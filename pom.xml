@@ -29,11 +29,11 @@
   </developers>
 
   <modules>
+   <module>imexcentral-model</module>
    <module>imexcentral-persistence</module>
    <module>imexcentral-webapp</module>
    <module>imexcentral-webservice</module>
    <module>imexcentral-webservice-client</module>
-   <module>imexcentral-weservice-test</module>
   </modules>
 
   
