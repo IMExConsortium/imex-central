@@ -5,7 +5,7 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral-project</artifactId>
   <packaging>pom</packaging>
-  <version>1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>IMEx Central</name>
   <url>https://imex.mbi.ucla.edu/trac/imexcentral</url>
 
@@ -29,11 +29,12 @@
   </developers>
 
   <modules>
+
    <module>imexcentral-model</module>
    <module>imexcentral-persistence</module>
    <module>imexcentral-webapp</module>
+   <module>imexcentral-api</module>
    <module>imexcentral-webservice</module>
-   <module>imexcentral-webservice-client</module>
   </modules>
 
   
@@ -54,12 +55,20 @@
  
    
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+
+   <dependency>
+    <groupId>postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>8.3-603.jdbc4</version>
+   </dependency>
+
+   <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>3.8.1</version>
+    <scope>test</scope>
+   </dependency>
+
   </dependencies>
 
 </project>

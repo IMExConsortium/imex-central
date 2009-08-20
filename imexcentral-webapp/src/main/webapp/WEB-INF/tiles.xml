@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<!-- ========================================================================
+ ! $HeadURL::                                                               $
+ ! $Id::                                                                    $
+ ! Version: $Rev::                                                          $
+ !===========================================================================
+ !
+ ! IMEx Central: tiles configuration
+ !
+ !======================================================================= -->
+
+<tiles-definitions>
+
+ <definition name="htmlhead" template="/tiles/htmlhead.jsp"/>
+
+ <definition name="header" template="/tiles/header.jsp"/>
+ <definition name="footer" template="/tiles/footer.jsp"/>
+ <definition name="footer.small" template="/tiles/footer.jsp"/>
+ <definition name="main" template="/tiles/main.jsp"/>
+
+ <definition name="page" template="/tiles/page.jsp"/>
+ <definition name="register" template="/tiles/register.jsp"/>
+ <definition name="login" template="/tiles/login.jsp"/>
+
+</tiles-definitions>

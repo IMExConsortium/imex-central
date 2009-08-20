@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+
+ <New class="org.mortbay.jetty.plus.naming.Resource">
+  <Arg>jdbc/icentral</Arg>
+  <Arg>
+   <New class="org.postgresql.ds.PGSimpleDataSource">
+    <Set name="User">lukasz</Set>
+    <Set name="Password">444ls444</Set>
+    <Set name="DatabaseName">icentral</Set>
+    <Set name="ServerName">10.1.1.12</Set>
+    <Set name="PortNumber">5432</Set>
+   </New>
+  </Arg>
+ </New>
+
+</Configure>
+
