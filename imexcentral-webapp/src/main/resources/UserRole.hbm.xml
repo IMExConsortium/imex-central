@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!-- ========================================================================
+ ! $HeadURL:: https://imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-portal/src/mai#$
+ ! $Id:: DipUser.hbm.xml 174 2009-06-28 20:46:45Z lukasz                    $
+ ! Version: $Rev:: 174                                                      $
+ !===========================================================================
+ !
+ ! hibernate mapping of the User class
+ !
+ !======================================================================= -->
+	
+<hibernate-mapping>
+
+ <class name="edu.ucla.mbi.imex.central.Role" table="role" lazy="false">
+  <id name="id" column="id" >
+   <generator class="sequence">
+    <param name="sequence">role_id_seq</param>
+   </generator>
+  </id>
+
+  <property name="name" column="name" />
+  <property name="comments" column="comments" />
+
+ </class>
+
+ <class name="edu.ucla.mbi.imex.central.Group" table="grp" lazy="false">
+  <id name="id" column="id" >
+   <generator class="sequence">
+    <param name="sequence">grp_id_seq</param>
+   </generator>
+  </id>
+
+  <property name="label" column="label" />
+  <property name="name" column="name" />
+  <property name="comments" column="comments" />
+
+  <many-to-one name="adminUser" column="admin_uid" 
+               class="edu.ucla.mbi.imex.central.User" />
+  <many-to-one name="contactUser" column="contact_uid"
+               class="edu.ucla.mbi.imex.central.User" />
+ 
+  <set name="roles" table="grp_role" sort="natural" lazy="false">
+    <key column="grp_id"/>
+    <many-to-many column="role_id" class="edu.ucla.mbi.imex.central.Role"/>
+  </set>
+
+ </class>
+
+ <class name="edu.ucla.mbi.imex.central.User" table="usr" lazy="false">
+  <id name="id" column="id" >
+   <generator class="sequence">
+    <param name="sequence">usr_id_seq</param>
+   </generator>
+  </id>
+  
+  <property name="firstName" column="fname" />
+  <property name="lastName" column="lname" />
+  <property name="affiliation" column="affiliation" />
+  <property name="email" column="email" />
+  <property name="login" column="login" />
+  <property name="password" column="pass" />
+  <property name="activationKey" column="act_key" />
+  <property name="activated" column="act_flag" />
+  <property name="enabled" column="enable_flag" />
+
+  <set name="roles" table="usr_role" sort="natural" lazy="false">
+    <key column="usr_id"/>
+    <many-to-many column="role_id" class="edu.ucla.mbi.imex.central.Role"/>
+  </set>
+
+  <set name="groups" table="usr_grp" sort="natural" lazy="false">
+    <key column="usr_id"/>
+    <many-to-many column="grp_id" class="edu.ucla.mbi.imex.central.Group"/>
+  </set>
+
+ </class>
+
+</hibernate-mapping> 
