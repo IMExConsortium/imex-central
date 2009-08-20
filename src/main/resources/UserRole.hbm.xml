@@ -15,7 +15,7 @@
 	
 <hibernate-mapping>
 
- <class name="edu.ucla.mbi.imex.central.Role" table="role" lazy="false">
+ <class name="edu.ucla.mbi.imex.central.IcRole" table="role" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
     <param name="sequence">role_id_seq</param>
@@ -27,7 +27,7 @@
 
  </class>
 
- <class name="edu.ucla.mbi.imex.central.Group" table="grp" lazy="false">
+ <class name="edu.ucla.mbi.imex.central.IcGroup" table="grp" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
     <param name="sequence">grp_id_seq</param>
@@ -39,18 +39,18 @@
   <property name="comments" column="comments" />
 
   <many-to-one name="adminUser" column="admin_uid" 
-               class="edu.ucla.mbi.imex.central.User" />
+               class="edu.ucla.mbi.imex.central.IcUser" />
   <many-to-one name="contactUser" column="contact_uid"
-               class="edu.ucla.mbi.imex.central.User" />
+               class="edu.ucla.mbi.imex.central.IcUser" />
  
   <set name="roles" table="grp_role" sort="natural" lazy="false">
     <key column="grp_id"/>
-    <many-to-many column="role_id" class="edu.ucla.mbi.imex.central.Role"/>
+    <many-to-many column="role_id" class="edu.ucla.mbi.imex.central.IcRole"/>
   </set>
 
  </class>
 
- <class name="edu.ucla.mbi.imex.central.User" table="usr" lazy="false">
+ <class name="edu.ucla.mbi.imex.central.IcUser" table="usr" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
     <param name="sequence">usr_id_seq</param>
@@ -69,12 +69,12 @@
 
   <set name="roles" table="usr_role" sort="natural" lazy="false">
     <key column="usr_id"/>
-    <many-to-many column="role_id" class="edu.ucla.mbi.imex.central.Role"/>
+    <many-to-many column="role_id" class="edu.ucla.mbi.imex.central.IcRole"/>
   </set>
 
   <set name="groups" table="usr_grp" sort="natural" lazy="false">
     <key column="usr_id"/>
-    <many-to-many column="grp_id" class="edu.ucla.mbi.imex.central.Group"/>
+    <many-to-many column="grp_id" class="edu.ucla.mbi.imex.central.IcGroup"/>
   </set>
 
  </class>
