@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    
+      http://www.springframework.org/schema/tx 
+      http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+      
+      http://www.springframework.org/schema/aop 
+      http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+<!-- static content -->
+ 
+  <bean id="pageAction" scope="prototype"
+        class="edu.ucla.mbi.imex.central.struts.action.PageAction">
+    <property name="pageContext"         ref="pageContext"/>
+    <property name="menuContext"         ref="menuContext"/>
+  </bean>
+
+  <bean id="pageContext" class="edu.ucla.mbi.util.JsonContext">
+    <property name="config">
+      <map>
+        <entry key="json-config" value="/etc/pages.json"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="menuContext" class="edu.ucla.mbi.util.JsonContext">
+    <property name="config">
+      <map>
+        <entry key="json-config" value="/etc/menu.json"/>
+      </map>
+    </property>
+  </bean>
+
+
+<!-- user/feedback management -->
+
+ <bean id="userAction" scope="prototype"
+      class="edu.ucla.mbi.dip.struts2.action.UserAction">
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="mst" value="1:1"/>
+
+    <property name="notifyFrom" value="dip@mbi.ucla.edu" />
+    <property name="notifyServer" value="imex.mbi.ucla.edu" />
+
+    <property name="reCaptcha" ref="reCaptcha"/>
+  </bean>
+
+  <bean id="feedbackAction" scope="prototype"
+      class="edu.ucla.mbi.dip.struts2.action.FeedbackAction">
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="mst" value="1:1"/>
+
+    <property name="adminMail" value="dip@mbi.ucla.edu" />
+    <property name="mailServer" value="imex.mbi.ucla.edu" />
+
+    <property name="reCaptcha" ref="reCaptcha"/>
+  </bean>
+
+  <bean id="reCaptcha" class="net.tanesha.recaptcha.ReCaptchaImpl">
+    <property name="privateKey" value="6LfVAwcAAAAAAAVpzD05-mBbK5_HRJ9StEvSPAIn"/>
+    <property name="publicKey" value="6LfVAwcAAAAAACFlY-X-icWpaoVMxHFyFVu3eIgc"/>
+    <property name="recaptchaServer" value="https://api-secure.recaptcha.net"/>
+    <property name="includeNoscript" value="false"/>
+  </bean>
+
+<!--  -->
+
+
+ <bean id="statusAction" scope="prototype"
+       class="edu.ucla.mbi.imex.central.struts.actions.StatusAction">
+  <property name="context">
+   <map>
+    <entry key="cache" value="on"/>
+   </map>
+  </property>
+ </bean>
+
+
+</beans>

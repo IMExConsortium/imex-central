@@ -1,0 +1,42 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<!-- =======================================================================
+ ! $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-portal#$
+ ! $Id:: hibernate.cfg.xml 237 2009-07-09 22:00:27Z lukasz                 $
+ ! Version: $Rev:: 237                                                     $
+ !==========================================================================
+ !
+ ! Hibernate ORM configuration
+ !
+ !====================================================================== -->
+
+<hibernate-configuration>
+ <session-factory>
+	   
+  <!-- JNDI-style connection: set up by container-->
+<!--
+  <property name="connection.datasource">
+   java:/comp/env/jdbc/proxyws
+  </property>
+-->
+    
+  <property name="connection.datasource">
+   jdbc/dipuser
+  </property>
+ 
+  <property name="hibernate.query.factory_class">
+   org.hibernate.hql.classic.ClassicQueryTranslatorFactory
+  </property>
+
+  <!-- SQL dialect -->
+  <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+  <!-- Echo (or not) all executed SQL to stdout -->
+  <property name="show_sql">true</property>
+
+  <mapping resource="edu/ucla/mbi/dip/orm/UserRole.hbm.xml"/>
+
+ </session-factory>
+</hibernate-configuration>
