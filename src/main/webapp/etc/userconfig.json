@@ -1,0 +1,24 @@
+{
+ role:[
+   {name:"user",
+    comments:"default user role"},
+   {name:"administrator",
+    comments:"default administrator role"},
+   {name:"test",
+    comments:"test role"}
+ ],
+ group:[
+   {label:"USR",name:"users",
+    roles:["user"],
+    comments:"user group"},
+   {label:"ADMIN",name:"admins",
+    roles:["administrator"],
+    comments:"administrator group"}
+ ],
+ user:[
+   {login:"ADMIN",
+    roles:["user","administrator"],
+    groups:["ADMIN"]
+   }
+ ]
+}

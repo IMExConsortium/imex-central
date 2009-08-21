@@ -1,0 +1,106 @@
+{upanel:true,
+ spanel:true,
+ menu:[
+  {label:"TOP",
+   link:"/",
+   active:true,
+   menu:[
+      {label:"Track",
+       link:"page?id=tracker",
+       active:true,
+       menu:[
+         {label:"Search",
+          link:"page?id=search",
+          active:true,
+          menu:[]
+         },      
+         {label:"Submit",
+          link:"page?id=submit",
+          active:true,
+          menu:[]
+         },
+         {label:"Edit",
+          link:"page?id=submit",
+          active:true,
+          menu:[]
+         }]
+      },       
+      {label:"Tools",
+       link:"page?id=tools",
+       active:true,
+       menu:[                   
+         {label:"MIF Tools",
+          link:"page?id=miftools",
+          active:true,
+          menu:[]
+         },
+         {label:"Web Services",
+          link:"page?id=webservices",
+          active:true,
+          menu:[]
+         }]
+      },
+      {label:"Admin",
+       link:"page?id=admin",
+       active:true,
+       menu:[                   
+         {label:"Users",
+          link:"page?id=usermgr",
+          active:true,
+          menu:[
+           {label:"Users",
+            link:"usermgr",
+            active:true,
+            roles:["administrator"],
+            menu:[]
+           },
+           {label:"Groups",
+            link:"groupmgr",
+            active:true,
+            roles:["administrator"],
+            menu:[]
+           },
+           {label:"Roles",
+            link:"rolemgr",
+            active:true,
+            roles:["administrator"],
+            menu:[]
+           }]
+         },
+         {label:"Entries",
+          link:"page?id=entries",
+          active:true,
+          menu:[]
+         }]
+      },
+      {label:"Preferences",
+       link:"page?id=preferences",
+       active:true,
+       menu:[
+         {label:"Account Settings",
+          link:"user?op=reg",
+          active:true,
+          menu:[]
+         },
+         {label:"Database",
+          link:"user?op=reg",
+          active:true,
+          menu:[]
+         }]
+      }]
+  }]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

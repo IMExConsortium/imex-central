@@ -1,0 +1,171 @@
+{
+  pageConfig:{
+    pathregex:"^/pages/[a-zA-Z0-9_\\-\\.]+$",
+    idregex:"^[a-zA-Z0-9_\\-]+$",
+    pages:{
+      about:{
+        active:true,
+        title:"About IMEx Central",
+        menudef:"0:2",
+        menusel:"3:0",
+        viewtype:"file-html",
+        viewpath:"/pages/about.html"
+      },
+      admin:{
+        active:true,
+        title:"ImexCentral Site Administration",
+        menudef:"0:2",
+        menusel:"3",
+        viewtype:"file-html",
+        viewpath:"/pages/admin.html"
+      },
+      usermgr:{
+        active:true,
+        title:"User Manager",
+        menudef:"0:2:0",
+        menusel:"3:1",
+        viewtype:"file-html",
+        viewpath:"/pages/useradmin.html"
+      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      data:{
+        active:true,
+        title:"DIP Data",
+        menudef:"0:0",
+        menusel:"1:0",
+        viewtype:"file-html",
+        viewpath:"/pages/data.html"
+      },
+      news:{
+        active:true,
+        title:"DIP Data",
+        menudef:"0:2:0",
+        menusel:"1:1",
+        viewtype:"file-html",
+        viewpath:"/pages/news.html"
+      },
+      guide:{
+        active:true,
+        title:"DIP Data",
+        menudef:"0:2",
+        menusel:"3:4:0",
+        viewtype:"file-html",
+        viewpath:"/pages/guide/contents.html"
+      },
+      tools:{
+        active:true,
+        title:"DIP Tools",
+        menudef:"0:1",
+        menusel:"2:0",
+        viewtype:"file-html",
+        viewpath:"/pages/tools.html"
+      },
+      evltools:{
+        active:true,
+        title:"Data Evaluation Tools",
+        menudef:"0:1:1",
+        menusel:"2:2:0",
+        viewtype:"file-html",
+        viewpath:"/pages/evltools.html"
+      },
+      miftools:{
+        active:true,
+        title:"MIF Tools",
+        menudef:"0:1",
+        menusel:"2:3",
+        viewtype:"file-html",
+        viewpath:"/pages/miftools.html"
+      },
+      links:{
+        active:true,
+        title:"DIP Links",
+        viewtype:"file-html",
+        menudef:"0:3",
+        menusel:"4:0",
+        viewpath:"/pages/links.html"
+      },
+      submit:{
+        active:true,
+        title:"DIP Submit",
+        menudef:"0:0",
+        menusel:"1:3:0",
+        viewtype:"file-html",
+        viewpath:"/pages/submit.html"
+      },
+      software:{
+        active:true,
+        title:"DIP Submit",
+        menudef:"0:1:0",
+        menusel:"2:1:0",
+        viewtype:"file-html",
+        viewpath:"/pages/software.html"
+      },
+      download:{
+        active:true,
+        title:"DIP Download",
+        menudef:"0:0:1",
+        menusel:"1:2:0",
+        viewtype:"file-html",
+        viewpath:"/pages/download.html"
+      },
+      search:{
+        active:true,
+        title:"DIP Search",
+        menudef:"0:0:0",
+        menusel:"1:1:0",
+        viewtype:"file-html",
+        viewpath:"/pages/search.html"
+      },
+      articles:{
+        active:true,
+        title:"DIP Search",
+        menudef:"0:2",
+        menusel:"3:3:0",
+        viewtype:"file-html",
+        viewpath:"/pages/articles.html"
+      },
+      feedback:{
+        active:true,
+        title:"DIP Search",
+        menudef:"0:0:0",
+        menusel:"0:0:0",
+        viewtype:"file-html",
+        viewpath:"/pages/feedback.html"
+      },
+      webservices:{
+        active:true,
+        title:"DIP Web Services",
+        menudef:"0:1",
+        menusel:"2:4",
+        viewtype:"file-html",
+        viewpath:"/pages/webservices.html"
+      },
+      template:{
+        active:true,
+        title:"DIP Search",
+        menudef:"0:0:0",
+        menusel:"0:0:0",
+        viewtype:"file-html",
+        viewpath:"/pages/template.html"
+      }
+    }
+  }
+}
+
+

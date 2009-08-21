@@ -10,7 +10,7 @@
    <table width="100%" cellspacing="0" border="0">
     <tr>
      <td class="logo" valign="middle">
-      <a href="index.jsp"><img height="55" border="0" src="img/imex_central_logo_small.png" alt="iCentral"/></a>
+      <a href="."><img height="55" border="0" src="img/imex_central_logo_small.png" alt="iCentral"/></a>
      </td>
     </tr>
    </table>
@@ -46,14 +46,14 @@
        <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
          <td align="right" class="acccell">
-          <s:if test="userOn">
-           <s:if test="#session['DIP_USER_ROLE'].administrator != null" >
+          <%-- <s:if test="userOn"> --%>
+           <s:if test="#session['USER_ROLE'].administrator != null" >
               (<a href="edit?ret=menu&mst=<s:property value='mst'/>">MENU EDIT</a>) |
            </s:if>
-           <s:if test="#session['DIP_USER_ID'] > 0">
+           <s:if test="#session['USER_ID'] > 0">
              User:  |
               <a href='user?op=edit'>
-                <s:property value="#session['DIP_LOGIN']" />
+                <s:property value="#session['LOGIN']" />
               </a>
                |
                <a href="user?op=logout" class="acmain">Log out</a>
@@ -64,7 +64,7 @@
                    | <a onMouseOver="this.className='acMON';" onMouseOut="this.className='acMOFF';" 
                         HREF="login.jsp" class="acMOFF">Log in</a>
            </s:else>
-          </s:if>
+          <%-- </s:if> --%>
          </td>
         </tr>
        </table>
@@ -109,7 +109,7 @@
           <tr>
            <td align="right" nowrap>
             <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
-               HREF="index.jsp">Home</a>
+               HREF=".">Home</a>
             | <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
                  HREF="page?id=about">Help</a>
             | <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
@@ -170,6 +170,7 @@
          <table cellspacing="0" cellpadding="0">
           <tr>
            <td align="left" class="btmsearchtab" nowrap>
+<%--
            <s:if test="searchOn">
             <s:form action="jqquery" theme="simple">
              <s:hidden name="mdf" value="0:0:0" />
@@ -184,6 +185,7 @@
             </s:form>
            </td>
            </s:if>
+--%>
            <td class="menu3blank">&nbsp;
            </td>
           </tr>
