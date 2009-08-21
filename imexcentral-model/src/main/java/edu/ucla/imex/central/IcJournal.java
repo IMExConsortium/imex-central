@@ -17,29 +17,49 @@ import java.util.*;
 
 import edu.ucla.mbi.util.Group;
 
-public class IcGroup extends Group {
+public class IcJournal extends IcGroup {
 
-    public IcGroup() {}
+    private String websiteURL;
+    private String nlmid;
+
+    //---------------------------------------------------------------------
+
+    public IcJournal() {}
         
-    public IcGroup( Group group ) {
+    public IcJournal( Group group ) {
         setId( group.getId() );
         setLabel( group.getLabel() );
         setName( group.getName() );
 
         setComments( group.getComments() == null ? "" : group.getComments() );
-
-        if ( group.getRoles() != null ) {
-            getRoles().addAll( group.getRoles() );
-        }
-
-
     }
 
+    //---------------------------------------------------------------------
+    
+    public String getWebsiteUrl() {
+        return websiteURL;
+    }
+    
+    public void setWebsiteUrl( String url ) {
+        websiteURL = url;
+    }
+
+    public String getNlmid() {
+        return nlmid;
+    }
+    
+    public void setNlmid( String nlmid ) {
+        this.nlmid = nlmid;
+    }
+
+    
+    //---------------------------------------------------------------------
+    
     public String toString() {
 	
 	StringBuffer sb = new StringBuffer();
 	
-	sb.append( " IcGroup(id=" + getId() );
+	sb.append( " IcJournal(id=" + getId() );
 	sb.append( " label=" + getLabel() );
 	sb.append( " comments=" + getComments() );
 	sb.append( ")" );
@@ -48,3 +68,5 @@ public class IcGroup extends Group {
     }
 
 }
+
+

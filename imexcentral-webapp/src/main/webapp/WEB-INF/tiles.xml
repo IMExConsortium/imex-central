@@ -23,7 +23,38 @@
  <definition name="main" template="/tiles/main.jsp"/>
 
  <definition name="page" template="/tiles/page.jsp"/>
+ <definition name="editpage" template="/tiles/editpage.jsp"/>
  <definition name="register" template="/tiles/register.jsp"/>
  <definition name="login" template="/tiles/login.jsp"/>
+ <definition name="uedit" template="/tiles/uedit.jsp"/>
+
+ <definition name="activate" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Account Activate" />
+  <put-attribute name="body" value="/tiles/activate.jsp"/>
+ </definition>
+ <definition name="roleedit" template="/tiles/roleedit.jsp"/>
+
+ <definition name="rolemgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Role Manager" />
+  <put-attribute name="body" value="/tiles/rolemgr.jsp"/>
+ </definition>
+ <definition name="roleedit" template="/tiles/roleedit.jsp"/>
+
+ <definition name="groupmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Group Manager" />
+  <put-attribute name="body" value="/tiles/groupmgr.jsp"/>
+ </definition>
+ <definition name="groupedit" template="/tiles/groupedit.jsp"/>
+
+ <definition name="usermgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="User Manager" />
+  <put-attribute name="body" value="/tiles/usermgr.jsp"/>
+ </definition>
+ <definition name="useredit" template="/tiles/useredit.jsp"/>
+
+ <definition name="aclerror" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ACL Violation" />
+  <put-attribute name="body" value="/tiles/aclerror.jsp"/>
+ </definition>
 
 </tiles-definitions>

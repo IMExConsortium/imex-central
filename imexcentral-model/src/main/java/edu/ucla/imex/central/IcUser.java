@@ -36,6 +36,15 @@ public class IcUser extends User {
 	setLogin( user.getLogin() ); 
 	setActivated( false );
 	setEnabled( false );
+
+        if ( user.getRoles() != null ) {
+            getRoles().addAll( user.getRoles() );
+        }
+
+        if ( user.getGroups() != null ) {
+            getGroups().addAll( user.getGroups() );
+        }
+        
     }
 
     public String toString() {

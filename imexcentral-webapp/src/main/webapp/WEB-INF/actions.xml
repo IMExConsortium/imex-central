@@ -40,27 +40,60 @@
 
 <!-- user/feedback management -->
 
- <bean id="userAction" scope="prototype"
-      class="edu.ucla.mbi.dip.struts2.action.UserAction">
+  <!-- usr context -->
 
-    <property name="menuContext" ref="menuContext"/>
-    <property name="mst" value="1:1"/>
+  <bean id="userContext" init-method="initialize"
+          class="edu.ucla.mbi.util.UserContext">
 
-    <property name="notifyFrom" value="dip@mbi.ucla.edu" />
-    <property name="notifyServer" value="imex.mbi.ucla.edu" />
+     <property name="config">
+      <map>
+        <entry key="json-config" value="/etc/userconfig.json"/>
+        <entry key="json-source">
+          <bean class="edu.ucla.mbi.util.SpringFileResource">
+            <property name="file" value="etc/userconfig.json"/>
+          </bean>
+         </entry>
+      </map>
+    </property>
 
-    <property name="reCaptcha" ref="reCaptcha"/>
+    <property name="groupDao" ref="groupDao"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="roleDao" ref="roleDao"/>
+
   </bean>
 
-  <bean id="feedbackAction" scope="prototype"
-      class="edu.ucla.mbi.dip.struts2.action.FeedbackAction">
+  <!-- user data access -->
 
+  <bean id="userDao" class="edu.ucla.mbi.imex.central.dao.IcUserDao"/>
+  <bean id="groupDao" class="edu.ucla.mbi.imex.central.dao.IcGroupDao"/>
+  <bean id="roleDao" class="edu.ucla.mbi.imex.central.dao.IcRoleDao"/>
+
+
+ <!-- actions -->
+
+  <bean id="userAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.UserAction">
+    
     <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
     <property name="mst" value="1:1"/>
-
+    
+    <property name="notifyFrom" value="dip@mbi.ucla.edu" />
+    <property name="notifyServer" value="imex.mbi.ucla.edu" />
+    
+    <property name="reCaptcha" ref="reCaptcha"/>
+  </bean>
+  
+  <bean id="feedbackAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.FeedbackAction">
+    
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="mst" value="1:1"/>
+    
     <property name="adminMail" value="dip@mbi.ucla.edu" />
     <property name="mailServer" value="imex.mbi.ucla.edu" />
-
+    
     <property name="reCaptcha" ref="reCaptcha"/>
   </bean>
 
@@ -71,11 +104,71 @@
     <property name="includeNoscript" value="false"/>
   </bean>
 
-<!--  -->
 
+ <!-- access control list/interceptor -->
+
+  <bean id="aclContext" class="edu.ucla.mbi.util.JsonContext">
+    <property name="config">
+      <map>
+        <entry key="json-config" value="/etc/acl.json"/>
+        <entry key="json-source">
+          <bean class="edu.ucla.mbi.util.SpringFileResource">
+            <property name="file" value="etc/acl.json"/>
+          </bean>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="aclInterceptor"
+        class="edu.ucla.mbi.util.struts2.interceptor.AclInterceptor">
+    <property name="aclContext" ref="aclContext"/>
+  </bean>
+
+
+
+
+
+
+
+
+
+
+
+  <!-- user management actions -->
+
+  <bean id="userMgrAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.UserMgrAction">
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="mst" value="3:1:1"/>
+
+    <property name="firstRecord" value="1"/>
+    <property name="blockSize" value="20"/>
+  </bean>
+
+  <bean id="groupMgrAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.GroupMgrAction">
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="mst" value="3:1:2"/>
+  </bean>
+
+  <bean id="roleMgrAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.RoleMgrAction">
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="mst" value="3:1:3"/>
+  </bean>
+
+
+ <!--  -->
 
  <bean id="statusAction" scope="prototype"
-       class="edu.ucla.mbi.imex.central.struts.actions.StatusAction">
+       class="edu.ucla.mbi.imex.central.struts.action.StatusAction">
   <property name="context">
    <map>
     <entry key="cache" value="on"/>

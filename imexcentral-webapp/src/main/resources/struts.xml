@@ -17,6 +17,12 @@
   <constant name="struts.objectFactory" value="spring" />
   <constant name="struts.devMode" value="false" />
 
+
+   <!-- user mamagement -->
+
+    <include file="usermgr.xml"/>
+
+
   <package name="icentral" extends="json-default" namespace="">
 
 <!-- =========================================================== Results -->
@@ -74,7 +80,7 @@
      <result name="input">register.jsp</result>
      <result name="home">index.jsp</result>
      <result name="uedit">uedit.jsp</result>
-     <result name="activate">activate.jsp</result>
+     <result name="activate" type="tiles">activate</result>
 
      <result name="json"  type="json">
        <param name="includeProperties">
@@ -109,7 +115,7 @@
 
    </action>
 
-<!-- contact -->
+  <!-- contact -->
 
   <action name="feedback" class="feedbackAction" >
 
@@ -122,6 +128,9 @@
     <result name="accepted" type="tiles">jqfeedback-ack</result>
 
   </action>
+
+
+
 
 
    </package>
