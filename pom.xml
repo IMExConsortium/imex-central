@@ -29,14 +29,12 @@
   </developers>
 
   <modules>
-
-   <module>imexcentral-model</module>
-   <module>imexcentral-persistence</module>
-   <module>imexcentral-webapp</module>
-   <module>imexcentral-api</module>
-   <module>imexcentral-webservice</module>
+   <module>icentral</module>
+   <module>ic-model</module>
+   <module>ic-persistence</module>
+   <module>ic-api</module>
+   <module>ic-ws</module>
   </modules>
-
   
   <build>
    <plugins>

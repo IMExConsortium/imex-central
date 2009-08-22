@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.ucla.mbi.imex</groupId>
-    <artifactId>imexcentral-api</artifactId>
+    <artifactId>ic-api</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Web service api module</name>

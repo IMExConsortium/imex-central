@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.ucla.mbi.imex</groupId>
-    <artifactId>imexcentral-persistence</artifactId>
+    <artifactId>ic-persistence</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Persistence module</name>
@@ -18,7 +18,7 @@
 
       <dependency>
        <groupId>edu.ucla.mbi.imex</groupId>
-       <artifactId>imexcentral-model</artifactId>
+       <artifactId>ic-model</artifactId>
        <version>1.0-SNAPSHOT</version>
       </dependency>
 
