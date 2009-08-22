@@ -26,6 +26,8 @@
 
  <import resource="actions.xml" />
 
+ <import resource="workflow.xml" />
+
 <!-- ======================================================= WEB SERVICES -->
 
 <!--

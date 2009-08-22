@@ -14,79 +14,58 @@ package edu.ucla.mbi.util.data;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 
-public class DataSource{
+import java.util.*;
 
-    Set<Organization> organizations = new TreeSet<Organization>();
-    Set<Publication> publications = new TreeSet<Publication>();
-    Set<Person> curators = new TreeSet<Person>();
+import edu.ucla.mbi.util.*;
 
-    DataSource() {
-    }
+public class DataSource {
 
-    void setPaperAbstract(String paperAbstract) {
-        this.paperAbstract = paperAbstract;
-    }
-
-    public Set<Person> getCurators() {
-        return curators;
-    }
-
-    public void setCurators(Set<Person> curators) {
-        this.curators = curators;
-    }
-
-    Set<Publication> getPublications() {
-        return publications;
-    }
-
-    void setPublications(Set<Publication> publications) {
-        this.publications = publications;
-    }
-
-
-    Set<Organization> getOrganizations() {
-        return organizations;
-    }
-
-    void setOrganizations(Set<Organization> organizations) {
-        this.organizations = organizations;
-    }
-
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    void setWebsiteURL(String websiteURL) {
-        this.websiteURL = websiteURL;
-    }
+    DataSource() {}
 
     private Integer id;
 
-    Integer getId() {
+    public Integer getId() {
         return id;
     }
 
-    void setId(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
+    
+    //---------------------------------------------------------------------
+    
+    User owner;
 
-    public String getUniqueSearchKey() {
-        return getName();
+    public User getOwner() {
+        return owner;
     }
 
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        final Journal journal = (Journal) o;
-//
-//        return getName().equals(journal.getName());
-//
-//    }
+    public void setOwner( User owner ) {
+        this.owner = owner;
+    }
+    
+    //---------------------------------------------------------------------
+
+    Set<User>  adminUsrSet;
+
+    public Set<User> getAdminUsers() {
+        return adminUsrSet;
+    }
+
+    public void setAdminUsers( Set<User> users ) {
+        this.adminUsrSet = users;
+    }
+
+    //---------------------------------------------------------------------
+
+    Set<Group> adminGroupSet;
+
+    public Set<Group> getAdminGroups() {
+        return adminGroupSet;
+    }
+    
+    public void setAdminGroups( Set<Group> groups ) {
+        this.adminGroupSet = groups;
+    }
 
 }

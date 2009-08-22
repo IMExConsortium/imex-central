@@ -52,6 +52,21 @@
  </definition>
  <definition name="useredit" template="/tiles/useredit.jsp"/>
 
+
+ <definition name="statemgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="State Manager" />
+  <put-attribute name="body" value="/tiles/statemgr.jsp"/>
+ </definition>
+ <definition name="stateedit" template="/tiles/stateedit.jsp"/>
+
+ <definition name="transemgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Transition Manager" />
+  <put-attribute name="body" value="/tiles/transmgr.jsp"/>
+ </definition>
+ <definition name="transedit" template="/tiles/transedit.jsp"/>
+
+
+
  <definition name="aclerror" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ACL Violation" />
   <put-attribute name="body" value="/tiles/aclerror.jsp"/>

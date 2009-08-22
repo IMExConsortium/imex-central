@@ -9,18 +9,13 @@
        link:"page?id=tracker",
        active:true,
        menu:[
-         {label:"Search",
-          link:"page?id=search",
+         {label:"Add Entry",
+          link:"page?id=tracker",
           active:true,
           menu:[]
          },      
-         {label:"Submit",
-          link:"page?id=submit",
-          active:true,
-          menu:[]
-         },
-         {label:"Edit",
-          link:"page?id=submit",
+         {label:"Edit Entry",
+          link:"page?id=tracker",
           active:true,
           menu:[]
          }]
@@ -67,10 +62,22 @@
             menu:[]
            }]
          },
-         {label:"Entries",
-          link:"page?id=entries",
+         {label:"Workflow",
+          link:"page?id=workflowmgr",
           active:true,
-          menu:[]
+          menu:[
+           {label:"States",
+            link:"statemgr",
+            active:true,
+            roles:["administrator"],
+            menu:[]
+           },
+           {label:"Transitions",
+            link:"transitionmgr",
+            active:true,
+            roles:["administrator"],
+            menu:[]
+           }]
          }]
       },
       {label:"Preferences",

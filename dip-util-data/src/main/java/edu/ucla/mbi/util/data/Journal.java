@@ -6,87 +6,64 @@ package edu.ucla.mbi.util.data;
  * Version: $Rev::                                                         $
  *==========================================================================
  *
- * DataSource - a source of DataItem(s)
- *             
+ * Journal
  *
  ======================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 
-public class DataSource{
+public class Journal extends DataSource {
 
-    Set<Organization> organizations = new TreeSet<Organization>();
-    Set<Publication> publications = new TreeSet<Publication>();
-    Set<Person> curators = new TreeSet<Person>();
-
-    DataSource() {
+    public Journal() {}
+    
+    //---------------------------------------------------------------------
+    
+    String title;
+    
+    public void setTitle( String title ) {
+        this.title = title;
     }
 
-    void setPaperAbstract(String paperAbstract) {
-        this.paperAbstract = paperAbstract;
+    public String getTitle() {
+        return title;
     }
 
-    public Set<Person> getCurators() {
-        return curators;
+    //---------------------------------------------------------------------
+
+    String nlmid;
+
+    public void setNlmid( String nlmid ) {
+        this.nlmid = nlmid;
     }
 
-    public void setCurators(Set<Person> curators) {
-        this.curators = curators;
-    }
-
-    Set<Publication> getPublications() {
-        return publications;
-    }
-
-    void setPublications(Set<Publication> publications) {
-        this.publications = publications;
-    }
-
-
-    Set<Organization> getOrganizations() {
-        return organizations;
-    }
-
-    void setOrganizations(Set<Organization> organizations) {
-        this.organizations = organizations;
+    public String getNlmid() {
+        return nlmid;
     }
 
 
-    void setName(String name) {
-        this.name = name;
+    //---------------------------------------------------------------------
+
+    String comments;
+    
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
-    void setComment(String comment) {
-        this.comment = comment;
+    public String getComments() {
+        return comments;
     }
 
-    void setWebsiteURL(String websiteURL) {
+
+    //---------------------------------------------------------------------
+    
+    String websiteURL;
+
+    public void setWebsiteURL(String websiteURL) {
         this.websiteURL = websiteURL;
     }
 
-    private Integer id;
-
-    Integer getId() {
-        return id;
+    public String getWebsiteURL() {
+        return websiteURL;
     }
-
-    void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUniqueSearchKey() {
-        return getName();
-    }
-
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        final Journal journal = (Journal) o;
-//
-//        return getName().equals(journal.getName());
-//
-//    }
-
 }

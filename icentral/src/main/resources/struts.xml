@@ -18,9 +18,16 @@
   <constant name="struts.devMode" value="false" />
 
 
-   <!-- user mamagement -->
+  <!-- user mamagement -->
 
-    <include file="usermgr.xml"/>
+  <include file="usermgr.xml"/>
+
+  <!-- workflow management -->
+
+
+ <include file="workflow.xml"/>
+
+
 
 
   <package name="icentral" extends="json-default" namespace="">
