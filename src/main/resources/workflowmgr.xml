@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+          "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<!-- =======================================================================
+ # $Id:: user.xml 394 2009-08-11 04:41:05Z lukasz                          $
+ # Version: $Rev:: 394                                                     $
+ #==========================================================================
+ #                                                                         $
+ # struts2: jqdip package configuration                                    $
+ #                                                                         $
+ #====================================================================== -->
+                                                                           
+<struts>
+
+  <package name="workflowmgr" extends="json-default" namespace="">
+
+<!-- =========================================================== Results -->
+
+    <result-types>
+      <result-type name="tiles" 
+                   class="org.apache.struts2.views.tiles.TilesResult"/>
+    </result-types>
+
+<!-- ====================================================== Interceptors -->
+        
+    <interceptors>
+     <interceptor name="menu" 
+         class="edu.ucla.mbi.util.struts2.interceptor.MenuInterceptor"/>
+     <interceptor name="accession" 
+         class="edu.ucla.mbi.util.struts2.interceptor.AccessionInterceptor"/>
+     <interceptor name="jsonTable" 
+         class="edu.ucla.mbi.util.struts2.interceptor.JsonTableInterceptor"/>
+
+    <interceptor name="acl" class="aclInterceptor"/>
+
+    <interceptor-stack name="mgrStack">
+      <interceptor-ref name="exception"/>
+      <interceptor-ref name="alias"/>
+      <interceptor-ref name="servletConfig"/>
+      <interceptor-ref name="prepare"/>
+      <interceptor-ref name="i18n"/>
+      <interceptor-ref name="chain"/>
+      <interceptor-ref name="debugging"/>
+      <interceptor-ref name="profiling"/>
+      <interceptor-ref name="scopedModelDriven"/>
+      <interceptor-ref name="modelDriven"/>
+      <interceptor-ref name="fileUpload"/>
+      <interceptor-ref name="checkbox"/>
+      <interceptor-ref name="staticParams"/>
+      <interceptor-ref name="params">
+       <param name="excludeParams">dojo\..*</param>
+      </interceptor-ref>
+      <interceptor-ref name="conversionError"/>
+
+      <interceptor-ref name="menu"/>
+      <interceptor-ref name="acl"/>
+
+      <interceptor-ref name="validation">
+       <param name="excludeMethods">input,back,cancel,browse</param>
+      </interceptor-ref>
+      <interceptor-ref name="workflow">
+       <param name="excludeMethods">input,back,cancel,browse</param>
+      </interceptor-ref>
+    </interceptor-stack>
+
+   </interceptors>
+
+<!-- =========================================================== Actions -->
+
+   <action name="">
+      <result>/index.jsp</result>
+   </action>
+
+  <!-- state management -->   
+
+   <action name="statemgr" class="workflowAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">statemgr</result>     
+     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="input" type="tiles">statemgr</result>     
+   </action>
+
+   <action name="stateedit" class="workflowAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">statemgr</result>
+     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="input" type="tiles">statemgr</result>     
+   </action>
+
+  <!-- transition management -->   
+
+   <action name="transmgr" class="workflowAction">
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">transmgr</result>
+     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="input" type="tiles">transmgr</result>
+   </action>
+
+   <action name="transedit" class="workflowAction">
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">transmgr</result>  
+     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="input" type="tiles">transmgr</result>     
+   </action>
+
+ </package>
+</struts>

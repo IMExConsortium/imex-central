@@ -27,12 +27,22 @@
         viewtype:"file-html",
         viewpath:"/pages/useradmin.html"
       },
-
-
-
-
-
-
+      workflowmgr:{
+        active:true,
+        title:"Workflow Manager",
+        menudef:"0:2:1",
+        menusel:"3:2",
+        viewtype:"file-html",
+        viewpath:"/pages/workflowadmin.html"
+      },
+      tracker:{
+        active:true,
+        title:"Tracker",
+        menudef:"0:0:0",
+        menusel:"1:0",
+        viewtype:"file-html",
+        viewpath:"/pages/tracker.html"
+      },
 
 
 
