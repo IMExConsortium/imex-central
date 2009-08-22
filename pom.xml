@@ -30,6 +30,7 @@
 
   <modules>
    <module>icentral</module>
+   <module>dip-util-data</module>
    <module>ic-model</module>
    <module>ic-persistence</module>
    <module>ic-api</module>
