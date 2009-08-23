@@ -37,6 +37,7 @@
   <property name="show_sql">true</property>
 
   <mapping resource="UserRole.hbm.xml"/>
+  <mapping resource="workflow.hbm.xml"/>
 
  </session-factory>
 </hibernate-configuration>
