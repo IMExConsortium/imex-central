@@ -61,3 +61,25 @@ CREATE TABLE grp_role (
 CREATE INDEX grp_role_1 on grp_role (role_id);
 CREATE INDEX grp_role_2 on grp_role (role_id, grp_id);
 CREATE INDEX grp_role_3 on grp_role (grp_id,role_id);
+
+
+
+CREATE TABLE datastate (
+    id serial primary key, 
+    name character varying(32) UNIQUE not null default '',
+    comments character varying(256) not null default ''
+);
+CREATE INDEX datastate_1 on role (name);
+
+
+CREATE TABLE trans (
+    id serial primary key, 
+    name character varying(32) UNIQUE not null default '',
+    comments character varying(256) not null default ''
+    from_sid integer not null default 0,
+    to_sid integer not null default 0,
+);
+CREATE INDEX trans_1 on role (name);
+CREATE INDEX trans_2 on role (from_sid,to_sid);
+CREATE INDEX trans_3 on role (to_sid);
+
