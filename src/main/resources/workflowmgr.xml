@@ -5,8 +5,8 @@
           "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <!-- =======================================================================
- # $Id:: user.xml 394 2009-08-11 04:41:05Z lukasz                          $
- # Version: $Rev:: 394                                                     $
+ # $Id::                                                                   $
+ # Version: $Rev::                                                         $
  #==========================================================================
  #                                                                         $
  # struts2: jqdip package configuration                                    $
@@ -76,7 +76,7 @@
 
   <!-- state management -->   
 
-   <action name="statemgr" class="workflowAction">
+   <action name="statemgr" class="stateAction">
 
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
@@ -86,7 +86,7 @@
      <result name="input" type="tiles">statemgr</result>     
    </action>
 
-   <action name="stateedit" class="workflowAction">
+   <action name="stateedit" class="stateAction">
 
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
@@ -98,7 +98,7 @@
 
   <!-- transition management -->   
 
-   <action name="transmgr" class="workflowAction">
+   <action name="transmgr" class="transAction">
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
@@ -107,7 +107,7 @@
      <result name="input" type="tiles">transmgr</result>
    </action>
 
-   <action name="transedit" class="workflowAction">
+   <action name="transedit" class="transAction">
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 

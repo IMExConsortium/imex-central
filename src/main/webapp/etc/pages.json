@@ -35,6 +35,14 @@
         viewtype:"file-html",
         viewpath:"/pages/workflowadmin.html"
       },
+      databasemgr:{
+        active:true,
+        title:"Database Manager",
+        menudef:"0:2:2",
+        menusel:"3:3",
+        viewtype:"file-html",
+        viewpath:"/pages/databaseadmin.html"
+      },
       tracker:{
         active:true,
         title:"Tracker",

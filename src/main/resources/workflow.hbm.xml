@@ -4,9 +4,9 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <!-- ========================================================================
- ! $HeadURL:: https://imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-portal/src/mai#$
- ! $Id:: DipUser.hbm.xml 174 2009-06-28 20:46:45Z lukasz                    $
- ! Version: $Rev:: 174                                                      $
+ ! $HeadURL::                                                               $
+ ! $Id::                                                                    $
+ ! Version: $Rev::                                                          $
  !===========================================================================
  !
  ! hibernate mapping of the User class

@@ -32,9 +32,11 @@
     <table width="100%" border="1">
      <s:form theme="simple" action="rolemgr"> 
       <tr>
-       <th colspan="2">RID</th>
+       <th colspan="2" width="10%" >TID</th>
        <th>Name</th>
-       <th>&nbsp</th>
+       <th width="15%">From</th>
+       <th width="15%">To</th>
+       <th width="5%">&nbsp</th>
       </tr>
       <s:if test="transList!=null">
        <s:iterator value="transList" id="trans" status="tpos">
@@ -49,8 +51,14 @@
            <s:property value="#trans.name" />
          </td>
          <td align="center">
-          <a href='transmgr?id=<s:property value="#trans.id"/>'>detail</a>
+          <s:property value="#trans.fromState.name" />
+         </td> 
+         <td align="center">
+           <s:property value="#trans.toState.name" />
          </td>
+         <td align="center">
+          <a href='transmgr?id=<s:property value="#trans.id"/>'>detail</a>
+         </td>         
         </s:iterator>
        </tr>
       </s:if>
@@ -71,6 +79,14 @@
          </s:if>
         </s:if>
         <s:textfield theme="simple" name="trans.name" size="48" maxLength="64"/>
+       </td>
+       <td>
+         <s:select name="opp.sfrom"  headerKey="-1" headerValue="---Select From State---"
+                    list="stateList" listKey="id" listValue="name" />
+       </td> 
+       <td>
+         <s:select name="opp.sto"  headerKey="-1" headerValue="---Select To State---"
+                    list="stateList" listKey="id" listValue="name" />
        </td>
        <td align="center">
         <s:submit theme="simple" name="op.add" value="ADD" />

@@ -36,17 +36,36 @@
       </th>
      </tr>
      <tr>
-      <td colspan="4">
+      <td colspan="3">
        <table width="100%" border="1">
-        <td nowrap>Comments</td>
-        <td align="left" width="95%"> 
-         <s:textarea name="trans.comments" value="%{trans.comments}" cols="32" rows="4"/>
-        </td>
+        <tr>
+         <td align="right" nowrap>States</td>
+         <td align="left" width="45%"> 
+          From: 
+          <s:select name="opp.sfrom"  headerKey="-1" headerValue="---Select From State---"
+                    list="stateList" listKey="id" listValue="name" value="%{trans.fromState.id}"/>
+         </td>
+         <td align="left" width="45%"> 
+          To:
+          <s:select name="opp.sto"  headerKey="-1" headerValue="---Select To State---"
+                    list="stateList" listKey="id" listValue="name" value="%{trans.toState.id}"/>
+         </td>
          <th rowspan="1">
-          <s:submit theme="simple" name="op.pup" value="STORE"/>
+          <s:submit theme="simple" name="op.sup" value="UPDATE"/>
          </th>
+        </tr>
+        <tr>
+         <td align="right" nowrap>Comments</td>
+         <td align="left" width="95%" colspan="2"> 
+          <s:textarea name="trans.comments" value="%{trans.comments}" cols="32" rows="4"/>
+         </td>
+         <th rowspan="1">
+          <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+         </th>
+        </tr>
        </table>
       </td>
+      <td>&nbsp;</td>
      </tr> 
     </s:form>
    </table>

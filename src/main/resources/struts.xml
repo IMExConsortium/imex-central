@@ -5,8 +5,8 @@
           "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <!-- #================================================================
-     # $Id:: struts.xml 171 2009-06-28 19:48:12Z lukasz              $
-     # Version: $Rev:: 171                                           $
+     # $Id::                                                         $
+     # Version: $Rev::                                               $
      #================================================================
      #
      # struts2: global configuration
@@ -24,11 +24,11 @@
 
   <!-- workflow management -->
 
+  <include file="workflowmgr.xml"/>
 
- <include file="workflowmgr.xml"/>
+  <!-- entry mamagement -->
 
-
-
+  <include file="entrymgr.xml"/>  
 
   <package name="icentral" extends="json-default" namespace="">
 

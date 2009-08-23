@@ -28,6 +28,8 @@
 
  <import resource="workflow.xml" />
 
+ <import resource="entry.xml" />
+
 <!-- ======================================================= WEB SERVICES -->
 
 <!--
