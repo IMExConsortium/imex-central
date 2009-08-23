@@ -1,4 +1,4 @@
-package edu.ucla.mbi.util.data.*;
+package edu.ucla.mbi.util.data;
 
 /* ========================================================================
  # $Id:: UserContext.java 465 2009-08-21 02:36:27Z lukasz                 $
@@ -18,6 +18,7 @@ import java.util.*;
 import java.io.*;
 import org.json.*;
 
+import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 public class WorkflowContext extends JsonContext {
@@ -28,7 +29,7 @@ public class WorkflowContext extends JsonContext {
         return wflowDao;
     }
 
-    public void setWorkflowDAO( WorkflowDAO dao ) {
+    public void setWorkflowDao( WorkflowDAO dao ) {
         wflowDao = dao;
     }
     
@@ -74,13 +75,13 @@ public class WorkflowContext extends JsonContext {
                         log.info( "state: name=" + name +
                                   " comments=" + comments );
                         
-                        DataState oldState = wflowDao.getState( name );
+                        DataState oldState = wflowDao.getDataState( name );
                         if ( oldState != null ) continue;
                         
                         DataState newState = new DataState();
                         newState.setName( name );
                         newState.setComments( comments );
-                        wflowDao.saveState( newRole );
+                        wflowDao.saveDataState( newState );
                     }
 
                 }
@@ -107,25 +108,27 @@ public class WorkflowContext extends JsonContext {
                     
                     for ( int i = 0; i < groupArray.length(); i++ ) {
                         JSONObject trans = groupArray.getJSONObject( i );
-                        if ( group == null ) continue;
+                        if ( trans == null ) continue;
                             
                         String label = trans.getString( "name" );
                         String frStateName = trans.getString( "from" );
                         String toStateName = trans.getString( "to" );
                         String comments = trans.getString( "comments" );
                             
-                        Transition oldTrans = wflowDao.getTrans( name );
+                        Transition oldTrans = wflowDao.getTrans( label );
                         if ( oldTrans != null ) continue;
                         
-                        DataState frState = wflowDao.getState( frStateName);
-                        DataState toState = wflowDao.getState( toStateName);
+                        DataState frState = 
+                            wflowDao.getDataState( frStateName );
+                        DataState toState = 
+                            wflowDao.getDataState( toStateName );
                         
                         if ( frState == null || toState == null ) continue;
-
+                        
                         Transition newTrans  = new Transition();
                         newTrans.setFromState( frState );
                         newTrans.setToState( toState );
-                        newTrans.setName( name );
+                        newTrans.setName( label );
                         newTrans.setComments( comments );
                         
                         wflowDao.saveTrans( newTrans );

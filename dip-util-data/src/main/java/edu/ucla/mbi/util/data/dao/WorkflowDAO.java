@@ -15,7 +15,7 @@ import edu.ucla.mbi.util.data.*;
 
 public interface WorkflowDAO {
 
-    public DataState getDataState( int id );
+    public DataState getDataState( long id );
     public DataState getDataState( String title );
     public List<DataState> getDataStateList();
     public long getDataStateCount();
@@ -24,14 +24,14 @@ public interface WorkflowDAO {
     public void updateDataState( DataState state );
     public void deleteDataState( DataState state );
 
-    public Transition getTransition( int id );
-    public Transition getTransition( String name );
-    public List<Transition> getTransitionList();
-    public long getTransitionCount();
+    public Transition getTrans( long id );
+    public Transition getTrans( String name );
+    public List<Transition> getTransList();
+    public long getTransCount();
 
-    public void saveTransition( Transition trans );
-    public void updateTransition( Transition trans );
-    public void deleteTransition( Transition trans );
+    public void saveTrans( Transition trans );
+    public void updateTrans( Transition trans );
+    public void deleteTrans( Transition trans );
 
 
 

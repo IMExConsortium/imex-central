@@ -26,7 +26,7 @@ public class DataItem {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId( Long id ) {
         this.id = id;
     }
 
