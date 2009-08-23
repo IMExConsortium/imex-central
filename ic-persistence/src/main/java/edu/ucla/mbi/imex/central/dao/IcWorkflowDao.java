@@ -36,7 +36,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         DataState pub = null;
         
         try {
-            pub = (DataState) super.find( DataState.class, id );
+            pub = (DataState) super.find( IcDataState.class, id );
         } catch ( DAOException dex ) {
             // log exception ?
         }
@@ -52,7 +52,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         try {
             startOperation();
             Query query =
-                session.createQuery( "from DataState s where " +
+                session.createQuery( "from IcDataState s where " +
                                      " s.name = :name ");
             query.setParameter("name", name );
             query.setFirstResult( 0 );
@@ -74,7 +74,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         try {
             startOperation();
             Query query =
-                session.createQuery( "from DataState s order by id ");
+                session.createQuery( "from IcDataState s order by id ");
             
             slst = (List<DataState>) query.list();
             tx.commit();
@@ -95,7 +95,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
 
     public void saveDataState( DataState state ) { 
         try {          
-            super.saveOrUpdate( state );
+            super.saveOrUpdate( new IcDataState( state ) );
         } catch ( DAOException dex ) {
             // log exception ?
         }
@@ -130,7 +130,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         Transition trans = null;
 
         try {
-            trans = (Transition) super.find( Transition.class, id );
+            trans = (Transition) super.find( IcTransition.class, id );
         } catch ( DAOException dex ) {
             // log exception ?
         }
@@ -146,7 +146,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         try {
             startOperation();
             Query query =
-                session.createQuery( "from Transition t where " +
+                session.createQuery( "from IcTransition t where " +
                                      " t.name = :name ");
             query.setParameter("name", name );
             query.setFirstResult( 0 );
@@ -168,7 +168,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         try {
             startOperation();
             Query query =
-                session.createQuery( "from Transition t order by id ");
+                session.createQuery( "from IcTransition t order by id ");
             
             tlst = (List<Transition>) query.list();
             tx.commit();
@@ -189,7 +189,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
 
     public void saveTrans( Transition trans ) { 
         try {          
-            super.saveOrUpdate( trans );
+            super.saveOrUpdate( new IcTransition ( trans ) );
         } catch ( DAOException dex ) {
             // log exception ?
         }

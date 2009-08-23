@@ -46,11 +46,16 @@ public class WorkflowContext extends JsonContext {
         try {
             readJsonConfigDef( fr.getInputStream() );
         } catch ( Exception e ){
-            log.info( "UserContext: json-source error" );
+            log.info( "WorkflowContext: json-source error" );
             return;
         }
 
+        log.info( "WorkflowContext: json-source OK " );
+        System.out.println( "config="+ getJsonConfigObject() );
+        
         if ( wflowDao != null ) {
+        
+            log.info( "WorkflowContext: dao OK " );
             
             //-----------------------------------------------------------------        
             // initialize states
@@ -59,17 +64,18 @@ public class WorkflowContext extends JsonContext {
             try {
                 if( getJsonConfigObject().getJSONArray("state") != null ) {
                     
+
                     // "state":[{"name":"user",
                     //             "comments":"default user role"}]    
                     
                     JSONArray stateArray = 
                         getJsonConfigObject().getJSONArray( "state" );
-            
+                    
                     for ( int i = 0; i < stateArray.length(); i++ ) {
                         JSONObject state = stateArray.getJSONObject( i );
                         if ( state == null ) continue;
-
-                        String name = state.getString( "state" );
+                        
+                        String name = state.getString( "name" );
                         String comments = state.getString( "comments" );
                         
                         log.info( "state: name=" + name +
@@ -86,7 +92,8 @@ public class WorkflowContext extends JsonContext {
 
                 }
             } catch ( Exception e ){
-                log.info( "WorkflowContext: json-source error" );
+                log.info( "WorkflowContext: json-source error (status)" );
+                e.printStackTrace();
                 return;
             }   
         
@@ -95,7 +102,7 @@ public class WorkflowContext extends JsonContext {
             //-----------------------
 
             try {
-                if( getJsonConfigObject().getJSONArray("trans") != null ) {
+                if( getJsonConfigObject().getJSONArray("transition") != null ) {
                     
                     //"trans":[{name:"reserve",
                     //          from:"NEW",to:"RESERVED",
@@ -104,7 +111,7 @@ public class WorkflowContext extends JsonContext {
                     log.info( "WorkflowContext: initializing transitions" );
                     
                     JSONArray groupArray = 
-                        getJsonConfigObject().getJSONArray( "trans" );
+                        getJsonConfigObject().getJSONArray( "transition" );
                     
                     for ( int i = 0; i < groupArray.length(); i++ ) {
                         JSONObject trans = groupArray.getJSONObject( i );
@@ -136,7 +143,7 @@ public class WorkflowContext extends JsonContext {
                 }
             } catch ( Exception e ){
                 e.printStackTrace();
-                log.info( "WorkflowContext: json-source error" );
+                log.info( "WorkflowContext: json-source error (trans)" );
                 return;
             }
         }
