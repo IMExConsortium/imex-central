@@ -59,7 +59,7 @@
  </definition>
  <definition name="stateedit" template="/tiles/stateedit.jsp"/>
 
- <definition name="transemgr" template="/tiles/layout.jsp">
+ <definition name="transmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Transition Manager" />
   <put-attribute name="body" value="/tiles/transmgr.jsp"/>
  </definition>
