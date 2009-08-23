@@ -74,7 +74,7 @@ CREATE INDEX datastate_1 on datastate (name);
 
 CREATE TABLE trans (
     id serial primary key, 
-    name character varying(32) UNIQUE not null default '',
+    name character varying(32) not null default '',
     comments character varying(256) not null default '',
     from_sid integer not null default 0,
     to_sid integer not null default 0
@@ -83,3 +83,48 @@ CREATE INDEX trans_1 on trans (name);
 CREATE INDEX trans_2 on trans (from_sid,to_sid);
 CREATE INDEX trans_3 on trans (to_sid);
 
+CREATE TABLE journal (
+    id serial primary key,
+    owner_uid integer not null default 0,
+    crt timestamp not null default now(),
+
+    title character varying(256) not null default '',
+    nlmid character varying(32) not null default '',
+    url character varying(256) not null default '',
+    comments character varying(256) not null default ''
+);
+CREATE INDEX j_1 on journal (owner_uid);
+CREATE INDEX j_2 on journal (crt);
+CREATE INDEX j_3 on journal (title);
+CREATE INDEX j_4 on journal (nlmid);
+
+CREATE TABLE entry (
+    id serial primary key,
+    owner_uid integer not null default 0,
+    crt timestamp not null default now(),
+
+    source_id integer not null default 0,
+    state_id integer not null default 0,
+
+    imexId character varying(32) not null default '',
+
+    doi character varying(256) not null default '',
+    pmid character varying(32) not null default '',
+    jspec character varying(256) not null default '',
+    title character varying(256) not null default '',
+    author character varying(1024) not null default '',
+    abstract character varying(1024) not null default '',
+    pub_date timestamp ,
+    epub_date timestamp,
+    rel_date timestamp
+);
+CREATE INDEX e_1 on entry (owner_uid);
+CREATE INDEX e_2 on entry (crt);
+
+CREATE INDEX e_3 on entry (pmid);
+CREATE INDEX e_4 on entry (doi);
+CREATE INDEX e_5 on entry (jspec);
+CREATE INDEX e_6 on entry (title);
+CREATE INDEX e_7 on entry (pub_date);
+CREATE INDEX e_8 on entry (epub_date);
+CREATE INDEX e_9 on entry (rel_date);

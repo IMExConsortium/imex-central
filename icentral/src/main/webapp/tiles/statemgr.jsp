@@ -34,7 +34,7 @@
       <tr>
        <th colspan="2">SID</th>
        <th>Name</th>
-       <th>&nbsp</th>
+       <th width="5%">&nbsp</th>
       </tr>
       <s:if test="stateList!=null">
        <s:iterator value="stateList" id="state" status="spos">

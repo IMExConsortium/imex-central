@@ -27,7 +27,7 @@ import edu.ucla.mbi.imex.central.*;
 
 public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
-    public Journal getJournal( int id ) { 
+    public Journal getJournal( long id ) { 
         
         Journal journal = null;
 

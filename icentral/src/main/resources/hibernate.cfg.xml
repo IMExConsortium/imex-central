@@ -3,9 +3,9 @@
 	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <!-- =======================================================================
- ! $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-portal#$
- ! $Id:: hibernate.cfg.xml 237 2009-07-09 22:00:27Z lukasz                 $
- ! Version: $Rev:: 237                                                     $
+ ! $HeadURL::                                                              $
+ ! $Id::                                                                   $
+ ! Version: $Rev::                                                         $
  !==========================================================================
  !
  ! Hibernate ORM configuration
@@ -33,6 +33,8 @@
 
   <mapping resource="usermgr.hbm.xml"/>
   <mapping resource="workflow.hbm.xml"/>
+
+  <mapping resource="data.hbm.xml"/>
 
  </session-factory>
 </hibernate-configuration>

@@ -1,9 +1,10 @@
-package edu.ucla.mbi.util.struts2.action;
+package edu.ucla.mbi.imex.central.struts.action;
+        
                                                                             
 /* =========================================================================
- * $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-util-s#$
- * $Id:: UserMgrSupport.java 475 2009-08-21 23:46:54Z lukasz               $
- * Version: $Rev:: 475                                                     $
+ * $HeadURL::                                                              $
+ * $Id::                                                                   $
+ * Version: $Rev::                                                         $
  *==========================================================================
  *
  * WorkflowMgrSupport action
@@ -19,30 +20,33 @@ import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.dao.*;
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
+import edu.ucla.mbi.util.struts2.action.*;
 import edu.ucla.mbi.util.struts2.interceptor.*;
 
-public abstract class WorkflowMgrSupport extends ManagerSupport {
+import edu.ucla.mbi.imex.central.*;
+
+public abstract class EntryMgrAction extends ManagerSupport {
 
     //---------------------------------------------------------------------
-    //  WorkflowContext
-    //-----------------
+    //  TracContext
+    //--------------
 
-    private WorkflowContext wflowContext;
+    private TracContext tracContext;
     
-    public void setWorkflowContext( WorkflowContext context ) {
-        this.wflowContext = context;
+    public void setTracContext( TracContext context ) {
+        this.tracContext = context;
     }
     
-    public WorkflowContext getWorkflowContext() {
-        return this.wflowContext;
+    public TracContext getTracContext() {
+        return this.tracContext;
     }
 
 
     //---------------------------------------------------------------------
-    //  mode: state/trans
-    //-------------------
+    //  mode: journal/icpub
+    //---------------------
 
-    private String mode = "state";
+    private String mode = "journal";
     
     public String getMode() {
         return this.mode;
@@ -54,48 +58,67 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
 
     
     //---------------------------------------------------------------------
-    //  DataState
-    //------------
-    
-    private DataState state = null;
-
-    public void setDataState( DataState state ) {
-	this.state = state;
-    }
-    
-    public DataState getDataState(){
-	return this.state;
-    }
-    
-    //---------------------------------------------------------------------
-    
-    public List<DataState> getStateList(){
-     
-        if ( wflowContext.getWorkflowDao() == null ) return null;
-        return wflowContext.getWorkflowDao().getDataStateList();
-    }
-
-
-    //---------------------------------------------------------------------
-    // Transition
+    //  IcJournal
     //-----------
-
-    private Transition trans = null;
     
-    public void setTrans( Transition trans ) {
-        this.trans = trans;
+    private IcJournal journal = null;
+
+    public void setJournal( IcJournal journal ) {
+	this.journal = journal;
+    }
+    
+    public IcJournal getJournal(){
+	return this.journal;
+    }
+    
+    //---------------------------------------------------------------------
+    
+    public List<IcJournal> getJournalList(){
+     
+        if ( tracContext.getJournalDao() == null ) return null;
+       
+        List<Journal> jl = tracContext.getJournalDao().getJournalList();
+        if ( jl == null ) return null;
+
+        List<IcJournal> ijl = new ArrayList<IcJournal>();
+        for ( Iterator<Journal> ii = jl.iterator(); ii.hasNext(); ) {
+            IcJournal jj = (IcJournal) ii.next();
+            ijl.add( jj );
+        }
+        return ijl;
     }
 
-    public Transition getTrans(){
-        return this.trans;
+
+    //---------------------------------------------------------------------
+    // IcPub
+    //------
+
+    private IcPub icpub = null;
+    
+    public void setPublication( IcPub publication ) {
+        this.icpub = publication;
+    }
+
+    public IcPub getPublication(){
+        return this.icpub;
     }
 
     //---------------------------------------------------------------------
     
-    public List<Transition> getTransList(){
+    public List<IcPub> getPublicationList(){
         
-        if ( wflowContext.getWorkflowDao() == null ) return null;
-        return wflowContext.getWorkflowDao().getTransList();
+        if ( tracContext.getPubDao() == null ) return null;
+        
+        List<Publication> pl = tracContext.getPubDao().getPublicationList();
+        if ( pl == null ) return null;
+        
+        List<IcPub> ipl = new ArrayList<IcPub>();
+        for ( Iterator<Publication> ii = pl.iterator(); ii.hasNext(); ) {
+            IcPub jj = (IcPub) ii.next();
+            ipl.add( jj );
+        }
+
+        return ipl;
     }
     
     //---------------------------------------------------------------------
@@ -104,19 +127,25 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info(  "mode=" + mode + " id=" + getId() + 
-                   " state=" + state + " trans=" + trans); 
+                   " journal=" + journal + " icpub=" + icpub ); 
         
-        if ( wflowContext.getWorkflowDao() == null ) return SUCCESS;
+        if ( tracContext.getJournalDao() == null ||
+             tracContext.getPubDao() == null ) return SUCCESS;
 
-        if ( mode.equals( "state" ) && getId() > 0 && state == null ) {
-            log.info( "setting state=" + getId() );            
-            state = wflowContext.getWorkflowDao().getDataState( getId() );  
+        if ( mode.equals( "journal" ) && 
+             getId() > 0 && journal == null ) {
+            
+            log.info( "setting journal=" + getId() );            
+            journal = (IcJournal) tracContext
+                .getJournalDao().getJournal( getId() );  
             return SUCCESS;
         }
 
-        if ( mode.equals( "trans" ) && getId() > 0 && trans == null ) {
-            log.info(  "setting trans=" + getId() );
-            trans = wflowContext.getWorkflowDao().getTrans( getId() );
+        if ( mode.equals( "icpub" ) && 
+             getId() > 0 && icpub == null ) {
+            
+            log.info(  "setting icpub=" + getId() );
+            icpub = (IcPub) tracContext.getPubDao().getPublication( getId() );
             return SUCCESS;
         }
 
@@ -131,31 +160,69 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
             if ( val != null && val.length() > 0 ) {
 
                 //---------------------------------------------------------
-                // state operations
+                // journal operations
+                //-------------------
+                
+                if ( key.equalsIgnoreCase( "jadd" ) ) {
+                    return addJournal( journal );
+                }
+
+                //---------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "jdel" ) ) {
+                    return deleteJournal( journal );
+                }
+
+                //---------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "jldel" ) ) {
+
+                    if ( getOpp() == null ) return SUCCESS;
+                    
+                    String udel = getOpp().get( "del" );
+
+                    if ( udel != null ) {
+                        List<Integer> uidl =
+                            new ArrayList<Integer>();
+                        try {
+                            udel = udel.replaceAll("\\s","");
+                            String[] us = udel.split(",");
+
+                            for( int ii = 0; ii <us.length; ii++ ) {
+                                uidl.add( Integer.valueOf( us[ii] ) );
+                            }
+                        } catch ( Exception ex ) {
+                            // should not happen
+                        }
+                        return deleteJournalList( uidl );
+                    }
+                    return SUCCESS;
+                }
+
+                //---------------------------------------------------------
+                
+                if ( key.equalsIgnoreCase( "jpup" ) ) {
+                    return updateJournalProperties( getId(), journal );
+                }
+                
+
+                //---------------------------------------------------------
+                // icpub operations
                 //-----------------
+
+                if ( key.equalsIgnoreCase( "eadd" ) ) {
+                    return addIcPub( icpub );
+                }
                 
-                if ( key.equalsIgnoreCase( "sed" ) &&
-                     getId() > 0 && state == null ) {
-                    state = wflowContext.getWorkflowDao()
-                        .getDataState( getId() );
-                    return SUCCESS;
-                }
-
                 //---------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "sadd" ) ) {
-                    return addDataState( state );
+
+                if ( key.equalsIgnoreCase( "edel" ) ) {
+                    return deleteIcPub( icpub );
                 }
 
                 //---------------------------------------------------------
 
-                if ( key.equalsIgnoreCase( "sdel" ) ) {
-                    return deleteDataState( state );
-                }
-
-                //---------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "sldel" ) ) {
+                if ( key.equalsIgnoreCase( "eldel" ) ) {
 
                     if ( getOpp() == null ) return SUCCESS;
                     
@@ -174,82 +241,22 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
                         } catch ( Exception ex ) {
                             // should not happen
                         }
-                        return deleteDataStateList( uidl );
+                        return deleteIcPubList( uidl );
                     }
                     return SUCCESS;
                 }
 
                 //---------------------------------------------------------
                 
-                if ( key.equalsIgnoreCase( "spup" ) ) {
-                    return updateDataStateProperties( getId(), state );
-                }
-                
-
-                //---------------------------------------------------------
-                // transition operations
-                //----------------------
-
-                if ( key.equalsIgnoreCase( "ted" ) &&
-                     getId() > 0 && trans == null ) {
-                    trans = wflowContext.getWorkflowDao()
-                        .getTrans( getId() );
-                    return SUCCESS;
-                }
-
-                //---------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "tadd" ) ) {
-                    return addTrans( trans );
-                }
-                
-                //---------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "tdel" ) ) {
-                    return deleteTrans( trans );
-                }
-
-                //---------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "tldel" ) ) {
-
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String udel = getOpp().get( "del" );
-
-                    if ( udel != null ) {
-                        List<Integer> uidl =
-                            new ArrayList<Integer>();
-                        try {
-                            udel = udel.replaceAll("\\s","");
-                            String[] us = udel.split(",");
-
-                            for( int ii = 0; ii <us.length; ii++ ) {
-                                uidl.add( Integer.valueOf( us[ii] ) );
-                            }
-                        } catch ( Exception ex ) {
-                            // should not happen
-                        }
-                        return deleteTransList( uidl );
-                    }
-                    return SUCCESS;
-                }
-
-                //---------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "tpup" ) ) {
-                    return updateTransProperties( getId(), trans );
+                if ( key.equalsIgnoreCase( "epup" ) ) {
+                    return updateIcPubProperties( getId(), icpub );
                 }
                 
                 //---------------------------------------------------------
                 
-                if ( key.equalsIgnoreCase( "tsup" ) ) {
-
-
-                    int fid=0;
-                    int tid=0;
-
-                    return updateTransStates( getId(), fid, tid );
+                if ( key.equalsIgnoreCase( "esup" ) ) {
+                    int sid=0;
+                    return updateIcPubState( getId(), sid );
                 }
             }
         }
@@ -264,7 +271,7 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
     public void validate() {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "WorkflowMgr: validate" );
+        log.info( "EntryMgr: validate" );
         
         /*
         boolean loadUserFlag = false;
@@ -479,11 +486,11 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
 
     
     //---------------------------------------------------------------------
-    // operations: DataState
+    // operations: Journal
     //----------------------
 
-    public String addDataState( DataState state ) {
-
+    public String addJournal( Journal journal ) {
+        /*
         if( wflowContext.getWorkflowDao() == null || 
             state == null ) return SUCCESS;
 
@@ -493,14 +500,15 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
                   " name=" + state.getName() );
 
         this.state = null;
+        */
         return SUCCESS;
     }
 
 
     //---------------------------------------------------------------------
 
-    public String deleteDataState( DataState state ) {
-        
+    public String deleteJournal( Journal journal ) {
+        /*
         if( wflowContext.getWorkflowDao() == null || 
             state == null ) return SUCCESS;
         
@@ -514,13 +522,14 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
         
         this.state = null;
         setId( 0 );
+        */
         return SUCCESS;
     }
 
     //---------------------------------------------------------------------
 
-    private String deleteDataStateList( List<Integer> states ) {
-        
+    private String deleteJournalList( List<Integer> ournals ) {
+        /*
         if( wflowContext.getWorkflowDao() == null || 
             states == null ) return SUCCESS;
         
@@ -536,13 +545,14 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
             log.info( " delete state -> id=" + s.getId() );
             wflowContext.getWorkflowDao().deleteDataState( s );                
         }
+        */
         return SUCCESS;
     }
 
     //---------------------------------------------------------------------
     
-    public String updateDataStateProperties( int id, DataState state ) {
-
+    public String updateJournalProperties( int id, Journal journal ) {
+        /*
         if( wflowContext.getWorkflowDao() == null ) return SUCCESS;
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -559,16 +569,17 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
         this.state = wflowContext.getWorkflowDao().getDataState( id );
         
         log.info( " updated state(props) -> id=" + id );
+        */
         return SUCCESS;
     }
 
 
     //---------------------------------------------------------------------
-    // operations: Transition
-    //-----------------------
+    // operations: IcPub
+    //------------------
 
-    public String addTrans( Transition trans ) {
-
+    public String addIcPub( Publication pub ) {
+        /*
         if( wflowContext.getWorkflowDao() == null || 
             state == null ) return SUCCESS;
 
@@ -578,13 +589,14 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
                   " name=" + trans.getName() );
 
         this.trans = null;
+        */
         return SUCCESS;
     }
 
     //---------------------------------------------------------------------
 
-    public String deleteTrans( Transition trans ) {
-        
+    public String deleteIcPub( Publication pub ) {
+        /*
         if( wflowContext.getWorkflowDao() == null || 
             state == null ) return SUCCESS;
         
@@ -598,13 +610,14 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
         
         this.trans = null;
         setId( 0 );
+        */
         return SUCCESS;
     }
 
     //---------------------------------------------------------------------
 
-    private String deleteTransList( List<Integer> trans ) {
-        
+    private String deleteIcPubList( List<Integer> pubs ) {
+        /*
         if( wflowContext.getWorkflowDao() == null || 
             trans == null ) return SUCCESS;
         
@@ -620,13 +633,14 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
             log.info( " delete trans -> id=" + t.getId() );
             wflowContext.getWorkflowDao().deleteTrans( t );                
         }
+        */
         return SUCCESS;
     }
 
     //---------------------------------------------------------------------
     
-    public String updateTransProperties( int id, Transition trans ) {
-        
+    public String updateIcPubProperties( int id, Publication pub ) {
+        /*
         if( wflowContext.getWorkflowDao() == null ) return SUCCESS;
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -643,13 +657,14 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
         this.trans = wflowContext.getWorkflowDao().getTrans( id );
         
         log.info( " updated trans(props) -> id=" + id );
+        */
         return SUCCESS;
     }
 
     //---------------------------------------------------------------------
     
-    private String updateTransStates( int id, int fid, int tid ) {
-        
+    private String updateIcPubState( int id, int sid) {
+        /*
         if ( wflowContext.getWorkflowDao() == null ||
              !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
         
@@ -669,6 +684,7 @@ public abstract class WorkflowMgrSupport extends ManagerSupport {
         
         this.trans = wflowContext.getWorkflowDao().getTrans( id );
         log.info( "updated trans(states)=" +this.trans );
+        */
         return SUCCESS;
     }    
 }

@@ -18,11 +18,11 @@ import java.util.*;
 
 import edu.ucla.mbi.util.data.*;
 
-public class IcPublication extends Publication {
+public class IcPub extends Publication {
     
-    IcPublication() {}
+    IcPub() {}
 
-    public IcPublication( Publication pub ) {
+    public IcPub( Publication pub ) {
         
     }
 
@@ -32,7 +32,7 @@ public class IcPublication extends Publication {
         this.imexId = imexId;
     }
 
-    public String setImexId() {
+    public String getImexId() {
         return imexId;
     }
 

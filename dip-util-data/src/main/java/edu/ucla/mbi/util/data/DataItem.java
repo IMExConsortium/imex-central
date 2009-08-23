@@ -56,6 +56,18 @@ public class DataItem {
 
     //---------------------------------------------------------------------
 
+    private GregorianCalendar creationTime;
+
+    public void setCrt( GregorianCalendar  crt) {
+        this.creationTime = crt;
+    }
+
+    public GregorianCalendar getCrt() {
+        return this.creationTime;
+    }
+
+    //---------------------------------------------------------------------
+
     Set<User>  adminUsrSet;
 
     public Set<User> getAdminUsers() {

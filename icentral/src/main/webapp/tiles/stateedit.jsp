@@ -24,21 +24,21 @@
    <table width="100%" border="1">
     <s:form theme="simple" action="stateedit"> 
      <s:hidden name="id" value="%{id}"/>
-     <s:hidden name="state.id" value="%{id}"/>
-     <s:hidden name="state.name" value="%{state.name}"/>
+     <s:hidden name="dataState.id" value="%{id}"/>
+     <s:hidden name="dataState.name" value="%{dataState.name}"/>
      <tr>
-      <th nowrap>SID:<s:property value="state.id"/></th>
+      <th nowrap>SID:<s:property value="dataState.id"/></th>
       
-      <th nowrap>Name:<s:property value="state.name"/></th>
+      <th nowrap>Name:<s:property value="dataState.name"/></th>
       <td width="95%">&nbsp;</td> 
       <th>
         <s:submit theme="simple" name="op.del" value="REMOVE"/>
       </th>
      </tr>
      <tr>
-      <td colspan="4">
+      <td colspan="3">
        <table width="100%" border="1">
-        <td nowrap>Comments</td>
+        <td align="right" nowrap>Comments</td>
         <td align="left" width="95%"> 
          <s:textarea name="state.comments" value="%{state.comments}" cols="32" rows="4"/>
         </td>
@@ -47,6 +47,7 @@
          </th>
        </table>
       </td>
+      <td>&nbsp;</td>
      </tr> 
     </s:form>
    </table>

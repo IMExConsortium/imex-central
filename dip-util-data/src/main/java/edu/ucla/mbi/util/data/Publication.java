@@ -54,7 +54,7 @@ public class Publication extends DataItem {
         this.journalSpecific = journalSpecific;
     }
 
-    public String setJournalSpecific() {
+    public String getJournalSpecific() {
         return journalSpecific;
     }
 

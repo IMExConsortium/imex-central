@@ -9,13 +9,13 @@
  # Version: $Rev::                                                         $
  #==========================================================================
  #                                                                         $
- # struts2: jqdip package configuration                                    $
+ # struts2: entrymgr package configuration                                 $
  #                                                                         $
  #====================================================================== -->
                                                                            
 <struts>
 
-  <package name="usermgr" extends="json-default" namespace="">
+  <package name="entrymgr" extends="json-default" namespace="">
 
 <!-- =========================================================== Results -->
 
@@ -74,68 +74,46 @@
       <result>/index.jsp</result>
    </action>
 
-  <!-- group management -->   
+  <!-- publication management -->   
 
-   <action name="groupmgr" class="groupMgrAction">
+   <action name="pubmgr" class="pubAction">
 
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">groupmgr</result>     
+     <result name="success" type="tiles">pubmgr</result>     
      <result name="acl_error" type="tiles">aclerror</result>
-     <result name="input" type="tiles">groupmgr</result>     
+     <result name="input" type="tiles">pubmgr</result>     
    </action>
 
-   <action name="groupedit" class="groupMgrAction">
+   <action name="pubedit" class="pubAction">
 
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">groupmgr</result>
+     <result name="success" type="tiles">pubmgr</result>
      <result name="acl_error" type="tiles">aclerror</result>
-     <result name="input" type="tiles">groupmgr</result>     
+     <result name="input" type="tiles">pubmgr</result>     
    </action>
 
-  <!-- role management -->   
+  <!-- journal management -->   
 
-   <action name="rolemgr" class="roleMgrAction">
+   <action name="journalmgr" class="journalAction">
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">rolemgr</result>
+     <result name="success" type="tiles">journalmgr</result>
      <result name="acl_error" type="tiles">aclerror</result>
-     <result name="input" type="tiles">rolemgr</result>
+     <result name="input" type="tiles">journalmgr</result>
    </action>
 
-   <action name="roleedit" class="roleMgrAction">
+   <action name="journaledit" class="journalAction">
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">rolemgr</result>  
+     <result name="success" type="tiles">journalmgr</result>  
      <result name="acl_error" type="tiles">aclerror</result>
-     <result name="input" type="tiles">rolemgr</result>     
-   </action>
-
-  <!-- user management -->   
-
-   <action name="usermgr" class="userMgrAction">
-
-     <interceptor-ref name="mgrStack"/>
-     <interceptor-ref name="timer"/>
-      
-     <result name="success" type="tiles">usermgr</result>     
-     <result name="acl_error" type="tiles">aclerror</result>     
-     <result name="input" type="tiles">usermgr</result>
-   </action>
-
-   <action name="useredit" class="userMgrAction">
-
-     <interceptor-ref name="mgrStack"/>
-     <interceptor-ref name="timer"/>
-      
-     <result name="success" type="tiles">usermgr</result>     
-     <result name="acl_error" type="tiles">aclerror</result>
-     <result name="input" type="tiles">usermgr</result>     
+     <result name="input" type="tiles">journalmgr</result>     
    </action>
 
  </package>

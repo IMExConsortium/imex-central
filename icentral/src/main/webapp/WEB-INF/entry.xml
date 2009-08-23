@@ -13,47 +13,40 @@
       http://www.springframework.org/schema/aop 
       http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-  <!-- workflow content -->
+  <!-- trac content -->
  
-  <bean id="workflowContext" init-method="initialize"
-          class="edu.ucla.mbi.util.data.WorkflowContext">
+  <bean id="tracContext" init-method="initialize"
+          class="edu.ucla.mbi.imex.central.TracContext">
 
-     <property name="config">
-      <map>
-        <entry key="json-source">
-          <bean class="edu.ucla.mbi.util.SpringFileResource">
-            <property name="file" value="etc/workflow.json"/>
-          </bean>
-         </entry>
-      </map>
-    </property>
-    <property name="workflowDao" ref="workflowDao"/>
+    <property name="journalDao" ref="journalDao"/>
+    <property name="pubDao" ref="pubDao"/>
   </bean>
 
   <!-- workflow persistence -->
 
-  <bean id="workflowDao" class="edu.ucla.mbi.imex.central.dao.IcWorkflowDao"/>
+  <bean id="journalDao" class="edu.ucla.mbi.imex.central.dao.IcJournalDao"/>
+  <bean id="pubDao" class="edu.ucla.mbi.imex.central.dao.IcPubDao"/>
 
  <!-- actions -->
 
-  <bean id="stateAction" scope="prototype"
-      class="edu.ucla.mbi.imex.central.struts.action.WorkflowMgrAction">
+  <bean id="pubAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.EntryMgrAction">
     
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
-    <property name="workflowContext" ref="workflowContext"/>
-    <property name="mode" value="state"/>
+    <property name="tracContext" ref="tracContext"/>
+    <property name="mode" value="icpub"/>
     <property name="mst" value="3:2:1"/>
   </bean>
 
-  <bean id="transAction" scope="prototype"
-      class="edu.ucla.mbi.imex.central.struts.action.WorkflowMgrAction">
+  <bean id="journalAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.EntryMgrAction">
     
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
-    <property name="workflowContext" ref="workflowContext"/>
-    <property name="mode" value="trans"/>
-    <property name="mst" value="3:2:2"/>
+    <property name="tracContext" ref="tracContext"/>
+    <property name="mode" value="journal"/>
+    <property name="mst" value="3:3:2"/>
   </bean>
   
 </beans>

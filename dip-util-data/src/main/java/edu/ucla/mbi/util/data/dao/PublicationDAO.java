@@ -15,7 +15,7 @@ import edu.ucla.mbi.util.data.*;
 
 public interface PublicationDAO {
 
-    public Publication getPublication( int id );
+    public Publication getPublication( long id );
     public Publication getPublication( String title );
     public List<Publication> getPublicationList();
     public List<Publication> getPublicationList( int firstRecord, int blockSize );

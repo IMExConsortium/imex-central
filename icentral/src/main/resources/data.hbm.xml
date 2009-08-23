@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!-- ========================================================================
+ ! $HeadURL::                                                               $
+ ! $Id::                                                                    $
+ ! Version: $Rev::                                                          $
+ !===========================================================================
+ !
+ ! hibernate mapping of the User class
+ !
+ !======================================================================= -->
+	
+<hibernate-mapping>
+
+ <!-- DataItem: IcPub --> 
+
+ <class name="edu.ucla.mbi.imex.central.IcPub" table="entry" lazy="false">
+  <id name="id" column="id">
+   <generator class="sequence">
+    <param name="sequence">entry_id_seq</param>
+   </generator>
+  </id>
+
+  <!-- icPub-specific -->
+
+  <property name="imexId" column="imexid" />
+
+  <!-- publication-specific -->
+
+  <property name="doi" column="doi" />
+  <property name="pmid" column="pmid" />
+  <property name="journalSpecific" column="jspec"/>
+
+  <property name="title" column="title"/>
+  <property name="author" column="author"/>
+  <property name="abstract" column="abstract"/>
+
+  <property name="pubDate" column="pub_date"/>
+  <property name="expectedPubDate" column="epub_date"/>
+  <property name="releaseDate" column="rel_date"/>
+
+ <!-- DataItem -->
+
+  <property name="crt" column="crt_date"/>
+
+  <many-to-one name="source" column="src_id"
+               class="edu.ucla.mbi.imex.central.IcJournal" />
+
+  <many-to-one name="owner" column="owner_uid"
+               class="edu.ucla.mbi.imex.central.IcUser" />
+
+  <many-to-one name="state" column="state_id"
+               class="edu.ucla.mbi.imex.central.IcDataState" />
+
+ </class>
+
+ <!-- DataSource: journal -->
+
+ <class name="edu.ucla.mbi.imex.central.IcJournal" table="journal" lazy="false">
+  <id name="id" column="id" >
+   <generator class="sequence">
+    <param name="sequence">journal_id_seq</param>
+   </generator>
+  </id>
+
+  <!-- journal specific -->
+
+  <property name="title" column="title" />
+  <property name="nlmid" column="nlmid" />
+  <property name="websiteUrl" column="url" />
+  <property name="comments" column="comments" />
+
+
+ <!-- DataSource--> 
+
+  <property name="crt" column="crt_date"/>
+
+  <many-to-one name="owner" column="owner_uid"
+               class="edu.ucla.mbi.imex.central.IcUser" />
+ 
+ </class>
+
+</hibernate-mapping> 

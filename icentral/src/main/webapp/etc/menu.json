@@ -5,16 +5,16 @@
    link:"/",
    active:true,
    menu:[
-      {label:"Track",
+      {label:"Entries",
        link:"page?id=tracker",
        active:true,
        menu:[
-         {label:"Add Entry",
+         {label:"Add",
           link:"page?id=tracker",
           active:true,
           menu:[]
          },      
-         {label:"Edit Entry",
+         {label:"Browse",
           link:"page?id=tracker",
           active:true,
           menu:[]
@@ -78,6 +78,11 @@
             roles:["administrator"],
             menu:[]
            }]
+         },
+         {label:"Database",
+          link:"page?id=databasemgr",
+          active:true,
+          menu:[]
          }]
       },
       {label:"Preferences",

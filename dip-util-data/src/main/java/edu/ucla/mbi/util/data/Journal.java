@@ -46,7 +46,7 @@ public class Journal extends DataSource {
 
     String comments;
     
-    public void setComments(String comments) {
+    public void setComments( String comments ) {
         this.comments = comments;
     }
 
@@ -59,11 +59,11 @@ public class Journal extends DataSource {
     
     String websiteURL;
 
-    public void setWebsiteURL(String websiteURL) {
-        this.websiteURL = websiteURL;
+    public void setWebsiteUrl( String url ) {
+        this.websiteURL = url;
     }
 
-    public String getWebsiteURL() {
+    public String getWebsiteUrl() {
         return websiteURL;
     }
 }

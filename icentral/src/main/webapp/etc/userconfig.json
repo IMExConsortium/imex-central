@@ -3,9 +3,7 @@
    {name:"user",
     comments:"default user role"},
    {name:"administrator",
-    comments:"default administrator role"},
-   {name:"test",
-    comments:"test role"}
+    comments:"default administrator role"}
  ],
  group:[
    {label:"USR",name:"users",

@@ -25,14 +25,14 @@ import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
        
-public class IcPublicationDao extends AbstractDAO implements PublicationDAO {
+public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
-    public Publication getPublication( int id ) { 
+    public Publication getPublication( long id ) { 
         
         Publication pub = null;
 
         try {
-            pub =  (IcPublication) super.find( IcPublication.class, id );
+            pub =  (IcPub) super.find( IcPub.class, id );
         } catch ( DAOException dex ) {
             // log exception ?
         }
@@ -53,7 +53,7 @@ public class IcPublicationDao extends AbstractDAO implements PublicationDAO {
                                      " j.title = :title ");
             query.setParameter("title", title );
             query.setFirstResult( 0 );
-            pub = (IcPublication) query.uniqueResult();
+            pub = (IcPub) query.uniqueResult();
             tx.commit();
             
         } catch( DAOException dex ) {
@@ -100,7 +100,7 @@ public class IcPublicationDao extends AbstractDAO implements PublicationDAO {
 
     public void savePublication( Publication publication ) { 
         try {          
-            super.saveOrUpdate( new IcPublication( publication ) );
+            super.saveOrUpdate( new IcPub( publication ) );
         } catch ( DAOException dex ) {
             // log exception ?
         }
