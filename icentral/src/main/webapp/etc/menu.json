@@ -73,7 +73,7 @@
             menu:[]
            },
            {label:"Transitions",
-            link:"transitionmgr",
+            link:"transmgr",
             active:true,
             roles:["administrator"],
             menu:[]
