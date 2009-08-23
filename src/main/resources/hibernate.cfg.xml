@@ -16,11 +16,6 @@
  <session-factory>
 	   
   <!-- JNDI-style connection: set up by container-->
-<!--
-  <property name="connection.datasource">
-   java:/comp/env/jdbc/proxyws
-  </property>
--->
     
   <property name="connection.datasource">
    jdbc/icentral
@@ -36,7 +31,7 @@
   <!-- Echo (or not) all executed SQL to stdout -->
   <property name="show_sql">true</property>
 
-  <mapping resource="UserRole.hbm.xml"/>
+  <mapping resource="usermgr.hbm.xml"/>
   <mapping resource="workflow.hbm.xml"/>
 
  </session-factory>
