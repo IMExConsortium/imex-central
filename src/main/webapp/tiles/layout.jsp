@@ -6,14 +6,14 @@
  ! $Id:: layout.jsp 435 2009-08-15 01:34:09Z lukasz                       $
  ! Version: $Rev:: 435                                                    $
  !==================================================================== --%>
-
-<HTML>
- <HEAD>
- <TITLE><t:getAsString name="title"/></TITLE>
+<html lang="en">
+ <head>
+ <title>
+  <t:getAsString name="title"/>
+ </title>
  <t:insertDefinition name="htmlhead"/>
- </HEAD>
-
- <BODY>
+ </head>
+ <body>
   <center>
    <t:insertDefinition name="header"/>
    <table width="95%" cellspacing="0" cellpadding="0">

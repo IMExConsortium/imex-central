@@ -23,10 +23,19 @@
  <definition name="main" template="/tiles/main.jsp"/>
 
  <definition name="page" template="/tiles/page.jsp"/>
+
  <definition name="editpage" template="/tiles/editpage.jsp"/>
  <definition name="register" template="/tiles/register.jsp"/>
  <definition name="login" template="/tiles/login.jsp"/>
  <definition name="uedit" template="/tiles/uedit.jsp"/>
+
+
+
+
+
+
+
+
 
  <definition name="activate" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Account Activate" />

@@ -1,14 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%-- ======================================================================
+ ! $HeadURL::                                                             $
+ ! $Id::                                                                  $
+ ! Version: $Rev::                                                        $
+ !==================================================================== --%>
 <html lang="en">
  <head>
   <title>
    <s:property value="page.title"/>
   </title>
-  <link rel="stylesheet" href="css/icentral.css" type="text/css"/>
-  <link rel="stylesheet" href="css/icentraltab.css" type="text/css"/>
-  <link rel="stylesheet" href="css/icentralstruts.css" type="text/css"/>
+  <t:insertDefinition name="htmlhead"/>
  </head>
  <body>
   <s:if test="#session['USER_ROLE'].administrator != null" >

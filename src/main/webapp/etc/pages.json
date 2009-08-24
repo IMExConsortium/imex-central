@@ -3,6 +3,14 @@
     pathregex:"^/pages/[a-zA-Z0-9_\\-\\.]+$",
     idregex:"^[a-zA-Z0-9_\\-]+$",
     pages:{
+      cover:{
+        active:true,
+        title:"ImexCentral",
+        menudef:"0:0",
+        menusel:"1",
+        viewtype:"file-html",
+        viewpath:"/pages/cover.html"
+      },
       about:{
         active:true,
         title:"About IMEx Central",
