@@ -29,14 +29,6 @@
  <definition name="login" template="/tiles/login.jsp"/>
  <definition name="uedit" template="/tiles/uedit.jsp"/>
 
-
-
-
-
-
-
-
-
  <definition name="activate" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Account Activate" />
   <put-attribute name="body" value="/tiles/activate.jsp"/>
@@ -61,7 +53,6 @@
  </definition>
  <definition name="useredit" template="/tiles/useredit.jsp"/>
 
-
  <definition name="statemgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="State Manager" />
   <put-attribute name="body" value="/tiles/statemgr.jsp"/>
@@ -73,6 +64,39 @@
   <put-attribute name="body" value="/tiles/transmgr.jsp"/>
  </definition>
  <definition name="transedit" template="/tiles/transedit.jsp"/>
+
+
+
+
+ <definition name="pubmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Publication Manager" />
+  <put-attribute name="body" value="/tiles/pubmgr.jsp"/>
+ </definition>
+ <definition name="pubedit" template="/tiles/pubedit.jsp"/>
+
+ <definition name="journalmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Journal Manager" />
+  <put-attribute name="body" value="/tiles/journalmgr.jsp"/>
+ </definition>
+ <definition name="journaledit" template="/tiles/journaledit.jsp"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

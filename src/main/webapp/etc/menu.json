@@ -5,19 +5,38 @@
    link:"/",
    active:true,
    menu:[
-      {label:"Entries",
-       link:"page?id=tracker",
+      {label:"HOME",
+       link:".",
        active:true,
        menu:[
-         {label:"Add",
-          link:"page?id=tracker",
-          active:true,
-          menu:[]
-         },      
          {label:"Browse",
-          link:"page?id=tracker",
+          link:"page?id=browse",
           active:true,
-          menu:[]
+          menu:[
+            {label:"Publications",
+             link:"pubmgr",
+             active:true,
+             menu:[]
+            },
+            {label:"Journals",
+             link:"journalmgr",
+             active:true,
+             menu:[]
+            }]
+         },
+         {label:"Add",
+          link:"page?id=pubadd",
+          active:true,
+          menu:[{label:"Publication",
+             link:"pubmgr",
+             active:true,
+             menu:[]
+            },
+            {label:"Journal",
+             link:"journalmgr",
+             active:true,
+             menu:[]
+            }]
          }]
       },       
       {label:"Tools",

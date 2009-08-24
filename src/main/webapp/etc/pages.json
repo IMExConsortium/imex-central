@@ -11,6 +11,22 @@
         viewtype:"file-html",
         viewpath:"/pages/cover.html"
       },
+      browse:{
+        active:true,
+        title:"ImexCentral",
+        menudef:"0:0:0",
+        menusel:"1:1",
+        viewtype:"file-html",
+        viewpath:"/pages/browse.html"
+      },
+      pubadd:{
+        active:true,
+        title:"ImexCentral",
+        menudef:"0:0:1",
+        menusel:"1:2",
+        viewtype:"file-html",
+        viewpath:"/pages/pubadd.html"
+      },
       about:{
         active:true,
         title:"About IMEx Central",
