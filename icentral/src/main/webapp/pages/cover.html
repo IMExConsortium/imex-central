@@ -1,26 +1,46 @@
-<h1>About Imex Central</h1>
-
-<p>The Imex Central Site provide access to the databases used for coordinating
-curation of the interaction data by the members of the 
-<a href="http://imex.sf.net">IMEx Consortium</a>. The participating databases 
-share the curation load by collecting data from non-overlapping sources, 
-processing it according to common curation rules and sharing the curated 
-interaction data.</p>
-
-<p>Databases participating in the coordinated data curation include: 
-<ul>
-<li><a href="http://dip.doe-mbi.ucla.edu">DIP</a></li>
-<li><a href="http://www.ebi.ac.uk/intact">IntAct</a></li>
-<li><a href="http://mint.bio.uniroma2.it/mint">MINT</a></li>
-<li><a href="http://mips.gsf.de/genre/proj/mpact">MPact</a></li> 
-<li><a href="http://www.thebiogrid.org">BioGRID</a></li>
-</ul>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+<h1>Welcome to ImexCentral</h1>
+<p>IMEx Central is designed to coordinate curation efforts between the 
+<a href="http://imex.sf.net">IMEx</a> partners - a group of interaction 
+databases that agreed to conform to common curation and data exchange
+formats in order to improve curation efficiency.
+</p>
+<p>Databases actively participating in the coordinated data curation include: 
+<br/><br/>
+<center>
+<table width="80%">
+ <tr align="center">
+  <td width="20%"><a href="http://dip.doe-mbi.ucla.edu">DIP</a></td>
+  <td width="20%"><a href="http://www.ebi.ac.uk/intact">IntAct</a></td>
+  <td width="20%"><a href="http://mint.bio.uniroma2.it/mint">MINT</a></td>
+  <td width="20%"><a href="http://mips.gsf.de/genre/proj/mpact">MPact</a></td>
+  <td width="20%"><a href="http://www.thebiogrid.org">BioGRID</a></td>
+ </tr>
+</table>
+</center>
+<br/><br/>
+<p>Please, provide <a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed">NCBI</a> 
+PubMed identifier (<a href="http://en.wikipedia.org/wiki/PMID">PMID<a>) if you would 
+like to check if an already published paper has been curated by one of the IMex 
+databases:
+<br/>
+<center>
+ <form method="post" action="pubmgr" name="pubmgr" id="pubmgr">
+  <input type="hidden" name="op" value="search"/>
+  <table width="50%">
+   <tr>
+    <th align="right" width="50%" nowrap>
+     PMID: <input type="text" name="pmid"  size="32" maxsize="32"/>
+    </th>
+    <td align="left">
+     <input type="submit" id="pubmgr_op_search" name="op.search" value="Query ImexCentral"/>
+    </td>
+   </tr>
+  </table>
+ </form>
+</center>
+<br/><br/>
+In case the paper has not been curated you will be able to recommend it
+for curation by one of the IMEx databases.
+<br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/>
 

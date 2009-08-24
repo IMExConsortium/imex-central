@@ -25,7 +25,7 @@ import edu.ucla.mbi.util.struts2.interceptor.*;
 
 import edu.ucla.mbi.imex.central.*;
 
-public abstract class EntryMgrAction extends ManagerSupport {
+public class EntryMgrAction extends ManagerSupport {
 
     //---------------------------------------------------------------------
     //  TracContext
