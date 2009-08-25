@@ -89,6 +89,7 @@ CREATE TABLE journal (
     crt timestamp not null default now(),
 
     title character varying(256) not null default '',
+    issn character varying(32) not null default '',
     nlmid character varying(32) not null default '',
     url character varying(256) not null default '',
     comments character varying(256) not null default ''

@@ -31,6 +31,18 @@ public class Journal extends DataSource {
 
     //---------------------------------------------------------------------
 
+    String issn;
+
+    public void setIssn( String issn ) {
+        this.issn = issn;
+    }
+
+    public String getIssn() {
+        return issn;
+    }
+
+    //---------------------------------------------------------------------
+
     String nlmid;
 
     public void setNlmid( String nlmid ) {
@@ -40,7 +52,6 @@ public class Journal extends DataSource {
     public String getNlmid() {
         return nlmid;
     }
-
 
     //---------------------------------------------------------------------
 

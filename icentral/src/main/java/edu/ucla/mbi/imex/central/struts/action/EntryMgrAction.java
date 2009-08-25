@@ -95,11 +95,11 @@ public class EntryMgrAction extends ManagerSupport {
 
     private IcPub icpub = null;
     
-    public void setPublication( IcPub publication ) {
-        this.icpub = publication;
+    public void setPub( IcPub pub ) {
+        this.icpub = pub;
     }
 
-    public IcPub getPublication(){
+    public IcPub getPub(){
         return this.icpub;
     }
 

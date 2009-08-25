@@ -19,6 +19,8 @@ import edu.ucla.mbi.util.data.*;
 
 public class IcJournal extends Journal { 
 
+    public IcJournal() {}
+
     public IcJournal( Journal journal ){
         
     }

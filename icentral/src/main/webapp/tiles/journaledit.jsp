@@ -24,29 +24,48 @@
    <table width="100%" border="1">
     <s:form theme="simple" action="roleedit"> 
      <s:hidden name="id" value="%{id}"/>
-     <s:hidden name="role.id" value="%{id}"/>
-     <s:hidden name="role.name" value="%{role.name}"/>
+     <s:hidden name="journal.id" value="%{id}"/>
      <tr>
-      <th nowrap>RID:<s:property value="role.id"/></th>
-      
-      <th nowrap>Name:<s:property value="role.name"/></th>
+      <th nowrap>JID:<s:property value="journal.id"/></th>
+      <th nowrap>ISSN:<s:textfield theme="simple" name="journal.issn" size="32" maxLength="64"/></th>
       <td width="95%">&nbsp;</td> 
       <th>
-        <s:submit theme="simple" name="op.del" value="REMOVE"/>
+        <s:submit theme="simple" name="op.del" value="ADD"/>
       </th>
      </tr>
      <tr>
-      <td colspan="4">
+      <td colspan="3">
        <table width="100%" border="1">
-        <td nowrap>Comments</td>
-        <td align="left" width="95%"> 
-         <s:textarea name="role.comments" value="%{role.comments}" cols="32" rows="4"/>
-        </td>
-         <th rowspan="1">
-          <s:submit theme="simple" name="op.pup" value="STORE"/>
+        <tr>
+         <td width="15%" align="right" nowrap>Title</td>
+         <td align="left" width="95%"> 
+          <s:textfield theme="simple" name="journal.title" size="32" maxLength="64"/>
+         </td>
+         <th rowspan="4">
+          <s:submit theme="simple" name="op.pup" value="UPDATE"/>
          </th>
+        </tr>
+        <tr>
+         <td width="15%" align="right" nowrap>NLMID</td>
+         <td align="left" width="95%">
+          <s:textfield theme="simple" name="journal.nlmid" size="32" maxLength="64"/>
+         </td>
+        </tr>
+        <tr>
+         <td width="15%" align="right" nowrap>Journal Site</td>
+         <td align="left" width="95%">
+          <s:textfield theme="simple" name="journal.websiteUrl" size="32" maxLength="64"/>
+         </td>
+        </tr>
+        <tr>
+         <td width="15%" align="right" nowrap>Comments</td>
+         <td align="left" width="95%"> 
+          <s:textarea name="journal.comments" value="%{journal.comments}" cols="64" rows="4"/>
+         </td>
+        </tr>
        </table>
       </td>
+      <td>&nbsp;</td>
      </tr> 
     </s:form>
    </table>
