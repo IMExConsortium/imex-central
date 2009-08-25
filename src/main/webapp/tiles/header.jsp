@@ -108,9 +108,7 @@
          <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
            <td align="right" nowrap>
-            <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
-               HREF=".">Home</a>
-            | <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
+             <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
                  HREF="page?id=about">Help</a>
             | <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
                  HREF="feedback">Contact Us</a>

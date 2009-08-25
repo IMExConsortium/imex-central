@@ -44,9 +44,9 @@
 
  <!-- DataItem -->
 
-  <property name="crt" column="crt_date"/>
+  <property name="crt" column="crt"/>
 
-  <many-to-one name="source" column="src_id"
+  <many-to-one name="source" column="source_id"
                class="edu.ucla.mbi.imex.central.IcJournal" />
 
   <many-to-one name="owner" column="owner_uid"
@@ -69,6 +69,7 @@
   <!-- journal specific -->
 
   <property name="title" column="title" />
+  <property name="issn" column="issn" />
   <property name="nlmid" column="nlmid" />
   <property name="websiteUrl" column="url" />
   <property name="comments" column="comments" />
@@ -76,7 +77,7 @@
 
  <!-- DataSource--> 
 
-  <property name="crt" column="crt_date"/>
+  <property name="crt" column="crt"/>
 
   <many-to-one name="owner" column="owner_uid"
                class="edu.ucla.mbi.imex.central.IcUser" />
