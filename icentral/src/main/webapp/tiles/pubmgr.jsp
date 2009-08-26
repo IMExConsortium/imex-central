@@ -32,33 +32,62 @@
     <table width="100%" border="1">
      <s:form theme="simple" action="rolemgr"> 
       <tr>
-       <th colspan="2">RID</th>
-       <th>Name</th>
+       <th colspan="2">PID</th>
+       <th colspan="2" width="85%">Publication</th>
+       <th>PMID</th>
+       <th>ImexId</th>
+       <th>Status</th>
+       <th nowrap>Submission<br/>date</th>
+       <th nowrap>Submitted by</th>
        <th>&nbsp</th>
       </tr>
-      <s:if test="roleList!=null">
-       <s:iterator value="roleList" id="role" status="rpos">
+      <s:if test="publicationList!=null">
+       <s:iterator value="publicationList" id="pub" status="ppos">
         <tr>
-         <td align="center">
-          <s:checkbox name="opp.del" fieldValue="%{#role.id}"/>
+         <td align="center" rowspan="2">
+          <s:checkbox name="opp.del" fieldValue="%{#pub.id}"/>
          </td>
-         <td align="center">
-           <s:property value="#role.id" />
+         <td align="center" rowspan="2">
+           <s:property value="#pub.id" />
          </td>
+         <th align="right" width="5%">Author(s)</th>
          <td>
-           <s:property value="#role.name" />
+          <s:property value="#pub.author" />
          </td>
-         <td align="center">
-          <a href='rolemgr?id=<s:property value="#role.id"/>'>detail</a>
+         <td align="center" rowspan="2">
+          <s:property value="#pub.pmid" />
          </td>
-        </s:iterator>
-       </tr>
+         <td rowspan="2">
+          <s:property value="#pub.imex" />
+         </td>
+         <td align="center" rowspan="2">
+           <s:property value="#pub.status" />
+         </td>
+         <td align="center" rowspan="2">
+          <s:property value="#pub.createDateString"/>
+          <br/>
+          <s:property value="#pub.createTimeString"/>
+         </td>
+         <td align="center" rowspan="2">
+           <s:property value="#pub.owner.login" />
+         </td>
+         <td align="center" rowspan="2">
+          <a href='pubmgr?id=<s:property value="#pub.id"/>'>details</a>
+         </td>
+        </tr>
+        <tr>
+         <th width="5%">Title</th>
+         <td>
+          <s:property value="#pub.title"/>
+         </td>
+        </tr>
+       </s:iterator>
       </s:if>
       <tr>
        <td colspan="2" align="center">
         <s:submit theme="simple" name="op.ldel" value="DROP" />
        </td>
-       <td>
+       <td colspan="7">
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['role.name']!=null">
           <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
@@ -70,9 +99,9 @@
           </div>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
+        PMID: <s:textfield theme="simple" name=".name" size="48" maxLength="64"/>
        </td>
-       <td align="center">
+       <td colspan="1" align="center">
         <s:submit theme="simple" name="op.add" value="ADD" />
        </td>
       </tr>

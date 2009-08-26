@@ -106,12 +106,20 @@ public class EntryMgrAction extends ManagerSupport {
     //---------------------------------------------------------------------
     
     public List<IcPub> getPublicationList(){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "publist called..."  );
         
         if ( tracContext.getPubDao() == null ) return null;
+
+        log.info( "pubdao ok..."  );
         
         List<Publication> pl = tracContext.getPubDao().getPublicationList();
+
+        log.info( "publist=" + pl );
+
         if ( pl == null ) return null;
-        
+
         List<IcPub> ipl = new ArrayList<IcPub>();
         for ( Iterator<Publication> ii = pl.iterator(); ii.hasNext(); ) {
             IcPub jj = (IcPub) ii.next();

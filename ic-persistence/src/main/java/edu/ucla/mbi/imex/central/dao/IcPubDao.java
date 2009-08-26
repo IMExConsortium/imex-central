@@ -72,7 +72,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         try {
             startOperation();
             Query query =
-                session.createQuery( "from IcPublication p order by id ");
+                session.createQuery( "from IcPub p order by id ");
             
             plst = (List<Publication>) query.list();
             tx.commit();

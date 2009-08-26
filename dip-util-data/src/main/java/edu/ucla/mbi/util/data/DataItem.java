@@ -66,6 +66,25 @@ public class DataItem {
         return this.creationTime;
     }
 
+    public String getCreateDateString(){
+        if( creationTime == null ){
+            return "----/--/--";
+        }
+        
+        StringBuffer sb = new StringBuffer();
+        sb.append( creationTime.get(Calendar.YEAR) );
+        sb.append( "/");
+        sb.append( creationTime.get(Calendar.MONTH) + 1);
+        sb.append( "/" );
+        sb.append( creationTime.get(Calendar.DAY_OF_MONTH) );
+        
+        return sb.toString();
+    }
+
+    public String getCreateTimeString(){
+        return "--:--:--";
+    }
+
     //---------------------------------------------------------------------
 
     Set<User>  adminUsrSet;

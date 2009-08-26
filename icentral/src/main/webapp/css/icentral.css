@@ -3,10 +3,10 @@
    styles for the Imex Central site
     
    Color scheme:
-    - blue for table borders: #5375a8
-    - top menu (menu1) dark blue: #446099
-    - mid menu (menu2) med blue: #99bbee
-    - bottom menu (menu3) lt blue: #e3edff
+    - blue for table borders: #5375a8 #444444 
+    - top menu (menu1) dark blue: #446099 #aaaaaa
+    - mid menu (menu2) med blue: #99bbee  #cccccc
+    - bottom menu (menu3) lt blue: #e3edff #eeeeee
 */
 
 /* GENERAL STYLES */
@@ -67,8 +67,8 @@ h2 {
 }
 
 .focus {
-  background-color: #e3edff;
-  border: 1px solid #5375a8;
+  background-color: #eeeeee;
+  border: 1px solid #444444;
   padding: 10px;
   margin-top: 10px;
 }
@@ -76,18 +76,18 @@ h2 {
 .bottom {}
 
 .footer {
-  border-top: 1px solid #5375a8;
+  border-top: 1px solid #444444;
   margin: 0px;
   padding: 0px;
 }
 
 td.footer {
   border-top: 0px;
-  border-bottom: 1px dotted #555566;
+  border-bottom: 1px dotted #555555;
 }
 
 .footbar {
-  background-color: #555566;
+  background-color: #555555;
   font-size: 0.70em;
   white-space: nowrap;
   border-bottom: 1px solid #555555;
@@ -106,17 +106,17 @@ td.footer {
 }
 
 .border {
-  border: 1px solid #555566;
+  border: 1px solid #555555;
 }
 
 .t2 {
-  border-bottom: 1px solid #555566;
-  border-right: 1px solid #555566;
+  border-bottom: 1px solid #555555;
+  border-right: 1px solid #555555;
 }
 
 .tcell2 {
-  border-top: 1px solid #555566;
-  border-left: 1px solid #555566;
+  border-top: 1px solid #555555;
+  border-left: 1px solid #555555;
   padding: 9px 8px;
 }
 
@@ -135,15 +135,15 @@ ul.detail {
 }
 
 table.results {
-  border-bottom: 1px solid #5375a8;
-  border-right: 1px solid #5375a8;
+  border-bottom: 1px solid #444444;
+  border-right: 1px solid #444444;
   background-color: white;
   font-size: 0.8em;
 }
 
 table.results_int {
-  border-bottom: 1px solid #5375a8;
-  border-right: 1px solid #5375a8;
+  border-bottom: 1px solid #444444;
+  border-right: 1px solid #444444;
   background-color: white;
   font-size: 0.8em;
 }
@@ -151,8 +151,8 @@ table.results_int {
 th.results, td.results, td.results1, 
 .results_imex, th.results_int, td.results_int,
 .results_mol, .results_core, .results_exp, .results_source {
-  border-top: 1px solid #5375a8;
-  border-left: 1px solid #5375a8;
+  border-top: 1px solid #444444;
+  border-left: 1px solid #444444;
   padding: 4px 6px;
 }
 
@@ -162,7 +162,7 @@ th.results_mol, th.results_core, th.results_exp, th.results_source {
 }
 
 th.results {
-  background-color: #e3edff;
+  background-color: #eeeeee;
 }
 
 .results1 {
@@ -170,7 +170,7 @@ th.results {
 }
 
 .results_mol {
-  background-color: #e3edff;
+  background-color: #eeeeee;
 }
 
 .results_imex {
@@ -186,7 +186,7 @@ th.results {
 }
 
 .results_source {
-  background-color: #dddddd;
+  background-color: #eeeeee;
 }
 
 ol.int_list {
@@ -275,63 +275,63 @@ td.data_graphs {
 
 .data_mol {
   background-color: #adccf6;
-  border-bottom: 2px solid #5375a8;
+  border-bottom: 2px solid #444444;
 }
 
 table.data_mol {
   background-color: #adccf6;
-  border-top: 2px solid #5375a8;
-  border-bottom: 2px solid #5375a8;
+  border-top: 2px solid #444444;
+  border-bottom: 2px solid #444444;
 }
 
 .data_int, .data_core {
   background-color: #fcfc88;
-  border-bottom: 2px solid #5375a8;
+  border-bottom: 2px solid #444444;
 }
 
 table.data_int, table.data_core {
   background-color: #fcfc88;
-  border-top: 2px solid #5375a8;
-  border-bottom: 2px solid #5375a8;
+  border-top: 2px solid #444444;
+  border-bottom: 2px solid #444444;
 }
 
 .data_exp {
   background-color: #aee394;
-  border-bottom: 2px solid #5375a8;
+  border-bottom: 2px solid #444444;
 }
 
 table.data_exp {
   background-color: #aee394;
-  border-top: 2px solid #5375a8;
-  border-bottom: 2px solid #5375a8;
+  border-top: 2px solid #444444;
+  border-bottom: 2px solid #444444;
 }
 
 .data_source {
   background-color: #b3b3b3;
-  border-bottom: 2px solid #5375a8;
+  border-bottom: 2px solid #444444;
 }
 
 table.data_source {
   background-color: #b3b3b3;
-  border-top: 2px solid #5375a8;
-  border-bottom: 2px solid #5375a8;
+  border-top: 2px solid #444444;
+  border-bottom: 2px solid #444444;
 }
 
 table.mol {
-  border-bottom: 1px solid #5375a8;
-  border-right: 1px solid #5375a8;
+  border-bottom: 1px solid #444444;
+  border-right: 1px solid #444444;
   background-color: white
 }
 
 th.mol, td.mol, td.mol1 {
-  border-left: 1px solid #5375a8;
+  border-left: 1px solid #444444;
   text-align: left;
 }
 
 th.mol {
-  border-top: 1px solid #5375a8;
-  border-bottom: 1px solid #5375a8;
-  background-color: #e3edff;
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+  background-color: #eeeeee;
   padding: 4px 10px;
 }
 
@@ -360,8 +360,8 @@ th.int, td.int {
 }
 
 .ftitle {
-  background-color:  #e3edff;
-  border-bottom: 1px solid #5375a8;
+  background-color:  #eeeeee;
+  border-bottom: 1px solid #444444;
   padding: 1px 10px;
   width:   100%;
   text-align: center; 
@@ -378,9 +378,9 @@ th.int, td.int {
 .fspacer { }
 
 .fs {
-  background-color:  #e3edff;
+  background-color:  #eeeeee;
   padding: 0px;
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   width:   100%;
   text-align: left;
   vertical-align: top;
@@ -390,7 +390,7 @@ th.int, td.int {
   background-color:  #ffff99;
   margin:  0px;
   padding: 4px 10px 2px 10px;
-  border-bottom: 1px solid #5375a8;
+  border-bottom: 1px solid #444444;
   width:   100%;
   font-size:  large;
   font-weight: bold;
@@ -422,7 +422,7 @@ th.int, td.int {
 /* PAGE BODY TAB STYLES (ex: Download pages) */
 
 .ttab {                           /* unselected tab */
-  border-bottom: 1px solid #5375a8;
+  border-bottom: 1px solid #444444;
   padding: 3pt 6pt;
   font-size:      small;
 }
@@ -432,57 +432,57 @@ th.int, td.int {
 }
 
 .tlnkon {                         /* selected tab */
-  color: #446099;
+  color: #888888;
   text-decoration: none;
 }
 
 .ttabon {                         /* selected tab in multi-layer */
-  border-right: 1px solid #5375a8;
-  border-left:  1px solid #5375a8;
-  border-top:   1px solid #5375a8;
+  border-right: 1px solid #444444;
+  border-left:  1px solid #444444;
+  border-top:   1px solid #444444;
   padding: 3pt 6pt;
   font-size: small;
   background-color: #eeeeee;
 }
 
 .tcont {
-  border-left:   1px solid #5375a8;
-  border-right:  1px solid #5375a8;
-  border-bottom: 1px solid #5375a8;
+  border-left:   1px solid #444444;
+  border-right:  1px solid #444444;
+  border-bottom: 1px solid #444444;
   padding: 15px;
   background-color: #eeeeee;
 }
 
 .ttabon_int {                         /* selected interaction tab */
-  border-right: 1px solid #5375a8;
-  border-left:  1px solid #5375a8;
-  border-top:   1px solid #5375a8;
+  border-right: 1px solid #444444;
+  border-left:  1px solid #444444;
+  border-top:   1px solid #444444;
   padding: 3pt 6pt;
   font-size: small;
   background-color: #f6f6f6;
 }
 
 .tcont_int {
-  border-left:   1px solid #5375a8;
-  border-right:  1px solid #5375a8;
-  border-bottom: 1px solid #5375a8;
+  border-left:   1px solid #444444;
+  border-right:  1px solid #444444;
+  border-bottom: 1px solid #444444;
   padding: 10px;
   background-color: #f6f6f6;
 }
 
 .ttabon_mol {                         /* selected molecule tab */
-  border-right: 1px solid #5375a8;
-  border-left:  1px solid #5375a8;
-  border-top:   1px solid #5375a8;
+  border-right: 1px solid #444444;
+  border-left:  1px solid #444444;
+  border-top:   1px solid #444444;
   padding: 3pt 6pt;
   font-size: small;
   background-color: #ccddff;
 }
 
 .tcont_mol {
-  border-left:   1px solid #5375a8;
-  border-right:  1px solid #5375a8;
-  border-bottom: 1px solid #5375a8;
+  border-left:   1px solid #444444;
+  border-right:  1px solid #444444;
+  border-bottom: 1px solid #444444;
   padding: 10px;
   background-color: #ccddff;
 }
@@ -500,7 +500,7 @@ th.int, td.int {
 }
 
 .hlnk {
-  color:     #555566;
+  color:     #555555;
   font-size:   small;
 }
 
@@ -525,7 +525,7 @@ th.int, td.int {
 }
 
 .fxn {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   background-color: #edf4ff;
   padding: 8px;
 }
@@ -536,7 +536,7 @@ th.int, td.int {
 }
 
 .tou {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   padding: 2px 2px 2px 0px;
  }
 
@@ -574,7 +574,7 @@ th.int, td.int {
   font-family: sans-serif;
   white-space: nowrap;  
   font-weight: bold;
-  color: #bbbbbb;
+  color: #eeeeee;
 }
 
 .acccellmain {
@@ -585,7 +585,7 @@ th.int, td.int {
   font-family: sans-serif;
   white-space: nowrap;  
   font-weight: bold;
-  color: #888888;
+  color: #cccccc;
 }
 
 .mainheader {
@@ -610,8 +610,8 @@ th.int, td.int {
 }
 
 .menulogo {
-  border-right: 1px solid #5375a8;
-  border-bottom: 1px solid #5375a8;
+  border-right: 1px solid #444444;
+  border-bottom: 1px solid #444444;
   background-color: white
 }
 
@@ -643,7 +643,7 @@ th.int, td.int {
 }
 
 .imex {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   background-color:  white;
   margin-top:    2px;
   margin-bottom:  2px;
@@ -653,18 +653,18 @@ th.int, td.int {
   font-size: 7.5pt;
   vertical-align: middle; 
   font-family:  sans-serif;
-  color: #5375a8;  
+  color: #444444;  
   font-weight: bold;
 }
 
 .imexfooter {
   background-color: white;
-  border-right: 1px dotted #5375a8;
-  border-left: 1px dotted #5375a8;
-  border-bottom: 1px dotted #5375a8;
+  border-right: 1px dotted #444444;
+  border-left: 1px dotted #444444;
+  border-bottom: 1px dotted #444444;
   padding-right: 8px;
   padding-left: 4px;
-  color: #5375a8;
+  color: #444444;
   font-weight: bold;
   font-size: 7.5pt;
   font-family: sans-serif;
@@ -684,7 +684,7 @@ th.int, td.int {
 .tmainmenu {
   font-family: sans-serif;
   border: 0px solid black;
-  background-color: #99BBEE;
+  background-color: #cccccc;
   margin:  0px;
   padding: 0px;
   text-align: center; 
@@ -693,7 +693,7 @@ th.int, td.int {
 
 .mainmenu {
   border: 0px solid black;
-  background-color: #99BBEE;
+  background-color: #cccccc;
   margin:  0px;
   padding-left: 10px;
   text-align: center; 
@@ -710,15 +710,15 @@ th.int, td.int {
 }
 
 .clogin {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   margin:  0px;
   padding: 5px;
   font-family: sans-serif;
-  background-color: #e3edff;
+  background-color: #eeeeee;
 }
 
 .clogin1 {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   margin:  0px;
   padding: 5px;
   font-family: sans-serif;
@@ -726,7 +726,7 @@ th.int, td.int {
 }
 
 .captcha1 {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
   margin:  0px;
   padding: 5px;
   font-family: sans-serif;
@@ -734,7 +734,7 @@ th.int, td.int {
 }
  
 img.main {
-  border: 1px solid #5375a8;
+  border: 1px solid #444444;
 }
 
 .submit {
@@ -748,7 +748,7 @@ img.main {
 
 .mmsecttop {
   border: 0px solid black;
-  background-color: #99BBEE;
+  background-color: #cccccc;
   padding-top: 20px;
   font-size: 1em;
   font-weight: bolder;
@@ -759,7 +759,7 @@ img.main {
 
 .mmsect {
   border: 0px solid black;
-  background-color: #99BBEE;
+  background-color: #cccccc;
   padding-top: 10px;
   font-size: 1em;
   font-weight: bolder;
@@ -770,7 +770,7 @@ img.main {
 
 .mmitem {
   border: 0px solid black;
-  background-color: #99BBEE;
+  background-color: #cccccc;
   margin:  0px;
   padding-top: 2px;
   padding-bottom: 2px;
@@ -801,16 +801,16 @@ img.main {
 }
 
 .topmenu {
-  background-color: #446099;
+  background-color: #888888;
 }
 
 .maintopmenu {
-  background-color: #446099;
+  background-color: #888888;
   border-bottom: 4px solid black;
 }
 
 .topmenutab {
-  border: 0px solid rgb(20%,20%,40%);
+  border: 0px solid rgb(20%,20%,20%);
   margin-top:  0px;
   padding: 3px;
   text-align: center; 
@@ -818,7 +818,7 @@ img.main {
 }
 
 .topmenutabon {
-  border: thin solid #555566;
+  border: thin solid #555555;
   margin-top:  0px;
   padding: 3px;
   text-align: center;
@@ -836,13 +836,13 @@ img.main {
 }
 
 .corner {
-  border-top:  thick solid #99BBEE;
+  border-top:  thick solid #cccccc;
   margin:  0px;
   padding: 0px;  
 }
 
 .midmenu {
-  background-color: #99bbee;
+  background-color: #cccccc;
   font-family: sans-serif;
 }
 
@@ -875,19 +875,19 @@ img.main {
 }
 
 .btmmenu {
-  background-color: #e3edff;
+  background-color: #eeeeee;
   text-align: center; 
   font-family: sans-serif;
   vertical-align: bottom; 
 }
 
 .btmsearch {
-  background-color: #e3edff;
+  background-color: #eeeeee;
   color: white;
   text-align: center; 
   font-family: sans-serif;
   vertical-align: middle; 
-  border-bottom: 1px solid #555566;
+  border-bottom: 1px solid #555555;
 }
 
 .btmsearchtab {
@@ -931,20 +931,20 @@ img.main {
   padding: 5px 10px;
   text-align: left; 
   vertical-align: middle; 
-  color: #333333;
-  border-bottom: 1px dotted #5375a8;
+  color: #888888;
+  border-bottom: 1px dotted #444444;
 }
 
 .copyright {
   font-size: 0.65em;
-  color: #888888;
+  color: #cccccc;
   padding: 3px;
   text-align: left; 
   vertical-align: middle; 
 }
 
 .copyright2 {
-  border-bottom: 1px dotted #5375a8;
+  border-bottom: 1px dotted #444444;
   font-size: 0.60em;
   color: #777777;
   padding: 5px 10px;
@@ -953,7 +953,7 @@ img.main {
 }
 
 .copyright3 {
-  border-bottom: 1px dotted #5375a8;
+  border-bottom: 1px dotted #444444;
   font-size: 0.60em;
   color: #777777;
   padding: 5px 10px;
@@ -978,7 +978,7 @@ img.main {
 }
 */
 
-TABLE.TG { background-color:  #99BBEE; }
+TABLE.TG { background-color:  #cccccc; }
           
 TABLE.TBF {
            border-style: solid;
@@ -1090,7 +1090,7 @@ TD.TDY    {
           
 TD.TDM    {        
            border-style: solid; 
-           border-color: #5375a8; 
+           border-color: #444444; 
            border-width: 1px;
            vertical-align: top;
           }
@@ -1107,14 +1107,14 @@ TD.TDMC_ACT {
 
 TR.TRMC_ACT {       
              text-align:        left;
-             background-color:  #99BBEE;
+             background-color:  #cccccc;
             }
           
 TD.TDF    {        
            border-style: solid; 
            border-color: black; 
            border-width: 1pt;
-           background-color:  #99BBEE;
+           background-color:  #cccccc;
           }
           
 TH.THH    {
@@ -1127,18 +1127,18 @@ TH.THF {border-style: solid; border-color: black; border-width: 1pt;}
 /* MENU STYLES */
 
 table.mainmenu1 {			/* main (front) page */
-  background-color:#446099;
-  border-bottom: 4px solid #99bbee;
+  background-color:#888888;
+  border-bottom: 4px solid #cccccc;
   color: white;
 }
 
 table.mainmenubtm {
-  border-top: 4px solid #e3edff;
+  border-top: 4px solid #eeeeee;
 }
 
 table.menu1_background {		/* top menu (menu1) */
-  border-top: 5px solid #446099; 
-  background-color:#446099;
+  border-top: 5px solid #888888; 
+  background-color:#888888;
 }
 
 td.menu1first, td.menu1, td.menu1select, td.menu1last, td.menu1blank {
@@ -1151,25 +1151,25 @@ td.menu1first, td.menu1, td.menu1select, td.menu1last, td.menu1blank {
 
 td.menu1first {
   padding: 0px 4px;
-  border-right: 1px solid #224477;
+  border-right: 1px solid #444444;
 }
 
 td.menu1 {
   color: white;
-  border-right: 1px solid #224477; 
-  border-left: 1px solid #7090bb;
+  border-right: 1px solid #444444; 
+  border-left: 1px solid #888888;
 }
 
 td.menu1select {
-  background-color:#99bbee; 
-  border-right: 1px solid #bbccee;
-  border-top: 1px solid #7799cc;
-  border-left: 1px solid #7799cc;
+  background-color:#cccccc; 
+  border-right: 1px solid #888888;
+  border-top: 1px solid #888888;
+  border-left: 1px solid #888888;
 }
 
 td.menu1last {
   color: white;
-  border-left: 1px solid #7090bb;
+  border-left: 1px solid #888888;
 }
 
 td.menu1blank {
@@ -1177,8 +1177,8 @@ td.menu1blank {
 }
 
 table.menu2_background {		/* mid menu (menu2) */
-  border-top: 5px solid #99bbee;
-  background-color:#99bbee;
+  border-top: 5px solid #cccccc;
+  background-color:#cccccc;
 }
 
 td.menu2first, td.menu2, td.menu2select, td.menu2last, td.menu2blank {
@@ -1189,24 +1189,24 @@ td.menu2first, td.menu2, td.menu2select, td.menu2last, td.menu2blank {
 
 td.menu2first {
   padding: 0px 8px;
-  border-right: 1px solid #7799cc;
+  border-right: 1px solid #999999;
 }
 
 td.menu2 {
-  border-right: 1px solid #7799cc; 
-  border-left: 1px solid #bbccee;
+  border-right: 1px solid #999999; 
+  border-left: 1px solid #cccccc;
 }
 
 td.menu2select {
   color: white;
-  background-color: #e3edff; 
-  border-top:    1px solid #bbccee; 
+  background-color: #eeeeee; 
+  border-top:    1px solid #999999; 
   border-right:   1px solid white; 
-  border-left:  1px solid #bbccee;
+  border-left:  1px solid #cccccc;
 }
 
 td.menu2last {
-  border-left: 1px solid #bbccee;
+  border-left: 1px solid #cccccc;
 }
 
 td.menu2blank {
@@ -1215,8 +1215,8 @@ td.menu2blank {
 }
 
 table.menu3_background {		/* bottom menu (menu3) */
-  border-top: 5px solid #e3edff;
-  background-color:     #e3edff;
+  border-top: 5px solid #eeeeee;
+  background-color:     #eeeeee;
 }
 
 td.menu3first, td.menu3, td.menu3select, td.menu3last, td.menu3blank, td.menu3null {
@@ -1226,41 +1226,41 @@ td.menu3first, td.menu3, td.menu3select, td.menu3last, td.menu3blank, td.menu3nu
 }
 
 td.menu3first, td.menu3, td.menu3last, td.menu3null {
-  border-bottom: 1px solid #5375a8;
+  border-bottom: 1px solid #444444;
 } 
 
 td.menu3first {
   padding: 0px 12px;
-  border-right: 1px solid #bbccee;
+  border-right: 1px solid #cccccc;
 }
 
 td.menu3 {
-  border-top:    1px solid #e3edff; 
+  border-top:    1px solid #eeeeee; 
   border-left:   1px solid white; 
-  border-right:  1px solid #bbccee;
+  border-right:  1px solid #cccccc;
 }
 
 td.menu3select {
   background-color: white; 
-  border-top:    1px solid #5375a8; 
-  border-left:   1px solid #5375a8; 
-  border-right:  1px solid #5375a8;
+  border-top:    1px solid #444444; 
+  border-left:   1px solid #444444; 
+  border-right:  1px solid #444444;
 }
 
 td.menu3last
 {
-  border-top:    1px solid #e3edff; 
+  border-top:    1px solid #eeeeee; 
   border-left:   1px solid white; 
 }
 
 td.menu3blank {
   padding: 3px 5px;
-  border-top:    1px solid #e3edff;
+  border-top:    1px solid #eeeeee;
 }
 
 td.menu3null {
-  background-color: #e3edff;
-  border-top:    1px solid #e3edff;
+  background-color: #eeeeee;
+  border-top:    1px solid #eeeeee;
 }
 
 /*-------------------------------*/
@@ -1285,7 +1285,7 @@ img.core {
 
 img.interact {
   padding: 10px;
-  border: 1px solid #555566;
+  border: 1px solid #555555;
   margin: 10px 0px;
 }
 
@@ -1310,7 +1310,7 @@ table.dstable {
 }
 
 td.dsheader {
-  background-color:     #e3edff;
+  background-color:     #eeeeee;
   text-align:center;
   font-family:sans-serif;
   white-space: nowrap; 
@@ -1385,16 +1385,16 @@ a.MOFF {
 }
 
 a.acMON {                          /* account menu */
-  color: #bbbbbb;
+  color: #eeeeee;
   text-decoration: underline; 
 }
 
 a.acMOFF {
-  color: #bbbbbb; 
+  color: #eeeeee; 
   text-decoration: none;
 } 
 
-a.acmain { color: #888888; }
+a.acmain { color: #cccccc; }
 
 a.mmMON {    color: black;           /* middle menu */
   text-decoration: underline;
