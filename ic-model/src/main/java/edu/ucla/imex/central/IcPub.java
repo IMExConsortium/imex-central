@@ -20,13 +20,26 @@ import edu.ucla.mbi.util.data.*;
 
 public class IcPub extends Publication {
     
-    IcPub() {}
-
+    IcPub() { }
+    
     public IcPub( Publication pub ) {
+
+        this.setPmid( pub.getPmid() );
+
+        this.setTitle( pub.getTitle() );
+        this.setAuthor( pub.getAuthor() );
+        this.setAbstract( pub.getAbstract() );
         
+        this.setOwner( pub.getOwner() );
+        this.setSource( pub.getSource() );
+        this.setState( pub.getState() );
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime( new Date() );
+        this.setCrt( calendar );
     }
 
-    private String imexId;
+    private String imexId = "";
     
     public void setImexId( String imexId ) {
         this.imexId = imexId;

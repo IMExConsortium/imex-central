@@ -31,7 +31,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
     // DataState
     //----------
 
-    public DataState getDataState( long id ) { 
+    public DataState getDataState( int id ) { 
         
         DataState pub = null;
         
@@ -125,7 +125,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
     // Transition
     //-----------
 
-    public Transition getTrans( long id ) { 
+    public Transition getTrans( int id ) { 
         
         Transition trans = null;
 

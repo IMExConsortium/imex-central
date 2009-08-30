@@ -24,19 +24,19 @@ public class Publication extends DataItem {
     // identifiers
     //------------
 
-    private String doi;
+    private String doi = "";
 
-    public void setDoi(String doi) {
+    public void setDoi( String doi ) {
         this.doi = doi;
     }
-
+    
     public String getDoi() {
         return doi;
     }
 
     //---------------------------------------------------------------------
 
-    private String pmid;
+    private String pmid = "";
 
     public void setPmid( String pmid ) {
         this.pmid = pmid;
@@ -48,7 +48,7 @@ public class Publication extends DataItem {
 
     //---------------------------------------------------------------------
 
-    private String journalSpecific;
+    private String journalSpecific = "";
 
     public void setJournalSpecific( String journalSpecific ) {
         this.journalSpecific = journalSpecific;
@@ -63,7 +63,7 @@ public class Publication extends DataItem {
     // publication data
     //-----------------
 
-    private String title;
+    private String title = "";
 
     public void setTitle( String title ) {
         this.title = title;
@@ -75,7 +75,7 @@ public class Publication extends DataItem {
 
     //---------------------------------------------------------------------
 
-    private String author;
+    private String author = "";
 
     public void setAuthor( String author ) {
         this.author = author; 
@@ -87,7 +87,7 @@ public class Publication extends DataItem {
 
     //---------------------------------------------------------------------
 
-    private String publicationAbstract;
+    private String publicationAbstract = "";
     
     public void setAbstract( String abst ) {
         this.publicationAbstract = abst;

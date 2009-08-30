@@ -27,7 +27,7 @@ import edu.ucla.mbi.imex.central.*;
        
 public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
-    public Publication getPublication( long id ) { 
+    public Publication getPublication( int id ) { 
         
         Publication pub = null;
 
@@ -39,7 +39,6 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
     
-
     //---------------------------------------------------------------------
 
     public Publication getPublication( String title ) { 
@@ -62,13 +61,38 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
     
+    //---------------------------------------------------------------------
 
+    public Publication getPublicationByPmid( String pmid ) { 
+        
+        Publication pub = null;
+
+        try {
+            startOperation();
+            Query query =
+                session.createQuery( "from IcPub p where " +
+                                     " p.pmid = :pmid ");
+            query.setParameter("pmid", pmid );
+            query.setFirstResult( 0 );
+            pub = (IcPub) query.uniqueResult();
+            tx.commit();
+            
+        } catch( DAOException dex ) {
+            // log error ?
+        }
+        return pub; 
+    }
+    
     //---------------------------------------------------------------------
 
     public List<Publication> getPublicationList() {
         
         List<Publication> plst = null;
         
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcPubDao:getPublicationList"  );
+
+
         try {
             startOperation();
             Query query =
@@ -79,7 +103,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
         } catch ( DAOException dex ) {
             // log exception ?
+            dex.printStackTrace();
         } 
+        
+        System.out.println("plist"+plst);
+
         return plst;
     }
 

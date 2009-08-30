@@ -63,7 +63,6 @@ CREATE INDEX grp_role_2 on grp_role (role_id, grp_id);
 CREATE INDEX grp_role_3 on grp_role (grp_id,role_id);
 
 
-
 CREATE TABLE datastate (
     id serial primary key, 
     name character varying(32) UNIQUE not null default '',
@@ -107,14 +106,14 @@ CREATE TABLE entry (
     source_id integer not null default 0,
     state_id integer not null default 0,
 
-    imexId character varying(32) not null default '',
+    imexId character varying(32) default '',
 
-    doi character varying(256) not null default '',
-    pmid character varying(32) not null default '',
-    jspec character varying(256) not null default '',
-    title character varying(256) not null default '',
-    author character varying(1024) not null default '',
-    abstract character varying(1024) not null default '',
+    doi character varying(256) default '',
+    pmid character varying(32) default '',
+    jspec character varying(256) default '',
+    title character varying(1024) default '',
+    author text default '',
+    abstract text default '',
     pub_date timestamp ,
     epub_date timestamp,
     rel_date timestamp

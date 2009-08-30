@@ -32,24 +32,28 @@
     <table width="100%" border="1">
      <s:form theme="simple" action="rolemgr"> 
       <tr>
-       <th colspan="2">RID</th>
-       <th>Name</th>
-       <th>&nbsp</th>
+       <th colspan="2  width="5%"">JID</th>
+       <th width="5%" nowrap>NLMID</th>
+       <th width="85%" nowrap>Title</th>
+       <th idth="5%" nowrap>&nbsp</th>
       </tr>
-      <s:if test="roleList!=null">
-       <s:iterator value="roleList" id="role" status="rpos">
+      <s:if test="journalList!=null">
+       <s:iterator value="journalList" id="journal" status="jpos">
         <tr>
          <td align="center">
-          <s:checkbox name="opp.del" fieldValue="%{#role.id}"/>
+          <s:checkbox name="opp.del" fieldValue="%{#journal.id}"/>
          </td>
          <td align="center">
-           <s:property value="#role.id" />
+           <s:property value="#journal.id" />
          </td>
          <td>
-           <s:property value="#role.name" />
+           <s:property value="#journal.nlmid" />
+         </td>
+         <td>
+           <s:property value="#journal.title" />
          </td>
          <td align="center">
-          <a href='rolemgr?id=<s:property value="#role.id"/>'>detail</a>
+          <a href='journalmgr?id=<s:property value="#journal.id"/>'>detail</a>
          </td>
         </s:iterator>
        </tr>
@@ -58,7 +62,7 @@
        <td colspan="2" align="center">
         <s:submit theme="simple" name="op.ldel" value="DROP" />
        </td>
-       <td>
+       <td colspan="2">
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['role.name']!=null">
           <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
@@ -70,7 +74,7 @@
           </div>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
+        NLMID: <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
        </td>
        <td align="center">
         <s:submit theme="simple" name="op.add" value="ADD" />

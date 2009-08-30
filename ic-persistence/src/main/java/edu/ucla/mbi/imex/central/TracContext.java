@@ -45,6 +45,20 @@ public class TracContext extends JsonContext {
     public void setJournalDao( JournalDAO dao ) {
         journalDao = dao;
     }
+
+    //---------------------------------------------------------------------
+    //  NCBI Proxy Access
+    //-------------------
+    
+    private NcbiProxyClient ncbiProxy;
+
+    public void setNcbiProxyClient( NcbiProxyClient proxy ) {
+        this.ncbiProxy = proxy;
+    }
+
+    public NcbiProxyClient getNcbiProxyClient() {
+        return this.ncbiProxy;
+    }
     
     //---------------------------------------------------------------------        
     

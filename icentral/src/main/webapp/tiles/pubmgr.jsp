@@ -30,16 +30,19 @@
   <tr>
    <td>
     <table width="100%" border="1">
-     <s:form theme="simple" action="rolemgr"> 
+     <s:form theme="simple" action="pubmgr"> 
       <tr>
-       <th colspan="2">PID</th>
-       <th colspan="2" width="85%">Publication</th>
-       <th>PMID</th>
-       <th>ImexId</th>
-       <th>Status</th>
-       <th nowrap>Submission<br/>date</th>
-       <th nowrap>Submitted by</th>
-       <th>&nbsp</th>
+       <th colspan="2" rowspan="2">PID</th>
+       <th colspan="2" width="85%" rowspan="2">Publication</th>
+       <th rowspan="2">PMID</th>
+       <th rowspan="2">ImexId</th>
+       <th rowspan="2">Status</th>
+       <th nowrap colspan="2">Submission</th>
+       <th rowspan="2">&nbsp</th>
+      </tr>
+      <tr>
+       <th nowrap>Date</th>
+       <th nowrap>Owner</th>
       </tr>
       <s:if test="publicationList!=null">
        <s:iterator value="publicationList" id="pub" status="ppos">
@@ -61,7 +64,7 @@
           <s:property value="#pub.imex" />
          </td>
          <td align="center" rowspan="2">
-           <s:property value="#pub.status" />
+           <s:property value="#pub.state.name" />
          </td>
          <td align="center" rowspan="2">
           <s:property value="#pub.createDateString"/>
@@ -99,10 +102,10 @@
           </div>
          </s:if>
         </s:if>
-        PMID: <s:textfield theme="simple" name=".name" size="48" maxLength="64"/>
+        PMID: <s:textfield theme="simple" name="pub.pmid" size="48" maxLength="64"/>
        </td>
        <td colspan="1" align="center">
-        <s:submit theme="simple" name="op.add" value="ADD" />
+        <s:submit theme="simple" name="op.eadd" value="ADD" />
        </td>
       </tr>
      </s:form>

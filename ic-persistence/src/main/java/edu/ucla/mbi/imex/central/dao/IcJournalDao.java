@@ -27,7 +27,7 @@ import edu.ucla.mbi.imex.central.*;
 
 public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
-    public Journal getJournal( long id ) { 
+    public Journal getJournal( int id ) { 
         
         Journal journal = null;
 
@@ -39,6 +39,28 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         return journal; 
     }
     
+
+    //---------------------------------------------------------------------
+
+    public Journal getJournalByNlmid( String nlmid ) { 
+        
+        Journal journal = null;
+
+        try {
+            startOperation();
+            Query query =
+                session.createQuery( "from IcJournal j where " +
+                                     " j.nlmid = :nlmid ");
+            query.setParameter( "nlmid", nlmid );
+            query.setFirstResult( 0 );
+            journal = (IcJournal) query.uniqueResult();
+            tx.commit();
+            
+        } catch( DAOException dex ) {
+            // log error ?
+        }
+        return journal; 
+    }
 
     //---------------------------------------------------------------------
 
@@ -62,7 +84,6 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         return journal; 
     }
     
-
     //---------------------------------------------------------------------
 
     public List<Journal> getJournalList() {
