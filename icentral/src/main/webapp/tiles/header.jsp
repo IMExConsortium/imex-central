@@ -168,22 +168,13 @@
          <table cellspacing="0" cellpadding="0">
           <tr>
            <td align="left" class="btmsearchtab" nowrap>
-<%--
-           <s:if test="searchOn">
-            <s:form action="jqquery" theme="simple">
-             <s:hidden name="mdf" value="0:0:0" />
-             <s:hidden name="mst" value="1:1:0" />
-             <s:hidden name="debugOn" value="true" />
-             <s:hidden name="debugOn" value="true" />
-             <s:hidden name="bigOn" value="true" />
-             <s:hidden name="tp" value="0" />
-             <s:hidden name="dl" value="full" />
-             <s:textfield theme="simple" name="query" size="32" size="32" maxlength="128"/>
-             <s:submit type="input" tabindex="3" name="Search" value="Search DIP" theme="simple"/>
+            <s:if test="searchOn"><s:form action="pubedit" theme="simple">
+             PMID:<s:textfield theme="simple" name="icpub.id" size="16" size="16" maxlength="128"/>
+             <s:submit type="input" tabindex="3" name="Search" value="SEARCH" theme="simple"/>
             </s:form>
            </td>
            </s:if>
---%>
+
            <td class="menu3blank">&nbsp;
            </td>
           </tr>
