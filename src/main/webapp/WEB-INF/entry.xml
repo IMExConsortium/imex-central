@@ -20,6 +20,9 @@
 
     <property name="journalDao" ref="journalDao"/>
     <property name="pubDao" ref="pubDao"/>
+    
+    <property name="ncbiProxyClient" ref="ncbiProxyClient" />
+
   </bean>
 
   <!-- workflow persistence -->
@@ -35,6 +38,7 @@
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
     <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
 
     <property name="mode" value="icpub"/>
     <property name="mst" value="1:1:1"/>
@@ -46,6 +50,8 @@
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
     <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
+
     <property name="mode" value="journal"/>
     <property name="mst" value="1:1:2"/>
   </bean>

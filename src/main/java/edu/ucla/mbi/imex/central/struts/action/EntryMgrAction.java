@@ -27,6 +27,9 @@ import edu.ucla.mbi.imex.central.*;
 
 public class EntryMgrAction extends ManagerSupport {
 
+    private final String PUBEDIT = "pubedit";
+    private final String JEDIT = "jedit";
+
     //---------------------------------------------------------------------
     //  TracContext
     //--------------
@@ -41,6 +44,19 @@ public class EntryMgrAction extends ManagerSupport {
         return this.tracContext;
     }
 
+    //---------------------------------------------------------------------
+    //  WorkflowContext
+    //-----------------
+    
+    private WorkflowContext wflowContext;
+
+    public void setWorkflowContext( WorkflowContext context ) {
+        this.wflowContext = context;
+    }
+
+    public WorkflowContext getWorkflowContext() {
+        return this.wflowContext;
+    }
 
     //---------------------------------------------------------------------
     //  mode: journal/icpub
@@ -74,9 +90,9 @@ public class EntryMgrAction extends ManagerSupport {
     //---------------------------------------------------------------------
     
     public List<IcJournal> getJournalList(){
-     
+        
         if ( tracContext.getJournalDao() == null ) return null;
-       
+        
         List<Journal> jl = tracContext.getJournalDao().getJournalList();
         if ( jl == null ) return null;
 
@@ -112,14 +128,14 @@ public class EntryMgrAction extends ManagerSupport {
         
         if ( tracContext.getPubDao() == null ) return null;
 
-        log.info( "pubdao ok..."  );
+        log.info( "getPublicationList: pubDao ok..."  );
         
         List<Publication> pl = tracContext.getPubDao().getPublicationList();
 
         log.info( "publist=" + pl );
-
+        
         if ( pl == null ) return null;
-
+        
         List<IcPub> ipl = new ArrayList<IcPub>();
         for ( Iterator<Publication> ii = pl.iterator(); ii.hasNext(); ) {
             IcPub jj = (IcPub) ii.next();
@@ -139,7 +155,7 @@ public class EntryMgrAction extends ManagerSupport {
         
         if ( tracContext.getJournalDao() == null ||
              tracContext.getPubDao() == null ) return SUCCESS;
-
+        
         if ( mode.equals( "journal" ) && 
              getId() > 0 && journal == null ) {
             
@@ -149,8 +165,7 @@ public class EntryMgrAction extends ManagerSupport {
             return SUCCESS;
         }
 
-        if ( mode.equals( "icpub" ) && 
-             getId() > 0 && icpub == null ) {
+        if ( mode.equals( "icpub" ) && getId() > 0 && icpub == null ) {
             
             log.info(  "setting icpub=" + getId() );
             icpub = (IcPub) tracContext.getPubDao().getPublication( getId() );
@@ -587,17 +602,82 @@ public class EntryMgrAction extends ManagerSupport {
     //------------------
 
     public String addIcPub( Publication pub ) {
-        /*
-        if( wflowContext.getWorkflowDao() == null || 
-            state == null ) return SUCCESS;
-
-        wflowContext.getWorkflowDao().saveTrans( trans );
+        
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new trans -> id=" + trans.getId() +
-                  " name=" + trans.getName() );
+        log.info( " new pub -> id=" + pub.getId() +
+                  " pmid=" + pub.getPmid() );
 
-        this.trans = null;
-        */
+        // test if already in 
+        //-------------------
+
+        IcPub oldPub =  (IcPub) tracContext.getPubDao()
+            .getPublicationByPmid( pub.getPmid() );
+        
+        if ( oldPub != null ) {
+            icpub = oldPub;
+            setId( oldPub.getId() );
+            return PUBEDIT;
+        }
+
+        // get through proxy
+        //------------------        
+        
+        NcbiProxyClient cli = tracContext.getNcbiProxyClient();
+        
+        if ( cli != null ) {
+            Publication newPub = 
+                cli.getPublicationByPmid( pub.getPmid() );
+            
+            if ( newPub != null ) {
+                IcPub icp = new IcPub( newPub );
+                
+                if( icp.getSource() == null ) {
+                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
+                        .getJournalByNlmid( "0410462" ); // pub.getNlmid();
+                    
+                    if ( icj != null ) {
+                        icp.setSource( icj ); 
+                    } else {
+
+                        // add journal
+                        //------------
+
+
+                    }
+                }
+                
+                int usr_id = ((Integer) getSession().get( "USER_ID" )).intValue();
+                log.info( " login id=" + usr_id );
+                if ( usr_id > 0 ) {
+                    User owner = 
+                        getUserContext().getUserDao().getUser( usr_id );
+                    
+                    log.info( " owner set to: " + owner );
+                    icp.setOwner( owner ) ;
+                }
+
+                
+                DataState ds = 
+                    wflowContext.getWorkflowDao().getDataState( "NEW" );
+
+                log.info( " state set to: " + ds );
+
+                icp.setState( ds );
+                
+
+
+                // validate permissions here
+                //--------------------------
+
+                tracContext.getPubDao().savePublication( icp );
+
+                icpub =  (IcPub) tracContext.getPubDao()
+                    .getPublicationByPmid( icp.getPmid() );
+                
+                return PUBEDIT;
+            }
+        }        
+        
         return SUCCESS;
     }
 

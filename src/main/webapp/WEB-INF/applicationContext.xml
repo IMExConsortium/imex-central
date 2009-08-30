@@ -41,4 +41,15 @@
 
  </bean>
 -->
+
+
+<!-- =================================================== DIP PROXY ACCESS -->
+
+ <bean id="ncbiProxyClient" init-method="initialize"
+          class="edu.ucla.mbi.imex.central.NcbiProxyClient">
+  <property name="endpoint"
+        value="http://dip.doe-mbi.ucla.edu:80/dip-proxy/ncbi-service"/>
+  <property name="debug" value="false" />
+ </bean>
+
 </beans>

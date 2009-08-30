@@ -26,16 +26,21 @@
      <s:hidden name="id" value="%{id}"/>
      <s:hidden name="pub.id" value="%{id}"/>
      <tr>
-      <th nowrap>PID:<s:property value="pub.id"/></th>
-      <th nowrap>PMID:<s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/></th>
-      <th nowrap>IMEx ID:<s:property value="pub.imexId"/></th>
-      <th width="75%" nowrap>&nbsp;</th>
-      <th>
-       <s:submit theme="simple" name="op.add" value="ADD"/>
+      <th width="5%" nowrap>PID:<s:property value="pub.id"/></th>
+      <th width="5%" nowrap>PMID:<s:property value="pub.pmid"/></th>
+      <td align="left" width="85%" nowrap>
+       <s:if test="pub.imexid.length > 0">
+        <b>IMEx ID:</b><s:property value="pub.imexid"/></th>
+       </s:if>
+       <s:else>
+        <b>IMEx ID:</b> <s:submit theme="simple" name="op.pasim" value="ASSIGN"/>
+       </s:else> 
+      <th width="5%">
+       <s:submit theme="simple" name="op.del" value="DELETE"/>
       </th>
      </tr>
      <tr>
-      <td colspan="4">
+      <td colspan="3">
        <table width="100%" border="1">
         <tr>
          <td align="right" nowrap>
@@ -94,9 +99,9 @@
            Journal
          </th>
          <td width="75%" nowrap>
-           <s:select name="opp.jid"  headerKey="-1" headerValue="---Select Journal---"
-              list="#{'00':'--unpublished--','01':'Nature', '02':'Science','03':'Cell'}" />             
-<%--                    list="groupAll" listKey="id" listValue="label" /> --%>
+           <s:select name="opp.jid"  headerKey="-1" headerValue="---Select Journal---" value="pub.source.id"
+              list="#{'00':'--unpublished--','1':'Nature', '2':'Science','3':'Cell'}" />             
+<%--                    list="groupAll" listKey="id" listValue="label" /> --%>           
          </td>
          <th>
           <s:submit theme="simple" name="op.jset" value="UPDATE"/>
@@ -108,7 +113,7 @@
           Author(s)
          </td>
          <td width="75%" nowrap>
-          <s:textfield theme="simple" name="pub.author" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
          </td>
          <th rowspan="2">
           <s:submit theme="simple" name="op.pup" value="UPDATE"/>
@@ -119,7 +124,7 @@
           Title
          </td>
          <td>
-          <s:textfield theme="simple" name="pub.title" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>
          </td>
         </tr>
  
@@ -128,7 +133,7 @@
           Abstract
          </td>
          <td width="75%" nowrap>
-          <s:textarea name="role.comments" value="%{pub.abstract}" cols="100" rows="8"/>
+          <s:textarea name="role.comments" value="%{pub.abstract}" cols="100" rows="12"/>
          </td>
          <th>
           <s:submit theme="simple" name="op.pup" value="UPDATE"/>
