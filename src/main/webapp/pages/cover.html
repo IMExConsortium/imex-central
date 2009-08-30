@@ -1,46 +1,49 @@
 <h1>Welcome to ImexCentral</h1>
-<p>IMEx Central is designed to coordinate curation efforts between the 
+<p>IMEx Central is designed to coordinate curation effort and the exchange 
+of completed records on molecular interaction data between the 
 <a href="http://imex.sf.net">IMEx</a> partners - a group of interaction 
-databases that agreed to conform to common curation and data exchange
-formats in order to improve curation efficiency.
-</p>
-<p>Databases actively participating in the coordinated data curation include: 
+data providers that agreed to conform to common curation and data exchange
+formats.  We hope that this way, besides improving curation efficiency we 
+will be able to provide interaction data users with a large, uniform set of 
+interactions.  It will be easier to analyse than a mosaic of smaller, 
+partially overlapping interaction sets curated independently in incompatible 
+ways. 
+<p>The databases actively participating in the coordinated data curation 
+currently include <a href="http://dip.doe-mbi.ucla.edu">DIP</a>,
+<a href="http://www.ebi.ac.uk/intact">IntAct</a> and
+<a href="http://mint.bio.uniroma2.it/mint">MINT</a>.
+Other members of <a href="http://imex.sf.net">IMEx</a>:
+<a href="http://mips.gsf.de/genre/proj/mpact">MPact</a>,
+<a href="http://www.thebiogrid.org">BioGRID</a>,
+<a href="http://matrixdb.ibcp.fr/">MatrixDB</a> and
+<a href="http://www.jcvi.org/mpidb">MPIDB</a> consider joining in
+after adopting their curation procedures and database infrastructure 
+to <a href="http://imex.sf.net">IMEx</a> requrements.
+
+<p>To check if an already published paper has been curated by one of the 
+<a href="http://imex.sf.net">IMEx</a> databases, please, provide 
+<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed">NCBI</a> 
+PubMed identifier (<a href="http://en.wikipedia.org/wiki/PMID">PMID<a>):
 <br/><br/>
 <center>
-<table width="80%">
- <tr align="center">
-  <td width="20%"><a href="http://dip.doe-mbi.ucla.edu">DIP</a></td>
-  <td width="20%"><a href="http://www.ebi.ac.uk/intact">IntAct</a></td>
-  <td width="20%"><a href="http://mint.bio.uniroma2.it/mint">MINT</a></td>
-  <td width="20%"><a href="http://mips.gsf.de/genre/proj/mpact">MPact</a></td>
-  <td width="20%"><a href="http://www.thebiogrid.org">BioGRID</a></td>
- </tr>
-</table>
-</center>
-<br/><br/>
-<p>Please, provide <a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed">NCBI</a> 
-PubMed identifier (<a href="http://en.wikipedia.org/wiki/PMID">PMID<a>) if you would 
-like to check if an already published paper has been curated by one of the IMex 
-databases:
-<br/>
-<center>
- <form method="post" action="pubmgr" name="pubmgr" id="pubmgr">
+ <form id="pubedit" name="pubedit" action="/icentral/pubedit.action" method="post">
   <input type="hidden" name="op" value="search"/>
   <table width="50%">
    <tr>
     <th align="right" width="50%" nowrap>
-     PMID: <input type="text" name="pmid"  size="32" maxsize="32"/>
+     PMID: <input type="text" name="pub.pmid" size="16" maxlength="16" value="" id="pubedit_pub_pmid"/>
     </th>
     <td align="left">
-     <input type="submit" id="pubmgr_op_search" name="op.search" value="Query ImexCentral"/>
+     <input type="submit" id="pubedit_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
     </td>
    </tr>
   </table>
  </form>
 </center>
 <br/><br/>
-In case the paper has not been curated you will be able to recommend it
-for curation by one of the IMEx databases.
+<p>To recommend an already published paper for curation by one of the IMEx databases, please,
+<a href="register.jsp">register</a> - you will be then able to add a paper you choose to
+the IMEx curation queue. 
 <br/><br/><br/><br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/><br/><br/><br/>
 

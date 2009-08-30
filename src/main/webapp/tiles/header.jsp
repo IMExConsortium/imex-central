@@ -169,12 +169,11 @@
           <tr>
            <td align="left" class="btmsearchtab" nowrap>
             <s:if test="searchOn"><s:form action="pubedit" theme="simple">
-             PMID:<s:textfield theme="simple" name="icpub.id" size="16" size="16" maxlength="128"/>
-             <s:submit type="input" tabindex="3" name="Search" value="SEARCH" theme="simple"/>
+             PMID:<s:textfield theme="simple" name="pub.pmid" size="16" size="16" maxlength="128"/>
+             <s:submit type="input" tabindex="3" name="op.esrc" value="SEARCH" theme="simple"/>
             </s:form>
            </td>
            </s:if>
-
            <td class="menu3blank">&nbsp;
            </td>
           </tr>
