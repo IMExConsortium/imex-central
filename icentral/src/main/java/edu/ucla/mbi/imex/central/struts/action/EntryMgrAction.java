@@ -1,13 +1,12 @@
 package edu.ucla.mbi.imex.central.struts.action;
-        
-                                                                            
+                                                                   
 /* =========================================================================
  * $HeadURL::                                                              $
  * $Id::                                                                   $
  * Version: $Rev::                                                         $
  *==========================================================================
  *
- * WorkflowMgrSupport action
+ * EntryMgrAction - web interface to entry management
  *
  ======================================================================== */
 
@@ -29,6 +28,20 @@ public class EntryMgrAction extends ManagerSupport {
 
     private final String PUBEDIT = "pubedit";
     private final String JEDIT = "jedit";
+
+    //---------------------------------------------------------------------
+    // Entry Manager
+    //--------------
+
+    private EntryManager entryManager;
+    
+    public void setEntryManager( EntryManager manager ) {
+        this.entryManager = manager;
+    }
+    
+    public EntryManager getEntryManager() {
+        return this.entryManager;
+    }
 
     //---------------------------------------------------------------------
     //  TracContext
@@ -160,15 +173,14 @@ public class EntryMgrAction extends ManagerSupport {
              getId() > 0 && journal == null ) {
             
             log.info( "setting journal=" + getId() );            
-            journal = (IcJournal) tracContext
-                .getJournalDao().getJournal( getId() );  
+            journal = entryManager.getIcJournal( getId() );  
             return SUCCESS;
         }
 
         if ( mode.equals( "icpub" ) && getId() > 0 && icpub == null ) {
             
             log.info(  "setting icpub=" + getId() );
-            icpub = (IcPub) tracContext.getPubDao().getPublication( getId() );
+            icpub = entryManager.getIcPub( getId() );
             return SUCCESS;
         }
 
@@ -232,6 +244,12 @@ public class EntryMgrAction extends ManagerSupport {
                 //---------------------------------------------------------
                 // icpub operations
                 //-----------------
+
+                if ( key.equalsIgnoreCase( "esrc" ) ) {
+                    return searchIcPub( icpub );
+                }
+
+                //---------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "eadd" ) ) {
                     return addIcPub( icpub );
@@ -601,6 +619,24 @@ public class EntryMgrAction extends ManagerSupport {
     // operations: IcPub
     //------------------
 
+    public String searchIcPub( Publication pub ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " search pub -> id=" + pub.getId() +
+                  " pmid=" + pub.getPmid() );
+        
+        IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
+        
+        if ( oldPub != null ) {
+            icpub = oldPub;
+            setId( oldPub.getId() );
+            return PUBEDIT;
+        }
+        return SUCCESS;
+    }
+    
+    //---------------------------------------------------------------------
+    
     public String addIcPub( Publication pub ) {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -609,9 +645,8 @@ public class EntryMgrAction extends ManagerSupport {
 
         // test if already in 
         //-------------------
-
-        IcPub oldPub =  (IcPub) tracContext.getPubDao()
-            .getPublicationByPmid( pub.getPmid() );
+        
+        IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
         
         if ( oldPub != null ) {
             icpub = oldPub;
@@ -619,71 +654,35 @@ public class EntryMgrAction extends ManagerSupport {
             return PUBEDIT;
         }
 
-        // get through proxy
-        //------------------        
+        User owner = null;
         
-        NcbiProxyClient cli = tracContext.getNcbiProxyClient();
+        Integer usr = (Integer) getSession().get( "USER_ID" );
+        log.info( " login id=" + usr );
+        if ( usr != null ) {
+            owner = getUserContext().getUserDao().getUser( usr.intValue() );
+            log.info( " owner set to: " + owner );
+        }
+
+        DataState state =  
+            wflowContext.getWorkflowDao().getDataState( "NEW" );
+        log.info( " state set to: " + state );
         
-        if ( cli != null ) {
-            Publication newPub = 
-                cli.getPublicationByPmid( pub.getPmid() );
+        if ( owner != null && state != null ){
+            icpub = entryManager.addIcPub( pub, owner, state );
             
-            if ( newPub != null ) {
-                IcPub icp = new IcPub( newPub );
-                
-                if( icp.getSource() == null ) {
-                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
-                        .getJournalByNlmid( "0410462" ); // pub.getNlmid();
-                    
-                    if ( icj != null ) {
-                        icp.setSource( icj ); 
-                    } else {
-
-                        // add journal
-                        //------------
-
-
-                    }
-                }
-                
-                int usr_id = ((Integer) getSession().get( "USER_ID" )).intValue();
-                log.info( " login id=" + usr_id );
-                if ( usr_id > 0 ) {
-                    User owner = 
-                        getUserContext().getUserDao().getUser( usr_id );
-                    
-                    log.info( " owner set to: " + owner );
-                    icp.setOwner( owner ) ;
-                }
-
-                
-                DataState ds = 
-                    wflowContext.getWorkflowDao().getDataState( "NEW" );
-
-                log.info( " state set to: " + ds );
-
-                icp.setState( ds );
-                
-
-
-                // validate permissions here
-                //--------------------------
-
-                tracContext.getPubDao().savePublication( icp );
-
-                icpub =  (IcPub) tracContext.getPubDao()
-                    .getPublicationByPmid( icp.getPmid() );
-                
-                return PUBEDIT;
-            }
-        }        
+            return PUBEDIT;
+        }
         
         return SUCCESS;
     }
-
+    
     //---------------------------------------------------------------------
 
     public String deleteIcPub( Publication pub ) {
+
+        entryManager.deleteIcPub( null );
+        return SUCCESS;
+
         /*
         if( wflowContext.getWorkflowDao() == null || 
             state == null ) return SUCCESS;
@@ -699,12 +698,15 @@ public class EntryMgrAction extends ManagerSupport {
         this.trans = null;
         setId( 0 );
         */
-        return SUCCESS;
     }
 
     //---------------------------------------------------------------------
 
     private String deleteIcPubList( List<Integer> pubs ) {
+        
+        entryManager.deleteIcPub( null );
+        return SUCCESS;
+
         /*
         if( wflowContext.getWorkflowDao() == null || 
             trans == null ) return SUCCESS;
@@ -722,12 +724,15 @@ public class EntryMgrAction extends ManagerSupport {
             wflowContext.getWorkflowDao().deleteTrans( t );                
         }
         */
-        return SUCCESS;
     }
 
     //---------------------------------------------------------------------
     
     public String updateIcPubProperties( int id, Publication pub ) {
+
+        entryManager.updateIcPubProps( null );
+        return SUCCESS;
+
         /*
         if( wflowContext.getWorkflowDao() == null ) return SUCCESS;
         
@@ -746,12 +751,15 @@ public class EntryMgrAction extends ManagerSupport {
         
         log.info( " updated trans(props) -> id=" + id );
         */
-        return SUCCESS;
     }
 
     //---------------------------------------------------------------------
     
     private String updateIcPubState( int id, int sid) {
+        
+        entryManager.updateIcPubState( null );
+        return SUCCESS;
+
         /*
         if ( wflowContext.getWorkflowDao() == null ||
              !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
@@ -773,6 +781,5 @@ public class EntryMgrAction extends ManagerSupport {
         this.trans = wflowContext.getWorkflowDao().getTrans( id );
         log.info( "updated trans(states)=" +this.trans );
         */
-        return SUCCESS;
     }    
 }

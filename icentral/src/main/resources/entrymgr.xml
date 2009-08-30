@@ -84,7 +84,7 @@
      <result name="success" type="tiles">pubmgr</result>     
      <result name="acl_error" type="tiles">aclerror</result>
      <result name="input" type="tiles">pubmgr</result>     
-     <result name="pubedit" type="tiles">pubedit</result>
+     <result name="pubedit" type="tiles">pubmgr</result>
    </action>
 
    <action name="pubedit" class="pubAction">
@@ -94,7 +94,8 @@
 
      <result name="success" type="tiles">pubmgr</result>
      <result name="acl_error" type="tiles">aclerror</result>
-     <result name="input" type="tiles">pubmgr</result>     
+     <result name="input" type="tiles">pubmgr</result>
+     <result name="pubedit" type="tiles">pubmgr</result>  
    </action>
 
   <!-- journal management -->   
