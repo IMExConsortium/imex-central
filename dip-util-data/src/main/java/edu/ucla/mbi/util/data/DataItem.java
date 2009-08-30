@@ -67,22 +67,47 @@ public class DataItem {
     }
 
     public String getCreateDateString(){
-        if( creationTime == null ){
+        if( creationTime == null ) {
             return "----/--/--";
         }
         
         StringBuffer sb = new StringBuffer();
         sb.append( creationTime.get(Calendar.YEAR) );
         sb.append( "/");
-        sb.append( creationTime.get(Calendar.MONTH) + 1);
+
+        sb.append( creationTime
+                   .get( Calendar.MONTH ) < 9 ? "0" : "" ); 
+        sb.append( creationTime.get( Calendar.MONTH ) + 1);
         sb.append( "/" );
-        sb.append( creationTime.get(Calendar.DAY_OF_MONTH) );
+
+        sb.append( creationTime
+                   .get( Calendar.DAY_OF_MONTH ) < 10 ? "0" : "" );
+        sb.append( creationTime.get( Calendar.DAY_OF_MONTH) );
         
         return sb.toString();
     }
 
     public String getCreateTimeString(){
-        return "--:--:--";
+
+        if( creationTime == null ) {
+            return "--:--:--";
+        } 
+
+        StringBuffer sb = new StringBuffer();
+        sb.append( creationTime
+                   .get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "" );
+        sb.append( creationTime.get(Calendar.HOUR_OF_DAY) );
+        sb.append( ":");
+        
+        sb.append( creationTime
+                   .get(Calendar.MINUTE) < 10 ? "0" : "" );
+        sb.append( creationTime.get(Calendar.MINUTE) );
+        sb.append( ":");
+        
+        sb.append( creationTime
+                   .get(Calendar.SECOND) < 10 ? "0" : "" );
+        sb.append( creationTime.get(Calendar.SECOND) );
+        return sb.toString();
     }
 
     //---------------------------------------------------------------------
