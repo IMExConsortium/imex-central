@@ -89,6 +89,9 @@
      <result name="uedit">uedit.jsp</result>
      <result name="activate" type="tiles">activate</result>
 
+     <result name="logf" type="tiles">login</result>
+     <result name="regf" type="tiles">register</result>
+
      <result name="json"  type="json">
        <param name="includeProperties">
         jq.*,menu.*
