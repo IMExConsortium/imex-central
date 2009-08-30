@@ -60,9 +60,9 @@
            </s:if>
            <s:else>
               User: | <a onMouseOver="this.className='acMON'" onMouseOut="this.className='acMOFF'" 
-                        HREF="register.jsp" class="acMOFF">Sign up</a>
+                        href="user?op=regf" class="acMOFF">Sign up</a>
                    | <a onMouseOver="this.className='acMON';" onMouseOut="this.className='acMOFF';" 
-                        HREF="login.jsp" class="acMOFF">Log in</a>
+                        href="user" class="acMOFF">Log in</a>
            </s:else>
           <%-- </s:if> --%>
          </td>

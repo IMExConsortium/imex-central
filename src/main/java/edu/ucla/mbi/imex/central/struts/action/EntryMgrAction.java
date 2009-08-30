@@ -154,7 +154,6 @@ public class EntryMgrAction extends ManagerSupport {
             IcPub jj = (IcPub) ii.next();
             ipl.add( jj );
         }
-
         return ipl;
     }
     

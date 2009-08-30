@@ -25,9 +25,17 @@
  <definition name="page" template="/tiles/page.jsp"/>
 
  <definition name="editpage" template="/tiles/editpage.jsp"/>
- <definition name="register" template="/tiles/register.jsp"/>
- <definition name="login" template="/tiles/login.jsp"/>
  <definition name="uedit" template="/tiles/uedit.jsp"/>
+
+ <definition name="login" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral:Login" />
+  <put-attribute name="body" value="/tiles/login.jsp"/>
+ </definition>
+
+ <definition name="register" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral:Register" />
+  <put-attribute name="body" value="/tiles/register.jsp"/>
+ </definition>
 
  <definition name="activate" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Account Activate" />
@@ -65,9 +73,6 @@
  </definition>
  <definition name="transedit" template="/tiles/transedit.jsp"/>
 
-
-
-
  <definition name="pubmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Publication Manager" />
   <put-attribute name="body" value="/tiles/pubmgr.jsp"/>
@@ -79,24 +84,6 @@
   <put-attribute name="body" value="/tiles/journalmgr.jsp"/>
  </definition>
  <definition name="journaledit" template="/tiles/journaledit.jsp"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
