@@ -42,25 +42,25 @@
      <tr>
       <td colspan="3">
        <table width="100%" border="1">
+
         <tr>
-         <td align="right" nowrap>
-          DOI
+         <th align="right" nowrap>
+          Publication Status
+         </th>
+         <td>
+          <table width="100%" border="1">
+           <tr>
+            <td align="left">
+             <b><s:property value="pub.state.name"/></b>
+            </td>
+           </tr>
+          </table>
          </td>
-         <td width="75%" nowrap>
-          <s:textfield theme="simple" name="pub.doi" size="32" maxLength="64"/>
-         </td>
-         <th rowspan="2">
-          <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+         <th>
+          <s:submit theme="simple" name="op.pav" value="UPDATE"/>
          </th>
         </tr>
-        <tr>
-         <td align="right" nowrap>
-          Internal
-         </td>
-         <td>
-          <s:textfield theme="simple" name="pub.journalSpecific" size="32" maxLength="64"/>
-         </td>
-        </tr>
+
         <tr>
          <th align="right" nowrap>
           Availability
@@ -94,10 +94,74 @@
          <th>
           <s:submit theme="simple" name="op.pav" value="UPDATE"/>
          </th>
+        </tr>
+
         <tr>
-         <th align="right" width="15%" nowrap>
-           Journal
+         <th align="right" nowrap>
+          IMEx Records
          </th>
+         <td>
+          <table width="100%" border="1">
+           <tr>
+            <td align="left">
+             [---------]
+            </td>
+           </tr>
+          </table>
+         </td>
+         <th>
+          <s:submit theme="simple" name="op.pav" value="UPDATE"/>
+         </th>
+        </tr>
+
+        <tr>
+         <th align="right" nowrap>
+          Comments
+         </th>
+         <td>
+          <table width="100%" border="1">
+           <tr>
+            <td align="left">
+             [---------]
+            </td>
+           </tr>
+          </table>
+         </td>
+         <th>
+          &nbsp;
+         </th>
+        </tr>
+
+        <tr>
+         <th colspan="3" nowrap>
+          Publication Details
+         </th>
+        </tr>
+
+        <tr>
+         <td align="right" nowrap>
+          DOI
+         </td>
+         <td width="75%" nowrap>
+          <s:textfield theme="simple" name="pub.doi" size="32" maxLength="64"/>
+         </td>
+         <th rowspan="2">
+          <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+         </th>
+        </tr>
+
+        <tr>
+         <td align="right" nowrap>
+          Internal
+         </td>
+         <td>
+          <s:textfield theme="simple" name="pub.journalSpecific" size="32" maxLength="64"/>
+         </td>
+        </tr>
+        <tr>
+         <td align="right" width="15%" nowrap>
+           Journal
+         </td>
          <td width="75%" nowrap>
            <s:select name="opp.jid"  headerKey="-1" headerValue="---Select Journal---" value="pub.source.id"
               list="#{'00':'--unpublished--','1':'Nature', '2':'Science','3':'Cell'}" />             

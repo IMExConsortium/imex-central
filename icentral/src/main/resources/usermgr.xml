@@ -82,7 +82,8 @@
      <interceptor-ref name="timer"/>
 
      <result name="success" type="tiles">groupmgr</result>     
-     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">groupmgr</result>     
    </action>
 
@@ -92,7 +93,8 @@
      <interceptor-ref name="timer"/>
 
      <result name="success" type="tiles">groupmgr</result>
-     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">groupmgr</result>     
    </action>
 
@@ -103,7 +105,8 @@
      <interceptor-ref name="timer"/>
 
      <result name="success" type="tiles">rolemgr</result>
-     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">rolemgr</result>
    </action>
 
@@ -112,7 +115,8 @@
      <interceptor-ref name="timer"/>
 
      <result name="success" type="tiles">rolemgr</result>  
-     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">rolemgr</result>     
    </action>
 
@@ -124,7 +128,8 @@
      <interceptor-ref name="timer"/>
       
      <result name="success" type="tiles">usermgr</result>     
-     <result name="acl_error" type="tiles">aclerror</result>     
+     <result name="acl_page" type="tiles">aclpageerror</result>  
+     <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">usermgr</result>
    </action>
 
@@ -134,7 +139,8 @@
      <interceptor-ref name="timer"/>
       
      <result name="success" type="tiles">usermgr</result>     
-     <result name="acl_error" type="tiles">aclerror</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">usermgr</result>     
    </action>
 
