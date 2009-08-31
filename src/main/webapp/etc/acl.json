@@ -149,6 +149,10 @@
             user:["ADMIN"],
             role:["administrator"],
             group:["ADMIN"]
+          },
+          target:{
+            ousr:["__LOGIN"],
+            ogrp:["__LOGIN"]
           }
         },
         pup:{
@@ -156,6 +160,10 @@
             user:["ADMIN"],
             role:["administrator"],
             group:["ADMIN"]
+          },
+          target:{
+            ousr:["__LOGIN"],
+            ogrp:["__LOGIN"]
           }
         }
       }
