@@ -87,9 +87,14 @@
 
 
 
- <definition name="aclerror" template="/tiles/layout.jsp">
+ <definition name="aclpageerror" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ACL Violation" />
-  <put-attribute name="body" value="/tiles/aclerror.jsp"/>
+  <put-attribute name="body" value="/tiles/aclpageerror.jsp"/>
+ </definition>
+
+ <definition name="acloperror" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ACL Violation" />
+  <put-attribute name="body" value="/tiles/acloperror.jsp"/>
  </definition>
 
 </tiles-definitions>

@@ -267,16 +267,42 @@ public class UserAction extends UserSupport {
 		getSession().put( "USER_ID", icUser.getId() );
 		getSession().put( "LOGIN", icUser.getLogin() );
 		log.info( " login: session set" );
+
+                Map<String,Integer> roles = new HashMap();
+                Map<String,Integer> groups = new HashMap();
+
 		if ( icUser.getRoles()  != null ) {
-		    Map<String,Integer> roles = new HashMap();
+
 		    for ( Iterator ii = icUser.getRoles().iterator(); 
 			  ii.hasNext(); ) {
 			IcRole r = (IcRole) ii.next();
 			log.info( "  role=" + r.toString() );
 			roles.put( r.getName(),r.getId());
 		    }	    
-		    getSession().put( "USER_ROLE", roles );
-		}
+                }
+                
+                if ( icUser.getGroups() != null ) {
+                    for ( Iterator ig = icUser.getGroups().iterator();
+                          ig.hasNext(); ) {
+                        Group g = (Group) ig.next();
+                        log.info( "  group=" + g.toString() );
+                        groups.put( g.getLabel(), g.getId() );
+
+                        if ( g.getRoles()  != null ) {
+                            for ( Iterator ir = g.getRoles().iterator();
+                                  ir.hasNext(); ) {
+                                IcRole r = (IcRole) ir.next();
+                                log.info( "  role=" + r.toString() );
+                                roles.put( r.getName(), r.getId() );
+                            }
+                        }
+                    }
+                }
+
+                getSession().put( "USER_ROLE", roles );
+                getSession().put( "USER_GROUP", groups );
+                log.info( " login: session set" );
+
 		return HOME;
 	    }
 
