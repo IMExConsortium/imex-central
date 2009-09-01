@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 import java.io.*;
-
+       
 import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.dao.*;
 import edu.ucla.mbi.util.data.*;
@@ -53,6 +53,20 @@ public class EntryManager {
 
     public WorkflowContext getWorkflowContext() {
         return this.wflowContext;
+    }
+
+    //---------------------------------------------------------------------
+    //  UserContext
+    //--------------
+    
+    private UserContext userContext;
+
+    public void setUserContext( UserContext context ) {
+        this.userContext = context;
+    }
+
+    public UserContext getUserContext() {
+        return this.userContext;
     }
     
     //---------------------------------------------------------------------
@@ -201,6 +215,3 @@ public class EntryManager {
 
 
 }
-
-
-

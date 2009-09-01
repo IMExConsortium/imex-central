@@ -29,7 +29,8 @@
 
    <property name="tracContext" ref="tracContext"/>
    <property name="workflowContext" ref="workflowContext"/>
-
+   <property name="userContext" ref="userContext"/>
+   
  </bean>
 
 <!-- =================================================== DIP PROXY ACCESS -->

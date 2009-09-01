@@ -118,6 +118,7 @@ CREATE TABLE entry (
     epub_date timestamp,
     rel_date timestamp
 );
+
 CREATE INDEX e_1 on entry (owner_uid);
 CREATE INDEX e_2 on entry (crt);
 
@@ -128,3 +129,42 @@ CREATE INDEX e_6 on entry (title);
 CREATE INDEX e_7 on entry (pub_date);
 CREATE INDEX e_8 on entry (epub_date);
 CREATE INDEX e_9 on entry (rel_date);
+
+
+CREATE TABLE entry_ausr (
+    entry_id integer not null default 0, 
+    usr_id integer not null default 0,
+    primary key (entry_id,usr_id) 
+);
+CREATE INDEX entry_ausr_1 on entry_ausr (entry_id);
+CREATE INDEX entry_ausr_2 on entry_ausr (entry_id, usr_id);
+CREATE INDEX entry_ausr_3 on entry_ausr (usr_id,entry_id);
+
+CREATE TABLE entry_agrp (
+    entry_id integer not null default 0, 
+    grp_id integer not null default 0,
+    primary key (entry_id,grp_id) 
+);
+CREATE INDEX entry_agrp_1 on entry_agrp (entry_id);
+CREATE INDEX entry_agrp_2 on entry_agrp (entry_id, grp_id);
+CREATE INDEX entry_agrp_3 on entry_agrp (grp_id,entry_id);
+
+CREATE TABLE journal_ausr (
+    journal_id integer not null default 0, 
+    usr_id integer not null default 0,
+    primary key (journal_id,usr_id) 
+);
+CREATE INDEX journal_ausr_1 on journal_ausr (journal_id);
+CREATE INDEX journal_ausr_2 on journal_ausr (journal_id, usr_id);
+CREATE INDEX journal_ausr_3 on journal_ausr (usr_id,journal_id);
+
+CREATE TABLE journal_agrp (
+    journal_id integer not null default 0, 
+    grp_id integer not null default 0,
+    primary key (journal_id,grp_id) 
+);
+CREATE INDEX journal_agrp_1 on journal_agrp (journal_id);
+CREATE INDEX journal_agrp_2 on journal_agrp (journal_id, grp_id);
+CREATE INDEX journal_agrp_3 on journal_agrp (grp_id,journal_id);
+
+
