@@ -30,7 +30,7 @@
       <th nowrap>ISSN:<s:textfield theme="simple" name="journal.issn" size="32" maxLength="64"/></th>
       <td width="95%">&nbsp;</td> 
       <th>
-        <s:submit theme="simple" name="op.del" value="ADD"/>
+        <s:submit theme="simple" name="op.del" value="DELETE"/>
       </th>
      </tr>
      <tr>
@@ -63,6 +63,61 @@
           <s:textarea name="journal.comments" value="%{journal.comments}" cols="64" rows="4"/>
          </td>
         </tr>
+
+        <tr>
+         <th colspan="3" nowrap>Access Management</td>
+        </tr>
+        <tr>
+         <th width="15%" align="right" nowrap>Owner</th>
+         <td align="left" width="95%">
+          <s:textfield theme="simple" name="journal.owner.login" size="32" maxLength="64"/>
+         </td>
+         <th rowspan="1">
+          <s:submit theme="simple" name="op.oup" value="UPDATE"/>
+         </th>
+        </tr>
+        <tr>
+         <th rowspan="2" align="right" nowrap>Admin Users</th>
+         <td colspan="1">
+          <s:iterator value="journal.adminUsers" id="u" status="upos">
+           <s:checkbox name="opp.udel" fieldValue="%{#u.id}"/>
+           <s:property value="#u.login"/>
+          </s:iterator>
+         </td>
+        <th>
+          <s:submit theme="simple" name="op.udel" value="DROP"/>
+         </th>
+        </tr>
+        <tr>
+         <td colspan="1">
+          <s:textfield theme="simple" name="opp.uadd" size="32" maxLength="64"/>
+         </td>
+         <th>
+          <s:submit theme="simple" name="op.gadd" value="ADD"/>
+         </th>
+        </tr>
+
+        <tr>
+         <th rowspan="2" align="right" nowrap>Admin Groups</th>
+         <td colspan="1">
+          <s:iterator value="journal.adminGroups" id="g" status="gpos">
+           <s:checkbox name="opp.gdel" fieldValue="%{#g.id}"/>
+           <s:property value="#g.label"/>
+          </s:iterator>
+         </td>
+        <th>
+          <s:submit theme="simple" name="op.gdel" value="DROP"/>
+         </th>
+        </tr>
+        <tr>
+         <td colspan="1">
+          <s:textfield theme="simple" name="opp.gadd" size="32" maxLength="64"/>
+         </td>
+         <th>
+          <s:submit theme="simple" name="op.gadd" value="ADD"/>
+         </th>
+        </tr>
+
        </table>
       </td>
       <td>&nbsp;</td>

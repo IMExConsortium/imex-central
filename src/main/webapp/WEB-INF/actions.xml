@@ -125,16 +125,6 @@
     <property name="aclContext" ref="aclContext"/>
   </bean>
 
-
-
-
-
-
-
-
-
-
-
   <!-- user management actions -->
 
   <bean id="userMgrAction" scope="prototype"

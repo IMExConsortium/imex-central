@@ -653,6 +653,19 @@ public class EntryMgrAction extends ManagerSupport {
             return PUBEDIT;
         }
 
+        //protected Set<String> ownerMatch;
+        //protected Set<String> groupMatch;
+
+        if ( ownerMatch != null && ownerMatch.size() > 0 ) {
+
+            // ACL target control 
+            //-------------------
+
+            
+            
+
+        }
+
         User owner = null;
         
         Integer usr = (Integer) getSession().get( "USER_ID" );

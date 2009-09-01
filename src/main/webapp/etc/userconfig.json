@@ -18,5 +18,11 @@
     roles:["user","administrator"],
     groups:["ADMIN"]
    }
- ]
+ ],
+ default{
+    owner:"ADMIN",
+    group:"ADMIN",
+    adminowner:"ADMIN",
+    admingroup:"ADMIN"
+ }
 }

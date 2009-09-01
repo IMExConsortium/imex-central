@@ -55,6 +55,16 @@
   <many-to-one name="state" column="state_id"
                class="edu.ucla.mbi.imex.central.IcDataState" />
 
+  <set name="adminUsers" table="entry_ausr" sort="natural" lazy="false">
+    <key column="entry_id"/>
+    <many-to-many column="usr_id" class="edu.ucla.mbi.imex.central.IcUser"/>
+  </set>
+
+  <set name="adminGroups" table="entry_agrp" sort="natural" lazy="false">
+    <key column="entry_id"/>
+    <many-to-many column="grp_id" class="edu.ucla.mbi.imex.central.IcGroup"/>
+  </set>
+
  </class>
 
  <!-- DataSource: journal -->
@@ -81,7 +91,17 @@
 
   <many-to-one name="owner" column="owner_uid"
                class="edu.ucla.mbi.imex.central.IcUser" />
- 
+
+  <set name="adminUsers" table="journal_ausr" sort="natural" lazy="false">
+    <key column="journal_id"/>
+    <many-to-many column="usr_id" class="edu.ucla.mbi.imex.central.IcUser"/>
+  </set>
+
+  <set name="adminGroups" table="journal_agrp" sort="natural" lazy="false">
+    <key column="journal_id"/>
+    <many-to-many column="grp_id" class="edu.ucla.mbi.imex.central.IcGroup"/>
+  </set>
+
  </class>
 
 </hibernate-mapping> 
