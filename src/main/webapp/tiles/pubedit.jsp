@@ -98,6 +98,18 @@
 
         <tr>
          <th align="right" nowrap>
+          Contact Email
+         </th>
+         <td>
+          <s:textfield theme="simple" name="pub.contactEmail" size="32" maxLength="32"/>
+         </td>
+         <th>
+          <s:submit theme="simple" name="op.pcm" value="UPDATE"/>
+         </th>
+
+        </tr>  
+        <tr>
+         <th align="right" nowrap>
           IMEx Records
          </th>
          <td>
@@ -246,15 +258,16 @@
           </s:iterator>
          </td>
         <th>
-          <s:submit theme="simple" name="op.gdel" value="DROP"/>
+          <s:submit theme="simple" name="op.eagdel" value="DROP"/>
          </th>
         </tr>
         <tr>
          <td colspan="1">
-          <s:textfield theme="simple" name="opp.gadd" size="32" maxLength="64"/>
+           <s:select name="opp.gadd"  headerKey="-1" headerValue="---Select Group---"
+                     list="groupAll" listKey="id" listValue="label" />  
          </td>
          <th>
-          <s:submit theme="simple" name="op.gadd" value="ADD"/>
+          <s:submit theme="simple" name="op.eagadd" value="ADD"/>
          </th>
         </tr>
         

@@ -161,11 +161,28 @@ public class EntryManager {
                         // add journal
                         //------------
                         
+
+                        // set admin user/group to 
+                        // defaults defined in userContext
+                        //--------------------------------
+                        
+                        
                     }
                 }
 
                 icp.setOwner( owner ) ;
                 icp.setState( state );
+                
+                // set admin user/group sets
+                //--------------------------
+                
+                if ( icp.getSource() != null ) {
+                    icp.getAdminUsers()
+                        .addAll( icp.getSource().getAdminUsers() );
+
+                    icp.getAdminGroups()
+                        .addAll( icp.getSource().getAdminGroups() );
+                }
                 
                 tracContext.getPubDao().savePublication( icp );
                 
@@ -196,6 +213,62 @@ public class EntryManager {
     }
 
     //---------------------------------------------------------------------
+
+    public IcPub addAdminGroup( Publication pub, Group group ) {
+        
+        IcPub oldPub = (IcPub) tracContext.getPubDao()
+            .getPublication( pub.getId() );
+
+        if ( oldPub != null ) {
+            oldPub.getAdminGroups().add( group );
+            tracContext.getPubDao()
+                .updatePublication( oldPub );
+        }
+
+        return oldPub;        
+    }
+    
+    //---------------------------------------------------------------------
+    
+    public IcPub delAdminGroup( Publication pub, List<Integer> gdel ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        for ( Iterator<Integer> ii = gdel.iterator();
+              ii.hasNext(); ) {
+
+            int dgid = ii.next().intValue();
+
+            IcPub oldPub = (IcPub) tracContext.getPubDao()
+                .getPublication( pub.getId() );
+            Group group = getUserContext().getGroupDao().getGroup( dgid );
+
+            log.info( "pub=" + oldPub.getId() + " gid=" + dgid);
+            
+            if ( group != null && oldPub != null) {
+                Set<Group> groups = oldPub.getAdminGroups();
+                
+                for ( Iterator<Group> ig = groups.iterator();
+                      ig.hasNext(); ) {
+
+                    Group og = ig.next();
+                    if ( og.getId() == group.getId() ) {
+                        oldPub.getAdminGroups().remove( og );
+                        break;
+                    }
+                }
+                tracContext.getPubDao().updatePublication( oldPub );
+                log.info( "groups=" + oldPub.getAdminGroups() );
+            }
+        }
+
+        return (IcPub) tracContext.getPubDao()
+            .getPublication( pub.getId() );
+    }
+    
+    
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
     // IcJournal management
     //----------------------
     
@@ -204,14 +277,63 @@ public class EntryManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " get journal -> id=" + id );
         
-        IcPub oldPub =  (IcPub) tracContext.getPubDao()
-            .getPublication( id );
-
         IcJournal oldJournal = (IcJournal) tracContext
             .getJournalDao().getJournal( id );
         
         return oldJournal;
     }
+    
+    //---------------------------------------------------------------------
+    
+    public IcJournal addAdminGroup( Journal journal, Group group ) {
 
+        IcJournal oldJournal = (IcJournal) tracContext.getJournalDao()
+            .getJournal( journal.getId() );
+
+        if ( oldJournal != null ) {
+            oldJournal.getAdminGroups().add( group );
+            tracContext.getJournalDao()
+                .updateJournal( oldJournal );
+        }
+        return oldJournal;
+    }
+    
+    //---------------------------------------------------------------------
+
+    public IcJournal delAdminGroup( Journal journal, List<Integer> gdel ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        for ( Iterator<Integer> ii = gdel.iterator();
+              ii.hasNext(); ) {
+
+            int dgid = ii.next().intValue();
+
+            IcJournal oldJournal = (IcJournal) tracContext.getJournalDao()
+                .getJournal( journal.getId() );
+            Group group = getUserContext().getGroupDao().getGroup( dgid );
+
+            log.info( "journal=" + journal.getId() + " gid=" + dgid);
+            
+            if ( group != null && oldJournal != null) {
+                Set<Group> groups = oldJournal.getAdminGroups();
+                
+                for ( Iterator<Group> ig = groups.iterator();
+                      ig.hasNext(); ) {
+
+                    Group og = ig.next();
+                    if ( og.getId() == group.getId() ) {
+                        oldJournal.getAdminGroups().remove( og );
+                        break;
+                    }
+                }
+                tracContext.getJournalDao().updateJournal( oldJournal );
+                log.info( "groups=" +oldJournal.getAdminGroups() );
+            }
+        }
+
+        return (IcJournal) tracContext.getJournalDao()
+            .getJournal( journal.getId() );
+    }
 
 }

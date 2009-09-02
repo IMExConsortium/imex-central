@@ -71,6 +71,19 @@ public class EntryMgrAction extends ManagerSupport {
         return this.wflowContext;
     }
 
+
+    //---------------------------------------------------------------------
+    // GroupAll list
+    //--------------
+
+    public List<Group> getGroupAll(){
+        
+        if ( getUserContext().getGroupDao() != null ) {
+            return getUserContext().getGroupDao().getGroupList();
+        }
+        return null;
+    }
+    
     //---------------------------------------------------------------------
     //  mode: journal/icpub
     //---------------------
@@ -239,7 +252,51 @@ public class EntryMgrAction extends ManagerSupport {
                     return updateJournalProperties( getId(), journal );
                 }
                 
+                //---------------------------------------------------------
+                
+                if ( key.equalsIgnoreCase( "jagadd" ) ) {
+                    if ( getOpp() == null ) return SUCCESS;
+                    
+                    String sgid = getOpp().get( "jagadd" );
+                    try {
+                        int gid = Integer.parseInt( sgid );
+                        return addJournalAdminGroup( getId(), gid );
+                        
+                    } catch( NumberFormatException nfe ) {
+                        // abort on error
+                    }
+                    return SUCCESS;
+                }
 
+                //---------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "jagdel" ) ) {
+                    if ( getOpp() == null ) return SUCCESS;
+
+                    String gdel = getOpp().get( "gdel" );
+
+                    if ( getId() > 0 && gdel != null ) {
+                        try {
+                             List<Integer> gidl =
+                                 new ArrayList<Integer>();
+                             String[] gs = gdel.split(",");
+
+                             for( int ii = 0; ii <gs.length; ii++ ) {
+                                 gidl.add( Integer.valueOf( gs[ii] ) );
+                             }
+                             return delJournalAdminGroups( getId(), gidl );
+                        } catch ( Exception ex ) {
+                            // should not happen
+                        }   
+                    } else {
+                        journal = entryManager.getIcJournal( getId() );
+                        setId( journal.getId() );
+                    }
+                    return SUCCESS;
+                }
+                
+
+                //---------------------------------------------------------
                 //---------------------------------------------------------
                 // icpub operations
                 //-----------------
@@ -297,6 +354,49 @@ public class EntryMgrAction extends ManagerSupport {
                 if ( key.equalsIgnoreCase( "esup" ) ) {
                     int sid=0;
                     return updateIcPubState( getId(), sid );
+                }
+
+                //---------------------------------------------------------
+                
+                if ( key.equalsIgnoreCase( "eagadd" ) ) {
+                    if ( getOpp() == null ) return SUCCESS;
+                    
+                    String sgid = getOpp().get( "jagadd" );
+                    try {
+                        int gid = Integer.parseInt( sgid );
+                        return addIcPubAdminGroup( getId(), gid );
+                        
+                    } catch( NumberFormatException nfe ) {
+                        // abort on error
+                    }
+                    return SUCCESS;
+                }
+
+                //---------------------------------------------------------
+                
+                if ( key.equalsIgnoreCase( "eagdel" ) ) {
+                    if ( getOpp() == null ) return SUCCESS;
+                    
+                    String gdel = getOpp().get( "gdel" );
+
+                    if ( getId() > 0 && gdel != null ) {
+                        try {
+                             List<Integer> gidl =
+                                 new ArrayList<Integer>();
+                             String[] gs = gdel.split(",");
+
+                             for( int ii = 0; ii <gs.length; ii++ ) {
+                                 gidl.add( Integer.valueOf( gs[ii] ) );
+                             }
+                             return delIcPubAdminGroups( getId(), gidl );
+                        } catch ( Exception ex ) {
+                            // should not happen
+                        }
+                    } else {
+                        journal = entryManager.getIcJournal( getId() );
+                        setId( journal.getId() );
+                    }
+                    return SUCCESS;
                 }
             }
         }
@@ -613,7 +713,50 @@ public class EntryMgrAction extends ManagerSupport {
         return SUCCESS;
     }
 
+    //---------------------------------------------------------------------
 
+    public String addJournalAdminGroup( int id, int grp ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "add JAG: id=" + id + " ag= " + grp );
+                
+        IcJournal oldJournal = entryManager.getIcJournal( id );
+        Group agrp = getUserContext().getGroupDao().getGroup( grp );
+
+        if ( oldJournal != null && agrp != null ) {
+            entryManager.addAdminGroup( oldJournal, agrp );
+            
+            journal = entryManager.getIcJournal( id );
+            setId( journal.getId() );
+            
+            return JEDIT;
+        }
+        setId( 0 );
+        return SUCCESS;
+    }
+
+    //---------------------------------------------------------------------
+    
+    public String delJournalAdminGroups( int id, List<Integer> gidl ) {
+    
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "drop JAG: id=" + id + " aglist= " + gidl );
+        
+        IcJournal oldJournal = entryManager.getIcJournal( id );
+        if ( oldJournal != null && gidl != null ) {
+            
+            entryManager.delAdminGroup( oldJournal, gidl );
+
+            journal = entryManager.getIcJournal( id );
+            setId( journal.getId() );
+            
+            return JEDIT;
+        }
+        setId( 0 );
+        return SUCCESS;
+    }
+     
+    //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     // operations: IcPub
     //------------------
@@ -794,4 +937,49 @@ public class EntryMgrAction extends ManagerSupport {
         log.info( "updated trans(states)=" +this.trans );
         */
     }    
+
+    //---------------------------------------------------------------------
+    
+    public String addIcPubAdminGroup( int id, int grp ) {
+                        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "add JAG: id=" + id + " ag= " + grp );
+                
+        IcPub oldPub = entryManager.getIcPub( id );
+        Group agrp = getUserContext().getGroupDao().getGroup( grp );
+
+        if ( oldPub != null && agrp != null ) {
+            entryManager.addAdminGroup( oldPub, agrp );
+            
+            icpub = entryManager.getIcPub( id );
+            setId( icpub.getId() );
+            
+            return PUBEDIT;
+        }
+        setId( 0 );
+        return SUCCESS;
+    }
+
+    //---------------------------------------------------------------------
+
+    public String delIcPubAdminGroups( int id, List<Integer> gidl ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "drop EAG: id=" + id + " aglist= " + gidl );
+
+        IcPub oldPub = entryManager.getIcPub( id );
+        if ( oldPub != null && gidl != null ) {
+
+            entryManager.delAdminGroup( oldPub, gidl );
+
+            icpub = entryManager.getIcPub( id );
+            setId( icpub.getId() );
+            
+            return PUBEDIT;
+        }
+        setId( 0 );
+        return SUCCESS;
+    }
+
+    
 }
