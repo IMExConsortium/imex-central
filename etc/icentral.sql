@@ -103,6 +103,8 @@ CREATE TABLE entry (
     owner_uid integer not null default 0,
     crt timestamp not null default now(),
 
+    contact_email character varying(128) default '',
+
     source_id integer not null default 0,
     state_id integer not null default 0,
 

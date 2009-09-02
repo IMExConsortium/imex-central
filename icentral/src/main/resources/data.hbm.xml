@@ -42,6 +42,8 @@
   <property name="expectedPubDate" column="epub_date"/>
   <property name="releaseDate" column="rel_date"/>
 
+  <property name="contactEmail" column="contact_email"/>
+
  <!-- DataItem -->
 
   <property name="crt" column="crt"/>

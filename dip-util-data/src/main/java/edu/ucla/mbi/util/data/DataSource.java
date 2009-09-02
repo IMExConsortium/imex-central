@@ -61,6 +61,9 @@ public class DataSource {
     Set<User>  adminUsrSet;
 
     public Set<User> getAdminUsers() {
+        if ( adminUsrSet == null ) {
+            adminUsrSet = new HashSet<User>();
+        }
         return adminUsrSet;
     }
 
@@ -73,6 +76,9 @@ public class DataSource {
     Set<Group> adminGroupSet;
 
     public Set<Group> getAdminGroups() {
+        if ( adminGroupSet == null ) {
+            adminGroupSet = new HashSet<Group>();
+        }
         return adminGroupSet;
     }
     

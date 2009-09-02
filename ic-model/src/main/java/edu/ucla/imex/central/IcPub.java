@@ -34,6 +34,8 @@ public class IcPub extends Publication {
         this.setSource( pub.getSource() );
         this.setState( pub.getState() );
 
+        this.setContactEmail( pub.getContactEmail() );
+
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime( new Date() );
         this.setCrt( calendar );

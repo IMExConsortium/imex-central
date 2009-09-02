@@ -58,6 +58,17 @@ public class Publication extends DataItem {
         return journalSpecific;
     }
 
+    //---------------------------------------------------------------------
+
+    private String contactEmail = "";
+
+    public void setContactEmail( String email ) {
+        this.contactEmail = email;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
 
     //---------------------------------------------------------------------
     // publication data

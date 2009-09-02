@@ -22,7 +22,7 @@
  <tr>
   <td>
    <table width="100%" border="1">
-    <s:form theme="simple" action="roleedit"> 
+    <s:form theme="simple" action="journalmgr"> 
      <s:hidden name="id" value="%{id}"/>
      <s:hidden name="journal.id" value="%{id}"/>
      <tr>
@@ -106,15 +106,16 @@
           </s:iterator>
          </td>
         <th>
-          <s:submit theme="simple" name="op.gdel" value="DROP"/>
+          <s:submit theme="simple" name="op.jagdel" value="DROP"/>
          </th>
         </tr>
         <tr>
          <td colspan="1">
-          <s:textfield theme="simple" name="opp.gadd" size="32" maxLength="64"/>
+           <s:select name="opp.jagadd"  headerKey="-1" headerValue="---Select Group---"
+                     list="groupAll" listKey="id" listValue="label" />
          </td>
          <th>
-          <s:submit theme="simple" name="op.gadd" value="ADD"/>
+          <s:submit theme="simple" name="op.jagadd" value="ADD"/>
          </th>
         </tr>
 
