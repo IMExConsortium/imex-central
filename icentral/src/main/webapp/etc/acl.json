@@ -144,7 +144,7 @@
             group:["ADMIN"]
           }
         },
-        pres:{
+        prs:{
           allow:{
             user:["ADMIN"],
             role:["administrator"],

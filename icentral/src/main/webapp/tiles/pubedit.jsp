@@ -232,20 +232,20 @@
          <th rowspan="2" align="right" nowrap>Admin Users</th>
          <td colspan="1">
           <s:iterator value="pub.adminUsers" id="u" status="upos">
-           <s:checkbox name="opp.udel" fieldValue="%{#u.id}"/>
+           <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}"/>
            <s:property value="#u.login"/>
           </s:iterator>
          </td>
         <th>
-          <s:submit theme="simple" name="op.udel" value="DROP"/>
+          <s:submit theme="simple" name="op.eaudel" value="DROP"/>
          </th>
         </tr>
         <tr>
          <td colspan="1">
-          <s:textfield theme="simple" name="opp.uadd" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
          </td>
          <th>
-          <s:submit theme="simple" name="op.gadd" value="ADD"/>
+          <s:submit theme="simple" name="op.eauadd" value="ADD"/>
          </th>
         </tr>
 
@@ -253,7 +253,7 @@
          <th rowspan="2" align="right" nowrap>Admin Groups</th>
          <td colspan="1">
           <s:iterator value="pub.adminGroups" id="g" status="gpos">
-           <s:checkbox name="opp.gdel" fieldValue="%{#g.id}"/>
+           <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}"/>
            <s:property value="#g.label"/>
           </s:iterator>
          </td>
@@ -263,7 +263,7 @@
         </tr>
         <tr>
          <td colspan="1">
-           <s:select name="opp.gadd"  headerKey="-1" headerValue="---Select Group---"
+           <s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
                      list="groupAll" listKey="id" listValue="label" />  
          </td>
          <th>
