@@ -214,6 +214,22 @@ public class EntryManager {
 
     //---------------------------------------------------------------------
 
+    public IcPub addAdminUser( Publication pub, User user ) {
+        
+        IcPub oldPub = (IcPub) tracContext.getPubDao()
+            .getPublication( pub.getId() );
+
+        if ( oldPub != null ) {
+            oldPub.getAdminUsers().add( user );
+            tracContext.getPubDao()
+                .updatePublication( oldPub );
+        }
+
+        return oldPub;        
+    }
+    
+    //---------------------------------------------------------------------
+
     public IcPub addAdminGroup( Publication pub, Group group ) {
         
         IcPub oldPub = (IcPub) tracContext.getPubDao()
@@ -227,10 +243,48 @@ public class EntryManager {
 
         return oldPub;        
     }
-    
+
     //---------------------------------------------------------------------
     
-    public IcPub delAdminGroup( Publication pub, List<Integer> gdel ) {
+    public IcPub delAdminUsers( Publication pub, List<Integer> udel ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        for ( Iterator<Integer> ii = udel.iterator();
+              ii.hasNext(); ) {
+
+            int duid = ii.next().intValue();
+
+            IcPub oldPub = (IcPub) tracContext.getPubDao()
+                .getPublication( pub.getId() );
+            User user = getUserContext().getUserDao().getUser( duid );
+
+            log.info( "pub=" + oldPub.getId() + " uid=" + duid);
+            
+            if ( user != null && oldPub != null) {
+                Set<User> users = oldPub.getAdminUsers();
+                
+                for ( Iterator<User> iu = users.iterator();
+                      iu.hasNext(); ) {
+
+                    User ou = iu.next();
+                    if ( ou.getId() == user.getId() ) {
+                        oldPub.getAdminUsers().remove( ou );
+                        break;
+                    }
+                }
+                tracContext.getPubDao().updatePublication( oldPub );
+                log.info( "users=" + oldPub.getAdminUsers() );
+            }
+        }
+
+        return (IcPub) tracContext.getPubDao()
+            .getPublication( pub.getId() );
+    }
+
+    //---------------------------------------------------------------------
+
+    public IcPub delAdminGroups( Publication pub, List<Integer> gdel ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         
@@ -285,6 +339,21 @@ public class EntryManager {
     
     //---------------------------------------------------------------------
     
+    public IcJournal addAdminUser( Journal journal, User user ) {
+
+        IcJournal oldJournal = (IcJournal) tracContext.getJournalDao()
+            .getJournal( journal.getId() );
+
+        if ( oldJournal != null ) {
+            oldJournal.getAdminUsers().add( user );
+            tracContext.getJournalDao()
+                .updateJournal( oldJournal );
+        }
+        return oldJournal;
+    }
+    
+    //---------------------------------------------------------------------
+    
     public IcJournal addAdminGroup( Journal journal, Group group ) {
 
         IcJournal oldJournal = (IcJournal) tracContext.getJournalDao()
@@ -300,7 +369,44 @@ public class EntryManager {
     
     //---------------------------------------------------------------------
 
-    public IcJournal delAdminGroup( Journal journal, List<Integer> gdel ) {
+    public IcJournal delAdminUsers( Journal journal, List<Integer> udel ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        for ( Iterator<Integer> ii = udel.iterator();
+              ii.hasNext(); ) {
+
+            int duid = ii.next().intValue();
+
+            IcJournal oldJournal = (IcJournal) tracContext.getJournalDao()
+                .getJournal( journal.getId() );
+            User user = getUserContext().getUserDao().getUser( duid );
+
+            log.info( "journal=" + journal.getId() + " uid=" + duid);
+            
+            if ( user != null && oldJournal != null) {
+                Set<User> users = oldJournal.getAdminUsers();
+                
+                for ( Iterator<User> iu = users.iterator();
+                      iu.hasNext(); ) {
+
+                    User ou = iu.next();
+                    if ( ou.getId() == user.getId() ) {
+                        oldJournal.getAdminUsers().remove( ou );
+                        break;
+                    }
+                }
+                tracContext.getJournalDao().updateJournal( oldJournal );
+                log.info( "groups=" +oldJournal.getAdminGroups() );
+            }
+        }
+
+        return (IcJournal) tracContext.getJournalDao()
+            .getJournal( journal.getId() );
+    }
+    //---------------------------------------------------------------------
+
+    public IcJournal delAdminGroups( Journal journal, List<Integer> gdel ) {
 
         Log log = LogFactory.getLog( this.getClass() );
         

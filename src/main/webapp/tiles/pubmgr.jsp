@@ -3,9 +3,7 @@
 <h1>Publication Manager</h1>
 <s:if test="id > 0">
  <t:insertDefinition name="pubedit"/>
- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
- <br/><br/><br/><br/><br/><br/><br/><br/>
+ <br/><br/>
 </s:if>
 <s:else>
  <table width="100%">
