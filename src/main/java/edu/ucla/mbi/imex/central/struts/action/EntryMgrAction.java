@@ -815,8 +815,8 @@ public class EntryMgrAction extends ManagerSupport {
         Group agrp = getUserContext().getGroupDao().getGroup( grp );
 
         if ( oldJournal != null && agrp != null ) {
-            if ( testAcl( oldJournal,
-                          ownerMatch, adminUserMatch, adminGroupMatch ) ) {
+            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
+                                     adminGroupMatch ) ) {
                 
                 entryManager.addAdminGroup( oldJournal, agrp );
                 
@@ -840,8 +840,8 @@ public class EntryMgrAction extends ManagerSupport {
         
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal != null && gidl != null ) {
-            if ( testAcl( oldJournal,
-                          ownerMatch, adminUserMatch, adminGroupMatch ) ) {
+            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
+                                     adminGroupMatch ) ) {
 
                 entryManager.delAdminGroups( oldJournal, gidl );
 
@@ -868,8 +868,8 @@ public class EntryMgrAction extends ManagerSupport {
         
         if ( oldJournal != null && ausr != null ) {
 
-            if ( testAcl( oldJournal,
-                          ownerMatch, adminUserMatch, adminGroupMatch ) ) {
+            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
+                                     adminGroupMatch ) ) {
                 
                 entryManager.addAdminUser( oldJournal, ausr );
             
@@ -893,13 +893,13 @@ public class EntryMgrAction extends ManagerSupport {
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal != null && uidl != null ) {
 
-            if ( testAcl( oldJournal, ownerMatch, adminUserMatch, 
-                          adminGroupMatch ) ) {
+            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
+                                     adminGroupMatch ) ) {
                 
                 log.info( "ACL test passed");
                 
                 entryManager.delAdminUsers( oldJournal, uidl );
-            
+                
                 journal = entryManager.getIcJournal( id );
                 setId( journal.getId() );
                 return JEDIT;
@@ -1102,8 +1102,8 @@ public class EntryMgrAction extends ManagerSupport {
         Group agrp = getUserContext().getGroupDao().getGroup( grp );
 
         if ( oldPub != null && agrp != null ) {
-            entryManager.addAdminGroup( oldPub, agrp );
             
+            entryManager.addAdminGroup( oldPub, agrp );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1122,9 +1122,8 @@ public class EntryMgrAction extends ManagerSupport {
 
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && gidl != null ) {
-
+            
             entryManager.delAdminGroups( oldPub, gidl );
-
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1145,8 +1144,8 @@ public class EntryMgrAction extends ManagerSupport {
         User ausr = getUserContext().getUserDao().getUser( ulogin );
 
         if ( oldPub != null && ausr != null ) {
-            entryManager.addAdminUser( oldPub, ausr );
             
+            entryManager.addAdminUser( oldPub, ausr );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1167,7 +1166,6 @@ public class EntryMgrAction extends ManagerSupport {
         if ( oldPub != null && uidl != null ) {
 
             entryManager.delAdminUsers( oldPub, uidl );
-            
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1178,72 +1176,5 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
     //---------------------------------------------------------------------
-    //---------------------------------------------------------------------
-
-    private boolean testAcl( Journal jrnl ,
-                             Set<String> owner, Set<String> aUser, 
-                             Set<String> aGroup ) {
-        try{
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "ACL Test: jrnl=" + jrnl + 
-                  "\n           owner= " + owner +
-                  "\n           ausr= " + aUser +
-                  "\n           agrp= " + aGroup);
-
-        if ( jrnl == null ) return false;
-        if ( owner == null && aUser == null && aGroup == null ) return true;
-              
-        
-        // owner match
-        //------------
-        
-        if ( ownerMatch != null ) {
-            if ( ownerMatch.contains( jrnl.getOwner() ) ) {
-                log.info( "ACL Test: owner matched");
-                return true;
-            } 
-        }
-        
-        log.info( "ACL Test: no owner match");
-        
-        // admin user match
-        //-----------------
-
-        if ( adminUserMatch != null ) {
-            for( Iterator<User> oi =jrnl.getAdminUsers().iterator();
-                 oi.hasNext(); ) {
-                
-                String usr = oi.next().getLogin();
-                if ( adminUserMatch.contains( usr ) ) {
-                    log.info( "ACL Test: ausr matched");
-                    return true;
-                }
-            }
-        }
-        log.info( "ACL Test: no ausr match");
-
-        // admin group match
-        //------------------
-                
-        if ( adminGroupMatch != null ) {
-
-            for( Iterator<Group> gi =jrnl.getAdminGroups().iterator();
-                 gi.hasNext(); ) {
-                
-                String grp = gi.next().getLabel();
-                if ( adminGroupMatch.contains( grp ) ) {
-                    log.info( "ACL Test: agrp matched");
-                    return true;
-                }
-            }
-        }
-        
-        log.info( "ACL Test: no agrp match");
-        return false;
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-        return false;
-    }
-
+    
 }
