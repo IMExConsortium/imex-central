@@ -121,7 +121,11 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
     public void saveJournal( Journal journal ) { 
         try {          
-            super.saveOrUpdate( new IcJournal( journal ) );
+            if ( journal instanceof IcJournal ) {
+                super.saveOrUpdate( journal );
+            } else {
+                super.saveOrUpdate( new IcJournal( journal ) );
+            }
         } catch ( DAOException dex ) {
             // log exception ?
         }

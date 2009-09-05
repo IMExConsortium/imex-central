@@ -31,7 +31,7 @@ public class Journal extends DataSource {
 
     //---------------------------------------------------------------------
 
-    String issn;
+    String issn = "";
 
     public void setIssn( String issn ) {
         this.issn = issn;
@@ -55,7 +55,7 @@ public class Journal extends DataSource {
 
     //---------------------------------------------------------------------
 
-    String comments;
+    String comments = "";
     
     public void setComments( String comments ) {
         this.comments = comments;
@@ -68,7 +68,7 @@ public class Journal extends DataSource {
 
     //---------------------------------------------------------------------
     
-    String websiteURL;
+    String websiteURL = "";
 
     public void setWebsiteUrl( String url ) {
         this.websiteURL = url;

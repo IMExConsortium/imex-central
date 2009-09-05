@@ -62,7 +62,7 @@ public class DataSource implements DataAclAware {
 
     public Set<User> getAdminUsers() {
         if ( adminUsrSet == null ) {
-            adminUsrSet = new HashSet<User>();
+            adminUsrSet = new TreeSet<User>();
         }
         return adminUsrSet;
     }
@@ -77,7 +77,7 @@ public class DataSource implements DataAclAware {
 
     public Set<Group> getAdminGroups() {
         if ( adminGroupSet == null ) {
-            adminGroupSet = new HashSet<Group>();
+            adminGroupSet = new TreeSet<Group>();
         }
         return adminGroupSet;
     }

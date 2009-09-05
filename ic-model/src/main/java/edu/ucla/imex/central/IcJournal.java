@@ -26,6 +26,7 @@ public class IcJournal extends Journal {
         this.setTitle( journal.getTitle() );
         this.setOwner( journal.getOwner() );
         this.setNlmid( journal.getNlmid() );
+        this.setIssn( journal.getIssn() );
         
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime( new Date() );

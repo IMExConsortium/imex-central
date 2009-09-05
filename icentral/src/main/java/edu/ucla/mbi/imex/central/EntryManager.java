@@ -143,43 +143,93 @@ public class EntryManager {
         
         NcbiProxyClient cli = tracContext.getNcbiProxyClient();
         
+        log.info( " NcbiProxyClient=" + cli );
+
         if ( cli != null ) {
             Publication newPub = 
                 cli.getPublicationByPmid( pub.getPmid() );
-        
+            
             if ( newPub != null ) {
                 IcPub icp = new IcPub( newPub );
+                log.info( " IcPub=" + icp );
                 
                 if( icp.getSource() == null ) {
-                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
-                        .getJournalByNlmid( "0410462" ); // pub.getNlmid();
                     
-                    if ( icj != null ) {
-                        icp.setSource( icj ); 
-                    } else {
+                    log.info( " IcPub: no source" );
 
-                        // add journal
-                        //------------
+                } else {
+
+                    Journal j = (Journal) icp.getSource();
+                    
+                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
+                        .getJournalByNlmid( j.getNlmid() );
+                    
+                    if ( icj == null ) {
                         
+                        // build  a new IcJournal
+                        //------------------------
 
+                        IcJournal newJrnl = new IcJournal( j );
+                        log.info( " new IcJournal=" + newJrnl );
                         // set admin user/group to 
                         // defaults defined in userContext
                         //--------------------------------
                         
+                        Map defs = 
+                            (Map) userContext.getJsonConfig().get( "default" );
+
+                        log.info( " UserContex=" + userContext.getJsonConfig() );
+                        log.info( " UserContex: default=" + userContext.getJsonConfig().get( "default" ) );
+                        
+                        if ( defs!= null ) {
+                            
+                            String ousr = (String) defs.get( "owner" ); 
+                            String ausr = (String) defs.get( "adminuser" ); 
+                            String agrp = (String) defs.get( "admingroup" ); 
+                            
+
+                            log.info( "ou =" + ousr + " au=" + ausr + " ag=" + agrp );
+                            
+                            
+                            newJrnl.setOwner( userContext
+                                              .getUserDao()
+                                              .getUser( ousr ) );
+                            
+                            newJrnl.getAdminUsers().add( userContext
+                                                         .getUserDao()
+                                                         .getUser( ausr ) );
+                            
+                            newJrnl.getAdminGroups().add( userContext
+                                                          .getGroupDao()
+                                                          .getGroup( agrp ) );
+
+                            log.info( " owner/admins added");
+  
+                        }
+                        
+                        // commit new journal
+                        //-------------------
+                        
+                        tracContext.getJournalDao().saveJournal( newJrnl );
+                        
+                        icj = (IcJournal) tracContext.getJournalDao()
+                            .getJournalByNlmid( newJrnl.getNlmid() );
                         
                     }
+                    
+                    icp.setSource( icj );
                 }
 
                 icp.setOwner( owner ) ;
                 icp.setState( state );
-                
+                 
                 // set admin user/group sets
                 //--------------------------
                 
                 if ( icp.getSource() != null ) {
                     icp.getAdminUsers()
                         .addAll( icp.getSource().getAdminUsers() );
-
+                    
                     icp.getAdminGroups()
                         .addAll( icp.getSource().getAdminGroups() );
                 }

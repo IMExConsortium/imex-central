@@ -115,6 +115,9 @@ public class DataItem implements DataAclAware {
     Set<User>  adminUsrSet;
 
     public Set<User> getAdminUsers() {
+        if ( adminUsrSet == null ) {
+            adminUsrSet = new TreeSet<User>();
+        }
         return adminUsrSet;
     }
 
@@ -127,6 +130,9 @@ public class DataItem implements DataAclAware {
     private Set<Group> adminGroupSet;
 
     public Set<Group> getAdminGroups() {
+        if ( adminGroupSet == null ) {
+            adminGroupSet = new TreeSet<Group>();
+        }
         return adminGroupSet;
     }
 
