@@ -36,7 +36,7 @@
        <th>First Name</th>
        <th>Last Name</th>
        <th>E-Mail</th>
-       <th>&nbsp <s:property value="userList.size"/>  <s:property value="totalRecords"/> </th>
+       <th>&nbsp</th>
       </tr>
       <s:if test="userList.size < totalRecords">
        <tr>

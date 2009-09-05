@@ -37,6 +37,11 @@ public class IcUser extends User {
 	setActivated( false );
 	setEnabled( false );
 
+        setActivationKey( user.getActivationKey() );
+        setPassword( user.getPassword() );
+
+
+
         if ( user.getRoles() != null ) {
             getRoles().addAll( user.getRoles() );
         }
