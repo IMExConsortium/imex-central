@@ -1,5 +1,88 @@
 {
   acl:{
+     journalmgr:{
+      allow:{
+        user:["ADMIN"],
+        role:["administrator"],
+        group:["USR","ADMIN"]
+      },
+      operation:{
+        add:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        del:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        ldel:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        pup:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["USR","ADMIN"]
+          }
+        },
+        oup:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        jauadd:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["USR","ADMIN"]
+          }
+        },
+        jaudel:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["USR","ADMIN"]
+          },
+          target:{
+            ousr:["__LOGIN"],     
+            ausr:["__LOGIN","DIP"],
+            agrp:["USR","DIP"]
+          }
+        },
+        jagadd:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["USR","ADMIN"]
+          }
+        },
+        jagdel:{
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["USR","ADMIN"]
+          },
+          target:{
+            ousr:["__LOGIN"],     
+            ausr:["__LOGIN","DIP"],
+            agrp:["USR","DIP"]
+          }
+        }
+      }
+      
+    },
     rolemgr:{
       allow:{
         user:["ADMIN"],
@@ -149,10 +232,6 @@
             user:["ADMIN"],
             role:["administrator"],
             group:["ADMIN"]
-          },
-          target:{
-            ousr:["__LOGIN"],
-            ogrp:["__LOGIN"]
           }
         },
         pup:{
@@ -160,10 +239,6 @@
             user:["ADMIN"],
             role:["administrator"],
             group:["ADMIN"]
-          },
-          target:{
-            ousr:["__LOGIN"],
-            ogrp:["__LOGIN"]
           }
         }
       }

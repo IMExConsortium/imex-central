@@ -1,6 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-
 <h1>ImexCentral Acount Settings</h1>
 <table width="98%">
  <tr>

@@ -83,10 +83,10 @@
      <interceptor-ref name="timer"/>
      <interceptor-ref name="menu"/>
 
-     <result name="success">register.jsp</result>
-     <result name="input">register.jsp</result>
+     <result name="success" type="tiles">register</result>
+     <result name="input" type="tiles">register</result>
      <result name="home">index.jsp</result>
-     <result name="uedit">uedit.jsp</result>
+     <result name="uedit" type="tiles">uedit</result>
      <result name="activate" type="tiles">activate</result>
 
      <result name="logf" type="tiles">login</result>
@@ -106,9 +106,9 @@
      <interceptor-ref name="timer"/>
      <interceptor-ref name="menu"/>
 
-     <result name="success">register.jsp</result>
-     <result name="input">register.jsp</result>
-     <result name="activate">activate.jsp</result>
+     <result name="success" type="tiles">register</result>
+     <result name="input" type="tiles">register</result>
+     <result name="activate" type="tiles">activate</result>
 
    </action>
 
@@ -133,9 +133,9 @@
     <interceptor-ref name="timer"/>
     <interceptor-ref name="menu"/>
 
-    <result name="success" type="tiles">jqfeedback</result>
-    <result name="input" type="tiles">jqfeedback</result>
-    <result name="accepted" type="tiles">jqfeedback-ack</result>
+    <result name="success" type="tiles">feedback</result>
+    <result name="input" type="tiles">feedback</result>
+    <result name="accepted" type="tiles">feedback-ack</result>
 
   </action>
 

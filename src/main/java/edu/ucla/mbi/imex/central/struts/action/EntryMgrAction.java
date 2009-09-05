@@ -29,6 +29,9 @@ public class EntryMgrAction extends ManagerSupport {
     private final String PUBEDIT = "pubedit";
     private final String JEDIT = "jedit";
 
+    public static final String ACL_PAGE = "acl_page";
+    public static final String ACL_OPER = "acl_oper";
+
     //---------------------------------------------------------------------
     // Entry Manager
     //--------------
@@ -291,9 +294,9 @@ public class EntryMgrAction extends ManagerSupport {
                 if ( key.equalsIgnoreCase( "jaudel" ) ) {
                     System.out.print("jaudel");
                     if ( getOpp() == null ) return SUCCESS;
-
+                    
                     String udel = getOpp().get( "jaudel" );
-
+                    
                     if ( getId() > 0 && udel != null ) {
                         try {
                              List<Integer> uidl =
@@ -812,13 +815,18 @@ public class EntryMgrAction extends ManagerSupport {
         Group agrp = getUserContext().getGroupDao().getGroup( grp );
 
         if ( oldJournal != null && agrp != null ) {
-            entryManager.addAdminGroup( oldJournal, agrp );
-            
-            journal = entryManager.getIcJournal( id );
-            setId( journal.getId() );
-            
-            return JEDIT;
+            if ( testAcl( oldJournal,
+                          ownerMatch, adminUserMatch, adminGroupMatch ) ) {
+                
+                entryManager.addAdminGroup( oldJournal, agrp );
+                
+                journal = entryManager.getIcJournal( id );
+                setId( journal.getId() );
+                return JEDIT;
+            }
+            return ACL_OPER;
         }
+        
         setId( 0 );
         return SUCCESS;
     }
@@ -832,19 +840,22 @@ public class EntryMgrAction extends ManagerSupport {
         
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal != null && gidl != null ) {
-            
-            entryManager.delAdminGroups( oldJournal, gidl );
+            if ( testAcl( oldJournal,
+                          ownerMatch, adminUserMatch, adminGroupMatch ) ) {
 
-            journal = entryManager.getIcJournal( id );
-            setId( journal.getId() );
-            
-            return JEDIT;
+                entryManager.delAdminGroups( oldJournal, gidl );
+
+                journal = entryManager.getIcJournal( id );
+                setId( journal.getId() );
+                return JEDIT;
+            }
+            return ACL_OPER;
         }
+        
         setId( 0 );
         return SUCCESS;
     }
-
-
+    
     //---------------------------------------------------------------------
     
     public String addJournalAdminUser( int id,  String ulogin ) {
@@ -854,14 +865,19 @@ public class EntryMgrAction extends ManagerSupport {
                 
         IcJournal oldJournal = entryManager.getIcJournal( id );
         User ausr = getUserContext().getUserDao().getUser( ulogin );
-
+        
         if ( oldJournal != null && ausr != null ) {
-            entryManager.addAdminUser( oldJournal, ausr );
+
+            if ( testAcl( oldJournal,
+                          ownerMatch, adminUserMatch, adminGroupMatch ) ) {
+                
+                entryManager.addAdminUser( oldJournal, ausr );
             
-            journal = entryManager.getIcJournal( id );
-            setId( journal.getId() );
-            
-            return JEDIT;
+                journal = entryManager.getIcJournal( id );
+                setId( journal.getId() );
+                return JEDIT;
+            }
+            return ACL_OPER;
         }
         setId( 0 );
         return SUCCESS;
@@ -877,12 +893,18 @@ public class EntryMgrAction extends ManagerSupport {
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal != null && uidl != null ) {
 
-            entryManager.delAdminUsers( oldJournal, uidl );
+            if ( testAcl( oldJournal, ownerMatch, adminUserMatch, 
+                          adminGroupMatch ) ) {
+                
+                log.info( "ACL test passed");
+                
+                entryManager.delAdminUsers( oldJournal, uidl );
             
-            journal = entryManager.getIcJournal( id );
-            setId( journal.getId() );
-            
-            return JEDIT;
+                journal = entryManager.getIcJournal( id );
+                setId( journal.getId() );
+                return JEDIT;
+            }
+            return ACL_OPER;
         }
         setId( 0 );
         return SUCCESS;
@@ -1153,6 +1175,75 @@ public class EntryMgrAction extends ManagerSupport {
         }
         setId( 0 );
         return SUCCESS;
+    }
+
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+
+    private boolean testAcl( Journal jrnl ,
+                             Set<String> owner, Set<String> aUser, 
+                             Set<String> aGroup ) {
+        try{
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "ACL Test: jrnl=" + jrnl + 
+                  "\n           owner= " + owner +
+                  "\n           ausr= " + aUser +
+                  "\n           agrp= " + aGroup);
+
+        if ( jrnl == null ) return false;
+        if ( owner == null && aUser == null && aGroup == null ) return true;
+              
+        
+        // owner match
+        //------------
+        
+        if ( ownerMatch != null ) {
+            if ( ownerMatch.contains( jrnl.getOwner() ) ) {
+                log.info( "ACL Test: owner matched");
+                return true;
+            } 
+        }
+        
+        log.info( "ACL Test: no owner match");
+        
+        // admin user match
+        //-----------------
+
+        if ( adminUserMatch != null ) {
+            for( Iterator<User> oi =jrnl.getAdminUsers().iterator();
+                 oi.hasNext(); ) {
+                
+                String usr = oi.next().getLogin();
+                if ( adminUserMatch.contains( usr ) ) {
+                    log.info( "ACL Test: ausr matched");
+                    return true;
+                }
+            }
+        }
+        log.info( "ACL Test: no ausr match");
+
+        // admin group match
+        //------------------
+                
+        if ( adminGroupMatch != null ) {
+
+            for( Iterator<Group> gi =jrnl.getAdminGroups().iterator();
+                 gi.hasNext(); ) {
+                
+                String grp = gi.next().getLabel();
+                if ( adminGroupMatch.contains( grp ) ) {
+                    log.info( "ACL Test: agrp matched");
+                    return true;
+                }
+            }
+        }
+        
+        log.info( "ACL Test: no agrp match");
+        return false;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
