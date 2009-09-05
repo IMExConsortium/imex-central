@@ -19,10 +19,10 @@
     groups:["ADMIN"]
    }
  ],
- default{
+ default:{
     owner:"ADMIN",
     group:"ADMIN",
-    adminowner:"ADMIN",
+    adminuser:"ADMIN",
     admingroup:"ADMIN"
  }
 }
