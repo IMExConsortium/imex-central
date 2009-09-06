@@ -127,24 +127,28 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     //---------------------------------------------------------------------
 
     public void savePublication( Publication publication ) { 
-        try {          
-            super.saveOrUpdate( new IcPub( publication ) );
-        } catch ( DAOException dex ) {
+        
+        try {
+            if ( publication  instanceof IcPub ) {
+                super.saveOrUpdate( publication );
+            } else {
+                super.saveOrUpdate( new IcPub( publication ) );
+            }
+        }  catch ( DAOException dex ) {
             // log exception ?
         }
     }
     
-
     //---------------------------------------------------------------------
     
     public void updatePublication( Publication publication ) { 
+        
         try {
             super.saveOrUpdate( publication );
         } catch ( DAOException dex ) {
             // log exception ?
         }
     }
-    
     
     //---------------------------------------------------------------------
 
@@ -157,4 +161,3 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     }
 
 }
-

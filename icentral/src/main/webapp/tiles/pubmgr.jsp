@@ -100,7 +100,7 @@
           </div>
          </s:if>
         </s:if>
-        PMID: <s:textfield theme="simple" name="pub.pmid" size="48" maxLength="64"/>
+        <b>PMID:</b> <s:textfield theme="simple" name="pub.pmid" size="48" maxLength="64"/>
        </td>
        <td colspan="1" align="center">
         <s:submit theme="simple" name="op.eadd" value="ADD" />

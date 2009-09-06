@@ -214,7 +214,9 @@ public class EntryMgrAction extends ManagerSupport {
                 //-------------------
                 
                 if ( key.equalsIgnoreCase( "jadd" ) ) {
-                    return addJournal( journal );
+                    if ( getOpp() == null ) return SUCCESS;
+                    String nlmid = getOpp().get( "jadd" );
+                    return addJournal( nlmid );
                 }
 
                 //---------------------------------------------------------
@@ -720,39 +722,50 @@ public class EntryMgrAction extends ManagerSupport {
     // operations: Journal
     //----------------------
 
-    public String addJournal( Journal journal ) {
-        /*
-        if( wflowContext.getWorkflowDao() == null || 
-            state == null ) return SUCCESS;
-
-        wflowContext.getWorkflowDao().saveDataState( state );
+    public String addJournal( String nlmid ) {
+        
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new group -> id=" + state.getId() +
-                  " name=" + state.getName() );
+        log.info( " new jrnl -> nlmid=" + nlmid );
+        
+        // test if already in 
+        //-------------------
+        
+        IcJournal oldJnrl = 
+            entryManager.getIcJournalByNlmid( nlmid );
+        
+        if ( oldJnrl != null ) {
+            journal = oldJnrl;
+            setId( oldJnrl.getId() );
+            return JEDIT;
+        }
+        
+        // ACL target control NOTE: implement if/as needed
+        //------------------------------------------------                
+        /* if ( ownerMatch != null && ownerMatch.size() > 0 ) { } */
+        
+        Integer usr = (Integer) getSession().get( "USER_ID" );        
+        if ( usr == null ) return ACL_OPER;
+        log.info( " login id=" + usr );
 
-        this.state = null;
-        */
+        User owner = 
+            getUserContext().getUserDao().getUser( usr.intValue() );
+        if ( owner == null ) return ACL_OPER;
+        log.info( " owner set to: " + owner );
+        
+        IcJournal newJnrl = entryManager.addIcJournal( nlmid, owner );
+        if ( newJnrl != null ) {
+            journal = newJnrl;
+            setId( newJnrl.getId() );
+            return JEDIT;
+        }
         return SUCCESS;
     }
-
 
     //---------------------------------------------------------------------
 
     public String deleteJournal( Journal journal ) {
         /*
-        if( wflowContext.getWorkflowDao() == null || 
-            state == null ) return SUCCESS;
-        
-        DataState oldState = wflowContext.getWorkflowDao()
-            .getDataState( state.getId() );
-        if ( oldState == null ) return SUCCESS;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " delete state -> id=" + oldState.getId() );
-        wflowContext.getWorkflowDao().deleteDataState( oldState );        
-        
-        this.state = null;
-        setId( 0 );
+          NOTE: must check dependencies before removal 
         */
         return SUCCESS;
     }
@@ -761,11 +774,9 @@ public class EntryMgrAction extends ManagerSupport {
 
     private String deleteJournalList( List<Integer> ournals ) {
         /*
-        if( wflowContext.getWorkflowDao() == null || 
-            states == null ) return SUCCESS;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        
+
+        NOTE: must check dependencies before removal
+
         for ( Iterator<Integer> ii = states.iterator();
               ii.hasNext(); ) {
             
@@ -782,26 +793,20 @@ public class EntryMgrAction extends ManagerSupport {
 
     //---------------------------------------------------------------------
     
-    public String updateJournalProperties( int id, Journal journal ) {
-        /*
-        if( wflowContext.getWorkflowDao() == null ) return SUCCESS;
-        
+    public String updateJournalProperties( int id, Journal jrnl ) {
+
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id );
-
-        DataState oldState = wflowContext.getWorkflowDao()
-            .getDataState( id );
-        if ( oldState == null ) return SUCCESS;
-
-        oldState.setName( state.getName() );
-        oldState.setComments( state.getComments() );
+        log.info( "update journal: id=" + id );
         
-        wflowContext.getWorkflowDao().updateDataState( oldState );
-        this.state = wflowContext.getWorkflowDao().getDataState( id );
+        IcJournal oldJournal = entryManager.getIcJournal( id );
+        if ( oldJournal == null || journal == null ) return SUCCESS;
         
-        log.info( " updated state(props) -> id=" + id );
-        */
-        return SUCCESS;
+        entryManager.updateIcJournal( oldJournal, jrnl );
+        
+        journal = entryManager.getIcJournal( id );
+        setId( journal.getId() );
+        
+        return JEDIT;
     }
 
     //---------------------------------------------------------------------
@@ -949,36 +954,31 @@ public class EntryMgrAction extends ManagerSupport {
             setId( oldPub.getId() );
             return PUBEDIT;
         }
-
-        //protected Set<String> ownerMatch;
-        //protected Set<String> groupMatch;
-
-        if ( ownerMatch != null && ownerMatch.size() > 0 ) {
-
-            // ACL target control 
-            //-------------------
-            
-            
-
-        }
-
-        User owner = null;
+        
+        // ACL target control NOTE: implement as needed
+        //---------------------------------------------
+        /* if ( ownerMatch != null && ownerMatch.size() > 0 ) { } */
         
         Integer usr = (Integer) getSession().get( "USER_ID" );
+        if ( usr == null )  return ACL_OPER;
         log.info( " login id=" + usr );
-        if ( usr != null ) {
-            owner = getUserContext().getUserDao().getUser( usr.intValue() );
-            log.info( " owner set to: " + owner );
-        }
-
+        
+        User owner = 
+            getUserContext().getUserDao().getUser( usr.intValue() );
+        if ( owner == null )  return ACL_OPER;
+        log.info( " owner set to: " + owner );
+        
         DataState state =  
             wflowContext.getWorkflowDao().getDataState( "NEW" );
         log.info( " state set to: " + state );
         
-        if ( owner != null && state != null ){
-            icpub = entryManager.addIcPub( pub, owner, state );
-            
-            return PUBEDIT;
+        if ( state != null ) {
+            IcPub newPub = entryManager.addIcPub( pub, owner, state );
+            if ( newPub != null ) {
+                icpub = newPub;
+                setId( newPub.getId() );
+                return PUBEDIT;
+            }
         }
         
         return SUCCESS;

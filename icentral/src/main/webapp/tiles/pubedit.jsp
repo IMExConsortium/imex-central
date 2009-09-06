@@ -29,12 +29,15 @@
       <th width="5%" nowrap>PID:<s:property value="pub.id"/></th>
       <th width="5%" nowrap>PMID:<s:property value="pub.pmid"/></th>
       <td align="left" width="85%" nowrap>
-       <s:if test="pub.imexid.length > 0">
-        <b>IMEx ID:</b><s:property value="pub.imexid"/></th>
-       </s:if>
-       <s:else>
-        <b>IMEx ID:</b> <s:submit theme="simple" name="op.pasim" value="ASSIGN"/>
-       </s:else> 
+       &nbsp;<b><i>
+        <s:if test="pub.title.length()>75">
+         <s:property value="pub.title.substring(0,75)"/>...
+        </s:if>
+        <s:else>
+         <s:property value="pub.title"/>
+        </s:else>
+       </i</b>             
+      </td> 
       <th width="5%">
        <s:submit theme="simple" name="op.del" value="DELETE"/>
       </th>
@@ -44,23 +47,11 @@
        <table width="100%" border="1">
 
         <tr>
-         <th align="right" nowrap>
+         <th colspan="3" nowrap>
           Publication Status
          </th>
-         <td>
-          <table width="100%" border="1">
-           <tr>
-            <td align="left">
-             <b><s:property value="pub.state.name"/></b>
-            </td>
-           </tr>
-          </table>
-         </td>
-         <th>
-          <s:submit theme="simple" name="op.pav" value="UPDATE"/>
-         </th>
         </tr>
-
+        
         <tr>
          <th align="right" nowrap>
           Availability
@@ -106,7 +97,38 @@
          <th>
           <s:submit theme="simple" name="op.pcm" value="UPDATE"/>
          </th>
+        </tr>
 
+        <tr>
+         <th align="right" nowrap>
+          Curation Status
+         </th>
+         <td>
+          <table width="100%" border="1">
+           <tr>
+            <td align="left">
+             <b><s:property value="pub.state.name"/></b>
+            </td>
+           </tr>
+          </table>
+         </td>
+         <th>
+          <s:submit theme="simple" name="op.pav" value="UPDATE"/>
+         </th>
+        </tr>
+        <tr>
+         <th align="right" nowrap>
+          IMEx ID
+         </th>
+         <td>
+          <s:if test="pub.imexid.length > 0">
+           <s:property value="pub.imexid"/></th>
+          </s:if>
+          <s:else>
+           <s:submit theme="simple" name="op.pasim" value="ASSIGN"/>
+          </s:else>
+         </td>
+         <td>&nbsp;</td>
         </tr>  
         <tr>
          <th align="right" nowrap>
@@ -175,9 +197,9 @@
            Journal
          </td>
          <td width="75%" nowrap>
-           <s:select name="opp.jid"  headerKey="-1" headerValue="---Select Journal---" value="pub.source.id"
-              list="#{'00':'--unpublished--','1':'Nature', '2':'Science','3':'Cell'}" />             
-<%--                    list="groupAll" listKey="id" listValue="label" /> --%>           
+           <s:select name="opp.jid" headerKey="-1" headerValue="---Select Journal---" 
+                     value="pub.source.id" list="journalList" 
+                     listKey="id" listValue="title" />                  
          </td>
          <th>
           <s:submit theme="simple" name="op.jset" value="UPDATE"/>

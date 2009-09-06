@@ -7,7 +7,7 @@
         group:["USR","ADMIN"]
       },
       operation:{
-        add:{
+        jadd:{
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -28,11 +28,11 @@
             group:["ADMIN"]
           }
         },
-        pup:{
+        jpup:{
           allow:{
             user:["ADMIN"],
             role:["administrator"],
-            group:["USR","ADMIN"]
+            group:["ADMIN"]
           }
         },
         oup:{
@@ -47,7 +47,8 @@
             user:["ADMIN"],
             role:["administrator"],
             group:["USR","ADMIN"]
-          }
+          },
+
         },
         jaudel:{
           allow:{
@@ -76,8 +77,8 @@
           },
           target:{
             ousr:["__LOGIN"],     
-            ausr:["__LOGIN","DIP"],
-            agrp:["USR","DIP"]
+            ausr:["__LOGIN","ADMIN"],
+            agrp:["DIP_ADMIN"]
           }
         }
       }

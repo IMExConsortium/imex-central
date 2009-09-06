@@ -30,7 +30,7 @@
   <tr>
    <td>
     <table width="100%" border="1">
-     <s:form theme="simple" action="rolemgr"> 
+     <s:form theme="simple" action="journalmgr"> 
       <tr>
        <th colspan="2  width="5%"">JID</th>
        <th width="5%" nowrap>NLMID</th>
@@ -74,10 +74,10 @@
           </div>
          </s:if>
         </s:if>
-        NLMID: <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
+        <b>NLMID:</b> <s:textfield theme="simple" name="opp.jadd" size="48" maxLength="64"/>
        </td>
        <td align="center">
-        <s:submit theme="simple" name="op.add" value="ADD" />
+        <s:submit theme="simple" name="op.jadd" value="ADD" />
        </td>
       </tr>
      </s:form>
