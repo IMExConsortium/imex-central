@@ -27,11 +27,10 @@ PubMed identifier (<a href="http://en.wikipedia.org/wiki/PMID">PMID<a>):
 <br/><br/>
 <center>
  <form id="pubedit" name="pubedit" action="/icentral/pubedit.action" method="post">
-  <input type="hidden" name="op" value="search"/>
   <table width="50%">
    <tr>
     <th align="right" width="50%" nowrap>
-     PMID: <input type="text" name="pub.pmid" size="16" maxlength="16" value="" id="pubedit_pub_pmid"/>
+     PMID: <input type="text" name="pub.pmid" size="16" maxlength="128" value="" id="pubedit_pub_pmid"/>
     </th>
     <td align="left">
      <input type="submit" id="pubedit_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>

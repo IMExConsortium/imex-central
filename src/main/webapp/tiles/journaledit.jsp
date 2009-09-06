@@ -27,28 +27,33 @@
      <s:hidden name="journal.id" value="%{id}"/>
      <tr>
       <th nowrap>JID:<s:property value="journal.id"/></th>
-      <th nowrap>ISSN:<s:textfield theme="simple" name="journal.issn" size="32" maxLength="64"/></th>
-      <td width="95%">&nbsp;</td> 
+      <th align="left"  width="95%" nowrap><s:property value="journal.title"/></th> 
       <th>
         <s:submit theme="simple" name="op.del" value="DELETE"/>
       </th>
      </tr>
      <tr>
-      <td colspan="3">
+      <td colspan="2">
        <table width="100%" border="1">
         <tr>
          <td width="15%" align="right" nowrap>Title</td>
          <td align="left" width="95%"> 
-          <s:textfield theme="simple" name="journal.title" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.title" size="64" maxLength="128"/>
          </td>
-         <th rowspan="4">
-          <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+         <th rowspan="5">
+          <s:submit theme="simple" name="op.jpup" value="UPDATE"/>
          </th>
         </tr>
         <tr>
          <td width="15%" align="right" nowrap>NLMID</td>
          <td align="left" width="95%">
           <s:textfield theme="simple" name="journal.nlmid" size="32" maxLength="64"/>
+         </td>
+        </tr>
+        <tr>
+         <td width="15%" align="right" nowrap>ISSN</td>
+         <td align="left" width="95%">
+          <s:textfield theme="simple" name="journal.issn" size="32" maxLength="64"/>
          </td>
         </tr>
         <tr>

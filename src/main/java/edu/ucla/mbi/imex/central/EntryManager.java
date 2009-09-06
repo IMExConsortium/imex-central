@@ -127,9 +127,8 @@ public class EntryManager {
     public IcPub addIcPub( Publication pub, User owner, DataState state ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new pub -> id=" + pub.getId() +
-                  " pmid=" + pub.getPmid() );
-
+        log.info( " new pub -> pmid=" + pub.getPmid() );
+        
         // test if already in 
         //-------------------
 
@@ -158,68 +157,19 @@ public class EntryManager {
                     log.info( " IcPub: no source" );
 
                 } else {
-
                     Journal j = (Journal) icp.getSource();
                     
                     IcJournal icj = (IcJournal) tracContext.getJournalDao()
                         .getJournalByNlmid( j.getNlmid() );
                     
                     if ( icj == null ) {
-                        
-                        // build  a new IcJournal
-                        //------------------------
-
-                        IcJournal newJrnl = new IcJournal( j );
-                        log.info( " new IcJournal=" + newJrnl );
-                        // set admin user/group to 
-                        // defaults defined in userContext
-                        //--------------------------------
-                        
-                        Map defs = 
-                            (Map) userContext.getJsonConfig().get( "default" );
-
-                        log.info( " UserContex=" + userContext.getJsonConfig() );
-                        log.info( " UserContex: default=" + userContext.getJsonConfig().get( "default" ) );
-                        
-                        if ( defs!= null ) {
-                            
-                            String ousr = (String) defs.get( "owner" ); 
-                            String ausr = (String) defs.get( "adminuser" ); 
-                            String agrp = (String) defs.get( "admingroup" ); 
-                            
-
-                            log.info( "ou =" + ousr + " au=" + ausr + " ag=" + agrp );
-                            
-                            
-                            newJrnl.setOwner( userContext
-                                              .getUserDao()
-                                              .getUser( ousr ) );
-                            
-                            newJrnl.getAdminUsers().add( userContext
-                                                         .getUserDao()
-                                                         .getUser( ausr ) );
-                            
-                            newJrnl.getAdminGroups().add( userContext
-                                                          .getGroupDao()
-                                                          .getGroup( agrp ) );
-
-                            log.info( " owner/admins added");
-  
-                        }
-                        
-                        // commit new journal
-                        //-------------------
-                        
-                        tracContext.getJournalDao().saveJournal( newJrnl );
-                        
-                        icj = (IcJournal) tracContext.getJournalDao()
-                            .getJournalByNlmid( newJrnl.getNlmid() );
-                        
+                        icj = this.addIcJournal( j, owner );
                     }
                     
+                    if ( icj == null ) return null;
                     icp.setSource( icj );
                 }
-
+                
                 icp.setOwner( owner ) ;
                 icp.setState( state );
                  
@@ -229,18 +179,15 @@ public class EntryManager {
                 if ( icp.getSource() != null ) {
                     icp.getAdminUsers()
                         .addAll( icp.getSource().getAdminUsers() );
-                    
                     icp.getAdminGroups()
                         .addAll( icp.getSource().getAdminGroups() );
                 }
                 
                 tracContext.getPubDao().savePublication( icp );
-                
                 return (IcPub) tracContext.getPubDao()
                     .getPublicationByPmid( icp.getPmid() );
             }
-        }        
-        
+        }                
         return null;
     }
 
@@ -386,7 +333,23 @@ public class EntryManager {
         
         return oldJournal;
     }
-    
+
+    //---------------------------------------------------------------------
+
+    public IcJournal getIcJournalByNlmid( String nlmid ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " get jrnl -> nlmid=" + nlmid );
+
+        // test if already in
+        //-------------------
+
+        IcJournal oldJrnl =  (IcJournal) tracContext.getJournalDao()
+            .getJournalByNlmid( nlmid );
+        
+        return oldJrnl;
+    }
+
     //---------------------------------------------------------------------
     
     public IcJournal addAdminUser( Journal journal, User user ) {
@@ -454,6 +417,7 @@ public class EntryManager {
         return (IcJournal) tracContext.getJournalDao()
             .getJournal( journal.getId() );
     }
+
     //---------------------------------------------------------------------
 
     public IcJournal delAdminGroups( Journal journal, List<Integer> gdel ) {
@@ -492,4 +456,101 @@ public class EntryManager {
             .getJournal( journal.getId() );
     }
 
+    //---------------------------------------------------------------------
+    
+    public IcJournal addIcJournal( String nlmid, User owner ) {
+
+        Journal newJrnl = new Journal();
+        newJrnl.setNlmid( nlmid );
+        
+        return addIcJournal( newJrnl, owner );
+    }
+    
+    public IcJournal addIcJournal( Journal jrnl, User owner ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " new jrnl -> nlmid= " + jrnl.getNlmid() );
+        
+        // test if already in 
+        //-------------------
+
+        IcJournal oldJrnl = (IcJournal) tracContext.getJournalDao()
+            .getJournalByNlmid( jrnl.getNlmid() );
+        
+        if ( oldJrnl != null ) return oldJrnl;        
+        
+        // get journal through proxy
+        //--------------------------        
+        
+        NcbiProxyClient cli = tracContext.getNcbiProxyClient();
+        if ( cli == null ) return null;
+        log.info( " NcbiProxyClient=" + cli );
+        
+        Journal newJrnl = cli.getJournalByNlmid( jrnl.getNlmid() );
+        if ( newJrnl == null ) return null;
+        
+        IcJournal icjrnl = new IcJournal( newJrnl );
+        log.info( " IcJournal=" + icjrnl );
+
+        // defaults defined in userContext
+        //--------------------------------
+        
+        Map defs = (Map) userContext.getJsonConfig().get( "default" );
+        if ( defs == null ) return null;
+        
+        String ousr = (String) defs.get( "owner" ); 
+        String ausr = (String) defs.get( "adminuser" ); 
+        String agrp = (String) defs.get( "admingroup" ); 
+
+        log.info( "defs: ou =" + ousr + " au=" + ausr + " ag=" + agrp );
+
+        icjrnl.setOwner( userContext.getUserDao().getUser( ousr ) );
+        icjrnl.getAdminUsers().add( userContext.getUserDao()
+                                    .getUser( ausr ) );
+        icjrnl.getAdminGroups().add( userContext.getGroupDao()
+                                     .getGroup( agrp ) );
+        
+        // commit new journal
+        //-------------------
+                
+        tracContext.getJournalDao().saveJournal( icjrnl );
+                
+        return (IcJournal) tracContext.getJournalDao()
+            .getJournalByNlmid( icjrnl.getNlmid() );
+    }
+
+    //---------------------------------------------------------------------
+    
+    public IcJournal updateIcJournal( Journal jrnl, Journal newJrnl ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " jrnl -> nlmid= " + jrnl.getNlmid() );
+
+        // sanity check
+        //-------------
+        
+        IcJournal oldJrnl = (IcJournal) tracContext.getJournalDao()
+            .getJournalByNlmid( jrnl.getNlmid() );
+        
+        if ( oldJrnl == null ) return null;
+
+        if ( newJrnl.getTitle() != null ) {
+            oldJrnl.setTitle( newJrnl.getTitle() );
+        }
+        if ( newJrnl.getNlmid() != null ) {
+            oldJrnl.setNlmid( newJrnl.getNlmid() );
+        }
+        if ( newJrnl.getIssn() != null ) {
+            oldJrnl.setIssn( newJrnl.getIssn() );
+        }
+        if ( newJrnl.getWebsiteUrl() != null ) {
+            oldJrnl.setWebsiteUrl( newJrnl.getWebsiteUrl() );
+        }
+        if ( newJrnl.getComments() != null ) {
+            oldJrnl.setComments( newJrnl.getComments() );
+        }
+        
+        tracContext.getJournalDao().updateJournal( oldJrnl );
+        return oldJrnl;
+    }
 }
