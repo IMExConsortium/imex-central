@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
 
- <endpoint name="dip-proxy"
-  interface="edu.ucla.mbi.proxy.DipProxyPort"
-  implementation="edu.ucla.mbi.proxy.dip.DipCachingImpl"
-  service="{http://mbi.ucla.edu/proxy/dip}DipProxyService"
-  port="{http://mbi.ucla.edu/proxy/dip}proxyPort"
-  wsdl="WEB-INF/wsdl/DipService14.wsdl"
-  url-pattern="/dip-service"/>
+ <endpoint name="icentral-ws"
+  interface="edu.ucla.mbi.icentral.ws.IcentralPort"
+  implementation="edu.ucla.mbi.icentral.server.IcentralPortImpl"
+  service="{http://imex.mbi.ucla.edu/icentral/ws}ImexCentral"
+  port="{http://imex.mbi.ucla.edu/icentral/ws}IcentralPort"
+  wsdl="WEB-INF/icentral.wsdl"
+  url-pattern="/icentral-ws"/>
 
 </endpoints>
