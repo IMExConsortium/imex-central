@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ !===========================================================================
+ ! $HeadURL::                                                               $
+ ! $Id::                                                                    $
+ ! Version: $Rev::                                                          $
+ !===========================================================================
+ !
+ ! ImexCentral Web Services
+ !
+ !======================================================================= -->
+
+<bindings wsdlLocation="../wsdl/icentral.wsdl"
+    xmlns="http://java.sun.com/xml/ns/jaxws"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" >
+
+ <bindings node="wsdl:definitions">
+  <package name="edu.ucla.mbi.icentral.ws"/>
+ </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='createPublication']/wsdl:fault">
+   <class name="IcentralFault" >
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='createPublicationById']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getPublicationById']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getPublicationByOwner']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getPublicationByStatus']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublicationStatus']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+ <bindings node="wsdl:definitions/wsdl:service[@name='ImexCentralService']">
+  <class name="IcentralService"/>
+ </bindings>
+
+ <bindings node="wsdl:definitions/wsdl:portType[@name='ImexCentral']">
+  <class name="IcentralPort"/>
+ </bindings>
+
+</bindings>

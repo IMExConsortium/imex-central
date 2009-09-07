@@ -30,10 +30,14 @@ public class IcPub extends Publication {
         this.setAuthor( pub.getAuthor() );
         this.setAbstract( pub.getAbstract() );
         
+        this.setExpectedPubDate( pub.getExpectedPubDate() );
+        this.setPubDate( pub.getPubDate() );
+        this.setReleaseDate( pub.getReleaseDate() );
+
         this.setOwner( pub.getOwner() );
         this.setSource( pub.getSource() );
         this.setState( pub.getState() );
-
+        
         this.setContactEmail( pub.getContactEmail() );
 
         GregorianCalendar calendar = new GregorianCalendar();
