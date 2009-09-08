@@ -54,6 +54,7 @@
               <verbose>false</verbose>
               <bindingFiles>
                 <bindingFile>icentral.jxb</bindingFile>
+                <bindingFile>icschema.jxb</bindingFile>
               </bindingFiles>
               <wsdlFiles>
                 <wsdlFile>icentral.wsdl</wsdlFile> 
@@ -73,16 +74,6 @@
           <fork>true</fork>
           <source>1.6</source>
           <target>1.6</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-         <descriptorRefs>
-          <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
         </configuration>
       </plugin>
 

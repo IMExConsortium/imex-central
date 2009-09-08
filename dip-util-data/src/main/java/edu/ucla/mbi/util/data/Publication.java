@@ -138,7 +138,7 @@ public class Publication extends DataItem {
 
     private GregorianCalendar releaseDate;
 
-    void setReleaseDate( GregorianCalendar date ) {
+    public void setReleaseDate( GregorianCalendar date ) {
         this.releaseDate = date;
     }
 

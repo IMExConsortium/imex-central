@@ -162,7 +162,7 @@
   <part name="response" element="ic:updatePublicationStatusResponse"/>
  </message>
  
- <portType name="ImexCentral">
+ <portType name="ImexCentralPort">
 
   <operation name="createPublication">
    <input message="ic:createPublication"/>
@@ -201,7 +201,7 @@
   </operation>
  </portType>
  
- <binding name="ImexCentralPortBinding" type="ic:ImexCentral">
+ <binding name="ImexCentralPortBinding" type="ic:ImexCentralPort">
 
   <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
   

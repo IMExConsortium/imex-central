@@ -18,7 +18,7 @@
     xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" >
 
  <bindings node="wsdl:definitions">
-  <package name="edu.ucla.mbi.icentral.ws"/>
+  <package name="edu.ucla.mbi.imex.central.ws"/>
  </bindings>
 
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='createPublication']/wsdl:fault">
@@ -58,7 +58,7 @@
   <class name="IcentralService"/>
  </bindings>
 
- <bindings node="wsdl:definitions/wsdl:portType[@name='ImexCentral']">
+ <bindings node="wsdl:definitions/wsdl:portType[@name='ImexCentralPort']">
   <class name="IcentralPort"/>
  </bindings>
 

@@ -1,0 +1,8 @@
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.1">
+  <bindings scd="x-schema::ci" xmlns:ci="http://imex.mbi.ucla.edu/icentral/ws">
+    <schemaBindings>
+      <package name="edu.ucla.mbi.imex.central.ws" />
+    </schemaBindings>
+  </bindings>
+</bindings>
+
