@@ -1,4 +1,4 @@
-package edu.ucla.mbi.icentral.ws.server;
+package edu.ucla.mbi.imex.central.ws.server;
 
 /* #=======================================================================
  # $Id:: DipCachingImpl.java 317 2009-07-25 17:32:52Z lukasz              $
@@ -13,18 +13,21 @@ package edu.ucla.mbi.icentral.ws.server;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.ucla.mbi.icentral.ws.*;
-
 import javax.jws.WebService;
 import javax.xml.ws.Holder;
 
-@WebService(endpointInterface = "edu.ucla.mbi.icentral.ws.IcentralPort")
+import java.util.*;
+              
+import edu.ucla.mbi.imex.central.ws.*;
+      
 
+@WebService(endpointInterface = "edu.ucla.mbi.imex.central.ws.IcentralPort")
+                                 
 public class IcentralPortImpl implements IcentralPort {
 
     public void createPublication( Holder<Publication> publication )
         throws IcentralFault {
-        return null;
+        
     }
     
     public Publication createPublicationById( Identifier identifier )
@@ -38,6 +41,7 @@ public class IcentralPortImpl implements IcentralPort {
     
     public PublicationList getPublicationByOwner( List<String> owner )
         throws IcentralFault {
+        return null;
     }
     
     public PublicationList getPublicationByStatus( List<String> status )

@@ -54,8 +54,98 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>*.do</url-pattern>
   </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>*.action</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>page</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>pubmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>pubedit</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>entrymgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>entryedit</url-pattern>
+  </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>usrmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>usredit</url-pattern>
+  </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>groupmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>groupedit</url-pattern>
+  </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>rolemgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>roleedit</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>statemgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>stateedit</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>transmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>transedit</url-pattern>
+  </filter-mapping>
+
+
 
 <!-- =================================================== =============== -->
 <!-- =================================================== LISTENERS setup -->
@@ -78,13 +168,13 @@
   </listener>
 
   <!-- ================================================= JAX-WS listener -->
-<!--
+
   <listener>
    <listener-class>
     com.sun.xml.ws.transport.http.servlet.WSServletContextListener
    </listener-class>
   </listener>
--->
+
   <!-- ======================================= WSContextManager listener -->
 <!--
   <listener>
@@ -96,7 +186,7 @@
 <!-- =================================================== =============== -->
 <!-- =================================================== Servlet startup -->
 <!-- =================================================== =============== -->
-<!--
+
   <servlet>
    <servlet-name>imex-central</servlet-name>
    <servlet-class>
@@ -104,16 +194,16 @@
    </servlet-class>
    <load-on-startup>1</load-on-startup>
   </servlet>
--->
+
 <!-- =================================================== =============== -->
 <!-- =================================================== Servlet mapping -->
 <!-- =================================================== =============== -->
-<!--
+
   <servlet-mapping>
    <servlet-name>imex-central</servlet-name>
-   <url-pattern>/service</url-pattern>
+   <url-pattern>/ws</url-pattern>
   </servlet-mapping>
--->
+
   <mime-mapping>
         <extension>inc</extension>
         <mime-type>text/plain</mime-type>
