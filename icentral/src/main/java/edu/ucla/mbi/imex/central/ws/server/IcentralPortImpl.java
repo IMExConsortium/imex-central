@@ -14,19 +14,31 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.BindingProvider; 
 import javax.xml.ws.Holder;
 
+import javax.xml.ws.handler.MessageContext; 
+
 import java.util.*;
-              
+import javax.annotation.*;         
+
 import edu.ucla.mbi.imex.central.ws.*;
-      
 
 @WebService(endpointInterface = "edu.ucla.mbi.imex.central.ws.IcentralPort")
                                  
 public class IcentralPortImpl implements IcentralPort {
 
+    @Resource 
+        WebServiceContext wsContext;
+      
     public void createPublication( Holder<Publication> publication )
         throws IcentralFault {
+
+        MessageContext context = wsContext.getMessageContext();
+        Map requestHeaders = 
+            (Map) context.get(MessageContext.HTTP_REQUEST_HEADERS) ;
+        
         
     }
     
@@ -34,6 +46,7 @@ public class IcentralPortImpl implements IcentralPort {
         throws IcentralFault {
         return null;
     }
+
     public PublicationList getPublicationById( List<Identifier> identifier )
         throws IcentralFault {
         return null;
