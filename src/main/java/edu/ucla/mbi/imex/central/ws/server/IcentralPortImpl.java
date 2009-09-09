@@ -20,21 +20,89 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.BindingProvider; 
 import javax.xml.ws.Holder;
 
+import javax.xml.ws.soap.Addressing;
+
 import javax.xml.ws.handler.MessageContext; 
 
 import java.util.*;
 import javax.annotation.*;         
 
+import edu.ucla.mbi.util.*;
+//import edu.ucla.mbi.util.dao.*;
+import edu.ucla.mbi.util.data.*;
+//import edu.ucla.mbi.util.data.dao.*;
+
+import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.ws.*;
 
-@WebService(endpointInterface = "edu.ucla.mbi.imex.central.ws.IcentralPort")
-                                 
+@WebService(serviceName = "ImexCentralService", 
+            portName = "ImexCentralPort", 
+            endpointInterface = "edu.ucla.mbi.imex.central.ws.IcentralPort", 
+            targetNamespace = "http://imex.mbi.ucla.edu/icentral/ws",
+            wsdlLocation = "/WEB-INF/wsdl/icentral.wsdl") 
+
 public class IcentralPortImpl implements IcentralPort {
 
     @Resource 
         WebServiceContext wsContext;
-      
-    public void createPublication( Holder<Publication> publication )
+
+    //---------------------------------------------------------------------
+    //  UserContext
+    //--------------
+
+    private UserContext userContext;
+
+    public void setUserContext( UserContext context ) {
+        this.userContext = context;
+    }
+    public UserContext getUserContext() {
+        return this.userContext;
+    }
+
+ 
+    //---------------------------------------------------------------------
+    // Entry Manager
+    //--------------
+
+    private EntryManager entryManager;
+
+    public void setEntryManager( EntryManager manager ) {
+        this.entryManager = manager;
+    }
+
+    public EntryManager getEntryManager() {
+        return this.entryManager;
+    }
+
+    //---------------------------------------------------------------------
+    //  TracContext
+    //--------------
+
+    private TracContext tracContext;
+
+    public void setTracContext( TracContext context ) {
+        this.tracContext = context;
+    }
+
+    public TracContext getTracContext() {
+        return this.tracContext;
+    }
+
+    //---------------------------------------------------------------------
+    //  WorkflowContext
+    //-----------------
+
+    private WorkflowContext wflowContext;
+
+    public void setWorkflowContext( WorkflowContext context ) {
+        this.wflowContext = context;
+    }
+
+    public WorkflowContext getWorkflowContext() {
+        return this.wflowContext;
+    }
+    
+    public void createPublication( Holder<edu.ucla.mbi.imex.central.ws.Publication> publication )
         throws IcentralFault {
 
         MessageContext context = wsContext.getMessageContext();
@@ -43,7 +111,7 @@ public class IcentralPortImpl implements IcentralPort {
         
     }
     
-    public Publication createPublicationById( Identifier identifier )
+    public edu.ucla.mbi.imex.central.ws.Publication createPublicationById( Identifier identifier )
         throws IcentralFault {
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -54,6 +122,10 @@ public class IcentralPortImpl implements IcentralPort {
         log.info( " login=" + c.getLogin() );
         log.info( " pass=" + c.getPass() );
         log.info( " identifier=" + identifier );
+
+        log.info( " user context=" +  userContext);
+        log.info( " entry manager=" +  entryManager);
+
                   
         return null;
     }
@@ -73,8 +145,8 @@ public class IcentralPortImpl implements IcentralPort {
         return null;
     }
 
-    public Publication updatePublicationStatus( Identifier identifier,
-                                                String status )
+    public edu.ucla.mbi.imex.central.ws.Publication updatePublicationStatus( Identifier identifier,
+                                                                             String status )
         throws IcentralFault {
         return null;
     }
