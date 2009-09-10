@@ -160,9 +160,16 @@
         <version>6.1.18</version>
         <configuration>
           <webDefaultXml>src/main/resources/webdefault.xml</webDefaultXml>
+
+          <systemProperties>
+            <systemProperty>
+              <name>com.sun.xml.ws.fault.SOAPFaultBuilder.disableCaptureStackTrace</name>
+              <value>false</value>
+            </systemProperty>
+          </systemProperties>
         </configuration>
       </plugin>
-   
+  
     </plugins>
 
   </build>

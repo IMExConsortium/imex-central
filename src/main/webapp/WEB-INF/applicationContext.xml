@@ -77,12 +77,7 @@
 
  <bean id="myService" 
        class="edu.ucla.mbi.imex.central.ws.server.IcentralPortImpl">
-
-    <property name="entryManager" ref="entryManager"/>      
-    <property name="userContext" ref="userContext"/>
-    <property name="tracContext" ref="tracContext"/>
-    <property name="workflowContext" ref="workflowContext"/>
-
+   <property name="entryManager" ref="entryManager"/>      
  </bean>
 
  <ws:service  id="ImexCentralService" bean="#myService"/>

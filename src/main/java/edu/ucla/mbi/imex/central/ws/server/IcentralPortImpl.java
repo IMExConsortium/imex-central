@@ -28,11 +28,13 @@ import java.util.*;
 import javax.annotation.*;         
 
 import edu.ucla.mbi.util.*;
-//import edu.ucla.mbi.util.dao.*;
+import edu.ucla.mbi.util.dao.*;
+
 import edu.ucla.mbi.util.data.*;
 //import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
+import edu.ucla.mbi.imex.central.dao.*;
 import edu.ucla.mbi.imex.central.ws.*;
 
 @WebService(serviceName = "ImexCentralService", 
@@ -45,20 +47,6 @@ public class IcentralPortImpl implements IcentralPort {
 
     @Resource 
         WebServiceContext wsContext;
-
-    //---------------------------------------------------------------------
-    //  UserContext
-    //--------------
-
-    private UserContext userContext;
-
-    public void setUserContext( UserContext context ) {
-        this.userContext = context;
-    }
-    public UserContext getUserContext() {
-        return this.userContext;
-    }
-
  
     //---------------------------------------------------------------------
     // Entry Manager
@@ -74,46 +62,25 @@ public class IcentralPortImpl implements IcentralPort {
         return this.entryManager;
     }
 
-    //---------------------------------------------------------------------
-    //  TracContext
-    //--------------
-
-    private TracContext tracContext;
-
-    public void setTracContext( TracContext context ) {
-        this.tracContext = context;
-    }
-
-    public TracContext getTracContext() {
-        return this.tracContext;
-    }
-
-    //---------------------------------------------------------------------
-    //  WorkflowContext
-    //-----------------
-
-    private WorkflowContext wflowContext;
-
-    public void setWorkflowContext( WorkflowContext context ) {
-        this.wflowContext = context;
-    }
-
-    public WorkflowContext getWorkflowContext() {
-        return this.wflowContext;
-    }
     
-    public void createPublication( Holder<edu.ucla.mbi.imex.central.ws.Publication> publication )
-        throws IcentralFault {
+    public void 
+        createPublication( Holder<edu.ucla.mbi.imex.central.ws.Publication> 
+                           publication ) throws IcentralFault {
 
         MessageContext context = wsContext.getMessageContext();
         Map requestHeaders = 
             (Map) context.get(MessageContext.HTTP_REQUEST_HEADERS) ;
         
     }
-    
-    public edu.ucla.mbi.imex.central.ws.Publication createPublicationById( Identifier identifier )
-        throws IcentralFault {
 
+    //---------------------------------------------------------------------
+    // IcentralPort interface
+    //-----------------------
+    
+    public edu.ucla.mbi.imex.central.ws.Publication 
+        createPublicationById( Identifier identifier )
+        throws IcentralFault {
+        
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl:" );
         
@@ -122,11 +89,12 @@ public class IcentralPortImpl implements IcentralPort {
         log.info( " login=" + c.getLogin() );
         log.info( " pass=" + c.getPass() );
         log.info( " identifier=" + identifier );
-
-        log.info( " user context=" +  userContext);
+        
         log.info( " entry manager=" +  entryManager);
+        log.info( " credentials test=" +  c.test() );
+        
+        if ( ! c.test() ) throw Fault.AUTH;
 
-                  
         return null;
     }
 
@@ -145,8 +113,8 @@ public class IcentralPortImpl implements IcentralPort {
         return null;
     }
 
-    public edu.ucla.mbi.imex.central.ws.Publication updatePublicationStatus( Identifier identifier,
-                                                                             String status )
+    public edu.ucla.mbi.imex.central.ws.Publication 
+        updatePublicationStatus( Identifier identifier, String status )
         throws IcentralFault {
         return null;
     }
@@ -184,6 +152,21 @@ public class IcentralPortImpl implements IcentralPort {
                 // ignore: login/pass left at null
             }
         }
-    }
 
+        public boolean test() {
+            
+            if ( entryManager == null ||  
+                 entryManager.getUserContext() == null ) return false;
+            
+            UserDao dao = entryManager.getUserContext().getUserDao();
+            if (dao == null ) return false;
+            
+            User user = dao.getUser( login );
+            
+            if ( user != null && pass != null ) {
+                return user.testPassword( pass );
+            } 
+            return false;            
+        }
+    }
 }
