@@ -5,11 +5,13 @@ use XML::XPath::XMLParser;
 
 my $URL= "http://dip.doe-mbi.ucla.edu/icentral/ws";
 
-my $PURL= "http://foo:bar\@10.1.1.%%%:8080/icentral/ws";
+my $PURL= "http://%USR%:%PASS%\@10.1.1.%%%:8080/icentral/ws";
 
 my $ip="";
 my $pmid="";
 my $op="";
+my $usr ="foo";
+my $pass ="bar";
 
 for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/IP=(.+)/ ) {
@@ -25,11 +27,25 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/OP=(.+)/ ) {
         $op=$1;
     }
+
+    if( $ARGV[$i]=~/USR=(.+)/ ) {
+        $usr=$1;
+    }
+
+    if( $ARGV[$i]=~/PASS=(.+)/ ) {
+        $pass=$1;
+    }
+
 }
+
+
+$PURL=~s/%USR%/$usr/;
+$PURL=~s/%PASS%/$pass/;
 
 print "URL: $PURL\n";
 print "OP: $op\n";
 print "PMID: $pmid\n";
+
 
 my $som="";
 my $rns ="";    
@@ -47,7 +63,7 @@ if($op ne "" ) {
                             SOAP::Data->name("service" => $format),
                             SOAP::Data->name("ns" => $ns),
                             SOAP::Data->name("ac" => $ac) );
-	print $som,"\n";
+#	print $som,"\n";
     }
 }
 
