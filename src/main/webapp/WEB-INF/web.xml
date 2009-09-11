@@ -69,80 +69,80 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>page</url-pattern>
+    <url-pattern>/page</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>pubmgr</url-pattern>
+    <url-pattern>/pubmgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>pubedit</url-pattern>
+    <url-pattern>/pubedit</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>entrymgr</url-pattern>
+    <url-pattern>/entrymgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>entryedit</url-pattern>
-  </filter-mapping>
-
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>usrmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>usredit</url-pattern>
+    <url-pattern>/entryedit</url-pattern>
   </filter-mapping>
 
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>groupmgr</url-pattern>
+    <url-pattern>/usrmgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>groupedit</url-pattern>
+    <url-pattern>/usredit</url-pattern>
   </filter-mapping>
 
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>rolemgr</url-pattern>
+    <url-pattern>/groupmgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>roleedit</url-pattern>
+    <url-pattern>/groupedit</url-pattern>
+  </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/rolemgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>statemgr</url-pattern>
+    <url-pattern>/roleedit</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>stateedit</url-pattern>
+    <url-pattern>/statemgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>transmgr</url-pattern>
+    <url-pattern>/stateedit</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>transedit</url-pattern>
+    <url-pattern>/transmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/transedit</url-pattern>
   </filter-mapping>
 
 
