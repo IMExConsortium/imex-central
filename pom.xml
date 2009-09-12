@@ -32,7 +32,7 @@
    <module>icentral</module>
    <module>dip-util-data</module>
    <module>ic-model</module>
-   <module>ic-persistence</module>
+   <module>ic-persist</module>
    <module>ic-api</module>
    <module>ic-ws</module>
   </modules>
@@ -50,8 +50,6 @@
     </plugin>
    </plugins>
   </build>
-
- 
    
   <dependencies>
 
@@ -69,7 +67,7 @@
 
    <dependency>
      <groupId>edu.ucla.mbi.dip</groupId>
-     <artifactId>dip-proxy-api</artifactId>
+     <artifactId>dip-proxy-ws</artifactId>
      <version>0.01</version>
    </dependency>
 
