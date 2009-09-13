@@ -16,7 +16,7 @@
  <session-factory>
 	   
   <!-- JNDI-style connection: set up by container-->
-    
+
   <property name="connection.datasource">
    jdbc/icentral
   </property>
