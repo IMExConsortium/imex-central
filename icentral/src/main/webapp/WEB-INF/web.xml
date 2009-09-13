@@ -74,6 +74,11 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/user</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/pubmgr</url-pattern>
   </filter-mapping>
 

@@ -123,26 +123,26 @@
         <configuration>
           <webResources>
 
-          <resource>
+           <resource>
             <directory>${basedir}/../ic-api/src/wsdl</directory>
             <targetPath>WEB-INF/wsdl</targetPath>
             <filtering>true</filtering>
             <includes>
               <include>icentral.wsdl</include>
             </includes>
-          </resource>
-<!--
-          <resource>
-            <directory>${basedir}/src/xsl</directory>
-              <targetPath>xsl</targetPath>
-              <filtering>true</filtering>
-              <includes>
-                <include>*/*.xsl</include>
+           </resource>
+
+           <resource>
+            <directory>${basedir}/../ic-persist/src/wsdl</directory>
+            <targetPath>WEB-INF/classes/edu/ucla/mbi/proxy</targetPath>
+            <filtering>true</filtering>
+            <includes>
+              <include>*.wsdl</include>
             </includes>
-          </resource>
--->           
+           </resource>
+
             <resource>
-              <directory>${basedir}/../etc/imexcentral-webapp</directory>
+              <directory>${basedir}/../etc/icentral</directory>
               <targetPath>WEB-INF</targetPath>
               <filtering>true</filtering>
               <includes>

@@ -34,7 +34,6 @@
    <module>ic-model</module>
    <module>ic-persist</module>
    <module>ic-api</module>
-   <module>ic-ws</module>
   </modules>
   
   <build>
