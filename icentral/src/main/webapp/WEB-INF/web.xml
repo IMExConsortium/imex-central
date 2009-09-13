@@ -89,6 +89,16 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/journalmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/journaledit</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/entrymgr</url-pattern>
   </filter-mapping>
 
