@@ -30,7 +30,6 @@
 
   <modules>
    <module>icentral</module>
-   <module>dip-util-data</module>
    <module>ic-model</module>
    <module>ic-persist</module>
    <module>ic-api</module>
@@ -51,6 +50,12 @@
   </build>
    
   <dependencies>
+
+   <dependency>
+     <groupId>edu.ucla.mbi.dip</groupId>
+     <artifactId>dip-util-data</artifactId>
+     <version>0.01</version>
+   </dependency>
 
    <dependency>
      <groupId>edu.ucla.mbi.dip</groupId>
