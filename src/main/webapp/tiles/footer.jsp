@@ -20,7 +20,7 @@
    <table width="98%" cellspacing="0">
     <tr>
      <td align="left" nowrap>
-      <font size="-5">$Rev$</font>
+      <font size="-5">Ver: ${icentral.version} ($Rev$)</font>
      </td>
      <td align="right" nowrap>
       <font size="-5">
