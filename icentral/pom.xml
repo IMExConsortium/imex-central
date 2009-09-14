@@ -9,6 +9,8 @@
   <name>Web Application module</name>
 
   <properties>
+      <icentral.version>${project.version}</icentral.version> 
+      <icentral.jdbc>jdbc/icentral</icentral.jdbc>
       <!-- foo.org: global key -->
       <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
       <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
@@ -165,6 +167,7 @@
               <filtering>true</filtering>
               <includes>
                 <include>register.jsp</include>
+                <include>footer.jsp</include>
               </includes>
             </resource>
 
