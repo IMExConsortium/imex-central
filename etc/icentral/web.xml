@@ -79,6 +79,21 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/register</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/uedit</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/feedback</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/pubmgr</url-pattern>
   </filter-mapping>
 
@@ -110,12 +125,12 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>/usrmgr</url-pattern>
+    <url-pattern>/usermgr</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>action2</filter-name>
-    <url-pattern>/usredit</url-pattern>
+    <url-pattern>/useredit</url-pattern>
   </filter-mapping>
 
 
