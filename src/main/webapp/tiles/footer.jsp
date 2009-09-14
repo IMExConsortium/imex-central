@@ -19,6 +19,9 @@
   <td align="center" width="100%">
    <table width="98%" cellspacing="0">
     <tr>
+     <td align="left" nowrap>
+      <font size="-5">$Rev$</font>
+     </td>
      <td align="right" nowrap>
       <font size="-5">
         <i>Code by:<A HREF="mailto:lukasz@mbi.ucla.edu">LS</A>.</i>
