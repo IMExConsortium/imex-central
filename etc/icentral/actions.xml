@@ -98,9 +98,9 @@
   </bean>
 
   <bean id="reCaptcha" class="net.tanesha.recaptcha.ReCaptchaImpl">
-    <property name="privateKey" value="6LfVAwcAAAAAAAVpzD05-mBbK5_HRJ9StEvSPAIn"/>
-    <property name="publicKey" value="6LfVAwcAAAAAACFlY-X-icWpaoVMxHFyFVu3eIgc"/>
-    <property name="recaptchaServer" value="https://api-secure.recaptcha.net"/>
+    <property name="privateKey" value="${recaptcha.privateKey}"/>
+    <property name="publicKey" value="${recaptcha.publicKey}"/>
+    <property name="recaptchaServer" value="${recaptcha.recaptchaServer}"/>
     <property name="includeNoscript" value="false"/>
   </bean>
 

@@ -7,6 +7,15 @@
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>Web Application module</name>
+
+  <properties>
+      <!-- foo.org: global key -->
+      <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
+      <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
+      <recaptcha.recaptchaServer>https://api-secure.recaptcha.net</recaptcha.recaptchaServer>
+
+      <icentral.jdbc>jdbc/icentral</icentral.jdbc>
+  </properties>
   
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
@@ -146,10 +155,28 @@
               <targetPath>WEB-INF</targetPath>
               <filtering>true</filtering>
               <includes>
-                <include>jetty-env.xml</include>
-                <include>context.xml.xml</include>
+                <include>*.xml</include>
               </includes>
             </resource>
+
+            <resource>
+              <directory>${basedir}/src/main/webapp/tiles</directory>
+              <targetPath>tiles</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>register.jsp</include>
+              </includes>
+            </resource>
+
+            <resource>
+              <directory>${basedir}/src/main/resources</directory>
+              <targetPath>WEB-INF/classes</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>hibernate.cfg.xml</include>
+              </includes>
+            </resource>
+
           </webResources>
         </configuration>
       </plugin>
