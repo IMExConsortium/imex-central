@@ -144,7 +144,6 @@
     <url-pattern>/groupedit</url-pattern>
   </filter-mapping>
 
-
   <filter-mapping>
     <filter-name>action2</filter-name>
     <url-pattern>/rolemgr</url-pattern>
