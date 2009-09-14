@@ -18,7 +18,7 @@
   <!-- JNDI-style connection: set up by container-->
 
   <property name="connection.datasource">
-   jdbc/icentral
+   ${icentral.jdbc}
   </property>
  
   <property name="hibernate.query.factory_class">
