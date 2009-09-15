@@ -6,7 +6,7 @@
  <tr>
   <td align=left>
    <font size=-2>
-    Already have an account? <A HREF="user?op=login">Log in</A>
+    Already have an account? <A HREF="user">Log in</A>
    </font>
   </td>
  </tr>
