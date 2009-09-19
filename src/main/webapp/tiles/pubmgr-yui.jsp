@@ -13,7 +13,7 @@
    width: 100%;
 }
 
-#pubtab th {
+.pubtab th {
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
@@ -29,6 +29,8 @@
 .yui-skin-sam .yui-dt th {
     background:#E8E8EA;
     text-align: center;
+    vertical-align: middle;
+    font-weight: bold;    
 }
 
 .yui-skin-sam .yui-dt-liner-null {
@@ -58,7 +60,7 @@
     border-color: #B8B8B8;
     background: #DDDDDD;
     text-align: right; 
-    
+    white-space: nowrap;
 }
 
 .yui-skin-sam  .yui-dt-odd th.yui-table-inner-top {
@@ -69,7 +71,7 @@
     border-color: #B8B8B8;
     background: #D0E2FF;
     text-align: right; 
-    
+    white-space: nowrap;
 }
 
 .yui-skin-sam  td.yui-table-inner-top {
@@ -94,6 +96,7 @@
     border-color: #A8A8A8;
     text-align: right;    
     background: #DDDDDD;
+    white-space: nowrap;
 }
 
 .yui-skin-sam  .yui-dt-odd th.yui-table-inner-bottom {
@@ -102,7 +105,8 @@
     border-width: 0; 
     border-color: #A8A8A8;
     background: #D0E2FF;
-    text-align: right;    
+    text-align: right;  
+    white-space: nowrap;
 }
 
 .yui-skin-sam tr.yui-dt-first th.yui-table-inner-bottom {
@@ -110,6 +114,7 @@
     border-width: 0;
     border-color: #A8A8A8;
     text-align: right;
+    white-space: nowrap;
 }
 
 .yui-skin-sam  td.yui-table-inner-bottom {
@@ -198,7 +203,7 @@
    </tr> 
   </table>
  </center>    
- <div id="pubtab" width="100%"></div>
+ <div id="pubtab" width="100%" class="pubtab"></div>
  <table width="100%" cellpadding="5">
   <s:form theme="simple" action="pubmgr">
    <tr>
