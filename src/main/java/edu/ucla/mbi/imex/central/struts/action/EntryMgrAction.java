@@ -28,6 +28,7 @@ public class EntryMgrAction extends ManagerSupport {
 
     private final String PUBEDIT = "pubedit";
     private final String JEDIT = "jedit";
+    private final String JSON = "json";
 
     public static final String ACL_PAGE = "acl_page";
     public static final String ACL_OPER = "acl_oper";
@@ -172,7 +173,22 @@ public class EntryMgrAction extends ManagerSupport {
         }
         return ipl;
     }
+
+
+    //---------------------------------------------------------------------
+    // Records
+    //--------
+
+    private Map<String,Object> records = null;
+
+    public void setRecords( Map<String,Object> records ) {
+        this.records = records;
+    }
     
+    public Map<String,Object> getRecords(){
+        return this.records;
+    }
+
     //---------------------------------------------------------------------
 
     public String execute() throws Exception{
@@ -346,7 +362,20 @@ public class EntryMgrAction extends ManagerSupport {
                     }
                     return SUCCESS;
                 }
-                
+
+                if ( key.equalsIgnoreCase( "jpg" ) ) {
+                    if ( getOpp() == null ) {
+                        return this.getIcJournalRecords();
+                    }
+                    String max= getOpp().get( "max" );
+                    String off= getOpp().get( "off" );
+                    String skey= getOpp().get( "skey" );
+                    String sdir= getOpp().get( "sdir" );
+                    String flt= getOpp().get( "flt" );
+
+                    return this.getIcJournalRecords( max, off, 
+                                                     skey, sdir, flt );
+                }
 
                 //---------------------------------------------------------
                 //---------------------------------------------------------
@@ -490,6 +519,23 @@ public class EntryMgrAction extends ManagerSupport {
                         setId( icpub.getId() );
                     }
                     return SUCCESS;
+                }
+
+                if ( key.equalsIgnoreCase( "ppg" ) ) {
+
+                    log.info(  "\n\nop=" + getOp() );
+                    log.info(  "opp=" + getOpp() );
+                    if ( getOpp() == null ) {
+                        return getIcPubRecords();
+                    }
+                    String max= getOpp().get( "max" );
+                    String off= getOpp().get( "off" );
+                    String skey= getOpp().get( "skey" );
+                    String sdir= getOpp().get( "sdir" );
+                    String flt= getOpp().get( "flt" );
+                    
+                    return getIcPubRecords( max, off,
+                                            skey, sdir, flt );
                 }
             }
         }
@@ -1175,6 +1221,183 @@ public class EntryMgrAction extends ManagerSupport {
         return SUCCESS;
     }
 
+
     //---------------------------------------------------------------------
+    // record list operations
+    //-----------------------
+
+    /*
+      {"recordsReturned":25, 
+       "totalRecords":1397, 
+       "startIndex":0, 
+       "sort":null, 
+       "dir":"asc", 
+       "pageSize":10, 
+       "records":[{"id":"0", "title":"...", "author":"...",
+                   "imexid":"...","pmid":"...",
+                   "owner":"","status:"","date":"..."},
+                  {...}]
+       }
+    */
     
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+
+    public String getIcPubRecords() {
+        return this.getIcPubRecords( "", "", "", "", "" );
+    }
+    
+    public String getIcPubRecords( String max, String off, 
+                                   String skey, String sdir, 
+                                   String flt ) {
+
+        if ( tracContext.getPubDao() == null ) return null;
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "getPubRecords: pubDao ok...>" + sdir + "<"  );
+        
+        int first = 0;
+        int blockSize = 10; // NOTE: initialize for defaults ?
+        boolean asc = true;
+
+        if ( off != null ) {
+            try {
+                first = Integer.parseInt( off );
+            } catch ( NumberFormatException nex ) {
+                // ignore == use default
+            }
+        }
+
+        if ( max != null ) {
+            try {
+                blockSize = Integer.parseInt( max );
+            } catch ( NumberFormatException nex ) {
+                // ignore == use default
+            }
+        }
+
+        if ( sdir != null && sdir.equals( "false" ) ) {
+            asc = false;
+        } else {
+            sdir ="true";
+        }
+        
+        String sortKey ="id";
+        
+        if ( skey != null ) {
+            if ( skey.equals( "pub" ) ) {
+                sortKey ="author";
+            }
+            if ( skey.equals( "date" ) ) {
+                sortKey ="crt";
+            }
+        } else {
+            skey = "id";
+            sortKey = "id";
+        }
+            
+
+        List<Publication> pl = 
+            tracContext.getPubDao().getPublicationList( first, blockSize, 
+                                                        sortKey, asc );
+        long total =  
+            tracContext.getPubDao().getPublicationCount();
+
+        // buid record map
+        //----------------
+        
+        records = new HashMap<String,Object>();
+        records.put("recordsReturned", pl.size() );
+        records.put("totalRecords", total );
+        records.put("startIndex", first );
+        records.put("sort", skey );
+        records.put("dir", sdir );
+        records.put("pageSize", max );
+
+        List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
+        records.put("records", rl );
+
+        for( Iterator<Publication> ii = pl.iterator(); ii.hasNext(); ) {
+            IcPub ip = (IcPub) ii.next();
+            Map<String,Object> r = new HashMap<String,Object>();  
+            r.put( "id", ip.getId() );
+            r.put( "pmid", ip.getPmid() );
+            r.put( "imexId", ip.getImexId() );
+            r.put( "title", ip.getTitle() );
+            r.put( "author", ip.getAuthor() );
+            r.put( "owner", ip.getOwner().getLogin() );
+            r.put( "state", ip.getState().getName() );
+            r.put( "date", ip.getCreateDateString() );
+            r.put( "time", ip.getCreateTimeString() );
+            rl.add( r );
+        }
+        return JSON;
+    }
+    
+    //---------------------------------------------------------------------
+
+    public String getIcJournalRecords() {
+        return this.getIcJournalRecords( "", "", "", "", "" );
+    }
+    
+    public String getIcJournalRecords( String max, String off, 
+                                       String skey, String sdir, 
+                                       String flt ) {
+        
+        if ( tracContext.getJournalDao() == null ) return null;
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "getJournalRecords: journalDao ok..."  );
+        
+        int first = 0;
+        int blockSize = 10; // NOTE: initialize for defaults ?
+        
+        if ( off != null ) {
+            try {
+                first = Integer.parseInt( off );
+            } catch ( NumberFormatException nex ) {
+                // ignore == use default
+            }
+        }
+
+        if ( max != null ) {
+            try {
+                blockSize = Integer.parseInt( max );
+            } catch ( NumberFormatException nex ) {
+                // ignore == use default
+            }
+        }
+
+        List<Journal> jl = 
+            tracContext.getJournalDao().getJournalList( first, blockSize );
+        long total =  
+            tracContext.getJournalDao().getJournalCount();
+
+        // buid record map
+        //----------------
+        
+        records = new HashMap<String,Object>();
+        records.put("recordsReturned", jl.size() );
+        records.put("totalRecords", total );
+        records.put("startIndex", first );
+        records.put("sort", skey );
+        records.put("dir", sdir );
+        records.put("pageSize", max );
+
+        List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
+        records.put("records", rl );
+
+        for( Iterator<Journal> ii = jl.iterator(); ii.hasNext(); ) {
+            IcJournal ij = (IcJournal) ii.next();
+            Map<String,Object> r = new HashMap<String,Object>();  
+            r.put( "id", ij.getId() );
+            r.put( "nlmid", ij.getNlmid() );
+            r.put( "title", ij.getTitle() );
+            r.put( "owner", ij.getOwner().getLogin() );
+            r.put( "date", ij.getCreateDateString() );
+            r.put( "time", ij.getCreateTimeString() );
+            rl.add( r );
+        }
+        return JSON;
+    }
 }
