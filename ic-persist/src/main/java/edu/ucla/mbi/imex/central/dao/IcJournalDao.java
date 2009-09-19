@@ -107,14 +107,47 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     //---------------------------------------------------------------------
 
     public long getJournalCount() {
-        return 0;
+
+        long count = 0;
+        try {
+            startOperation();
+            Query query = 
+                session.createQuery( "select count(j) from IcJournal j" );
+            count  = (Long) query.uniqueResult();
+            tx.commit();
+
+        } catch( DAOException dex ) {
+            // log error ?
+        }
+        return count;
     }
 
     //---------------------------------------------------------------------
 
     public List<Journal> getJournalList( int firstRecord,
                                          int blockSize ) {
-        return null;
+        List<Journal> jlst = null;
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcJournalDao:getJournalList(block)"  );
+
+        try {
+            startOperation();
+            Query query =
+                session.createQuery( "from IcJournal p order by id ");
+            query.setFirstResult( firstRecord );
+            query.setMaxResults( blockSize );
+
+            jlst = (List<Journal>) query.list();
+            tx.commit();
+            
+        } catch ( DAOException dex ) {
+            // log exception ?
+            dex.printStackTrace();
+        }
+
+        System.out.println("jlist" + jlst);
+        return jlst;
     }
     
     //---------------------------------------------------------------------

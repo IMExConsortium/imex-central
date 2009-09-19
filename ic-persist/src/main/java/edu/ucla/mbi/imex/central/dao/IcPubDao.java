@@ -17,6 +17,7 @@ import java.net.*;
 import java.util.*;
 
 import org.hibernate.*;
+import org.hibernate.criterion.*;
 
 import edu.ucla.mbi.orm.*;
 
@@ -91,8 +92,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList"  );
-
-
+        
         try {
             startOperation();
             Query query =
@@ -113,15 +113,91 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
     //---------------------------------------------------------------------
 
-    public long getPublicationCount() {
-        return 0;
+    public List<Publication> getPublicationList( int firstRecord, 
+                                                 int blockSize ) {
+        List<Publication> plst = null;
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcPubDao:getPublicationList(block)"  );
+
+        try {
+            startOperation();
+            Query query =
+                session.createQuery( "from IcPub p order by id ");
+            query.setFirstResult( firstRecord );
+            query.setMaxResults( blockSize );
+            
+            plst = (List<Publication>) query.list();
+            tx.commit();
+            
+        } catch ( DAOException dex ) {
+            // log exception ?
+            dex.printStackTrace();
+        } 
+        
+        System.out.println("plist" + plst);
+        return plst;
     }
 
     //---------------------------------------------------------------------
 
     public List<Publication> getPublicationList( int firstRecord, 
-                                                 int blockSize ) {
-        return null;
+                                                 int blockSize,
+                                                 String skey,
+                                                 boolean asc ) {
+        List<Publication> plst = null;
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
+
+        try {
+            startOperation();
+            
+            Criteria crit = session.createCriteria( IcPub.class );
+            crit.setFirstResult( firstRecord );
+            crit.setMaxResults( blockSize );
+
+            if (skey != null && skey.length() > 0 ) {
+                if ( asc ) {
+                    crit.addOrder( Order.asc( skey ) );
+                } else {
+                    crit.addOrder( Order.desc( skey ) );
+                }
+            }
+
+            //Query query =
+            //    session.createQuery( "from IcPub p order by id ");
+            //query.setFirstResult( firstRecord );
+            //query.setMaxResults( blockSize );
+            
+            //plst = (List<Publication>) query.list();
+
+            plst = crit.list();
+            
+            tx.commit();
+            
+        } catch ( DAOException dex ) {
+            // log exception ?
+            dex.printStackTrace();
+        }        
+        return plst;
+    }
+    
+    //---------------------------------------------------------------------
+
+    public long getPublicationCount() {
+
+        long count = 0;
+        try {
+            startOperation();
+            Query query = session.createQuery( "select count(p) from IcPub p" );
+            count  = (Long) query.uniqueResult();
+            tx.commit();
+
+        } catch( DAOException dex ) {
+            // log error ?
+        }
+        return count;
     }
 
     //---------------------------------------------------------------------

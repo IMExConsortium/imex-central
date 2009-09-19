@@ -31,15 +31,18 @@
     text-align: center;
 }
 
-.yui-skin-sam th .yui-dt-liner-null {
-    margin: 0;
-    padding: 0;
+.yui-skin-sam .yui-dt-liner-null {
+    margin: 0px;
+    padding: 0px;
+    border-width: 0px;
+    border-style: none;
 }
 
 .yui-skin-sam table.yui-table-inner {
-    border: 0;
-    padding: 0;
-    margin: 0;
+    border-width: 0px;
+    border-style: none;
+    padding: 0px;
+    margin: 0px;
 }
 
 .yui-skin-sam .yui-dt th .yui-dt-label {
@@ -47,13 +50,24 @@
   margin-left: 10px;
 }
 
-.yui-skin-sam  th.yui-table-inner-top {
+.yui-skin-sam  .yui-dt-even th.yui-table-inner-top {
     width: 5%;
     padding: 3px; 
     border-style: none none solid none;
     border-width: 0 0 thin 0; 
     border-color: #B8B8B8;
-    background: #C8C8C8;
+    background: #DDDDDD;
+    text-align: right; 
+    
+}
+
+.yui-skin-sam  .yui-dt-odd th.yui-table-inner-top {
+    width: 5%;
+    padding: 3px; 
+    border-style: none none solid none;
+    border-width: 0 0 thin 0; 
+    border-color: #B8B8B8;
+    background: #D0E2FF;
     text-align: right; 
     
 }
@@ -62,21 +76,32 @@
     padding: 3px;
     border-style: none none solid none;
     border-width: 0 0 thin 0; 
-    border-color: #B8B8B8;
+    border-color: #BBBBBB;
 }
 
 .yui-skin-sam  tr.yui-dt-first  td.yui-table-inner-top {
     padding: 3px;
     border-style: none none solid none;
     border-width: 0 0 thin 0;
-    border-color: #A8A8A8;
+    border-color: #BBBBBB;
+
 }
 
-.yui-skin-sam  th.yui-table-inner-bottom {
+.yui-skin-sam  .yui-dt-even th.yui-table-inner-bottom {
     padding: 3px;
     border-style: none;
     border-width: 0; 
     border-color: #A8A8A8;
+    text-align: right;    
+    background: #DDDDDD;
+}
+
+.yui-skin-sam  .yui-dt-odd th.yui-table-inner-bottom {
+    padding: 3px;
+    border-style: none;
+    border-width: 0; 
+    border-color: #A8A8A8;
+    background: #D0E2FF;
     text-align: right;    
 }
 
@@ -124,19 +149,19 @@
 
 #myAutoCompleteEditor { 
            width:12em;
-           padding-bottom:2em; 
+           padding-bottom:1.7em; 
 } 
 
 .yui-skin-sam td.filter-container {
    vertical-align: middle;
 }
 
-.yui-skin-sam em.yui-button-status {
+.yui-skin-sam em.yui-button-state {
    font-style: normal; 
    display: block; 
    text-align: left; 
    white-space: nowrap; 
-   width: 6em; 
+   width: 7em; 
    overflow: hidden; 
    text-overflow: ellipsis; 
 }
@@ -164,8 +189,8 @@
     <th width="1%">and</th>
     <td class="filter-container"><label id="partner-button-container"/></td>
     <th width="1%" nowrap>and Editor:</th>
-    <td>
-     <div id="myAutoCompleteEditor"> 
+    <td valign="middle">
+     <div id="myAutoCompleteEditor">     
       <input id="myEditorInput" type="text"> 
       <div id="myEditorContainer"></div> 
      </div> 
@@ -242,7 +267,7 @@
                               '<tr><th class="yui-table-inner-top">Author(s)</th>' +
                               '<td class="yui-table-inner-top">' + oRecord.getData("author") + '</td></tr>' +
                               '<tr><th class="yui-table-inner-bottom">Title</th>' + 
-                              '<td class="yui-table-inner-bottom">' + oRecord.getData("title") + '</td></tr><table>';        
+                              '<td class="yui-table-inner-bottom">' + oRecord.getData("title") + '</td></tr></table>';        
      }; 
       
      this.myElinkFormatter = function(elLiner, oRecord, oColumn, oData) {
