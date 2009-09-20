@@ -1,11 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<h1>Publication Manager</h1>
-<s:if test="id > 0">
- <t:insertDefinition name="pubedit"/>
- <br/><br/>
-</s:if>
-<s:else>
 
 <style>
 
@@ -182,6 +176,13 @@
 }
 
 </style> 
+
+<h1>Publication Manager</h1>
+<s:if test="id > 0">
+ <t:insertDefinition name="pubedit"/>
+ <br/><br/>
+</s:if>
+<s:else>
  
 <div class="yui-skin-sam" width="100%">
  <center>
@@ -221,7 +222,6 @@
  </table>
 </div>
 
-<script type="text/javascript" src="yui-test-data.js"></script>
 <script type="text/javascript">
   YAHOO.util.Event.addListener(window, "load", function() {
     YAHOO.example.NestedHeaders = function() {

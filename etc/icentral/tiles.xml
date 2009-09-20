@@ -93,7 +93,7 @@
   <put-attribute name="title" value="Publication Manager" />
   <put-attribute name="body" value="/tiles/pubmgr-yui.jsp"/>
  </definition>
- <definition name="pubedit" template="/tiles/pubedit.jsp"/>
+ <definition name="pubedit" template="/tiles/pubedit-yui.jsp"/>
 
  <definition name="journalmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Journal Manager" />
