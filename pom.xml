@@ -10,7 +10,7 @@
 
   <properties>
       <icentral.version>1.0-SNAPSHOT</icentral.version> 
-      <icentral.bld>$Rev: 1 $</icentral.bld> 
+      <icentral.bld>$Rev$</icentral.bld> 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
       <!-- foo.org: global key -->
       <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
