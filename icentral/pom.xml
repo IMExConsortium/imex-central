@@ -9,7 +9,8 @@
   <name>Web Application module</name>
 
   <properties>
-      <icentral.version>${project.version}</icentral.version> 
+      <icentral.version>1.0-SNAPSHOT</icentral.version> 
+      <icentral.bld>$Rev: 1 $</icentral.bld> 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
       <!-- foo.org: global key -->
       <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
@@ -18,7 +19,19 @@
 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
   </properties>
-  
+   
+  <profiles>
+   <profile>
+     <id>tomcat</id>
+     <activation>
+      <activeByDefault>false</activeByDefault>
+     </activation>
+     <properties>
+       <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
+     </properties>
+   </profile>
+  </profiles>
+ 
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
     <artifactId>imexcentral-project</artifactId>
