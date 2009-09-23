@@ -9,7 +9,7 @@
   <name>Web Application module</name>
 
   <properties>
-      <icentral.version>1.0-SNAPSHOT</icentral.version> 
+      <icentral.version>${project.version}</icentral.version> 
       <icentral.bld>$Rev$</icentral.bld> 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
       <!-- foo.org: global key -->
