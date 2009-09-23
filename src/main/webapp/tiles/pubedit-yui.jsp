@@ -6,28 +6,40 @@
 
 .yui-skin-sam .yui-navset .yui-content {
     background: #FFFFFF;
+     
     height: 450px;
 }
 
 .yui-skin-sam .yui-navset .selected {
-  background-color :#BBBBBB ;
+  background-color :#DDDDDD ;
   color:#FFFFFF;
 }
+
+
+.yui-skin-sam .yui-navset .yui-nav a, 
+.yui-skin-sam .yui-navset .yui-navset-top 
+.yui-nav a {
+  background:#F8F8F8;
+  color:#000000;
+}
+
 
 .yui-skin-sam .yui-navset .yui-nav .selected a, 
 .yui-skin-sam .yui-navset .yui-nav .selected a:focus, 
 .yui-skin-sam .yui-navset .yui-nav .selected a:hover {
-  background: #A0A0A0;
+  background: #D8D8D8;
+  color:#000000;
 }
 
 .yui-skin-sam .yui-navset .yui-nav a, 
 .yui-skin-sam .yui-navset .yui-navset-top .yui-nav a {
-  background: #DADADA 
+  background: #E4E4E4
+  color:#404040; 
 }
 
 .yui-skin-sam .yui-navset .yui-nav, 
 .yui-skin-sam .yui-navset .yui-navset-top .yui-nav {
-  border-color:#A0A0A0;
+  border-color:#D8D8D8;
   border-style:solid;
   border-width:0 0 5px;
 }
@@ -92,14 +104,14 @@
                <li><a href="#tab2"><em>Details</em></a></li> 
               <li><a href="#tab3"><em>Comments</em></a></li> 
               <li><a href="#tab4"><em>Access</em></a></li> 
-          </ul>             
+          </ul>         
           <div class="yui-content"> 
-            <div>
-<table width="100%" border="1">
- <tr>
-  <th align="right" width="15%" nowrap>Availability</th>
-  <td width="75%">
-   <table width="100%" border="1">
+<div>
+ <table width="100%" border="1">
+  <tr>
+   <th align="right" width="15%" nowrap>Availability</th>
+   <td width="75%">
+    <table width="100%" border="1">
      <tr>
       <th width="33%" nowrap>Publication Date (expected)</th>
       <th width="33%" nowrap>Publication Date</th>
@@ -117,12 +129,12 @@
       </td>
      </tr>
     </table>
-  </td>
-  <th  width="10%">
+   </td>
+   <th  width="10%">
     <s:submit theme="simple" name="op.pav" value="UPDATE"/>
-  </th>
- </tr>
- <tr>
+   </th>
+  </tr>
+  <tr>
    <th align="right" nowrap>Contact Email</th>
    <td>
     <s:textfield theme="simple" name="pub.contactEmail" size="32" maxLength="32"/>
@@ -130,8 +142,8 @@
    <th>
     <s:submit theme="simple" name="op.pcm" value="UPDATE"/>
    </th>
- </tr>
- <tr>
+  </tr>
+  <tr>
    <th align="right" nowrap>Curation Status</th>
    <td>
     <table width="100%" border="1">
@@ -145,8 +157,8 @@
    <th>
     <s:submit theme="simple" name="op.pav" value="UPDATE"/>
    </th>
- </tr>
- <tr>
+  </tr>
+  <tr>
    <th align="right" nowrap>IMEx ID</th>
    <td>
     <s:if test="pub.imexid.length > 0">
@@ -157,8 +169,8 @@
     </s:else>
    </td>
    <td>&nbsp;</td>
- </tr>  
- <tr>
+  </tr>  
+  <tr>
    <th align="right" nowrap>IMEx Records</th>
    <td>
     <table width="100%" border="1">

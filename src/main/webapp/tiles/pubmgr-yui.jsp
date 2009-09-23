@@ -52,7 +52,7 @@
     border-style: none none solid none;
     border-width: 0 0 thin 0; 
     border-color: #B8B8B8;
-    background: #DDDDDD;
+    background: #F4F4F4;
     text-align: right; 
     white-space: nowrap;
 }
@@ -89,7 +89,7 @@
     border-width: 0; 
     border-color: #A8A8A8;
     text-align: right;    
-    background: #DDDDDD;
+    background: #F4F4F4;
     white-space: nowrap;
 }
 
@@ -165,10 +165,10 @@
    text-overflow: ellipsis; 
 }
 
-.yui-skin-sam em.yui-button-partner {
+.yui-skin-sam em.yui-button-label {
    font-style: normal; 
    display: block; 
-   text-align: left; 
+   text-align: center; 
    white-space: nowrap; 
    width: 9em; 
    overflow: hidden; 
@@ -226,7 +226,15 @@
   YAHOO.util.Event.addListener(window, "load", function() {
     YAHOO.example.NestedHeaders = function() {
 
+
+    var onSelectedMenuItemChange = function (event) {
+       var oMenuItem = event.newValue;
+       this.set("label", ("<em class=\"yui-button-label\">" + 
+                 oMenuItem.cfg.getProperty("text") + "</em>"));
+    }
+
      var stateSel = [ 
+           { text: "---Status---", value: "none" }, 
            { text: "---ANY---", value: "none" }, 
            { text: "NEW", value: "new" }, 
            { text: "Reserved", value: "reserved" },
@@ -237,12 +245,15 @@
      var stateButton = new YAHOO.widget.Button({  
                                id: "state-button",  
                                name: "state-button", 
-                               label: "<em class=\"yui-button-state\">---Status---</em>", 
+                               label: "<em class=\"yui-button-label\">---Status---</em>", 
                                type: "menu",   
                                menu: stateSel,  
                                container: "state-button-container" }); 
+
+    stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
     
     var partnerSel = [
+           { text: "---Imex Partner---", value: "none" },
            { text: "---ANY---", value: "none" },
            { text: "DIP", value: "dip" },
            { text: "IntAct", value: "intact" },
@@ -253,10 +264,12 @@
      var partnerButton = new YAHOO.widget.Button({
                                id: "partner-button",
                                name: "partner-button",
-                               label: "<em class=\"yui-button-partner\">---Imex Partner---</em>",
+                               label: "<em class=\"yui-button-label\">---Imex Partner---</em>",
                                type: "menu",
                                menu: partnerSel,
                                container: "partner-button-container" });
+
+     partnerButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
 
      var editorArray = ["lukasz", "skerrien", "hhm", "doe_99"]; 
      var oACS = new YAHOO.util.LocalDataSource( editorArray );  
