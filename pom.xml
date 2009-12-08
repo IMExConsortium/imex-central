@@ -75,25 +75,7 @@
       <artifactId>spring</artifactId>
       <version>2.5.6</version>
     </dependency>
-    
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-core</artifactId>
-      <version>2.1.6</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-spring-plugin</artifactId>
-      <version>2.1.6</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-tiles-plugin</artifactId>
-      <version>2.1.6</version>
-    </dependency>
- 
+
     <dependency>
      <groupId>commons-codec</groupId>
      <artifactId>commons-codec</artifactId>
