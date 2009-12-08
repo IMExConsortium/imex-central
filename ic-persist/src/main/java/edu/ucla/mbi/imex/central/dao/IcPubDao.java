@@ -185,6 +185,79 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     
     //---------------------------------------------------------------------
 
+    public List<Publication> getPublicationList( int firstRecord,
+                                                 int blockSize,
+                                                 String skey, boolean asc,
+                                                 Map<String,String> flt) {
+        
+        List<Publication> plst = new ArrayList<Publication>();
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
+
+        try {
+            startOperation();
+
+            Criteria crit = session.createCriteria( IcPub.class );
+            crit.setFirstResult( firstRecord );
+            crit.setMaxResults( blockSize );
+
+            if (skey != null && skey.length() > 0 ) {
+                if ( asc ) {
+                    crit.addOrder( Order.asc( skey ) );
+                } else {
+                    crit.addOrder( Order.desc( skey ) );
+                }
+            }
+
+            if ( flt != null ) {
+
+                if( flt.get("status") != null && 
+                    !flt.get("status").equals("") ){
+
+                    crit.createAlias( "state", "st" )
+                        .add( Restrictions.eq( "st.name",
+                                               flt.get( "status" ) 
+                                               ) );
+                }
+                
+                if( flt.get("partner") != null && 
+                    !flt.get("partner").equals("") ){
+                    
+                    crit.createAlias( "adminGroups", "ag" )
+                        .add( Restrictions.eq( "ag.label",
+                                               flt.get( "partner" )
+                                               ) );
+                }
+                
+                if( flt.get("editor") != null && 
+                    !flt.get("editor").equals("") ){
+                    crit.createAlias( "adminUsers", "au" )
+                        .add( Restrictions.eq( "au.login",
+                                               flt.get( "editor" )
+                                               ) );
+                }
+            }
+            
+            plst = crit.list();
+            
+            log.info( "IcPubDao: plst=" + plst); 
+            log.info( "IcPubDao: size=" + plst.size()); 
+            tx.commit();
+
+        } catch ( DAOException dex ) {
+            // log exception ?
+            dex.printStackTrace(); 
+            
+        } catch( Exception ex ) {
+            // log exception ?
+            ex.printStackTrace();
+        }
+        
+        return plst;
+    }
+    //---------------------------------------------------------------------
+
     public long getPublicationCount() {
 
         long count = 0;

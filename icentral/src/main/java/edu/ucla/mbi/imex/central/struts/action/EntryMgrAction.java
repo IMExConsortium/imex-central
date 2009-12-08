@@ -532,10 +532,16 @@ public class EntryMgrAction extends ManagerSupport {
                     String off= getOpp().get( "off" );
                     String skey= getOpp().get( "skey" );
                     String sdir= getOpp().get( "sdir" );
-                    String flt= getOpp().get( "flt" );
                     
-                    return getIcPubRecords( max, off,
-                                            skey, sdir, flt );
+                    String sfv = getOpp().get( "sfv" ) == null ? 
+                        "" :  getOpp().get( "sfv" );
+                    String pfv = getOpp().get( "pfv" ) == null ?
+                        "" :  getOpp().get( "pfv" );;
+                    String efv = getOpp().get( "efv" ) == null ?
+                        "" :  getOpp().get( "efv" );
+                    
+                    return getIcPubRecords( max, off, skey, sdir,
+                                            sfv, pfv, efv );
                 }
             }
         }
@@ -1244,17 +1250,17 @@ public class EntryMgrAction extends ManagerSupport {
     //---------------------------------------------------------------------
 
     public String getIcPubRecords() {
-        return this.getIcPubRecords( "", "", "", "", "" );
+        return this.getIcPubRecords( "", "", "", "", "", "", "" );
     }
     
     public String getIcPubRecords( String max, String off, 
                                    String skey, String sdir, 
-                                   String flt ) {
+                                   String sfv, String pfv, String efv ) {
 
         if ( tracContext.getPubDao() == null ) return null;
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "getPubRecords: pubDao ok...>" + sdir + "<"  );
+        log.info( "getPubRecords: pubDao ok >" + sdir + "<"  );
         
         int first = 0;
         int blockSize = 10; // NOTE: initialize for defaults ?
@@ -1295,13 +1301,32 @@ public class EntryMgrAction extends ManagerSupport {
             skey = "id";
             sortKey = "id";
         }
-            
 
-        List<Publication> pl = 
-            tracContext.getPubDao().getPublicationList( first, blockSize, 
-                                                        sortKey, asc );
-        long total =  
-            tracContext.getPubDao().getPublicationCount();
+        List<Publication> pl = new ArrayList<Publication>();
+        long total = 0;
+        log.info( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv);
+        if ( sfv.equals("") && pfv.equals("") && efv.equals("") ) {
+            
+            log.info( "getPubRecords: unfiltered" );
+            
+            pl = tracContext.getPubDao()
+                .getPublicationList( first, blockSize, sortKey, asc );
+            total = tracContext.getPubDao().getPublicationCount();
+
+        } else {
+            
+            log.info( "getPubRecords: filtered" );
+
+            Map<String,String> flt = new HashMap<String,String>();
+
+            flt.put("status", sfv);
+            flt.put("partner", pfv);
+            flt.put("editor", efv);
+            
+            pl = tracContext.getPubDao()
+                .getPublicationList( first, blockSize, sortKey, asc, flt );            
+            total = tracContext.getPubDao().getPublicationCount();
+        }
 
         // buid record map
         //----------------

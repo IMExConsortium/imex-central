@@ -1417,3 +1417,38 @@ a.bmMOFF {    color: black;
 a.graph {
   border: 0px;
 }
+
+
+#footer{
+ width: 100%;
+ bottom:0;
+ position: fixed;
+ z-index: 10;
+ background-color: #FFFFFF;
+}
+
+.footer {
+  border-top: 1px solid #5375a8;
+  margin: 0px;
+  padding: 0px;
+}
+
+td.footer {
+  border-top: 0px;
+  border-bottom: 1px dotted #555566;
+}
+
+.footbar {
+  background-color: #555566;
+  font-size: 0.70em;
+  white-space: nowrap;
+  border-bottom: 1px solid #555555;
+}
+
+
+
+
+
+
+
+
