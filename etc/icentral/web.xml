@@ -111,6 +111,11 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/pubnew</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/journalmgr</url-pattern>
   </filter-mapping>
 

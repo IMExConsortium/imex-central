@@ -121,6 +121,28 @@ public class EntryManager {
         
         return oldPub;
     }
+
+    
+    //---------------------------------------------------------------------
+    // get through proxy
+    //------------------
+
+    public Publication getPubByPmid( String pmid ) {
+
+        NcbiProxyClient cli = tracContext.getNcbiProxyClient();
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " NcbiProxyClient=" + cli );
+
+        if ( cli != null ) {
+            Publication newPub =
+                cli.getPublicationByPmid( pmid );
+            
+            return newPub;
+        } 
+        return null;
+    }
+
     
     //---------------------------------------------------------------------
 

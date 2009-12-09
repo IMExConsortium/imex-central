@@ -91,9 +91,17 @@
 
  <definition name="pubmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Publication Manager" />
-  <put-attribute name="body" value="/tiles/pubmgr-yui.jsp"/>
+  <put-attribute name="body" value="/tiles/pubmgr-yui.jsp"/>  
  </definition>
+
  <definition name="pubedit" template="/tiles/pubedit-yui.jsp"/>
+
+
+ <definition name="pubnew" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Add Publication" />
+  <put-attribute name="body" value="/tiles/pubnew-yui.jsp"/>
+  <put-attribute name="mdf" value="/tiles/pubnew-yui.jsp"/>
+ </definition>
 
  <definition name="journalmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Journal Manager" />

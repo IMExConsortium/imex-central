@@ -1,14 +1,24 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-<script src="js/pubmgr-yui.js" type="text/javascript"></script>
+
 
 <h1>Publication Manager</h1>
 <s:if test="id > 0">
+
+ <script src="js/pubedit-yui.js" type="text/javascript"></script>
+
  <t:insertDefinition name="pubedit"/>
- <br/><br/>
+ 
+ <script type="text/javascript">
+  YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit ) ;
+ </script>
+
 </s:if>
 <s:else>
+
+ <script src="js/pubmgr-yui.js" type="text/javascript"></script>
+
  <div class="yui-skin-sam" width="100%">
   <center>
    <table width="99%">
@@ -46,6 +56,9 @@
    </s:form>
   </table>
  </div>
- <br/>
- <br/>
+
+ <script type="text/javascript">
+  YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubmgr ) ;
+ </script>
+
 </s:else>

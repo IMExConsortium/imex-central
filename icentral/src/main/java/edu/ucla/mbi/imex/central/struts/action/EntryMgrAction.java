@@ -27,6 +27,7 @@ import edu.ucla.mbi.imex.central.*;
 public class EntryMgrAction extends ManagerSupport {
 
     private final String PUBEDIT = "pubedit";
+    private final String PUBNEW = "pubnew";
     private final String JEDIT = "jedit";
     private final String JSON = "json";
 
@@ -190,6 +191,21 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
     //---------------------------------------------------------------------
+    // PMID
+    //-----
+
+    private String pmid = null;
+
+    public void setPmid( String pmid ) {
+        this.pmid = pmid;
+    }
+    
+    public String getPmid(){
+        return this.pmid;
+    }
+
+    
+    //---------------------------------------------------------------------
 
     public String execute() throws Exception{
 
@@ -214,6 +230,13 @@ public class EntryMgrAction extends ManagerSupport {
             icpub = entryManager.getIcPub( getId() );
             return SUCCESS;
         }
+
+
+        if( getPmid() != null ) {
+            icpub = new IcPub( entryManager.getPubByPmid( getPmid() ) ); 
+            return PUBNEW;
+        }
+
 
         if( getOp() == null ) return SUCCESS;
         
@@ -985,7 +1008,9 @@ public class EntryMgrAction extends ManagerSupport {
             setId( oldPub.getId() );
             return PUBEDIT;
         }
-        return SUCCESS;
+        
+        this.setPmid(pub.getPmid());
+        return PUBNEW;
     }
     
     //---------------------------------------------------------------------

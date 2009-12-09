@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/icentralstruts.css" type="text/css"/>
 
 <link rel="stylesheet" href="css/pubmgr.css" type="text/css"/>
+<link rel="stylesheet" href="css/pubnew.css" type="text/css"/>
 
 <link rel="stylesheet" href="jquery/css/tabs-accordion.css" type="text/css" media="screen" />
 
