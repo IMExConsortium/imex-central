@@ -295,6 +295,6 @@ YAHOO.imex.pubmgr = function() {
     };    
 };
 
-YAHOO.util.Event.addListener(
-    window, "load", YAHOO.imex.pubmgr ) ;
+//YAHOO.util.Event.addListener(
+//    window, "load", YAHOO.imex.pubmgr ) ;
 

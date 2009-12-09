@@ -7,7 +7,7 @@
     <table width="100%" class="footer" cellpadding="0" cellspacing="0">
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2010 UCLA
+       Copyright 2008-2010 IMEx Consortium
       </td>
       <td width="5%" class="copyright3" align="center" nowrap>
        <A HREF=".">Imex Central Site</A>.

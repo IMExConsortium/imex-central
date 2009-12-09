@@ -28,7 +28,7 @@
           link:"page?id=pubadd",
           active:true,
           menu:[{label:"Publication",
-             link:"pubmgr",
+             link:"pubnew",
              active:true,
              menu:[]
             },

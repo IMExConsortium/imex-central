@@ -1,52 +1,6 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-
-<style>
-
-.yui-skin-sam .yui-navset .yui-content {
-    background: #FFFFFF;
-     
-    height: 450px;
-}
-
-.yui-skin-sam .yui-navset .selected {
-  background-color :#DDDDDD ;
-  color:#FFFFFF;
-}
-
-
-.yui-skin-sam .yui-navset .yui-nav a, 
-.yui-skin-sam .yui-navset .yui-navset-top 
-.yui-nav a {
-  background:#F8F8F8;
-  color:#000000;
-}
-
-
-.yui-skin-sam .yui-navset .yui-nav .selected a, 
-.yui-skin-sam .yui-navset .yui-nav .selected a:focus, 
-.yui-skin-sam .yui-navset .yui-nav .selected a:hover {
-  background: #D8D8D8;
-  color:#000000;
-}
-
-.yui-skin-sam .yui-navset .yui-nav a, 
-.yui-skin-sam .yui-navset .yui-navset-top .yui-nav a {
-  background: #E4E4E4
-  color:#404040; 
-}
-
-.yui-skin-sam .yui-navset .yui-nav, 
-.yui-skin-sam .yui-navset .yui-navset-top .yui-nav {
-  border-color:#D8D8D8;
-  border-style:solid;
-  border-width:0 0 5px;
-}
-
-</style>
-
-
 <script type="text/javascript">
   YAHOO.util.Event.addListener(window, "load", function() {
     var myTabs = new YAHOO.widget.TabView("pubTab"); 
@@ -119,13 +73,13 @@
      </tr>
      <tr> 
       <td align="center">
-       <s:textfield theme="simple" name="pub.expectedPubDate" size="10" maxLength="10"/>
+       <s:textfield theme="simple" name="pub.expectedPubDateStr" size="10" maxLength="10"/>
       </td>
       <td align="center">
-       <s:textfield theme="simple" name="pub.pubDate" size="10" maxLength="10"/>
+       <s:textfield theme="simple" name="pub.pubDateStr" size="10" maxLength="10"/>
       </td>
       <td align="center">
-       <s:textfield theme="simple" name="pub.releaseDate" size="10" maxLength="10"/>
+       <s:textfield theme="simple" name="pub.releaseDateStr" size="10" maxLength="10"/>
       </td>
      </tr>
     </table>
@@ -146,10 +100,16 @@
   <tr>
    <th align="right" nowrap>Curation Status</th>
    <td>
-    <table width="100%" border="1">
+    <table width="100%" border="0">
      <tr>
-      <td align="left">
-       <b><s:property value="pub.state.name"/></b>
+      <td align="right" valign="middle" width="5%">
+        <b><s:property  value="pub.state.name"/></b>
+      </td>
+      <td align="center" valign="middle" width="5%" nowrap>  
+       <i>change to</i>
+      </td>
+       <td align="left" valign="middle" width="90%">  
+       <label id="state-button-container"/>
       </td>
      </tr>
     </table>

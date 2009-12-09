@@ -94,6 +94,25 @@
      </result>
    </action>
 
+   <action name="pubnew" class="pubNewAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">pubmgr</result>     
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="input" type="tiles">pubmgr</result>     
+     <result name="pubedit" type="tiles">pubmgr</result>
+     <result name="pubnew" type="tiles">pubnew</result>
+     <result name="json" type="json">
+      <param name="includeProperties">
+        records.*
+      </param>
+      <param name="noCache">true</param>
+     </result>
+   </action>
+
    <action name="pubedit" class="pubAction">
 
      <interceptor-ref name="mgrStack"/>
@@ -104,6 +123,12 @@
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">pubmgr</result>
      <result name="pubedit" type="tiles">pubmgr</result>  
+<!--     <result name="pubnew" type="tiles">pubnew</result>  -->
+
+     <result name="pubnew" type="redirectAction">
+       <param name="actionName">pubnew</param>
+       <param name="pmid">%{pmid}</param>
+     </result>  
    </action>
 
   <!-- journal management -->   
