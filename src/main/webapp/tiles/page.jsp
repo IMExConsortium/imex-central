@@ -38,15 +38,6 @@
        <s:property value="source" escape="false" />
       </td>
      </tr>
-<%-- 
-     <s:if test="#session['USER_ROLE'].administrator != null" >
-      <tr>
-       <td>    
-        <t:insertDefinition name="editpage" /> 
-       </td>
-      </tr>
-     </s:if>
---%>
     </s:if>
    </s:else>
   </table>

@@ -28,7 +28,7 @@
 }
 
 .accordion .selected {
-   background-color: #aaccff;
+   background-color: #dddddd;
 }
 
 .accordion #acc-top-tab {
@@ -36,14 +36,14 @@
   text-align: left;
   font-weight: bold;
   color: #eeeeee;
-  background-color: #446099;
+  background-color: #888888;
   margin: 0px;
   padding: 4px;
   border: 1px solid #000000;
 }
 
 #acc-top {
-  background-color: #e3edff;
+  background-color: #eeeeee;
   border: 0px;  
   padding: 0px;
   margin: 0px;
@@ -65,7 +65,7 @@
   border-style: solid;
   border-width: 0px 0px 1px 0px;
   border-color: #222222;
-  background-color: #99bbee;
+  background-color: #cccccc;
 }
 
 .accordion .bd {
