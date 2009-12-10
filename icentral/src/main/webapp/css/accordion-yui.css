@@ -1,0 +1,75 @@
+.accordion .close {
+   visibility: collapse;
+}
+
+.accordion .close .bd {
+   visibility: collapse;
+   height: 0px; 
+}
+
+.accordion .close div {
+   visibility: collapse;
+   height: 0px; 
+}
+.accordion .close dt {
+   visibility: collapse;
+   height: 0px; 
+}
+
+.accordion .close dd .bd{
+   visibility: collapse;
+   height: 0px;
+   margin: 0px;
+   padding: 0px; 
+}
+
+.accordion .open {
+   visibility: inherit;
+}
+
+.accordion .selected {
+   background-color: #aaccff;
+}
+
+.accordion #acc-top-tab {
+  white-space: nowrap;
+  text-align: left;
+  font-weight: bold;
+  color: #eeeeee;
+  background-color: #446099;
+  margin: 0px;
+  padding: 4px;
+  border: 1px solid #000000;
+}
+
+#acc-top {
+  background-color: #e3edff;
+  border: 0px;  
+  padding: 0px;
+  margin: 0px;
+}
+
+.accordion dd {
+  margin: 0px;
+  padding: 0px;
+  border-width: 0px;
+}
+
+.accordion dt {
+  font-size: 0.8em;
+  text-align: center;
+  font-weight: bold;
+  color: #000000;
+  margin: 0px;
+  padding: 4px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: #222222;
+  background-color: #99bbee;
+}
+
+.accordion .bd {
+  border-width: 0px 0px 1px 0px;
+  border-color: #222222;
+  border-style: solid;
+}

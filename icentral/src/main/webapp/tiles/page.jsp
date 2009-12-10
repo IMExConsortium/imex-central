@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<%-- ======================================================================
- ! $HeadURL::                                                             $
- ! $Id::                                                                  $
- ! Version: $Rev::                                                        $
- !==================================================================== --%>
+<%-- ===========================================================================
+ ! $HeadURL::                                                                  $
+ ! $Id::                                                                       $
+ ! Version: $Rev::                                                             $
+ !========================================================================= --%>
 <html lang="en">
  <head>
   <title>
@@ -14,14 +14,6 @@
   <t:insertDefinition name="htmlhead"/>
  </head>
  <body>
-  <s:if test="#session['USER_ROLE'].administrator != null" >
-   <script type="text/javascript">
-    $(document).ready( function(){
-      var edtpage = jqpage( {edt:"<s:text name='#session.EDT'/>"} );
-      edtpage.start();
-    });
-   </script>
-  </s:if>
   <center>
   <s:if test="big">
     <t:insertDefinition name="header" />
@@ -45,7 +37,8 @@
       <td class="page"> 
        <s:property value="source" escape="false" />
       </td>
-     </tr> 
+     </tr>
+<%-- 
      <s:if test="#session['USER_ROLE'].administrator != null" >
       <tr>
        <td>    
@@ -53,11 +46,12 @@
        </td>
       </tr>
      </s:if>
+--%>
     </s:if>
    </s:else>
   </table>
   <s:if test="big">
-    <t:insertDefinition name="footer"/>
+    <t:insertDefinition name="footer-edit"/>
   </s:if>
   <s:else>
     <t:insertDefinition name="footer.small"/>
@@ -65,7 +59,3 @@
   </center>
  </body>
 </html>
-
-
-
-
