@@ -30,7 +30,7 @@
   <tr>
    <td>
     <table width="100%" border="1">
-     <s:form theme="simple" action="rolemgr"> 
+     <s:form theme="simple" action="transmgr"> 
       <tr>
        <th colspan="2" width="10%" >TID</th>
        <th>Name</th>
@@ -42,7 +42,7 @@
        <s:iterator value="transList" id="trans" status="tpos">
         <tr>
          <td align="center">
-          <s:checkbox name="opp.del" fieldValue="%{#trans.id}"/>
+          <s:checkbox name="opp.tdel" fieldValue="%{#trans.id}"/>
          </td>
          <td align="center">
            <s:property value="#trans.id" />
@@ -64,7 +64,7 @@
       </s:if>
       <tr>
        <td colspan="2" align="center">
-        <s:submit theme="simple" name="op.ldel" value="DROP" />
+        <s:submit theme="simple" name="op.tldel" value="DROP" />
        </td>
        <td>
         <s:if test="hasFieldErrors()">
@@ -89,7 +89,7 @@
                     list="stateList" listKey="id" listValue="name" />
        </td>
        <td align="center">
-        <s:submit theme="simple" name="op.add" value="ADD" />
+        <s:submit theme="simple" name="op.tadd" value="ADD" />
        </td>
       </tr>
      </s:form>

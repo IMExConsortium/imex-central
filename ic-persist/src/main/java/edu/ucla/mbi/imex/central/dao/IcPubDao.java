@@ -191,13 +191,13 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
                                                  Map<String,String> flt) {
         
         List<Publication> plst = new ArrayList<Publication>();
-
+        
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
 
         try {
             startOperation();
-
+            
             Criteria crit = session.createCriteria( IcPub.class );
             crit.setFirstResult( firstRecord );
             crit.setMaxResults( blockSize );
@@ -211,38 +211,14 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             }
 
             if ( flt != null ) {
-
-                if( flt.get("status") != null && 
-                    !flt.get("status").equals("") ){
-
-                    crit.createAlias( "state", "st" )
-                        .add( Restrictions.eq( "st.name",
-                                               flt.get( "status" ) 
-                                               ) );
-                }
-                
-                if( flt.get("partner") != null && 
-                    !flt.get("partner").equals("") ){
-                    
-                    crit.createAlias( "adminGroups", "ag" )
-                        .add( Restrictions.eq( "ag.label",
-                                               flt.get( "partner" )
-                                               ) );
-                }
-                
-                if( flt.get("editor") != null && 
-                    !flt.get("editor").equals("") ){
-                    crit.createAlias( "adminUsers", "au" )
-                        .add( Restrictions.eq( "au.login",
-                                               flt.get( "editor" )
-                                               ) );
-                }
+                crit = this.addFilter( crit, flt );
             }
             
             plst = crit.list();
             
             log.info( "IcPubDao: plst=" + plst); 
             log.info( "IcPubDao: size=" + plst.size()); 
+            
             tx.commit();
 
         } catch ( DAOException dex ) {
@@ -270,6 +246,36 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         } catch( DAOException dex ) {
             // log error ?
         }
+        return count;
+    }
+
+    //---------------------------------------------------------------------
+
+    public long getPublicationCount(  Map<String,String> flt ) {
+
+        long count = 0;
+        try {
+            startOperation();
+            
+            Criteria crit = session.createCriteria( IcPub.class );
+            
+            if ( flt != null ) {
+                crit = this.addFilter( crit, flt );
+            }
+            
+            List foo = crit.setProjection( Projections.rowCount()).list();
+            
+            Log log = LogFactory.getLog( this.getClass() );
+            count  = ((Integer) foo.get(0) ).longValue() ;
+            log.info( "count=" + count );
+            tx.commit();
+            
+        } catch( DAOException dex ) {
+            dex.printStackTrace();
+        } catch( Exception ex ) {
+            ex.printStackTrace();
+        }
+
         return count;
     }
 
@@ -307,6 +313,40 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         } catch ( DAOException dex ) {
             // log exception ?
         }
+    }
+    
+    
+    //---------------------------------------------------------------------
+    
+    private  Criteria addFilter( Criteria crit, Map<String,String> flt ) {
+        
+        if( flt.get("status") != null && 
+            !flt.get("status").equals("") ){
+            
+            crit.createAlias( "state", "st" )
+                .add( Restrictions.eq( "st.name",
+                                       flt.get( "status" ) 
+                                       ) );
+        }
+        
+        if( flt.get("partner") != null && 
+            !flt.get("partner").equals("") ){
+            
+            crit.createAlias( "adminGroups", "ag" )
+                .add( Restrictions.eq( "ag.label",
+                                       flt.get( "partner" )
+                                       ) );
+        }
+        
+        if( flt.get("editor") != null && 
+            !flt.get("editor").equals("") ){
+            crit.createAlias( "adminUsers", "au" )
+                .add( Restrictions.eq( "au.login",
+                                       flt.get( "editor" )
+                                       ) );
+        }
+        
+        return crit;
     }
 
 }

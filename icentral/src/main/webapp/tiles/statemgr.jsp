@@ -30,7 +30,7 @@
   <tr>
    <td>
     <table width="100%" border="1">
-     <s:form theme="simple" action="rolemgr"> 
+     <s:form theme="simple" action="statemgr"> 
       <tr>
        <th colspan="2">SID</th>
        <th>Name</th>
@@ -40,7 +40,7 @@
        <s:iterator value="stateList" id="state" status="spos">
         <tr>
          <td align="center">
-          <s:checkbox name="opp.del" fieldValue="%{#state.id}"/>
+          <s:checkbox name="opp.sdel" fieldValue="%{#state.id}"/>
          </td>
          <td align="center">
            <s:property value="#state.id" />
@@ -56,7 +56,7 @@
       </s:if>
       <tr>
        <td colspan="2" align="center">
-        <s:submit theme="simple" name="op.ldel" value="DROP" />
+        <s:submit theme="simple" name="op.sldel" value="DROP" />
        </td>
        <td>
         <s:if test="hasFieldErrors()">
@@ -64,16 +64,16 @@
           <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
            <span class="error">
             <span class="errorMessage">
-             <s:property value="fieldErrors['state.name'][0]" />
+             <s:property value="fieldErrors['dataState.name'][0]" />
             </span>
            </span>
           </div>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="state.name" size="48" maxLength="64"/>
+        <s:textfield theme="simple" name="dataState.name" size="48" maxLength="64"/>
        </td>
        <td align="center">
-        <s:submit theme="simple" name="op.add" value="ADD" />
+        <s:submit theme="simple" name="op.sadd" value="ADD" />
        </td>
       </tr>
      </s:form>
