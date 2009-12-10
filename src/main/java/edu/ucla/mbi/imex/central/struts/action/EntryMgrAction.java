@@ -1350,8 +1350,13 @@ public class EntryMgrAction extends ManagerSupport {
             
             pl = tracContext.getPubDao()
                 .getPublicationList( first, blockSize, sortKey, asc, flt );            
-            total = tracContext.getPubDao().getPublicationCount();
+
+            total = tracContext.getPubDao().getPublicationCount( flt );
+
+
         }
+
+        log.info( "getPubRecords: total=" + total);
 
         // buid record map
         //----------------
@@ -1381,6 +1386,7 @@ public class EntryMgrAction extends ManagerSupport {
             r.put( "time", ip.getCreateTimeString() );
             rl.add( r );
         }
+        
         return JSON;
     }
     
