@@ -9,7 +9,7 @@
 
 /* edit header */
 .edit_menu_header {
-	background:#5375a8 url(/img/global/gradient/h30.png);
+	background:#888888;
 	margin:0;
 	padding:4px 10px;
 	font-size:12px;
@@ -21,7 +21,7 @@
 }
 /* edit body */
 .edit_menu_body {
-	background:#e3edff;
+	background:#eeeeee;
 	margin:0;
 	padding:5px 10px;
 	font-size:10px;
@@ -35,7 +35,7 @@
 /* menu item list */
 
 .edit_menu_ilist {
-	background:#e3edff;
+	background:#eeeeee;
 	margin:0;
 	padding:0px 0px;
 	font-size:10px;
@@ -48,7 +48,7 @@
 
 /* menu item */
 .edit_menu_item {
-	background:#99bbee;
+	background:#cccccc;
 	margin:0;
 	padding:5px 10px;
 	font-size:10px;
