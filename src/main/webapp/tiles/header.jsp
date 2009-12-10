@@ -1,8 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
- <s:set name="menu1" value='<t:getAsString name="menu1"'/>  
- <s:set name="menu2" value='<t:getAsString name="menu2"'/>  
- <s:set name="menu3" value='<t:getAsString name="menu3"'/>  
    
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
  <tr>
@@ -19,9 +16,9 @@
   <td class="topmenu" align="left">
    <table class="menu1_background" width="100%" cellspacing="0" cellpadding="0">
     <tr>
-     <s:if test='menuContext.jsonConfig.menu[menuDef[0]].menu.size > 0'>
+     <s:if test='menuContext.jsonConfig.menu[0].menu.size > 0'>
       <td class="menu1first">&nbsp;</td>
-       <s:iterator value="menuContext.jsonConfig.menu[menuDef[0]].menu" id="exp" status="mpos">
+       <s:iterator value="menuContext.jsonConfig.menu[0].menu" id="exp" status="mpos">
         <s:if test='#mpos.count==menuSel[0]'>
          <td class="menu1select" nowrap>
           <a onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
@@ -79,16 +76,15 @@
 <!-- mid menu -->
   <tr>
    <td class="midmenu">
-   
-      <table class="menu2_background" width="100%" cellspacing="0" cellpadding="0">
-<s:if test='menuContext.jsonConfig.menu[menuDef[0]].menu[menuDef[1]].menu.size > 0'>
+    <table class="menu2_background" width="100%" cellspacing="0" cellpadding="0">
+     <s:if test='menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu.size > 0'>
        <tr>
         <td class="menu2first">&nbsp;</td>
-  <s:iterator value="menuContext.jsonConfig.menu[menuDef[0]].menu[menuDef[1]].menu" id="exp" status="mpos" >
-     <s:if test='#mpos.count == menuSel[1]'>
-        <td class="menu2select" nowrap>
-         <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
-            class="midmenulinkon" HREF="<s:property value='link' />">
+         <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu" id="exp" status="mpos" >
+          <s:if test='#mpos.count == menuSel[1]'>
+           <td class="menu2select" nowrap>
+            <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
+             class="midmenulinkon" HREF="<s:property value='link' />">
           <s:property value='label' />          
          </a>
         </td>
@@ -134,33 +130,31 @@
         <td width="100%">
          <table class="menu3_background" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-
-<s:if test='menuContext.jsonConfig.menu[menuDef[0]].menu[menuDef[1]].menu[menuDef[2]].menu.size > 0'>
+           <s:if test='menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu[menuSel[1]-1].menu.size > 0'>
            <td class="menu3first">&nbsp;</td>
-
-  <s:iterator value="menuContext.jsonConfig.menu[menuDef[0]].menu[menuDef[1]].menu[menuDef[2]].menu" id="exp" status="mpos" >
-     <s:if test='#mpos.count == menuSel[2]'>
-           <td class="menu3select" nowrap>
-            <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
-               class="btmmenulink" HREF="<s:property value='link' />">
-             <s:property value='label' />
-            </a>
-           </td>
-     </s:if>
-     <s:else>
-           <td class="menu3" nowrap>
-            <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
-               class="btmmenulink" HREF="<s:property value='link' />">
-             <s:property value='label' />
-            </a>
-           </td>
-     </s:else>
-  </s:iterator>
+           <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu[menuSel[1]-1].menu" id="exp" status="mpos" >
+            <s:if test='#mpos.count == menuSel[2]'>
+             <td class="menu3select" nowrap>
+              <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
+                 class="btmmenulink" HREF="<s:property value='link' />">
+               <s:property value='label' />
+              </a>
+             </td>
+            </s:if>
+            <s:else>
+             <td class="menu3" nowrap>
+              <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
+                 class="btmmenulink" HREF="<s:property value='link' />">
+               <s:property value='label' />
+              </a>
+             </td>
+            </s:else>
+           </s:iterator>
            <td width="100%" class="menu3last">&nbsp;</td>
-</s:if>
-<s:else>
+          </s:if>
+          <s:else>
            <td width="100%" class="menu3null">&nbsp;</td>
-</s:else>
+          </s:else>
           </tr>
          </table>
         </td>
@@ -178,14 +172,10 @@
            </td>
           </tr>
          </table>
-
         </td>
        </tr>
-
 <!-- bottom menu: END -->
-	
-      </table>
-
+     </table>
      </td>
     </tr>
    </table>

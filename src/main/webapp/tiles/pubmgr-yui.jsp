@@ -50,13 +50,14 @@
       <b>PMID:</b> <s:textfield theme="simple" name="pub.pmid" size="24" maxLength="64"/>
      </td>
      <td colspan="1" align="center" width="5%">
-      <s:submit theme="simple" name="op.eadd" value="ADD" />
+      <s:submit theme="simple" name="op.esrc" value="Search" />
      </td>
     </tr>
    </s:form>
   </table>
+  <br/><br/><br/><br/><br/>
  </div>
-
+ 
  <script type="text/javascript">
   YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubmgr ) ;
  </script>

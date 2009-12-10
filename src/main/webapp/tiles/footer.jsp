@@ -5,6 +5,9 @@
   <tr>
    <td>
     <table width="100%" class="footer" cellpadding="0" cellspacing="0">
+     <s:if test="#session['USER_ROLE'].administrator != null" >
+      <t:insertAttribute name="edit" ignore="true"/>
+     </s:if>
      <tr>
       <td class="copyright2" nowrap>
        Copyright 2008-2010 IMEx Consortium
