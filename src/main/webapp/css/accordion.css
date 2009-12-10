@@ -39,7 +39,9 @@
   background-color: #888888;
   margin: 0px;
   padding: 4px;
-  border: 1px solid #000000;
+  border-color:  #000000;
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
 }
 
 #acc-top {

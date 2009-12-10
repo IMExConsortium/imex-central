@@ -74,6 +74,40 @@
       </result>
     </action>
 
+   <action name="edit" class="editAction" >
+    <interceptor-ref name="defaultStack"/>
+    <interceptor-ref name="timer"/>
+    <interceptor-ref name="menu"/>
+
+    <result name="page" type="redirect-action">
+     <param name="actionName">page</param>
+     <param name="namespace"></param>
+     <param name="parse">true</param>
+     <param name="id">${pageid}</param>
+    </result>
+
+    <result name="menu">menuedit.jsp</result>
+
+    <result name="error" type="redirect-action">
+     <param name="actionName">page</param>
+     <param name="namespace"></param>
+     <param name="parse">true</param>
+     <param name="id">${pageid}</param>
+    </result>
+  </action>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- user management -->
 
