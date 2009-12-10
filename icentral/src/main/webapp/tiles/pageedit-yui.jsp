@@ -114,10 +114,8 @@
   </s:form>
  </td>
 </tr> 
-
 <script type="text/javascript">
   var ip = function() {
-    alert("CXXX");
     YAHOO.mbi.accordion.init();
   }
   YAHOO.util.Event.on(window,"load", ip);

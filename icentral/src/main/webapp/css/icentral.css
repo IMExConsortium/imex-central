@@ -1428,27 +1428,19 @@ a.graph {
 }
 
 .footer {
-  border-top: 1px solid #5375a8;
+  border-top: 1px solid #444444;
   margin: 0px;
   padding: 0px;
 }
 
 td.footer {
   border-top: 0px;
-  border-bottom: 1px dotted #555566;
+  border-bottom: 1px dotted #555555;
 }
 
 .footbar {
-  background-color: #555566;
+  background-color: #555555;
   font-size: 0.70em;
   white-space: nowrap;
   border-bottom: 1px solid #555555;
 }
-
-
-
-
-
-
-
-
