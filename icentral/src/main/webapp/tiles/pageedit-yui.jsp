@@ -23,6 +23,7 @@
            <s:textfield size="86" value="%{id}" name="newid"/>
           </td>
          </tr>
+<%--
          <tr>
           <td>&nbsp;</td>
           <td width="35%" align="right" valign="middle">Show Title
@@ -33,6 +34,7 @@
            <s:checkbox value="%{page.showcomment}" name="page.showcomment"/>
           </td>
          </tr>
+--%>
          <tr>
           <td nowrap>Page Source</td>
           <td colspan="3">

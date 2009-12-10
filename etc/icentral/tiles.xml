@@ -50,6 +50,9 @@
   <put-attribute name="body" value="/tiles/uedit.jsp"/>
  </definition>
 
+ <definition name="menuedit-yui" template="/tiles/menuedit-yui.jsp" />
+
+
  <definition name="login" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Login" />
   <put-attribute name="body" value="/tiles/login.jsp"/>
