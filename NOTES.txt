@@ -1,8 +1,8 @@
 NOTES: IMEx Central
 -------------------
 
-$HeadURL: http://imex.mbi.ucla.edu/svn/dip-ws/trunk/NOTES.txt $
-$Id: NOTES.txt 335 2009-07-30 00:07:28Z nbrown $ 
+$HeadURL$
+$Id$ 
  
 SVN repository
 --------------

@@ -7,7 +7,7 @@
  <Resource name="jdbc/icentral" type="javax.sql.DataSource"
                      auth="Container"
                      driverClassName="org.postgresql.Driver"
-                     username="lukasz" password="444ls444"
-                     url="jdbc:postgresql://10.1.1.12:5432/icentral"
+                     username="${jdbc.user}" password="${jdbc.pass}"
+                     url="${jdbc.dburl}"
                      maxIdle="2" maxWait="5000" maxActive="4"/>
 </Context>

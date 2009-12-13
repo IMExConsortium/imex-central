@@ -1,0 +1,12 @@
+RELEASENOTES: IMEx Central
+---------------------------
+
+$HeadURL$
+$Id$ 
+
+2009/12/13 BETA-0.6
+
+ - corrected number of pages/publications in the publication table pager
+ - added functional add/drop state and transition actions to workflow editors
+   
+

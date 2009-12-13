@@ -9,9 +9,19 @@
   <name>Web Application module</name>
 
   <properties>
+
       <icentral.version>${project.version}</icentral.version> 
       <icentral.bld>$Rev$</icentral.bld> 
+
+       <jdbc.user>user</jdbc.user>
+       <jdbc.pass>password</jdbc.pass>
+       <jdbc.dburl>jdbc:postgresql://11.11.11.11:5432/icentral</jdbc.dburl>
+       <jdbc.dbname>icentral</jdbc.dbname>
+       <jdbc.srvname>11.11.11.11</jdbc.srvname>
+       <jdbc.srvport>5432</jdbc.srvport>
+
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
+
       <!-- foo.org: global key -->
       <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
       <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
@@ -21,15 +31,35 @@
   </properties>
    
   <profiles>
+
    <profile>
-     <id>tomcat</id>
+     <id>beta</id>
      <activation>
-      <activeByDefault>false</activeByDefault>
+       <property>
+        <name>build</name>
+        <value>beta</value>
+      </property>
      </activation>
      <properties>
+       <environment.srv>tomcat</environment.srv>
        <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
      </properties>
    </profile>
+
+   <profile>
+     <id>production</id>
+     <activation>
+       <property>
+         <name>build</name>
+         <value>prod</value>
+       </property> 
+     </activation>
+     <properties>
+      <environment.srv>tomcat</environment.srv>
+      <icentral.jdbc>java:/comp/env/jdbc/icentral-prod</icentral.jdbc>
+     </properties>
+   </profile>
+
   </profiles>
  
   <parent>
@@ -153,6 +183,16 @@
               <filtering>true</filtering>
               <includes>
                 <include>*.xml</include>
+                <exclude>context.xml</exclude>
+              </includes>
+            </resource>
+
+            <resource>
+              <directory>${basedir}/../etc/icentral</directory>
+              <targetPath>META-INF</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>context.xml</include>
               </includes>
             </resource>
 

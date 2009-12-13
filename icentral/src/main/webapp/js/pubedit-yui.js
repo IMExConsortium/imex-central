@@ -49,9 +49,22 @@ YAHOO.imex.pubedit = function() {
     //      type: "push",   
     //      disabled: true,
     //      container: "state-label-container" }); 
+
+
+    // imex id
+    //---------
+        
+    var imexButton = new YAHOO.widget.Button(
+        { id: "imex-button",  
+          name: "imex-button", 
+          label: "<em class=\"yui-button-label\">"+"ASSIGN"+"</em>", 
+          type: "push", 
+          disabled: true,  
+          menu: stateSel,  
+          container: "imex-button-container" }); 
+    
+    imexButton.my = { items: stateSel, value: "" };
+    imexButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
     
 };
-    
-//YAHOO.util.Event.addListener(
-//    window, "load", YAHOO.imex.pubnew ) ;
 

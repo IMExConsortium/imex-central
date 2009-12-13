@@ -7,11 +7,11 @@
   <Arg>jdbc/icentral</Arg>
   <Arg>
    <New class="org.postgresql.ds.PGSimpleDataSource">
-    <Set name="User">lukasz</Set>
-    <Set name="Password">444ls444</Set>
-    <Set name="DatabaseName">icentral</Set>
-    <Set name="ServerName">10.1.1.12</Set>
-    <Set name="PortNumber">5432</Set>
+    <Set name="User">${jdbc.user}</Set>
+    <Set name="Password">${jdbc.pass}</Set>
+    <Set name="DatabaseName">${jdbc.dbname}</Set>
+    <Set name="ServerName">${jdbc.srvname}</Set>
+    <Set name="PortNumber">${jdbc.srvport}</Set>
    </New>
   </Arg>
  </New>

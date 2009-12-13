@@ -63,7 +63,7 @@
 <div>
  <table width="100%" border="1">
   <tr>
-   <th align="right" width="15%" nowrap>Availability</th>
+   <th align="right" width="15%" nowrap>Availability<br/>Status</th>
    <td width="75%">
     <table width="100%" border="1">
      <tr>
@@ -89,7 +89,7 @@
    </th>
   </tr>
   <tr>
-   <th align="right" nowrap>Contact Email</th>
+   <th align="right" nowrap>Contact<br/>Email</th>
    <td>
     <s:textfield theme="simple" name="pub.contactEmail" size="32" maxLength="32"/>
    </td>
@@ -98,7 +98,7 @@
    </th>
   </tr>
   <tr>
-   <th align="right" nowrap>Curation Status</th>
+   <th align="right" nowrap>Curation<br/>Status</th>
    <td>
     <table width="100%" border="0">
      <tr>
@@ -121,12 +121,7 @@
   <tr>
    <th align="right" nowrap>IMEx ID</th>
    <td>
-    <s:if test="pub.imexid.length > 0">
-     <s:property value="pub.imexid"/></th>
-    </s:if>
-    <s:else>
-     <s:submit theme="simple" name="op.pasim" value="ASSIGN"/>
-    </s:else>
+    <label id="imex-button-container"/>
    </td>
    <td>&nbsp;</td>
   </tr>  
