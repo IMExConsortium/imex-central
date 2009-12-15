@@ -119,6 +119,13 @@ public class IcentralPortImpl implements IcentralPort {
         return null;
     }
 
+    public edu.ucla.mbi.imex.central.ws.Publication 
+        getPublicationImexAccession( Identifier identifier, 
+                                     java.lang.Boolean create )
+        throws IcentralFault {
+        return null;
+    }
+
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     

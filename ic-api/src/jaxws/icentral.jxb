@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
- !===========================================================================
- ! $HeadURL::                                                               $
- ! $Id::                                                                    $
- ! Version: $Rev::                                                          $
- !===========================================================================
- !
- ! ImexCentral Web Services
- !
- !======================================================================= -->
+<!-- $Id::                                                                 $ -->
 
 <bindings wsdlLocation="../wsdl/icentral.wsdl"
     xmlns="http://java.sun.com/xml/ns/jaxws"
@@ -49,6 +40,12 @@
   </bindings>
 
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublicationStatus']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getPublicationImexAccession']/wsdl:fault">
    <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
    </class>
