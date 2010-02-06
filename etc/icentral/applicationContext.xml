@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- =======================================================================
- ! $HeadURL::                                                              $
- ! $Id::                                                                   $
- ! Version: $Rev::                                                         $
- !==========================================================================
+<!-- ===========================================================================
+ ! $HeadURL::                                                                  $
+ ! $Id::                                                                       $
+ ! Version: $Rev::                                                             $
+ !==============================================================================
  !
  ! IMEx Central: application context
  !
- !====================================================================== -->
+ !========================================================================== -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -32,7 +32,7 @@
         http://jax-ws.dev.java.net/spring/servlet
         http://jax-ws.dev.java.net/spring/servlet.xsd">
 
-<!-- ==================================================== ENTRY MANAGER -->
+<!-- ========================================================= ENTRY MANAGER -->
 
  <bean id="entryManager" init-method="initialize" destroy-method="cleanup"
        class="edu.ucla.mbi.imex.central.EntryManager">
@@ -43,7 +43,7 @@
    
  </bean>
 
-<!-- =================================================== DIP PROXY ACCESS -->
+<!-- ======================================================== DIP PROXY ACCESS -->
 
  <bean id="ncbiProxyClient" init-method="initialize"
           class="edu.ucla.mbi.imex.central.NcbiProxyClient">
@@ -52,15 +52,16 @@
   <property name="debug" value="false" />
  </bean>
 
-<!-- ===================================================== STRUTS ACTIONS -->
+<!-- ========================================================== STRUTS ACTIONS -->
 
  <import resource="actions.xml" />
 
  <import resource="workflow.xml" />
 
+ <import resource="keyspace.xml" />
  <import resource="entry.xml" />
 
-<!-- ======================================================= WEB SERVICES -->
+<!-- ============================================================ WEB SERVICES -->
 
 <!--
  <bean id="wsContext" init-method="initialize" destroy-method="cleanup"

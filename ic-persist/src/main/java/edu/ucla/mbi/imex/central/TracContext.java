@@ -1,15 +1,15 @@
 package edu.ucla.mbi.imex.central;
 
-/* ========================================================================
- # $Id:: UserContext.java 465 2009-08-21 02:36:27Z lukasz                 $
- # Version: $Rev:: 465                                                    $
- #=========================================================================
- #                                                                        $
- # TracContext: JSON-based tracker configuration                          $
- #                                                                        $
- #     TO DO:                                                             $
- #                                                                        $
- #======================================================================= */
+/* =============================================================================
+ # $Id:: UserContext.java 465 2009-08-21 02:36:27Z lukasz                      $
+ # Version: $Rev:: 465                                                         $
+ #==============================================================================
+ #                                                                             $
+ # TracContext: JSON-based tracker configuration                               $
+ #                                                                             $
+ #     TO DO:                                                                  $
+ #                                                                             $
+ #=========================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
@@ -33,8 +33,8 @@ public class TracContext extends JsonContext {
     public void setPubDao( PublicationDAO dao ) {
         pubDao = dao;
     }
-    
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
 
     private JournalDAO journalDao;
 
@@ -46,7 +46,7 @@ public class TracContext extends JsonContext {
         journalDao = dao;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  NCBI Proxy Access
     //-------------------
     
@@ -60,7 +60,7 @@ public class TracContext extends JsonContext {
         return this.ncbiProxy;
     }
     
-    //---------------------------------------------------------------------        
+    //--------------------------------------------------------------------------
     
     public void initialize() { 
 

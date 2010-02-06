@@ -36,5 +36,9 @@
 
   <mapping resource="data.hbm.xml"/>
 
+  <mapping resource="ickey.hbm.xml"/>
+  <mapping resource="ickeyspace.hbm.xml"/>
+
+
  </session-factory>
 </hibernate-configuration>
