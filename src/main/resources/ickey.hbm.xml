@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+ <hibernate-mapping>
+
+   <class name="edu.ucla.imex.central.IcKey" table="key" lazy="false">
+     <id name="id" column="pk">
+       <generator class="native">
+         <param name="sequence">key_pk_seq</param>   
+       </generator>
+     </id>
+
+     <many-to-one name="keyspace" column="fk_keyspace"  not-null="true" /> 
+     <property name="keyvalue"     column="value"/>
+     <property name="created"   column="created"/>
+     <property name="updated"   column="updated"/>
+   </class>
+
+</hibernate-mapping>
+
+

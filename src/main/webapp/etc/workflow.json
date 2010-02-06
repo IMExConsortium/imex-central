@@ -1,0 +1,21 @@
+{
+ state:[
+  {name:"NEW",comments:""},
+  {name:"RESERVED",comments:""},
+  {name:"INPROGRESS",comments:""},
+  {name:"RELEASED",comments:""}
+  {name:"DISCARDED",comments:""}
+  {name:"INCOMPLETE",comments:""}
+ ],
+ transition:[
+   {name:"reserve",from:"NEW",to:"RESERVED",
+    comments:""
+   },
+   {name:"process",from:"RESERVED",to:"INPROGRESS",
+    comments:""
+   },
+   {name:"release",from:"INPROGRESS",to:"RELEASED",
+    comments:""
+   }
+ ]
+}

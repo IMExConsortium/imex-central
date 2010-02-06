@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+   <class name="edu.ucla.imex.central.IcKeyspace" table="keyspace" lazy="false">
+     <id name="id" column="pk">
+       <generator class="native">
+         <param name="sequence">keyspace_pk_seq</param>
+       </generator>
+     </id>
+
+     <property name="name"      column="name"/>
+     <property name="active"    column="active"/>
+     <property name="prefix"    column="prefix"/>
+     <property name="postfix"   column="postfix"/>
+     <property name="comments"   column="comments"/>
+   </class>
+
+</hibernate-mapping>
+
+
