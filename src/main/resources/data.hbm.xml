@@ -15,6 +15,37 @@
 	
 <hibernate-mapping>
 
+ <!-- keyspace/key mapping -->
+
+ <class table="keyspace" lazy="false"
+        name="edu.ucla.mbi.imex.central.IcKeyspace" >
+  <id name="id" column="id">
+   <generator class="sequence">
+    <param name="sequence">keyspace_id_seq</param>
+   </generator>
+  </id>
+
+  <property name="name" column="name" />
+  <property name="prefix" column="prefix" />
+  <property name="postfix" column="postfix" />
+  <property name="active" column="active" />
+  <property name="comments" column="comments" />
+ </class>
+    
+ <class name="edu.ucla.mbi.imex.central.IcKey" table="key" lazy="false">
+  <id name="id" column="id">
+   <generator class="sequence">
+    <param name="sequence">key_id_seq</param>
+   </generator>
+  </id>
+  <many-to-one name="keyspace" column="keyspace_id"
+               class="edu.ucla.mbi.imex.central.IcKeyspace" />
+
+  <property name="value" column="value" />
+  <property name="created" column="created" />
+ </class>
+
+
  <!-- DataItem: IcPub --> 
 
  <class name="edu.ucla.mbi.imex.central.IcPub" table="entry" lazy="false">
@@ -26,7 +57,10 @@
 
   <!-- icPub-specific -->
 
-  <property name="imexId" column="imexid" />
+<!--  <property name="imexId" column="imexid" /> -->
+
+  <many-to-one name="icKey" column="imex_id"
+               class="edu.ucla.mbi.imex.central.IcKey" />  
 
   <!-- publication-specific -->
 

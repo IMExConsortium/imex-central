@@ -5,9 +5,9 @@
 
 <hibernate-mapping>
    <class name="edu.ucla.imex.central.IcKeyspace" table="keyspace" lazy="false">
-     <id name="id" column="pk">
+     <id name="id" column="id">
        <generator class="native">
-         <param name="sequence">keyspace_pk_seq</param>
+         <param name="sequence">keyspace_id_seq</param>
        </generator>
      </id>
 

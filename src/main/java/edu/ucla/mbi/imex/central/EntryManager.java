@@ -68,6 +68,20 @@ public class EntryManager {
     public UserContext getUserContext() {
         return this.userContext;
     }
+
+    //---------------------------------------------------------------------
+    // KeyContext
+    //-----------
+
+    private KeyspaceContext keyspaceContext;
+
+    public void setKeyspaceContext( KeyspaceContext context ) {
+        this.keyspaceContext = context;
+    }
+
+    public KeyspaceContext getKeyspaceContext() {
+        return this.keyspaceContext;
+    }
     
     //---------------------------------------------------------------------
     
@@ -213,25 +227,50 @@ public class EntryManager {
         return null;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public void deleteIcPub( IcPub pub ) {
         
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public IcPub updateIcPubProps( IcPub pub ) {
         return null;
     }
 
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+
+    public IcPub genIcPubImex( IcPub pub ) {
+
+        if( pub == null ) { return null; }
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " EntryManager.genIcPubImex:  id=" + pub.getId() +
+                  " imex=" + pub.getIcKey() );
+
+        if( pub.getIcKey() == null ) {
+            log.info( "KeyspaceContext=" + keyspaceContext );
+
+            IcKey key = 
+                (IcKey) keyspaceContext.getKeyspaceDao().nextKey( "imex" );
+            pub.setIcKey( key );
+            tracContext.getPubDao().updatePublication( pub );
+        }
+
+        return pub;
+    }
+
+
+    //--------------------------------------------------------------------------
 
     public IcPub updateIcPubState( IcPub pub ) {
         return null;
     }
 
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
 
     public IcPub addAdminUser( Publication pub, User user ) {
         
@@ -247,7 +286,8 @@ public class EntryManager {
         return oldPub;        
     }
     
-    //---------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+
 
     public IcPub addAdminGroup( Publication pub, Group group ) {
         
