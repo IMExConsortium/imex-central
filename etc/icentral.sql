@@ -108,7 +108,8 @@ CREATE TABLE entry (
     source_id integer not null default 0,
     state_id integer not null default 0,
 
-    imexId character varying(32) default '',
+--    imexId character varying(32) default '',
+    imex_id integer, 
 
     doi character varying(256) default '',
     pmid character varying(32) default '',
@@ -169,4 +170,23 @@ CREATE INDEX journal_agrp_1 on journal_agrp (journal_id);
 CREATE INDEX journal_agrp_2 on journal_agrp (journal_id, grp_id);
 CREATE INDEX journal_agrp_3 on journal_agrp (grp_id,journal_id);
 
+create table keyspace (
+    id serial NOT NULL primary key, 
+    name character varying(32) NOT NULL default '', 
+    prefix character varying(8) NOT NULL default '',
+    postfix character varying(8) NOT NULL default '', 
+    active boolean NOT NULL default true, 
+    comments text NOT NULL default '');
+
+CREATE INDEX keyspace_1 on keyspace (name);
+
+create table key (
+    id serial NOT NULL primary key, 
+    keyspace_id integer not null default 0,
+    value integer not null default 0,
+    created timestamp not null default now()
+);
+
+CREATE INDEX key_1 on key (value);
+CREATE INDEX key_2 on key (keyspace,value);
 

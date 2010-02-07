@@ -113,6 +113,17 @@
        <param name="actionName">pubnew</param>
        <param name="pmid">%{pmid}</param>
      </result>  
+
+     <result name="json" type="json">
+      <param name="excludeProperties">
+        publicationList.*
+      </param>
+      <param name="includeProperties">
+        pub.*
+      </param>
+      <param name="noCache">true</param>
+     </result>
+
    </action>
 
    <action name="pubnew" class="pubNewAction">
@@ -161,7 +172,8 @@
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">journalmgr</result> 
-      <result name="jedit" type="tiles">journalmgr</result>
+     <result name="jedit" type="tiles">journalmgr</result>
+          
    </action>
 
  </package>

@@ -45,14 +45,31 @@ public class IcPub extends Publication {
         this.setCrt( calendar );
     }
 
-    private String imexId = "";
+    //private String imexId = "";
     
-    public void setImexId( String imexId ) {
-        this.imexId = imexId;
+    //public void setImexId( String imexId ) {
+    //    this.imexId = imexId;
+    //}
+
+    private IcKey key;
+
+    public IcKey getIcKey() {
+        return key;
     }
 
+    public void setIcKey( IcKey key ) {
+        this.key = key;
+    }
+
+
+
     public String getImexId() {
-        return imexId;
+
+        if( key == null ) {
+            return "N/A";
+        }
+        
+        return key.getAccession();
     }
 
     //---------------------------------------------------------------------    

@@ -1,17 +1,14 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-
-
 <h1>Publication Manager</h1>
 <s:if test="id > 0">
 
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
-
  <t:insertDefinition name="pubedit"/>
- 
- <script type="text/javascript">
-  YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit ) ;
+  <script type="text/javascript">
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit, 
+                                 {id:"<s:property value="id"/>",imexACC:"<s:property value="pub.imexId"/>"} ) ;
  </script>
 
 </s:if>
@@ -47,7 +44,8 @@
       <s:submit theme="simple" name="op.ldel" value="DROP" />
      </td>
      <td align="right">
-      <b>PMID:</b> <s:textfield theme="simple" name="pub.pmid" size="24" maxLength="64"/>
+      <b>PMID:</b> 
+      <s:textfield theme="simple" name="pub.pmid" size="24" maxLength="64"/>
      </td>
      <td colspan="1" align="center" width="5%">
       <s:submit theme="simple" name="op.esrc" value="Search" />

@@ -22,7 +22,7 @@
       <map>
         <entry key="json-source">
           <bean class="edu.ucla.mbi.util.SpringFileResource">
-            <property name="file" value="etc/workflow.json"/>
+            <property name="file" value="/etc/workflow.json"/>
           </bean>
          </entry>
       </map>

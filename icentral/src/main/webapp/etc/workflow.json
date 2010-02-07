@@ -3,8 +3,8 @@
   {name:"NEW",comments:""},
   {name:"RESERVED",comments:""},
   {name:"INPROGRESS",comments:""},
-  {name:"RELEASED",comments:""}
-  {name:"DISCARDED",comments:""}
+  {name:"RELEASED",comments:""},
+  {name:"DISCARDED",comments:""},
   {name:"INCOMPLETE",comments:""}
  ],
  transition:[

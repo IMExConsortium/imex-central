@@ -40,6 +40,7 @@
    <property name="tracContext" ref="tracContext"/>
    <property name="workflowContext" ref="workflowContext"/>
    <property name="userContext" ref="userContext"/>
+   <property name="keyspaceContext" ref="keyspaceContext"/>
    
  </bean>
 

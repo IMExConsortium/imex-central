@@ -1,14 +1,14 @@
 package edu.ucla.mbi.imex.central.struts.action;
-                                                                   
-/* =========================================================================
- * $HeadURL::                                                              $
- * $Id::                                                                   $
- * Version: $Rev::                                                         $
- *==========================================================================
+
+/* =============================================================================
+ * $HeadURL::                                                                  $
+ * $Id::                                                                       $
+ * Version: $Rev::                                                             $
+ *==============================================================================
  *
  * EntryMgrAction - web interface to entry management
  *
- ======================================================================== */
+ ============================================================================ */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
@@ -34,7 +34,7 @@ public class EntryMgrAction extends ManagerSupport {
     public static final String ACL_PAGE = "acl_page";
     public static final String ACL_OPER = "acl_oper";
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Entry Manager
     //--------------
 
@@ -48,7 +48,7 @@ public class EntryMgrAction extends ManagerSupport {
         return this.entryManager;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  TracContext
     //--------------
 
@@ -62,7 +62,7 @@ public class EntryMgrAction extends ManagerSupport {
         return this.tracContext;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  WorkflowContext
     //-----------------
     
@@ -211,7 +211,8 @@ public class EntryMgrAction extends ManagerSupport {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info(  "mode=" + mode + " id=" + getId() + 
-                   " journal=" + journal + " icpub=" + icpub ); 
+                   " journal=" + journal + " icpub=" + icpub +
+                   " op=" + getOp() ); 
         
         if ( tracContext.getJournalDao() == null ||
              tracContext.getPubDao() == null ) return SUCCESS;
@@ -224,28 +225,33 @@ public class EntryMgrAction extends ManagerSupport {
             return SUCCESS;
         }
 
-        if ( mode.equals( "icpub" ) && getId() > 0 && icpub == null ) {
+        if ( mode.equals( "icpub" ) && getId() > 0 
+             && icpub == null && getOp() == null ) {
             
             log.info(  "setting icpub=" + getId() );
             icpub = entryManager.getIcPub( getId() );
             return SUCCESS;
         }
-
-
+        
         if( getPmid() != null ) {
             icpub = new IcPub( entryManager.getPubByPmid( getPmid() ) ); 
             return PUBNEW;
         }
 
-
         if( getOp() == null ) return SUCCESS;
         
+        if ( getId() > 0 && icpub == null ) {
+            icpub = entryManager.getIcPub( getId() );
+        }
+
         for ( Iterator<String> i = getOp().keySet().iterator();
               i.hasNext(); ) {
             
             String key = i.next();
             String val = getOp().get(key);
             
+            log.info(  "op=" + key + "  val=" + val );
+
             if ( val != null && val.length() > 0 ) {
 
                 //---------------------------------------------------------
@@ -400,8 +406,8 @@ public class EntryMgrAction extends ManagerSupport {
                                                      skey, sdir, flt );
                 }
 
-                //---------------------------------------------------------
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
+                //--------------------------------------------------------------
                 // icpub operations
                 //-----------------
 
@@ -409,19 +415,19 @@ public class EntryMgrAction extends ManagerSupport {
                     return searchIcPub( icpub );
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "eadd" ) ) {
                     return addIcPub( icpub );
                 }
                 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "edel" ) ) {
                     return deleteIcPub( icpub );
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "eldel" ) ) {
 
@@ -447,20 +453,26 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "epup" ) ) {
                     return updateIcPubProperties( getId(), icpub );
                 }
+
+                //--------------------------------------------------------------
                 
-                //---------------------------------------------------------
+                if ( key.equalsIgnoreCase( "epix" ) ) {
+                    return genIcPubImex( getId(), icpub );
+                }
+                
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "esup" ) ) {
                     int sid=0;
                     return updateIcPubState( getId(), sid );
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eauadd" ) ) {
                     if ( getOpp() == null ) return SUCCESS;
@@ -474,7 +486,7 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eagadd" ) ) {
                     if ( getOpp() == null ) return SUCCESS;
@@ -490,7 +502,7 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eaudel" ) ) {
                     if ( getOpp() == null ) return SUCCESS;
@@ -517,7 +529,7 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eagdel" ) ) {
                     if ( getOpp() == null ) return SUCCESS;
@@ -571,8 +583,8 @@ public class EntryMgrAction extends ManagerSupport {
         return SUCCESS;
     }
 
-
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // validation
     //-----------
     
@@ -1111,7 +1123,7 @@ public class EntryMgrAction extends ManagerSupport {
         */
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     
     public String updateIcPubProperties( int id, Publication pub ) {
 
@@ -1138,7 +1150,25 @@ public class EntryMgrAction extends ManagerSupport {
         */
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+
+    public String genIcPubImex( int id, IcPub pub ) {
+
+        IcPub oldPub = entryManager.genIcPubImex( pub );
+        
+        if ( oldPub != null ) {
+            icpub = oldPub;
+            setId( oldPub.getId() );
+            this.setPmid( oldPub.getPmid() );
+            return JSON;        
+        }
+
+        return JSON;
+    }
+
+
+    //--------------------------------------------------------------------------
     
     private String updateIcPubState( int id, int sid) {
         

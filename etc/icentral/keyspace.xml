@@ -22,7 +22,7 @@
       <map>
         <entry key="json-source">
           <bean class="edu.ucla.mbi.util.SpringFileResource">
-            <property name="file" value="etc/keyspace.json"/>
+            <property name="file" value="/etc/keyspace.json"/>
           </bean>
          </entry>
       </map>
@@ -32,7 +32,9 @@
 
   <!-- keyspace persistence -->
 
-  <bean id="keyspaceDao" class="edu.ucla.mbi.imex.central.dao.IcKeyspaceDao"/>
+  <bean id="keyspaceDao" class="edu.ucla.mbi.imex.central.dao.IcKeyspaceDAO"/>
+
+
 
  <!-- actions -->
 <!--
