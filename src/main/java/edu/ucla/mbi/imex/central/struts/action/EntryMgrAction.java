@@ -1172,7 +1172,7 @@ public class EntryMgrAction extends ManagerSupport {
     
     private String updateIcPubState( int id, int sid) {
         
-        entryManager.updateIcPubState( null );
+        entryManager.updateIcPubState( id, sid );
         return SUCCESS;
 
         /*
