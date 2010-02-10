@@ -4,12 +4,13 @@ use XML::XPath;
 use XML::XPath::XMLParser;
 
 my $URL= "http://dip.doe-mbi.ucla.edu/icentral/ws";
-
 my $PURL= "http://%USR%:%PASS%\@10.1.1.%%%:8080/icentral/ws";
 
 my $ip="";
 my $pmid="";
+my $imex="";
 my $op="";
+my $stat="";
 my $usr ="foo";
 my $pass ="bar";
 
@@ -23,9 +24,16 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/PMID=(.+)/ ) {
         $pmid=$1;
     }
+    if( $ARGV[$i]=~/IMEX=(.+)/ ) {
+        $imex=$1;
+    }
 
     if( $ARGV[$i]=~/OP=(.+)/ ) {
         $op=$1;
+    }
+
+    if( $ARGV[$i]=~/ST=(.+)/ ) {
+        $stat=$1;
     }
 
     if( $ARGV[$i]=~/USR=(.+)/ ) {
@@ -53,18 +61,44 @@ if($op ne "" ) {
     
     $rns ="http://imex.mbi.ucla.edu/icentral/ws";    
 
-    if($op eq "createPublicationById"){
-
+    if( $op eq "createPublicationById" ) {        
         $som=SOAP::Lite->uri($PURL)
             ->proxy($PURL)
             ->default_ns($rns)
             ->outputxml('true')
             ->createPublicationById(SOAP::Data->name("provi" => $prv),
-                            SOAP::Data->name("service" => $format),
-                            SOAP::Data->name("ns" => $ns),
-                            SOAP::Data->name("ac" => $ac) );
-#	print $som,"\n";
+                                    SOAP::Data->name("service" => $format),
+                                    SOAP::Data->name("ns" => "pmid"),
+                                    SOAP::Data->name("ac" => $pmid) );
     }
+    
+    if( $op eq "updatePublicationStatus" && $stat ne "") {   
+        $som=SOAP::Lite->uri($PURL)
+            ->proxy($PURL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->updatePublicationStatus( SOAP::Data->type( 'xml' =>
+                                                         "<identifier ns='pmid' ac='$pmid' />" ),
+                                       SOAP::Data->name("status" => $stat) );
+    }
+    
+    if( $op eq "getPublicationById" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+        if( $imex ne "" ) {
+            $ac = $imex;
+            $ns = "imex";
+        }
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($PURL)
+            ->proxy($PURL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->getPublicationById( SOAP::Data->type( 'xml' =>
+                                                    "<identifier ns='$ns' ac='$ac' />" ));
+    }
+    
 }
 
 print $som,"\n";

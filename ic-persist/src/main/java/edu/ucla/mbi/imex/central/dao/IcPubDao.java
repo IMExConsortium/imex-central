@@ -349,4 +349,28 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return crit;
     }
 
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+    public IcPub getPublicationByImexId( long imex ) { 
+        
+        IcPub pub = null;
+        
+        try {
+            startOperation();
+            Query query =
+                session.createQuery( "from IcPub p where " +
+                                     " p.icKey.value = :imex ");
+            query.setParameter( "imex", imex );
+            query.setFirstResult( 0 );
+            pub = (IcPub) query.uniqueResult();
+            tx.commit();
+            
+        } catch( DAOException dex ) {
+            // log error ?
+        }
+        return pub; 
+    }
+
+
 }

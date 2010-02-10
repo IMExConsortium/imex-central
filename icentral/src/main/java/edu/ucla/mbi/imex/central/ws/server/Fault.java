@@ -21,6 +21,27 @@ public class Fault {
         AUTH = createFault( 2, "unauthorized user" );
     public static final IcentralFault
         INVALID_OP = createFault( 3, "invalid operation" );
+
+    public static final IcentralFault
+        ID_MISSING = createFault( 4, "identifier missing" );
+
+    public static final IcentralFault
+        ID_UNKNOWN = createFault( 5, "identifier unknown" );
+
+    public static final IcentralFault
+        NO_RECORD = createFault( 6, "no record(s) found" );
+
+    public static final IcentralFault
+        NO_REC_CR = createFault( 7, "record not created" );
+
+    public static final IcentralFault
+        STAT_UNKNOWN = createFault( 8, "status unknown" );
+
+    public static final IcentralFault
+        NO_IMEX = createFault( 9, "IMEx identifier missing" );
+    
+    public static final IcentralFault
+        UNSUP = createFault( 98, "operation not supported" );
     public static final IcentralFault
         UNKNOWN = createFault( 99, "internal server error" );
         

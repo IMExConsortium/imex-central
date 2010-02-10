@@ -1,15 +1,14 @@
 package edu.ucla.mbi.imex.central;
 
-/* =========================================================================
- * $HeadURL::                                                              $
- * $Id::                                                                   $
- * Version: $Rev::                                                         $
- *==========================================================================
+/* =============================================================================
+ * $HeadURL::                                                                  $
+ * $Id::                                                                       $
+ * Version: $Rev::                                                             $
+ *==============================================================================
  *
- * IcPublication - a traceable publication
+ * IcPub - a traceable publication
  *
- *
- ======================================================================== */
+ ============================================================================ */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +24,7 @@ public class IcPub extends Publication {
     public IcPub( Publication pub ) {
 
         this.setPmid( pub.getPmid() );
-
+        
         this.setTitle( pub.getTitle() );
         this.setAuthor( pub.getAuthor() );
         this.setAbstract( pub.getAbstract() );

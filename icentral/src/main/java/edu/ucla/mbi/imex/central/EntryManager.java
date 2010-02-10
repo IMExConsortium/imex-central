@@ -157,9 +157,8 @@ public class EntryManager {
         return null;
     }
 
+    //--------------------------------------------------------------------------
     
-    //---------------------------------------------------------------------
-
     public IcPub addIcPub( Publication pub, User owner, DataState state ) {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -265,7 +264,44 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
-    public IcPub updateIcPubState( IcPub pub ) {
+    public IcPub updateIcPubState( IcPub pub, DataState state ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        if( pub != null && state !=null ) {
+            pub.setState( state );
+            tracContext.getPubDao().savePublication( pub );
+        }
+        return pub;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public IcPub updateIcPubState( int id, int sid ) {
+
+        /*
+        if ( wflowContext.getWorkflowDao() == null ||
+             !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "id=" + id + " from=" + fid + " to=" + tid );
+        
+        Transition oldTrans = wflowContext.getWorkflowDao().getTrans( id );
+        DataState fState = wflowContext.getWorkflowDao().getDataState( fid );
+        DataState tState = wflowContext.getWorkflowDao().getDataState( tid );
+
+        if ( oldTrans == null ||
+             fState == null || tState == null ) return SUCCESS;
+
+        oldTrans.setFromState( fState );
+        oldTrans.setToState( tState );
+        wflowContext.getWorkflowDao().updateTrans( oldTrans );
+
+        this.trans = wflowContext.getWorkflowDao().getTrans( id );
+        log.info( "updated trans(states)=" +this.trans );
+
+        */
+
         return null;
     }
 
