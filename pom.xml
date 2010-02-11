@@ -13,11 +13,11 @@
       <icentral.version>${project.version}</icentral.version> 
       <icentral.bld>$Rev$</icentral.bld> 
 
-       <jdbc.user>user</jdbc.user>
-       <jdbc.pass>password</jdbc.pass>
-       <jdbc.dburl>jdbc:postgresql://11.11.11.11:5432/icentral</jdbc.dburl>
+       <jdbc.user>dip</jdbc.user>
+       <jdbc.pass>444dip444</jdbc.pass>
+       <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral</jdbc.dburl>
        <jdbc.dbname>icentral</jdbc.dbname>
-       <jdbc.srvname>11.11.11.11</jdbc.srvname>
+       <jdbc.srvname>10.1.1.12</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
@@ -31,6 +31,24 @@
   </properties>
    
   <profiles>
+
+   <profile>
+     <id>test</id>
+     <activation>
+       <property>
+        <name>build</name>
+        <value>test</value>
+      </property>
+     </activation>
+     <properties>
+       <environment.srv>tomcat</environment.srv>
+       <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
+       <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral_test</jdbc.dburl>
+       <jdbc.dbname>icentral_test</jdbc.dbname>
+       <jdbc.srvname>10.1.1.12</jdbc.srvname>
+       <jdbc.srvport>5432</jdbc.srvport>
+     </properties>
+   </profile>
 
    <profile>
      <id>beta</id>
@@ -56,7 +74,7 @@
      </activation>
      <properties>
       <environment.srv>tomcat</environment.srv>
-      <icentral.jdbc>java:/comp/env/jdbc/icentral-prod</icentral.jdbc>
+      <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
      </properties>
    </profile>
 
