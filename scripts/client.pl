@@ -13,6 +13,7 @@ my $op="";
 my $stat="";
 my $usr ="foo";
 my $pass ="bar";
+my $create="false";
 
 for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/IP=(.+)/ ) {
@@ -42,6 +43,9 @@ for( my $i=0; $i < @ARGV; $i++ ) {
 
     if( $ARGV[$i]=~/PASS=(.+)/ ) {
         $pass=$1;
+    }
+    if( $ARGV[$i]=~/CREATE=(.+)/ ) {
+        $create=$1;
     }
 
 }
@@ -97,6 +101,20 @@ if($op ne "" ) {
             ->outputxml('true')
             ->getPublicationById( SOAP::Data->type( 'xml' =>
                                                     "<identifier ns='$ns' ac='$ac' />" ));
+    }
+
+    if( $op eq "getPublicationImexAccession" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+        
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->getPublicationImexAccession( SOAP::Data->type( 'xml' =>
+                                                             "<identifier ns='$ns' ac='$ac' />" ),
+                                           SOAP::Data->name("create" => $create) );
     }
     
 }
