@@ -3,7 +3,7 @@ use SOAP::Lite;
 use XML::XPath;
 use XML::XPath::XMLParser;
 
-my $URL= "http://dip.doe-mbi.ucla.edu/icentral/ws";
+my $URL= "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
 my $PURL= "http://%USR%:%PASS%\@10.1.1.%%%:8080/icentral/ws";
 
 my $ip="";
@@ -18,7 +18,7 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/IP=(.+)/ ) {
         $ip=$1;
         $URL=$PURL;
-        $PURL=~s/%%%/$ip/;
+        $URL=~s/%%%/$ip/;
     }
 
     if( $ARGV[$i]=~/PMID=(.+)/ ) {
@@ -47,10 +47,10 @@ for( my $i=0; $i < @ARGV; $i++ ) {
 }
 
 
-$PURL=~s/%USR%/$usr/;
-$PURL=~s/%PASS%/$pass/;
+$URL=~s/%USR%/$usr/;
+$URL=~s/%PASS%/$pass/;
 
-print "URL: $PURL\n";
+print "URL: $URL\n";
 print "OP: $op\n";
 print "PMID: $pmid\n";
 
@@ -62,8 +62,8 @@ if($op ne "" ) {
     $rns ="http://imex.mbi.ucla.edu/icentral/ws";    
 
     if( $op eq "createPublicationById" ) {        
-        $som=SOAP::Lite->uri($PURL)
-            ->proxy($PURL)
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
             ->default_ns($rns)
             ->outputxml('true')
             ->createPublicationById(SOAP::Data->name("provi" => $prv),
@@ -73,8 +73,8 @@ if($op ne "" ) {
     }
     
     if( $op eq "updatePublicationStatus" && $stat ne "") {   
-        $som=SOAP::Lite->uri($PURL)
-            ->proxy($PURL)
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationStatus( SOAP::Data->type( 'xml' =>
@@ -91,8 +91,8 @@ if($op ne "" ) {
         }
 
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($PURL)
-            ->proxy($PURL)
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
             ->default_ns($rns)
             ->outputxml('true')
             ->getPublicationById( SOAP::Data->type( 'xml' =>

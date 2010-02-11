@@ -188,5 +188,5 @@ create table key (
 );
 
 CREATE INDEX key_1 on key (value);
-CREATE INDEX key_2 on key (keyspace,value);
+CREATE INDEX key_2 on key (keyspace_id,value);
 
