@@ -70,10 +70,8 @@ if($op ne "" ) {
             ->proxy($URL)
             ->default_ns($rns)
             ->outputxml('true')
-            ->createPublicationById(SOAP::Data->name("provi" => $prv),
-                                    SOAP::Data->name("service" => $format),
-                                    SOAP::Data->name("ns" => "pmid"),
-                                    SOAP::Data->name("ac" => $pmid) );
+            ->createPublicationById(SOAP::Data->type( 'xml' =>
+                                                      "<identifier ns='pmid' ac='$pmid' />" ) );
     }
     
     if( $op eq "updatePublicationStatus" && $stat ne "") {   

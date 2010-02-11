@@ -121,10 +121,19 @@ public class IcentralPortImpl implements IcentralPort {
         //-------------------
 
         IcPub icPub = entryManager.getIcPubByPmid( ac );
+        log.info( " icPub=" + icPub);
 
+        if ( icPub == null ) {
+
+            edu.ucla.mbi.util.data.Publication
+                newPub = entryManager.getPubByPmid( ac );
+            if( newPub != null ) {
+                icPub = new IcPub( newPub );
+            }
+        }
         if ( icPub != null ) {
-            
-            if ( icPub.getId() ==  0 ) {
+            log.info( " icPub=" + icPub + " ID=" + icPub.getId());
+            if ( icPub.getId() == null ) {
                 
                 // ACL target control NOTE: implement as needed
                 //---------------------------------------------
