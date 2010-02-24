@@ -1,12 +1,20 @@
-{
-  acl:{
-     journalmgr:{
-      allow:{
+{acl:{
+  pubmgr:{
+    allow:{
+      action:"ANY",
+      user:["ADMIN"],
+      role:["administrator"],
+      group:["USR","ADMIN"]
+    }
+  },
+  journalmgr:{
+    allow:{
+        action:"ANY", 
         user:["ADMIN"],
         role:["administrator"],
         group:["USR","ADMIN"]
-      },
-      operation:{
+    },
+    operation:{
         jadd:{
           allow:{
             user:["ADMIN"],
@@ -81,10 +89,9 @@
             agrp:["DIP_ADMIN"]
           }
         }
-      }
-      
-    },
-    rolemgr:{
+      }  
+  },
+  rolemgr:{
       allow:{
         user:["ADMIN"],
         role:["administrator"],

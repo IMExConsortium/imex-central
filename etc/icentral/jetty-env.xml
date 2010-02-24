@@ -9,7 +9,7 @@
    <New class="org.postgresql.ds.PGSimpleDataSource">
     <Set name="User">${jdbc.user}</Set>
     <Set name="Password">${jdbc.pass}</Set>
-    <Set name="DatabaseName">${jdbc.dbname}</Set>
+    <Set name="DatabaseName">${jdbc.dbnme}</Set>
     <Set name="ServerName">${jdbc.srvname}</Set>
     <Set name="PortNumber">${jdbc.srvport}</Set>
    </New>

@@ -278,7 +278,15 @@ public class EntryManager {
     //--------------------------------------------------------------------------
 
     public IcPub updateIcPubState( int id, int sid ) {
+        
+        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
+        DataState state = wflowContext.getWorkflowDao().getDataState( sid );
 
+        if( pub != null && state != null ) {
+            pub.setState( state );
+            tracContext.getPubDao().savePublication( pub );
+        }
+        
         /*
         if ( wflowContext.getWorkflowDao() == null ||
              !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
@@ -302,9 +310,22 @@ public class EntryManager {
 
         */
 
-        return null;
+        return pub;
     }
 
+
+    //--------------------------------------------------------------------------
+
+    public IcPub  updateIcPubContactMail( int id, String mail ) {
+        
+        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
+        
+        if( pub != null && mail != null ) {
+            pub.setContactEmail( mail );
+            tracContext.getPubDao().savePublication( pub );
+        }
+        return pub;
+    }
 
     //--------------------------------------------------------------------------
 

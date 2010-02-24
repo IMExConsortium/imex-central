@@ -15,12 +15,14 @@
 
        <jdbc.user>dip</jdbc.user>
        <jdbc.pass>444dip444</jdbc.pass>
-       <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral</jdbc.dburl>
-       <jdbc.dbname>icentral</jdbc.dbname>
+       <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral_test</jdbc.dburl>
+       <jdbc.dbnme>icentral_test</jdbc.dbnme>
        <jdbc.srvname>10.1.1.12</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
+
+      <icentral.css>icentral-test.css</icentral.css>
 
       <!-- foo.org: global key -->
       <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
@@ -44,7 +46,7 @@
        <environment.srv>tomcat</environment.srv>
        <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
        <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral_test</jdbc.dburl>
-       <jdbc.dbname>icentral_test</jdbc.dbname>
+       <jdbc.dbnme>icentral_test</jdbc.dbnme>
        <jdbc.srvname>10.1.1.12</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
      </properties>
@@ -61,6 +63,7 @@
      <properties>
        <environment.srv>tomcat</environment.srv>
        <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
+      <icentral.css>icentral-beta.css</icentral.css>
      </properties>
    </profile>
 
@@ -75,6 +78,7 @@
      <properties>
       <environment.srv>tomcat</environment.srv>
       <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
+      <icentral.css>icentral.css</icentral.css>
      </properties>
    </profile>
 
@@ -221,6 +225,7 @@
               <includes>
                 <include>register.jsp</include>
                 <include>footer.jsp</include>
+                <include>icentral-css.jsp</include>
               </includes>
             </resource>
 

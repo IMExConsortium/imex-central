@@ -7,9 +7,6 @@
     - top menu (menu1) dark blue: #446099 #aaaaaa
     - mid menu (menu2) med blue: #99bbee  #cccccc
     - bottom menu (menu3) lt blue: #e3edff #eeeeee
-
-    - LA style:  V - #68359b  Y: #ffcc65  G: #eeeeee
-         beta:   V - #82689c  Y: #ffdd99  G: #eeeeee
 */
 
 /* GENERAL STYLES */
@@ -1132,8 +1129,8 @@ TH.THF {border-style: solid; border-color: black; border-width: 1pt;}
 /* MENU STYLES */
 
 table.mainmenu1 {			/* main (front) page */
-  background-color:#82689c;
-  border-bottom: 4px solid #ffdd99;
+  background-color:#888888;
+  border-bottom: 4px solid #cccccc;
   color: white;
 }
 
@@ -1142,8 +1139,8 @@ table.mainmenubtm {
 }
 
 table.menu1_background {		/* top menu (menu1) */
-  border-top: 5px solid #82689c; 
-  background-color:#82689c;
+  border-top: 5px solid #888888; 
+  background-color:#888888;
 }
 
 td.menu1first, td.menu1, td.menu1select, td.menu1last, td.menu1blank {
@@ -1156,34 +1153,34 @@ td.menu1first, td.menu1, td.menu1select, td.menu1last, td.menu1blank {
 
 td.menu1first {
   padding: 0px 4px;
-  border-right: 1px solid #aaaaaa;
+  border-right: 1px solid #444444;
 }
 
 td.menu1 {
   color: white;
-  border-right: 1px solid #aaaaaa; 
-  border-left: 1px solid #82689c;
+  border-right: 1px solid #444444; 
+  border-left: 1px solid #888888;
 }
 
 td.menu1select {
-  background-color: #ffdd99; 
-  border-right: 1px solid #82689c;
-  border-top: 1px solid #aaaaaa;
-  border-left: 1px solid #ffdd99;
+  background-color:#cccccc; 
+  border-right: 1px solid #888888;
+  border-top: 1px solid #444444;
+  border-left: 1px solid #888888;
 }
 
 td.menu1last {
   color: white;
-  border-left: 1px solid #82689c;
+  border-left: 1px solid #888888;
 }
 
 td.menu1blank {
-  padding: 1px 5px;
+  padding: 3px 5px;
 }
 
 table.menu2_background {		/* mid menu (menu2) */
-  border-top: 5px solid #ffdd99;
-  background-color: #ffdd99;
+  border-top: 5px solid #cccccc;
+  background-color:#cccccc;
 }
 
 td.menu2first, td.menu2, td.menu2select, td.menu2last, td.menu2blank {
@@ -1199,7 +1196,7 @@ td.menu2first {
 
 td.menu2 {
   border-right: 1px solid #999999; 
-  border-left: 1px solid #ffdd99;
+  border-left: 1px solid #cccccc;
 }
 
 td.menu2select {
@@ -1211,7 +1208,7 @@ td.menu2select {
 }
 
 td.menu2last {
-  border-left: 1px solid #ffdd99;
+  border-left: 1px solid #cccccc;
 }
 
 td.menu2blank {
@@ -1236,19 +1233,19 @@ td.menu3first, td.menu3, td.menu3last, td.menu3null {
 
 td.menu3first {
   padding: 0px 12px;
-  border-right: 1px solid #888888;
+  border-right: 1px solid #cccccc;
 }
 
 td.menu3 {
   border-top:    1px solid #eeeeee; 
   border-left:   1px solid white; 
-  border-right:  1px solid #888888;
+  border-right:  1px solid #cccccc;
 }
 
 td.menu3select {
   background-color: white; 
   border-top:    1px solid #444444; 
-  border-left:   1px solid #888888; 
+  border-left:   1px solid #444444; 
   border-right:  1px solid #444444;
 }
 
@@ -1447,6 +1444,7 @@ td.footer {
   white-space: nowrap;
   border-bottom: 1px solid #555555;
 }
+
 
 .aclerror {
   border: 2px solid #dd0000;

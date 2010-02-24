@@ -8,8 +8,9 @@
     - mid menu (menu2) med blue: #99bbee  #cccccc
     - bottom menu (menu3) lt blue: #e3edff #eeeeee
 
-    - LA style:  V - #68359b  Y: #ffcc65  G: #eeeeee
-         beta:   V - #82689c  Y: #ffdd99  G: #eeeeee
+    - LA style:  V - #68359b  Y: #ffcc65
+                 V - #948c9c  Y: #edc677
+                      88858c     #e5cfa1
 */
 
 /* GENERAL STYLES */
@@ -1132,8 +1133,8 @@ TH.THF {border-style: solid; border-color: black; border-width: 1pt;}
 /* MENU STYLES */
 
 table.mainmenu1 {			/* main (front) page */
-  background-color:#82689c;
-  border-bottom: 4px solid #ffdd99;
+  background-color:#88858c;
+  border-bottom: 4px solid #e5cfa1;
   color: white;
 }
 
@@ -1142,8 +1143,8 @@ table.mainmenubtm {
 }
 
 table.menu1_background {		/* top menu (menu1) */
-  border-top: 5px solid #82689c; 
-  background-color:#82689c;
+  border-top: 5px solid #88858c; 
+  background-color:#88858c;
 }
 
 td.menu1first, td.menu1, td.menu1select, td.menu1last, td.menu1blank {
@@ -1162,19 +1163,19 @@ td.menu1first {
 td.menu1 {
   color: white;
   border-right: 1px solid #aaaaaa; 
-  border-left: 1px solid #82689c;
+  border-left: 1px solid #88858c;
 }
 
 td.menu1select {
-  background-color: #ffdd99; 
-  border-right: 1px solid #82689c;
+  background-color: #e5cfa1; 
+  border-right: 1px solid #88858c;
   border-top: 1px solid #aaaaaa;
-  border-left: 1px solid #ffdd99;
+  border-left: 1px solid #e5cfa1;
 }
 
 td.menu1last {
   color: white;
-  border-left: 1px solid #82689c;
+  border-left: 1px solid #88858c;
 }
 
 td.menu1blank {
@@ -1182,8 +1183,8 @@ td.menu1blank {
 }
 
 table.menu2_background {		/* mid menu (menu2) */
-  border-top: 5px solid #ffdd99;
-  background-color: #ffdd99;
+  border-top: 5px solid #e5cfa1;
+  background-color: #e5cfa1;
 }
 
 td.menu2first, td.menu2, td.menu2select, td.menu2last, td.menu2blank {
@@ -1199,7 +1200,7 @@ td.menu2first {
 
 td.menu2 {
   border-right: 1px solid #999999; 
-  border-left: 1px solid #ffdd99;
+  border-left: 1px solid #e5cfa1;
 }
 
 td.menu2select {
@@ -1211,7 +1212,7 @@ td.menu2select {
 }
 
 td.menu2last {
-  border-left: 1px solid #ffdd99;
+  border-left: 1px solid #e5cfa1;
 }
 
 td.menu2blank {
@@ -1457,3 +1458,4 @@ td.footer {
   margin: 2em 5em 0 5em;
   padding: 2em;
 }
+

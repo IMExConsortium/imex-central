@@ -9,6 +9,8 @@
   <script type="text/javascript">
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit, 
                                  {id:"<s:property value="id"/>",imexACC:"<s:property value="pub.imexId"/>"} ) ;
+
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init ) ;
  </script>
 
 </s:if>

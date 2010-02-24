@@ -465,10 +465,33 @@ public class EntryMgrAction extends ManagerSupport {
                     return genIcPubImex( getId(), icpub );
                 }
                 
+
+                //--------------------------------------------------------------
+                
+                if ( key.equalsIgnoreCase( "emup" ) ) {
+
+                    if ( getOpp() == null ) return SUCCESS;
+                    String necm = getOpp().get( "ecm" );
+                    return updateIcPubContactMail( getId(), necm );
+                    
+                }
+
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "esup" ) ) {
+
                     int sid=0;
+                    
+                    if ( getOpp() == null ) return SUCCESS;
+                    String nsid = getOpp().get( "nsn" );
+                    
+                    try {
+                        sid = Integer.parseInt(nsid);
+                    } catch ( Exception ex ) {
+                        // should not happen
+                        return SUCCESS;
+                    }
+                    
                     return updateIcPubState( getId(), sid );
                 }
 
@@ -1170,9 +1193,29 @@ public class EntryMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
     
+    private String updateIcPubContactMail( int id, String mail ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "id=" + id + " mail=" + mail );
+
+        IcPub pub =  entryManager.updateIcPubContactMail( id, mail );
+        if( pub != null ) {
+            this.setPub( pub );
+        }        
+        return SUCCESS;
+    }
+
+    //--------------------------------------------------------------------------
+    
     private String updateIcPubState( int id, int sid) {
         
-        entryManager.updateIcPubState( id, sid );
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "id=" + id + " sid=" + sid );
+
+        IcPub pub =  entryManager.updateIcPubState( id, sid );
+        if( pub != null ) {
+            this.setPub( pub );
+        }        
         return SUCCESS;
 
         /*
