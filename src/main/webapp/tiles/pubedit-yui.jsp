@@ -18,7 +18,7 @@
        <span class="error">
         <s:iterator value="actionErrors">
          <span class="errorMessage"><s:property escape="false" /></span>
-        </s:iterator>B
+        </s:iterator>
        </span>
       </div>
      </td></tr>
@@ -46,7 +46,7 @@
        </i</b>             
       </td> 
       <th width="5%">
-       <s:submit theme="simple" name="op.del" value="DELETE"/>
+       <s:submit theme="simple" name="op.del" value="DELETE" disabled="true" />
       </th>
      </tr>
      <tr>
@@ -76,7 +76,8 @@
        <table border="0" cellspacing="0">
         <tr>
          <td>
-          <s:textfield theme="simple" name="pub.expectedPubDateStr" size="10" maxLength="10"/>
+          <s:hidden name="pub.expectedPubDateStr"/>
+          <s:textfield theme="simple" name="opp.epd" size="10" maxLength="10"/>
          </td>
          <td>
           <button type="button" id="epd-show" title="Show Calendar">
@@ -90,7 +91,8 @@
        <table border="0" cellspacing="0">
         <tr>
          <td>
-          <s:textfield theme="simple" name="pub.pubDateStr" size="10" maxLength="10"/>
+          <s:hidden name="pub.pubDateStr"/>
+          <s:textfield theme="simple" name="opp.pd" size="10" maxLength="10"/>
          </td>
          <td>
           <button type="button" id="pd-show" title="Show Calendar">
@@ -104,7 +106,8 @@
        <table border="0" cellspacing="0">
         <tr>
          <td>
-          <s:textfield theme="simple" name="pub.releaseDateStr" size="10" maxLength="10"/>
+          <s:hidden name="pub.releaseDateStr"/>
+          <s:textfield theme="simple" name="opp.rd" size="10" maxLength="10"/>
          </td>
          <td>
           <button type="button" id="rd-show" title="Show Calendar">
@@ -118,7 +121,7 @@
     </table>
    </td>
    <th  width="10%">
-    <s:submit theme="simple" name="op.pav" value="UPDATE"/>
+    <s:submit theme="simple" name="op.edup" value="UPDATE"/>
    </th>
   </tr>
   <tr>
@@ -171,7 +174,7 @@
     </table>
    </td>
    <th>
-    <s:submit theme="simple" name="op.pav" value="UPDATE"/>
+    <s:submit theme="simple" name="op.pav" value="UPDATE" disabled="true"/>
    </th>
   </tr>
  </table>
@@ -185,7 +188,7 @@
     <s:textfield theme="simple" name="pub.doi" size="32" maxLength="64"/>
    </td>
    <th rowspan="2" width="10%">
-    <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+    <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
    </th>
   </tr>
   <tr>
@@ -202,7 +205,7 @@
               listKey="id" listValue="title" />                  
    </td>
    <th width="10%">
-    <s:submit theme="simple" name="op.jset" value="UPDATE"/>
+    <s:submit theme="simple" name="op.jset" value="UPDATE" disabled="true"/>
    </th>
   </tr>
   <tr>
@@ -211,7 +214,7 @@
           <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
          </td>
          <th rowspan="2">
-          <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+          <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
          </th>
   </tr>
   <tr>
@@ -226,96 +229,95 @@
           <s:textarea name="pub.abstract" value="%{pub.abstract}" cols="100" rows="12"/>
    </td>
    <th>
-    <s:submit theme="simple" name="op.pup" value="UPDATE"/>
+    <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
    </th>
   </tr> 
  </table>
 </div> 
 
-<div>
- <table width="100%" border="1">
-  <tr>
-   <th align="right" width="15%" nowrap>Comments</th>
-   <td>
-    <table width="100%" border="1">
-     <tr>
-      <td align="left">
-        [---------]
-       </td>
-     </tr>
-    </table>
-   </td>
-   <th>&nbsp;</th>
-  </tr>
- </table>
-</div> 
-            
-<div>
- <table width="100%" border="1">
-  <tr>
-   <th width="15%" align="right" nowrap>Owner</th>
-   <td align="left" width="75%">
-    <s:textfield theme="simple" name="pub.owner.login" size="32" maxLength="64"/>
-   </td>
-   <th rowspan="1" width="10%">
-    <s:submit theme="simple" name="op.oup" value="UPDATE"/>
-   </th>
-  </tr>
-  <tr>
-         <th rowspan="2" align="right" nowrap>Admin Users</th>
-         <td colspan="1">
-          <s:iterator value="pub.adminUsers" id="u" status="upos">
-           <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}"/>
-           <s:property value="#u.login"/>
-          </s:iterator>
+       <div>
+        <table width="100%" border="1">
+         <tr>
+          <th align="right" width="15%" nowrap>Comments</th>
+          <td>
+           <table width="100%" border="1">
+            <tr>
+             <td align="left">
+              [---------]
+             </td>
+            </tr>
+           </table>
+          </td>
+          <th width="5%">
+           <s:submit theme="simple" name="op.ecup" value="UPDATE" disabled="true"/>
+          </th>
+         </tr>
+        </table>
+       </div>
+             
+       <div>
+        <table width="100%" border="1">
+         <tr>
+          <th width="15%" align="right" nowrap>Owner</th>
+          <td align="left" width="75%">
+           <s:hidden name="pub.owner.login"/>
+           <s:textfield theme="simple" name="opp.neo" size="32" maxLength="64"/>
+          </td>
+          <th rowspan="1" width="10%">
+           <s:submit theme="simple" name="op.eoup" value="UPDATE"/>
+          </th>
+         </tr>
+         <tr>
+          <th rowspan="2" align="right" nowrap>Admin Users</th>
+           <td colspan="1">
+            <s:iterator value="pub.adminUsers" id="u" status="upos">
+             <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}"/>
+             <s:property value="#u.login"/>
+            </s:iterator>
+           </td>
+           <th>
+            <s:submit theme="simple" name="op.eaudel" value="DROP"/>
+           </th>
+          </tr>
+          <tr>
+           <td colspan="1">
+            <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
+           </td>
+           <th>
+            <s:submit theme="simple" name="op.eauadd" value="ADD"/>
+           </th>
+          </tr>
+           <tr>
+            <th rowspan="2" align="right" nowrap>Admin Groups</th>
+            <td colspan="1">
+             <s:iterator value="pub.adminGroups" id="g" status="gpos">
+              <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}"/>
+              <s:property value="#g.label"/>
+             </s:iterator>
+            </td>
+            <th>
+             <s:submit theme="simple" name="op.eagdel" value="DROP"/>
+            </th>
+           </tr>
+           <tr>
+            <td colspan="1">
+             <s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
+                       list="groupAll" listKey="id" listValue="label" />  
+            </td>
+            <th>
+             <s:submit theme="simple" name="op.eagadd" value="ADD"/>
+            </th>
+           </tr>
+          </table>
          </td>
-        <th>
-          <s:submit theme="simple" name="op.eaudel" value="DROP"/>
-         </th>
-        </tr>
-        <tr>
-         <td colspan="1">
-          <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
-         </td>
-         <th>
-          <s:submit theme="simple" name="op.eauadd" value="ADD"/>
-         </th>
-        </tr>
-
-        <tr>
-         <th rowspan="2" align="right" nowrap>Admin Groups</th>
-         <td colspan="1">
-          <s:iterator value="pub.adminGroups" id="g" status="gpos">
-           <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}"/>
-           <s:property value="#g.label"/>
-          </s:iterator>
-         </td>
-        <th>
-          <s:submit theme="simple" name="op.eagdel" value="DROP"/>
-         </th>
-        </tr>
-        <tr>
-         <td colspan="1">
-           <s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
-                     list="groupAll" listKey="id" listValue="label" />  
-         </td>
-         <th>
-          <s:submit theme="simple" name="op.eagadd" value="ADD"/>
-         </th>
-        </tr>
-        
-       </table>
-      </td>
-      <td nowrap>&nbsp;</td>
-     </tr> 
-
-    </s:form>
-   </table>  
-</div> 
-          </div> 
-         </div> 
-       </div>      
-     
+         <td nowrap>&nbsp;</td>
+         </tr> 
+        </s:form>
+       </table>  
+      </div> 
+     </div> 
+    </div> 
+   </div>      
   </td>
  </tr>
 </table>

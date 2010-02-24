@@ -1,24 +1,42 @@
 YAHOO.namespace("imex");
 
+
+YAHOO.imex.util = {
+  copyField : function( inField, outField ) {
+        
+        var h = YAHOO.util.Dom.get( inField );
+        if(h) {
+            var opp = YAHOO.util.Dom.get( outField );
+            if( opp ) {
+                opp.value = h.value; 
+            }
+        }
+  }
+};
+
 YAHOO.imex.calendar = {
     calDialog : null,
     cal : null, 
     dtf : null, 
     
     init : function(e, obj ) {
-        
+
+        YAHOO.imex.util.copyField( "pubedit_pub_expectedPubDateStr", "pubedit_opp_epd" );        
+        YAHOO.imex.util.copyField( "pubedit_pub_pubDateStr", "pubedit_opp_pd" );
+        YAHOO.imex.util.copyField( "pubedit_pub_releaseDateStr", "pubedit_opp_rd" );
+
         YAHOO.util.Event.on( YAHOO.util.Dom.get( "epd-show"), "click", 
                              YAHOO.imex.calendar.open, 
                              { button:"epd-show", 
-                               date:"pubedit_pub_expectedPubDateStr"});
+                               date:"pubedit_opp_epd"});
         YAHOO.util.Event.on( YAHOO.util.Dom.get( "pd-show"), "click", 
                              YAHOO.imex.calendar.open, 
                              { button:"pd-show", 
-                             date:"pubedit_pub_pubDateStr"} );
+                             date:"pubedit_opp_pd"} );
         YAHOO.util.Event.on( YAHOO.util.Dom.get( "rd-show"), "click", 
                              YAHOO.imex.calendar.open, 
                              { button:"rd-show",
-                               date:"pubedit_pub_releaseDateStr"});
+                               date:"pubedit_opp_rd"});
     },
 
     close : function(e) {
@@ -26,7 +44,6 @@ YAHOO.imex.calendar = {
         YAHOO.imex.calendar.dtf = null;
     },
 
-    
     reset : function(e) {
         // Reset the current calendar page to the select date, or 
         // to today if nothing is selected.
@@ -41,6 +58,16 @@ YAHOO.imex.calendar = {
         
         YAHOO.imex.calendar.cal.cfg.setProperty( "pagedate", resetDate );
         YAHOO.imex.calendar.cal.render();
+    },
+
+    clear : function(e) {
+        YAHOO.imex.calendar.cal.deselectAll();
+        YAHOO.imex.calendar.cal.render();        
+        if( YAHOO.imex.calendar.dtf ) {
+            YAHOO.imex.calendar.dtf.value = "0000/00/00";
+        }
+        YAHOO.imex.calendar.calDialog.hide();
+        YAHOO.imex.calendar.dtf = null;
     },
 
     select : function( e, par ) {        
@@ -61,7 +88,7 @@ YAHOO.imex.calendar = {
             
             YAHOO.imex.calendar.dtf.value = yStr  + "/" + mStr + "/" + dStr;
         } else {
-            YAHOO.imex.calendar.dtf.value = "0000-00-00";
+            YAHOO.imex.calendar.dtf.value = "0000/00/00";
         }
         YAHOO.imex.calendar.calDialog.hide();
         YAHOO.imex.calendar.dtf = null;
@@ -83,9 +110,9 @@ YAHOO.imex.calendar = {
                     "container", 
                     {visible:false,
                      context:[btn, "tl", "bl"],
-                     //buttons:[ { text:"Reset", isDefault:true,
-                     //            handler: YAHOO.imex.calendar.reset }, 
-                     //          { text:"Close", 
+                     buttons:[ { text:"Clear",
+                                 handler: YAHOO.imex.calendar.clear }], 
+                     //          { text:"Close", isDefault:true,
                      //            handler: YAHOO.imex.calendar.close }],
                      draggable:false,
                      close:true
@@ -107,7 +134,6 @@ YAHOO.imex.calendar = {
                     "context", [btn,"tl", "bl"] );
             }
 
-            
             if (!YAHOO.imex.calendar.cal ) {
             
                 YAHOO.imex.calendar.cal = new YAHOO.widget.Calendar(
@@ -162,6 +188,8 @@ YAHOO.imex.calendar = {
 };
 
 YAHOO.imex.pubedit = function( e, obj ) {
+
+    YAHOO.imex.util.copyField( "pubedit_pub_owner_login", "pubedit_opp_neo" );             
   
     var onSelectedMenuItemChange = function ( event ) {
         var oMenuItem = event.newValue;
