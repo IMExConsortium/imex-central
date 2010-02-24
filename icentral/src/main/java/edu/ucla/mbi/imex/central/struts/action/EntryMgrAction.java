@@ -14,6 +14,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 
 import java.util.*;
+import java.util.regex.*;
+import java.util.GregorianCalendar;
+import java.util.Calendar;
 
 import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.dao.*;
@@ -465,17 +468,22 @@ public class EntryMgrAction extends ManagerSupport {
                     return genIcPubImex( getId(), icpub );
                 }
                 
-
                 //--------------------------------------------------------------
                 
-                if ( key.equalsIgnoreCase( "emup" ) ) {
+                if ( key.equalsIgnoreCase( "edup" ) ) {
 
                     if ( getOpp() == null ) return SUCCESS;
-                    String necm = getOpp().get( "ecm" );
-                    return updateIcPubContactMail( getId(), necm );
                     
-                }
+                    // parse dates
+                    //------------
 
+                    GregorianCalendar epGD = parseDate( getOpp().get( "epd" ) );
+                    GregorianCalendar pGD = parseDate( getOpp().get( "pd" ) );
+                    GregorianCalendar rGD = parseDate( getOpp().get( "rd" ) );
+                    
+                    return updateIcPubDates( getId(), epGD, pGD, rGD );
+                }
+                
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "esup" ) ) {
@@ -556,8 +564,9 @@ public class EntryMgrAction extends ManagerSupport {
                 
                 if ( key.equalsIgnoreCase( "eagdel" ) ) {
                     if ( getOpp() == null ) return SUCCESS;
-                    
-                    String gdel = getOpp().get( "aegdel" );
+
+                    String gdel = getOpp().get( "eagdel" );
+                    log.info("eagdel=" + gdel);
 
                     if ( getId() > 0 && gdel != null ) {
                         try {
@@ -1205,6 +1214,18 @@ public class EntryMgrAction extends ManagerSupport {
         return SUCCESS;
     }
 
+
+    private String updateIcPubDates( int  id, GregorianCalendar epd, 
+                                     GregorianCalendar pd, 
+                                     GregorianCalendar rd ) {
+        
+        IcPub pub = entryManager.updateIcPubDates( id, epd, pd, rd );
+        if ( pub != null ) {
+            this.setPub( pub );
+        }
+        return SUCCESS;
+    }
+
     //--------------------------------------------------------------------------
     
     private String updateIcPubState( int id, int sid) {
@@ -1528,5 +1549,38 @@ public class EntryMgrAction extends ManagerSupport {
             rl.add( r );
         }
         return JSON;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private GregorianCalendar parseDate( String date ) {
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "parseDate: " + date );
+        
+        // FORMAT: 2004/[0]3/12
+        //----------------------
+
+        try{
+            Pattern p = Pattern.compile("(\\d{4}?)/(\\d\\d?)/(\\d\\d?)");
+            Matcher m = p.matcher(date);
+            if (  m.matches() ) {
+
+                String year = m.group(1);
+                String month = m.group(2);
+                String day = m.group(3);
+                
+                log.info( "Y=" + year + " M=" + month + " D=" + day );
+                
+                GregorianCalendar dateGC = 
+                    new GregorianCalendar( Integer.parseInt( year ),
+                                           Integer.parseInt( month )-1,
+                                           Integer.parseInt( day ) );
+                
+                return dateGC;                
+            }
+        } catch( Exception ex ) {
+            // ignore == parse to null
+        }
+        return null;        
     }
 }

@@ -14,6 +14,9 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 import java.io.*;
+
+import java.util.GregorianCalendar;
+import java.util.Calendar;
        
 import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.dao.*;
@@ -275,6 +278,24 @@ public class EntryManager {
         return pub;
     }
 
+    //--------------------------------------------------------------------------
+
+    public IcPub updateIcPubDates( int id, GregorianCalendar epd, 
+                                   GregorianCalendar pd, 
+                                   GregorianCalendar rd ) {
+        
+        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
+
+        if( pub != null ) {
+            pub.setExpectedPubDate( epd );
+            pub.setPubDate( pd );
+            pub.setReleaseDate( rd );
+            
+            tracContext.getPubDao().savePublication( pub );
+        }
+        return pub;
+    }
+    
     //--------------------------------------------------------------------------
 
     public IcPub updateIcPubState( int id, int sid ) {
