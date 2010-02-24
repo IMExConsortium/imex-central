@@ -13,7 +13,7 @@
  </title>
  <t:insertDefinition name="htmlhead"/>
  </head>
- <body>
+ <body class="yui-skin-sam">
 
   <center>
    <t:insertDefinition name="header"/>

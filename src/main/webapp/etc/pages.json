@@ -105,7 +105,6 @@
       guide:{
         active:true,
         title:"DIP Data",
-        menudef:"0:2",
         menusel:"3:4:0",
         viewtype:"file-html",
         viewpath:"/pages/guide/contents.html"
@@ -113,7 +112,7 @@
       tools:{
         active:true,
         title:"DIP Tools",
-        menudef:"0:1",
+       
         menusel:"2:0",
         viewtype:"file-html",
         viewpath:"/pages/tools.html"

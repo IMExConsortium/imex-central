@@ -3,11 +3,11 @@
 
 <script type="text/javascript">
   YAHOO.util.Event.addListener(window, "load", function() {
-    var myTabs = new YAHOO.widget.TabView("pubTab"); 
+    var myTabs = new YAHOO.widget.TabView("pubTab");
   });
 </script>
 
-<table width="100%">
+<table width="100%" class="yui-skin-sam">
  <tr>
   <td align="left">
    <br/>
@@ -18,7 +18,7 @@
        <span class="error">
         <s:iterator value="actionErrors">
          <span class="errorMessage"><s:property escape="false" /></span>
-        </s:iterator>
+        </s:iterator>B
        </span>
       </div>
      </td></tr>
@@ -73,13 +73,46 @@
      </tr>
      <tr> 
       <td align="center">
-       <s:textfield theme="simple" name="pub.expectedPubDateStr" size="10" maxLength="10"/>
+       <table border="0" cellspacing="0">
+        <tr>
+         <td>
+          <s:textfield theme="simple" name="pub.expectedPubDateStr" size="10" maxLength="10"/>
+         </td>
+         <td>
+          <button type="button" id="epd-show" title="Show Calendar">
+           <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" >
+          </button>
+         </td>
+        </tr>
+       </table>
       </td>
       <td align="center">
-       <s:textfield theme="simple" name="pub.pubDateStr" size="10" maxLength="10"/>
+       <table border="0" cellspacing="0">
+        <tr>
+         <td>
+          <s:textfield theme="simple" name="pub.pubDateStr" size="10" maxLength="10"/>
+         </td>
+         <td>
+          <button type="button" id="pd-show" title="Show Calendar">
+           <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" >
+          </button>
+         </td>
+        </tr>
+       </table>
       </td>
       <td align="center">
-       <s:textfield theme="simple" name="pub.releaseDateStr" size="10" maxLength="10"/>
+       <table border="0" cellspacing="0">
+        <tr>
+         <td>
+          <s:textfield theme="simple" name="pub.releaseDateStr" size="10" maxLength="10"/>
+         </td>
+         <td>
+          <button type="button" id="rd-show" title="Show Calendar">
+           <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" >
+          </button>
+        </td>
+        </tr>
+       </table>
       </td>
      </tr>
     </table>
@@ -91,10 +124,10 @@
   <tr>
    <th align="right" nowrap>Contact<br/>Email</th>
    <td>
-    <s:textfield theme="simple" name="pub.contactEmail" size="32" maxLength="32"/>
+    <s:textfield theme="simple" name="opp.ecm" size="32" maxLength="32"/>
    </td>
    <th>
-    <s:submit theme="simple" name="op.pcm" value="UPDATE"/>
+    <s:submit theme="simple" name="op.emup" value="UPDATE"/>
    </th>
   </tr>
   <tr>
@@ -115,7 +148,8 @@
     </table>
    </td>
    <th>
-    <s:submit theme="simple" name="op.pav" value="UPDATE"/>
+    <s:hidden id="nsn" name="opp.nsn" value="%{pub.state.name}"/>
+    <s:submit theme="simple" name="op.esup" value="UPDATE"/>
    </th>
   </tr>
   <tr>
@@ -189,7 +223,7 @@
   <tr>
    <th align="right" nowrap>Abstract</th>
    <td width="75%" nowrap>
-          <s:textarea name="role.comments" value="%{pub.abstract}" cols="100" rows="12"/>
+          <s:textarea name="pub.abstract" value="%{pub.abstract}" cols="100" rows="12"/>
    </td>
    <th>
     <s:submit theme="simple" name="op.pup" value="UPDATE"/>
