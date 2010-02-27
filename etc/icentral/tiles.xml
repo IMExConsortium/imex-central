@@ -126,7 +126,7 @@
 
  <definition name="journalmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Journal Manager" />
-  <put-attribute name="body" value="/tiles/journalmgr.jsp"/>
+  <put-attribute name="body" value="/tiles/journalmgr-yui.jsp"/>
  </definition>
  <definition name="journaledit" template="/tiles/journaledit.jsp"/>
 
@@ -140,6 +140,11 @@
  <definition name="acloperror" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ACL Violation" />
   <put-attribute name="body" value="/tiles/acloperror.jsp"/>
+ </definition>
+
+ <definition name="acltgterror" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ACL Violation" />
+  <put-attribute name="body" value="/tiles/acltargeterror.jsp"/>
  </definition>
 
 </tiles-definitions>
