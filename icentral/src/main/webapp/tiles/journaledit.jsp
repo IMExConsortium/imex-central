@@ -29,7 +29,7 @@
       <th nowrap>JID:<s:property value="journal.id"/></th>
       <th align="left"  width="95%" nowrap><s:property value="journal.title"/></th> 
       <th>
-        <s:submit theme="simple" name="op.del" value="DELETE"/>
+        <s:submit theme="simple" name="op.del" value="DELETE" disabled="true"/>
       </th>
      </tr>
      <tr>

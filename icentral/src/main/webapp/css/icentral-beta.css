@@ -10,7 +10,7 @@
 
     - LA style:  V - #68359b  Y: #ffcc65
                  V - #948c9c  Y: #edc677
-                      88858c     #e5cfa1
+                     #7c708c     #e5cfa1
 */
 
 /* GENERAL STYLES */
@@ -1133,7 +1133,7 @@ TH.THF {border-style: solid; border-color: black; border-width: 1pt;}
 /* MENU STYLES */
 
 table.mainmenu1 {			/* main (front) page */
-  background-color:#88858c;
+  background-color:#7c708c;
   border-bottom: 4px solid #e5cfa1;
   color: white;
 }
@@ -1143,8 +1143,8 @@ table.mainmenubtm {
 }
 
 table.menu1_background {		/* top menu (menu1) */
-  border-top: 5px solid #88858c; 
-  background-color:#88858c;
+  border-top: 5px solid #7c708c; 
+  background-color:#7c708c;
 }
 
 td.menu1first, td.menu1, td.menu1select, td.menu1last, td.menu1blank {
@@ -1163,19 +1163,19 @@ td.menu1first {
 td.menu1 {
   color: white;
   border-right: 1px solid #aaaaaa; 
-  border-left: 1px solid #88858c;
+  border-left: 1px solid #7c708c;
 }
 
 td.menu1select {
   background-color: #e5cfa1; 
-  border-right: 1px solid #88858c;
+  border-right: 1px solid #7c708c;
   border-top: 1px solid #aaaaaa;
   border-left: 1px solid #e5cfa1;
 }
 
 td.menu1last {
   color: white;
-  border-left: 1px solid #88858c;
+  border-left: 1px solid #7c708c;
 }
 
 td.menu1blank {
