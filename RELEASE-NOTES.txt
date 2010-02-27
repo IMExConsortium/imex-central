@@ -10,3 +10,18 @@ $Id$
  - added functional add/drop state and transition actions to workflow editors
    
 
+2010/02/27 BETA-0.71
+
+ - key assigner and initial web services framework added
+ - ACL system updates
+ - GUI updates:
+    - publication editor actions added: 
+         - availability status, 
+         - contact email 
+         - curation status
+         - key assigner
+    - journal manager converted to YUI tables
+ - CSS modified in order to visually distinguish between test/beta/production 
+   sites 
+ - pom.xml modifications 
+
