@@ -1,21 +1,20 @@
 {acl:{
   pubmgr:{
-    allow:{
-      action:"ANY",
-      user:["ADMIN"],
-      role:["administrator"],
-      group:["USR","ADMIN"]
+    order:["operation"],
+    operation:{
+      ppg:{
+          order:["ANY"]
+      }
     }
   },
   journalmgr:{
-    allow:{
-        action:"ANY", 
-        user:["ADMIN"],
-        role:["administrator"],
-        group:["USR","ADMIN"]
-    },
+    order:[ "operation" ],
     operation:{
+        jpg:{
+          order:["ANY"]          
+        }, 
         jadd:{
+          order:["ANY","allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],

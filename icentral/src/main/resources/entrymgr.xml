@@ -107,6 +107,7 @@
      <result name="success" type="tiles">pubmgr</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
      <result name="input" type="tiles">pubmgr</result>
      <result name="pubedit" type="tiles">pubmgr</result>  
      <result name="pubnew" type="redirectAction">
@@ -134,6 +135,7 @@
      <result name="success" type="tiles">pubmgr</result>     
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
      <result name="input" type="tiles">pubmgr</result>     
      <result name="pubedit" type="tiles">pubmgr</result>
      <result name="pubnew" type="tiles">pubnew</result>
@@ -154,6 +156,7 @@
      <result name="success" type="tiles">journalmgr</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
      <result name="input" type="tiles">journalmgr</result>
      <result name="jedit" type="tiles">journalmgr</result>
      <result name="json" type="json">
@@ -171,6 +174,7 @@
      <result name="success" type="tiles">journalmgr</result>  
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
      <result name="input" type="tiles">journalmgr</result> 
      <result name="jedit" type="tiles">journalmgr</result>
           

@@ -1,30 +1,23 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-<h1>Publication Manager</h1>
+<h1>Journal Manager</h1>
+
 <s:if test="id > 0">
-
- <script src="js/pubedit-yui.js" type="text/javascript"></script>
- <t:insertDefinition name="pubedit"/>
-  <script type="text/javascript">
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit, 
-                                 {id:"<s:property value="id"/>",imexACC:"<s:property value="pub.imexId"/>"} ) ;
-
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init ) ;
- </script>
-
+ <t:insertDefinition name="journaledit"/>
+ <br/><br/>
 </s:if>
+
 <s:else>
+ <script src="js/journalmgr-yui.js" type="text/javascript"></script>
 
- <script src="js/pubmgr-yui.js" type="text/javascript"></script>
-
- <div class="yui-skin-sam" width="100%">
+  <div class="yui-skin-sam" width="100%">
   <center>
    <table width="99%">
     <tr>
      <td><div id="dt-pag-nav"></div></td>
      <td width="95%">&nbsp;</td>
-     <th width="1%">Filter:</th>
+<%-- <th width="1%">Filter:</th>
      <td class="filter-container"><label id="state-button-container"/></td>
      <th width="1%">and</th>
      <td class="filter-container"><label id="partner-button-container"/></td>
@@ -34,20 +27,20 @@
        <input id="myEditorInput" type="text"> 
        <div id="myEditorContainer"></div> 
       </div> 
-     </td>
+     </td> --%>
     </tr> 
    </table>
   </center>    
-  <div id="pubtab" width="100%" class="pubtab"></div>
+  <div id="joutab" width="100%" class="joutab"></div>
   <table width="100%" cellpadding="5">
-   <s:form theme="simple" action="pubmgr">
+   <s:form theme="simple" action="journalmgr">
     <tr>
      <td align="center" width="5%">
       <%-- <s:submit theme="simple" name="op.ldel" value="DROP" /> --%>
      </td>
      <td align="right">
-      <b>PMID:</b> 
-      <s:textfield theme="simple" name="pub.pmid" size="24" maxLength="64"/>
+      <b>NLMID:</b> 
+      <s:textfield theme="simple" name="journal.nlmid" size="24" maxLength="64"/>
      </td>
      <td colspan="1" align="center" width="5%">
       <s:submit theme="simple" name="op.esrc" value="Search" />
@@ -55,11 +48,10 @@
     </tr>
    </s:form>
   </table>
-  <br/><br/><br/><br/><br/>
  </div>
- 
- <script type="text/javascript">
-  YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubmgr ) ;
- </script>
 
+ <br/><br/> 
+ <script type="text/javascript">
+  YAHOO.util.Event.addListener( window, "load", YAHOO.imex.journalmgr ) ;
+ </script>
 </s:else>
