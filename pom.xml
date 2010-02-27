@@ -50,6 +50,9 @@
        <jdbc.srvname>10.1.1.12</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
      </properties>
+     <build>
+      <finalName>icentraltest</finalName>
+     </build>
    </profile>
 
    <profile>

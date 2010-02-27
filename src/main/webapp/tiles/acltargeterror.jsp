@@ -4,7 +4,7 @@
  <table border="0">
   <tr>
    <td class="aclerror" nowrap>
-    Access Control List Violation (page).<br/>
+    Access Control List Violation (target).<br/>
     <font size="-1.5"><i>If you think you have got here in error please
     <a href="feedback">contact us</a>.</i></font>
    </td>

@@ -58,7 +58,7 @@
        link:"page?id=admin",
        active:true,
        menu:[                   
-         {label:"Users",
+         {label:"Accounts",
           link:"page?id=usermgr",
           active:true,
           menu:[

@@ -1,15 +1,15 @@
-#pubtab table {
+#joutab table {
    width: 100%;
 }
 
-.pubtab th {
+.joutab th {
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
      
 }
 
-#pubtab .yui-dt-label .yui-dt-sortable {
+#joutab .yui-dt-label .yui-dt-sortable {
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
@@ -52,7 +52,7 @@
     white-space: nowrap;
 }
 
-.yui-skin-sam  .yui-dt-odd th.yui-table-inner-top {
+.yui-skin-sam .yui-dt-odd th.yui-table-inner-top {
     width: 5%;
     padding: 3px; 
     border-style: none none solid none;
@@ -63,14 +63,14 @@
     white-space: nowrap;
 }
 
-.yui-skin-sam  td.yui-table-inner-top {
+.yui-skin-sam td.yui-table-inner-top {
     padding: 3px;
     border-style: none none solid none;
     border-width: 0 0 thin 0; 
     border-color: #BBBBBB;
 }
 
-.yui-skin-sam  tr.yui-dt-first  td.yui-table-inner-top {
+.yui-skin-sam tr.yui-dt-first  td.yui-table-inner-top {
     padding: 3px;
     border-style: none none solid none;
     border-width: 0 0 thin 0;
@@ -78,7 +78,7 @@
 
 }
 
-.yui-skin-sam  .yui-dt-even th.yui-table-inner-bottom {
+.yui-skin-sam .yui-dt-even th.yui-table-inner-bottom {
     padding: 3px;
     border-style: none;
     border-width: 0; 
@@ -88,7 +88,7 @@
     white-space: nowrap;
 }
 
-.yui-skin-sam  .yui-dt-odd th.yui-table-inner-bottom {
+.yui-skin-sam .yui-dt-odd th.yui-table-inner-bottom {
     padding: 3px;
     border-style: none;
     border-width: 0; 
@@ -106,7 +106,7 @@
     white-space: nowrap;
 }
 
-.yui-skin-sam  td.yui-table-inner-bottom {
+.yui-skin-sam td.yui-table-inner-bottom {
     padding: 3px;
     border-style: none;
     border-width: 0; 
@@ -242,17 +242,16 @@
         height:30em;
     }
 
-#pubtab .checkbox{
+#joutab .checkbox{
   width:50px;
-  text-align: center;
+  text-align: center; 
 }
 
-#pubtab .detail {
+#joutab .detail {
   width:6em;
-  text-align: center;
+  text-align: center; 
 }
 
-#pubtab .pmid {
-  width:8em;
+#joutab .nlmid {
+  width:8em; 
 }
-

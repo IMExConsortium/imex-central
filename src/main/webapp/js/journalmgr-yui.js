@@ -1,7 +1,7 @@
 YAHOO.namespace("imex");
 
-YAHOO.imex.pubmgr = function() {
-    
+YAHOO.imex.journalmgr = function(filter) {
+       
     var onSelectedMenuItemChange = function (event) {
         var oMenuItem = event.newValue;
         var text = oMenuItem.cfg.getProperty("text");
@@ -19,69 +19,68 @@ YAHOO.imex.pubmgr = function() {
 
     // status filter 
     //-------------
-
-    var stateSel = [ 
-        { text: "---Status---", value: "" }, 
-        { text: "---ANY---", value: "" }, 
-        { text: "NEW", value: "NEW" }, 
-        { text: "Reserved", value: "RESERVED" },
-        { text: "Incomplete", value: "INCOMPLETE" },        
-        { text: "Processing", value: "INPROGRESS" },
-        { text: "Discarded", value: "DISCARDED" },
-        { text: "Released", value: "RELEASED" } 
-    ]; 
+    if( filter ) {
         
-    var stateButton = new YAHOO.widget.Button(
-        { id: "state-button",  
-          name: "state-button", 
-          label: "<em class=\"yui-button-label\">---Status---</em>", 
-          type: "menu",   
-          menu: stateSel,  
-          container: "state-button-container" }); 
+        var stateSel = [ 
+            { text: "---Status---", value: "" }, 
+            { text: "---ANY---", value: "" }, 
+            { text: "NEW", value: "NEW" }, 
+            { text: "Reserved", value: "reserved" },
+            { text: "Processed", value: "processed" },
+            { text: "Released", value: "released" } 
+        ]; 
+        
+        var stateButton = new YAHOO.widget.Button(
+            { id: "state-button",  
+              name: "state-button", 
+              label: "<em class=\"yui-button-label\">---Status---</em>", 
+              type: "menu",   
+              menu: stateSel,  
+              container: "state-button-container" }); 
     
-    stateButton.my = { items: stateSel, value: "" };
-    stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+        stateButton.my = { items: stateSel, value: "" };
+        stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
 
 
-    // partner filter
-    //---------------
-    
-    var partnerSel = [
-        { text: "---Imex Partner---", value: "" },
-        { text: "---ANY---", value: "" },
-        { text: "DIP", value: "DIP" },
-        { text: "IntAct", value: "IntAct" },
-        { text: "MINT", value: "MINT" },
-        { text: "MPIDB", value: "MPIDB" }
-    ];
-    
-    var partnerButton = new YAHOO.widget.Button(
-        { id: "partner-button",
-          name: "partner-button",
-          label: "<em class=\"yui-button-label\">---Imex Partner---</em>",
-          type: "menu",
-          menu: partnerSel,
-          container: "partner-button-container" });
-    
-    partnerButton.my = { items: partnerSel, value: "" };
-    
-    partnerButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+        // partner filter
+        //---------------
+        
+        var partnerSel = [
+            { text: "---Imex Partner---", value: "" },
+            { text: "---ANY---", value: "" },
+            { text: "DIP", value: "DIP" },
+            { text: "IntAct", value: "IntAct" },
+            { text: "MINT", value: "MINT" },
+            { text: "MPIDB", value: "MPIDB" }
+        ];
+        
+        var partnerButton = new YAHOO.widget.Button(
+            { id: "partner-button",
+              name: "partner-button",
+              label: "<em class=\"yui-button-label\">---Imex Partner---</em>",
+              type: "menu",
+              menu: partnerSel,
+              container: "partner-button-container" });
+        
+        partnerButton.my = { items: partnerSel, value: "" };
+        
+        partnerButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
 
 
-    // editor filter
-    //--------------
+        // editor filter
+        //--------------
     
-    var editorArray = ["lukasz", "skerrien", "hhm", "doe_99"]; 
-    var oACS = new YAHOO.util.LocalDataSource( editorArray );  
-    oACS.responseSchema = {fields : ["editor"]};
-    
-    var acEditor = new YAHOO.widget.AutoComplete(
-        "myEditorInput", "myEditorContainer", oACS);
-    acEditor.my = {};
-    
-    acEditor.prehighlightClassName = "yui-ac-prehighlight"; 
-    acEditor.useShadow = true; 
-    
+        var editorArray = ["lukasz", "skerrien", "hhm", "doe_99"]; 
+        var oACS = new YAHOO.util.LocalDataSource( editorArray );  
+        oACS.responseSchema = {fields : ["editor"]};
+        
+        var acEditor = new YAHOO.widget.AutoComplete(
+            "myEditorInput", "myEditorContainer", oACS);
+        acEditor.my = {};
+        
+        acEditor.prehighlightClassName = "yui-ac-prehighlight"; 
+        acEditor.useShadow = true; 
+    }
     // custom formatters
     //------------------
 
@@ -99,7 +98,7 @@ YAHOO.imex.pubmgr = function() {
     
     this.myElinkFormatter = function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-        elLiner.innerHTML = '<a href="pubmgr?id=' + 
+        elLiner.innerHTML = '<a href="journalmgr?id=' + 
             oRecord.getData( "id" ) + 
             '">details</a>';
     };
@@ -125,12 +124,12 @@ YAHOO.imex.pubmgr = function() {
     // create datasource 
     //------------------
 
-    var myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=44&"); 
+    var myDataSource = new YAHOO.util.DataSource("journalmgr?op.jpg=44&"); 
     
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
     myDataSource.responseSchema = { 
         resultsList: "records.records", 
-        fields: ["id","author","title","pmid","imexId","owner","state","date","time"], 
+        fields: ["id","nlmid","title"], 
         metaFields: { 
             totalRecords: "records.totalRecords", 
             paginationRecordOffset : "records.startIndex", 
@@ -151,26 +150,12 @@ YAHOO.imex.pubmgr = function() {
         });
     
     var myColumnDefs = [
-        //{ key:"del",label:"",  sortable:false, resizeable:false,
-        //  formatter:"checkbox", className:"checkbox" },
-        { key:"pub", label:"Publication", sortable:true, resizeable:true, 
-          formatter:"publication", maxAutoWidth:1000 },
-        { key:"pmid", label:"PMID", sortable:true, resizeable:true, 
-          formatter:"center", className:"pmid" },
-        { key:"imexId", label:"ImexId", sortable:true, resizeable:true, 
-          formatter:"center" },
-        { key:"state", label:"Status", sortable:true, resizeable:false, 
-          formatter:"center" },
-        { label:"Submission", 
-          children:[
-             { key:"date",  label:"Date",sortable:true, resizeable:false, 
-               formatter:"crt" },
-             { key:"owner", label:"Owner",sortable:true, resizeable:false, 
-               formatter:"center" }
-          ]
-        },
-        { key:"detail", label:"",sortable:false, resizeable:true, 
-          formatter:"elink", className:"detail" }
+        //{ key:"del",label:"", className:"checkbox", sortable:false, resizeable:false, maxAutoWidth:50,
+        //  formatter:"checkbox", hidden:true },
+        { key:"title", label:"Journal Title", sortable:true, resizeable:false },
+        { key:"nlmid", label:"NLMID", sortable:true, resizeable:false, className:"nlmid" },
+        { key:"detail", label:"",sortable:false, resizeable:false, 
+          formatter:"elink" , className:"detail" }
     ];
     
     var myRequestBuilder = function( oState, oSelf ) {
@@ -186,11 +171,18 @@ YAHOO.imex.pubmgr = function() {
         
         // filters
         //--------
+        var sfVal ="";
+        var pfVal ="";
+        var efVal ="";
 
-        var sfVal = oSelf.my.stateFlt.my.value;
-        var pfVal = oSelf.my.partnerFlt.my.value;
-        var efVal = oSelf.my.editorFlt.getInputEl().value;
-
+        try {
+            sfVal = oSelf.my.stateFlt.my.value;
+            pfVal = oSelf.my.partnerFlt.my.value;
+            efVal = oSelf.my.editorFlt.getInputEl().value;
+        } catch (x) {
+            // ignore
+        }
+        
         var req = "opp.skey=" + sort +
             "&opp.sfv=" + sfVal +
             "&opp.pfv=" + pfVal +
@@ -199,7 +191,7 @@ YAHOO.imex.pubmgr = function() {
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
 
-        //        alert("request: " + req);
+        //alert("request: " + req);
         
         // build custom request
         //---------------------
@@ -238,7 +230,7 @@ YAHOO.imex.pubmgr = function() {
     var myConfig = {
         paginator : new YAHOO.widget.Paginator(
             { containers: ["dt-pag-nav"], 
-              rowsPerPage: 25, 
+              rowsPerPage: 10, 
               template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE, 
               rowsPerPageOptions: [5,10,25,50,100], 
               pageLinks: 5 
@@ -252,7 +244,7 @@ YAHOO.imex.pubmgr = function() {
     // Instantiate DataTable
     
     var myDataTable = new YAHOO.widget.DataTable(
-        "pubtab", myColumnDefs, myDataSource, myConfig
+        "joutab", myColumnDefs, myDataSource, myConfig
     );
     
     myDataTable.my = { stateFlt: stateButton, 
@@ -298,5 +290,5 @@ YAHOO.imex.pubmgr = function() {
 };
 
 //YAHOO.util.Event.addListener(
-//    window, "load", YAHOO.imex.pubmgr ) ;
+//    window, "load", YAHOO.imex.journalmgr ) ;
 
