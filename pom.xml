@@ -68,6 +68,9 @@
        <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
       <icentral.css>icentral-beta.css</icentral.css>
      </properties>
+     <build>
+      <finalName>icentralbeta</finalName>
+     </build>
    </profile>
 
    <profile>
