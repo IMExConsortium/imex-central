@@ -3,14 +3,121 @@
     order:["operation"],
     operation:{
       ppg:{
-          order:["ANY"]
+        order:["ANY"]
+      },
+      esrc:{
+        order:["ANY"]
+      },
+      edup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      emup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      esup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
       }
     }
   },
+
+  pubedit:{
+    order:["operation"],
+    operation:{
+      ppg:{
+        order:["ANY"]
+      },
+      esrc:{
+        order:["ANY"]
+      },
+      edup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      emup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      esup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      eoup:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      eaudel:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      eauadd:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      eagdel:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      },
+      eagadd:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN"]
+        }
+      }
+    }
+  },
+
   journalmgr:{
-    order:[ "operation" ],
+    order:[ "operation"],
     operation:{
         jpg:{
+          order:["ANY"]          
+        }, 
+        jsrc:{
           order:["ANY"]          
         }, 
         jadd:{
@@ -22,6 +129,7 @@
           }
         },
         del:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -29,6 +137,7 @@
           }
         },
         ldel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -36,6 +145,7 @@
           }
         },
         jpup:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -43,6 +153,7 @@
           }
         },
         oup:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -50,6 +161,7 @@
           }
         },
         jauadd:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -58,6 +170,7 @@
 
         },
         jaudel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -70,6 +183,7 @@
           }
         },
         jagadd:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -77,6 +191,7 @@
           }
         },
         jagdel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -91,12 +206,14 @@
       }  
   },
   rolemgr:{
+      order:["allow","operation"],
       allow:{
         user:["ADMIN"],
         role:["administrator"],
         group:["ADMIN"]
       },
       operation:{
+        order:["allow"],
         add:{
           allow:{
             user:["ADMIN"],
@@ -105,6 +222,7 @@
           }
         },
         del:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -112,6 +230,7 @@
           }
         },
         pup:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -119,6 +238,7 @@
           }
         },
         ldel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -128,6 +248,7 @@
       }
     },
     groupmgr:{
+      order:["allow","operation"],
       allow:{
         user:["ADMIN"],
         role:["administrator"],
@@ -135,6 +256,7 @@
       },
       operation:{
         add:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -142,6 +264,7 @@
           }
         },
         del:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -149,6 +272,7 @@
           }
         },
         ldel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -156,6 +280,7 @@
           }
         },
         radd:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -163,6 +288,7 @@
           }
         },
         rdel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -170,6 +296,7 @@
           }
         },
         pup:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -179,6 +306,7 @@
       }
     },
     usermgr:{
+      order:["allow","operation"],
       allow:{
         user:["ADMIN"],
         role:["administrator"],
@@ -186,6 +314,7 @@
       },
       operation:{
         add:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -193,6 +322,7 @@
           }
         },
         del:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -200,6 +330,7 @@
           }
         },
         ldel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -207,6 +338,7 @@
           }
         },
         radd:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -214,6 +346,7 @@
           }
         },
         rdel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -221,6 +354,7 @@
           }
         },
         gadd:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -228,6 +362,7 @@
           }
         },
         gdel:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -235,6 +370,7 @@
           }
         },
         prs:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
@@ -242,6 +378,7 @@
           }
         },
         pup:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],

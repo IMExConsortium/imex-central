@@ -80,7 +80,7 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // GroupAll list
     //--------------
 
@@ -92,7 +92,7 @@ public class EntryMgrAction extends ManagerSupport {
         return null;
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  mode: journal/icpub
     //---------------------
 
@@ -107,7 +107,7 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  IcJournal
     //-----------
     
@@ -121,7 +121,7 @@ public class EntryMgrAction extends ManagerSupport {
 	return this.journal;
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     
     public List<IcJournal> getJournalList(){
         
@@ -139,7 +139,7 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // IcPub
     //------
 
@@ -153,7 +153,7 @@ public class EntryMgrAction extends ManagerSupport {
         return this.icpub;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     
     public List<IcPub> getPublicationList(){
 
@@ -179,7 +179,7 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Records
     //--------
 
@@ -193,7 +193,7 @@ public class EntryMgrAction extends ManagerSupport {
         return this.records;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // PMID
     //-----
 
@@ -208,7 +208,7 @@ public class EntryMgrAction extends ManagerSupport {
     }
 
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public String execute() throws Exception{
 
@@ -257,23 +257,32 @@ public class EntryMgrAction extends ManagerSupport {
 
             if ( val != null && val.length() > 0 ) {
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
+                //--------------------------------------------------------------
                 // journal operations
                 //-------------------
                 
+                if ( key.equalsIgnoreCase( "jsrc" ) ) {
+                    if ( getJournal() == null ) return SUCCESS;
+                    String nlmid = getJournal().getNlmid();
+                    return searchJournal( nlmid );
+                }
+
+                //--------------------------------------------------------------
+    
                 if ( key.equalsIgnoreCase( "jadd" ) ) {
                     if ( getOpp() == null ) return SUCCESS;
                     String nlmid = getOpp().get( "jadd" );
                     return addJournal( nlmid );
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "jdel" ) ) {
                     return deleteJournal( journal );
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "jldel" ) ) {
 
@@ -299,13 +308,13 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "jpup" ) ) {
                     return updateJournalProperties( getId(), journal );
                 }
                 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "jauadd" ) ) {
                     System.out.print("jauadd");
@@ -322,7 +331,7 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
                 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "jagadd" ) ) {
                     System.out.print("jagadd");
@@ -339,7 +348,7 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "jaudel" ) ) {
                     System.out.print("jaudel");
@@ -367,7 +376,7 @@ public class EntryMgrAction extends ManagerSupport {
                     return SUCCESS;
                 }
                 
-                //---------------------------------------------------------
+                //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "jagdel" ) ) {
                     System.out.print("jagdel");
@@ -836,10 +845,29 @@ public class EntryMgrAction extends ManagerSupport {
         */        
     }
 
-    
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // operations: Journal
     //----------------------
+    
+    public String searchJournal( String nlmid ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " search journal -> nlmid=" + nlmid );
+        
+        IcJournal oldJnrl =
+            entryManager.getIcJournalByNlmid( nlmid );
+
+        if ( oldJnrl != null ) {
+            journal = oldJnrl;
+            setId( oldJnrl.getId() );
+            return JEDIT;
+        }
+        return SUCCESS;
+    }
+    
+    //--------------------------------------------------------------------------
 
     public String addJournal( String nlmid ) {
         
@@ -880,7 +908,7 @@ public class EntryMgrAction extends ManagerSupport {
         return SUCCESS;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public String deleteJournal( Journal journal ) {
         /*
