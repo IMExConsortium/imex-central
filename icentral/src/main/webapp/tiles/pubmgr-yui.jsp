@@ -22,13 +22,21 @@
   <center>
    <table width="99%">
     <tr>
+     <td colspan="3">&nbsp;</td>
+     <td class="filter-name">By Status</td>
+     <td>&nbsp;</td>
+     <td class="filter-name">By Partner</td>
+     <td>&nbsp;</td>
+     <td class="filter-name">By Editor</td> 
+    </tr>
+    <tr>
      <td><div id="dt-pag-nav"></div></td>
      <td width="95%">&nbsp;</td>
      <th width="1%">Filter:</th>
      <td class="filter-container"><label id="state-button-container"/></td>
      <th width="1%">and</th>
      <td class="filter-container"><label id="partner-button-container"/></td>
-     <th width="1%" nowrap>and Editor:</th>
+     <th width="1%" nowrap>and</th>
      <td valign="middle">
       <div id="myAutoCompleteEditor">     
        <input id="myEditorInput" type="text"> 

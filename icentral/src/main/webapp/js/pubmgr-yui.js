@@ -21,7 +21,6 @@ YAHOO.imex.pubmgr = function() {
     //-------------
 
     var stateSel = [ 
-        { text: "---Status---", value: "" }, 
         { text: "---ANY---", value: "" }, 
         { text: "NEW", value: "NEW" }, 
         { text: "Reserved", value: "RESERVED" },
@@ -34,7 +33,7 @@ YAHOO.imex.pubmgr = function() {
     var stateButton = new YAHOO.widget.Button(
         { id: "state-button",  
           name: "state-button", 
-          label: "<em class=\"yui-button-label\">---Status---</em>", 
+          label: "<em class=\"yui-button-label\">---ANY---</em>", 
           type: "menu",   
           menu: stateSel,  
           container: "state-button-container" }); 
@@ -47,9 +46,8 @@ YAHOO.imex.pubmgr = function() {
     //---------------
     
     var partnerSel = [
-        { text: "---Imex Partner---", value: "" },
         { text: "---ANY---", value: "" },
-        { text: "DIP", value: "DIP" },
+        { text: "DIP", value: "DIPDB" },
         { text: "IntAct", value: "IntAct" },
         { text: "MINT", value: "MINT" },
         { text: "MPIDB", value: "MPIDB" }
@@ -58,7 +56,7 @@ YAHOO.imex.pubmgr = function() {
     var partnerButton = new YAHOO.widget.Button(
         { id: "partner-button",
           name: "partner-button",
-          label: "<em class=\"yui-button-label\">---Imex Partner---</em>",
+          label: "<em class=\"yui-button-label\">---ANY---</em>",
           type: "menu",
           menu: partnerSel,
           container: "partner-button-container" });
