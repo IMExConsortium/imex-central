@@ -44,68 +44,76 @@
       esrc:{
         order:["ANY"]
       },
+      eadd:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
       edup:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       emup:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       esup:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       eoup:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       eaudel:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       eauadd:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       eagdel:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       },
       eagadd:{
         order:["allow"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN"]
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
         }
       }
     }

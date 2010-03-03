@@ -13,17 +13,22 @@
       },
       browse:{
         active:true,
-        title:"ImexCentral",
-        menudef:"0:0:0",
+        title:"ImexCentral: Browse",
         menusel:"1:1",
         viewtype:"file-html",
         viewpath:"/pages/browse.html"
       },
+      search:{
+        active:true,
+        title:"ImexCentral: Search",
+        menusel:"1:2",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
       pubadd:{
         active:true,
-        title:"ImexCentral",
-        menudef:"0:0:1",
-        menusel:"1:2",
+        title:"ImexCentral: Add",
+        menusel:"1:3",
         viewtype:"file-html",
         viewpath:"/pages/pubadd.html"
       },
@@ -164,14 +169,6 @@
         menusel:"1:2:0",
         viewtype:"file-html",
         viewpath:"/pages/download.html"
-      },
-      search:{
-        active:true,
-        title:"DIP Search",
-        menudef:"0:0:0",
-        menusel:"1:1:0",
-        viewtype:"file-html",
-        viewpath:"/pages/search.html"
       },
       articles:{
         active:true,

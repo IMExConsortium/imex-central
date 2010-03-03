@@ -111,6 +111,11 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/pubsrc</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/pubedit</url-pattern>
   </filter-mapping>
 
@@ -122,6 +127,11 @@
   <filter-mapping>
     <filter-name>action2</filter-name>
     <url-pattern>/journalmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/jousrc</url-pattern>
   </filter-mapping>
 
   <filter-mapping>

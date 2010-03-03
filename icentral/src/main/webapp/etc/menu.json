@@ -7,115 +7,125 @@
    menu:[
       {label:"HOME",
        link:".",
-       active:true,
+       "disabled":"false",
        menu:[
          {label:"Browse",
           link:"page?id=browse",
-          active:true,
+          "disabled":"false",
           menu:[
             {label:"Publications",
              link:"pubmgr",
-             active:true,
+             "disabled":"false",
              menu:[]
             },
             {label:"Journals",
              link:"journalmgr",
-             active:true,
+             "disabled":"false",
+             menu:[]
+            }]
+         },
+         {label:"Search",
+          link:"page?id=search",
+          "disabled":"true",
+          menu:[
+            {label:"Publications",
+             link:"pubsrc.jsp",
+             "disabled":"false",
              menu:[]
             }]
          },
          {label:"Add",
           link:"page?id=pubadd",
-          active:true,
+          "disabled":"false",
           menu:[{label:"Publication",
              link:"pubnew",
-             active:true,
+             "disabled":"false",
              menu:[]
             },
             {label:"Journal",
              link:"journalmgr",
-             active:true,
+             "disabled":"true",
              menu:[]
             }]
          }]
       },       
       {label:"Tools",
        link:"page?id=tools",
-       active:true,
+       "disabled":"false",
        menu:[                   
          {label:"MIF Tools",
           link:"page?id=miftools",
-          active:true,
+          "disabled":"false",
           menu:[]
          },
          {label:"Web Services",
           link:"page?id=webservices",
-          active:true,
+          "disabled":"false",
           menu:[]
          }]
       },
       {label:"Admin",
        link:"page?id=admin",
-       active:true,
+       "disabled":"false",
        menu:[                   
          {label:"Accounts",
           link:"page?id=usermgr",
-          active:true,
+          "disabled":"false",
           menu:[
            {label:"Users",
             link:"usermgr",
-            active:true,
+            "disabled":"false",
             roles:["administrator"],
             menu:[]
            },
            {label:"Groups",
             link:"groupmgr",
-            active:true,
+            "disabled":"false",
             roles:["administrator"],
             menu:[]
            },
            {label:"Roles",
             link:"rolemgr",
-            active:true,
+            "disabled":"false",
             roles:["administrator"],
             menu:[]
            }]
          },
          {label:"Workflow",
           link:"page?id=workflowmgr",
-          active:true,
+          "disabled":"false",
           menu:[
            {label:"States",
             link:"statemgr",
-            active:true,
+            "disabled":"false",
             roles:["administrator"],
             menu:[]
            },
            {label:"Transitions",
             link:"transmgr",
-            active:true,
+            "disabled":"false",
             roles:["administrator"],
             menu:[]
            }]
          },
          {label:"Database",
           link:"page?id=databasemgr",
-          active:true,
+          "disabled":"false",
           menu:[]
          }]
       },
       {label:"Preferences",
        link:"page?id=preferences",
-       active:true,
+       "disabled":"false",
        menu:[
          {label:"Account Settings",
           link:"user?op=reg",
-          active:true,
+          "disabled":"false",
           menu:[]
          },
          {label:"Database",
           link:"user?op=reg",
-          active:true,
+          "disabled":"false",
           menu:[]
          }]
       }]

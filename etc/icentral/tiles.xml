@@ -110,6 +110,11 @@
  </definition>
  <definition name="transedit" template="/tiles/transedit.jsp"/>
 
+ <definition name="pubsrc" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Search" />
+  <put-attribute name="body" value="/tiles/pubsrc-yui.jsp"/>  
+ </definition>
+
  <definition name="pubmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="Publication Manager" />
   <put-attribute name="body" value="/tiles/pubmgr-yui.jsp"/>  

@@ -1455,3 +1455,36 @@ td.footer {
   margin: 2em 5em 0 5em;
   padding: 2em;
 }
+
+
+.udev {
+ border: 2px dashed #eeeeee;
+ background-color: #cccccc;
+ color: #aaaaaa;
+ font-size: 1.1em;
+ margin: 2em 5em 0 5em;
+ padding: 2em;
+}
+
+a.disabled {
+  color: #a0a0a0;
+}
+
+.qfield {
+  border: 1px solid #aaaaaa;
+  background-color: #f0f0f0;
+}
+
+.qlegend {
+  color: #888888;
+  background-color: #ffffff;
+}
+.qtable {
+  border: 0px solid #888888;
+  background-color: #f0f0f0;
+}
+
+.qtd {
+  border: 0px solid #eeeeee;
+  background-color: #f0f0f0;
+}

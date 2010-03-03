@@ -21,17 +21,19 @@
        <s:iterator value="menuContext.jsonConfig.menu[0].menu" id="exp" status="mpos">
         <s:if test='#mpos.count==menuSel[0]'>
          <td class="menu1select" nowrap>
-          <a onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
-             class="topmenulinkon" HREF="<s:property value='link' />">
+          <a <s:if test="disabled == 'false'">onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'"
+             class="topmenulinkon" HREF="<s:property value='#exp.link' />"</s:if>
+             <s:else>class="topmenulinkon disabled"</s:else>>
            <s:property value="label"/>
           </a>
          </td>
         </s:if>
         <s:else>
          <td class="menu1" nowrap>      
-          <a onMouseOver="this.className='MON'" onMouseOut="this.className='MOFF'" 
-             class="topmenulink" HREF="<s:property value='link' />">
-           <s:property value="label" />
+          <a <s:if test="disabled == 'false'">onMouseOver="this.className='MON'" onMouseOut="this.className='MOFF'"
+             class="topmenulink" HREF="<s:property value='#exp.link' />"</s:if>
+             <s:else>class="topmenulink disabled"</s:else>>
+           <s:property value="#exp.label" />
           </a>
          </td>
         </s:else>  
@@ -83,16 +85,19 @@
          <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu" id="exp" status="mpos" >
           <s:if test='#mpos.count == menuSel[1]'>
            <td class="menu2select" nowrap>
-            <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
-             class="midmenulinkon" HREF="<s:property value='link' />">
+            <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                     class="midmenulinkon" HREF="<s:property value='link' />"</s:if>
+             <s:else>class="midmenulinkon disabled"</s:else>>
           <s:property value='label' />          
          </a>
         </td>
      </s:if>
      <s:else> 
         <td class="menu2" nowrap>
-         <a onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
-            class="midmenulinkon" HREF="<s:property value='link' />">
+
+         <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+             class="midmenulinkon" HREF="<s:property value='link' />"</s:if>
+             <s:else>class="midmenulinkon disabled"</s:else>>
           <s:property value='label' />
          </a>
         </td>
@@ -135,16 +140,18 @@
            <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu[menuSel[1]-1].menu" id="exp" status="mpos" >
             <s:if test='#mpos.count == menuSel[2]'>
              <td class="menu3select" nowrap>
-              <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
-                 class="btmmenulink" HREF="<s:property value='link' />">
+              <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                 class="btmmenulink" HREF="<s:property value='link' />" </s:if>
+                 <s:else>class="btmmenulink disabled"</s:else>>
                <s:property value='label' />
               </a>
              </td>
             </s:if>
             <s:else>
              <td class="menu3" nowrap>
-              <a onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'" 
-                 class="btmmenulink" HREF="<s:property value='link' />">
+              <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                 class="btmmenulink" HREF="<s:property value='link' />" </s:if>
+                 <s:else>class="btmmenulink disabled"</s:else>>
                <s:property value='label' />
               </a>
              </td>
@@ -162,7 +169,7 @@
          <table cellspacing="0" cellpadding="0">
           <tr>
            <td align="left" class="btmsearchtab" nowrap>
-            <s:if test="searchOn"><s:form action="pubedit" theme="simple">
+            <s:if test="searchOn"><s:form action="pubsrc" theme="simple">
              PMID:<s:textfield theme="simple" name="pub.pmid" size="16" size="16" value="" maxlength="128"/>
              <s:submit type="input" tabindex="3" name="op.esrc" value="SEARCH" theme="simple"/>
             </s:form>
