@@ -4,103 +4,119 @@
           "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
           "http://struts.apache.org/dtds/struts-2.0.dtd">
 
-<!-- =======================================================================
- # $Id::                                                                   $
- # Version: $Rev::                                                         $
- #==========================================================================
- #                                                                         $
- # struts2: entrymgr package configuration                                 $
- #                                                                         $
- #====================================================================== -->
+<!-- ===========================================================================
+ ! $Id::                                                                       $
+ ! Version: $Rev::                                                             $
+ !==============================================================================
+ !                                                                             $
+ ! struts2: entrymgr package configuration                                     $
+ !                                                                             $
+ !========================================================================== -->
                                                                            
 <struts>
 
   <package name="entrymgr" extends="json-default" namespace="">
 
-<!-- =========================================================== Results -->
+   <!-- ============================================================ Results -->
 
     <result-types>
       <result-type name="tiles" 
                    class="org.apache.struts2.views.tiles.TilesResult"/>
     </result-types>
 
-<!-- ====================================================== Interceptors -->
-        
+   <!-- ======================================================= Interceptors -->
+
     <interceptors>
-     <interceptor name="menu" 
+      <interceptor name="menu" 
          class="edu.ucla.mbi.util.struts2.interceptor.MenuInterceptor"/>
-     <interceptor name="accession" 
+      <interceptor name="accession" 
          class="edu.ucla.mbi.util.struts2.interceptor.AccessionInterceptor"/>
-     <interceptor name="jsonTable" 
+      <interceptor name="jsonTable" 
          class="edu.ucla.mbi.util.struts2.interceptor.JsonTableInterceptor"/>
 
-    <interceptor name="acl" class="aclInterceptor"/>
+      <interceptor name="acl" class="aclInterceptor"/>
 
-    <interceptor-stack name="mgrStack">
-      <interceptor-ref name="exception"/>
-      <interceptor-ref name="alias"/>
-      <interceptor-ref name="servletConfig"/>
-      <interceptor-ref name="prepare"/>
-      <interceptor-ref name="i18n"/>
-      <interceptor-ref name="chain"/>
-      <interceptor-ref name="debugging"/>
-      <interceptor-ref name="profiling"/>
-      <interceptor-ref name="scopedModelDriven"/>
-      <interceptor-ref name="modelDriven"/>
-      <interceptor-ref name="fileUpload"/>
-      <interceptor-ref name="checkbox"/>
-      <interceptor-ref name="staticParams"/>
-      <interceptor-ref name="params">
-       <param name="excludeParams">dojo\..*</param>
-      </interceptor-ref>
-      <interceptor-ref name="conversionError"/>
+      <interceptor-stack name="mgrStack">
+        <interceptor-ref name="exception"/>
+        <interceptor-ref name="alias"/>
+        <interceptor-ref name="servletConfig"/>
+        <interceptor-ref name="prepare"/>
+        <interceptor-ref name="i18n"/>
+        <interceptor-ref name="chain"/>
+        <interceptor-ref name="debugging"/>
+        <interceptor-ref name="profiling"/>
+        <interceptor-ref name="scopedModelDriven"/>
+        <interceptor-ref name="modelDriven"/>
+        <interceptor-ref name="fileUpload"/>
+        <interceptor-ref name="checkbox"/>
+        <interceptor-ref name="staticParams"/>
+        <interceptor-ref name="params">
+          <param name="excludeParams">dojo\..*</param>
+        </interceptor-ref>
+        <interceptor-ref name="conversionError"/>
 
-      <interceptor-ref name="menu"/>
-      <interceptor-ref name="acl"/>
+        <interceptor-ref name="menu"/>
+        <interceptor-ref name="acl"/>
 
-      <interceptor-ref name="validation">
-       <param name="excludeMethods">input,back,cancel,browse</param>
-      </interceptor-ref>
-      <interceptor-ref name="workflow">
-       <param name="excludeMethods">input,back,cancel,browse</param>
-      </interceptor-ref>
-    </interceptor-stack>
+        <interceptor-ref name="validation">
+          <param name="excludeMethods">input,back,cancel,browse</param>
+        </interceptor-ref>
+        <interceptor-ref name="workflow">
+          <param name="excludeMethods">input,back,cancel,browse</param>
+        </interceptor-ref>
+      </interceptor-stack>
+    </interceptors>
 
-   </interceptors>
+   <!-- ============================================================ Actions -->
 
-<!-- =========================================================== Actions -->
-
-   <action name="">
+    <action name="">
       <result>/index.jsp</result>
-   </action>
+    </action>
 
-  <!-- publication management -->   
+    <!-- publication management -->   
 
-   <action name="pubmgr" class="pubAction">
+    <action name="pubsrc" class="pubSrcAction">
+      <interceptor-ref name="mgrStack"/>
+      <interceptor-ref name="timer"/>
+      <result name="success" type="tiles">pubmgr</result>
+      <result name="notfound" type="tiles">pubsrc</result>
+      <result name="input" type="tiles">pubsrc</result>
 
-     <interceptor-ref name="mgrStack"/>
-     <interceptor-ref name="timer"/>
+      <result name="pubnew" type="redirectAction">
+        <param name="actionName">pubnew</param>
+        <param name="pmid">%{pmid}</param>
+      </result>
 
-     <result name="success" type="tiles">pubmgr</result>     
-     <result name="acl_page" type="tiles">aclpageerror</result>
-     <result name="acl_oper" type="tiles">acloperror</result>
-     <result name="input" type="tiles">pubmgr</result>     
-     <result name="pubedit" type="tiles">pubmgr</result>
-     <result name="pubnew" type="redirectAction">
-      <param name="actionName">pubnew</param>
-      <param name="pmid">%{pmid}</param>
-     </result>
+      <result name="acl_page" type="tiles">aclpageerror</result>
+      <result name="acl_oper" type="tiles">acloperror</result>
 
-     <result name="json" type="json">
-      <param name="includeProperties">
-        records.*
-      </param>
-      <param name="noCache">true</param>
-     </result>
-   </action>
+    </action>
 
-   <action name="pubedit" class="pubAction">
-
+    <action name="pubmgr" class="pubAction">
+      
+      <interceptor-ref name="mgrStack"/>
+      <interceptor-ref name="timer"/>
+      
+      <result name="success" type="tiles">pubmgr</result>     
+      <result name="acl_page" type="tiles">aclpageerror</result>
+      <result name="acl_oper" type="tiles">acloperror</result>
+      <result name="input" type="tiles">pubmgr</result>     
+      <result name="pubedit" type="tiles">pubmgr</result>
+      <result name="pubnew" type="redirectAction">
+        <param name="actionName">pubnew</param>
+        <param name="pmid">%{pmid}</param>
+      </result>
+      
+      <result name="json" type="json">
+        <param name="includeProperties">
+          records.*
+        </param>
+        <param name="noCache">true</param>
+      </result>
+    </action>
+    
+    <action name="pubedit" class="pubAction">
+     
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
@@ -114,17 +130,17 @@
        <param name="actionName">pubnew</param>
        <param name="pmid">%{pmid}</param>
      </result>  
-
+     
      <result name="json" type="json">
-      <param name="excludeProperties">
-        publicationList.*
-      </param>
-      <param name="includeProperties">
-        pub.*
-      </param>
-      <param name="noCache">true</param>
+       <param name="excludeProperties">
+         publicationList.*
+       </param>
+       <param name="includeProperties">
+         pub.*
+       </param>
+       <param name="noCache">true</param>
      </result>
-
+     
    </action>
 
    <action name="pubnew" class="pubNewAction">
@@ -138,12 +154,16 @@
      <result name="acl_tget" type="tiles">acltargeterror</result>
      <result name="input" type="tiles">pubmgr</result>     
      <result name="pubedit" type="tiles">pubmgr</result>
+<!--
      <result name="pubnew" type="tiles">pubnew</result>
+-->
+     <result name="pubnew" type="tiles">pubnew</result>
+     <result name="notfound" type="tiles">pubsrc</result>
      <result name="json" type="json">
-      <param name="includeProperties">
-        records.*
-      </param>
-      <param name="noCache">true</param>
+       <param name="includeProperties">
+         records.*
+       </param>
+       <param name="noCache">true</param>
      </result>
    </action>
 

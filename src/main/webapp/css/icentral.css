@@ -1457,3 +1457,16 @@ td.footer {
   margin: 2em 5em 0 5em;
   padding: 2em;
 }
+
+.udev {
+ border: 2px dashed #4455aa;
+ background-color: #e3edff;
+ color: #8899cc;
+ font-size: 1.1em;
+ margin: 2em 5em 0 5em;
+ padding: 2em;
+}
+
+a.disabled {
+  color: #a0a0a0;
+}

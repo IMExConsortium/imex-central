@@ -29,6 +29,8 @@ import edu.ucla.mbi.imex.central.*;
 
 public class EntryMgrAction extends ManagerSupport {
 
+    private final String NOPUB = "notfound";
+    private final String NOJOU = "notfound";
     private final String PUBEDIT = "pubedit";
     private final String PUBNEW = "pubnew";
     private final String JEDIT = "jedit";
@@ -237,8 +239,17 @@ public class EntryMgrAction extends ManagerSupport {
         }
         
         if( getPmid() != null ) {
-            icpub = new IcPub( entryManager.getPubByPmid( getPmid() ) ); 
-            return PUBNEW;
+
+            Publication nicp = entryManager.getPubByPmid( getPmid() );
+            if ( nicp != null ) {
+                icpub = new IcPub( nicp ); 
+                return PUBNEW;
+            } else {
+                addActionError( "No publication found." ) ;
+                icpub = new IcPub(new Publication());
+                icpub.setPmid(getPmid());
+                return NOPUB;
+            }
         }
 
         if( getOp() == null ) return SUCCESS;
@@ -633,19 +644,69 @@ public class EntryMgrAction extends ManagerSupport {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "EntryMgr: validate" );
-        
-        /*
-        boolean loadUserFlag = false;
+       
+        //boolean loadUserFlag = false;
         
         if( getOp() != null ) {
             for ( Iterator<String> i = getOp().keySet().iterator();
                   i.hasNext(); ) {
-
+                
                 String key = i.next();
                 String val = getOp().get(key);
 
                 if ( val != null && val.length() > 0 ) {
-                  
+                    
+                    log.info( " op=" + val);
+                    if ( key.equalsIgnoreCase( "esrc" ) ) {
+
+
+                        if( getPub() == null 
+                            || getPub().getPmid() == null ) {
+                            addFieldError( "pub.pmid",
+                                           "PMID field cannot be empty." );
+                            
+                        } else {
+                            String pmid = getPub().getPmid();
+                            try {
+                                pmid = pmid.replaceAll( "\\s", "" );
+                            } catch( Exception ex ) {
+                                // should not happen
+                            }
+                            log.info( " pmid=" + pmid +"<");
+                            if( pmid.length() == 0  ) {
+                                log.info( "  empty PMID field" );
+                                addFieldError( "pub.pmid",
+                                               "PMID field cannot be empty." );
+                            }
+                        }
+
+                        break;
+                    }
+                    
+                    if ( key.equalsIgnoreCase( "jsrc" ) ) {
+                        if( getJournal() == null 
+                            || getJournal().getNlmid() == null ) {
+                            addFieldError( "journal.nlmid",
+                                           "NLMID field cannot be empty." );
+                        } else {
+                            String nlmid = getJournal().getNlmid();
+                            try {
+                                nlmid = nlmid.replaceAll( "\\s", "" );
+                            } catch( Exception ex ) {
+                                // should not happen
+                            }
+                            if( nlmid.length() == 0  ) {
+                                addFieldError( "journal.nlmid",
+                                               "NLMID field cannot be empty." );
+                            }
+                        }
+
+                        break;
+                    }
+                    
+
+                    /*
+                      
                     //-----------------------------------------------------
                     
                     if ( key.equalsIgnoreCase( "add" ) ) {
@@ -834,15 +895,17 @@ public class EntryMgrAction extends ManagerSupport {
                         // user group drop validation: NONE                                              
                         break;
                     }
+
+                    */
                 }
             }
         }
         
-        if ( loadUserFlag && getId() > 0 ) {
-            user = getUserContext().getUserDao().getUser( getId() );
-            setBig( false );
-        }
-        */        
+        //if ( loadUserFlag && getId() > 0 ) {
+        //    user = getUserContext().getUserDao().getUser( getId() );
+        //    setBig( false );
+        //}
+        
     }
 
 
@@ -1081,8 +1144,15 @@ public class EntryMgrAction extends ManagerSupport {
             return PUBEDIT;
         }
         
-        this.setPmid(pub.getPmid());
-        return PUBNEW;
+        if( pub !=null && pub.getPmid() != null && 
+            !pub.getPmid().equals("") ) {
+            this.setPmid( pub.getPmid() );
+
+            return PUBNEW;
+        }
+        
+        addActionError( "No publication found" ) ;
+        return NOPUB;
     }
     
     //---------------------------------------------------------------------
