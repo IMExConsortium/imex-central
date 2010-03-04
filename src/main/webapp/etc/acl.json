@@ -52,6 +52,14 @@
           group:["ADMIN","CURATOR"]
         }
       },
+      epix:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
       edup:{
         order:["allow"],
         allow:{
