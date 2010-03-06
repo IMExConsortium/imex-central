@@ -112,6 +112,17 @@
           link:"page?id=databasemgr",
           "disabled":"false",
           menu:[]
+         },
+         {label:"Access Control",
+          link:"page?id=accessmgr",
+          "disabled":"false",
+          menu:[
+           {label:"Reinitialize",
+            link:"aclmgr",
+            "disabled":"false",
+            roles:["administrator"],
+            menu:[]
+           }]
          }]
       },
       {label:"Preferences",
