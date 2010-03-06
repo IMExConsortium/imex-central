@@ -87,6 +87,13 @@
         viewtype:"file-html",
         viewpath:"/pages/tracker.html"
       },
+      preferences:{
+        active:true,
+        title:"ImexCentral: Preferences",
+        menusel:"4",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
 
 
 

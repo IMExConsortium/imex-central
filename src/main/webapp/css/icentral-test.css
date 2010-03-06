@@ -1458,8 +1458,8 @@ td.footer {
 
 
 .udev {
- border: 2px dashed #eeeeee;
- background-color: #cccccc;
+ border: 2px solid #aaaaaa;
+ background-color: #eeeeee;
  color: #aaaaaa;
  font-size: 1.1em;
  margin: 2em 5em 0 5em;

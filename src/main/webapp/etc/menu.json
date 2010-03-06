@@ -75,7 +75,7 @@
            {label:"Users",
             link:"usermgr",
             "disabled":"false",
-            roles:["administrator"],
+            roles:["ADMIN"],
             menu:[]
            },
            {label:"Groups",
@@ -116,10 +116,17 @@
          {label:"Access Control",
           link:"page?id=accessmgr",
           "disabled":"false",
+          roles:["administrator"], 
           menu:[
            {label:"Reinitialize",
             link:"aclmgr",
             "disabled":"false",
+            roles:["administrator"],
+            menu:[]
+           },
+           {label:"ACL Editor",
+            link:"aclmgr",
+            "disabled":"true",
             roles:["administrator"],
             menu:[]
            }]
