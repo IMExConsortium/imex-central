@@ -50,7 +50,7 @@
       },
       usermgr:{
         active:true,
-        title:"User Manager",
+        title:"ImexCentral: User Manager",
         menudef:"0:2:0",
         menusel:"3:1",
         viewtype:"file-html",
@@ -58,7 +58,7 @@
       },
       workflowmgr:{
         active:true,
-        title:"Workflow Manager",
+        title:"ImexCentral: Workflow Manager",
         menudef:"0:2:1",
         menusel:"3:2",
         viewtype:"file-html",
@@ -66,11 +66,18 @@
       },
       databasemgr:{
         active:true,
-        title:"Database Manager",
+        title:"ImexCentral: Database Manager",
         menudef:"0:2:2",
         menusel:"3:3",
         viewtype:"file-html",
         viewpath:"/pages/databaseadmin.html"
+      },
+      accessmgr:{
+        active:true,
+        title:"ImexCentral: Access Manager",
+        menusel:"3:4",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
       },
       tracker:{
         active:true,
@@ -80,14 +87,6 @@
         viewtype:"file-html",
         viewpath:"/pages/tracker.html"
       },
-
-
-
-
-
-
-
-
 
 
 

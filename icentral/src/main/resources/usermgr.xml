@@ -144,5 +144,18 @@
      <result name="input" type="tiles">usermgr</result>     
    </action>
 
+   <!-- acess control management -->
+
+   <action name="aclmgr" class="aclMgrAction">
+     
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+     
+     <result name="success" type="tiles">aclmgr</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="input" type="tiles">aclmgr</result>
+   </action>
+
  </package>
 </struts>

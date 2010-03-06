@@ -182,6 +182,11 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/aclmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/statemgr</url-pattern>
   </filter-mapping>
 

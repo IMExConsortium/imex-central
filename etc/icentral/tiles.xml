@@ -98,6 +98,11 @@
  </definition>
  <definition name="useredit" template="/tiles/useredit.jsp"/>
 
+ <definition name="aclmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ACL Manager" />
+  <put-attribute name="body" value="/tiles/aclmgr.jsp"/>
+ </definition>
+
  <definition name="statemgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="State Manager" />
   <put-attribute name="body" value="/tiles/statemgr.jsp"/>

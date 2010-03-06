@@ -231,6 +231,7 @@
       operation:{
         order:["allow"],
         add:{
+          order:["allow"],
           allow:{
             user:["ADMIN"],
             role:["administrator"],
