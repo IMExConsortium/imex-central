@@ -19,24 +19,27 @@
      <s:if test='menuContext.jsonConfig.menu[0].menu.size > 0'>
       <td class="menu1first">&nbsp;</td>
        <s:iterator value="menuContext.jsonConfig.menu[0].menu" id="exp" status="mpos">
-        <s:if test='#mpos.count==menuSel[0]'>
-         <td class="menu1select" nowrap>
-          <a <s:if test="disabled == 'false'">onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'"
-             class="topmenulinkon" HREF="<s:property value='#exp.link' />"</s:if>
-             <s:else>class="topmenulinkon disabled"</s:else>>
-           <s:property value="label"/>
-          </a>
-         </td>
+        <s:set name="itemon" value="#exp.roles.{? #this in #session['USER_ROLE'].keySet()}.size > 0"/>
+        <s:if test="#exp.roles==null || #exp.roles.size==0 || #itemon ">
+         <s:if test='#mpos.count==menuSel[0]'>
+          <td class="menu1select" nowrap>
+           <a <s:if test="disabled == 'false'">onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'"
+              class="topmenulinkon" HREF="<s:property value='#exp.link' />"</s:if>
+              <s:else>class="topmenulinkon disabled"</s:else>>
+            <s:property value="label"/>
+           </a>
+          </td>
+         </s:if>
+         <s:else>
+          <td class="menu1" nowrap>      
+           <a <s:if test="disabled == 'false'">onMouseOver="this.className='MON'" onMouseOut="this.className='MOFF'"
+              class="topmenulink" HREF="<s:property value='#exp.link' />"</s:if>
+              <s:else>class="topmenulink disabled"</s:else>>
+            <s:property value="#exp.label" />
+           </a>
+          </td>
+         </s:else>  
         </s:if>
-        <s:else>
-         <td class="menu1" nowrap>      
-          <a <s:if test="disabled == 'false'">onMouseOver="this.className='MON'" onMouseOut="this.className='MOFF'"
-             class="topmenulink" HREF="<s:property value='#exp.link' />"</s:if>
-             <s:else>class="topmenulink disabled"</s:else>>
-           <s:property value="#exp.label" />
-          </a>
-         </td>
-        </s:else>  
        </s:iterator>
       </s:if>
       <td width="100%" class="menu1last">&nbsp;</td>
@@ -83,27 +86,29 @@
        <tr>
         <td class="menu2first">&nbsp;</td>
          <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu" id="exp" status="mpos" >
-          <s:if test='#mpos.count == menuSel[1]'>
-           <td class="menu2select" nowrap>
-            <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
-                     class="midmenulinkon" HREF="<s:property value='link' />"</s:if>
-             <s:else>class="midmenulinkon disabled"</s:else>>
-          <s:property value='label' />          
-         </a>
-        </td>
-     </s:if>
-     <s:else> 
-        <td class="menu2" nowrap>
-
-         <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
-             class="midmenulinkon" HREF="<s:property value='link' />"</s:if>
-             <s:else>class="midmenulinkon disabled"</s:else>>
-          <s:property value='label' />
-         </a>
-        </td>
-     </s:else>
-  </s:iterator>
-</s:if> 
+          <s:set name="itemon" value="#exp.roles.{? #this in #session['USER_ROLE'].keySet()}.size > 0"/>
+          <s:if test="#exp.roles==null || #exp.roles.size==0 || #itemon ">
+           <s:if test='#mpos.count == menuSel[1]'>
+            <td class="menu2select" nowrap>
+             <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                      class="midmenulinkon" HREF="<s:property value='link' />"</s:if>
+                <s:else>class="midmenulinkon disabled"</s:else>>
+              <s:property value='label' />          
+             </a>
+            </td>
+           </s:if>
+           <s:else> 
+            <td class="menu2" nowrap>
+             <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                 class="midmenulinkon" HREF="<s:property value='link' />"</s:if>
+                <s:else>class="midmenulinkon disabled"</s:else>>
+              <s:property value='label' />
+             </a>
+            </td>
+           </s:else>
+          </s:if>
+         </s:iterator>
+        </s:if> 
         <td width="100%" class="menu2last">&nbsp;</td>
         <td class="menu2blank">
          <table width="100%" cellpadding="0" cellspacing="0">
@@ -136,32 +141,35 @@
          <table class="menu3_background" width="100%" cellspacing="0" cellpadding="0">
           <tr>
            <s:if test='menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu[menuSel[1]-1].menu.size > 0'>
-           <td class="menu3first">&nbsp;</td>
-           <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu[menuSel[1]-1].menu" id="exp" status="mpos" >
-            <s:if test='#mpos.count == menuSel[2]'>
-             <td class="menu3select" nowrap>
-              <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
-                 class="btmmenulink" HREF="<s:property value='link' />" </s:if>
-                 <s:else>class="btmmenulink disabled"</s:else>>
-               <s:property value='label' />
-              </a>
-             </td>
-            </s:if>
-            <s:else>
-             <td class="menu3" nowrap>
-              <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
-                 class="btmmenulink" HREF="<s:property value='link' />" </s:if>
-                 <s:else>class="btmmenulink disabled"</s:else>>
-               <s:property value='label' />
-              </a>
-             </td>
-            </s:else>
-           </s:iterator>
-           <td width="100%" class="menu3last">&nbsp;</td>
-          </s:if>
-          <s:else>
-           <td width="100%" class="menu3null">&nbsp;</td>
-          </s:else>
+            <td class="menu3first">&nbsp;</td>
+            <s:iterator value="menuContext.jsonConfig.menu[0].menu[menuSel[0]-1].menu[menuSel[1]-1].menu" id="exp" status="mpos" >
+             <s:set name="itemon" value="#exp.roles.{? #this in #session['USER_ROLE'].keySet()}.size > 0"/>
+             <s:if test="#exp.roles==null || #exp.roles.size==0 || #itemon ">
+              <s:if test='#mpos.count == menuSel[2]'>
+               <td class="menu3select" nowrap>
+                <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                    class="btmmenulink" HREF="<s:property value='link' />" </s:if>
+                   <s:else>class="btmmenulink disabled"</s:else>>
+                 <s:property value='label' />
+                </a>
+               </td>
+              </s:if>
+              <s:else>
+               <td class="menu3" nowrap>
+                <a <s:if test="disabled == 'false'">onMouseOver="this.className='bmMON'" onMouseOut="this.className='bmMOFF'"
+                    class="btmmenulink" HREF="<s:property value='link' />" </s:if>
+                   <s:else>class="btmmenulink disabled"</s:else>>
+                 <s:property value='label' />
+                </a>
+               </td>
+              </s:else>
+             </s:if>
+            </s:iterator>
+            <td width="100%" class="menu3last">&nbsp;</td>
+           </s:if>
+           <s:else>
+            <td width="100%" class="menu3null">&nbsp;</td>
+           </s:else>
           </tr>
          </table>
         </td>
