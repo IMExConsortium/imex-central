@@ -32,4 +32,4 @@ $Id$
   - GUI updates:
       - on-line ACL reinitialization
       - publication search page/action added
- 
+      - conditional menu items added 
