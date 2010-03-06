@@ -15,13 +15,21 @@ $Id$
  - key assigner and initial web services framework added
  - ACL system updates
  - GUI updates:
-    - publication editor actions added: 
+     - publication editor actions added: 
          - availability status, 
          - contact email 
          - curation status
          - key assigner
-    - journal manager converted to YUI tables
+     - journal manager converted to YUI tables
  - CSS modified in order to visually distinguish between test/beta/production 
    sites 
  - pom.xml modifications 
 
+
+2010/03/06 BETA-0.72
+
+  - NcbiProxyClient fixes
+  - GUI updates:
+      - on-line ACL reinitialization
+      - publication search page/action added
+ 

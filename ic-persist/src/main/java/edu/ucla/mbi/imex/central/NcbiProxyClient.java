@@ -133,11 +133,39 @@ public class NcbiProxyClient {
         if( dataset != null && dataset.getNode() != null &&
             dataset.getNode().size() == 1 ) {
             nodeT = dataset.getNode().get( 0 );
-         
-            if ( nodeT != null ){
 
+            if ( debug ) {
+                try{
+                    edu.ucla.mbi.dxf14.ObjectFactory
+                        dof= new edu.ucla.mbi.dxf14.ObjectFactory();
+                    
+                    JAXBContext jc = DxfJAXBContext.getDxfContext();
+                    
+                    Marshaller marshaller = jc.createMarshaller();
+                    marshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT,
+                                        new Boolean( true ) );
+                                        
+                    java.io.StringWriter sw = new StringWriter();
+                    marshaller.setProperty( Marshaller.JAXB_ENCODING,
+                                            "UTF-8");
+                    
+                    marshaller.marshal( dof.createDataset(dataset), sw );
+                    log.info( "NcbiProxyClient(debug): " + sw.toString() );
+                    
+                } catch ( JAXBException jex ){
+                    jex.printStackTrace();
+                }
+            }
+            
+            if ( nodeT != null && nodeT.getAc() != null ){
+
+                if( nodeT.getAc().equals("") ) {
+                    return null;
+                }
+                
                 Publication newPub = new Publication();
-                newPub.setPmid( pmid );
+
+                newPub.setPmid( nodeT.getAc() );
                 
                 List<AttrType> atl =nodeT.getAttrList().getAttr();
 
