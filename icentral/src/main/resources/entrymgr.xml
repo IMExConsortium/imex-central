@@ -148,7 +148,8 @@
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">pubmgr</result>     
+<!--      <result name="success" type="tiles">pubmgr</result>     -->
+     <result name="success" type="tiles">pubnew</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="acl_tget" type="tiles">acltargeterror</result>

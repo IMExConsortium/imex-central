@@ -59,9 +59,7 @@ public class IcPub extends Publication {
     public void setIcKey( IcKey key ) {
         this.key = key;
     }
-
-
-
+    
     public String getImexId() {
 
         if( key == null ) {
@@ -71,8 +69,15 @@ public class IcPub extends Publication {
         return key.getAccession();
     }
 
-    //---------------------------------------------------------------------    
+    //--------------------------------------------------------------------------
 
+    
+
+
+
+
+    //--------------------------------------------------------------------------
+    
     private Set<ImexEntry> imexEntrySets;
 
     public void setImexSets( Set<ImexEntry> sets ){

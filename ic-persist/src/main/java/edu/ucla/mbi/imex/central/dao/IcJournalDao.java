@@ -83,17 +83,17 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         }
         return journal; 
     }
-    
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
 
     public List<Journal> getJournalList() {
         
         List<Journal> jlst = null;
-        
+
         try {
             startOperation();
-            Query query =
-                session.createQuery( "from IcJournal j order by id ");
+            Query query = session
+                .createQuery( "from IcJournal j where id > 0 order by id" );
             
             jlst = (List<Journal>) query.list();
             tx.commit();
@@ -104,15 +104,15 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         return jlst;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public long getJournalCount() {
 
         long count = 0;
         try {
             startOperation();
-            Query query = 
-                session.createQuery( "select count(j) from IcJournal j" );
+            Query query = session
+                .createQuery( "select count(j) from IcJournal j where id > 0" );
             count  = (Long) query.uniqueResult();
             tx.commit();
 
@@ -122,7 +122,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         return count;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<Journal> getJournalList( int firstRecord,
                                          int blockSize ) {
@@ -133,8 +133,8 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
         try {
             startOperation();
-            Query query =
-                session.createQuery( "from IcJournal p order by id ");
+            Query query = session
+                .createQuery( "from IcJournal p where id > 0 order by id ");
             query.setFirstResult( firstRecord );
             query.setMaxResults( blockSize );
 
@@ -150,7 +150,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         return jlst;
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public void saveJournal( Journal journal ) { 
         try {          
@@ -165,7 +165,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     }
     
 
-    //---------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     
     public void updateJournal( Journal journal ) { 
         try {
@@ -176,7 +176,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     }
     
     
-    //---------------------------------------------------------------------
+    //-------------------------------------------------------------------------
 
     public void deleteJournal( Journal journal ) { 
         try {

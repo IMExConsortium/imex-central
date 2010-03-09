@@ -22,6 +22,44 @@
    </table>  
   </td>
  </tr>
+<s:if test="pub == null or pub.pmid == null or pub.pmid.length() == 0" >
+ <tr>
+  <td>
+   <table width="100%" border="1">
+    <s:form theme="simple" action="pubedit">
+     <s:hidden name="id" value="%{id}"/>
+     <s:hidden name="pub.id" value="%{id}"/>
+     <tr>
+      <td>&nbsp;</td>
+      <th width="5%">
+       <s:submit theme="simple" name="op.eadd" value="ADD"/>
+      </th>
+     </tr>
+     <tr>
+      <td colspan="1">
+       <table width="100%" border="1">
+        <tr>
+         <th align="right" nowrap>Author(s)</th>
+         <td width="90%">
+           <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
+         </td>
+        </tr>
+        <tr>
+         <th align="right" nowrap>Title</th>
+         <td>
+          <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>
+         </td>
+        </tr>
+       </table>
+      </td>
+      <td>&nbsp;</td>
+     </tr>
+    </s:form>
+   </table>
+  </td>
+ </tr>
+</s:if>
+<s:else>
  <tr>
   <td>
    <table width="100%" border="1">
@@ -77,4 +115,5 @@
    </table>
   </td>
  </tr>
+</s:else>
 </table>

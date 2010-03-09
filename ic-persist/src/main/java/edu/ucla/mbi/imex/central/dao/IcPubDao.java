@@ -67,7 +67,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     public Publication getPublicationByPmid( String pmid ) { 
         
         Publication pub = null;
-
+        if ( pmid == null || pmid.equals("") ) return pub;
+        
         try {
             startOperation();
             Query query =

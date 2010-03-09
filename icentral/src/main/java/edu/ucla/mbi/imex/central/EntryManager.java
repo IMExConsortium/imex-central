@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 import java.io.*;
+import java.util.regex.PatternSyntaxException;
 
 import java.util.GregorianCalendar;
 import java.util.Calendar;
@@ -165,7 +166,71 @@ public class EntryManager {
     public IcPub addIcPub( Publication pub, User owner, DataState state ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new pub -> pmid=" + pub.getPmid() );
+        
+        if ( pub == null ) {
+            log.info( " new pub -> null");
+            return null;
+        }
+
+        if( pub.getPmid() != null && ! pub.getPmid().equals( "" ) ) {
+        
+            log.info( " new pub -> pmid=" + pub.getPmid() );
+        
+            return addPmidIcPub( pub, owner, state );
+            
+        } else {
+            if( pub != null 
+                && pub.getAuthor() != null && pub.getTitle() != null ){
+                
+                try {
+                    pub.setAuthor( pub.getAuthor().replaceAll( "^\\s+", "" ) );
+                    pub.setAuthor( pub.getAuthor().replaceAll( "\\s+$", "" ) );
+                    
+                    pub.setTitle( pub.getTitle().replaceAll( "^\\s+", "" ) );
+                    pub.setTitle( pub.getTitle().replaceAll( "\\s+$", "" ) );
+                } catch (PatternSyntaxException pse ) {
+                    // should not happen
+                }
+                
+                if ( pub.getAuthor().length() > 0 
+                     && pub.getTitle().length() > 0 ) {
+                    
+                    IcPub icp = new IcPub( pub );
+                    log.info( " IcPub=" + icp );
+                    
+                    
+                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
+                        .getJournal( "UNPUBLISHED" );
+                    icp.setSource( icj );
+                    
+                    icp.setOwner( owner ) ;
+                    icp.setState( state );
+                    
+                    // set admin user/group sets
+                    //--------------------------
+                    
+                    if ( icp.getSource() != null ) {
+                        icp.getAdminUsers()
+                            .addAll( icp.getSource().getAdminUsers() );
+                        icp.getAdminGroups()
+                            .addAll( icp.getSource().getAdminGroups() );
+                    }
+
+                    tracContext.getPubDao().savePublication( icp );
+                    return icp;
+                    //return (IcPub) tracContext.getPubDao()
+                    //    .getPublicationByPmid( icp.getPmid() );
+                }
+            }                
+        }
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public IcPub addPmidIcPub( Publication pub, User owner, DataState state ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
         
         // test if already in 
         //-------------------
@@ -174,7 +239,7 @@ public class EntryManager {
             .getPublicationByPmid( pub.getPmid() );
         
         if ( oldPub != null ) return oldPub;        
-
+        
         // get through proxy
         //------------------        
         
