@@ -236,7 +236,7 @@ public class EntryMgrAction extends ManagerSupport {
             log.info(  "setting icpub=" + getId() );
             icpub = entryManager.getIcPub( getId() );
             return SUCCESS;
-        }
+        } 
         
         if( getPmid() != null ) {
 
