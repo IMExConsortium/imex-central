@@ -26,7 +26,7 @@
          },
          {label:"Search",
           link:"page?id=search",
-          "disabled":"true",
+          "disabled":"false",
           menu:[
             {label:"Publications",
              link:"pubsrc.jsp",
