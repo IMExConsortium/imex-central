@@ -23,7 +23,7 @@
         title:"ImexCentral: Search",
         menusel:"1:2",
         viewtype:"file-html",
-        viewpath:"/pages/udev.html"
+        viewpath:"/pages/search.html"
       },
       pubadd:{
         active:true,
