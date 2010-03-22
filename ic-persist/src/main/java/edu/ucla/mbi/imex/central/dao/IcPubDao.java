@@ -87,6 +87,36 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     
     //---------------------------------------------------------------------
 
+    public Publication getPublicationByKey( String key ) { 
+        
+        Publication pub = null;
+        if ( key == null || key.equals("") ) return pub;
+        
+        try {
+
+            key = key.replaceAll( "\\D+", "" );
+
+            long lkey = Long.parseLong(key);
+            
+            startOperation();
+            Query query =
+                session.createQuery( "from IcPub p where " +
+                                     " p.icKey.value = :key ");
+            query.setParameter("key", lkey );
+            query.setFirstResult( 0 );
+            pub = (IcPub) query.uniqueResult();
+            tx.commit();
+            
+        } catch( DAOException dex ) {
+            // log error ?
+        } catch ( NumberFormatException nfe ){
+            // log error ?
+        }
+        return pub; 
+    }
+    
+    //---------------------------------------------------------------------
+
     public List<Publication> getPublicationList() {
         
         List<Publication> plst = null;

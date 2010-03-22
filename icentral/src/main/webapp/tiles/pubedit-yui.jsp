@@ -188,7 +188,7 @@
     <s:textfield theme="simple" name="pub.doi" size="32" maxLength="64"/>
    </td>
    <th rowspan="2" width="10%">
-    <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
+    <s:submit theme="simple" name="op.eidu" value="UPDATE" disabled="false"/>
    </th>
   </tr>
   <tr>
@@ -214,7 +214,7 @@
           <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
          </td>
          <th rowspan="2">
-          <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
+          <s:submit theme="simple" name="op.eatu" value="UPDATE" disabled="false"/>
          </th>
   </tr>
   <tr>
