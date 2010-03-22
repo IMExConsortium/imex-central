@@ -1,13 +1,13 @@
 package edu.ucla.mbi.imex.central;
 
-/* ========================================================================
- # $Id::                                                                  $
- # Version: $Rev::                                                        $
- #=========================================================================
+/* =============================================================================
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
+ #==============================================================================
  #
  # EntryManager - businness logic of entry/journal management 
  #                 
- #====================================================================== */
+ #=========================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
@@ -140,6 +140,21 @@ public class EntryManager {
         return oldPub;
     }
 
+    //---------------------------------------------------------------------
+    
+    public IcPub getIcPubByIcKey( String key ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " get pub -> key=" + key );
+        
+        // test if already in
+        //-------------------
+
+        IcPub oldPub =  (IcPub) tracContext.getPubDao()
+            .getPublicationByKey( key );
+        
+        return oldPub;
+    }
     
     //---------------------------------------------------------------------
     // get through proxy
@@ -360,7 +375,35 @@ public class EntryManager {
         }
         return pub;
     }
+
+    //--------------------------------------------------------------------------
+
+
+    public IcPub updateIcPubIdentifiers( int id, Publication pub ) {
+        
+        IcPub uPub = (IcPub) tracContext.getPubDao().getPublication( id );
+
+        if( uPub != null ) {
+            uPub.setDoi( pub.getDoi() );
+            uPub.setJournalSpecific( pub.getJournalSpecific() );
+            tracContext.getPubDao().savePublication( uPub );
+        }
+        return uPub;
+    }
     
+    //--------------------------------------------------------------------------
+
+    public IcPub updateIcPubAuthTitle( int id, Publication pub ) {
+        
+        IcPub uPub = (IcPub) tracContext.getPubDao().getPublication( id );
+        if( uPub != null ) {
+            uPub.setAuthor( pub.getAuthor() );
+            uPub.setTitle( pub.getTitle() );
+            tracContext.getPubDao().savePublication( uPub );
+        }
+        return uPub;
+    }
+
     //--------------------------------------------------------------------------
 
     public IcPub updateIcPubState( int id, int sid ) {

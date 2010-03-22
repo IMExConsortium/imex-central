@@ -1470,3 +1470,35 @@ td.footer {
 a.disabled {
   color: #a0a0a0;
 }
+
+.qfield {
+  border: 1px solid #aaaaaa;
+  background-color: #f0f0f0;
+  margin: 0px 0px 20px 0px;
+}
+
+.qlegend {
+  color: #888888;
+  background-color: #ffffff;
+}
+.qtable {
+  border: 0px solid #888888;
+  background-color: #f0f0f0;
+}
+
+.qtd {
+  border: 0px solid #eeeeee;
+  background-color: #f0f0f0;
+}
+
+.filter-name {
+  font-size: 0.8em;
+  font-weight: bold;
+  white-space: nowrap;
+  padding: 0 0 0 0.5em;
+}
+
+#dt-pag-nav {
+  margin: 0 0 6px 0;
+}
+

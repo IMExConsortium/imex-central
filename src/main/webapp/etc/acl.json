@@ -73,6 +73,22 @@
         allow:{
           user:["ADMIN"],
           role:["administrator","curator"],
+          group:["ADMIN"]
+        }
+      },
+      eidu:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
+      eatu:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
           group:["ADMIN","CURATOR"]
         }
       },

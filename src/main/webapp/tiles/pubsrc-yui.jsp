@@ -43,4 +43,25 @@
    </center>
   </td>
  </tr>
+ <tr>
+  <td>
+   <center>
+    <s:form theme="simple" action="pubsrc">
+     <fieldset class="qfield">
+      <legend class="qlegend">By IMEX Accession</legend>
+      <table width="100%" class="qtable">
+       <tr>
+        <th align="right" width="50%" nowrap>
+         IMEX ID: <s:textfield name="opp.imex"  size="16" maxlength="128" />
+        </th>
+        <td align="left">
+         <input type="submit" id="pubedit_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
+        </td>
+       </tr>
+      </table>
+     </fieldset>
+    </s:form>
+   </center>
+  </td>
+ </tr>
 </table>

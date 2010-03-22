@@ -1,7 +1,6 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =============================================================================
- * $HeadURL::                                                                  $
  * $Id::                                                                       $
  * Version: $Rev::                                                             $
  *==============================================================================
@@ -435,7 +434,11 @@ public class EntryMgrAction extends ManagerSupport {
                 //-----------------
 
                 if ( key.equalsIgnoreCase( "esrc" ) ) {
-                    return searchIcPub( icpub );
+                    String imex = null ;
+                    if ( getOpp() != null ) {
+                        imex = getOpp().get( "imex" );
+                    }
+                    return searchIcPub( icpub, imex );
                 }
 
                 //--------------------------------------------------------------
@@ -486,6 +489,26 @@ public class EntryMgrAction extends ManagerSupport {
                 
                 if ( key.equalsIgnoreCase( "epix" ) ) {
                     return genIcPubImex( getId(), icpub );
+                }
+                
+                //--------------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "eidu" ) ) {
+
+                    // update identifiers
+                    //-------------------
+
+                    return updateIcPubIdentifiers( getId(), icpub );
+                }
+
+                //--------------------------------------------------------------
+         
+                if ( key.equalsIgnoreCase( "eatu" ) ) {
+
+                    // update author/title
+                    //--------------------
+
+                    return updateIcPubAuthTitle( getId(), icpub );
                 }
                 
                 //--------------------------------------------------------------
@@ -659,9 +682,13 @@ public class EntryMgrAction extends ManagerSupport {
                     log.info( " op=" + val);
                     if ( key.equalsIgnoreCase( "esrc" ) ) {
 
+                        if ( getOpp() != null 
+                             && getOpp().get( "imex" ) != null 
+                             && ! getOpp().get( "imex" ).equals("") ) {
+                            break;
+                        }
 
-                        if( getPub() == null 
-                            || getPub().getPmid() == null ) {
+                        if( getPub() == null || getPub().getPmid() == null ) {
                             addFieldError( "pub.pmid",
                                            "PMID field cannot be empty." );
                             
@@ -683,6 +710,51 @@ public class EntryMgrAction extends ManagerSupport {
                         break;
                     }
                     
+                    //----------------------------------------------------------
+                    
+                    if ( key.equalsIgnoreCase( "eatu" ) ) {
+                        
+                        String auth = null;
+                        String title = null;
+                        
+                        if( getPub() != null ) {
+
+                            auth = getPub().getAuthor();
+                            title = getPub().getTitle();
+                            
+                            if (auth != null ) {
+                                auth = auth.replaceAll( "^\\s+", "" );
+                                auth = auth.replaceAll( "\\s+$", "" );
+                            } else {
+                                auth = "";
+                            }
+                            getPub().setAuthor( auth );
+
+                            if ( title != null ) {
+                                title = title.replaceAll( "^\\s+", "" );
+                                title = title.replaceAll( "\\s+$", "" );
+                            } else {
+                                title= "";
+                            }
+                            getPub().setTitle( title );
+
+                        }
+                        
+                        if( auth == null || auth.length() == 0 ) {
+                            addFieldError( "pub.author",
+                                           "Author field cannot be empty." );
+                        }
+                        
+                        if( title == null || title.length() == 0 ) {
+                            addFieldError( "pub.title",
+                                           "Title field cannot be empty." );
+                        }
+                        
+                        break;
+                    }
+                    
+                    //----------------------------------------------------------
+
                     if ( key.equalsIgnoreCase( "jsrc" ) ) {
                         if( getJournal() == null 
                             || getJournal().getNlmid() == null ) {
@@ -1130,12 +1202,33 @@ public class EntryMgrAction extends ManagerSupport {
     // operations: IcPub
     //------------------
 
-    public String searchIcPub( Publication pub ) {
+    public String searchIcPub( Publication pub, String imex ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " search pub -> id=" + pub.getId() +
-                  " pmid=" + pub.getPmid() );
-        
+
+        if( pub != null ) {
+            log.info( " search pub -> id=" + pub.getId() +
+                      " pmid=" + pub.getPmid() );
+        } else {  
+            log.info( " search pub -> imex=" + imex );
+        }        
+
+        try {
+            imex = imex.replaceAll("\\D+", "" );
+        } catch ( Exception ex ) {
+            // skip error
+        }
+
+        if ( imex != null && !imex.equals("") ) {
+            IcPub oldPub = entryManager.getIcPubByIcKey( imex );
+
+            if ( oldPub != null ) {
+                icpub = oldPub;
+                setId( oldPub.getId() );
+                return PUBEDIT;
+            }
+        }
+
         IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
         
         if ( oldPub != null ) {
@@ -1278,6 +1371,34 @@ public class EntryMgrAction extends ManagerSupport {
         
         log.info( " updated trans(props) -> id=" + id );
         */
+    }
+
+    //--------------------------------------------------------------------------
+
+    public String updateIcPubIdentifiers( int id, Publication pub ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " updateIcPubIds: id=" + id );
+        
+        IcPub uPub =  entryManager.updateIcPubIdentifiers( id, pub );
+        if( uPub != null ) {
+            this.setPub( uPub );
+        }
+        return SUCCESS;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public String updateIcPubAuthTitle( int id, Publication pub ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " updateIcPubAuthTitle: id=" + id );
+
+        IcPub uPub =  entryManager.updateIcPubAuthTitle( id, pub );
+        if( uPub != null ) {
+            this.setPub( uPub );
+        }
+        return SUCCESS;
     }
 
     //--------------------------------------------------------------------------
