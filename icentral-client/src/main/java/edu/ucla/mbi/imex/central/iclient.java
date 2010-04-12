@@ -65,9 +65,19 @@ public class iclient {
         id.setAc(ac);
         idl.add(id);
         try{
-
             PublicationList pl = port.getPublicationById( idl );
+            
+            if( pl != null ) {
+                for ( Iterator<Publication> 
+                          pli = pl.getPublication().iterator(); pli.hasNext(); 
+                      ) {
+                    Publication p = pli.next();
 
+                    System.out.println( " Author: " + p.getAuthor() );
+                    System.out.println( " Title: " + p.getTitle() );
+                }
+            }
+            
         } catch ( IcentralFault icf ){
             icf.printStackTrace();
         }
