@@ -1,0 +1,86 @@
+package edu.ucla.mbi.imex.central;
+
+/* =============================================================================
+ # $Id:: EntryManager.java 140 2010-03-22 16:25:42Z lukasz                     $
+ # Version: $Rev:: 140                                                         $
+ #==============================================================================
+ #
+ # iclient - simple icentral web service client
+ #
+ #=========================================================================== */
+
+import java.util.*;
+
+//import java.io.*;
+//import java.util.regex.PatternSyntaxException;
+
+//import java.util.GregorianCalendar;
+//import java.util.Calendar;
+
+//import edu.ucla.mbi.util.*;
+//import edu.ucla.mbi.util.dao.*;
+//import edu.ucla.mbi.util.data.*;
+//import edu.ucla.mbi.util.data.dao.*;
+
+import javax.xml.bind.*;
+import javax.xml.ws.BindingProvider;
+
+import javax.xml.namespace.QName;
+import java.net.URL;
+
+import edu.ucla.mbi.imex.central.ws.*;
+
+public class iclient {
+
+    static IcentralService service;
+    static IcentralPort port;
+    static String endpoint = "https://imexcentral.org/icentraltest/ws";
+    
+    public static void connect(String[] args) {
+
+        try {
+            URL url = new URL( endpoint + "?wsdl" );
+            System.out.println( "WSDL: " + endpoint + "?wsdl" );
+            QName qn = new QName("http://imex.mbi.ucla.edu/icentral/ws",
+                                 "ImexCentralService");
+            service = new IcentralService( url, qn );
+            port = service.getImexCentralPort();
+            
+            ( (BindingProvider) port ).getRequestContext()
+                .put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                      endpoint );
+            ( (BindingProvider) port ).getRequestContext()
+                .put( BindingProvider.USERNAME_PROPERTY, args[0] );
+            ( (BindingProvider) port ).getRequestContext()
+                .put( BindingProvider.PASSWORD_PROPERTY, args[1] );
+            
+        } catch ( Exception ex ) {
+            ex.printStackTrace();
+            System.out.println( "IcentralService: cannot connect" );
+        }        
+    }
+
+    public static void main( String[] args ) {
+        System.out.println( "iclient" );
+        
+        String ac = args[2];
+        System.out.println( "PMID=" + ac );
+
+        connect(args);
+        
+        ObjectFactory icOF = new ObjectFactory();
+        
+        List<Identifier> idl = new ArrayList<Identifier>();
+        Identifier id = icOF.createIdentifier();
+        id.setNs("pmid");
+        id.setAc(ac);
+        idl.add(id);
+        try{
+
+            PublicationList pl = port.getPublicationById( idl );
+
+        } catch ( IcentralFault icf ){
+            icf.printStackTrace();
+        }
+    }
+}
