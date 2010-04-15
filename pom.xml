@@ -52,30 +52,6 @@
   <dependencies>
 
    <dependency>
-     <groupId>edu.ucla.mbi.dip</groupId>
-     <artifactId>dip-util-data</artifactId>
-     <version>0.01</version>
-   </dependency>
-
-   <dependency>
-     <groupId>edu.ucla.mbi.dip</groupId>
-     <artifactId>dip-util-struts</artifactId>
-     <version>0.01</version>
-   </dependency>
-
-   <dependency>
-     <groupId>edu.ucla.mbi.dip</groupId>
-     <artifactId>dip-orm</artifactId>
-     <version>0.01</version>
-   </dependency>
-
-   <dependency>
-     <groupId>edu.ucla.mbi.dip</groupId>
-     <artifactId>dip-proxy-ws</artifactId>
-     <version>0.01</version>
-   </dependency>
-
-   <dependency>
     <groupId>postgresql</groupId>
     <artifactId>postgresql</artifactId>
     <version>8.3-603.jdbc4</version>
