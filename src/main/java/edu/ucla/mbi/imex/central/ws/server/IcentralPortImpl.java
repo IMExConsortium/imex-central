@@ -336,6 +336,55 @@ public class IcentralPortImpl implements IcentralPort {
     }
 
     //--------------------------------------------------------------------------
+
+    public void getServerStatus( String depth, Holder<String> version, 
+                                 Holder<String> status )
+        throws IcentralFault {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl:" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+
+        throw Fault.UNSUP;
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public edu.ucla.mbi.imex.central.ws.Publication 
+        updatePublicationAdminUser( Identifier identifier,
+                                    String operation,
+                                    String user) throws IcentralFault {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl:" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+        
+        throw Fault.UNSUP;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public edu.ucla.mbi.imex.central.ws.Publication 
+        updatePublicationAdminGroup( Identifier identifier,
+                                     String operation,
+                                     String group ) throws IcentralFault {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl:" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+        
+        throw Fault.UNSUP;
+    }
+
+
+
+    //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     // utilities
     //----------
@@ -399,9 +448,9 @@ public class IcentralPortImpl implements IcentralPort {
 
         return pub;
     }
-    
-    //---------------------------------------------------------------------
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     
     class Credentials{
         
