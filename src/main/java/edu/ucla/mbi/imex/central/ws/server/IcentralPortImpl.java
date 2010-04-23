@@ -72,6 +72,19 @@ public class IcentralPortImpl implements IcentralPort {
             // should not happen
         }
     }
+    
+    //--------------------------------------------------------------------------
+
+    private long delay = 30L;
+
+    public void setDelay( long delay ) {
+        this.delay = delay;
+    }
+    
+    public long getDelay() {
+        return this.delay;
+    }
+    
     static ObjectFactory of = new ObjectFactory();
 
     //--------------------------------------------------------------------------
@@ -262,7 +275,7 @@ public class IcentralPortImpl implements IcentralPort {
     //--------------------------------------------------------------------------
 
     public edu.ucla.mbi.imex.central.ws.Publication 
-        updatePublicationStatus( Identifier id, String status )
+        updatePublicationStatus( Identifier id, String status, String message )
         throws IcentralFault {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -342,12 +355,20 @@ public class IcentralPortImpl implements IcentralPort {
         throws IcentralFault {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl:" );
+        log.info( "IcentralPortImpl: getServerStatus" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
-        if ( ! c.test() ) throw Fault.AUTH;
-
-        throw Fault.UNSUP;
+        if ( ! c.test() ) {
+        
+            try{
+                Thread.sleep( delay*1000 );
+            } catch ( InterruptedException ie) {
+            }
+            status.value = "";
+        } else {
+            status.value = "OK";
+        }
+        version.value = Icentral.VERSION;
     }
     
     //--------------------------------------------------------------------------
@@ -357,11 +378,43 @@ public class IcentralPortImpl implements IcentralPort {
                                     String operation,
                                     String user) throws IcentralFault {
 
+        edu.ucla.mbi.imex.central.ws.Publication retPub = null;
+
+
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl:" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+
+
+        if( operation != null && operation.toUpperCase().equals("ADD") ) {
+
+            // get publication
+
+            // get user
+
+            // check authorisation
+
+            // add user
+
+
+
+            return retPub;
+        }
+
+        if( operation != null && operation.toUpperCase().equals("DROP") ) {
+
+            // get publication
+
+            // get user
+
+            // check authorisation
+
+            // add user
+
+            return retPub;
+        }
         
         throw Fault.UNSUP;
     }

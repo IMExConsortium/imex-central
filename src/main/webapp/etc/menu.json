@@ -75,7 +75,7 @@
            {label:"Users",
             link:"usermgr",
             "disabled":"false",
-            roles:["ADMIN"],
+            roles:["administrator"],
             menu:[]
            },
            {label:"Groups",
