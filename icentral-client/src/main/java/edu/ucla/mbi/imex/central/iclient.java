@@ -79,8 +79,8 @@ public class iclient {
             }
             
         } catch ( IcentralFault icf ){
-            System.out.println( "icf: code: " + icf.getFaultInfo().getFaultCode() + 
-                                " message: " + icf.getFaultInfo().getMessage()  );
+            System.out.println( "SERVER FAULT: CODE:" + icf.getFaultInfo().getFaultCode() + 
+                                " MESSAGE: " + icf.getFaultInfo().getMessage()  );
         }
     }
 }

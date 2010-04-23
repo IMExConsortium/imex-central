@@ -45,7 +45,25 @@
    </class>
   </bindings>
 
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublicationAdminUser']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublicationAdminGroup']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getPublicationImexAccession']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getServerStatus']/wsdl:fault">
    <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
    </class>

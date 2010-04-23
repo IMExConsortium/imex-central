@@ -40,6 +40,12 @@
      <xs:element name="publication" type="ic:publication"  minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
    </xs:complexType>
+
+   <xs:complexType name="identifierList">
+    <xs:sequence>
+     <xs:element name="identifier" type="ic:identifier"  minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+   </xs:complexType>
       
    <xs:element name="ImexCentralFault">
     <xs:complexType>
@@ -115,11 +121,48 @@
     </xs:complexType>
    </xs:element>
 
+   <xs:element name="updatePublicationAdminUser">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
+      <xs:element name="operation" type="xs:string" minOccurs="1"/>
+      <xs:element name="user" type="xs:string" minOccurs="1"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="updatePublicationAdminGroup">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
+      <xs:element name="operation" type="xs:string" minOccurs="1"/>
+      <xs:element name="group" type="xs:string" minOccurs="1"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
    <xs:element name="getPublicationImexAccession">
     <xs:complexType>
      <xs:sequence>
       <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
       <xs:element name="create" type="xs:boolean" minOccurs="0"  default="false" />
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="getServerStatus">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="depth" type="xs:string" minOccurs="0"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="getServerStatusResponse">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="version" type="xs:string" minOccurs="1"/>
+      <xs:element name="status" type="xs:string" minOccurs="1"/>
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -163,8 +206,24 @@
   <part name="request" element="ic:updatePublicationStatus"/>
  </message>
 
+ <message name="updatePublicationAdminUser">
+  <part name="request" element="ic:updatePublicationAdminUser"/>
+ </message>
+
+ <message name="updatePublicationAdminGroup">
+  <part name="request" element="ic:updatePublicationAdminGroup"/>
+ </message>
+
  <message name="getPublicationImexAccession">
   <part name="request" element="ic:getPublicationImexAccession"/>
+ </message>
+
+ <message name="getServerStatus">
+  <part name="request" element="ic:getServerStatus"/>
+ </message>
+
+ <message name="getServerStatusResponse">
+  <part name="response" element="ic:getServerStatusResponse"/>
  </message>
  
  <portType name="ImexCentralPort">
@@ -205,9 +264,27 @@
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
 
+  <operation name="updatePublicationAdminUser">
+   <input message="ic:updatePublicationAdminUser"/>
+   <output message="ic:publicationResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="updatePublicationAdminGroup">
+   <input message="ic:updatePublicationAdminGroup"/>
+   <output message="ic:publicationResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
   <operation name="getPublicationImexAccession">
    <input message="ic:getPublicationImexAccession"/>
    <output message="ic:publicationResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="getServerStatus">
+   <input message="ic:getServerStatus"/> 
+   <output message="ic:getServerStatusResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
  </portType>
@@ -270,6 +347,24 @@
    </fault>
   </operation>
 
+  <operation name="updatePublicationAdminUser">
+   <soap:operation soapAction="urn:updatePublicationAdminUser"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="updatePublicationAdminGroup">
+   <soap:operation soapAction="urn:updatePublicationAdminGroup"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
   <operation name="getPublicationImexAccession">
    <soap:operation soapAction="urn:updatePublicationStatus"/>
    <input><soap:body use="literal"/></input>
@@ -278,6 +373,16 @@
     <soap:fault name="ImexCentralFault" use="literal"/>
    </fault>
   </operation>
+
+  <operation name="getServerStatus">
+   <soap:operation soapAction="urn:getServerStatus"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
 
  </binding>
 
