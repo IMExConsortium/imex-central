@@ -12,7 +12,7 @@
 
       <icentral.version>${project.version}</icentral.version> 
       <icentral.bld>$Rev$</icentral.bld> 
-
+       <icentral.wsver>1.0</icentral.wsver>
        <jdbc.user>dip</jdbc.user>
        <jdbc.pass>444dip444</jdbc.pass>
        <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral_test</jdbc.dburl>

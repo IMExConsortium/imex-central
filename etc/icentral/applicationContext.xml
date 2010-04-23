@@ -79,14 +79,12 @@
 
  <bean id="myService" 
        class="edu.ucla.mbi.imex.central.ws.server.IcentralPortImpl">
-   <property name="entryManager" ref="entryManager"/>      
+   <property name="entryManager" ref="entryManager"/>
+   <property name="delay" value="5"/>       
  </bean>
 
  <ws:service  id="ImexCentralService" bean="#myService"/>
 
  <wss:binding url="/ws" service="#ImexCentralService" />
-
-
-
 
 </beans>
