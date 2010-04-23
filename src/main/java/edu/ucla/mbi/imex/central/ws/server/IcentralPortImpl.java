@@ -368,7 +368,7 @@ public class IcentralPortImpl implements IcentralPort {
         } else {
             status.value = "OK";
         }
-        version.value = Icentral.VERSION;
+        version.value = Icentral.WSVERSION;
     }
     
     //--------------------------------------------------------------------------
