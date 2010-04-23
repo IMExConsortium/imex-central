@@ -14,7 +14,7 @@
              targetNamespace="http://imex.mbi.ucla.edu/icentral/ws">
 
    <xs:complexType name="icentral">
-     <xs:attribute name="version" type="xs:string" fixed="1.0"/>
+     <xs:attribute name="wsversion" type="xs:string" fixed="1.0"/>
    </xs:complexType>
 
    <xs:complexType name="identifier">
