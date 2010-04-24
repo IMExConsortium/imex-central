@@ -379,41 +379,77 @@ public class IcentralPortImpl implements IcentralPort {
                                     String user) throws IcentralFault {
 
         edu.ucla.mbi.imex.central.ws.Publication retPub = null;
-
-
+        
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl:" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
-
-        if( operation != null && operation.toUpperCase().equals("ADD") ) {
-
-            // get publication
-
-            // get user
-
+        if( operation == null || identifier == null || user == null ) {
+            throw Fault.UNSUP;
+        }
+        
+        // get publication
+        //----------------
+        
+        if( !identifier.getNs().equals("pmid") ) throw Fault.ID_UNKNOWN;
+        
+        IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
+        IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
+        if ( icp == null ) throw Fault.NO_RECORD;
+        
+        if( operation.toUpperCase().equals("DROP") ) {
+            
+            //------------------------------------------------------------------
             // check authorisation
+            //--------------------
 
-            // add user
-
-
-
-            return retPub;
+            //------------------------------------------------------------------
+            // drop user
+            //----------
+            
+            boolean drop = false;
+            
+            Set<User> us = icp.getAdminUsers();
+            List<Integer> udel = new ArrayList<Integer>();
+            
+            
+            for( Iterator<User> ui = us.iterator(); ui.hasNext(); ) {
+                User u = ui.next();
+                if( u.getLogin().equals(user) ) {
+                    udel.add( new Integer( u.getId() ) );
+                    drop = true;
+                }
+            }
+            
+            if( drop ) {
+                IcPub icpub = entryManager.delAdminUsers( icp, udel ); 
+                return buildPub( icpub ); 
+            }
         }
 
-        if( operation != null && operation.toUpperCase().equals("DROP") ) {
-
-            // get publication
-
-            // get user
-
+        if( operation != null && operation.toUpperCase().equals("ADD") ) {
+            
+            //------------------------------------------------------------------
             // check authorisation
+            //--------------------
 
+            //------------------------------------------------------------------
+            // get user
+            //---------
+            
+            UserDao dao = entryManager.getUserContext().getUserDao();
+            IcUser usr = (IcUser) dao.getUser( user );
+           
+            //------------------------------------------------------------------
             // add user
+            //---------
 
-            return retPub;
+            if( usr != null ) {
+                IcPub icpub = entryManager.addAdminUser( icp, usr );
+                return buildPub( icpub );
+            }
         }
         
         throw Fault.UNSUP;
@@ -426,17 +462,83 @@ public class IcentralPortImpl implements IcentralPort {
                                      String operation,
                                      String group ) throws IcentralFault {
         
+        edu.ucla.mbi.imex.central.ws.Publication retPub = null;
+        
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl:" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         
+        if( operation == null || identifier == null || group == null ) {
+            throw Fault.UNSUP;
+        }
+        
+        // get publication
+        //----------------
+        
+        if( !identifier.getNs().equals("pmid") ) throw Fault.ID_UNKNOWN;
+        
+        IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
+        IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
+        if ( icp == null ) throw Fault.NO_RECORD;
+        
+        if( operation.toUpperCase().equals("DROP") ) {
+            
+            //------------------------------------------------------------------
+            // check authorisation
+            //--------------------
+
+            //------------------------------------------------------------------
+            // drop group
+            //-----------
+            
+            boolean drop = false;
+            
+            Set<Group> gs = icp.getAdminGroups();
+            List<Integer> gdel = new ArrayList<Integer>();
+            
+            
+            for( Iterator<Group> gi = gs.iterator(); gi.hasNext(); ) {
+                Group g = gi.next();
+                if( g.getLabel().equals( group ) ) {
+                    gdel.add( new Integer( g.getId() ) );
+                    drop = true;
+                }
+            }
+            
+            if( drop ) {
+                IcPub icpub = entryManager.delAdminGroups( icp, gdel ); 
+                return buildPub( icpub ); 
+            }
+        }
+
+        if( operation != null && operation.toUpperCase().equals("ADD") ) {
+            
+            //------------------------------------------------------------------
+            // check authorisation
+            //--------------------
+
+            //------------------------------------------------------------------
+            // get group
+            //----------
+            
+            GroupDao dao = entryManager.getUserContext().getGroupDao();
+            IcGroup grp = (IcGroup) dao.getGroup( group );
+            
+            //------------------------------------------------------------------
+            // add group
+            //----------
+
+            if( grp != null ) {
+                IcPub icpub = entryManager.addAdminGroup( icp, grp );
+                return buildPub( icpub );
+            }
+        }
+        
         throw Fault.UNSUP;
     }
-
-
-
+    
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     // utilities

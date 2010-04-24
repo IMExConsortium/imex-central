@@ -38,8 +38,11 @@ public class EntryMgrAction extends ManagerSupport {
     public static final String ACL_PAGE = "acl_page";
     public static final String ACL_OPER = "acl_oper";
 
-    //--------------------------------------------------------------------------
-    // Entry Manager
+    public static final String EDITOR = "CURATOR";
+    public static final String PARTNER = "IMEX PARTNER";
+    
+    ////------------------------------------------------------------------------
+    /// Entry Manager
     //--------------
 
     private EntryManager entryManager;
@@ -1697,6 +1700,60 @@ public class EntryMgrAction extends ManagerSupport {
             r.put( "state", ip.getState().getName() );
             r.put( "date", ip.getCreateDateString() );
             r.put( "time", ip.getCreateTimeString() );
+            r.put( "editor", "[N/A]" );
+            r.put( "imexDb", "[N/A]" );
+
+            // set partner
+            //------------
+
+            String partner = "";
+
+            Set<Group> gs = ip.getAdminGroups();
+            for( Iterator<Group> gi = gs.iterator(); gi.hasNext(); ) {
+
+                Group g = gi.next();
+                Set<Role> rs = g.getRoles();
+
+                for( Iterator<Role> ri = rs.iterator(); ri.hasNext(); ) {
+                    Role role = ri.next();
+                    if( role.getName().toUpperCase().equals(PARTNER) ) {
+                        partner += g.getLabel()+":";
+                    }
+                    //log.info( "r:" + role.getName() );
+                }
+                //log.info( "g:" + g.getLabel() );
+                
+            }
+            if ( !partner.equals("") ) {
+                r.put( "imexDb", partner.substring(0,partner.length()-1 ) );
+            }
+            
+
+            // set editors
+            //------------
+
+            String editor = "";
+
+            Set<User> us = ip.getAdminUsers();
+            for( Iterator<User> ui = us.iterator(); ui.hasNext(); ) {
+
+                User u = ui.next();
+                Set<Role> rs = u.getRoles();
+
+                for( Iterator<Role> ri = rs.iterator(); ri.hasNext(); ) {
+                    Role role = ri.next();
+                    if( role.getName().toUpperCase().equals(EDITOR) ) {
+                        editor += u.getLogin()+":";
+                    }
+                    //log.info( "r:" + role.getName() );
+                }
+                //log.info( "u:" + u.getLogin() );
+                
+            }
+            if ( !editor.equals("") ) {
+                r.put( "editor", editor.substring(0,editor.length()-1 ) );
+            }
+            
             rl.add( r );
         }
         
