@@ -112,6 +112,24 @@ YAHOO.imex.pubmgr = function() {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = oData; 
     };
+
+    this.myPartnerListFormatter = function(elLiner, oRecord, oColumn, oData) {
+        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+        if( oRecord !== undefined  &&  oRecord.getData("imexDb") !== undefined ) {            
+            elLiner.innerHTML = oRecord.getData( "imexDb" );
+        } else {
+            elLiner.innerHTML = '<i>N/A</i>';
+        } 
+    };
+
+    this.myEditorListFormatter = function(elLiner, oRecord, oColumn, oData) {
+        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+        if( oRecord !== undefined  &&  oRecord.getData("editor") !== undefined ) {            
+            elLiner.innerHTML = oRecord.getData("editor");
+        } else {
+            elLiner.innerHTML = '<i>N/A</i>';
+        } 
+    };
     
     // Add the custom formatters 
     
@@ -119,6 +137,8 @@ YAHOO.imex.pubmgr = function() {
     YAHOO.widget.DataTable.Formatter.elink = this.myElinkFormatter; 
     YAHOO.widget.DataTable.Formatter.crt = this.myDateFormatter; 
     YAHOO.widget.DataTable.Formatter.center = this.myCenterFormatter; 
+    YAHOO.widget.DataTable.Formatter.partnerList = this.myPartnerListFormatter; 
+    YAHOO.widget.DataTable.Formatter.editorList = this.myEditorListFormatter; 
     
     // create datasource 
     //------------------
@@ -128,7 +148,8 @@ YAHOO.imex.pubmgr = function() {
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
     myDataSource.responseSchema = { 
         resultsList: "records.records", 
-        fields: ["id","author","title","pmid","imexId","owner","state","date","time"], 
+        fields: ["id","author","title","pmid","imexId",
+                 "owner","state","date","time","imexDb","editor"], 
         metaFields: { 
             totalRecords: "records.totalRecords", 
             paginationRecordOffset : "records.startIndex", 
@@ -157,6 +178,8 @@ YAHOO.imex.pubmgr = function() {
           formatter:"center", className:"pmid" },
         { key:"imexId", label:"ImexId", sortable:true, resizeable:true, 
           formatter:"center" },
+        { key:"imexDb", label:"<center>Imex<br/>Partner</center>", sortable:true, resizeable:true, 
+          formatter:"partnerList" },
         { key:"state", label:"Status", sortable:true, resizeable:false, 
           formatter:"center" },
         { label:"Submission", 
@@ -164,9 +187,11 @@ YAHOO.imex.pubmgr = function() {
              { key:"date",  label:"Date",sortable:true, resizeable:false, 
                formatter:"crt" },
              { key:"owner", label:"Owner",sortable:true, resizeable:false, 
-               formatter:"center" }
+               formatter:"list" }
           ]
         },
+        { key:"editor", label:"<center>Record<br/>Editor</center>", sortable:true, resizeable:true, 
+          formatter:"editorList" },
         { key:"detail", label:"",sortable:false, resizeable:true, 
           formatter:"elink", className:"detail" }
     ];
@@ -197,7 +222,7 @@ YAHOO.imex.pubmgr = function() {
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
 
-        //        alert("request: " + req);
+        alert("request: " + req);
         
         // build custom request
         //---------------------

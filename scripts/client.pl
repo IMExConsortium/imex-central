@@ -15,6 +15,9 @@ my $usr ="foo";
 my $pass ="bar";
 my $create="false";
 
+my $ausr = "";
+my $agrp = "";
+
 for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/IP=(.+)/ ) {
         $ip=$1;
@@ -46,6 +49,12 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     }
     if( $ARGV[$i]=~/CREATE=(.+)/ ) {
         $create=$1;
+    }
+    if( $ARGV[$i]=~/AUSR=(.+)/ ) {
+        $ausr=$1;
+    }
+    if( $ARGV[$i]=~/AGRP=(.+)/ ) {
+        $agrp=$1;
     }
 
 }
@@ -114,7 +123,66 @@ if($op ne "" ) {
                                                              "<identifier ns='$ns' ac='$ac' />" ),
                                            SOAP::Data->name("create" => $create) );
     }
-    
+
+    if( $op eq "addAdminUser" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->updatePublicationAdminUser( SOAP::Data->type( 'xml' =>
+                                                            "<identifier ns='$ns' ac='$ac' />" ),
+                                          SOAP::Data->name("operation" => "ADD"),
+                                          SOAP::Data->name("user" => $ausr) );
+    }
+
+    if( $op eq "dropAdminUser" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->updatePublicationAdminUser( SOAP::Data->type( 'xml' =>
+                                                            "<identifier ns='$ns' ac='$ac' />" ),
+                                          SOAP::Data->name("operation" => "DROP"),
+                                          SOAP::Data->name("user" => $ausr) );
+    }
+    if( $op eq "addAdminGroup" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->updatePublicationAdminGroup( SOAP::Data->type( 'xml' =>
+                                                             "<identifier ns='$ns' ac='$ac' />" ),
+                                           SOAP::Data->name("operation" => "ADD"),
+                                           SOAP::Data->name("group" => $agrp) );
+    }
+
+    if( $op eq "dropAdminGroup" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL)
+            ->proxy($URL)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->updatePublicationAdminGroup( SOAP::Data->type( 'xml' =>
+                                                             "<identifier ns='$ns' ac='$ac' />" ),
+                                           SOAP::Data->name("operation" => "DROP"),
+                                           SOAP::Data->name("group" => $agrp) );
+    }
+
 }
 
 print $som,"\n";
