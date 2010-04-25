@@ -173,16 +173,16 @@ YAHOO.imex.pubmgr = function() {
         //{ key:"del",label:"",  sortable:false, resizeable:false,
         //  formatter:"checkbox", className:"checkbox" },
         { key:"pub", label:"Publication", sortable:true, resizeable:true, 
-          formatter:"publication", maxAutoWidth:1000 },
+          formatter:"publication", maxAutoWidth:1000, menuLabel:"Publication" },
         { key:"pmid", label:"PMID", sortable:true, resizeable:true, 
-          formatter:"center", className:"pmid" },
-        { key:"imexId", label:"ImexId", sortable:true, resizeable:true, 
-          formatter:"center" },
+          formatter:"center", className:"pmid", menuLabel:"PMID" },
+        { key:"imexId", label:"<center>Imex<br/>Accession</center>", sortable:true, resizeable:true, 
+          formatter:"center",menuLabel:"Imex Accession" },
         { key:"imexDb", label:"<center>Imex<br/>Partner</center>", sortable:true, resizeable:true, 
-          formatter:"partnerList" },
+          formatter:"partnerList",menuLabel:"Imex Partner" },
         { key:"state", label:"Status", sortable:true, resizeable:false, 
-          formatter:"center" },
-        { label:"Submission", 
+          formatter:"center",menuLabel:"Status" },
+        { label:"Submission", menuLabel:"Submission",key:"submission",
           children:[
              { key:"date",  label:"Date",sortable:true, resizeable:false, 
                formatter:"crt" },
@@ -190,8 +190,8 @@ YAHOO.imex.pubmgr = function() {
                formatter:"list" }
           ]
         },
-        { key:"editor", label:"<center>Record<br/>Editor</center>", sortable:true, resizeable:true, 
-          formatter:"editorList" },
+        { key:"editor", label:"Curator(s)", sortable:true, resizeable:true, 
+          formatter:"editorList",menuLabel:"Curator(s)" },
         { key:"detail", label:"",sortable:false, resizeable:true, 
           formatter:"elink", className:"detail" }
     ];
@@ -222,7 +222,7 @@ YAHOO.imex.pubmgr = function() {
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
 
-        alert("request: " + req);
+        //alert("request: " + req);
         
         // build custom request
         //---------------------
@@ -312,8 +312,51 @@ YAHOO.imex.pubmgr = function() {
         tableReload( oMyAcInstance.my.table, oMyAcInstance.my.table );
     };
     
-    acEditor.itemSelectEvent.subscribe( acSelectHandler );
+    try{
+        
+        acEditor.itemSelectEvent.subscribe( acSelectHandler );
+        
+        
+        myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
+        
+        var oConfMenu = [[{text:"Preferences" }],
+                         [{text: "Show Columns", 
+                           submenu: myDataTable.my.colmenu }],
+                         [{text:"Save...", disabled: true}]
+                        ];        
+        
+        var clist=[];
+        var trigger=[];
+
+        for( var i = 0;  i < myColumnDefs.length; i++ ) {
+            if( myColumnDefs[i].menuLabel !== undefined ) {
+                var item= {text: myColumnDefs[i].menuLabel,
+                           checked: true };
+                clist.push(item);
+                var trg = myDataTable.getColumn( myColumnDefs[i].key );
+                //alert( myColumnDefs[i].key+ "::"+trg);
+                if( trg !== null ) {
+                    trigger.push( trg.getThEl() );
+                    //alert(trg.getThEl());
+                }
+            }
+        }
+
+        myDataTable.my.colmenu.addItems( clist );
+
+        myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
+            "configmenu", { trigger: trigger } );
+
+
+        myDataTable.my.configmenu.addItems( oConfMenu );
     
+        myDataTable.my.configmenu.render("pubtab");
+
+    } catch (x) {
+        alert(x);
+    }
+
+
     return { 
         ds: myDataSource, 
         dt: myDataTable 

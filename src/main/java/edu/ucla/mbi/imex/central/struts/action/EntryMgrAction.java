@@ -1700,8 +1700,8 @@ public class EntryMgrAction extends ManagerSupport {
             r.put( "state", ip.getState().getName() );
             r.put( "date", ip.getCreateDateString() );
             r.put( "time", ip.getCreateTimeString() );
-            r.put( "editor", "[N/A]" );
-            r.put( "imexDb", "[N/A]" );
+            r.put( "editor", "N/A" );
+            r.put( "imexDb", "N/A" );
 
             // set partner
             //------------
