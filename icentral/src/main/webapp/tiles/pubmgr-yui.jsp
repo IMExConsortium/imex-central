@@ -27,7 +27,7 @@
      <td>&nbsp;</td>
      <td class="filter-name">By Partner</td>
      <td>&nbsp;</td>
-     <td class="filter-name">By Editor</td> 
+     <td class="filter-name">By Curator</td> 
     </tr>
     <tr>
      <td><div id="dt-pag-nav"></div></td>
