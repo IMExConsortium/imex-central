@@ -40,7 +40,7 @@
        <table width="100%" border="1">
         <td align="right" nowrap>Comments</td>
         <td align="left" width="95%"> 
-         <s:textarea name="state.comments" value="%{state.comments}" cols="32" rows="4"/>
+         <s:textarea name="state.comments" value="%{state.comments}" cols="64" rows="4"/>
         </td>
          <th rowspan="1">
           <s:submit theme="simple" name="op.pup" value="STORE"/>
