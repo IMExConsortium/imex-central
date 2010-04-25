@@ -100,7 +100,7 @@
         <tr>
          <td align="right" nowrap>Comments</td>
          <td>
-          <s:textarea name="group.comments" value="%{group.comments}" cols="32" rows="4"/>
+          <s:textarea name="group.comments" value="%{group.comments}" cols="64" rows="4"/>
          </td>
         </tr>
         <tr>
