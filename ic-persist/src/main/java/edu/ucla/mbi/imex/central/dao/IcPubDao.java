@@ -225,6 +225,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
+        log.info( "IcPubDao:getPublicationList(block) filt(partner)=:" + 
+                  flt.get("partner") );
 
         try {
             startOperation();

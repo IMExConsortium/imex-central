@@ -47,8 +47,8 @@ YAHOO.imex.pubmgr = function() {
     
     var partnerSel = [
         { text: "---ANY---", value: "" },
-        { text: "DIP", value: "DIPDB" },
-        { text: "IntAct", value: "IntAct" },
+        { text: "DIP", value: "DIP" },
+        { text: "IntAct", value: "INTACT" },
         { text: "MINT", value: "MINT" },
         { text: "MPIDB", value: "MPIDB" }
     ];
