@@ -44,8 +44,8 @@ public class Fault {
         UNSUP = createFault( 98, "operation not supported" );
     public static final IcentralFault
         UNKNOWN = createFault( 99, "internal server error" );
-        
-    //---------------------------------------------------------------------
+    
+    //--------------------------------------------------------------------------
     
     private static ObjectFactory faultFactory;
     
@@ -59,7 +59,8 @@ public class Fault {
         ImexCentralFault icf = faultFactory.createImexCentralFault();
         icf.setFaultCode( code );
         icf.setMessage( message );
-        return new IcentralFault("ImexCentral Fault", icf);
+        IcentralFault flt = new IcentralFault( "ImexCentral Fault", icf );
+        return flt;
     }
     
 }

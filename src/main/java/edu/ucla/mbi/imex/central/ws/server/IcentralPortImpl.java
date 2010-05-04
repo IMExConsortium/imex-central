@@ -203,7 +203,7 @@ public class IcentralPortImpl implements IcentralPort {
             boolean noid = true;
             IcPub icp = null;
             if( ns == null || ac == null ) throw Fault.ID_MISSING;
-
+            
             if( ns.equals( "pmid" ) ) {
                 icp = (IcPub) pubDao.getPublicationByPmid( ac );
                 log.info( " icp=" + icp );
@@ -333,18 +333,23 @@ public class IcentralPortImpl implements IcentralPort {
         if( ns == null || ac == null )  throw Fault.ID_MISSING;
         if( !ns.equals("pmid") ) throw Fault.ID_UNKNOWN;
         
-        log.info( " ns=" + ns + " ac=" + ac );
+        log.info( " ns=" + ns + " ac=" + ac + "create=" + create );
 
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
         IcPub icp = (IcPub) pubDao.getPublicationByPmid( ac );       
         if ( icp == null ) throw Fault.NO_RECORD;
 
+        log.info( " imexid(old)=" + icp.getImexId() );
+
         if( ( icp.getImexId() == null || icp.getImexId().equals("N/A") )
             && create ) {
             icp = entryManager.genIcPubImex( icp );
-        } else {
+        }
+
+        if( icp.getImexId() == null || icp.getImexId().equals("N/A") ) {
             throw Fault.NO_IMEX;
         }
+        log.info( " imexid(final)=" + icp.getImexId() );
         return buildPub( icp );
     }
 
@@ -627,9 +632,11 @@ public class IcentralPortImpl implements IcentralPort {
                     (Map) context.get(MessageContext.HTTP_REQUEST_HEADERS ) ;
                 
                 String b64str = (String) 
-                    ((List) requestHeaders.get("Authorization")).get(0);            
+                    ((List) requestHeaders.get("Authorization")).get(0);
+                
                 String lpString = 
                     new String( Base64.decodeBase64( b64str.substring(6) ) );
+
                 
                 login = lpString.substring( 0, lpString.indexOf( ":" ) );
                 pass = lpString.substring( lpString.indexOf( ":" ) + 1 );
@@ -644,8 +651,15 @@ public class IcentralPortImpl implements IcentralPort {
                  entryManager.getUserContext() == null ) return false;
             
             UserDao dao = entryManager.getUserContext().getUserDao();
-            if (dao == null ) return false;
+            if ( dao == null ) return false;
             
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( "Credentials.test: login=" + login );
+
+            if( login == null ) {
+                return false;
+            }
+
             User user = dao.getUser( login );
             
             if ( user != null && pass != null ) {
