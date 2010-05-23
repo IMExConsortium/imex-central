@@ -1230,6 +1230,10 @@ public class EntryMgrAction extends ManagerSupport {
                 setId( oldPub.getId() );
                 return PUBEDIT;
             }
+
+            addActionError( "No publication found" ) ;
+            return NOPUB;
+
         }
 
         IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
