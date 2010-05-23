@@ -58,7 +58,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             query.setFirstResult( 0 );
             state = (DataState) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -78,7 +78,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             
             slst = (List<DataState>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
         } 
@@ -152,7 +152,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             query.setFirstResult( 0 );
             trans = (Transition) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -172,7 +172,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             
             tlst = (List<Transition>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
         } 

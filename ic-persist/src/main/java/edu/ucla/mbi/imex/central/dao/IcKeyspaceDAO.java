@@ -45,7 +45,7 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
             query.setFirstResult( 0 );
             ksp = (IcKeyspace) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }

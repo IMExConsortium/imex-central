@@ -54,7 +54,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             role = (IcRole) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -75,7 +75,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             
             rlst = (List<Role>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
         } 
@@ -133,7 +133,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             cnt = (Long) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -159,7 +159,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             ulst = (List<User>) query.list();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -185,7 +185,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             cnt = (Long) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -211,7 +211,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             ulst = (List<Group>) query.list();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }

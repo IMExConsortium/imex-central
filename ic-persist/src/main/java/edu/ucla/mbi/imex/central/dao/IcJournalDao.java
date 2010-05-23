@@ -55,7 +55,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             query.setFirstResult( 0 );
             journal = (IcJournal) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -77,7 +77,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             query.setFirstResult( 0 );
             journal = (IcJournal) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -97,7 +97,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             
             jlst = (List<Journal>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
         } 
@@ -115,7 +115,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
                 .createQuery( "select count(j) from IcJournal j where id > 0" );
             count  = (Long) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -140,7 +140,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
             jlst = (List<Journal>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
             dex.printStackTrace();

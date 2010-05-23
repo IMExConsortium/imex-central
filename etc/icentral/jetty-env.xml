@@ -6,7 +6,8 @@
  <New class="org.mortbay.jetty.plus.naming.Resource">
   <Arg>jdbc/icentral</Arg>
   <Arg>
-   <New class="org.postgresql.ds.PGSimpleDataSource">
+   <New class="org.postgresql.ds.PGSimpleDataSource"> 
+<!--   <New class="org.postgresql.ds.PGConnectionPoolDataSource"> -->
     <Set name="User">${jdbc.user}</Set>
     <Set name="Password">${jdbc.pass}</Set>
     <Set name="DatabaseName">${jdbc.dbnme}</Set>

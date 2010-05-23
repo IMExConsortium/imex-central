@@ -54,7 +54,7 @@ public class IcUserDao extends AbstractDAO implements UserDao {
             query.setFirstResult( 0 );
             user = (IcUser) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();            
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -82,7 +82,7 @@ public class IcUserDao extends AbstractDAO implements UserDao {
             
             userl = (List<User>) query.list();
             tx.commit();
-        
+            HibernateUtil.closeSession();
             System.out.println( firstRecord+ " :: " + 
                                 blockSize + " :: " + userl.size() );
     

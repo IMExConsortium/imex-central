@@ -54,7 +54,7 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             query.setFirstResult( 0 );
             group = (IcGroup) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -128,7 +128,7 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             query.setFirstResult( 0 );
             cnt = (Long) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -154,7 +154,7 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             query.setFirstResult( 0 );
             ulst = (List<User>) query.list();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
