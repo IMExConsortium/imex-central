@@ -55,7 +55,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -78,7 +78,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -106,7 +106,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         } catch ( NumberFormatException nfe ){
@@ -131,7 +131,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             plst = (List<Publication>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
             dex.printStackTrace();
@@ -160,7 +160,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             plst = (List<Publication>) query.list();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
             dex.printStackTrace();
@@ -206,7 +206,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             plst = crit.list();
             
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
             dex.printStackTrace();
@@ -253,7 +253,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             log.info( "IcPubDao: size=" + plst.size()); 
             
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch ( DAOException dex ) {
             // log exception ?
             dex.printStackTrace(); 
@@ -275,7 +275,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             Query query = session.createQuery( "select count(p) from IcPub p" );
             count  = (Long) query.uniqueResult();
             tx.commit();
-
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
@@ -302,7 +302,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             count  = ((Integer) foo.get(0) ).longValue() ;
             log.info( "count=" + count );
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             dex.printStackTrace();
         } catch( Exception ex ) {
@@ -398,12 +398,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            
+            HibernateUtil.closeSession();
         } catch( DAOException dex ) {
             // log error ?
         }
         return pub; 
     }
-
-
+    
 }
