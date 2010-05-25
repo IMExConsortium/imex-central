@@ -33,13 +33,7 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
 
     public DataState getDataState( int id ) { 
         
-        DataState pub = null;
-        
-        try {
-            pub = (DataState) super.find( IcDataState.class, id );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        DataState pub = (DataState) super.find( IcDataState.class, id );
         return pub; 
     }
     
@@ -58,10 +52,13 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             query.setFirstResult( 0 );
             state = (DataState) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+        
         return state; 
     }
     
@@ -78,10 +75,12 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             
             slst = (List<DataState>) query.list();
             tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
             HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
-            // log exception ?
-        } 
+        }
         return slst;
     }
 
@@ -94,50 +93,36 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
     //---------------------------------------------------------------------
 
     public void saveDataState( DataState state ) { 
-        try {          
-            super.saveOrUpdate( new IcDataState( state ) );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+
+        super.saveOrUpdate( new IcDataState( state ) );
+            
     }
     
     //---------------------------------------------------------------------
     
     public void updateDataState( DataState state ) { 
-        try {
-            super.saveOrUpdate( state );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+
+        super.saveOrUpdate( state );
     }
     
     //---------------------------------------------------------------------
 
     public void deleteDataState( DataState state ) { 
-        try {
-            super.delete( state );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+    
+        super.delete( state );
     }
-
-    //---------------------------------------------------------------------
+    
+    //--------------------------------------------------------------------------
     // Transition
     //-----------
 
     public Transition getTrans( int id ) { 
         
-        Transition trans = null;
-
-        try {
-            trans = (Transition) super.find( IcTransition.class, id );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        Transition trans = (Transition) super.find( IcTransition.class, id );
         return trans; 
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public Transition getTrans( String name ) { 
         
@@ -152,10 +137,13 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             query.setFirstResult( 0 );
             trans = (Transition) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+        
         return trans; 
     }
     
@@ -172,10 +160,13 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             
             tlst = (List<Transition>) query.list();
             tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
             HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
-            // log exception ?
-        } 
+        }
+        
         return tlst;
     }
 
@@ -188,31 +179,21 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
     //---------------------------------------------------------------------
 
     public void saveTrans( Transition trans ) { 
-        try {          
-            super.saveOrUpdate( new IcTransition ( trans ) );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        
+        super.saveOrUpdate( new IcTransition ( trans ) );
     }
     
     //---------------------------------------------------------------------
     
     public void updateTrans( Transition trans ) { 
-        try {
-            super.saveOrUpdate( trans );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        
+        super.saveOrUpdate( trans );        
     }
     
     //---------------------------------------------------------------------
 
     public void deleteTrans( Transition trans ) { 
-        try {
-            super.delete( trans );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        super.delete( trans );
     }
 }
 

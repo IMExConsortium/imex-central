@@ -29,13 +29,7 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
     public Journal getJournal( int id ) { 
         
-        Journal journal = null;
-
-        try {
-            journal =  (IcJournal) super.find( IcJournal.class, id );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        Journal journal = (IcJournal) super.find( IcJournal.class, id );
         return journal; 
     }
     
@@ -55,10 +49,13 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             query.setFirstResult( 0 );
             journal = (IcJournal) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+
         return journal; 
     }
 
@@ -77,10 +74,13 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             query.setFirstResult( 0 );
             journal = (IcJournal) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+
         return journal; 
     }
 
@@ -97,17 +97,20 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             
             jlst = (List<Journal>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log exception ?
-        } 
+        } finally {
+            HibernateUtil.closeSession();
+        }
+
         return jlst;
     }
 
     //--------------------------------------------------------------------------
 
     public long getJournalCount() {
-
+        
         long count = 0;
         try {
             startOperation();
@@ -115,10 +118,13 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
                 .createQuery( "select count(j) from IcJournal j where id > 0" );
             count  = (Long) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+
         return count;
     }
 
@@ -140,12 +146,14 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
 
             jlst = (List<Journal>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log exception ?
-            dex.printStackTrace();
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
         }
-
+        
         System.out.println("jlist" + jlst);
         return jlst;
     }
@@ -153,14 +161,11 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     //--------------------------------------------------------------------------
 
     public void saveJournal( Journal journal ) { 
-        try {          
-            if ( journal instanceof IcJournal ) {
-                super.saveOrUpdate( journal );
-            } else {
-                super.saveOrUpdate( new IcJournal( journal ) );
-            }
-        } catch ( DAOException dex ) {
-            // log exception ?
+                  
+        if ( journal instanceof IcJournal ) {
+            super.saveOrUpdate( journal );
+        } else {
+            super.saveOrUpdate( new IcJournal( journal ) );
         }
     }
     
@@ -168,22 +173,14 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     //-------------------------------------------------------------------------
     
     public void updateJournal( Journal journal ) { 
-        try {
-            super.saveOrUpdate( journal );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        super.saveOrUpdate( journal );
     }
     
     
     //-------------------------------------------------------------------------
 
-    public void deleteJournal( Journal journal ) { 
-        try {
-            super.delete( journal );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+    public void deleteJournal( Journal journal ) {    
+        super.delete( journal );
     }
 
 }

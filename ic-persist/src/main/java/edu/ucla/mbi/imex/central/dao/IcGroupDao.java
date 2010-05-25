@@ -29,21 +29,15 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     
     public Group getGroup( int id ) { 
         
-        Group group = null;
-
-        try {
-            group =  (IcGroup) super.find( IcGroup.class, id );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        Group group = (IcGroup) super.find( IcGroup.class, id ); 
         return group; 
     }
 
-
+    
     //---------------------------------------------------------------------
 
     public Group getGroup( String label ) {
-
+        
         Group group = null;
         try {
             startOperation();
@@ -54,10 +48,13 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             query.setFirstResult( 0 );
             group = (IcGroup) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+
         return group;
     }
 
@@ -66,13 +63,7 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
 
     public List<Group> getGroupList() {
      
-        List<Group> glst = null;
-        
-        try {
-            glst = (List<Group>) super.findAll( IcGroup.class );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        List<Group> glst = (List<Group>) super.findAll( IcGroup.class );
         return glst;
     }
 
@@ -80,33 +71,21 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     //---------------------------------------------------------------------
 
     public void saveGroup( Group group ) { 
-        try {
-            super.saveOrUpdate( new IcGroup( group ) );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        super.saveOrUpdate( new IcGroup( group ) );
     }
     
 
     //---------------------------------------------------------------------
     
-    public void updateGroup( Group group ) { 
-        try {
-            super.saveOrUpdate( group );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+    public void updateGroup( Group group ) {   
+        super.saveOrUpdate( group );
     }
     
     
     //---------------------------------------------------------------------
 
     public void deleteGroup( Group group ) { 
-        try {
-            super.delete( group );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        super.delete( group );
     }
 
     
@@ -128,11 +107,13 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             query.setFirstResult( 0 );
             cnt = (Long) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
-        
+
         return cnt;
     }
     
@@ -154,11 +135,13 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             query.setFirstResult( 0 );
             ulst = (List<User>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
-        
+
         return  ulst;
     }
 }

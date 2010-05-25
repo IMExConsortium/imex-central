@@ -29,13 +29,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
     
     public Role getRole( int id ) { 
         
-        Role grp = null;
-
-        try {
-            grp =  (IcRole) super.find( IcRole.class, id );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        Role grp = (IcRole) super.find( IcRole.class, id );
         return grp; 
     }
     
@@ -54,10 +48,14 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             role = (IcRole) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+        
         return role; 
     }
     
@@ -75,10 +73,14 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             
             rlst = (List<Role>) query.list();
             tx.commit();
+            
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
             HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
-            // log exception ?
-        } 
+        }
+
         return rlst;
     }
 
@@ -86,35 +88,26 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
     //---------------------------------------------------------------------
 
     public void saveRole( Role role ) { 
-        try {          
-            super.saveOrUpdate( new IcRole( role ) );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+                  
+        super.saveOrUpdate( new IcRole( role ) );
     }
     
 
     //---------------------------------------------------------------------
     
     public void updateRole( Role role ) { 
-        try {
-            super.saveOrUpdate( role );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+
+        super.saveOrUpdate( role );
     }
     
     
     //---------------------------------------------------------------------
 
     public void deleteRole( Role role ) { 
-        try {
-            super.delete( role );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+    
+        super.delete( role );
     }
-
+    
     //---------------------------------------------------------------------
     // usage/count: Users
     //-------------------
@@ -133,9 +126,11 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             cnt = (Long) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
 
         return cnt;
@@ -160,9 +155,13 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             ulst = (List<User>) query.list();
             tx.commit();
             HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
+        
         return ulst;
     }
 
@@ -185,11 +184,13 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             cnt = (Long) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
-
+        
         return cnt;
     }
 
@@ -211,11 +212,12 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             ulst = (List<Group>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
-
         return ulst;
     }
 }

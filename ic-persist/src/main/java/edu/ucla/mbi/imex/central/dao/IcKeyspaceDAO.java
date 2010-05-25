@@ -45,9 +45,10 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
             query.setFirstResult( 0 );
             ksp = (IcKeyspace) query.uniqueResult();
             tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+        } finally {
             HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
-            // log error ?
         }
         return ksp;
     }
@@ -61,24 +62,20 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
     }
     
     public void saveKeyspace( Keyspace ksp ) {
-
-        try {
-            if ( ksp instanceof IcKeyspace ) {
-                super.saveOrUpdate( ksp );
-            } else {
-                super.saveOrUpdate( new IcKeyspace( ksp ) );
-            }
-        }  catch ( DAOException dex ) {
-            // log exception ?
-        }        
+        
+        if ( ksp instanceof IcKeyspace ) {
+            super.saveOrUpdate( ksp );
+        } else {
+            super.saveOrUpdate( new IcKeyspace( ksp ) );
+        }       
     }
 
     public void updateKeyspace( Keyspace ksp ) {
-
+        
     }
 
     public void deleteKeyspace( Keyspace  ksp ) {
-
+        
     }
 
     public Key newKey() {
@@ -162,8 +159,8 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
 	    HibernateUtil.closeSession();
 	    return key;
 	    
-	} catch (HibernateException e) {
-	    handleException(e);
+	} catch ( HibernateException e ) {
+	    handleException( e );
 	} finally {
 	    HibernateUtil.closeSession();
 	}

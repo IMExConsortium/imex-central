@@ -30,13 +30,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
     public Publication getPublication( int id ) { 
         
-        Publication pub = null;
-
-        try {
-            pub =  (IcPub) super.find( IcPub.class, id );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        Publication pub = (IcPub) super.find( IcPub.class, id );
         return pub; 
     }
     
@@ -45,7 +39,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     public Publication getPublication( String title ) { 
         
         Publication pub = null;
-
+        
         try {
             startOperation();
             Query query =
@@ -55,9 +49,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
         return pub; 
     }
@@ -78,9 +74,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
         return pub; 
     }
@@ -93,7 +91,6 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         if ( key == null || key.equals("") ) return pub;
         
         try {
-
             key = key.replaceAll( "\\D+", "" );
 
             long lkey = Long.parseLong(key);
@@ -106,11 +103,13 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
+            
+        } catch ( NumberFormatException nfe ) {
+            // log error ?
+        } catch ( HibernateException e ) {
+            handleException( e );
+        } finally {
             HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
-            // log error ?
-        } catch ( NumberFormatException nfe ){
-            // log error ?
         }
         return pub; 
     }
@@ -131,11 +130,13 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             plst = (List<Publication>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log exception ?
-            dex.printStackTrace();
-        } 
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
+        }
         
         System.out.println("plist"+plst);
 
@@ -160,10 +161,12 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             plst = (List<Publication>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log exception ?
-            dex.printStackTrace();
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
         } 
         
         System.out.println("plist" + plst);
@@ -183,7 +186,6 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
         try {
             startOperation();
-            
             Criteria crit = session.createCriteria( IcPub.class );
             crit.setFirstResult( firstRecord );
             crit.setMaxResults( blockSize );
@@ -206,10 +208,12 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             plst = crit.list();
             
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log exception ?
-            dex.printStackTrace();
+            e.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
         }        
         return plst;
     }
@@ -253,14 +257,17 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             log.info( "IcPubDao: size=" + plst.size()); 
             
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch ( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
+            
             // log exception ?
-            dex.printStackTrace(); 
+            e.printStackTrace(); 
             
         } catch( Exception ex ) {
             // log exception ?
             ex.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
         }
         
         return plst;
@@ -275,9 +282,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             Query query = session.createQuery( "select count(p) from IcPub p" );
             count  = (Long) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
         return count;
     }
@@ -302,11 +311,13 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             count  = ((Integer) foo.get(0) ).longValue() ;
             log.info( "count=" + count );
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
-            dex.printStackTrace();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            e.printStackTrace();
         } catch( Exception ex ) {
             ex.printStackTrace();
+        } finally {
+            HibernateUtil.closeSession();
         }
 
         return count;
@@ -316,14 +327,10 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
     public void savePublication( Publication publication ) { 
         
-        try {
-            if ( publication  instanceof IcPub ) {
-                super.saveOrUpdate( publication );
-            } else {
-                super.saveOrUpdate( new IcPub( publication ) );
-            }
-        }  catch ( DAOException dex ) {
-            // log exception ?
+        if ( publication  instanceof IcPub ) {
+            super.saveOrUpdate( publication );
+        } else {
+            super.saveOrUpdate( new IcPub( publication ) );
         }
     }
     
@@ -331,21 +338,14 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     
     public void updatePublication( Publication publication ) { 
         
-        try {
-            super.saveOrUpdate( publication );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        super.saveOrUpdate( publication );
     }
     
     //---------------------------------------------------------------------
 
     public void deletePublication( Publication publication ) { 
-        try {
-            super.delete( publication );
-        } catch ( DAOException dex ) {
-            // log exception ?
-        }
+        
+        super.delete( publication );
     }
     
     
@@ -398,11 +398,12 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             query.setFirstResult( 0 );
             pub = (IcPub) query.uniqueResult();
             tx.commit();
-            HibernateUtil.closeSession();
-        } catch( DAOException dex ) {
+        } catch ( HibernateException e ) {
+            handleException( e );
             // log error ?
+        } finally {
+            HibernateUtil.closeSession();
         }
         return pub; 
     }
-    
 }
