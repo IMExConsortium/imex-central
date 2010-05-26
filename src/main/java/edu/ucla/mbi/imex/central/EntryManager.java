@@ -324,6 +324,37 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
+    public List<String> getTargetStates( IcPub pub, String mode ) {
+
+        List<String> stateList = new ArrayList<String>();
+
+        if( pub == null ) { return stateList; }
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " EntryManager.getTargetStates: id=" +  pub.getId() 
+                  + " state=" + pub.getState().getName());
+        
+        if( mode !=null && mode.equals( "allowed" ) ) {
+            List<Transition> trans = wflowContext.getWorkflowDao()
+                .getAllowedTransList( pub.getState() );
+            for( Iterator<Transition> ti = trans.iterator(); ti.hasNext(); ) {
+                Transition t = ti.next();
+                stateList.add(t.getToState().getName() );
+            }
+        } else {
+            List<DataState> states = wflowContext.getWorkflowDao()
+                .getDataStateList();
+            for( Iterator<DataState> si = states.iterator(); si.hasNext(); ) {
+                DataState s = si.next();
+                stateList.add( s.getName() );
+            }         
+        }
+
+        return stateList; 
+    }
+    
+    //--------------------------------------------------------------------------
+
     public IcPub genIcPubImex( IcPub pub ) {
 
         if( pub == null ) { return null; }
