@@ -136,7 +136,7 @@
          publicationList.*
        </param>
        <param name="includeProperties">
-         pub.*
+         pub.*, targetStates.*
        </param>
        <param name="noCache">true</param>
      </result>

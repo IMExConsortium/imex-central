@@ -241,17 +241,71 @@ YAHOO.imex.pubedit = function( e, obj ) {
     var imexUpdateFail = function ( o ) {
         alert( "AJAX Error update failed: id=" + o.argument.id ); 
     };
-           
+    
+    var setTargetStates = function ( id, stateButton ) {
+        
+        var targetStateCallback = { cache:false, timeout: 5000, 
+                                    success: targetStateUpdate,
+                                    failure: targetStateUpdateFail,
+                                    argument:{ id:id, btn:stateButton } };        
+        try{
+            YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               'pubedit?op.etsl=all&id=' + id, 
+                               targetStateCallback );  
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+    };
+
+    var targetStateUpdate = function ( o ) {
+        try{            
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+            
+            var tsList = [];
+            for( var i = 0; i < messages.targetStates.length; i++ ) {
+                tsList[i]= {text: messages.targetStates[i], value:i};
+            }
+            
+            var btnMenu = o.argument.btn.getMenu();
+            if( YAHOO.util.Dom.inDocument(btnMenu.element) ) {  //rendered   
+                btnMenu.clearContent();
+                btnMenu.addItems( tsList );
+                btnMenu.render();
+            } else {  // unrenedered
+                btnMenu.itemData = tsList;
+            }
+        } catch ( x ) {
+            alert("AJAX Error: " + x );
+        }        
+    };
+    
+    var targetStateUpdateFail = function ( o ) {
+        alert("AJAX Error:  Update of the target state list failed");
+    };
+
+    var stateUpdate = function ( o ) {
+        var messages = YAHOO.lang.JSON.parse( o.responseText );
+        var pid = messages.id;
+        var imexACC = messages.pub.imexId;
+        o.argument.btn.set("label",imexACC);
+        o.argument.btn.set("disabled",true);        
+    };
+
+    var stateUpdateFail = function ( o ) {
+        alert( "AJAX Error update failed: id=" + o.argument.id ); 
+    };
+    
     // new status 
     //-----------
 
     var stateSel = [ 
-        { text: "NEW", value: "1" }, 
-        { text: "RESERVED", value: "2" },
-        { text: "INPROGRESS", value: "3" },
-        { text: "RELEASED", value: "4" }, 
-        { text: "DISCARDED", value: "5" }, 
-        { text: "INCOMPLETE", value: "6" } 
+        { text: "NEW", value: "1" },
+        { text: "RESERVED", value: "2" }
+        //{ text: "INPROGRESS", value: "3" },
+        //{ text: "RELEASED", value: "4" }, 
+        //{ text: "DISCARDED", value: "5" }, 
+        //{ text: "INCOMPLETE", value: "6" } 
     ]; 
         
     var stateButton = new YAHOO.widget.Button(
@@ -265,6 +319,8 @@ YAHOO.imex.pubedit = function( e, obj ) {
     var hsv = YAHOO.util.Dom.get( "nsn" );
     stateButton.my = { items: stateSel, value: "",  hidden:hsv};
     stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+    
+    setTargetStates( obj.id, stateButton );
     
     
     // current status

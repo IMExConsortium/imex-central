@@ -84,6 +84,14 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         return slst;
     }
 
+
+
+
+
+
+
+
+
     //---------------------------------------------------------------------
 
     public long getDataStateCount() {
@@ -157,6 +165,31 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             startOperation();
             Query query =
                 session.createQuery( "from IcTransition t order by id ");
+            
+            tlst = (List<Transition>) query.list();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            HibernateUtil.closeSession();
+        }
+        
+        return tlst;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<Transition> getAllowedTransList( DataState state ) {
+        
+        List<Transition> tlst = null;
+        
+        try {
+            startOperation();
+            Query query =
+                session.createQuery( "from IcTransition t order by id " +
+                                     " where t.fromState = :state ");
+            query.setParameter("state", state );
             
             tlst = (List<Transition>) query.list();
             tx.commit();

@@ -211,6 +211,21 @@ public class EntryMgrAction extends ManagerSupport {
         return this.pmid;
     }
 
+
+    //--------------------------------------------------------------------------
+    // target states
+    //--------------
+
+
+    private List<String> targetStates = null;
+    
+    public void setTargetStates( List<String> states) {
+        this.targetStates = states;
+    }
+
+    public List<String> getTargetStates() {
+        return this.targetStates;
+    }
     
     //--------------------------------------------------------------------------
 
@@ -458,6 +473,14 @@ public class EntryMgrAction extends ManagerSupport {
 
                 //--------------------------------------------------------------
 
+                if ( key.equalsIgnoreCase( "etsl" ) ) {
+                    if( icpub != null ) {
+                        return getTargetStates( icpub, val );
+                    }
+                }
+                
+                //--------------------------------------------------------------
+
                 if ( key.equalsIgnoreCase( "eldel" ) ) {
 
                     if ( getOpp() == null ) return SUCCESS;
@@ -660,7 +683,7 @@ public class EntryMgrAction extends ManagerSupport {
         }
         return SUCCESS;
     }
-
+    
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     // validation
@@ -1422,6 +1445,16 @@ public class EntryMgrAction extends ManagerSupport {
             return JSON;        
         }
 
+        return JSON;
+    }
+
+
+    //--------------------------------------------------------------------------
+
+    public String getTargetStates( IcPub pub, String mode ) {
+
+        List<String> states = entryManager.getTargetStates( pub, mode );
+        targetStates = states;
         return JSON;
     }
 
