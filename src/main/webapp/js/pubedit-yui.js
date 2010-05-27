@@ -187,66 +187,147 @@ YAHOO.imex.calendar = {
     }   
 };
 
-YAHOO.imex.pubedit = function( e, obj ) {
 
-    YAHOO.imex.util.copyField( "pubedit_pub_owner_login", "pubedit_opp_neo" );             
+
+YAHOO.imex.pubedit = {
+
+    pubId: 0,
+
+    init: function( e, obj ) {
+
+        YAHOO.imex.pubedit.pubId = obj.id;
+        
+        YAHOO.imex.util.copyField( "pubedit_pub_owner_login", "pubedit_opp_neo" );             
   
-    var onSelectedMenuItemChange = function ( event ) {
-        var oMenuItem = event.newValue;
-        var text = oMenuItem.cfg.getProperty( "text" );
-        
-        for( var i = 0; i < this.my.items.length; i++ ) {
-            if ( this.my.items[i].text === text ) {
-                this.my.value = this.my.items[i].value;
-                this.my.hidden.value= this.my.items[i].value;
+        var onSelectedMenuItemChange = function ( event ) {
+            var oMenuItem = event.newValue;
+            var text = oMenuItem.cfg.getProperty( "text" );
+            
+            for( var i = 0; i < this.my.items.length; i++ ) {
+                if ( this.my.items[i].text === text ) {
+                    this.my.value = this.my.items[i].value;
+                    this.my.hidden.value= this.my.items[i].value;
+                }
             }
-        }
+            
+            this.set("label", ("<em class=\"yui-button-label\">" + 
+                               oMenuItem.cfg.getProperty("text") + "</em>"));
+            
+        };
         
-        this.set("label", ("<em class=\"yui-button-label\">" + 
-                           oMenuItem.cfg.getProperty("text") + "</em>"));
-               
-    };
+        var onImexClick = function ( event ) {
+            
+            var oMenuItem = event.newValue;
+            var imexCallback = { cache:false, timeout: 5000, 
+                                 success: imexUpdate,
+                                 failure: imexUpdateFail,
+                                 argument:{ id:obj.id, btn:imexButton } };                  
+            
+            var r = confirm("Confirm IMEx Accession request ?");
+            if ( r == true ) {
+                try{
+                    YAHOO.util.Connect
+                        .asyncRequest( 'GET', 
+                                       'pubedit?op.epix=update&id=' + obj.id, 
+                                       imexCallback );        
+                } catch (x) {
+                    alert("AJAX Error:"+x);
+                }
+            } else {
+                // do nothing
+            }    
+        };
+        
+        var imexUpdate = function ( o ) {
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+            var pid = messages.id;
+            var imexACC = messages.pub.imexId;
+            o.argument.btn.set("label",imexACC);
+            o.argument.btn.set("disabled",true);        
+        };
+        
+        var imexUpdateFail = function ( o ) {
+            alert( "AJAX Error update failed: id=" + o.argument.id ); 
+        };
 
-    var onImexClick = function ( event ) {
+        var stateUpdate = function ( o ) {
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+            var pid = messages.id;
+            var imexACC = messages.pub.imexId;
+            o.argument.btn.set("label",imexACC);
+            o.argument.btn.set("disabled",true);        
+        };
         
-        var oMenuItem = event.newValue;
-        var imexCallback = { cache:false, timeout: 5000, 
-                             success: imexUpdate,
-                             failure: imexUpdateFail,
-                             argument:{ id:obj.id, btn:imexButton } };                  
+        var stateUpdateFail = function ( o ) {
+            alert( "AJAX Error update failed: id=" + o.argument.id ); 
+        };
         
-        var r = confirm("Confirm IMEx Accession request ?");
-        if ( r == true ) {
-            try{
-                YAHOO.util.Connect
-                    .asyncRequest( 'GET', 
-                                   'pubedit?op.epix=update&id=' + obj.id, 
-                                   imexCallback );        
-            } catch (x) {
-                alert("AJAX Error:"+x);
+        // new status 
+        //-----------
+        
+        var stateSel = [ 
+            { text: "NEW", value: "1" },
+            { text: "RESERVED", value: "2" }
+            //{ text: "INPROGRESS", value: "3" },
+            //{ text: "RELEASED", value: "4" }, 
+            //{ text: "DISCARDED", value: "5" }, 
+            //{ text: "INCOMPLETE", value: "6" } 
+        ]; 
+        
+        var stateButton = new YAHOO.widget.Button(
+            { id: "state-button",  
+              name: "state-button", 
+              label: "<em class=\"yui-button-label\">"+stateSel[0].text+"</em>", 
+              type: "menu",   
+              menu: stateSel,  
+              container: "state-button-container" }); 
+        
+        var hsv = YAHOO.util.Dom.get( "nsn" );
+        stateButton.my = { items: stateSel, value: "",  hidden:hsv};
+        stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+        
+        YAHOO.imex.pubedit.setTargetStates( obj.id, stateButton );
+        YAHOO.imex.pubedit.pubState('set');
+        
+        // current status
+        //---------------
+        
+        //var curStateButton = new YAHOO.widget.Button(
+        //    { id: "state-label",  
+        //      name: "state-label", 
+        //      label: "<em class=\"yui-button-label\">"+stateSel[0].text+"</em>", 
+        //      type: "push",   
+        //      disabled: true,
+        //      container: "state-label-container" }); 
+        
+        
+        // imex id
+        //---------
+        
+        var imexButton = new YAHOO.widget.Button(
+            { id: "imex-button",  
+              name: "imex-button", 
+              label: "<em class=\"yui-button-label\">"+"ASSIGN"+"</em>", 
+              type: "push", 
+              disabled: false,  
+              menu: stateSel,  
+              container: "imex-button-container" }); 
+        
+        if( obj.imexACC  !== undefined &&  obj.imexACC.length > 0 
+            && obj.imexACC !== "N/A" ) {
+                imexButton.set( "label", obj.imexACC );
+                imexButton.set( "disabled", true );
             }
-        } else {
-            // do nothing
-        }    
-    };
-
-    var imexUpdate = function ( o ) {
-        var messages = YAHOO.lang.JSON.parse( o.responseText );
-        var pid = messages.id;
-        var imexACC = messages.pub.imexId;
-        o.argument.btn.set("label",imexACC);
-        o.argument.btn.set("disabled",true);        
-    };
-
-    var imexUpdateFail = function ( o ) {
-        alert( "AJAX Error update failed: id=" + o.argument.id ); 
-    };
-    
-    var setTargetStates = function ( id, stateButton ) {
         
+        imexButton.my = { items: stateSel, value: "" };
+        imexButton.on("click", onImexClick );
+    },
+
+    setTargetStates: function ( id, stateButton ) {
+            
         var targetStateCallback = { cache:false, timeout: 5000, 
-                                    success: targetStateUpdate,
-                                    failure: targetStateUpdateFail,
+                                    success: YAHOO.imex.pubedit.targetStateUpdate,
+                                    failure: YAHOO.imex.pubedit.targetStateUpdateFail,
                                     argument:{ id:id, btn:stateButton } };        
         try{
             YAHOO.util.Connect
@@ -256,12 +337,12 @@ YAHOO.imex.pubedit = function( e, obj ) {
         } catch (x) {
             alert("AJAX Error: " + x );
         }   
-    };
-
-    var targetStateUpdate = function ( o ) {
+    },
+    
+    targetStateUpdate: function ( o ) {
         try{            
             var messages = YAHOO.lang.JSON.parse( o.responseText );
-            
+                
             var tsList = [];
             for( var i = 0; i < messages.targetStates.length; i++ ) {
                 tsList[i]= {text: messages.targetStates[i], value:i};
@@ -278,83 +359,51 @@ YAHOO.imex.pubedit = function( e, obj ) {
         } catch ( x ) {
             alert("AJAX Error: " + x );
         }        
-    };
-    
-    var targetStateUpdateFail = function ( o ) {
+    },
+        
+    targetStateUpdateFail: function ( o ) {
         alert("AJAX Error:  Update of the target state list failed");
-    };
-
-    var stateUpdate = function ( o ) {
-        var messages = YAHOO.lang.JSON.parse( o.responseText );
-        var pid = messages.id;
-        var imexACC = messages.pub.imexId;
-        o.argument.btn.set("label",imexACC);
-        o.argument.btn.set("disabled",true);        
-    };
-
-    var stateUpdateFail = function ( o ) {
-        alert( "AJAX Error update failed: id=" + o.argument.id ); 
-    };
+    },
     
-    // new status 
-    //-----------
-
-    var stateSel = [ 
-        { text: "NEW", value: "1" },
-        { text: "RESERVED", value: "2" }
-        //{ text: "INPROGRESS", value: "3" },
-        //{ text: "RELEASED", value: "4" }, 
-        //{ text: "DISCARDED", value: "5" }, 
-        //{ text: "INCOMPLETE", value: "6" } 
-    ]; 
-        
-    var stateButton = new YAHOO.widget.Button(
-        { id: "state-button",  
-          name: "state-button", 
-          label: "<em class=\"yui-button-label\">"+stateSel[0].text+"</em>", 
-          type: "menu",   
-          menu: stateSel,  
-          container: "state-button-container" }); 
-    
-    var hsv = YAHOO.util.Dom.get( "nsn" );
-    stateButton.my = { items: stateSel, value: "",  hidden:hsv};
-    stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
-    
-    setTargetStates( obj.id, stateButton );
-    
-    
-    // current status
-    //---------------
-
-    //var curStateButton = new YAHOO.widget.Button(
-    //    { id: "state-label",  
-    //      name: "state-label", 
-    //      label: "<em class=\"yui-button-label\">"+stateSel[0].text+"</em>", 
-    //      type: "push",   
-    //      disabled: true,
-    //      container: "state-label-container" }); 
+    pubState: function(op) {
+       alert("setState called");
 
 
-    // imex id
-    //---------
-        
-    var imexButton = new YAHOO.widget.Button(
-        { id: "imex-button",  
-          name: "imex-button", 
-          label: "<em class=\"yui-button-label\">"+"ASSIGN"+"</em>", 
-          type: "push", 
-          disabled: false,  
-          menu: stateSel,  
-          container: "imex-button-container" }); 
-    
-    if( obj.imexACC  !== undefined &&  obj.imexACC.length > 0 
-        && obj.imexACC !== "N/A" ) {
-            imexButton.set( "label", obj.imexACC );
-            imexButton.set( "disabled", true );
+        var setStateCallback = { cache:false, timeout: 5000, 
+                                 success: YAHOO.imex.pubedit.stateUpdate,
+                                 failure: YAHOO.imex.pubedit.stateUpdateFail,
+                                 argument:{ id:YAHOO.imex.pubedit.pubId } };        
+        try{
+            YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               'pubedit?op.esup=' + op + 
+                               + '&id=' + YAHOO.imex.pubedit.pubId
+                               + '&opp.nsn=' + 'foo', 
+                               setStateCallback );  
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+
+
+
+       return false; 
+
+    },
+
+    stateUpdate: function( o ) { 
+        try{            
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+            var stl = YAHOO.util.Dom.get( "state-label" );
+            stl.innerHTML=messages.pub.state.name;
+        } catch(x) {
+            alert("AJAX Error: " + x );
         }
-     
-    imexButton.my = { items: stateSel, value: "" };
-    imexButton.on("click", onImexClick );
+    },
+
+    stateUpdateFail: function( o ) {
+        alert(o.responseText);
+
+    }
 
 };
 

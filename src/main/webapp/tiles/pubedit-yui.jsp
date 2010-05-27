@@ -138,8 +138,8 @@
    <td>
     <table width="100%" border="0">
      <tr>
-      <td align="right" valign="middle" width="5%">
-        <b><s:property  value="pub.state.name"/></b>
+      <td align="right" valign="middle" width="5%">        
+        <label id="state-label" class="pub-state-label"/>
       </td>
       <td align="center" valign="middle" width="5%" nowrap>  
        <i>change to</i>
@@ -152,7 +152,8 @@
    </td>
    <th>
     <s:hidden id="nsn" name="opp.nsn" value="%{pub.state.name}"/>
-    <s:submit theme="simple" name="op.esup" value="UPDATE"/>
+    <s:submit theme="simple" name="op.esup" value="UPDATE" 
+       onclick="return YAHOO.imex.pubedit.pubState('update');"/>
    </th>
   </tr>
   <tr>
