@@ -437,6 +437,21 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
+    public IcPub updateIcPubState( int id, String stateName ) {
+
+        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
+        DataState state = wflowContext.getWorkflowDao().getDataState( stateName );
+
+        if( pub != null && state != null ) {
+            pub.setState( state );
+            tracContext.getPubDao().savePublication( pub );
+        }
+
+        return pub;
+    }
+
+    //--------------------------------------------------------------------------
+
     public IcPub updateIcPubState( int id, int sid ) {
         
         IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );

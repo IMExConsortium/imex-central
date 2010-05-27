@@ -558,18 +558,22 @@ public class EntryMgrAction extends ManagerSupport {
                 if ( key.equalsIgnoreCase( "esup" ) ) {
 
                     int sid=0;
-                    
+                   
+                    log.info( "opp=" + getOpp() );
+
                     if ( getOpp() == null ) return SUCCESS;
                     String nsid = getOpp().get( "nsn" );
-                    
+                    log.info( "opp.nsn=" + nsid );
                     try {
                         sid = Integer.parseInt(nsid);
+                        updateIcPubState( getId(), sid );
                     } catch ( Exception ex ) {
                         // should not happen
-                        return SUCCESS;
+                        updateIcPubState( getId(), nsid );
+                        
                     }
-                    
-                    return updateIcPubState( getId(), sid );
+                                        
+                    return JSON;
                 }
 
                 //--------------------------------------------------------------
@@ -1487,7 +1491,20 @@ public class EntryMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
     
-    private String updateIcPubState( int id, int sid) {
+    private String updateIcPubState( int id, String state ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "id=" + id + " state=" + state );
+
+        IcPub pub =  entryManager.updateIcPubState( id, state );
+        if( pub != null ) {
+            this.setPub( pub );
+        }        
+        return SUCCESS;
+
+    }
+
+    private String updateIcPubState( int id, int sid ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "id=" + id + " sid=" + sid );
@@ -1497,28 +1514,6 @@ public class EntryMgrAction extends ManagerSupport {
             this.setPub( pub );
         }        
         return SUCCESS;
-
-        /*
-        if ( wflowContext.getWorkflowDao() == null ||
-             !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id + " from=" + fid + " to=" + tid );
-        
-        Transition oldTrans = wflowContext.getWorkflowDao().getTrans( id );
-        DataState fState = wflowContext.getWorkflowDao().getDataState( fid );
-        DataState tState = wflowContext.getWorkflowDao().getDataState( tid );
-                
-        if ( oldTrans == null || 
-             fState == null || tState == null ) return SUCCESS;
-        
-        oldTrans.setFromState( fState );
-        oldTrans.setToState( tState );        
-        wflowContext.getWorkflowDao().updateTrans( oldTrans );
-        
-        this.trans = wflowContext.getWorkflowDao().getTrans( id );
-        log.info( "updated trans(states)=" +this.trans );
-        */
     }    
 
     //---------------------------------------------------------------------

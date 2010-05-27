@@ -7,7 +7,7 @@
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
  <t:insertDefinition name="pubedit"/>
   <script type="text/javascript">
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit, 
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit.init, 
                                  {id:"<s:property value="id"/>",imexACC:"<s:property value="pub.imexId"/>"} ) ;
 
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init ) ;
