@@ -108,8 +108,11 @@
       </result>
       
       <result name="json" type="json">
+        <param name="excludeProperties">
+         publicationList.*,.*roles.*,.*password.*,.*allRoles.*
+        </param>
         <param name="includeProperties">
-          records.*
+          records.*,pub.*
         </param>
         <param name="noCache">true</param>
       </result>

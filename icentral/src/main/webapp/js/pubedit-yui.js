@@ -192,7 +192,7 @@ YAHOO.imex.calendar = {
 YAHOO.imex.pubedit = {
 
     pubId: 0,
-
+    stateButton: null,
     init: function( e, obj ) {
 
         YAHOO.imex.pubedit.pubId = obj.id;
@@ -205,11 +205,12 @@ YAHOO.imex.pubedit = {
             
             for( var i = 0; i < this.my.items.length; i++ ) {
                 if ( this.my.items[i].text === text ) {
-                    this.my.value = this.my.items[i].value;
-                    this.my.hidden.value= this.my.items[i].value;
+                    this.my.value = this.my.items[i].value;                   
                 }
             }
             
+            this.my.text = oMenuItem.cfg.getProperty("text");
+
             this.set("label", ("<em class=\"yui-button-label\">" + 
                                oMenuItem.cfg.getProperty("text") + "</em>"));
             
@@ -274,7 +275,7 @@ YAHOO.imex.pubedit = {
             //{ text: "INCOMPLETE", value: "6" } 
         ]; 
         
-        var stateButton = new YAHOO.widget.Button(
+        YAHOO.imex.pubedit.stateButton = new YAHOO.widget.Button(
             { id: "state-button",  
               name: "state-button", 
               label: "<em class=\"yui-button-label\">"+stateSel[0].text+"</em>", 
@@ -282,11 +283,16 @@ YAHOO.imex.pubedit = {
               menu: stateSel,  
               container: "state-button-container" }); 
         
-        var hsv = YAHOO.util.Dom.get( "nsn" );
-        stateButton.my = { items: stateSel, value: "",  hidden:hsv};
-        stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+        //var hsv = YAHOO.util.Dom.get( "nsn" );
+        //var hsv = stateSel[0].text;
+        YAHOO.imex.pubedit.stateButton.my = { items: stateSel, 
+                                              value:stateSel[0].value,  
+                                              text:stateSel[0].text};
+        YAHOO.imex.pubedit.stateButton.on( "selectedMenuItemChange", 
+                                           onSelectedMenuItemChange);
         
-        YAHOO.imex.pubedit.setTargetStates( obj.id, stateButton );
+        YAHOO.imex.pubedit.setTargetStates( obj.id, 
+                                            YAHOO.imex.pubedit.stateButton );
         YAHOO.imex.pubedit.pubState('set');
         
         // current status
@@ -366,35 +372,46 @@ YAHOO.imex.pubedit = {
     },
     
     pubState: function(op) {
-       alert("setState called");
-
-
+        
         var setStateCallback = { cache:false, timeout: 5000, 
                                  success: YAHOO.imex.pubedit.stateUpdate,
                                  failure: YAHOO.imex.pubedit.stateUpdateFail,
-                                 argument:{ id:YAHOO.imex.pubedit.pubId } };        
+                                 argument:{ id:YAHOO.imex.pubedit.pubId } };
         try{
-            YAHOO.util.Connect
-                .asyncRequest( 'GET', 
-                               'pubedit?op.esup=' + op + 
-                               + '&id=' + YAHOO.imex.pubedit.pubId
-                               + '&opp.nsn=' + 'foo', 
-                               setStateCallback );  
+            
+            if( op === 'update' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.esup=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.nsn=' + YAHOO.imex.pubedit.stateButton.my.text, 
+                                   setStateCallback );
+            } 
+
+            if( op === 'set' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( "GET", 
+                                   "pubmgr?format=json"  
+                                   + "&id=" + YAHOO.imex.pubedit.pubId, 
+                                   setStateCallback );  
+            } 
+
         } catch (x) {
             alert("AJAX Error: " + x );
         }   
-
-
-
-       return false; 
-
+        return false; 
     },
 
     stateUpdate: function( o ) { 
-        try{            
-            var messages = YAHOO.lang.JSON.parse( o.responseText );
-            var stl = YAHOO.util.Dom.get( "state-label" );
-            stl.innerHTML=messages.pub.state.name;
+        try {
+            var acl = /ACL Violation/; 
+            if( acl.test(o.responseText) ) {
+                alert( "ACL Violation" );
+            } else {
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var stl = YAHOO.util.Dom.get( "state-label" );
+                stl.innerHTML = messages.pub.state.name;
+            }
         } catch(x) {
             alert("AJAX Error: " + x );
         }
@@ -402,8 +419,6 @@ YAHOO.imex.pubedit = {
 
     stateUpdateFail: function( o ) {
         alert(o.responseText);
-
     }
-
 };
 
