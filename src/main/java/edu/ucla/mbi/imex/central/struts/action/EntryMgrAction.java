@@ -29,10 +29,8 @@ import edu.ucla.mbi.imex.central.*;
 public class EntryMgrAction extends ManagerSupport {
 
     private final String NOPUB = "notfound";
-    private final String NOJOU = "notfound";
     private final String PUBEDIT = "pubedit";
     private final String PUBNEW = "pubnew";
-    private final String JEDIT = "jedit";
     private final String JSON = "json";
 
     public static final String ACL_PAGE = "acl_page";
@@ -97,53 +95,6 @@ public class EntryMgrAction extends ManagerSupport {
     }
     
     //--------------------------------------------------------------------------
-    //  mode: journal/icpub
-    //---------------------
-
-    private String mode = "journal";
-    
-    public String getMode() {
-        return this.mode;
-    }
-    
-    public void setMode( String mode ) {
-        this.mode = mode;
-    }
-
-    
-    //--------------------------------------------------------------------------
-    //  IcJournal
-    //-----------
-    
-    private IcJournal journal = null;
-
-    public void setJournal( IcJournal journal ) {
-	this.journal = journal;
-    }
-    
-    public IcJournal getJournal(){
-	return this.journal;
-    }
-    
-    //--------------------------------------------------------------------------
-    
-    public List<IcJournal> getJournalList(){
-        
-        if ( tracContext.getJournalDao() == null ) return null;
-        
-        List<Journal> jl = tracContext.getJournalDao().getJournalList();
-        if ( jl == null ) return null;
-
-        List<IcJournal> ijl = new ArrayList<IcJournal>();
-        for ( Iterator<Journal> ii = jl.iterator(); ii.hasNext(); ) {
-            IcJournal jj = (IcJournal) ii.next();
-            ijl.add( jj );
-        }
-        return ijl;
-    }
-
-
-    //--------------------------------------------------------------------------
     // IcPub
     //------
 
@@ -155,6 +106,23 @@ public class EntryMgrAction extends ManagerSupport {
 
     public IcPub getPub(){
         return this.icpub;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<IcJournal> getJournalList(){
+
+        if ( tracContext.getJournalDao() == null ) return null;
+
+        List<Journal> jl = tracContext.getJournalDao().getJournalList();
+        if ( jl == null ) return null;
+
+        List<IcJournal> ijl = new ArrayList<IcJournal>();
+        for ( Iterator<Journal> ii = jl.iterator(); ii.hasNext(); ) {
+            IcJournal jj = (IcJournal) ii.next();
+            ijl.add( jj );
+        }
+        return ijl;
     }
 
     //--------------------------------------------------------------------------
@@ -211,6 +179,20 @@ public class EntryMgrAction extends ManagerSupport {
         return this.pmid;
     }
 
+    //--------------------------------------------------------------------------
+    // format
+    //-------
+
+    private String format = null;
+
+    public void setFormat( String format ) {
+        this.format = format;
+    }
+    
+    public String getFormat(){
+        return this.format;
+    }
+
 
     //--------------------------------------------------------------------------
     // target states
@@ -232,26 +214,18 @@ public class EntryMgrAction extends ManagerSupport {
     public String execute() throws Exception{
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info(  "mode=" + mode + " id=" + getId() + 
-                   " journal=" + journal + " icpub=" + icpub +
-                   " op=" + getOp() ); 
+        log.info(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
         
-        if ( tracContext.getJournalDao() == null ||
-             tracContext.getPubDao() == null ) return SUCCESS;
+        if ( tracContext.getPubDao() == null ) return SUCCESS;
         
-        if ( mode.equals( "journal" ) && 
-             getId() > 0 && journal == null ) {
-            
-            log.info( "setting journal=" + getId() );            
-            journal = entryManager.getIcJournal( getId() );  
-            return SUCCESS;
-        }
-
-        if ( mode.equals( "icpub" ) && getId() > 0 
-             && icpub == null && getOp() == null ) {
+        if ( getId() > 0 && icpub == null && getOp() == null ) {
             
             log.info(  "setting icpub=" + getId() );
             icpub = entryManager.getIcPub( getId() );
+
+            if( format != null && format.toUpperCase().equals("JSON") ) {
+                return JSON;
+            } 
             return SUCCESS;
         } 
         
@@ -284,173 +258,7 @@ public class EntryMgrAction extends ManagerSupport {
             log.info(  "op=" + key + "  val=" + val );
 
             if ( val != null && val.length() > 0 ) {
-
-                //--------------------------------------------------------------
-                //--------------------------------------------------------------
-                // journal operations
-                //-------------------
                 
-                if ( key.equalsIgnoreCase( "jsrc" ) ) {
-                    if ( getJournal() == null ) return SUCCESS;
-                    String nlmid = getJournal().getNlmid();
-                    return searchJournal( nlmid );
-                }
-
-                //--------------------------------------------------------------
-    
-                if ( key.equalsIgnoreCase( "jadd" ) ) {
-                    if ( getOpp() == null ) return SUCCESS;
-                    String nlmid = getOpp().get( "jadd" );
-                    return addJournal( nlmid );
-                }
-
-                //--------------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "jdel" ) ) {
-                    return deleteJournal( journal );
-                }
-
-                //--------------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "jldel" ) ) {
-
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String udel = getOpp().get( "del" );
-
-                    if ( udel != null ) {
-                        List<Integer> uidl =
-                            new ArrayList<Integer>();
-                        try {
-                            udel = udel.replaceAll("\\s","");
-                            String[] us = udel.split(",");
-
-                            for( int ii = 0; ii <us.length; ii++ ) {
-                                uidl.add( Integer.valueOf( us[ii] ) );
-                            }
-                        } catch ( Exception ex ) {
-                            // should not happen
-                        }
-                        return deleteJournalList( uidl );
-                    }
-                    return SUCCESS;
-                }
-
-                //--------------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "jpup" ) ) {
-                    return updateJournalProperties( getId(), journal );
-                }
-                
-                //--------------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "jauadd" ) ) {
-                    System.out.print("jauadd");
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String ulogin = getOpp().get( "jauadd" );
-                    try {
-                        return addJournalAdminUser( getId(), ulogin );
-                        
-                    } catch( NumberFormatException nfe ) {
-                        // abort on error
-                        nfe.printStackTrace();
-                    }
-                    return SUCCESS;
-                }
-                
-                //--------------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "jagadd" ) ) {
-                    System.out.print("jagadd");
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String sgid = getOpp().get( "jagadd" );
-                    try {
-                        int gid = Integer.parseInt( sgid );
-                        return addJournalAdminGroup( getId(), gid );
-                        
-                    } catch( NumberFormatException nfe ) {
-                        // abort on error
-                    }
-                    return SUCCESS;
-                }
-
-                //--------------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "jaudel" ) ) {
-                    System.out.print("jaudel");
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String udel = getOpp().get( "jaudel" );
-                    
-                    if ( getId() > 0 && udel != null ) {
-                        try {
-                             List<Integer> uidl =
-                                 new ArrayList<Integer>();
-                             String[] us = udel.split(",");
-
-                             for( int ii = 0; ii <us.length; ii++ ) {
-                                 uidl.add( Integer.valueOf( us[ii] ) );
-                             }
-                             return delJournalAdminUsers( getId(), uidl );
-                        } catch ( Exception ex ) {
-                            // should not happen
-                        }   
-                    } else {
-                        journal = entryManager.getIcJournal( getId() );
-                        setId( journal.getId() );
-                    }
-                    return SUCCESS;
-                }
-                
-                //--------------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "jagdel" ) ) {
-                    System.out.print("jagdel");
-                    if ( getOpp() == null ) return SUCCESS;
-
-                    String gdel = getOpp().get( "jagdel" );
-
-                    if ( getId() > 0 && gdel != null ) {
-                        try {
-                             List<Integer> gidl =
-                                 new ArrayList<Integer>();
-                             String[] gs = gdel.split(",");
-
-                             for( int ii = 0; ii <gs.length; ii++ ) {
-                                 gidl.add( Integer.valueOf( gs[ii] ) );
-                             }
-                             return delJournalAdminGroups( getId(), gidl );
-                        } catch ( Exception ex ) {
-                            // should not happen
-                        }   
-                    } else {
-                        journal = entryManager.getIcJournal( getId() );
-                        setId( journal.getId() );
-                    }
-                    return SUCCESS;
-                }
-
-                if ( key.equalsIgnoreCase( "jpg" ) ) {
-                    if ( getOpp() == null ) {
-                        return this.getIcJournalRecords();
-                    }
-                    String max= getOpp().get( "max" );
-                    String off= getOpp().get( "off" );
-                    String skey= getOpp().get( "skey" );
-                    String sdir= getOpp().get( "sdir" );
-                    String flt= getOpp().get( "flt" );
-
-                    return this.getIcJournalRecords( max, off, 
-                                                     skey, sdir, flt );
-                }
-
-                //--------------------------------------------------------------
-                //--------------------------------------------------------------
-                // icpub operations
-                //-----------------
-
                 if ( key.equalsIgnoreCase( "esrc" ) ) {
                     String imex = null ;
                     if ( getOpp() != null ) {
@@ -781,461 +589,21 @@ public class EntryMgrAction extends ManagerSupport {
                         }
                         
                         break;
-                    }
-                    
-                    //----------------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "jsrc" ) ) {
-                        if( getJournal() == null 
-                            || getJournal().getNlmid() == null ) {
-                            addFieldError( "journal.nlmid",
-                                           "NLMID field cannot be empty." );
-                        } else {
-                            String nlmid = getJournal().getNlmid();
-                            try {
-                                nlmid = nlmid.replaceAll( "\\s", "" );
-                            } catch( Exception ex ) {
-                                // should not happen
-                            }
-                            if( nlmid.length() == 0  ) {
-                                addFieldError( "journal.nlmid",
-                                               "NLMID field cannot be empty." );
-                            }
-                        }
-
-                        break;
-                    }
-                    
-
-                    /*
-                      
-                    //-----------------------------------------------------
-                    
-                    if ( key.equalsIgnoreCase( "add" ) ) {
-                                            
-                        // add user validation
-                        //--------------------
-                        
-                        // login: unique
-                        //---------------
-                        
-                        String newLogin = 
-                            sanitizeString( user.getLogin() );
-                        
-                        if ( newLogin != null ) {
-
-                            // test if unique
-                            //---------------
-                            
-                            if ( getUserContext().getUserDao() != null &&
-                                 getUserContext().getUserDao().getUser( newLogin ) != null ) {
-                                
-                                newLogin = null;
-                                user.setLogin( newLogin );
-                            }
-                        }                                
-                        
-                        if ( newLogin != null ) {
-                            user.setLogin( newLogin );
-                        } else {
-                            addFieldError( "user.login", 
-                                           "User Login must be unique." );
-                        }
-
-
-                        // first name: non-empty
-                        //-----------------------
-
-                        String newFirstName = 
-                            sanitizeString( user.getFirstName() );
-                        
-                        if ( newFirstName != null ) {
-                            user.setFirstName( newFirstName );
-                        } else {
-                            addFieldError( "user.firstName", 
-                                           "First name field" +
-                                           " cannot be empty." );
-                        }   
-
-                        // last name: non-empty
-                        //---------------------
-
-                        String newLastName = 
-                            sanitizeString( user.getLastName() );
-                        
-                        if ( newLastName != null ) {
-                            user.setLastName( newLastName );
-                        } else {
-                            addFieldError( "user.lastName", 
-                                           "Last name field" +
-                                           " cannot be empty." );
-                        }   
-                        
-                        // email: non-empty
-                        //-----------------
-
-                        String newEmail = 
-                            sanitizeString( user.getEmail() );
-                        
-                        if ( newEmail != null ) {
-                            user.setEmail( newEmail );
-                        } else {
-                            addFieldError( "user.email", 
-                                           "E-mail field" +
-                                           " cannot be empty." );
-                        }
-                        break;
-                    }
-                    
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "del" ) ) {
-                        // user drop validation: NONE ?                        
-                        break;
-                    }
-
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "ldel" ) ) {
-                        // user list drop validation: NONE ?                        
-                        break;
-                    }
-
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "pup" ) ) {
-
-                        if ( user == null || 
-                             getUserContext().getUserDao() == null )  return;
-                        
-                        // user property update validation                       
-                        //---------------------------------
-                       
-                        // first name: non-empty
-                        //-----------------------
-
-                        String newFirstName = 
-                            sanitizeString( user.getFirstName() );
-                        
-                        if ( newFirstName != null ) {
-                            user.setFirstName( newFirstName );
-                        } else {
-                            addFieldError( "user.firstName", 
-                                           "First name field" +
-                                           " cannot be empty." );
-                        }   
-
-                        // last name: non-empty
-                        //---------------------
-
-                        String newLastName = 
-                            sanitizeString( user.getLastName() );
-                        
-                        if ( newLastName != null ) {
-                            user.setLastName( newLastName );
-                        } else {
-                            addFieldError( "user.lastName", 
-                                           "Last name field" +
-                                           " cannot be empty." );
-                        }   
-                        
-                        // email: non-empty
-                        //-----------------
-
-                        String newEmail = 
-                            sanitizeString( user.getEmail() );
-                        
-                        if ( newEmail != null ) {
-                            user.setEmail( newEmail );
-                        } else {
-                            addFieldError( "user.email", 
-                                           "E-mail field" +
-                                           " cannot be empty." );
-                        }
-                        
-                        break;
-                    }
-                    
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "sup" ) ) {
-                        // user status update validation                       
-                        break;
-                    }
-
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "prs" ) ) {
-                        // user password reset validation                       
-                        break;
-                    }
-                    
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "radd" ) ) {
-                        // user role add validation: NONE
-                        break;
-                    }
-                    
-                    //-----------------------------------------------------
-                    
-                    if ( key.equalsIgnoreCase( "rdel" ) ) {
-                        // user role drop validation: NONE
-                        break;
-                    }
-
-                    //-----------------------------------------------------
-
-                    if ( key.equalsIgnoreCase( "gadd" ) ) {
-                        // user group add validation: NONE
-                        break;
-                    }
-                    
-                    //-----------------------------------------------------
-                    
-                    if ( key.equalsIgnoreCase( "gdel" ) ) {
-                        // user group drop validation: NONE                                              
-                        break;
-                    }
-
-                    */
+                    }                                        
                 }
             }
         }
-        
-        //if ( loadUserFlag && getId() > 0 ) {
-        //    user = getUserContext().getUserDao().getUser( getId() );
-        //    setBig( false );
-        //}
-        
-    }
-
-
-    //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
-    // operations: Journal
-    //----------------------
-    
-    public String searchJournal( String nlmid ) {
-
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " search journal -> nlmid=" + nlmid );
-        
-        IcJournal oldJnrl =
-            entryManager.getIcJournalByNlmid( nlmid );
-
-        if ( oldJnrl != null ) {
-            journal = oldJnrl;
-            setId( oldJnrl.getId() );
-            return JEDIT;
-        }
-        return SUCCESS;
-    }
-    
-    //--------------------------------------------------------------------------
-
-    public String addJournal( String nlmid ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new jrnl -> nlmid=" + nlmid );
-        
-        // test if already in 
-        //-------------------
-        
-        IcJournal oldJnrl = 
-            entryManager.getIcJournalByNlmid( nlmid );
-        
-        if ( oldJnrl != null ) {
-            journal = oldJnrl;
-            setId( oldJnrl.getId() );
-            return JEDIT;
-        }
-        
-        // ACL target control NOTE: implement if/as needed
-        //------------------------------------------------                
-        /* if ( ownerMatch != null && ownerMatch.size() > 0 ) { } */
-        
-        Integer usr = (Integer) getSession().get( "USER_ID" );        
-        if ( usr == null ) return ACL_OPER;
-        log.info( " login id=" + usr );
-
-        User owner = 
-            getUserContext().getUserDao().getUser( usr.intValue() );
-        if ( owner == null ) return ACL_OPER;
-        log.info( " owner set to: " + owner );
-        
-        IcJournal newJnrl = entryManager.addIcJournal( nlmid, owner );
-        if ( newJnrl != null ) {
-            journal = newJnrl;
-            setId( newJnrl.getId() );
-            return JEDIT;
-        }
-        return SUCCESS;
-    }
-
-    //--------------------------------------------------------------------------
-
-    public String deleteJournal( Journal journal ) {
-        /*
-          NOTE: must check dependencies before removal 
-        */
-        return SUCCESS;
-    }
-
-    //---------------------------------------------------------------------
-
-    private String deleteJournalList( List<Integer> ournals ) {
-        /*
-
-        NOTE: must check dependencies before removal
-
-        for ( Iterator<Integer> ii = states.iterator();
-              ii.hasNext(); ) {
-            
-            int gid = ii.next();
-            DataState s = wflowContext.getWorkflowDao()
-                .getDataState( gid );
-                                     
-            log.info( " delete state -> id=" + s.getId() );
-            wflowContext.getWorkflowDao().deleteDataState( s );                
-        }
-        */
-        return SUCCESS;
-    }
-
-    //---------------------------------------------------------------------
-    
-    public String updateJournalProperties( int id, Journal jrnl ) {
-
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "update journal: id=" + id );
-        
-        IcJournal oldJournal = entryManager.getIcJournal( id );
-        if ( oldJournal == null || journal == null ) return SUCCESS;
-        
-        entryManager.updateIcJournal( oldJournal, jrnl );
-        
-        journal = entryManager.getIcJournal( id );
-        setId( journal.getId() );
-        
-        return JEDIT;
-    }
-
-    //---------------------------------------------------------------------
-
-    public String addJournalAdminGroup( int id, int grp ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "add JAG: id=" + id + " ag= " + grp );
-                
-        IcJournal oldJournal = entryManager.getIcJournal( id );
-        Group agrp = getUserContext().getGroupDao().getGroup( grp );
-
-        if ( oldJournal != null && agrp != null ) {
-            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
-                                     adminGroupMatch ) ) {
-                
-                entryManager.addAdminGroup( oldJournal, agrp );
-                
-                journal = entryManager.getIcJournal( id );
-                setId( journal.getId() );
-                return JEDIT;
-            }
-            return ACL_OPER;
-        }
-        
-        setId( 0 );
-        return SUCCESS;
-    }
-
-    //---------------------------------------------------------------------
-    
-    public String delJournalAdminGroups( int id, List<Integer> gidl ) {
-    
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "drop JAG: id=" + id + " aglist= " + gidl );
-        
-        IcJournal oldJournal = entryManager.getIcJournal( id );
-        if ( oldJournal != null && gidl != null ) {
-            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
-                                     adminGroupMatch ) ) {
-
-                entryManager.delAdminGroups( oldJournal, gidl );
-
-                journal = entryManager.getIcJournal( id );
-                setId( journal.getId() );
-                return JEDIT;
-            }
-            return ACL_OPER;
-        }
-        
-        setId( 0 );
-        return SUCCESS;
-    }
-    
-    //---------------------------------------------------------------------
-    
-    public String addJournalAdminUser( int id,  String ulogin ) {
-                        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "add JAG: id=" + id + " au= " + ulogin );
-                
-        IcJournal oldJournal = entryManager.getIcJournal( id );
-        User ausr = getUserContext().getUserDao().getUser( ulogin );
-        
-        if ( oldJournal != null && ausr != null ) {
-
-            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
-                                     adminGroupMatch ) ) {
-                
-                entryManager.addAdminUser( oldJournal, ausr );
-            
-                journal = entryManager.getIcJournal( id );
-                setId( journal.getId() );
-                return JEDIT;
-            }
-            return ACL_OPER;
-        }
-        setId( 0 );
-        return SUCCESS;
-    }
-
-    //---------------------------------------------------------------------
-
-    public String delJournalAdminUsers( int id, List<Integer> uidl ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "drop EAG: id=" + id + " aglist= " + uidl );
-
-        IcJournal oldJournal = entryManager.getIcJournal( id );
-        if ( oldJournal != null && uidl != null ) {
-
-            if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
-                                     adminGroupMatch ) ) {
-                
-                log.info( "ACL test passed");
-                
-                entryManager.delAdminUsers( oldJournal, uidl );
-                
-                journal = entryManager.getIcJournal( id );
-                setId( journal.getId() );
-                return JEDIT;
-            }
-            return ACL_OPER;
-        }
-        setId( 0 );
-        return SUCCESS;
     }
      
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    // operations: IcPub
-    //------------------
+    // operations
+    //-----------
 
     public String searchIcPub( Publication pub, String imex ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-
+        
         if( pub != null ) {
             log.info( " search pub -> id=" + pub.getId() +
                       " pmid=" + pub.getPmid() );
@@ -1792,73 +1160,6 @@ public class EntryMgrAction extends ManagerSupport {
         return JSON;
     }
     
-    //---------------------------------------------------------------------
-
-    public String getIcJournalRecords() {
-        return this.getIcJournalRecords( "", "", "", "", "" );
-    }
-    
-    public String getIcJournalRecords( String max, String off, 
-                                       String skey, String sdir, 
-                                       String flt ) {
-        
-        if ( tracContext.getJournalDao() == null ) return null;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "getJournalRecords: journalDao ok..."  );
-        
-        int first = 0;
-        int blockSize = 10; // NOTE: initialize for defaults ?
-        
-        if ( off != null ) {
-            try {
-                first = Integer.parseInt( off );
-            } catch ( NumberFormatException nex ) {
-                // ignore == use default
-            }
-        }
-
-        if ( max != null ) {
-            try {
-                blockSize = Integer.parseInt( max );
-            } catch ( NumberFormatException nex ) {
-                // ignore == use default
-            }
-        }
-
-        List<Journal> jl = 
-            tracContext.getJournalDao().getJournalList( first, blockSize );
-        long total =  
-            tracContext.getJournalDao().getJournalCount();
-
-        // buid record map
-        //----------------
-        
-        records = new HashMap<String,Object>();
-        records.put("recordsReturned", jl.size() );
-        records.put("totalRecords", total );
-        records.put("startIndex", first );
-        records.put("sort", skey );
-        records.put("dir", sdir );
-        records.put("pageSize", max );
-
-        List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
-        records.put("records", rl );
-
-        for( Iterator<Journal> ii = jl.iterator(); ii.hasNext(); ) {
-            IcJournal ij = (IcJournal) ii.next();
-            Map<String,Object> r = new HashMap<String,Object>();  
-            r.put( "id", ij.getId() );
-            r.put( "nlmid", ij.getNlmid() );
-            r.put( "title", ij.getTitle() );
-            r.put( "owner", ij.getOwner().getLogin() );
-            r.put( "date", ij.getCreateDateString() );
-            r.put( "time", ij.getCreateTimeString() );
-            rl.add( r );
-        }
-        return JSON;
-    }
-
     //--------------------------------------------------------------------------
 
     private GregorianCalendar parseDate( String date ) {
