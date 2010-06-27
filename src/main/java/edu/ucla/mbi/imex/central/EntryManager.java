@@ -332,9 +332,9 @@ public class EntryManager {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " EntryManager.getTargetStates: id=" +  pub.getId() 
-                  + " state=" + pub.getState().getName());
+                  + " state=" + pub.getState().getName() + " mode=" + mode);
         
-        if( mode !=null && mode.equals( "allowed" ) ) {
+        if( mode != null && mode.equals( "allowed" ) ) {
             List<Transition> trans = wflowContext.getWorkflowDao()
                 .getAllowedTransList( pub.getState() );
             for( Iterator<Transition> ti = trans.iterator(); ti.hasNext(); ) {
@@ -349,7 +349,7 @@ public class EntryManager {
                 stateList.add( s.getName() );
             }         
         }
-
+        log.info( "DONE" );
         return stateList; 
     }
     
