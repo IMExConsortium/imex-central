@@ -406,7 +406,9 @@ YAHOO.imex.pubedit = {
         try {
             var acl = /ACL Violation/; 
             if( acl.test(o.responseText) ) {
-                alert( "ACL Violation" );
+                
+
+                YAHOO.mbi.modal.spcstat("ACL Violation");
             } else {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var stl = YAHOO.util.Dom.get( "state-label" );
