@@ -1,9 +1,9 @@
 package edu.ucla.mbi.imex.central.dao;
 
 /*===========================================================================
- * $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/central/trunk/ic-persist#$
- * $Id:: IcRoleDao.java 10 2009-08-22 14:06:27Z lukasz                      $
- * Version: $Rev:: 10                                                       $
+ * $HeadURL::                                                               $
+ * $Id::                                                                    $
+ * Version: $Rev::                                                          $
  *===========================================================================
  *
  * IcJournalDAO:

@@ -22,6 +22,10 @@ import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
+
+import edu.ucla.mbi.imex.central.dao.*;
+
+
 public class TracContext extends JsonContext {
 
     private PublicationDAO pubDao;
@@ -45,6 +49,20 @@ public class TracContext extends JsonContext {
     public void setJournalDao( JournalDAO dao ) {
         journalDao = dao;
     }
+
+
+    //--------------------------------------------------------------------------
+
+    private IcStatsDao icStatsDao;
+
+    public IcStatsDao getIcStatsDao() {
+        return icStatsDao;
+    }
+
+    public void setIcStatsDao( IcStatsDao dao ) {
+        icStatsDao = dao;
+    }
+
 
     //--------------------------------------------------------------------------
     //  NCBI Proxy Access

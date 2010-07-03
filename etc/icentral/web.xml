@@ -205,6 +205,11 @@
     <url-pattern>/transedit</url-pattern>
   </filter-mapping>
 
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/stats</url-pattern>
+  </filter-mapping>
+
 
 
 <!-- =================================================== =============== -->

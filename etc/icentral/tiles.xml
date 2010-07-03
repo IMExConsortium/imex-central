@@ -64,64 +64,64 @@
  </definition>
 
  <definition name="activate" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Account Activate" />
+  <put-attribute name="title" value="ImexCentral:Account Activate" />
   <put-attribute name="body" value="/tiles/activate.jsp"/>
  </definition>
 
  <definition name="feedback" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Feedback" />
+  <put-attribute name="title" value="ImexCentral:Feedback" />
   <put-attribute name="body" value="/tiles/feedback.jsp"/>
  </definition>
 
  <definition name="feedback-ack" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Feedback" />
+  <put-attribute name="title" value="ImexCentral:Feedback" />
   <put-attribute name="body" value="/tiles/feedbackack.jsp"/>
  </definition>
 
 
  <definition name="rolemgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Role Manager" />
+  <put-attribute name="title" value="ImexCentral:Role Manager" />
   <put-attribute name="body" value="/tiles/rolemgr.jsp"/>
  </definition>
  <definition name="roleedit" template="/tiles/roleedit.jsp"/>
 
 
  <definition name="groupmgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Group Manager" />
+  <put-attribute name="title" value="ImexCentral:Group Manager" />
   <put-attribute name="body" value="/tiles/groupmgr.jsp"/>
  </definition>
  <definition name="groupedit" template="/tiles/groupedit.jsp"/>
 
  <definition name="usermgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="User Manager" />
+  <put-attribute name="title" value="ImexCentral:User Manager" />
   <put-attribute name="body" value="/tiles/usermgr.jsp"/>
  </definition>
  <definition name="useredit" template="/tiles/useredit.jsp"/>
 
  <definition name="aclmgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="ACL Manager" />
+  <put-attribute name="title" value="ImexCentral:ACL Manager" />
   <put-attribute name="body" value="/tiles/aclmgr.jsp"/>
  </definition>
 
  <definition name="statemgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="State Manager" />
+  <put-attribute name="title" value="ImexCentral:State Manager" />
   <put-attribute name="body" value="/tiles/statemgr.jsp"/>
  </definition>
  <definition name="stateedit" template="/tiles/stateedit.jsp"/>
 
  <definition name="transmgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Transition Manager" />
+  <put-attribute name="title" value="ImexCentral:Transition Manager" />
   <put-attribute name="body" value="/tiles/transmgr.jsp"/>
  </definition>
  <definition name="transedit" template="/tiles/transedit.jsp"/>
 
  <definition name="pubsrc" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Search" />
+  <put-attribute name="title" value="ImexCentral:Search" />
   <put-attribute name="body" value="/tiles/pubsrc-yui.jsp"/>  
  </definition>
 
  <definition name="pubmgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Publication Manager" />
+  <put-attribute name="title" value="ImexCentral:Publication Manager" />
   <put-attribute name="body" value="/tiles/pubmgr-yui.jsp"/>  
  </definition>
 
@@ -129,13 +129,13 @@
 
 
  <definition name="pubnew" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Add Publication" />
+  <put-attribute name="title" value="ImexCentral:Add Publication" />
   <put-attribute name="body" value="/tiles/pubnew-yui.jsp"/>
   <put-attribute name="mdf" value="/tiles/pubnew-yui.jsp"/>
  </definition>
 
  <definition name="journalmgr" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="Journal Manager" />
+  <put-attribute name="title" value="ImexCentral:Journal Manager" />
   <put-attribute name="body" value="/tiles/journalmgr-yui.jsp"/>
  </definition>
  <definition name="journaledit" template="/tiles/journaledit.jsp"/>
@@ -143,18 +143,28 @@
 
 
  <definition name="aclpageerror" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="ACL Violation" />
+  <put-attribute name="title" value="ImexCentral:ACL Violation" />
   <put-attribute name="body" value="/tiles/aclpageerror.jsp"/>
  </definition>
 
  <definition name="acloperror" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="ACL Violation" />
+  <put-attribute name="title" value="ImexCentral:ACL Violation" />
   <put-attribute name="body" value="/tiles/acloperror.jsp"/>
  </definition>
 
  <definition name="acltgterror" template="/tiles/layout.jsp">
-  <put-attribute name="title" value="ACL Violation" />
+  <put-attribute name="title" value="ImexCentral:ACL Violation" />
   <put-attribute name="body" value="/tiles/acltargeterror.jsp"/>
  </definition>
+
+
+
+
+ <definition name="stats" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral:Statistics" />
+  <put-attribute name="body" value="/tiles/statistics.jsp"/>
+ </definition>
+
+
 
 </tiles-definitions>
