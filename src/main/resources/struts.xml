@@ -152,6 +152,30 @@
     <result name="accepted" type="tiles">feedback-ack</result>
    </action>
 
+
+
+
+
+  <!-- stats -->
+
+   <action name="stats" class="statsAction" >
+    <interceptor-ref name="defaultStack"/>
+    <interceptor-ref name="timer"/>
+    <interceptor-ref name="menu"/>
+
+    <result name="success" type="tiles">stats</result>
+   </action>
+
+
+
+
+
+
+
+
+
+
+
  </package>
 
 </struts>
