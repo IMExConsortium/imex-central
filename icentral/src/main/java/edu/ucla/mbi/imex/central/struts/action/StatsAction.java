@@ -1,14 +1,14 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
-/* =========================================================================
- * $HeadURL::                                                              $
- * $Id::                                                                   $
- * Version: $Rev::                                                         $
- *==========================================================================
+/* =============================================================================
+ * $HeadURL::                                                                  $
+ * $Id::                                                                       $
+ * Version: $Rev::                                                             $
+ *==============================================================================
  *
  * StatsAction action
  *                
- ======================================================================== */
+ ============================================================================ */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
@@ -97,9 +97,9 @@ public class StatsAction extends PortalSupport {
         return counts;
     }
     
-    //---------------------------------------------------------------------
-    //---------------------------------------------------------------------
-    
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
     public String execute() throws Exception {
 
         IcStatsDao dao = getTracContext().getIcStatsDao();
@@ -180,9 +180,7 @@ public class StatsAction extends PortalSupport {
 	return SUCCESS;
     }
     
-
-    //---------------------------------------------------------------------
-
+    //--------------------------------------------------------------------------
 
     private Map statesToRow( Map<DataState,Long> stc, 
                              Map<DataState,Long> totals ) {
@@ -212,9 +210,7 @@ public class StatsAction extends PortalSupport {
                  
                 totals.put( me.getKey(), 
                             totals.get( me.getKey() ).longValue() 
-                            + me.getValue().longValue() );
-                
-                
+                            + me.getValue().longValue() );                
             }
             
         }
@@ -225,64 +221,5 @@ public class StatsAction extends PortalSupport {
         res.put( "total",tcol );
         return res;
     }
-
-
-
-    //---------------------------------------------------------------------
-
-    /*
-    public void validate() {
-
-	Log log = LogFactory.getLog( this.getClass() );
-		    
-	if( getSubmit() != null && getSubmit().length() > 0 ) {
-
-
-	    String comment = getComment();
-	    if ( comment != null ) {
-		try {
-		    comment = comment.replaceAll("^\\s+","");
-		    comment = comment.replaceAll("\\s+$","");
-		} catch ( Exception ex ) {
-		    // cannot be here 
-		}
-		setComment( comment );
-	    }
-
-	    if ( comment == null || comment.length() == 0 ) {
-		addFieldError( "comment",
-			       "Comment field cannot be left empty" );
-	    }
-	    
-	    if ( getSession().get( "DIP_USER_ID" ) != null &&
-		 (Integer) getSession().get( "DIP_USER_ID" )  > 0 ) {
-		
-		
-		
-	    } else {
-		
-		// test recaptcha
-		//---------------
-
-		if( recaptcha != null ) {
-		    
-		    ReCaptchaResponse reCaptchaResponse = 
-			recaptcha.checkAnswer( ServletActionContext.
-					   getRequest().getRemoteHost(),  
-					       rcf, rrf );  
-		    
-		    if ( !reCaptchaResponse.isValid() ) {  
-			addActionError("Not a good CAPTCHA");
-		    } else {
-			
-			log.info( "  recaptcha response=" + 
-				  reCaptchaResponse.getErrorMessage() );
-		    }
-		}
-	    }
-	}
-    }
-
-    */
 
 }
