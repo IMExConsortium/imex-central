@@ -30,6 +30,9 @@ YAHOO.imex.stats = function() {
         if( oRecord.getData("label") === "Total") {
             YAHOO.util.Dom.addClass( elLiner, "dt-bold");
         }
+        if( oRecord.getData("label") === "Unassigned") {
+            YAHOO.util.Dom.addClass( elLiner, "dt-italic");
+        }
    
         elLiner.innerHTML = oData; 
     };
@@ -65,19 +68,19 @@ YAHOO.imex.stats = function() {
     }; 
     
     var myColumnDefs = [
-        { key:"label", label:"Partners", formatter:"stat", sortable:true, resizeable:false, 
+        { key:"label", label:"Partners", formatter:"stat", sortable:false, resizeable:true, 
           width: 600, maxAutoWidth: 1000, menuLabel:"Publication" },
-        { label:"Status", menuLabel:"Status",key:"submission",
+        { label:"Record Status", menuLabel:"Status",key:"submission",
           children:[
-             { key:"states['1'].cnt",  label:"New",sortable:true, resizeable:false, 
+             { key:"states['1'].cnt",  label:"New",sortable:false, resizeable:false, 
                formatter:"stat", className:"dt-right" },
-             { key:"states['2'].cnt", label:"Reserved",sortable:true, resizeable:false, 
+             { key:"states['2'].cnt", label:"Reserved",sortable:false, resizeable:false, 
                formatter:"stat", className:"dt-right"},
-             { key:"states['3'].cnt", label:"Processing",sortable:true, resizeable:false, 
+             { key:"states['3'].cnt", label:"Processing",sortable:false, resizeable:false, 
                formatter:"stat", className:"dt-right" },
-             { key:"states['10'].cnt", label:"Processed",sortable:true, resizeable:false, 
+             { key:"states['10'].cnt", label:"Processed",sortable:false, resizeable:false, 
                formatter:"stat", className:"dt-right" },
-             { key:"states['4'].cnt", label:"Released",sortable:true, resizeable:false, 
+             { key:"states['4'].cnt", label:"Released",sortable:false, resizeable:false, 
                formatter:"stat", className:"dt-right" }
           ]
         },

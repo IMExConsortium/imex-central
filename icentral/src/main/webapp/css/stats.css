@@ -24,6 +24,10 @@
   font-weight: bold;
 }
 
+#statstab .dt-italic {
+  font-style: italic;
+}
+
 #statstab tr.yui-dt-last {
   background: #EEEEEE;
 }

@@ -1,10 +1,11 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<h1>ImexCentral Statistics</h1>
+<h1>Record Status</h1>
 
  <script src="js/stats-yui.js" type="text/javascript"></script>
-
+ 
  <div class="yui-skin-sam" width="100%">   
+  <br/>
   <div id="statstab" width="100%" class="statstab"></div>
   <br/><br/><br/><br/><br/>
  </div>

@@ -135,7 +135,7 @@ public class StatsAction extends PortalSupport {
                 //-----------
 
                 Map rowMap = new HashMap();
-                rowMap.put( "label", "NONE" );
+                rowMap.put( "label", "Unassigned" );
                 rowMap.put( "name", "Unreserved" );
                 rowMap.put( "states",
                             statesToRow( dao.getCountNoPartner(), totals ) );
