@@ -162,7 +162,7 @@
 
  <definition name="stats" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Statistics" />
-  <put-attribute name="body" value="/tiles/statistics.jsp"/>
+  <put-attribute name="body" value="/tiles/stats-yui.jsp"/>
  </definition>
 
 

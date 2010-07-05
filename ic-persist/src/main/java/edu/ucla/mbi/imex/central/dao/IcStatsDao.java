@@ -33,33 +33,41 @@ public class IcStatsDao extends AbstractDAO {
     
     public Map<DataState,Long> getCountAll() { 
         
-        Map<DataState,Long> counts = new HashMap<DataState,Long>();
+        String qStr = "select p.state.id, count( distinct p ) " + 
+            " from IcPub p group by p.state.id";
+        
+        Map<DataState,Long> resmap = new HashMap<DataState,Long>();
         
         try {
             startOperation();
-            Query query =
-                session.createQuery( "select count(*) from IcPub p" +
-                                     "  ");
             
+            Query query = session.createQuery( qStr );
             List  res = query.list();
             
-            if(res.size()>0) {
-                System.out.println("Size: " + res.size() + "res(0)=" + res.get(0) );
+            if( res.size()>0 ) {
+                for( Iterator i = res.iterator(); i.hasNext(); ) {
+                    Object[] ir = (Object[])i.next();
+                    
+                    Integer stateId = (Integer) ir[0];
+                    Long cnt = (Long) ir[1]; 
+                    
+                    DataState state = (DataState) 
+                        super.find( IcDataState.class, stateId );
+                    
+                    resmap.put( state, cnt );
+                }
             } else {
-                System.out.println("M/T");
+                Log log = LogFactory.getLog( this.getClass() );
+                log.info( "IcStatsDao(getCountAll): no counts"  );
             }
             
-
-            tx.commit();
         } catch ( HibernateException e ) {
             handleException( e );
             // log error ?
         } finally {
-            //tx.commit();
             HibernateUtil.closeSession();
         }
-        
-        return counts;
+        return resmap;
     }
 
     //--------------------------------------------------------------------------
@@ -67,8 +75,7 @@ public class IcStatsDao extends AbstractDAO {
     public Map<Group,Map<DataState,Long>> getCountByPartner() { 
         
         String qStr = "select grp.id, p.state.id, count( distinct p ) " + 
-            " from IcPub p left outer join p.adminUsers user " + 
-            " join user.groups grp join grp.roles role " +
+            " from IcPub p join p.adminGroups grp join grp.roles role " +
             "  where role.id= :pid group by grp.id, p.state.id";
         
         Map<Group,Map<DataState,Long>> 
@@ -76,11 +83,9 @@ public class IcStatsDao extends AbstractDAO {
         
         try {
             startOperation();
-            Query query =
-                session.createQuery( qStr );
-        
-            query.setParameter( "pid", IcStatsDao.PARTNERID );
             
+            Query query = session.createQuery( qStr );
+            query.setParameter( "pid", IcStatsDao.PARTNERID );
             List  res = query.list();
             
             if(res.size()>0) {
@@ -98,21 +103,19 @@ public class IcStatsDao extends AbstractDAO {
                         super.find( IcDataState.class, stateId );
                     
                     if( partner != null ) {
+
                         if( resmap.get(partner) == null ) {
                             Map<DataState,Long> 
                                 pst = new HashMap<DataState,Long>();
                             resmap.put( partner, pst );
                         }
                         resmap.get(partner).put(state,cnt);
-                        System.out.println("Partner=" + partner.getName() +
-                                           " State=" + state.getName() +
-                                           " count: " + cnt );
                     }
                 }
             } else {
-                System.out.println("M/T");
+                Log log = LogFactory.getLog( this.getClass() );
+                log.info( "IcStatsDao(getCountByPartner): no counts" );
             }
-            //tx.commit();
         } catch ( HibernateException e ) {
             handleException( e );
             // log error ?
@@ -129,13 +132,14 @@ public class IcStatsDao extends AbstractDAO {
     public Map<DataState,Long> getCountNoPartner() { 
 
         String qStr = "select p.state.id, count(distinct p) " +
-            " from IcPub p where p.adminUsers.size = 0 " +
+            " from IcPub p where p.adminGroups.size = 0 " +
             " group by p.state.id";
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
         
         try {
             startOperation();
+            
             Query query = session.createQuery( qStr );
             List  res = query.list();
 
@@ -151,14 +155,11 @@ public class IcStatsDao extends AbstractDAO {
                         super.find( IcDataState.class, stateId );
                     
                     resmap.put(state,cnt);
-                    System.out.println("Partner=NONE;" +
-                                       " State=" + state.getName() +
-                                       " count: " + cnt );
                 }
             } else {
-                System.out.println("M/T");
+                Log log = LogFactory.getLog( this.getClass() );
+                log.info( "IcStatsDao(getCountNoPartner): no counts" );
             }
-            //tx.commit();
         } catch ( HibernateException e ) {
             handleException( e );
             // log error ?
@@ -166,7 +167,6 @@ public class IcStatsDao extends AbstractDAO {
             System.out.println("Session closed (exeption)");
             HibernateUtil.closeSession();
         }
-
         return resmap;
     }
     
