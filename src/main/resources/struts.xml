@@ -153,9 +153,6 @@
    </action>
 
 
-
-
-
   <!-- stats -->
 
    <action name="stats" class="statsAction" >
@@ -164,6 +161,14 @@
     <interceptor-ref name="menu"/>
 
     <result name="success" type="tiles">stats</result>
+
+     <result name="json"  type="json">
+       <param name="includeProperties">
+        counts.*,partnerCounts.*
+       </param>
+       <param name="noCache">true</param>
+     </result>
+     
    </action>
 
 

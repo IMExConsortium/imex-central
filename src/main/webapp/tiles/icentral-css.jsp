@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="css/journalmgr.css" type="text/css" />
 <link rel="stylesheet" href="css/journalnew.css" type="text/css" />
 
+<link rel="stylesheet" href="css/stats.css" type="text/css" />
+
+
 
 <link rel="stylesheet" href="css/accordion.css" type="text/css" />
 <link rel="stylesheet" href="css/edit.css" type="text/css" />
