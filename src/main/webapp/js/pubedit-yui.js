@@ -402,17 +402,79 @@ YAHOO.imex.pubedit = {
         return false; 
     },
 
+    pubContactMail: function(op) {
+        
+        var setContactMailCallback = { cache:false, timeout: 5000, 
+                                 success: YAHOO.imex.pubedit.stateUpdate,
+                                 failure: YAHOO.imex.pubedit.stateUpdateFail,
+                                 argument:{ id:YAHOO.imex.pubedit.pubId } };
+        try{
+            
+            if( op === 'update' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.emup=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.necm=' + YAHOO.util.Dom.get("pubedit_opp_ecm").value, 
+                                   setContactMailCallback );
+            } 
+
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+        return false; 
+    },
+
+    pubDate: function(op) {
+        
+        var setDateCallback = { cache:false, timeout: 5000, 
+                                success: YAHOO.imex.pubedit.stateUpdate,
+                                failure: YAHOO.imex.pubedit.stateUpdateFail,
+                                argument:{ id:YAHOO.imex.pubedit.pubId } };
+        try{
+            
+            if( op === 'update' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.edup=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.epd=' + YAHOO.util.Dom.get("pubedit_opp_epd").value
+                                   + '&opp.pd=' + YAHOO.util.Dom.get("pubedit_opp_pd").value
+                                   + '&opp.rd=' + YAHOO.util.Dom.get("pubedit_opp_rd").value, 
+                                   setDateCallback );
+            } 
+
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+        return false; 
+    },
+
     stateUpdate: function( o ) { 
         try {
             var acl = /ACL Violation/; 
             if( acl.test(o.responseText) ) {
-                
-
                 YAHOO.mbi.modal.spcstat("ACL Violation");
             } else {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var stl = YAHOO.util.Dom.get( "state-label" );
                 stl.innerHTML = messages.pub.state.name;
+                
+                var cem = YAHOO.util.Dom.get( "pubedit_opp_ecm" );
+                var cem_val = messages.pub.contactEmail;               
+                cem.value = cem_val;
+
+                var pd = YAHOO.util.Dom.get( "pubedit_opp_pd" );
+                var pd_val = messages.pub.pubDateStr;               
+                pd.value = pd_val;
+
+                var epd = YAHOO.util.Dom.get( "pubedit_opp_epd" );
+                var epd_val = messages.pub.expectedPubDateStr;               
+                epd.value = epd_val;
+
+                var rd = YAHOO.util.Dom.get( "pubedit_opp_rd" );
+                var rd_val = messages.pub.releaseDateStr;               
+                rd.value = rd_val;                
             }
         } catch(x) {
             alert("AJAX Error: " + x );
@@ -423,4 +485,3 @@ YAHOO.imex.pubedit = {
         alert(o.responseText);
     }
 };
-
