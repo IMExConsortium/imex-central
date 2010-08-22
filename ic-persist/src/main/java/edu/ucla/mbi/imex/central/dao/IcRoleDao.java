@@ -39,8 +39,13 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
     public Role getRole( String name ) { 
         
         Role role = null;
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcRole u where " +
                                      " u.name = :name ");
@@ -53,7 +58,8 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return role; 
@@ -66,8 +72,12 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         List<Role> rlst = null;
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcRole r order by id ");
             
@@ -78,7 +88,8 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return rlst;
@@ -116,8 +127,12 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         long cnt = 0;
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "select count(u) from IcUser u" +
                                      " join u.roles as role" +
@@ -130,7 +145,8 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return cnt;
@@ -144,8 +160,12 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
 
         List<User> ulst = null;
 
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "select u from IcUser u" +
                                      " join u.roles as role" +
@@ -154,12 +174,13 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             query.setFirstResult( 0 );
             ulst = (List<User>) query.list();
             tx.commit();
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
         } catch ( HibernateException e ) {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return ulst;
@@ -174,8 +195,12 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         long cnt = 0;
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "select count(g) from IcGroup g" +
                                      " join g.roles as role" +
@@ -188,7 +213,8 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return cnt;
@@ -202,8 +228,12 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
 
         List<Group> ulst = null;
 
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "select g from IcGroup g" +
                                      " join g.roles as role" +
@@ -216,7 +246,8 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         return ulst;
     }

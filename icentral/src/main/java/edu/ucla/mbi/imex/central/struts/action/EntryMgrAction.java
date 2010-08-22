@@ -358,7 +358,10 @@ public class EntryMgrAction extends ManagerSupport {
                     GregorianCalendar pGD = parseDate( getOpp().get( "pd" ) );
                     GregorianCalendar rGD = parseDate( getOpp().get( "rd" ) );
                     
-                    return updateIcPubDates( getId(), epGD, pGD, rGD );
+                    updateIcPubDates( getId(), epGD, pGD, rGD );
+
+                    return JSON;
+
                 }
                 
                 //--------------------------------------------------------------
@@ -381,6 +384,27 @@ public class EntryMgrAction extends ManagerSupport {
                         
                     }
                                         
+                    return JSON;
+                }
+                
+                //--------------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "emup" ) ) {
+
+                    int sid=0;
+
+                    log.info( "opp=" + getOpp() );
+                    
+                    if ( getOpp() == null ) return SUCCESS;
+                    String necm = getOpp().get( "necm" );
+                    log.info( "opp.necm=" + necm );
+                    try {
+                        updateIcPubContactMail( getId(), necm );
+                    } catch ( Exception ex ) {
+                        // should not happen
+                        //updateIcPubContactMail( getId(), necm );
+                    }
+                    
                     return JSON;
                 }
 

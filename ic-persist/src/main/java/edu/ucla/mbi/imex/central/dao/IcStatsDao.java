@@ -37,9 +37,13 @@ public class IcStatsDao extends AbstractDAO {
             " from IcPub p group by p.state.id";
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
         
         try {
-            startOperation();
+            //startOperation();
             
             Query query = session.createQuery( qStr );
             List  res = query.list();
@@ -65,7 +69,8 @@ public class IcStatsDao extends AbstractDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         return resmap;
     }
@@ -81,8 +86,12 @@ public class IcStatsDao extends AbstractDAO {
         Map<Group,Map<DataState,Long>> 
             resmap = new HashMap<Group,Map<DataState,Long>>();
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             
             Query query = session.createQuery( qStr );
             query.setParameter( "pid", IcStatsDao.PARTNERID );
@@ -121,7 +130,8 @@ public class IcStatsDao extends AbstractDAO {
             // log error ?
         } finally {
             System.out.println("Session closed (exeption)");
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return resmap;
@@ -137,8 +147,12 @@ public class IcStatsDao extends AbstractDAO {
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             
             Query query = session.createQuery( qStr );
             List  res = query.list();
@@ -165,7 +179,8 @@ public class IcStatsDao extends AbstractDAO {
             // log error ?
         } finally {
             System.out.println("Session closed (exeption)");
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         return resmap;
     }
@@ -174,8 +189,12 @@ public class IcStatsDao extends AbstractDAO {
     
     public void testQuery( String testQuery ) { 
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( testQuery );
             
@@ -193,16 +212,15 @@ public class IcStatsDao extends AbstractDAO {
             } else {
                 System.out.println("M/T");
             }
-            //tx.commit();
+            tx.commit();
             System.out.println("Session closed normally");
             
         } catch ( HibernateException e ) {
             handleException( e );
             // log error ?
         } finally {
-            System.out.println("Session closed (exeption)");
-            tx.commit();
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
     }
 
@@ -212,8 +230,12 @@ public class IcStatsDao extends AbstractDAO {
         
         Publication pub = null;
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcJournal j where " +
                                      " j.title = :title ");
@@ -225,7 +247,8 @@ public class IcStatsDao extends AbstractDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         return pub; 
     }

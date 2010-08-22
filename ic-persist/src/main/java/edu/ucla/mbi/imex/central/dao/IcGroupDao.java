@@ -39,8 +39,12 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     public Group getGroup( String label ) {
         
         Group group = null;
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcGroup g where " +
                                      " g.label = :label ");
@@ -52,7 +56,8 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return group;
@@ -96,9 +101,12 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     public long getUserCount( Group group ) {
 
         long cnt = 0;
-        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "select count(u) from IcUser u" +
                                      " join u.groups as grp" +
@@ -111,7 +119,8 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return cnt;
@@ -124,9 +133,13 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
         // NOTE: use sparingly - potentially can load all users
         
         List<User> ulst = null;
-
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "select u from IcUser u" +
                                      " join u.groups as grp" +
@@ -139,7 +152,8 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return  ulst;

@@ -42,9 +42,13 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
     public DataState getDataState( String name ) { 
         
         DataState state = null;
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
         
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcDataState s where " +
                                      " s.name = :name ");
@@ -56,7 +60,8 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return state; 
@@ -67,9 +72,13 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
     public List<DataState> getDataStateList() {
         
         List<DataState> slst = null;
-        
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcDataState s order by id ");
             
@@ -79,7 +88,8 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         return slst;
     }
@@ -128,8 +138,12 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         
         Transition trans = null;
 
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcTransition t where " +
                                      " t.name = :name ");
@@ -141,7 +155,8 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return trans; 
@@ -153,8 +168,12 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         
         List<Transition> tlst = null;
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcTransition t order by id ");
             
@@ -164,7 +183,8 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return tlst;
@@ -176,8 +196,12 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         
         List<Transition> tlst = null;
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcTransition t order by id " +
                                      " where t.fromState = :state ");
@@ -189,7 +213,8 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         return tlst;
@@ -221,4 +246,3 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
         super.delete( trans );
     }
 }
-

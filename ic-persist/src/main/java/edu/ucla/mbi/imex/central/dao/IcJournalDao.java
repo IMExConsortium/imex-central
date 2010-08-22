@@ -39,9 +39,13 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     public Journal getJournalByNlmid( String nlmid ) { 
         
         Journal journal = null;
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
 
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcJournal j where " +
                                      " j.nlmid = :nlmid ");
@@ -53,7 +57,8 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return journal; 
@@ -65,8 +70,12 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         
         Journal journal = null;
 
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcJournal j where " +
                                      " j.title = :title ");
@@ -78,7 +87,8 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return journal; 
@@ -90,8 +100,12 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         
         List<Journal> jlst = null;
 
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query = session
                 .createQuery( "from IcJournal j where id > 0 order by id" );
             
@@ -101,7 +115,8 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             handleException( e );
             // log exception ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return jlst;
@@ -112,8 +127,12 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
     public long getJournalCount() {
         
         long count = 0;
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query = session
                 .createQuery( "select count(j) from IcJournal j where id > 0" );
             count  = (Long) query.uniqueResult();
@@ -122,7 +141,8 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             handleException( e );
             // log error ?
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
 
         return count;
@@ -137,8 +157,12 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcJournalDao:getJournalList(block)"  );
 
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            startOperation();
+            //startOperation();
             Query query = session
                 .createQuery( "from IcJournal p where id > 0 order by id ");
             query.setFirstResult( firstRecord );
@@ -151,7 +175,8 @@ public class IcJournalDao extends AbstractDAO implements JournalDAO {
             // log exception ?
             e.printStackTrace();
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         
         System.out.println("jlist" + jlst);

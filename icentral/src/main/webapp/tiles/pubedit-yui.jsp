@@ -121,7 +121,9 @@
     </table>
    </td>
    <th  width="10%">
-    <s:submit theme="simple" name="op.edup" value="UPDATE"/>
+    <s:submit theme="simple" name="op.edup" value="UPDATE"
+       onclick="return YAHOO.imex.pubedit.pubDate('update');"
+      />
    </th>
   </tr>
   <tr>
@@ -130,7 +132,8 @@
     <s:textfield theme="simple" name="opp.ecm" size="32" maxLength="32"/>
    </td>
    <th>
-    <s:submit theme="simple" name="op.emup" value="UPDATE"/>
+    <s:submit theme="simple" name="op.emup" value="UPDATE"
+       onclick="return YAHOO.imex.pubedit.pubContactMail('update');" />
    </th>
   </tr>
   <tr>

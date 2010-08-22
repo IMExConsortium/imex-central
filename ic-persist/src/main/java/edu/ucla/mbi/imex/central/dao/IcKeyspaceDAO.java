@@ -35,9 +35,13 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
     public Keyspace getKeyspace( String name ) {
 
         Keyspace ksp = null;
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
         
         try {
-            startOperation();
+            //startOperation();
             Query query =
                 session.createQuery( "from IcKeyspace k where " +
                                      " k.name = :name ");
@@ -48,7 +52,8 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
         } catch ( HibernateException e ) {
             handleException( e );
         } finally {
-            HibernateUtil.closeSession();
+            //HibernateUtil.closeSession();
+            session.close();
         }
         return ksp;
     }
@@ -77,7 +82,7 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
     public void deleteKeyspace( Keyspace  ksp ) {
         
     }
-
+    
     public Key newKey() {
         return null;
     }
@@ -142,9 +147,13 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
 	IcKey key = null;
 	accession = accession.replaceAll( "[^0-9]", "" );
         
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
 	try {
 	    long value = Long.parseLong( accession );
-	    startOperation();
+	    //startOperation();
 
 	    Query query
 		= session.createQuery( "select k from IcKey as k "+
@@ -156,13 +165,14 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
 	    key  = (IcKey) query.uniqueResult();
             tx.commit();
 	    
-	    HibernateUtil.closeSession();
+	    //HibernateUtil.closeSession();
 	    return key;
 	    
 	} catch ( HibernateException e ) {
 	    handleException( e );
 	} finally {
-	    HibernateUtil.closeSession();
+	    //HibernateUtil.closeSession();
+            session.close();
 	}
 	throw new DAOException("IcKeyspaceDAO exception");
     }    
@@ -170,9 +180,13 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
     public IcKey getMaxKey( String keyspace ) throws DAOException {
        	
 	IcKey key = null;
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
 	
 	try {
-	    startOperation();
+	    //startOperation();
 	    
 	    Query query	= session
                 .createQuery( "select k from IcKey as k "+
@@ -185,13 +199,14 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
             
 	    key  = (IcKey) query.uniqueResult();
             tx.commit();
-	    HibernateUtil.closeSession();
+	    //HibernateUtil.closeSession();
 	    return key;
 	    
 	} catch ( HibernateException e ) {
 	    handleException(e);
 	} finally {
-	    HibernateUtil.closeSession();
+	    //HibernateUtil.closeSession();
+            session.close();
 	}
 	
 	throw new DAOException( "IcKeyspaceDAO exception" );

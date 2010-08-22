@@ -3,7 +3,9 @@ use SOAP::Lite;
 use XML::XPath;
 use XML::XPath::XMLParser;
 
-my $URL= "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
+my $URLTEST = "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
+my $URLBETA = "https://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws";
+my $URL = $URLTEST;
 my $PURL= "http://%USR%:%PASS%\@10.1.1.%%%:8080/icentral/ws";
 
 my $ip="";
@@ -19,6 +21,10 @@ my $ausr = "";
 my $agrp = "";
 
 for( my $i=0; $i < @ARGV; $i++ ) {
+
+    if( $ARGV[$i]=~/PROD=YES/ ) {
+        $URL=$URLBETA;
+    }
     if( $ARGV[$i]=~/IP=(.+)/ ) {
         $ip=$1;
         $URL=$PURL;
