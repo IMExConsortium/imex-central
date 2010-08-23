@@ -268,19 +268,20 @@
            <s:textfield theme="simple" name="opp.neo" size="32" maxLength="64"/>
           </td>
           <th rowspan="1" width="10%">
-           <s:submit theme="simple" name="op.eoup" value="UPDATE"/>
+           <s:submit theme="simple" name="op.eoup" value="UPDATE" disabled="true" />
           </th>
          </tr>
          <tr>
           <th rowspan="2" align="right" nowrap>Admin Users</th>
-           <td colspan="1">
+           <td colspan="1" id="td-admin-user" >
             <s:iterator value="pub.adminUsers" id="u" status="upos">
-             <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}"/>
+             <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop" />
              <s:property value="#u.login"/>
             </s:iterator>
            </td>
            <th>
-            <s:submit theme="simple" name="op.eaudel" value="DROP"/>
+            <s:submit theme="simple" name="op.eaudel" value="DROP" 
+               onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');" />
            </th>
           </tr>
           <tr>
@@ -288,12 +289,13 @@
             <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
            </td>
            <th>
-            <s:submit theme="simple" name="op.eauadd" value="ADD"/>
+            <s:submit theme="simple" name="op.eauadd" value="ADD"
+               onclick="return YAHOO.imex.pubedit.pubAdminUser('add');" />
            </th>
           </tr>
            <tr>
             <th rowspan="2" align="right" nowrap>Admin Groups</th>
-            <td colspan="1">
+            <td colspan="1" id="td-admin-group" >
              <s:iterator value="pub.adminGroups" id="g" status="gpos">
               <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}"/>
               <s:property value="#g.label"/>
