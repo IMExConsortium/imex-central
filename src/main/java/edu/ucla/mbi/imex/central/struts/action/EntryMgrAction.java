@@ -420,24 +420,24 @@ public class EntryMgrAction extends ManagerSupport {
                     } catch( NumberFormatException nfe ) {
                         // abort on error
                     }
-                    //return SUCCESS;
                     return JSON;
                 }
 
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eagadd" ) ) {
-                    if ( getOpp() == null ) return SUCCESS;
+                    if ( getOpp() == null ) return JSON;
                     
                     String sgid = getOpp().get( "eagadd" );
                     try {
                         int gid = Integer.parseInt( sgid );
-                        return addIcPubAdminGroup( getId(), gid );
+                        addIcPubAdminGroup( getId(), gid );
+                        return JSON;
                         
                     } catch( NumberFormatException nfe ) {
                         // abort on error
                     }
-                    return SUCCESS;
+                    return JSON;
                 }
 
                 //--------------------------------------------------------------
@@ -475,7 +475,7 @@ public class EntryMgrAction extends ManagerSupport {
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eagdel" ) ) {
-                    if ( getOpp() == null ) return SUCCESS;
+                    if ( getOpp() == null ) return JSON;
 
                     String gdel = getOpp().get( "eagdel" );
                     log.info("eagdel=" + gdel);
@@ -487,9 +487,13 @@ public class EntryMgrAction extends ManagerSupport {
                              String[] gs = gdel.split(",");
 
                              for( int ii = 0; ii <gs.length; ii++ ) {
-                                 gidl.add( Integer.valueOf( gs[ii] ) );
+                                 if( gs[ii] != null && gs[ii].length() > 0 ) {
+                                     gidl.add( Integer.valueOf( gs[ii] ) );
+                                 }
                              }
-                             return delIcPubAdminGroups( getId(), gidl );
+                             delIcPubAdminGroups( getId(), gidl );
+                             return JSON;
+                             
                         } catch ( Exception ex ) {
                             // should not happen
                         }
@@ -497,7 +501,7 @@ public class EntryMgrAction extends ManagerSupport {
                         icpub = entryManager.getIcPub( getId() );
                         setId( icpub.getId() );
                     }
-                    return SUCCESS;
+                    return JSON;
                 }
 
                 if ( key.equalsIgnoreCase( "ppg" ) ) {

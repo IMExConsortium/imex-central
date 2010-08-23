@@ -128,8 +128,14 @@
   </tr>
   <tr>
    <th align="right" nowrap>Contact<br/>Email</th>
-   <td>
-    <s:textfield theme="simple" name="opp.ecm" size="32" maxLength="32"/>
+   <td id="td-contact-mail">
+    <s:if test="pub.contactEmail.length() > 0">
+      <s:a id="cm-link" href="%{'mailto:'+pub.contactEmail}">
+        <s:property value="pub.contactEmail"/>
+      </s:a>
+      <i>change to</i>
+    </s:if>
+    <s:textfield theme="simple" name="opp.necm" size="32" maxLength="32"/>
    </td>
    <th>
     <s:submit theme="simple" name="op.emup" value="UPDATE"
@@ -297,12 +303,13 @@
             <th rowspan="2" align="right" nowrap>Admin Groups</th>
             <td colspan="1" id="td-admin-group" >
              <s:iterator value="pub.adminGroups" id="g" status="gpos">
-              <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}"/>
+              <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop" />
               <s:property value="#g.label"/>
              </s:iterator>
             </td>
             <th>
-             <s:submit theme="simple" name="op.eagdel" value="DROP"/>
+             <s:submit theme="simple" name="op.eagdel" value="DROP"
+                onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');" />
             </th>
            </tr>
            <tr>
@@ -311,7 +318,8 @@
                        list="groupAll" listKey="id" listValue="label" />  
             </td>
             <th>
-             <s:submit theme="simple" name="op.eagadd" value="ADD"/>
+             <s:submit theme="simple" name="op.eagadd" value="ADD"
+                onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');" />
             </th>
            </tr>
           </table>
