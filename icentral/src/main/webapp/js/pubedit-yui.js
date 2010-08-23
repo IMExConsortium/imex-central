@@ -415,7 +415,7 @@ YAHOO.imex.pubedit = {
                     .asyncRequest( 'GET', 
                                    'pubedit?op.emup=update' 
                                    + '&id=' + YAHOO.imex.pubedit.pubId
-                                   + '&opp.necm=' + YAHOO.util.Dom.get("pubedit_opp_ecm").value, 
+                                   + '&opp.necm=' + YAHOO.util.Dom.get("pubedit_opp_necm").value, 
                                    setContactMailCallback );
             } 
 
@@ -451,14 +451,13 @@ YAHOO.imex.pubedit = {
     },
 
 
-    pubAdminUser: function(op) {
+    pubAdminUser: function( op ) {
         
         var setAdminUserCallback = { cache:false, timeout: 5000, 
                                      success: YAHOO.imex.pubedit.adminUpdate,
                                      failure: YAHOO.imex.pubedit.updateFail,
                                      argument:{ id:YAHOO.imex.pubedit.pubId } };
         try{
-            
             if( op === 'add' ) {
                 YAHOO.util.Connect
                     .asyncRequest( 'GET', 
@@ -474,7 +473,7 @@ YAHOO.imex.pubedit = {
                 var eaudel = ",";
                 
                 for( var i = 0; i < drops.length; i++ ) {
-                    //alert("val=" + drops[i].value + "chk=" + drops[i].checked);
+                    //alert("val=" + drops[i].value + " chk=" + drops[i].checked);
                     if( drops[i].checked ) {
                         eaudel = eaudel + drops[i].value + ",";
                     }
@@ -503,7 +502,56 @@ YAHOO.imex.pubedit = {
         return false; 
     },
 
-    
+    pubAdminGroup: function( op ) {
+        
+        var setAdminGroupCallback = { cache:false, timeout: 5000, 
+                                      success: YAHOO.imex.pubedit.adminUpdate,
+                                      failure: YAHOO.imex.pubedit.updateFail,
+                                      argument:{ id:YAHOO.imex.pubedit.pubId } };
+        try{
+            if( op === 'add' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.eagadd=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.eagadd=' + YAHOO.util.Dom.get("pubedit_opp_eagadd").value,
+                                   setAdminGroupCallback );
+            } 
+            
+            if( op === 'drop' ) {
+
+                var drops = YAHOO.util.Dom.getElementsByClassName("admin-group-drop");
+                var eagdel = ",";
+                
+                for( var i = 0; i < drops.length; i++ ) {
+                    //alert("val=" + drops[i].value + " chk=" + drops[i].checked);
+                    if( drops[i].checked ) {
+                        eagdel = eagdel + drops[i].value + ",";
+                    }
+                } 
+
+                if( eagdel === "," ) {               
+                    if(drops.checked) {
+                        eagdel = eagdel + drops.value + ",";
+                    }
+                }
+                alert("eagdel="+eagdel);
+                if( eagdel !== "," ) {   
+                    YAHOO.util.Connect
+                        .asyncRequest( 'GET', 
+                                       'pubedit?op.eagdel=update' 
+                                       + '&id=' + YAHOO.imex.pubedit.pubId
+                                       + '&opp.eagdel=' + eagdel,
+                                       setAdminGroupCallback );
+                }
+            } 
+            
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+        return false; 
+    },
+
     adminUpdate: function( o ) {
 
         try {
@@ -513,15 +561,15 @@ YAHOO.imex.pubedit = {
             } else {
                 
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
+                
                 var tau = YAHOO.util.Dom.get( "td-admin-user" );
-                               
                 var nih = "";
 
                 for( var i = 0; i < messages.pub.adminUsers.length; i++ ) {
                     
                     nih = nih + '<input type="checkbox" id="pubedit_opp_eaudel" value="' + 
                         messages.pub.adminUsers[i].id +
-                        '" name="opp.eaudel">';
+                        '" name="opp.eaudel" class="admin-user-drop">';
 
                     nih = nih + '<input type="hidden" value="' + 
                         messages.pub.adminUsers[i].id + 
@@ -531,6 +579,25 @@ YAHOO.imex.pubedit = {
                 }              
                 tau.innerHTML = nih;
                 YAHOO.util.Dom.get("pubedit_opp_eauadd").value ="";
+
+                var tag = YAHOO.util.Dom.get( "td-admin-group" );
+                var nig = "";
+
+                for( var i = 0; i < messages.pub.adminGroups.length; i++ ) {
+                    
+                    nig = nig + '<input type="checkbox" id="pubedit_opp_eagdel" value="' + 
+                        messages.pub.adminGroups[i].id +
+                        '" name="opp.eagdel" class="admin-group-drop">';
+
+                    nig = nig + '<input type="hidden" value="' + 
+                        messages.pub.adminGroups[i].id + 
+                        '" name="__checkbox_opp.eagdel" id="__checkbox_pubedit_opp_eagdel">';
+
+                    nig = nig + messages.pub.adminGroups[i].label;
+                }              
+                tag.innerHTML = nig;
+                //YAHOO.util.Dom.get("pubedit_opp_eauadd").value ="";
+
             }
         } catch(x) {
             alert("AJAX Error: " + x );
@@ -547,13 +614,27 @@ YAHOO.imex.pubedit = {
                 var stl = YAHOO.util.Dom.get( "state-label" );
                 stl.innerHTML = messages.pub.state.name;
                 
-                var cem = YAHOO.util.Dom.get( "pubedit_opp_ecm" );
-                var cem_val = messages.pub.contactEmail;               
-                cem.value = cem_val;
+                var tcm = YAHOO.util.Dom.get("td-contact-mail");
+                var nih = "";
+                
+                if( messages.pub.contactEmail.length > 0 ) {
+                    nih = '<a id="cm-link" href="mailto:' + 
+                        messages.pub.contactEmail + '">' +
+                        messages.pub.contactEmail +'</a>' +
+                        ' <i>change to</i> ';
+                }
+
+                nih = nih + '<input type="text" id="pubedit_opp_necm" ' +
+                    'value="" maxlength="32" size="32" name="opp.necm">'; 
+                tcm.innerHTML = nih;                
+
+                //var cem = YAHOO.util.Dom.get( "pubedit_opp_ecm" );
+                //var cem_val = messages.pub.contactEmail;               
+                //cem.value = cem_val;
 
                 var pd = YAHOO.util.Dom.get( "pubedit_opp_pd" );
                 var pd_val = messages.pub.pubDateStr;               
-                pd.value = pd_val;
+                pd.value = pd_val;               
 
                 var epd = YAHOO.util.Dom.get( "pubedit_opp_epd" );
                 var epd_val = messages.pub.expectedPubDateStr;               
