@@ -415,11 +415,13 @@ public class EntryMgrAction extends ManagerSupport {
                     
                     String ulogin = getOpp().get( "eauadd" );
                     try {
-                        return addIcPubAdminUser( getId(), ulogin );
+                        addIcPubAdminUser( getId(), ulogin );
+                        return JSON;
                     } catch( NumberFormatException nfe ) {
                         // abort on error
                     }
-                    return SUCCESS;
+                    //return SUCCESS;
+                    return JSON;
                 }
 
                 //--------------------------------------------------------------
@@ -441,9 +443,11 @@ public class EntryMgrAction extends ManagerSupport {
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eaudel" ) ) {
-                    if ( getOpp() == null ) return SUCCESS;
+                    if ( getOpp() == null ) return JSON;
                     
                     String udel = getOpp().get( "eaudel" );
+
+                    log.info("eaudel=" + udel);
 
                     if ( getId() > 0 && udel != null ) {
                         try {
@@ -452,9 +456,12 @@ public class EntryMgrAction extends ManagerSupport {
                              String[] us = udel.split(",");
 
                              for( int ii = 0; ii <us.length; ii++ ) {
-                                 uidl.add( Integer.valueOf( us[ii] ) );
+                                 if( us[ii].length()>0 ) {
+                                     uidl.add( Integer.valueOf( us[ii] ) );
+                                 }
                              }
-                             return delIcPubAdminUsers( getId(), uidl );
+                             delIcPubAdminUsers( getId(), uidl );
+                             return JSON;
                         } catch ( Exception ex ) {
                             // should not happen
                         }
@@ -462,7 +469,7 @@ public class EntryMgrAction extends ManagerSupport {
                         icpub = entryManager.getIcPub( getId() );
                         setId( icpub.getId() );
                     }
-                    return SUCCESS;
+                    return JSON;
                 }
 
                 //--------------------------------------------------------------

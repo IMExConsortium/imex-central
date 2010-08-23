@@ -450,6 +450,93 @@ YAHOO.imex.pubedit = {
         return false; 
     },
 
+
+    pubAdminUser: function(op) {
+        
+        var setAdminUserCallback = { cache:false, timeout: 5000, 
+                                     success: YAHOO.imex.pubedit.adminUpdate,
+                                     failure: YAHOO.imex.pubedit.updateFail,
+                                     argument:{ id:YAHOO.imex.pubedit.pubId } };
+        try{
+            
+            if( op === 'add' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.eauadd=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.eauadd=' + YAHOO.util.Dom.get("pubedit_opp_eauadd").value,
+                                   setAdminUserCallback );
+            } 
+            
+            if( op === 'drop' ) {
+
+                var drops = YAHOO.util.Dom.getElementsByClassName("admin-user-drop");
+                var eaudel = ",";
+                
+                for( var i = 0; i < drops.length; i++ ) {
+                    //alert("val=" + drops[i].value + "chk=" + drops[i].checked);
+                    if( drops[i].checked ) {
+                        eaudel = eaudel + drops[i].value + ",";
+                    }
+
+                } 
+
+                if( eaudel === "," ) {               
+                    if(drops.checked) {
+                        eaudel = eaudel + drops.value + ",";
+                    }
+                }
+                
+                if( eaudel !== "," ) {   
+                    YAHOO.util.Connect
+                        .asyncRequest( 'GET', 
+                                       'pubedit?op.eaudel=update' 
+                                       + '&id=' + YAHOO.imex.pubedit.pubId
+                                       + '&opp.eaudel=' + eaudel,
+                                       setAdminUserCallback );
+                }
+            } 
+            
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+        return false; 
+    },
+
+    
+    adminUpdate: function( o ) {
+
+        try {
+            var acl = /ACL Violation/; 
+            if( acl.test( o.responseText ) ) {
+                YAHOO.mbi.modal.spcstat("ACL Violation");
+            } else {
+                
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var tau = YAHOO.util.Dom.get( "td-admin-user" );
+                               
+                var nih = "";
+
+                for( var i = 0; i < messages.pub.adminUsers.length; i++ ) {
+                    
+                    nih = nih + '<input type="checkbox" id="pubedit_opp_eaudel" value="' + 
+                        messages.pub.adminUsers[i].id +
+                        '" name="opp.eaudel">';
+
+                    nih = nih + '<input type="hidden" value="' + 
+                        messages.pub.adminUsers[i].id + 
+                        '" name="__checkbox_opp.eaudel" id="__checkbox_pubedit_opp_eaudel">';
+
+                    nih = nih + messages.pub.adminUsers[i].login;
+                }              
+                tau.innerHTML = nih;
+                YAHOO.util.Dom.get("pubedit_opp_eauadd").value ="";
+            }
+        } catch(x) {
+            alert("AJAX Error: " + x );
+        }
+    },
+
     stateUpdate: function( o ) { 
         try {
             var acl = /ACL Violation/; 
@@ -483,5 +570,11 @@ YAHOO.imex.pubedit = {
 
     stateUpdateFail: function( o ) {
         alert(o.responseText);
+    },
+
+    updateFail: function( o ) {
+        alert(o.responseText);
     }
 };
+
+
