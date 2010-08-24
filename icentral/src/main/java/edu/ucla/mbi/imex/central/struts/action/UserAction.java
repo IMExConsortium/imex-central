@@ -180,7 +180,7 @@ public class UserAction extends UserSupport {
     public String edit() {
 	
 	Log log = LogFactory.getLog( this.getClass() );
-        log.info( " edit: uid=" + getSession().get( "USER_ID" ) );
+        log.debug( " edit: uid=" + getSession().get( "USER_ID" ) );
         
 	int uid = (Integer) getSession().get( "USER_ID" );
         
@@ -190,7 +190,7 @@ public class UserAction extends UserSupport {
             IcUser icUser = (IcUser) 
 		dao.getUser( (String) getSession().get( "LOGIN") );
             if ( icUser != null ) {
-                log.info( " icUser=" + icUser );
+                log.debug( " icUser=" + icUser );
 		if ( uedit != null && uedit.equalsIgnoreCase( "save" ) ) {
 
 		    log.info( " edit: updating uid=" + uid );
@@ -215,7 +215,7 @@ public class UserAction extends UserSupport {
                 
 		if ( uedit != null && uedit.equalsIgnoreCase( "reset" ) ) {
 
-		    log.info( " edit: resetting uid=" + uid );
+		    log.debug( " edit: resetting uid=" + uid );
 		}
 
 		if (getUser() == null ){
@@ -266,7 +266,7 @@ public class UserAction extends UserSupport {
 
 		getSession().put( "USER_ID", icUser.getId() );
 		getSession().put( "LOGIN", icUser.getLogin() );
-		log.info( " login: session set" );
+		log.debug( " login: session set" );
 
                 Map<String,Integer> roles = new HashMap();
                 Map<String,Integer> groups = new HashMap();
@@ -276,7 +276,7 @@ public class UserAction extends UserSupport {
 		    for ( Iterator ii = icUser.getRoles().iterator(); 
 			  ii.hasNext(); ) {
 			IcRole r = (IcRole) ii.next();
-			log.info( "  role=" + r.toString() );
+			log.debug( "  role=" + r.toString() );
 			roles.put( r.getName(),r.getId());
 		    }	    
                 }
@@ -285,14 +285,14 @@ public class UserAction extends UserSupport {
                     for ( Iterator ig = icUser.getGroups().iterator();
                           ig.hasNext(); ) {
                         Group g = (Group) ig.next();
-                        log.info( "  group=" + g.toString() );
+                        log.debug( "  group=" + g.toString() );
                         groups.put( g.getLabel(), g.getId() );
 
                         if ( g.getRoles()  != null ) {
                             for ( Iterator ir = g.getRoles().iterator();
                                   ir.hasNext(); ) {
                                 IcRole r = (IcRole) ir.next();
-                                log.info( "  role=" + r.toString() );
+                                log.debug( "  role=" + r.toString() );
                                 roles.put( r.getName(), r.getId() );
                             }
                         }
@@ -301,17 +301,17 @@ public class UserAction extends UserSupport {
 
                 getSession().put( "USER_ROLE", roles );
                 getSession().put( "USER_GROUP", groups );
-                log.info( " login: session set" );
+                log.debug( " login: session set" );
 
 		return HOME;
 	    }
 
 	    if( icUser != null ){
-		log.info( " login: id=" + icUser.getId() );
-		log.info( " login: oldpass=" + icUser.getPassword() );
+		log.debug( " login: id=" + icUser.getId() );
+		log.debug( " login: oldpass=" + icUser.getPassword() );
 	    }
-	    //log.info( " login: newpass" + getPass1() );
-	    //log.info( " login: " + Crypt.crypt( "ab", getPass1() ) );
+	    log.debug( " login: newpass" + getPass1() );
+	    log.debug( " login: " + Crypt.crypt( "ab", getPass1() ) );
 
 	}
 	log.info( " login: unknown user" );
@@ -426,7 +426,7 @@ public class UserAction extends UserSupport {
 	    //-----------
 
 	    if( getUser() != null ){
-		log.info( " validate:" + getUser().getLogin() );
+		log.debug( " validate:" + getUser().getLogin() );
                 
                 UserDao dao = getUserContext().getUserDao();
                 IcUser oldUser = 
@@ -434,7 +434,7 @@ public class UserAction extends UserSupport {
 		if( oldUser != null ){
 		    addFieldError( "user.login","User name already taken. " +
 				   "Please, select another one.");
-		    log.info( " old login... id=" + oldUser.toString() );
+		    log.debug( " old login... id=" + oldUser.toString() );
 		} 
 	    }
 

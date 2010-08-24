@@ -39,6 +39,12 @@ public class Fault {
 
     public static final IcentralFault
         NO_IMEX = createFault( 9, "IMEx identifier missing" );
+
+    public static final IcentralFault
+        USR_UNKNOWN = createFault( 10, "unknown user" );
+
+    public static final IcentralFault
+        GRP_UNKNOWN = createFault( 11, "unknown group" );
     
     public static final IcentralFault
         UNSUP = createFault( 98, "operation not supported" );

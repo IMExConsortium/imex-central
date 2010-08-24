@@ -67,7 +67,7 @@ public class FeedbackAction extends PortalSupport {
     public String regFeed() {
 	
 	Log log = LogFactory.getLog( this.getClass() );
-        log.info( "User Feedback :");	
+        log.info( "regFeed");	
 	
 	Integer id = (Integer) getSession().get( "DIP_USER_ID" );
 	UserDao dao = new IcUserDao();
@@ -86,7 +86,7 @@ public class FeedbackAction extends PortalSupport {
     public String mailFeed() {
 
 	Log log = LogFactory.getLog( this.getClass() );
-        log.info( "Email Feedback:" + email);
+        log.info( "mailFeed: email=" + email);
 	
 	String email = getEmail();
 	if ( email != null ) {
