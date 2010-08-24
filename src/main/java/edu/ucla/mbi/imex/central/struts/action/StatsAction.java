@@ -59,7 +59,6 @@ public class StatsAction extends PortalSupport {
     public void setPartner( String partner ) {
 	this.partnerStr = partner;
     }
-
     
     String query = null;
     

@@ -144,12 +144,12 @@ public class JournalMgrAction extends ManagerSupport {
     public String execute() throws Exception{
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + getId() + " journal=" + journal + " op=" + getOp() ); 
+        log.debug( "id=" + getId() + " journal=" + journal + " op=" + getOp() ); 
         
         if ( tracContext.getJournalDao() == null ) return SUCCESS;
         
         if ( getId() > 0 && journal == null ) {
-            log.info( "setting journal=" + getId() );            
+            log.debug( "setting journal=" + getId() );            
             journal = entryManager.getIcJournal( getId() );  
             return SUCCESS;
         }
@@ -162,7 +162,7 @@ public class JournalMgrAction extends ManagerSupport {
             String key = i.next();
             String val = getOp().get(key);
             
-            log.info(  "op=" + key + "  val=" + val );
+            log.debug(  "op=" + key + "  val=" + val );
 
             if ( val != null && val.length() > 0 ) {
 
@@ -339,7 +339,7 @@ public class JournalMgrAction extends ManagerSupport {
     public void validate() {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "JournalMgrAction: validate" );
+        log.info( "validate" );
        
         //boolean loadUserFlag = false;
         
@@ -352,7 +352,7 @@ public class JournalMgrAction extends ManagerSupport {
 
                 if ( val != null && val.length() > 0 ) {
                     
-                    log.info( " op=" + val);
+                    log.debug( " op=" + val);
                     
                     //----------------------------------------------------------
 
@@ -396,7 +396,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String searchJournal( String nlmid ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " search journal -> nlmid=" + nlmid );
+        log.debug( " search journal -> nlmid=" + nlmid );
         
         IcJournal oldJnrl =
             entryManager.getIcJournalByNlmid( nlmid );
@@ -414,7 +414,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String addJournal( String nlmid ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new jrnl -> nlmid=" + nlmid );
+        log.debug( " new jrnl -> nlmid=" + nlmid );
         
         // test if already in 
         //-------------------
@@ -434,12 +434,12 @@ public class JournalMgrAction extends ManagerSupport {
         
         Integer usr = (Integer) getSession().get( "USER_ID" );        
         if ( usr == null ) return ACL_OPER;
-        log.info( " login id=" + usr );
+        log.debug( " login id=" + usr );
 
         User owner = 
             getUserContext().getUserDao().getUser( usr.intValue() );
         if ( owner == null ) return ACL_OPER;
-        log.info( " owner set to: " + owner );
+        log.debug( " owner set to: " + owner );
         
         IcJournal newJnrl = entryManager.addIcJournal( nlmid, owner );
         if ( newJnrl != null ) {
@@ -473,7 +473,7 @@ public class JournalMgrAction extends ManagerSupport {
             DataState s = wflowContext.getWorkflowDao()
                 .getDataState( gid );
                                      
-            log.info( " delete state -> id=" + s.getId() );
+            log.debug( " delete state -> id=" + s.getId() );
             wflowContext.getWorkflowDao().deleteDataState( s );                
         }
         */
@@ -485,7 +485,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String updateJournalProperties( int id, Journal jrnl ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "update journal: id=" + id );
+        log.debug( "update journal: id=" + id );
         
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal == null || journal == null ) return SUCCESS;
@@ -503,7 +503,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String addJournalAdminGroup( int id, int grp ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "add JAG: id=" + id + " ag= " + grp );
+        log.debug( "add JAG: id=" + id + " ag= " + grp );
                 
         IcJournal oldJournal = entryManager.getIcJournal( id );
         Group agrp = getUserContext().getGroupDao().getGroup( grp );
@@ -530,7 +530,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String delJournalAdminGroups( int id, List<Integer> gidl ) {
     
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "drop JAG: id=" + id + " aglist= " + gidl );
+        log.debug( "drop JAG: id=" + id + " aglist= " + gidl );
         
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal != null && gidl != null ) {
@@ -555,7 +555,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String addJournalAdminUser( int id,  String ulogin ) {
                         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "add JAG: id=" + id + " au= " + ulogin );
+        log.debug( "add JAG: id=" + id + " au= " + ulogin );
                 
         IcJournal oldJournal = entryManager.getIcJournal( id );
         User ausr = getUserContext().getUserDao().getUser( ulogin );
@@ -582,7 +582,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String delJournalAdminUsers( int id, List<Integer> uidl ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "drop EAG: id=" + id + " aglist= " + uidl );
+        log.debug( "drop EAG: id=" + id + " aglist= " + uidl );
 
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal != null && uidl != null ) {
@@ -590,7 +590,7 @@ public class JournalMgrAction extends ManagerSupport {
             if ( oldJournal.testAcl( ownerMatch, adminUserMatch, 
                                      adminGroupMatch ) ) {
                 
-                log.info( "ACL test passed");
+                log.debug( "ACL test passed");
                 
                 entryManager.delAdminUsers( oldJournal, uidl );
                 
@@ -637,7 +637,7 @@ public class JournalMgrAction extends ManagerSupport {
         if ( tracContext.getJournalDao() == null ) return null;
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "getJournalRecords: journalDao ok..."  );
+        log.info( "getIcJournalRecords"  );
         
         int first = 0;
         int blockSize = 10; // NOTE: initialize for defaults ?
@@ -695,7 +695,7 @@ public class JournalMgrAction extends ManagerSupport {
 
     private GregorianCalendar parseDate( String date ) {
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "parseDate: " + date );
+        log.debug( "parseDate: " + date );
         
         // FORMAT: 2004/[0]3/12
         //----------------------
@@ -709,7 +709,7 @@ public class JournalMgrAction extends ManagerSupport {
                 String month = m.group(2);
                 String day = m.group(3);
                 
-                log.info( "Y=" + year + " M=" + month + " D=" + day );
+                log.debug( "Y=" + year + " M=" + month + " D=" + day );
                 
                 GregorianCalendar dateGC = 
                     new GregorianCalendar( Integer.parseInt( year ),

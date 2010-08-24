@@ -58,10 +58,10 @@ public class EditAction extends EditSupport {
 	pageCnf = getPageContext().getJsonConfig();
 	
 	if ( pageCnf == null ) {
-	    log.info( " initilizing page defs..." );
+	    log.info( "initilize" );
 	    String jsonPath = 
 		(String) getPageContext().getConfig().get( "json-config" );
-	    log.info( "JsonPageDef=" + jsonPath );
+	    log.debug( "JsonPageDef=" + jsonPath );
 	
 	    if ( jsonPath != null && jsonPath.length() > 0 ) {
 		
@@ -87,10 +87,10 @@ public class EditAction extends EditSupport {
         menuCnf = getMenuContext().getJsonConfig();
 	
 	if ( menuCnf == null ) {
-	    log.info( " initilizing page defs..." );
+	    log.debug( " initilizing page defs..." );
 	    String jsonPath = 
 		(String) getPageContext().getConfig().get( "json-config" );
-	    log.info( "JsonPageDef=" + jsonPath );
+	    log.debug( "JsonPageDef=" + jsonPath );
 	    
 	    if ( jsonPath != null && jsonPath.length() > 0 ) {
 		
@@ -142,7 +142,7 @@ public class EditAction extends EditSupport {
 	
 	String srcPath =
 	    getServletContext().getRealPath( jsonConfigFile );
-	log.info( " srcPath=" + srcPath );
+	log.debug( " srcPath=" + srcPath );
 	
 	File sf = new File( srcPath );
 	PrintWriter spw = new PrintWriter( sf );
@@ -153,6 +153,7 @@ public class EditAction extends EditSupport {
 
     public String execute() throws Exception {
 
+        log.info( "execute" );
 	initialize();
        	
 	// decode operation
@@ -195,7 +196,7 @@ public class EditAction extends EditSupport {
 	    itemIdx = getDropid().size()-1;
 	}
 
-	log.info( "target=" + target + " opcode=" +opcode);
+	log.debug( "target=" + target + " opcode=" +opcode);
 	
 	// dispatch
 	//---------
@@ -239,7 +240,7 @@ public class EditAction extends EditSupport {
 	String id = getPageid();
 	String newid = getNewid();
 	
-	log.info( "id(old)=" + id + " id(new)=" + newid );
+	log.debug( "id(old)=" + id + " id(new)=" + newid );
 
        	if ( id != null  && id.length() > 0 ) {
 	
@@ -348,7 +349,7 @@ public class EditAction extends EditSupport {
         String id = getPageid();
         String newid = getNewid();
 	
-        log.info( "id=" + id);
+        log.debug( "id=" + id);
 	
         if ( id != null  && id.length() > 0 ) {
 
@@ -388,7 +389,7 @@ public class EditAction extends EditSupport {
 	
 		String srcPath = 
 		    getServletContext().getRealPath( path );
-		log.info( " srcPath=" + srcPath );
+		log.debug( " srcPath=" + srcPath );
 	
 		if ( getSource() != null && getSource().length() > 0 ) {
 		
@@ -415,14 +416,14 @@ public class EditAction extends EditSupport {
     
     private String menuAttStore() {
 	
-	log.info(" EditAction: menuSel=" + getMenuSel() + 
-		 " item=" + getItem() );
+	log.debug(" EditAction: menuSel=" + getMenuSel() + 
+                  " item=" + getItem() );
 	
       	// get item definition
 	//--------------------
 	
 	Map menu = getItemDef( getMenuSel() );
-	log.info(" menu(old)=" + menu );
+	log.debug(" menu(old)=" + menu );
 
 	// update definition
 	//------------------
@@ -441,7 +442,7 @@ public class EditAction extends EditSupport {
 		}		
 	    }
 
-	    log.info(" menu(new)=" + menu );
+	    log.debug(" menu(new)=" + menu );
 	    
 	    // save updated configuration
             //---------------------------
@@ -449,7 +450,7 @@ public class EditAction extends EditSupport {
 	    try { 
 		saveContext( getMenuContext() );
 	    } catch(IOException ioe ) {
-		log.info( " error: " + ioe );
+		log.debug( " error: " + ioe );
 		return ERROR;
 	    }	    
 	}
@@ -463,14 +464,14 @@ public class EditAction extends EditSupport {
     
     private String  menuItemDrop( int idx ) {
 
-	log.info(" EditAction: menuSel=" + getMenuSel() +
-                 " item=" + getItem() );
+	log.debug(" EditAction: menuSel=" + getMenuSel() +
+                  " item=" + getItem() );
 
         // get item definition
         //--------------------
 	
         Map menu = getItemDef( getMenuSel() ); 	
-        log.info(" menu(old)=" + menu );
+        log.debug(" menu(old)=" + menu );
 	
 	// get/create submenu
         //-------------------
@@ -479,7 +480,7 @@ public class EditAction extends EditSupport {
         if ( submenu != null && submenu.size() > idx) {
             submenu.remove( idx );
 	
-	    log.info(" menu(new)=" + menu );
+	    log.debug(" menu(new)=" + menu );
 
 	    // save updated configuration
 	    //---------------------------
@@ -500,14 +501,14 @@ public class EditAction extends EditSupport {
 
     private String menuItemAdd() {
 
-	log.info(" EditAction: menuSel=" + getMenuSel() +
-                 " item=" + getItem() );
+	log.debug(" EditAction: menuSel=" + getMenuSel() +
+                  " item=" + getItem() );
 
         // get item definition
         //--------------------
 
 	Map menu = getItemDef( getMenuSel() );
-        log.info(" menu(old)=" + menu );
+        log.debug(" menu(old)=" + menu );
 
 	// get/create submenu
 	//-------------------
@@ -525,7 +526,7 @@ public class EditAction extends EditSupport {
 	newitem.put( "label","NewItem");
 	submenu.add( newitem );
 
-	log.info(" menu(new)=" + menu );
+	log.debug(" menu(new)=" + menu );
 	
 	// save updated configuration
 	//---------------------------
@@ -533,7 +534,7 @@ public class EditAction extends EditSupport {
 	try { 
 	    saveContext( getMenuContext() );
 	} catch(IOException ioe ) {
-	    log.info( " error: " + ioe );
+	    log.debug( " error: " + ioe );
 	    return ERROR;
 	}
 	return MENU;

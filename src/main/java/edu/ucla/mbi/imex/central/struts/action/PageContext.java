@@ -86,7 +86,7 @@ public class PageContext {
 	}
 	
 	String jsonPageDef = sb.toString();
-	log.info( "unparsed=" + jsonPageDef);
+	log.debug( "unparsed=" + jsonPageDef);
 	try {
 	    JSONObject jo = new JSONObject( jsonPageDef );
 	    log.info( "parsed: " +jo.toString() );

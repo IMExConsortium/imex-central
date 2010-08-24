@@ -130,15 +130,15 @@ public class EntryMgrAction extends ManagerSupport {
     public List<IcPub> getPublicationList(){
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "publist called..."  );
+        log.info( "EntryMgrAction: getPublicationList"  );
         
         if ( tracContext.getPubDao() == null ) return null;
 
-        log.info( "getPublicationList: pubDao ok..."  );
+        log.debug( "getPublicationList: pubDao ok..."  );
         
         List<Publication> pl = tracContext.getPubDao().getPublicationList();
 
-        log.info( "publist=" + pl );
+        log.debug( "publist=" + pl );
         
         if ( pl == null ) return null;
         
@@ -214,13 +214,13 @@ public class EntryMgrAction extends ManagerSupport {
     public String execute() throws Exception{
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
+        log.debug(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
         
         if ( tracContext.getPubDao() == null ) return SUCCESS;
         
         if ( getId() > 0 && icpub == null && getOp() == null ) {
             
-            log.info(  "setting icpub=" + getId() );
+            log.debug(  "setting icpub=" + getId() );
             icpub = entryManager.getIcPub( getId() );
 
             if( format != null && format.toUpperCase().equals("JSON") ) {
@@ -255,7 +255,7 @@ public class EntryMgrAction extends ManagerSupport {
             String key = i.next();
             String val = getOp().get(key);
             
-            log.info(  "op=" + key + "  val=" + val );
+            log.debug(  "op=" + key + "  val=" + val );
 
             if ( val != null && val.length() > 0 ) {
                 
@@ -370,11 +370,11 @@ public class EntryMgrAction extends ManagerSupport {
 
                     int sid=0;
                    
-                    log.info( "opp=" + getOpp() );
+                    log.debug( "opp=" + getOpp() );
 
                     if ( getOpp() == null ) return SUCCESS;
                     String nsid = getOpp().get( "nsn" );
-                    log.info( "opp.nsn=" + nsid );
+                    log.debug( "opp.nsn=" + nsid );
                     try {
                         sid = Integer.parseInt(nsid);
                         updateIcPubState( getId(), sid );
@@ -393,11 +393,11 @@ public class EntryMgrAction extends ManagerSupport {
 
                     int sid=0;
 
-                    log.info( "opp=" + getOpp() );
+                    log.debug( "opp=" + getOpp() );
                     
                     if ( getOpp() == null ) return SUCCESS;
                     String necm = getOpp().get( "necm" );
-                    log.info( "opp.necm=" + necm );
+                    log.debug( "opp.necm=" + necm );
                     try {
                         updateIcPubContactMail( getId(), necm );
                     } catch ( Exception ex ) {
@@ -447,7 +447,7 @@ public class EntryMgrAction extends ManagerSupport {
                     
                     String udel = getOpp().get( "eaudel" );
 
-                    log.info("eaudel=" + udel);
+                    log.debug("eaudel=" + udel);
 
                     if ( getId() > 0 && udel != null ) {
                         try {
@@ -478,7 +478,7 @@ public class EntryMgrAction extends ManagerSupport {
                     if ( getOpp() == null ) return JSON;
 
                     String gdel = getOpp().get( "eagdel" );
-                    log.info("eagdel=" + gdel);
+                    log.debug("eagdel=" + gdel);
 
                     if ( getId() > 0 && gdel != null ) {
                         try {
@@ -506,8 +506,8 @@ public class EntryMgrAction extends ManagerSupport {
 
                 if ( key.equalsIgnoreCase( "ppg" ) ) {
 
-                    log.info(  "\n\nop=" + getOp() );
-                    log.info(  "opp=" + getOpp() );
+                    log.debug(  "\n\nop=" + getOp() );
+                    log.debug(  "opp=" + getOpp() );
                     if ( getOpp() == null ) {
                         return getIcPubRecords();
                     }
@@ -539,7 +539,7 @@ public class EntryMgrAction extends ManagerSupport {
     public void validate() {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "EntryMgr: validate" );
+        log.info( "EntryMgrAction: validate" );
        
         //boolean loadUserFlag = false;
         
@@ -552,7 +552,7 @@ public class EntryMgrAction extends ManagerSupport {
 
                 if ( val != null && val.length() > 0 ) {
                     
-                    log.info( " op=" + val);
+                    log.debug( " op=" + val);
                     if ( key.equalsIgnoreCase( "esrc" ) ) {
 
                         if ( getOpp() != null 
@@ -572,9 +572,9 @@ public class EntryMgrAction extends ManagerSupport {
                             } catch( Exception ex ) {
                                 // should not happen
                             }
-                            log.info( " pmid=" + pmid +"<");
+                            log.debug( " pmid=" + pmid +"<");
                             if( pmid.length() == 0  ) {
-                                log.info( "  empty PMID field" );
+                                log.debug( "  empty PMID field" );
                                 addFieldError( "pub.pmid",
                                                "PMID field cannot be empty." );
                             }
@@ -640,10 +640,10 @@ public class EntryMgrAction extends ManagerSupport {
         Log log = LogFactory.getLog( this.getClass() );
         
         if( pub != null ) {
-            log.info( " search pub -> id=" + pub.getId() +
+            log.debug( " search pub -> id=" + pub.getId() +
                       " pmid=" + pub.getPmid() );
         } else {  
-            log.info( " search pub -> imex=" + imex );
+            log.debug( " search pub -> imex=" + imex );
         }        
 
         try {
@@ -690,7 +690,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String addIcPub( Publication pub ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " new pub -> id=" + pub.getId() +
+        log.debug( " new pub -> id=" + pub.getId() +
                   " pmid=" + pub.getPmid() );
 
         // test if already in 
@@ -710,16 +710,16 @@ public class EntryMgrAction extends ManagerSupport {
         
         Integer usr = (Integer) getSession().get( "USER_ID" );
         if ( usr == null )  return ACL_OPER;
-        log.info( " login id=" + usr );
+        log.debug( " login id=" + usr );
         
         User owner = 
             getUserContext().getUserDao().getUser( usr.intValue() );
         if ( owner == null )  return ACL_OPER;
-        log.info( " owner set to: " + owner );
+        log.debug( " owner set to: " + owner );
         
         DataState state =  
             wflowContext.getWorkflowDao().getDataState( "NEW" );
-        log.info( " state set to: " + state );
+        log.debug( " state set to: " + state );
         
         if ( state != null ) {
             IcPub newPub = entryManager.addIcPub( pub, owner, state );
@@ -749,7 +749,7 @@ public class EntryMgrAction extends ManagerSupport {
         if ( oldTrans == null ) return SUCCESS;
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " delete trans -> id=" + oldTrans.getId() );
+        log.debug( " delete trans -> id=" + oldTrans.getId() );
         wflowContext.getWorkflowDao().deleteTrans( oldTrans );        
         
         this.trans = null;
@@ -777,7 +777,7 @@ public class EntryMgrAction extends ManagerSupport {
             Transition t = wflowContext.getWorkflowDao()
                 .getTrans( gid );
                                      
-            log.info( " delete trans -> id=" + t.getId() );
+            log.debug( " delete trans -> id=" + t.getId() );
             wflowContext.getWorkflowDao().deleteTrans( t );                
         }
         */
@@ -794,7 +794,7 @@ public class EntryMgrAction extends ManagerSupport {
         if( wflowContext.getWorkflowDao() == null ) return SUCCESS;
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id );
+        log.debug( "id=" + id );
 
         Transition oldTrans = wflowContext.getWorkflowDao()
             .getTrans( id );
@@ -806,7 +806,7 @@ public class EntryMgrAction extends ManagerSupport {
         wflowContext.getWorkflowDao().updateTrans( oldTrans );
         this.trans = wflowContext.getWorkflowDao().getTrans( id );
         
-        log.info( " updated trans(props) -> id=" + id );
+        log.debug( " updated trans(props) -> id=" + id );
         */
     }
 
@@ -815,7 +815,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String updateIcPubIdentifiers( int id, Publication pub ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " updateIcPubIds: id=" + id );
+        log.debug( " updateIcPubIds: id=" + id );
         
         IcPub uPub =  entryManager.updateIcPubIdentifiers( id, pub );
         if( uPub != null ) {
@@ -829,7 +829,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String updateIcPubAuthTitle( int id, Publication pub ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " updateIcPubAuthTitle: id=" + id );
+        log.debug( " updateIcPubAuthTitle: id=" + id );
 
         IcPub uPub =  entryManager.updateIcPubAuthTitle( id, pub );
         if( uPub != null ) {
@@ -871,7 +871,7 @@ public class EntryMgrAction extends ManagerSupport {
     private String updateIcPubContactMail( int id, String mail ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id + " mail=" + mail );
+        log.debug( "id=" + id + " mail=" + mail );
 
         IcPub pub =  entryManager.updateIcPubContactMail( id, mail );
         if( pub != null ) {
@@ -897,7 +897,7 @@ public class EntryMgrAction extends ManagerSupport {
     private String updateIcPubState( int id, String state ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id + " state=" + state );
+        log.debug( "id=" + id + " state=" + state );
 
         IcPub pub =  entryManager.updateIcPubState( id, state );
         if( pub != null ) {
@@ -910,7 +910,7 @@ public class EntryMgrAction extends ManagerSupport {
     private String updateIcPubState( int id, int sid ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id + " sid=" + sid );
+        log.debug( "id=" + id + " sid=" + sid );
 
         IcPub pub =  entryManager.updateIcPubState( id, sid );
         if( pub != null ) {
@@ -924,7 +924,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String addIcPubAdminGroup( int id, int grp ) {
                         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "add EAG: id=" + id + " ag= " + grp );
+        log.debug( "add EAG: id=" + id + " ag= " + grp );
                 
         IcPub oldPub = entryManager.getIcPub( id );
         Group agrp = getUserContext().getGroupDao().getGroup( grp );
@@ -946,7 +946,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String delIcPubAdminGroups( int id, List<Integer> gidl ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "drop EAG: id=" + id + " aglist= " + gidl );
+        log.debug( "drop EAG: id=" + id + " aglist= " + gidl );
 
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && gidl != null ) {
@@ -966,7 +966,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String addIcPubAdminUser( int id, String ulogin ) {
                         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "add EAU: id=" + id + " au= " + ulogin );
+        log.debug( "add EAU: id=" + id + " au= " + ulogin );
                 
         IcPub oldPub = entryManager.getIcPub( id );
         User ausr = getUserContext().getUserDao().getUser( ulogin );
@@ -988,7 +988,7 @@ public class EntryMgrAction extends ManagerSupport {
     public String delIcPubAdminUsers( int id, List<Integer> uidl ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "drop EAU: id=" + id + " aulist= " + uidl );
+        log.debug( "drop EAU: id=" + id + " aulist= " + uidl );
 
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && uidl != null ) {
@@ -1036,7 +1036,7 @@ public class EntryMgrAction extends ManagerSupport {
         if ( tracContext.getPubDao() == null ) return null;
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "getPubRecords: pubDao ok >" + sdir + "<"  );
+        log.debug( "getPubRecords: pubDao ok >" + sdir + "<"  );
         
         int first = 0;
         int blockSize = 10; // NOTE: initialize for defaults ?
@@ -1080,10 +1080,10 @@ public class EntryMgrAction extends ManagerSupport {
 
         List<Publication> pl = new ArrayList<Publication>();
         long total = 0;
-        log.info( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv);
+        log.debug( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv);
         if ( sfv.equals("") && pfv.equals("") && efv.equals("") ) {
             
-            log.info( "getPubRecords: unfiltered" );
+            log.debug( "getPubRecords: unfiltered" );
             
             pl = tracContext.getPubDao()
                 .getPublicationList( first, blockSize, sortKey, asc );
@@ -1091,7 +1091,7 @@ public class EntryMgrAction extends ManagerSupport {
 
         } else {
             
-            log.info( "getPubRecords: filtered" );
+            log.debug( "getPubRecords: filtered" );
 
             Map<String,String> flt = new HashMap<String,String>();
 
@@ -1107,7 +1107,7 @@ public class EntryMgrAction extends ManagerSupport {
 
         }
 
-        log.info( "getPubRecords: total=" + total);
+        log.debug( "getPubRecords: total=" + total);
 
         // buid record map
         //----------------
@@ -1154,9 +1154,9 @@ public class EntryMgrAction extends ManagerSupport {
                     if( role.getName().toUpperCase().equals(PARTNER) ) {
                         partner += g.getLabel()+":";
                     }
-                    //log.info( "r:" + role.getName() );
+                    //log.debug( "r:" + role.getName() );
                 }
-                //log.info( "g:" + g.getLabel() );
+                //log.debug( "g:" + g.getLabel() );
                 
             }
             if ( !partner.equals("") ) {
@@ -1180,9 +1180,9 @@ public class EntryMgrAction extends ManagerSupport {
                     if( role.getName().toUpperCase().equals(EDITOR) ) {
                         editor += u.getLogin()+":";
                     }
-                    //log.info( "r:" + role.getName() );
+                    //log.debug( "r:" + role.getName() );
                 }
-                //log.info( "u:" + u.getLogin() );
+                //log.debug( "u:" + u.getLogin() );
                 
             }
             if ( !editor.equals("") ) {
@@ -1199,7 +1199,7 @@ public class EntryMgrAction extends ManagerSupport {
 
     private GregorianCalendar parseDate( String date ) {
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "parseDate: " + date );
+        log.debug( "parseDate: " + date );
         
         // FORMAT: 2004/[0]3/12
         //----------------------
@@ -1213,7 +1213,7 @@ public class EntryMgrAction extends ManagerSupport {
                 String month = m.group(2);
                 String day = m.group(3);
                 
-                log.info( "Y=" + year + " M=" + month + " D=" + day );
+                log.debug( "Y=" + year + " M=" + month + " D=" + day );
                 
                 GregorianCalendar dateGC = 
                     new GregorianCalendar( Integer.parseInt( year ),

@@ -30,6 +30,9 @@
       <recaptcha.recaptchaServer>https://api-secure.recaptcha.net</recaptcha.recaptchaServer>
 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
+
+      <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
+
   </properties>
    
   <profiles>
@@ -49,6 +52,8 @@
        <jdbc.dbnme>icentral_test</jdbc.dbnme>
        <jdbc.srvname>10.1.1.12</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
+
+
      </properties>
      <build>
       <finalName>icentraltest</finalName>
@@ -217,6 +222,15 @@
 
             <resource>
               <directory>${basedir}/../etc/icentral</directory>
+              <targetPath>WEB-INF/classes</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>log4j.properties</include>
+              </includes>
+            </resource>
+
+            <resource>
+              <directory>${basedir}/../etc/icentral</directory>
               <targetPath>META-INF</targetPath>
               <filtering>true</filtering>
               <includes>
@@ -260,6 +274,12 @@
               <name>com.sun.xml.ws.fault.SOAPFaultBuilder.disableCaptureStackTrace</name>
               <value>false</value>
             </systemProperty>
+
+           <systemProperty>
+              <name>log4j.configuration</name>
+              <value>file:../etc/icentral/jetty-log4j.properties</value>
+           </systemProperty>
+
           </systemProperties>
         </configuration>
       </plugin>
