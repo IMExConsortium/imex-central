@@ -33,3 +33,17 @@ $Id$
       - on-line ACL reinitialization
       - publication search page/action added
       - conditional menu items added 
+
+
+2010/08/24  BETA-0.77
+  - GUI updates:
+      - AJAX version publication editor actions:
+          Availability Status    
+          Contact Email           
+          Curation Status
+          Add/Drop Admin User
+          Add/Drop Admin Group
+  - login security fix
+  - web service fault codes added (unknown user/group)
+  - partial switch to log4j logging
+
