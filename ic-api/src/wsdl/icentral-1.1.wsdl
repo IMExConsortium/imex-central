@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- $Id::                                                                 $ -->
+<!-- $Id:: icentral.wsdl 153 2010-04-23 18:39:27Z lukasz                   $ -->
 
 <definitions targetNamespace="http://imex.mbi.ucla.edu/icentral/ws"
              xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
@@ -14,7 +14,7 @@
              targetNamespace="http://imex.mbi.ucla.edu/icentral/ws">
 
    <xs:complexType name="icentral">
-     <xs:attribute name="wsversion" type="xs:string" fixed="1.0"/>
+     <xs:attribute name="wsversion" type="xs:string" fixed="2.0"/>
    </xs:complexType>
 
    <xs:complexType name="identifier">
@@ -24,18 +24,31 @@
    
    <xs:complexType name="publication">
     <xs:sequence>
-     <xs:element name="identifier" type="ic:identifier" minOccurs="1" maxOccurs="unbounded"/>
+     <xs:element name="identifierList" type="ic:identifierList" minOccurs="1" />
      <xs:element name="author" type="xs:string" minOccurs="0" />
      <xs:element name="title" type="xs:string" minOccurs="0" />
      <xs:element name="paperAbstract" type="xs:string" minOccurs="0" />
      <xs:element name="expectedPublicationDate" type="xs:dateTime" minOccurs="0" />
      <xs:element name="publicationDate" type="xs:dateTime" minOccurs="0" />
      <xs:element name="releaseDate" type="xs:dateTime" minOccurs="0" />
-     
      <xs:element name="creationDate" type="xs:dateTime" minOccurs="0" />
      <xs:element name="status" type="xs:string" minOccurs="0" />
      <xs:element name="imexAccession" type="xs:string" minOccurs="0" />
      <xs:element name="owner" type="xs:string" minOccurs="0" />
+     <xs:element name="adminUserList" minOccurs="0">
+      <xs:complexType>
+       <xs:sequence>
+        <xs:element name="user" type="xs:string"  minOccurs="1" maxOccurs="unbounded"/>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+     <xs:element name="adminGroupList" minOccurs="0">
+      <xs:complexType>
+       <xs:sequence>
+        <xs:element name="group" type="xs:string"  minOccurs="1" maxOccurs="unbounded"/>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
     </xs:sequence>
    </xs:complexType>
    
@@ -122,6 +135,15 @@
       <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
       <xs:element name="status" type="xs:string" minOccurs="1"/>
       <xs:element name="message" type="xs:string" minOccurs="0"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="updatePublicationIdentifier">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
+      <xs:element name="newIdentifier" type="ic:identifier" minOccurs="1"/>
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -343,6 +365,15 @@
    </fault>
   </operation>
   
+  <operation name="updatePublicationStatus">
+   <soap:operation soapAction="urn:updatePublicationStatus"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
   <operation name="updatePublicationStatus">
    <soap:operation soapAction="urn:updatePublicationStatus"/>
    <input><soap:body use="literal"/></input>

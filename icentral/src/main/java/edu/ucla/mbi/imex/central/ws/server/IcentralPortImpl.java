@@ -577,9 +577,14 @@ public class IcentralPortImpl implements IcentralPort {
         
         edu.ucla.mbi.imex.central.ws.Publication 
             pub = of.createPublication();
-        pub.setIdentifier( of.createIdentifier() );
-        pub.getIdentifier().setNs( "pmid" );
-        pub.getIdentifier().setAc( icp.getPmid() );
+
+        Identifier pmid = of.createIdentifier();
+        pmid.setNs( "pmid" );
+        pmid.setAc( icp.getPmid() );
+        
+        pub.getIdentifier().add( pmid );
+        //pub.getIdentifier().setNs( "pmid" );
+        //pub.getIdentifier().setAc( icp.getPmid() );
         
         pub.setAuthor( icp.getAuthor() );
         pub.setTitle( icp.getTitle() );

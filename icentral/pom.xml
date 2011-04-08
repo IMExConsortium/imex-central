@@ -15,9 +15,9 @@
        <icentral.wsver>1.0</icentral.wsver>
        <jdbc.user>dip</jdbc.user>
        <jdbc.pass>444dip444</jdbc.pass>
-       <jdbc.url>jdbc:postgresql://10.1.1.12:5432/icentral_test</jdbc.url>
+       <jdbc.url>jdbc:postgresql://10.1.2.212:5432/icentral_test</jdbc.url>
        <jdbc.dbnme>icentral_test</jdbc.dbnme>
-       <jdbc.srvname>10.1.1.12</jdbc.srvname>
+       <jdbc.srvname>10.1.2.212</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
@@ -48,9 +48,9 @@
      <properties>
        <environment.srv>tomcat</environment.srv>
        <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
-       <jdbc.dburl>jdbc:postgresql://10.1.1.12:5432/icentral_test</jdbc.dburl>
+       <jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral_test</jdbc.dburl>
        <jdbc.dbnme>icentral_test</jdbc.dbnme>
-       <jdbc.srvname>10.1.1.12</jdbc.srvname>
+       <jdbc.srvname>10.1.2.212</jdbc.srvname>
        <jdbc.srvport>5432</jdbc.srvport>
 
 
