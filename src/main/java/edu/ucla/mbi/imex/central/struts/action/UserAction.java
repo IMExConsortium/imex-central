@@ -310,9 +310,10 @@ public class UserAction extends UserSupport {
 		log.debug( " login: id=" + icUser.getId() );
 		log.debug( " login: oldpass=" + icUser.getPassword() );
 	    }
-	    log.debug( " login: newpass" + getPass1() );
-	    log.debug( " login: " + Crypt.crypt( "ab", getPass1() ) );
-
+            if( getPass1() != null ){
+                log.debug( " login: newpass" + getPass1() );
+                log.debug( " login: " + Crypt.crypt( "ab", getPass1() ) );
+            }
 	}
 	log.info( " login: unknown user" );
 	addActionError( "User/Password not recognized." );
