@@ -230,8 +230,11 @@ public class EntryMgrAction extends ManagerSupport {
         } 
         
         if( getPmid() != null ) {
-
+            log.debug( "no ic pub record pmid=" + getPmid() );
             Publication nicp = entryManager.getPubByPmid( getPmid() );
+             
+            log.debug("nicp="+nicp);
+
             if ( nicp != null ) {
                 icpub = new IcPub( nicp ); 
                 return PUBNEW;
