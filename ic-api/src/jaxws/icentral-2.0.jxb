@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id::                                                                 $ -->
+<!-- $Id:: icentral.jxb 151 2010-04-23 15:26:42Z lukasz                    $ -->
 
-<bindings wsdlLocation="../wsdl/icentral.wsdl"
+<bindings wsdlLocation="../wsdl/icentral-2.0.wsdl"
     xmlns="http://java.sun.com/xml/ns/jaxws"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" >
 
  <bindings node="wsdl:definitions">
-  <package name="edu.ucla.mbi.imex.central.ws.v10"/>
+  <package name="edu.ucla.mbi.imex.central.ws.v20"/>
  </bindings>
 
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='createPublication']/wsdl:fault">
-   <class name="IcentralFault" >
+   <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
    </class>
   </bindings>
@@ -69,11 +69,11 @@
    </class>
   </bindings>
 
- <bindings node="wsdl:definitions/wsdl:service[@name='ImexCentralService']">
+ <bindings node="wsdl:definitions/wsdl:service[@name='ics20']">
   <class name="IcentralService"/>
  </bindings>
 
- <bindings node="wsdl:definitions/wsdl:portType[@name='ImexCentralPort']">
+ <bindings node="wsdl:definitions/wsdl:portType[@name='icp20']">
   <class name="IcentralPort"/>
  </bindings>
 

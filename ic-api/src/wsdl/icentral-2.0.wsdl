@@ -24,7 +24,7 @@
    
    <xs:complexType name="publication">
     <xs:sequence>
-     <xs:element name="identifierList" type="ic:identifierList" minOccurs="1" />
+     <xs:element name="identifier" type="ic:identifier" minOccurs="1" maxOccurs="unbounded" />
      <xs:element name="author" type="xs:string" minOccurs="0" />
      <xs:element name="title" type="xs:string" minOccurs="0" />
      <xs:element name="paperAbstract" type="xs:string" minOccurs="0" />
@@ -52,15 +52,31 @@
     </xs:sequence>
    </xs:complexType>
    
-   <xs:complexType name="publicationList">
+   <xs:complexType name="attachment">
     <xs:sequence>
-     <xs:element name="publication" type="ic:publication"  minOccurs="1" maxOccurs="unbounded"/>
+     <xs:element name="identifier" type="ic:identifier"  minOccurs="0"  maxOccurs="1" />
+     <xs:element name="parentList" type="ic:identifierList" minOccurs="0" maxOccurs="1" />
+     <xs:element name="type"  type="xs:string" minOccurs="1" />  
+     <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />
+     <xs:element name="body"  type="xs:string" minOccurs="1" />
     </xs:sequence>
    </xs:complexType>
 
    <xs:complexType name="identifierList">
     <xs:sequence>
      <xs:element name="identifier" type="ic:identifier"  minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="publicationList">
+    <xs:sequence>
+     <xs:element name="publication" type="ic:publication"  minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="attachmentList">
+    <xs:sequence>
+     <xs:element name="attachment" type="ic:attachment"  minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
    </xs:complexType>
       
@@ -193,7 +209,56 @@
      </xs:sequence>
     </xs:complexType>
    </xs:element>
-   
+
+   <xs:element name="addAttachment">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="parentList" type="ic:identifierList" minOccurs="1" />
+      <xs:element name="attachmentList" type="ic:attachmentList" minOccurs="1"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="getAttachment">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="identifierList" type="ic:identifierList" minOccurs="1" />
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="getAttachmentByParent">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="parentList" type="ic:identifierList" minOccurs="1" />
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="dropAttachment">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="identifierList" type="ic:identifierList" minOccurs="1" />
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="attachmentResponse">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="attachment" type="ic:attachment" minOccurs="1" />
+     </xs:sequence>
+    </xs:complexType> 
+   </xs:element>
+
+   <xs:element name="attachmentListResponse">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="attachmentList" type="ic:attachmentList" minOccurs="1" />
+     </xs:sequence>
+    </xs:complexType> 
+   </xs:element>
+
   </xs:schema>
  </types>
 
@@ -252,8 +317,32 @@
  <message name="getServerStatusResponse">
   <part name="response" element="ic:getServerStatusResponse"/>
  </message>
+
+ <message name="addAttachment">
+  <part name="request" element="ic:addAttachment"/>
+ </message>
+
+ <message name="getAttachment">
+  <part name="request" element="ic:getAttachment"/>
+ </message>
+
+ <message name="getAttachmentByParent">
+  <part name="request" element="ic:getAttachmentByParent"/>
+ </message>
+
+ <message name="dropAttachment">
+  <part name="request" element="ic:dropAttachment"/>
+ </message>
+
+ <message name="attachmentResponse">
+  <part name="response" element="ic:attachmentResponse"/>
+ </message>
+
+ <message name="attachmentListResponse">
+  <part name="response" element="ic:attachmentListResponse"/>
+ </message>
  
- <portType name="ImexCentralPort">
+ <portType name="icp20">
 
   <operation name="createPublication">
    <input message="ic:createPublication"/>
@@ -308,15 +397,40 @@
    <output message="ic:publicationResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
-
+ 
   <operation name="getServerStatus">
    <input message="ic:getServerStatus"/> 
    <output message="ic:getServerStatusResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
+
+  <operation name="addAttachment">
+   <input message="ic:addAttachment"/> 
+   <output message="ic:attachmentListResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="getAttachment">
+   <input message="ic:getAttachment"/> 
+   <output message="ic:attachmentListResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="getAttachmentByParent">
+   <input message="ic:getAttachmentByParent"/> 
+   <output message="ic:attachmentListResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="dropAttachment">
+   <input message="ic:dropAttachment"/> 
+   <output message="ic:attachmentListResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
  </portType>
  
- <binding name="ImexCentralPortBinding" type="ic:ImexCentralPort">
+ <binding name="ImexCentralPortBinding" type="ic:icp20">
 
   <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
   
@@ -374,15 +488,6 @@
    </fault>
   </operation>
 
-  <operation name="updatePublicationStatus">
-   <soap:operation soapAction="urn:updatePublicationStatus"/>
-   <input><soap:body use="literal"/></input>
-   <output><soap:body use="literal"/></output>
-   <fault name="ImexCentralFault">
-    <soap:fault name="ImexCentralFault" use="literal"/>
-   </fault>
-  </operation>
-
   <operation name="updatePublicationAdminUser">
    <soap:operation soapAction="urn:updatePublicationAdminUser"/>
    <input><soap:body use="literal"/></input>
@@ -419,11 +524,46 @@
    </fault>
   </operation>
 
+  <operation name="addAttachment">
+   <soap:operation soapAction="urn:addAttachment"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="getAttachment">
+   <soap:operation soapAction="urn:getAttachment"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="getAttachmentByParent">
+   <soap:operation soapAction="urn:getAttachmentByParent"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="dropAttachment">
+   <soap:operation soapAction="urn:dropAttachment"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
 
  </binding>
 
- <service name="ImexCentralService">
-  <port name="ImexCentralPort" binding="ic:ImexCentralPortBinding">
+ <service name="ics20">
+  <port name="icp20" binding="ic:ImexCentralPortBinding">
    <soap:address location=""/>
   </port>
  </service>

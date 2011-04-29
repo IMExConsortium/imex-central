@@ -63,28 +63,29 @@
  <import resource="entry.xml" />
 
 <!-- ============================================================ WEB SERVICES -->
+<!-- ver 1.x -->
 
-<!--
- <bean id="wsContext" init-method="initialize" destroy-method="cleanup"
-       class="edu.ucla.mbi.imex.central.WSContext">
-  <property name="port" value="8080" />
- </bean>
--->
-
-<!--
-  <bean id="svcAddNumbers" class="addnumbers.AddNumbersService" />
-  <ws:service id="addNumbersService" bean="#svcAddNumbers" />
-  <wss:binding url="/services/AddNumbers" service="#addNumbersService" />
--->
-
- <bean id="myService" 
-       class="edu.ucla.mbi.imex.central.ws.server.IcentralPortImpl">
+ <bean id="ws-v10" 
+       class="edu.ucla.mbi.imex.central.ws.v10.server.IcentralPortImpl">
    <property name="entryManager" ref="entryManager"/>
    <property name="delay" value="5"/>       
  </bean>
 
- <ws:service  id="ImexCentralService" bean="#myService"/>
+ <ws:service  id="ics-v10" bean="#ws-v10"/>
+ <wss:binding url="/ws" service="#ics-v10" />
+ <wss:binding url="/ws-v10" service="#ics-v10" />
 
- <wss:binding url="/ws" service="#ImexCentralService" />
+<!-- ver 2.x -->
+
+ <bean id="ws-v20" 
+       class="edu.ucla.mbi.imex.central.ws.v20.server.IcentralPortImpl">
+   <property name="entryManager" ref="entryManager"/>
+   <property name="delay" value="5"/>       
+ </bean>
+
+ <ws:service  id="ics-v20" bean="#ws-v20"/>
+ <wss:binding url="/ws-v20" service="#ics-v20" />
+
+
 
 </beans>

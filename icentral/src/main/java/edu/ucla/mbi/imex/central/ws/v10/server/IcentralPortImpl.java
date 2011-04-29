@@ -1,11 +1,11 @@
-package edu.ucla.mbi.imex.central.ws.server;
+package edu.ucla.mbi.imex.central.ws.v10.server;
 
 /* #============================================================================
  # $Id:: DipCachingImpl.java 317 2009-07-25 17:32:52Z lukasz                   $
  # Version: $Rev:: 317                                                         $
  #==============================================================================
  #
- # IcentralPortImpl - ImexCentral SOAP port implementation
+ # IcentralPortImpl - ImexCentral ver 1.0 SOAP port implementation
  #
  #=========================================================================== */
 
@@ -33,15 +33,14 @@ import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.dao.*;
 
 import edu.ucla.mbi.util.data.*;
-//import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
-import edu.ucla.mbi.imex.central.ws.*;
+import edu.ucla.mbi.imex.central.ws.v10.*;
 
 @WebService(serviceName = "ImexCentralService", 
             portName = "ImexCentralPort", 
-            endpointInterface = "edu.ucla.mbi.imex.central.ws.IcentralPort", 
+            endpointInterface = "edu.ucla.mbi.imex.central.ws.v10.IcentralPort", 
             targetNamespace = "http://imex.mbi.ucla.edu/icentral/ws",
             wsdlLocation = "/WEB-INF/wsdl/icentral.wsdl") 
 
@@ -93,7 +92,7 @@ public class IcentralPortImpl implements IcentralPort {
     //-----------------------
 
     public void 
-        createPublication( Holder<edu.ucla.mbi.imex.central.ws.Publication> 
+        createPublication( Holder<edu.ucla.mbi.imex.central.ws.v10.Publication> 
                            publication ) throws IcentralFault {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -107,7 +106,7 @@ public class IcentralPortImpl implements IcentralPort {
 
     //--------------------------------------------------------------------------
 
-    public edu.ucla.mbi.imex.central.ws.Publication 
+    public edu.ucla.mbi.imex.central.ws.v10.Publication 
         createPublicationById( Identifier id ) throws IcentralFault {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -274,7 +273,7 @@ public class IcentralPortImpl implements IcentralPort {
 
     //--------------------------------------------------------------------------
 
-    public edu.ucla.mbi.imex.central.ws.Publication 
+    public edu.ucla.mbi.imex.central.ws.v10.Publication 
         updatePublicationStatus( Identifier id, String status, String message )
         throws IcentralFault {
         
@@ -314,7 +313,7 @@ public class IcentralPortImpl implements IcentralPort {
 
     //--------------------------------------------------------------------------
 
-    public edu.ucla.mbi.imex.central.ws.Publication 
+    public edu.ucla.mbi.imex.central.ws.v10.Publication 
         getPublicationImexAccession( Identifier id, 
                                      java.lang.Boolean create )
         throws IcentralFault {
@@ -378,12 +377,12 @@ public class IcentralPortImpl implements IcentralPort {
     
     //--------------------------------------------------------------------------
 
-    public edu.ucla.mbi.imex.central.ws.Publication 
+    public edu.ucla.mbi.imex.central.ws.v10.Publication 
         updatePublicationAdminUser( Identifier identifier,
                                     String operation,
                                     String user) throws IcentralFault {
 
-        edu.ucla.mbi.imex.central.ws.Publication retPub = null;
+        edu.ucla.mbi.imex.central.ws.v10.Publication retPub = null;
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl: updatePublicationAdminUser" );
@@ -474,12 +473,12 @@ public class IcentralPortImpl implements IcentralPort {
 
     //--------------------------------------------------------------------------
 
-    public edu.ucla.mbi.imex.central.ws.Publication 
+    public edu.ucla.mbi.imex.central.ws.v10.Publication 
         updatePublicationAdminGroup( Identifier identifier,
                                      String operation,
                                      String group ) throws IcentralFault {
         
-        edu.ucla.mbi.imex.central.ws.Publication retPub = null;
+        edu.ucla.mbi.imex.central.ws.v10.Publication retPub = null;
 
         if( operation == null || identifier == null || group == null ) {
             throw Fault.UNSUP;
@@ -573,9 +572,9 @@ public class IcentralPortImpl implements IcentralPort {
     // utilities
     //----------
 
-    private edu.ucla.mbi.imex.central.ws.Publication buildPub( IcPub icp ) {
+    private edu.ucla.mbi.imex.central.ws.v10.Publication buildPub( IcPub icp ) {
         
-        edu.ucla.mbi.imex.central.ws.Publication 
+        edu.ucla.mbi.imex.central.ws.v10.Publication 
             pub = of.createPublication();
 
         Identifier pmid = of.createIdentifier();

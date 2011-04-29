@@ -276,7 +276,13 @@
 
   <servlet-mapping>
    <servlet-name>imex-central</servlet-name>
+   <url-pattern>/ws-v20</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+   <servlet-name>imex-central</servlet-name>
    <url-pattern>/ws</url-pattern>
+   <url-pattern>/ws-v10</url-pattern>
   </servlet-mapping>
 
   <mime-mapping>

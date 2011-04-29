@@ -73,6 +73,29 @@
               <keep>true</keep>
             </configuration>
           </execution>
+
+          <execution>
+            <id>icentral-2.0</id>
+            <goals>
+              <goal>wsimport</goal>
+            </goals>
+            <configuration>
+              <verbose>false</verbose>
+              <bindingFiles>
+                <bindingFile>icentral-2.0.jxb</bindingFile>
+                <bindingFile>icschema-2.0.jxb</bindingFile>
+              </bindingFiles>
+              <wsdlFiles>
+                <wsdlFile>icentral-2.0.wsdl</wsdlFile> 
+              </wsdlFiles>
+              <wsdlLocation>
+               /WEB-INF/wsdl/icentral-2.0.wsdl 
+              </wsdlLocation>
+              <staleFile>${basedir}/target/.icentral-2.0.staleFlag</staleFile>
+              <keep>true</keep>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
 

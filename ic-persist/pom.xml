@@ -45,7 +45,13 @@
       <artifactId>dip-proxy-ws</artifactId>
       <version>0.01</version>
      </dependency>
-
+<!--
+     <dependency>
+      <groupId>edu.ucla.mbi.dip</groupId>
+      <artifactId>dip-proxy</artifactId>
+      <version>0.01</version>
+     </dependency>
+-->
      <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-rt</artifactId>

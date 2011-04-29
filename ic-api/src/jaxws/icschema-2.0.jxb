@@ -2,7 +2,7 @@
   <bindings scd="x-schema::ci" xmlns:ci="http://imex.mbi.ucla.edu/icentral/ws">
     <globalBindings fixedAttributeAsConstantProperty="true" />
     <schemaBindings>
-      <package name="edu.ucla.mbi.imex.central.ws.v10" />
+      <package name="edu.ucla.mbi.imex.central.ws.v20" />
     </schemaBindings>
   </bindings>
 </bindings>
