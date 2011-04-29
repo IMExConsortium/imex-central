@@ -198,6 +198,7 @@
             <filtering>true</filtering>
             <includes>
               <include>icentral.wsdl</include>
+              <include>icentral-2.0.wsdl</include>
             </includes>
            </resource>
 
