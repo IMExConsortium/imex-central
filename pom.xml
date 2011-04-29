@@ -197,7 +197,7 @@
             <targetPath>WEB-INF/wsdl</targetPath>
             <filtering>true</filtering>
             <includes>
-              <include>icentral.wsdl</include>
+              <include>icentral-1.0.wsdl</include>
               <include>icentral-2.0.wsdl</include>
             </includes>
            </resource>

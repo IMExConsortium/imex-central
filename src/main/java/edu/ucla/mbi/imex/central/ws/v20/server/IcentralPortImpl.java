@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central.ws.v20.server;
 
 /* #============================================================================
- # $Id:: DipCachingImpl.java 317 2009-07-25 17:32:52Z lukasz                   $
- # Version: $Rev:: 317                                                         $
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
  #==============================================================================
  #
  # IcentralPortImpl - ImexCentral SOAP port implementation

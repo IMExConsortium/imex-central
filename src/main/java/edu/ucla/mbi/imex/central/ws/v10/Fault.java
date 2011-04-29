@@ -1,9 +1,9 @@
 package edu.ucla.mbi.imex.central.ws.v10;
 
 /*===========================================================================
- * $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/central/trunk/icentral/s#$
- * $Id:: Fault.java 182 2010-08-24 16:14:49Z lukasz                         $
- * Version: $Rev:: 182                                                      $
+ * $HeadURL::                                                               $
+ * $Id::                                                                    $
+ * Version: $Rev::                                                          $
  *===========================================================================
  *
  * FaultDef:
