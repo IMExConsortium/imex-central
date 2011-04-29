@@ -39,6 +39,18 @@
    </class>
   </bindings>
 
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublication']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublicationIdentifier']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublicationStatus']/wsdl:fault">
    <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
@@ -68,6 +80,31 @@
     <javadoc>ImexCentral fault</javadoc>
    </class>
   </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='addAttachment']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='dropAttachment']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getAttachmentByParent']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getAttachment']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
 
  <bindings node="wsdl:definitions/wsdl:service[@name='ics20']">
   <class name="IcentralService"/>

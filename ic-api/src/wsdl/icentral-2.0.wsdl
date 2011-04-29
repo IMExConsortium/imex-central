@@ -145,12 +145,11 @@
     </xs:complexType>
    </xs:element>
    
-   <xs:element name="updatePublicationStatus">
+   <xs:element name="updatePublication">
     <xs:complexType>
      <xs:sequence>
       <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
-      <xs:element name="status" type="xs:string" minOccurs="1"/>
-      <xs:element name="message" type="xs:string" minOccurs="0"/>
+      <xs:element name="publication" type="ic:publication"  minOccurs="1"/>      
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -160,6 +159,16 @@
      <xs:sequence>
       <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
       <xs:element name="newIdentifier" type="ic:identifier" minOccurs="1"/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="updatePublicationStatus">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
+      <xs:element name="status" type="xs:string" minOccurs="1"/>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -294,6 +303,14 @@
   <part name="request" element="ic:getPublicationByStatus"/>
  </message>
  
+ <message name="updatePublication">
+  <part name="request" element="ic:updatePublication"/>
+ </message>
+
+ <message name="updatePublicationIdentifier">
+  <part name="request" element="ic:updatePublicationIdentifier"/>
+ </message>
+
  <message name="updatePublicationStatus">
   <part name="request" element="ic:updatePublicationStatus"/>
  </message>
@@ -374,6 +391,18 @@
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
    
+  <operation name="updatePublication">
+   <input message="ic:updatePublication"/>
+   <output message="ic:publicationResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="updatePublicationIdentifier">
+   <input message="ic:updatePublicationIdentifier"/>
+   <output message="ic:publicationResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
   <operation name="updatePublicationStatus">
    <input message="ic:updatePublicationStatus"/>
    <output message="ic:publicationResponse"/>
@@ -479,6 +508,24 @@
    </fault>
   </operation>
   
+  <operation name="updatePublication">
+   <soap:operation soapAction="urn:updatePublication"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="updatePublicationIdentifier">
+   <soap:operation soapAction="urn:updatePublicationIdentifier"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
   <operation name="updatePublicationStatus">
    <soap:operation soapAction="urn:updatePublicationStatus"/>
    <input><soap:body use="literal"/></input>
@@ -515,15 +562,6 @@
    </fault>
   </operation>
 
-  <operation name="getServerStatus">
-   <soap:operation soapAction="urn:getServerStatus"/>
-   <input><soap:body use="literal"/></input>
-   <output><soap:body use="literal"/></output>
-   <fault name="ImexCentralFault">
-    <soap:fault name="ImexCentralFault" use="literal"/>
-   </fault>
-  </operation>
-
   <operation name="addAttachment">
    <soap:operation soapAction="urn:addAttachment"/>
    <input><soap:body use="literal"/></input>
@@ -553,6 +591,15 @@
 
   <operation name="dropAttachment">
    <soap:operation soapAction="urn:dropAttachment"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="getServerStatus">
+   <soap:operation soapAction="urn:getServerStatus"/>
    <input><soap:body use="literal"/></input>
    <output><soap:body use="literal"/></output>
    <fault name="ImexCentralFault">
