@@ -1,6 +1,6 @@
 package edu.ucla.mbi.imex.central.ws.v20.server;
 
-/* #============================================================================
+/* =============================================================================
  # $Id::                                                                       $
  # Version: $Rev::                                                             $
  #==============================================================================
@@ -33,7 +33,6 @@ import edu.ucla.mbi.util.*;
 import edu.ucla.mbi.util.dao.*;
 
 import edu.ucla.mbi.util.data.*;
-//import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
@@ -252,8 +251,6 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         
-
-        
         throw Fault.UNSUP;
     }
 
@@ -268,12 +265,46 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         
+        throw Fault.UNSUP;
+    }
+
+    //--------------------------------------------------------------------------
+
+    
+    public void updatePublication
+        ( Identifier identifier,
+          Holder<edu.ucla.mbi.imex.central.ws.v20.Publication> publication )
+        throws IcentralFault {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: getPublicationByStatus" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
 
         throw Fault.UNSUP;
     }
 
     //--------------------------------------------------------------------------
 
+    
+    public edu.ucla.mbi.imex.central.ws.v20.Publication 
+        updatePublicationIdentifier( Identifier identifier,
+                                     Identifier newIdentifier )
+        throws IcentralFault {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: getPublicationByStatus" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+
+        throw Fault.UNSUP;
+    }
+
+    //--------------------------------------------------------------------------
+    
+    
     public edu.ucla.mbi.imex.central.ws.v20.Publication 
         updatePublicationStatus( Identifier id, String status, String message )
         throws IcentralFault {
@@ -568,28 +599,52 @@ public class IcentralPortImpl implements IcentralPort {
         throw Fault.UNSUP;
     }
 
-
-
+    
     public void addAttachment( IdentifierList parentList,
                                Holder<AttachmentList> attachmentList )
-        throws ImexCentralFault_Exception{
+        throws IcentralFault{
         
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: getPublicationByOwner" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+        
+        throw Fault.UNSUP;
     }
     
     public AttachmentList dropAttachment( IdentifierList identifierList )
-        throws ImexCentralFault_Exception {
-        return null;
+        throws IcentralFault{
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: getPublicationByOwner" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+        
+        throw Fault.UNSUP;
     }
     
     public AttachmentList getAttachmentByParent( IdentifierList parentList )
-        throws ImexCentralFault_Exception{
-        return null;
+        throws IcentralFault{
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: getPublicationByOwner" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+
+        throw Fault.UNSUP;
     }
     
     public AttachmentList getAttachment( IdentifierList identifierList )
-        throws ImexCentralFault_Exception{
+        throws IcentralFault{
 
-        return null;
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: getPublicationByOwner" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+
+        throw Fault.UNSUP;
     }
     
     //--------------------------------------------------------------------------
