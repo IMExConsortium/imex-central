@@ -2,7 +2,7 @@
 
 <!-- $Id::                                                                 $ -->
 
-<bindings wsdlLocation="../wsdl/icentral.wsdl"
+<bindings wsdlLocation="../wsdl/icentral-1.0.wsdl"
     xmlns="http://java.sun.com/xml/ns/jaxws"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"

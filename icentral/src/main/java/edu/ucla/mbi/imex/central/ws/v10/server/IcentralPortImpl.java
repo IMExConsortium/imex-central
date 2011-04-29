@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central.ws.v10.server;
 
 /* #============================================================================
- # $Id:: DipCachingImpl.java 317 2009-07-25 17:32:52Z lukasz                   $
- # Version: $Rev:: 317                                                         $
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
  #==============================================================================
  #
  # IcentralPortImpl - ImexCentral ver 1.0 SOAP port implementation
@@ -42,7 +42,7 @@ import edu.ucla.mbi.imex.central.ws.v10.*;
             portName = "ImexCentralPort", 
             endpointInterface = "edu.ucla.mbi.imex.central.ws.v10.IcentralPort", 
             targetNamespace = "http://imex.mbi.ucla.edu/icentral/ws",
-            wsdlLocation = "/WEB-INF/wsdl/icentral.wsdl") 
+            wsdlLocation = "/WEB-INF/wsdl/icentral-1.0.wsdl") 
 
 public class IcentralPortImpl implements IcentralPort {
 

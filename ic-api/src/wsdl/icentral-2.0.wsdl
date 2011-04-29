@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- $Id:: icentral.wsdl 153 2010-04-23 18:39:27Z lukasz                   $ -->
+<!-- $Id::                                                                 $ -->
 
 <definitions targetNamespace="http://imex.mbi.ucla.edu/icentral/ws"
              xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"

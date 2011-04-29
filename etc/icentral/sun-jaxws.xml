@@ -4,11 +4,13 @@
  <endpoint name="ws-v20"
   interface="edu.ucla.mbi.imex.central.ws.v20.IcentralPort"
   implementation="edu.ucla.mbi.imex.central.ws.v20.server.IcentralPortImpl"
-  url-pattern="/ws20"/>
+  wsdl="WEB-INF/wsdl/icentral-2.0.wsdl"
+  url-pattern="/ws-v20"/>
 
  <endpoint name="ws-v10"
   interface="edu.ucla.mbi.imex.central.ws.v10.IcentralPort"
   implementation="edu.ucla.mbi.imex.central.ws.v10.server.IcentralPortImpl"
+  wsdl="WEB-INF/wsdl/icentral-1.0.wsdl"
   url-pattern="/ws"/>
 
 </endpoints>

@@ -60,16 +60,16 @@
             <configuration>
               <verbose>false</verbose>
               <bindingFiles>
-                <bindingFile>icentral.jxb</bindingFile>
-                <bindingFile>icschema.jxb</bindingFile>
+                <bindingFile>icentral-1.0.jxb</bindingFile>
+                <bindingFile>icschema-1.0.jxb</bindingFile>
               </bindingFiles>
               <wsdlFiles>
-                <wsdlFile>icentral.wsdl</wsdlFile> 
+                <wsdlFile>icentral-1.0.wsdl</wsdlFile> 
               </wsdlFiles>
               <wsdlLocation>
-               /WEB-INF/wsdl/icentral.wsdl 
+               /WEB-INF/wsdl/icentral-1.0.wsdl 
               </wsdlLocation>
-              <staleFile>${basedir}/target/.icentral.staleFlag</staleFile>
+              <staleFile>${basedir}/target/.icentral-1.0.staleFlag</staleFile>
               <keep>true</keep>
             </configuration>
           </execution>
