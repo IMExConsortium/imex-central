@@ -39,6 +39,12 @@
    </class>
   </bindings>
 
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='queryPublication']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='updatePublication']/wsdl:fault">
    <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
@@ -100,6 +106,12 @@
   </bindings>
 
   <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getAttachment']/wsdl:fault">
+   <class name="IcentralFault">
+    <javadoc>ImexCentral fault</javadoc>
+   </class>
+  </bindings>
+
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='queryAttachment']/wsdl:fault">
    <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
    </class>

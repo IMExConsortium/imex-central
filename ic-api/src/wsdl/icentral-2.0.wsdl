@@ -21,14 +21,16 @@
     <xs:attribute name="ns" type="xs:string" use="required"/>
     <xs:attribute name="ac" type="xs:string" use="required"/>
    </xs:complexType>
-   
+
    <xs:complexType name="publication">
     <xs:sequence>
-     <xs:element name="identifier" type="ic:identifier" minOccurs="1" maxOccurs="unbounded" />
+     <xs:element name="identifier" type="ic:identifier" 
+                 minOccurs="1" maxOccurs="unbounded" />
      <xs:element name="author" type="xs:string" minOccurs="0" />
      <xs:element name="title" type="xs:string" minOccurs="0" />
      <xs:element name="paperAbstract" type="xs:string" minOccurs="0" />
-     <xs:element name="expectedPublicationDate" type="xs:dateTime" minOccurs="0" />
+     <xs:element name="expectedPublicationDate" type="xs:dateTime" 
+                 minOccurs="0" />
      <xs:element name="publicationDate" type="xs:dateTime" minOccurs="0" />
      <xs:element name="releaseDate" type="xs:dateTime" minOccurs="0" />
      <xs:element name="creationDate" type="xs:dateTime" minOccurs="0" />
@@ -38,14 +40,16 @@
      <xs:element name="adminUserList" minOccurs="0">
       <xs:complexType>
        <xs:sequence>
-        <xs:element name="user" type="xs:string"  minOccurs="1" maxOccurs="unbounded"/>
+        <xs:element name="user" type="xs:string" 
+                    minOccurs="1" maxOccurs="unbounded"/>
        </xs:sequence>
       </xs:complexType>
      </xs:element>
      <xs:element name="adminGroupList" minOccurs="0">
       <xs:complexType>
        <xs:sequence>
-        <xs:element name="group" type="xs:string"  minOccurs="1" maxOccurs="unbounded"/>
+        <xs:element name="group" type="xs:string" 
+                    minOccurs="1" maxOccurs="unbounded"/>
        </xs:sequence>
       </xs:complexType>
      </xs:element>
@@ -54,8 +58,10 @@
    
    <xs:complexType name="attachment">
     <xs:sequence>
-     <xs:element name="identifier" type="ic:identifier"  minOccurs="0"  maxOccurs="1" />
-     <xs:element name="parentList" type="ic:identifierList" minOccurs="0" maxOccurs="1" />
+     <xs:element name="identifier" type="ic:identifier"  
+                 minOccurs="0"  maxOccurs="1" />
+     <xs:element name="parentList" type="ic:identifierList" 
+                 minOccurs="0" maxOccurs="1" />
      <xs:element name="type"  type="xs:string" minOccurs="1" />  
      <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />
      <xs:element name="body"  type="xs:string" minOccurs="1" />
@@ -64,19 +70,22 @@
 
    <xs:complexType name="identifierList">
     <xs:sequence>
-     <xs:element name="identifier" type="ic:identifier"  minOccurs="1" maxOccurs="unbounded"/>
+     <xs:element name="identifier" type="ic:identifier"  
+                 minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
    </xs:complexType>
 
    <xs:complexType name="publicationList">
     <xs:sequence>
-     <xs:element name="publication" type="ic:publication"  minOccurs="1" maxOccurs="unbounded"/>
+     <xs:element name="publication" type="ic:publication"  
+                 minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
    </xs:complexType>
 
    <xs:complexType name="attachmentList">
     <xs:sequence>
-     <xs:element name="attachment" type="ic:attachment"  minOccurs="1" maxOccurs="unbounded"/>
+     <xs:element name="attachment" type="ic:attachment"  
+                 minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
    </xs:complexType>
       
@@ -100,7 +109,9 @@
    <xs:element name="publicationListResponse">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="publicationList" type="ic:publicationList" minOccurs="1" />
+      <xs:element name="publicationList" type="ic:publicationList" 
+                  minOccurs="1" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
     </xs:complexType> 
    </xs:element>
@@ -124,7 +135,7 @@
    <xs:element name="getPublicationById">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="identifier" type="ic:identifier" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -132,7 +143,10 @@
    <xs:element name="getPublicationByOwner">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="owner" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="owner" type="xs:string" 
+                  minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="firstRec" type="xs:int" minOccurs="0" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -140,11 +154,24 @@
    <xs:element name="getPublicationByStatus">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="status" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="status" type="xs:string" 
+                  minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="firstRec" type="xs:int" minOccurs="0" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
     </xs:complexType>
    </xs:element>
-   
+
+   <xs:element name="queryPublication">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="query" type="xs:string" minOccurs="1" />
+      <xs:element name="firstRec" type="xs:int" minOccurs="0" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
    <xs:element name="updatePublication">
     <xs:complexType>
      <xs:sequence>
@@ -197,7 +224,8 @@
     <xs:complexType>
      <xs:sequence>
       <xs:element name="identifier" type="ic:identifier" minOccurs="1"/>
-      <xs:element name="create" type="xs:boolean" minOccurs="0"  default="false" />
+      <xs:element name="create" type="xs:boolean" default="false" 
+                  minOccurs="0" />
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -223,7 +251,7 @@
     <xs:complexType>
      <xs:sequence>
       <xs:element name="parentList" type="ic:identifierList" minOccurs="1" />
-      <xs:element name="attachmentList" type="ic:attachmentList" minOccurs="1"/>
+      <xs:element name="attachment" type="ic:attachment" minOccurs="1"/>
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -231,7 +259,7 @@
    <xs:element name="getAttachment">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="identifierList" type="ic:identifierList" minOccurs="1" />
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1" />
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -239,7 +267,20 @@
    <xs:element name="getAttachmentByParent">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="parentList" type="ic:identifierList" minOccurs="1" />
+      <xs:element name="parent" type="ic:identifier" minOccurs="1" />
+      <xs:element name="type" type="xs:string" minOccurs="0" />
+      <xs:element name="firstRec" type="xs:int" minOccurs="0" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+
+   <xs:element name="queryAttachment">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="query" type="xs:string" minOccurs="1" />
+      <xs:element name="firstRec" type="xs:int" minOccurs="0" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
     </xs:complexType>
    </xs:element>
@@ -247,23 +288,25 @@
    <xs:element name="dropAttachment">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="identifierList" type="ic:identifierList" minOccurs="1" />
+      <xs:element name="identifier" type="ic:identifier" minOccurs="1" />
      </xs:sequence>
     </xs:complexType>
    </xs:element>
 
-   <xs:element name="attachmentResponse">
+    <xs:element name="attachmentResponse">
     <xs:complexType>
      <xs:sequence>
       <xs:element name="attachment" type="ic:attachment" minOccurs="1" />
      </xs:sequence>
-    </xs:complexType> 
+    </xs:complexType>
    </xs:element>
 
    <xs:element name="attachmentListResponse">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="attachmentList" type="ic:attachmentList" minOccurs="1" />
+      <xs:element name="attachmentList" type="ic:attachmentList" 
+                  minOccurs="1" />
+      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
     </xs:complexType> 
    </xs:element>
@@ -301,6 +344,10 @@
   
  <message name="getPublicationByStatus">
   <part name="request" element="ic:getPublicationByStatus"/>
+ </message>
+
+ <message name="queryPublication">
+  <part name="request" element="ic:queryPublication"/>
  </message>
  
  <message name="updatePublication">
@@ -347,6 +394,10 @@
   <part name="request" element="ic:getAttachmentByParent"/>
  </message>
 
+ <message name="queryAttachment">
+  <part name="request" element="ic:queryAttachment"/>
+ </message>
+
  <message name="dropAttachment">
   <part name="request" element="ic:dropAttachment"/>
  </message>
@@ -375,7 +426,7 @@
   
   <operation name="getPublicationById">
    <input message="ic:getPublicationById"/>
-   <output message="ic:publicationListResponse"/>
+   <output message="ic:publicationResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
   
@@ -387,6 +438,12 @@
   
   <operation name="getPublicationByStatus">
    <input message="ic:getPublicationByStatus"/>
+   <output message="ic:publicationListResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
+  <operation name="queryPublication">
+   <input message="ic:queryPublication"/>
    <output message="ic:publicationListResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
@@ -435,13 +492,13 @@
 
   <operation name="addAttachment">
    <input message="ic:addAttachment"/> 
-   <output message="ic:attachmentListResponse"/>
+   <output message="ic:attachmentResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
 
   <operation name="getAttachment">
    <input message="ic:getAttachment"/> 
-   <output message="ic:attachmentListResponse"/>
+   <output message="ic:attachmentResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
 
@@ -451,9 +508,15 @@
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
 
+  <operation name="queryAttachment">
+   <input message="ic:queryAttachment"/>
+   <output message="ic:attachmentListResponse"/>
+   <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
+  </operation>
+
   <operation name="dropAttachment">
    <input message="ic:dropAttachment"/> 
-   <output message="ic:attachmentListResponse"/>
+   <output message="ic:attachmentResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
 
@@ -461,7 +524,8 @@
  
  <binding name="ImexCentralPortBinding" type="ic:icp20">
 
-  <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+  <soap:binding transport="http://schemas.xmlsoap.org/soap/http" 
+                style="document"/>
   
   <operation name="createPublication">
    <soap:operation soapAction="urn:createPublication"/>
@@ -501,6 +565,15 @@
   
   <operation name="getPublicationByStatus">
    <soap:operation soapAction="urn:getPublicationByStatus"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="queryPublication">
+   <soap:operation soapAction="urn:queryPublication"/>
    <input><soap:body use="literal"/></input>
    <output><soap:body use="literal"/></output>
    <fault name="ImexCentralFault">
@@ -582,6 +655,15 @@
 
   <operation name="getAttachmentByParent">
    <soap:operation soapAction="urn:getAttachmentByParent"/>
+   <input><soap:body use="literal"/></input>
+   <output><soap:body use="literal"/></output>
+   <fault name="ImexCentralFault">
+    <soap:fault name="ImexCentralFault" use="literal"/>
+   </fault>
+  </operation>
+
+  <operation name="queryAttachment">
+   <soap:operation soapAction="urn:queryAttachment"/>
    <input><soap:body use="literal"/></input>
    <output><soap:body use="literal"/></output>
    <fault name="ImexCentralFault">
