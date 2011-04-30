@@ -177,7 +177,8 @@ public class IcentralPortImpl implements IcentralPort {
     
     //--------------------------------------------------------------------------
     
-    public PublicationList getPublicationById( List<Identifier> idl )
+    public edu.ucla.mbi.imex.central.ws.v20.Publication 
+        getPublicationById( Identifier id )
         throws IcentralFault {
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -185,64 +186,54 @@ public class IcentralPortImpl implements IcentralPort {
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
-        if ( idl== null || idl.size() == 0 ) throw Fault.ID_MISSING;
+        if ( id == null ) throw Fault.ID_MISSING;
 
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
+            
+        String ns = id.getNs();
+        String ac = id.getAc();
+            
+        log.debug( " ns=" + ns + " ac=" + ac );
 
-        PublicationList pl = of.createPublicationList();
-        for( Iterator<Identifier> idi = idl.iterator(); idi.hasNext(); ) {
+        boolean noid = true;
+        IcPub icp = null;
+        if( ns == null || ac == null ) throw Fault.ID_MISSING;
             
-            Identifier id = idi.next();
-            
-            String ns = id.getNs();
-            String ac = id.getAc();
-            
-            log.debug( " ns=" + ns + " ac=" + ac );
-
-            boolean noid = true;
-            IcPub icp = null;
-            if( ns == null || ac == null ) throw Fault.ID_MISSING;
-            
-            if( ns.equals( "pmid" ) ) {
-                icp = (IcPub) pubDao.getPublicationByPmid( ac );
-                log.debug( " icp=" + icp );
-                noid = false;
-            }
-            
-            if( ns.equals( "imex" ) ) {
-                long lac = 0;
-                
-                try{
-                    ac = ac.replaceFirst( "IM-", "" );
-                    ac.replaceFirst( "-\\d$", "" );
-                    lac = Long.parseLong( ac ); 
-                } catch( Exception ex ) {
-                    throw Fault.ID_UNKNOWN;
-                }
-                
-                
-                icp = (IcPub) pubDao.getPublicationByImexId( lac );
-                log.debug( " icp=" + icp );
-                noid = false;
-            }
-
-            if( icp != null ) {
-                pl.getPublication().add( buildPub( icp ) );
-            }
-                
-            if( noid ) throw Fault.ID_UNKNOWN;
-
+        if( ns.equals( "pmid" ) ) {
+            icp = (IcPub) pubDao.getPublicationByPmid( ac );
+            log.debug( " icp=" + icp );
+            noid = false;
         }
-        if( pl.getPublication().size() >  0 ) { 
-            return pl;
-        } else {
-            throw Fault.NO_RECORD;
-        }        
+            
+        if( ns.equals( "imex" ) ) {
+            long lac = 0;
+                
+            try{
+                ac = ac.replaceFirst( "IM-", "" );
+                ac.replaceFirst( "-\\d$", "" );
+                lac = Long.parseLong( ac ); 
+            } catch( Exception ex ) {
+                throw Fault.ID_UNKNOWN;
+            }
+            
+            icp = (IcPub) pubDao.getPublicationByImexId( lac );
+            log.debug( " icp=" + icp );
+            noid = false;
+        }
+        
+        if( icp != null ) {
+            return buildPub( icp );
+        }
+        
+        throw Fault.NO_RECORD;
     }
     
     //--------------------------------------------------------------------------
     
-    public PublicationList getPublicationByOwner( List<String> owner )
+    public void getPublicationByOwner( List<String> owner,
+                                       Integer firstRec,
+                                       Holder<Integer> maxRec,
+                                       Holder<PublicationList> publicationList)
         throws IcentralFault {
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -256,9 +247,12 @@ public class IcentralPortImpl implements IcentralPort {
 
     //--------------------------------------------------------------------------
     
-    public PublicationList getPublicationByStatus( List<String> status )
+    public void getPublicationByStatus( List<String> status,
+                                        Integer firstRec,
+                                        Holder<Integer> maxRec,
+                                        Holder<PublicationList> publicationList)
         throws IcentralFault { 
-
+        
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl: getPublicationByStatus" );
         
@@ -270,6 +264,21 @@ public class IcentralPortImpl implements IcentralPort {
 
     //--------------------------------------------------------------------------
 
+    public void queryPublication( String query, Integer firstRec,
+                                  Holder<Integer> maxRec,
+                                  Holder<PublicationList> publicationList )
+        throws IcentralFault {
+    
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: queryPublication" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+
+        throw Fault.UNSUP;
+    }
+    
+    //--------------------------------------------------------------------------
     
     public void updatePublication
         ( Identifier identifier,
@@ -598,14 +607,13 @@ public class IcentralPortImpl implements IcentralPort {
         
         throw Fault.UNSUP;
     }
-
     
     public void addAttachment( IdentifierList parentList,
-                               Holder<AttachmentList> attachmentList )
+                               Holder<Attachment> attachment)    
         throws IcentralFault{
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByOwner" );
+        log.info( "IcentralPortImpl: addAttachment" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
@@ -613,10 +621,26 @@ public class IcentralPortImpl implements IcentralPort {
         throw Fault.UNSUP;
     }
     
-    public AttachmentList dropAttachment( IdentifierList identifierList )
+    public void queryAttachment( String query,
+                                 Integer firstRec,
+                                 Holder<Integer> maxRec,
+                                 Holder<AttachmentList> attachmentList )
+        throws IcentralFault{
+    
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: queryAttachment" );
+
+        Credentials c = new Credentials( wsContext.getMessageContext() );
+        if ( ! c.test() ) throw Fault.AUTH;
+
+        throw Fault.UNSUP;
+    }
+
+
+    public Attachment dropAttachment( Identifier identifier )
         throws IcentralFault{
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByOwner" );
+        log.info( "IcentralPortImpl: dropAttachment" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
@@ -624,22 +648,27 @@ public class IcentralPortImpl implements IcentralPort {
         throw Fault.UNSUP;
     }
     
-    public AttachmentList getAttachmentByParent( IdentifierList parentList )
-        throws IcentralFault{
+    public void getAttachmentByParent( Identifier parent,
+                                       String type,
+                                       Integer firstRec,
+                                       Holder<Integer> maxRec,
+                                       Holder<AttachmentList> attachmentList )
+        throws IcentralFault {
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByOwner" );
-
+        log.info( "IcentralPortImpl: getAttachmentByParent" );
+        
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
         throw Fault.UNSUP;
     }
     
-    public AttachmentList getAttachment( IdentifierList identifierList )
+
+    public Attachment getAttachment( Identifier identifier )
         throws IcentralFault{
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByOwner" );
+        log.info( "IcentralPortImpl: getAttachment" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
