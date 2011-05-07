@@ -27,6 +27,9 @@ import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.handler.MessageContext; 
 
 import java.util.*;
+import java.util.regex.*;
+import java.text.DecimalFormat;
+
 import javax.annotation.*;         
 
 import edu.ucla.mbi.util.*;
@@ -187,39 +190,13 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         if ( id == null ) throw Fault.ID_MISSING;
-
-        IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
-            
+        
         String ns = id.getNs();
         String ac = id.getAc();
             
         log.debug( " ns=" + ns + " ac=" + ac );
-
-        boolean noid = true;
-        IcPub icp = null;
-        if( ns == null || ac == null ) throw Fault.ID_MISSING;
-            
-        if( ns.equals( "pmid" ) ) {
-            icp = (IcPub) pubDao.getPublicationByPmid( ac );
-            log.debug( " icp=" + icp );
-            noid = false;
-        }
-            
-        if( ns.equals( "imex" ) ) {
-            long lac = 0;
-                
-            try{
-                ac = ac.replaceFirst( "IM-", "" );
-                ac.replaceFirst( "-\\d$", "" );
-                lac = Long.parseLong( ac ); 
-            } catch( Exception ex ) {
-                throw Fault.ID_UNKNOWN;
-            }
-            
-            icp = (IcPub) pubDao.getPublicationByImexId( lac );
-            log.debug( " icp=" + icp );
-            noid = false;
-        }
+        
+        IcPub icp = getIcPub( ns, ac );
         
         if( icp != null ) {
             return buildPub( icp );
@@ -227,6 +204,7 @@ public class IcentralPortImpl implements IcentralPort {
         
         throw Fault.NO_RECORD;
     }
+
     
     //--------------------------------------------------------------------------
     
@@ -298,8 +276,7 @@ public class IcentralPortImpl implements IcentralPort {
 
     
     public edu.ucla.mbi.imex.central.ws.v20.Publication 
-        updatePublicationIdentifier( Identifier identifier,
-                                     Identifier newIdentifier )
+        updatePublicationIdentifier( Identifier id, Identifier newId )
         throws IcentralFault {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -307,8 +284,51 @@ public class IcentralPortImpl implements IcentralPort {
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+        if ( id == null ) throw Fault.ID_MISSING;
 
-        throw Fault.UNSUP;
+        String ns = id.getNs();
+        String ac = id.getAc();
+
+        log.debug( " ns=" + ns + " ac=" + ac );
+
+        //IcPub icp = getIcPub( ns, ac );
+
+        //if( icp != null ) {
+        //    return buildPub( icp );
+        //}
+        
+        //log.debug( " ns=" + ns + " ac=" + ac );
+
+        IcPub icp = getIcPub( ns, ac );
+        if( icp == null ) throw Fault.NO_RECORD;
+        
+        String nNs = newId.getNs();
+        String nAc = newId.getAc();
+
+        if( nNs == null || nAc == null ) throw Fault.ID_MISSING;
+        
+        IcPub nIcp = getIcPub( nNs, nAc );
+
+        if( nIcp != null ) throw Fault.ID_DUP;
+
+        // icp ok, new id unique
+        //----------------------
+
+        if( nNs.equals("pmid") ){
+            icp.setPmid(nAc);
+        }
+
+        if( nNs.equals("doi") ){
+            icp.setDoi(nAc);
+        }
+
+        if( nNs.equals("jint") ){
+            icp.setJournalSpecific( nAc );
+        }
+ 
+        IcPub uIcPub = entryManager.updateIcPubIdentifiers( icp.getId(), icp);
+        return buildPub( uIcPub );
+               
     }
 
     //--------------------------------------------------------------------------
@@ -607,8 +627,10 @@ public class IcentralPortImpl implements IcentralPort {
         
         throw Fault.UNSUP;
     }
-    
-    public void addAttachment( IdentifierList parentList,
+
+    //--------------------------------------------------------------------------
+
+    public void addAttachment( Identifier parent,
                                Holder<Attachment> attachment)    
         throws IcentralFault{
         
@@ -617,8 +639,55 @@ public class IcentralPortImpl implements IcentralPort {
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+
+        // get parent
+        //-----------
         
-        throw Fault.UNSUP;
+        String ns = parent.getNs();
+        String ac = parent.getAc();
+
+        if( ns == null || ac== null ) throw Fault.ID_MISSING;
+        IcPub icParent = getIcPub( ns, ac );
+        
+        // build attachment
+        //-----------------
+        
+        Attachment iAtt = attachment.value;
+        
+        String attType = iAtt.getType();
+        String attLabel = iAtt.getSubject();
+        String attBody = iAtt.getBody();
+        
+        log.info( "type: "+attType+"  label: "+attLabel+ "   body: " +attBody);
+
+        User owner = entryManager.getUserContext()
+            .getUserDao().getUser( c.getLogin() );
+        log.debug( " attachment owner: " + owner );
+
+        if( attType != null 
+            && attType.toLowerCase().equals( "txt/comment" ) ){
+                
+            IcComment icCom = new IcComment( owner, icParent, 
+                                             attLabel, attBody);
+
+            icCom.setOwner( owner ); 
+            //icCom.setRoot( icParent ); 
+            
+            icCom.setLabel( attLabel );
+            icCom.setBody( attBody );
+
+            
+            IcAdiDao adiDao = (IcAdiDao) 
+                entryManager.getTracContext().getAdiDao();
+            adiDao.saveAdi( icCom );
+
+            Attachment nAtt = 
+                buildAttachment( icCom.getId(), icParent, null, attType, 
+                                 attLabel, attBody, owner );
+            
+            attachment.value= nAtt;
+        }
+        
     }
     
     public void queryAttachment( String query,
@@ -659,21 +728,89 @@ public class IcentralPortImpl implements IcentralPort {
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+        
+        // get parent
+        //-----------
+        
+        String ns = parent.getNs();
+        String ac = parent.getAc();
 
-        throw Fault.UNSUP;
+        log.info( "type: "+type+"  ns: "+ns+ "   ac: " +ac);
+
+
+        if( ns == null || ac== null ) throw Fault.ID_MISSING;
+        IcPub icParent = getIcPub( ns, ac );
+
+        IcAdiDao adiDao = (IcAdiDao)
+            entryManager.getTracContext().getAdiDao();
+        
+        List<AttachedDataItem> adiList = 
+            adiDao.getAdiListByRoot( icParent ); 
+        
+        if( adiList != null && adiList.size() > 0 ){
+            AttachmentList al = buildAttachmentList( adiList, type );
+            attachmentList.value = al;
+            if( al== null || al.getAttachment().size() == 0 ){
+                throw Fault.NO_RECORD;
+            } 
+        } else {
+            throw Fault.NO_RECORD;
+        }
     }
     
+    //--------------------------------------------------------------------------
 
-    public Attachment getAttachment( Identifier identifier )
+    public Attachment getAttachmentById( Identifier identifier )
         throws IcentralFault{
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getAttachment" );
+        log.info( "IcentralPortImpl: getAttachmentById" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
-        throw Fault.UNSUP;
+        String ns = identifier.getNs();
+        String ac = identifier.getAc();
+        log.info( "IcentralPortImpl: ns=" + ns + " ac=" + ac);
+
+        if( ns==null || !ns.equals( "ic" ) ){
+            throw Fault.INVALID_ID;    
+        } 
+
+        int id=-1;
+        
+        try{
+            Pattern p = Pattern.compile( "IC-0+([1-9][0-9]*)\\D+" );                
+            Matcher m = p.matcher( ac );
+
+            if( m.matches() ){
+                String sid = m.group(1);
+                log.info( "IcentralPortImpl: sid=" +sid);
+                id = Integer.parseInt( sid );
+            }
+        } catch(Exception ex){
+            throw Fault.INVALID_ID;
+        }
+        
+        if( id <= 0 ){ 
+            throw Fault.INVALID_ID;
+        }
+        
+        log.info( "IcentralPortImpl: id=" + id);
+
+        IcAdiDao adiDao = (IcAdiDao)
+            entryManager.getTracContext().getAdiDao();
+        AttachedDataItem adi =  adiDao.getAdi( id );
+
+        if(adi == null){
+            throw Fault.NO_RECORD;
+        } 
+        
+        log.info( "IcentralPortImpl: adi id=" + adi.getId());
+
+        Attachment nAtt = buildAttachment( adi );
+        return nAtt;
+
     }
     
     //--------------------------------------------------------------------------
@@ -681,6 +818,46 @@ public class IcentralPortImpl implements IcentralPort {
     // utilities
     //----------
 
+    private IcPub getIcPub( String ns, String ac )
+        throws IcentralFault {
+        
+        IcPub icp = null;
+        if( ns == null || ac == null ) throw Fault.ID_MISSING;
+
+        IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
+        
+        if( ns.equals( "pmid" ) ) {
+            icp = (IcPub) pubDao.getPublicationByPmid( ac );
+        }
+        
+        if( ns.equals( "imex" ) ) {
+            long lac = 0;
+            
+            try{
+                ac = ac.replaceFirst( "IM-", "" );
+                ac.replaceFirst( "-\\d$", "" );
+                lac = Long.parseLong( ac );
+            } catch( Exception ex ) {
+                throw Fault.ID_UNKNOWN;
+            }
+            
+            icp = (IcPub) pubDao.getPublicationByImexId( lac );
+        }
+        
+        if( ns.equals( "doi" ) ) {
+            icp = (IcPub) pubDao.getPublicationByDoi( ac );
+        }
+
+        if( ns.equals( "jint" ) ) {
+            icp = (IcPub) pubDao.getPublicationByJint( ac );
+        }
+        
+        return icp;
+    }
+    
+    //--------------------------------------------------------------------------
+
+    
     private edu.ucla.mbi.imex.central.ws.v20.Publication buildPub( IcPub icp ) {
         
         edu.ucla.mbi.imex.central.ws.v20.Publication 
@@ -747,6 +924,136 @@ public class IcentralPortImpl implements IcentralPort {
         return pub;
     }
 
+    //--------------------------------------------------------------------------
+
+    private edu.ucla.mbi.imex.central.ws.v20.Attachment 
+        buildAttachment( int id, IcPub parent,
+                         AttachedDataItem attAdi,
+                         String attType, String attLabel, String attBody,
+                         User owner ) {
+        
+        edu.ucla.mbi.imex.central.ws.v20.Attachment 
+            att = of.createAttachment();
+
+        Identifier aId = of.createIdentifier();
+        aId.setNs( "ic" );
+        
+        DecimalFormat df = new DecimalFormat("000000000000");
+        
+        aId.setAc( "IC-"+df.format( new Long(id) )+"-ATT" );
+        
+        att.setIdentifier(aId);
+        
+        Identifier pId = of.createIdentifier();
+        pId.setNs( "pmid" );
+        pId.setAc( parent.getPmid() );
+        
+        att.setParent(pId);
+       
+        
+        att.setType( attType );
+        att.setSubject( attLabel );
+        att.setBody( attBody );
+
+        att.setOwner( owner.getLogin() );
+
+        if( attAdi != null && attAdi.getCrt() != null ) {
+            XMLGregorianCalendar xmlDate = null;
+            try{
+                xmlDate = dtf.
+                    newXMLGregorianCalendar( attAdi.getCrt() );
+            } catch( Exception ex ) {
+                //ignore
+            }
+            if ( xmlDate != null ) {
+                att.setCreationDate( xmlDate );
+            }
+        }
+
+        return att;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private edu.ucla.mbi.imex.central.ws.v20.Attachment 
+        buildAttachment( AttachedDataItem adi ) {
+        
+        DecimalFormat df = new DecimalFormat("000000000000");
+
+        edu.ucla.mbi.imex.central.ws.v20.Attachment 
+            att = of.createAttachment();
+        
+        
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcentralPortImpl: buildAttachment: " + adi.getId() );
+
+
+
+        Identifier aId = of.createIdentifier();
+        aId.setNs( "ic" );      
+        aId.setAc( "IC-" + df.format( new Long( adi.getId() ) ) + "-ATT"  );
+        att.setIdentifier( aId );
+        
+        Identifier pId = of.createIdentifier();
+        pId.setNs( "pmid" );
+        pId.setAc( ((IcPub) adi.getRoot()).getPmid() );
+        att.setParent(pId);
+       
+        att.setType( "txt/comment" );
+        att.setSubject( ((IcComment) adi).getLabel() );
+        att.setBody( ((IcComment) adi).getBody() );
+        att.setOwner( adi.getOwner().getLogin() );
+
+        XMLGregorianCalendar xmlDate = null;
+        try{
+            xmlDate = dtf.
+                newXMLGregorianCalendar( adi.getCrt() );
+        } catch( Exception ex ) {
+            //ignore
+        }
+        if ( xmlDate != null ) {
+            att.setCreationDate( xmlDate );
+        }
+        
+        return att;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private edu.ucla.mbi.imex.central.ws.v20.AttachmentList
+        buildAttachmentList( List<AttachedDataItem> adl,
+                             String type ){
+
+        edu.ucla.mbi.imex.central.ws.v20.AttachmentList
+            atl = of.createAttachmentList();
+        
+        for( Iterator<AttachedDataItem> 
+                 ii = adl.iterator(); ii.hasNext(); ){
+        
+            AttachedDataItem cadi = ii.next();
+
+            if( type != null && 
+                type.equals( "txt/comment" ) && 
+                cadi instanceof edu.ucla.mbi.util.data.Comment ){
+                
+                Comment c = (edu.ucla.mbi.util.data.Comment) cadi;
+
+                Attachment catt = 
+                    buildAttachment( c.getId().intValue(), 
+                                     (IcPub) c.getRoot(),
+                                     c,
+                                     "txt/comment", 
+                                     c.getLabel(), c.getBody(),
+                                     c.getOwner() ); 
+            
+                atl.getAttachment().add( catt );
+            }
+        }
+        return atl;
+    }
+    
+    
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     
