@@ -20,6 +20,13 @@ my $create="false";
 my $ausr = "";
 my $agrp = "";
 
+my $ver="";
+
+my $ac="";
+
+my $newNS="";
+my $newAC="";
+
 for( my $i=0; $i < @ARGV; $i++ ) {
 
     if( $ARGV[$i]=~/PROD=YES/ ) {
@@ -34,6 +41,27 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/PMID=(.+)/ ) {
         $pmid=$1;
     }
+
+    if( $ARGV[$i]=~/AC=(.+)/ ) {
+        $ac=$1;
+    }
+
+    if( $ARGV[$i]=~/NEWAC=(.+)/ ) {
+        $newAC=$1;
+    }
+
+    if( $ARGV[$i]=~/NEWNS=(.+)/ ) {
+        $newNS=$1;
+    }
+
+    if( $ARGV[$i]=~/AC=(.+)/ ) {
+        $ac=$1;
+    }
+
+    if( $ARGV[$i]=~/VER=2/ ) {
+        $ver="-v20";
+    }
+
     if( $ARGV[$i]=~/IMEX=(.+)/ ) {
         $imex=$1;
     }
@@ -79,10 +107,11 @@ my $rns ="";
 if($op ne "" ) {
     
     $rns ="http://imex.mbi.ucla.edu/icentral/ws";    
+        
 
     if( $op eq "createPublicationById" ) {        
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->createPublicationById(SOAP::Data->type( 'xml' =>
@@ -90,13 +119,27 @@ if($op ne "" ) {
     }
     
     if( $op eq "updatePublicationStatus" && $stat ne "") {   
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationStatus( SOAP::Data->type( 'xml' =>
                                                          "<identifier ns='pmid' ac='$pmid' />" ),
                                        SOAP::Data->name("status" => $stat) );
+    }
+
+    if( $op eq "updatePubId") {   
+
+        print "URL: ",$URL.$ver,"\n";
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->updatePublicationIdentifier( SOAP::Data->type( 'xml' =>
+                                                             "<identifier ns='pmid' ac='$pmid' />" ),
+                                           SOAP::Data->type( 'xml' =>
+                                                             "<newIdentifier ns='$newNS' ac='$newAC' />" )
+                                           );
     }
     
     if( $op eq "getPublicationById" ) {
@@ -108,8 +151,8 @@ if($op ne "" ) {
         }
 
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->getPublicationById( SOAP::Data->type( 'xml' =>
@@ -121,8 +164,8 @@ if($op ne "" ) {
         my $ns = "pmid";
         
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->getPublicationImexAccession( SOAP::Data->type( 'xml' =>
@@ -135,8 +178,8 @@ if($op ne "" ) {
         my $ns = "pmid";
 
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationAdminUser( SOAP::Data->type( 'xml' =>
@@ -150,8 +193,8 @@ if($op ne "" ) {
         my $ns = "pmid";
 
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationAdminUser( SOAP::Data->type( 'xml' =>
@@ -164,8 +207,8 @@ if($op ne "" ) {
         my $ns = "pmid";
 
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationAdminGroup( SOAP::Data->type( 'xml' =>
@@ -179,8 +222,8 @@ if($op ne "" ) {
         my $ns = "pmid";
 
         print "NS=".$ns." AC=".$ac."\n";
-        $som=SOAP::Lite->uri($URL)
-            ->proxy($URL)
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationAdminGroup( SOAP::Data->type( 'xml' =>
@@ -189,6 +232,62 @@ if($op ne "" ) {
                                            SOAP::Data->name("group" => $agrp) );
     }
 
+
+    if( $op eq "addAtt" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+
+        print "URL: ".$URL.$ver."\n";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->addAttachment( SOAP::Data->type( 'xml' =>
+                                               "<parent ns='$ns' ac='$ac' />" ),
+                             SOAP::Data->type( 'xml' => 
+                                               "<attachment type='txt/comment'> 
+                                                  <label>foo</label>
+                                                  <body>bar</body> 
+                                                 </attachment>")
+                             );
+    }
+
+    if( $op eq "getAttByParent" ) {
+        my $ac = $pmid;
+        my $ns = "pmid";
+
+        print "URL: ".$URL.$ver."\n";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->getAttachmentByParent( SOAP::Data->type( 'xml' =>
+                                               "<parent ns='$ns' ac='$ac' />" ),
+                                     SOAP::Data->type( 'xml' => 
+                                                       "<type>txt/comment</type>")
+                                     );
+    }
+    
+    if( $op eq "getAttById" ) {
+        my $ac = $ac;
+        my $ns = "ic";
+
+        print "URL: ".$URL.$ver."\n";
+
+        print "NS=".$ns." AC=".$ac."\n";
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->getAttachmentById( SOAP::Data->type( 'xml' =>
+                                                   "<identifier ns='$ns' ac='$ac' />" )
+                                     );
+    }
+    
 }
 
 print $som,"\n";

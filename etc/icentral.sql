@@ -190,3 +190,34 @@ create table key (
 CREATE INDEX key_1 on key (value);
 CREATE INDEX key_2 on key (keyspace_id,value);
 
+
+
+
+
+CREATE TABLE adi (
+    id serial NOT NULL primary key,
+    owner_uid integer not null default 0,
+    crt timestamp not null default now(),
+
+    root_id integer not null default 0,
+    parent_id integer
+
+);
+
+CREATE INDEX adi_1 on adi (owner_uid);
+CREATE INDEX adi_2 on adi (root_id);
+CREATE INDEX adi_3 on adi (parent_id);
+CREATE INDEX adi_4 on adi (crt);
+
+CREATE TABLE comment (
+     id serial NOT NULL primary key,
+     adi_id integer,
+     subject text not null default '',
+     body text not null default ''
+
+);
+
+
+CREATE INDEX com_1 on comment (adi_id);
+CREATE INDEX com_2 on comment (subject);
+CREATE INDEX com_3 on comment (body);

@@ -101,6 +101,74 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         }
         return pub; 
     }
+
+    //---------------------------------------------------------------------
+
+    public Publication getPublicationByDoi( String doi ) { 
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcPubDao->getPublication: doi=" + doi  );
+
+        Publication pub = null;
+        if ( doi == null || doi.equals("") ) return pub;
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
+
+        try {
+            //startOperation();
+            Query query =
+                session.createQuery( "from IcPub p where " +
+                                     " p.doi = :doi ");
+            query.setParameter("doi", doi );
+            query.setFirstResult( 0 );
+            pub = (IcPub) query.uniqueResult();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        return pub; 
+    }
+
+    //---------------------------------------------------------------------
+
+    public Publication getPublicationByJint( String jint ) { 
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcPubDao->getPublication: jint=" + jint  );
+
+        Publication pub = null;
+        if ( jint == null || jint.equals("") ) return pub;
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
+
+        try {
+            //startOperation();
+            Query query =
+                session.createQuery( "from IcPub p where " +
+                                     " p.journalSpecific = :jint ");
+            query.setParameter("jint", jint );
+            query.setFirstResult( 0 );
+            pub = (IcPub) query.uniqueResult();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        return pub; 
+    }
     
     //---------------------------------------------------------------------
 

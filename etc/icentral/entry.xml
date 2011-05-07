@@ -21,6 +21,7 @@
     <property name="journalDao" ref="journalDao"/>
     <property name="pubDao" ref="pubDao"/>
     <property name="icStatsDao" ref="icStatsDao"/>
+    <property name="adiDao" ref="adiDao"/>
     
     <property name="ncbiProxyClient" ref="ncbiProxyClient" />
 
@@ -31,6 +32,7 @@
   <bean id="journalDao" class="edu.ucla.mbi.imex.central.dao.IcJournalDao"/>
   <bean id="pubDao" class="edu.ucla.mbi.imex.central.dao.IcPubDao"/>
   <bean id="icStatsDao" class="edu.ucla.mbi.imex.central.dao.IcStatsDao"/>
+  <bean id="adiDao" class="edu.ucla.mbi.imex.central.dao.IcAdiDao"/>
 
  <!-- actions -->
 

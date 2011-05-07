@@ -105,7 +105,7 @@
    </class>
   </bindings>
 
-  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getAttachment']/wsdl:fault">
+  <bindings node="wsdl:definitions/wsdl:portType/wsdl:operation[@name='getAttachmentById']/wsdl:fault">
    <class name="IcentralFault">
     <javadoc>ImexCentral fault</javadoc>
    </class>

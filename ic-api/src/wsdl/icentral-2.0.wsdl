@@ -58,14 +58,14 @@
    
    <xs:complexType name="attachment">
     <xs:sequence>
-     <xs:element name="identifier" type="ic:identifier"  
-                 minOccurs="0"  maxOccurs="1" />
-     <xs:element name="parentList" type="ic:identifierList" 
-                 minOccurs="0" maxOccurs="1" />
-     <xs:element name="type"  type="xs:string" minOccurs="1" />  
-     <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1" />
-     <xs:element name="body"  type="xs:string" minOccurs="1" />
+     <xs:element name="identifier" type="ic:identifier" minOccurs="0"  maxOccurs="1" />
+     <xs:element name="parent" type="ic:identifier" minOccurs="0" maxOccurs="1" />
+     <xs:element name="owner" type="xs:string" minOccurs="0" />
+     <xs:element name="creationDate" type="xs:dateTime" minOccurs="0" />
+     <xs:element name="subject" type="xs:string" minOccurs="0" maxOccurs="1" />
+     <xs:element name="body"  type="xs:string" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="required" />  
    </xs:complexType>
 
    <xs:complexType name="identifierList">
@@ -250,13 +250,13 @@
    <xs:element name="addAttachment">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="parentList" type="ic:identifierList" minOccurs="1" />
+      <xs:element name="parent" type="ic:identifier" minOccurs="1" />
       <xs:element name="attachment" type="ic:attachment" minOccurs="1"/>
      </xs:sequence>
     </xs:complexType>
    </xs:element>
 
-   <xs:element name="getAttachment">
+   <xs:element name="getAttachmentById">
     <xs:complexType>
      <xs:sequence>
       <xs:element name="identifier" type="ic:identifier" minOccurs="1" />
@@ -386,8 +386,8 @@
   <part name="request" element="ic:addAttachment"/>
  </message>
 
- <message name="getAttachment">
-  <part name="request" element="ic:getAttachment"/>
+ <message name="getAttachmentById">
+  <part name="request" element="ic:getAttachmentById"/>
  </message>
 
  <message name="getAttachmentByParent">
@@ -496,8 +496,8 @@
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
 
-  <operation name="getAttachment">
-   <input message="ic:getAttachment"/> 
+  <operation name="getAttachmentById">
+   <input message="ic:getAttachmentById"/> 
    <output message="ic:attachmentResponse"/>
    <fault message="ic:ImexCentralFault" name="ImexCentralFault"/>
   </operation>
@@ -644,8 +644,8 @@
    </fault>
   </operation>
 
-  <operation name="getAttachment">
-   <soap:operation soapAction="urn:getAttachment"/>
+  <operation name="getAttachmentById">
+   <soap:operation soapAction="urn:getAttachmentById"/>
    <input><soap:body use="literal"/></input>
    <output><soap:body use="literal"/></output>
    <fault name="ImexCentralFault">

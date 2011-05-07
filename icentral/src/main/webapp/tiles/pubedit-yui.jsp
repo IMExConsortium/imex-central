@@ -57,6 +57,7 @@
              <li class="selected"><a href="#tab1"><em>Status</em></a></li> 
                <li><a href="#tab2"><em>Details</em></a></li> 
               <li><a href="#tab3"><em>Comments</em></a></li> 
+              <li><a href="#tab3"><em>Attachments</em></a></li> 
               <li><a href="#tab4"><em>Access</em></a></li> 
           </ul>         
           <div class="yui-content"> 
@@ -249,6 +250,26 @@
         <table width="100%" border="1">
          <tr>
           <th align="right" width="15%" nowrap>Comments</th>
+          <td>
+           <table width="100%" border="1">
+            <tr>
+             <td align="left">
+              [---------]
+             </td>
+            </tr>
+           </table>
+          </td>
+          <th width="5%">
+           <s:submit theme="simple" name="op.ecup" value="UPDATE" disabled="true"/>
+          </th>
+         </tr>
+        </table>
+       </div>
+
+        <div>
+        <table width="100%" border="1">
+         <tr>
+          <th align="right" width="15%" nowrap>Attachments</th>
           <td>
            <table width="100%" border="1">
             <tr>

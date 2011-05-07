@@ -318,7 +318,17 @@ public class EntryManager {
     //--------------------------------------------------------------------------
 
     public IcPub updateIcPubProps( IcPub pub ) {
-        return null;
+
+        if( pub == null ) return pub;
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "EntryManager.updateIcPubProps: pub id=" + pub.getId()) ;
+
+        
+
+        tracContext.getPubDao().updatePublication( pub );
+
+        return pub;
     }
 
 
@@ -416,6 +426,7 @@ public class EntryManager {
 
         if( uPub != null ) {
             uPub.setDoi( pub.getDoi() );
+            uPub.setPmid( pub.getPmid() );
             uPub.setJournalSpecific( pub.getJournalSpecific() );
             tracContext.getPubDao().savePublication( uPub );
         }
