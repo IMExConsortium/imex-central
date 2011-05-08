@@ -82,16 +82,18 @@ public class AttachMgrAction extends ManagerSupport {
     // results
     //--------
     
-    public List attlist = null;
+    private List attlist = null;
     
     public List getAttach() {
+        if( attlist == null ){
+            attlist = new ArrayList();
+        }
         return attlist;
     }
     
-    public Map attmeta = null;
+    private Map attmeta = null;
     
-    public Map getAttachMeta(){
-        
+    public Map getAttachMeta(){   
         if( attmeta == null ){
             attmeta = new HashMap<String,Object>();
         }
@@ -132,10 +134,31 @@ public class AttachMgrAction extends ManagerSupport {
                 
                 if ( key.equalsIgnoreCase( "calg" ) ) {
                     // get all comments
-
+                    //-----------------
                     attlist = getCommByRoot( icpub );
                 }
 
+                if ( key.equalsIgnoreCase( "cidg" ) ) {
+
+                    // get comment by id
+                    //------------------
+                    
+                    if ( getOpp() == null ) return JSON;
+                    String sid = getOpp().get( "cid" );
+                    int cid = -1;
+                    try{
+                        cid = Integer.parseInt( sid );
+                    } catch (Exception ex){
+                        // skip format error 
+                    }
+                    
+                    Map icom = getCommById( cid );
+                    if( icom != null ){
+                        attlist = new ArrayList();
+                        attlist.add( icom );
+                    }
+                    return JSON;
+                }
                 
                 if ( key.equalsIgnoreCase( "eca" ) ) {
                     // get all comments
@@ -158,6 +181,7 @@ public class AttachMgrAction extends ManagerSupport {
 
                     getAttachMeta().put( "total", attCnt );
                 }
+                
             }
         }
 
@@ -192,9 +216,27 @@ public class AttachMgrAction extends ManagerSupport {
         
         return JSON;
     }
-    
-    private List getCommByRoot( IcPub icpub ){
 
+    //--------------------------------------------------------------------------
+
+    private Map getCommById( int id ){
+        
+        IcAdiDao adiDao = (IcAdiDao)
+            entryManager.getTracContext().getAdiDao();
+        
+        AttachedDataItem cadi = adiDao.getAdi( id );
+        
+        if( cadi != null && cadi instanceof IcComment ){
+            IcComment icom = (IcComment) cadi;
+            return buildCommentMap( icom );
+        }
+        return null;
+    }
+    
+    //--------------------------------------------------------------------------
+
+    private List getCommByRoot( IcPub icpub ){
+        
         IcAdiDao adiDao = (IcAdiDao)
             entryManager.getTracContext().getAdiDao();
 
@@ -209,22 +251,7 @@ public class AttachMgrAction extends ManagerSupport {
             AttachedDataItem cadi = ii.next();
             if( cadi instanceof IcComment ){
                 IcComment ic = (IcComment) cadi;
-                
-                Map<String,Object> row = new HashMap<String,Object>();
-                String sub = ic.getLabel();
-                String bdy = ic.getBody();
-                String crt = String.format( "%1$ta %1$tb %1$td %1$tT %1$tZ %1$tY", ic.getCrt() );
-                String aut = ic.getOwner().getLogin();
-                //String id = String(ic.getId());
-                //String root = ic.getRoot().getId()
-                row.put("id",ic.getId() );
-                row.put("root",ic.getRoot().getId());
-                row.put("subject",sub);
-                row.put("body",bdy);
-                row.put("date",crt);
-                row.put("author",aut);
-
-                clist.add(row);
+                clist.add( buildCommentMap(ic) );
             }
         }
 
@@ -233,6 +260,7 @@ public class AttachMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
     
+
     private long  countCommByRoot( IcPub icpub ){
 
         IcAdiDao adiDao = (IcAdiDao)
@@ -243,7 +271,23 @@ public class AttachMgrAction extends ManagerSupport {
         return cnt;
     }
 
+    //--------------------------------------------------------------------------
 
+    private Map buildCommentMap( IcComment ic ){
+        
+        Map<String,Object> cmap = new HashMap<String,Object>();
+        String sub = ic.getLabel();
+        String bdy = ic.getBody();
+        String crt = String.format( "%1$ta %1$tb %1$td %1$tT %1$tZ %1$tY", ic.getCrt() );
+        String aut = ic.getOwner().getLogin();
 
-    
+        cmap.put("id",ic.getId() );
+        cmap.put("root",ic.getRoot().getId());
+        cmap.put("subject",sub);
+        cmap.put("body",bdy);
+        cmap.put("date",crt);
+        cmap.put("author",aut);
+        
+        return cmap;
+    }    
 }
