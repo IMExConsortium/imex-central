@@ -37,7 +37,60 @@ YAHOO.mbi.modal = {
         var url = 'page?ret=body&id=' + id;
         YAHOO.mbi.modal.show({ mtitle: 'Help', title: title, url: url } );
     },
+
+    attachment:function( arg ){
     
+        var rid = arg.rid;
+        var aid = arg.aid;
+
+        var url = 'attachmgr?op.cidg=cidg'
+            + '&opp.cid=' + aid 
+            + '&id=' + rid;
+        
+        var attSuccess = function( o ){
+
+            var messages = YAHOO.lang.JSON.parse( o.responseText);
+            if( messages.attach[0] !== undefined ){
+                
+                var subject = messages.attach[0].subject;
+                var body = messages.attach[0].body;
+                var author = messages.attach[0].author;
+                var date =  messages.attach[0].date;
+
+                var bodyHTML = '<table width="99%">'
+                    + '<tr><td class="att-field-head" width="10%" nowrap>Subject:</td>'
+                    + '<td>'+subject+'</td></tr>'
+                    + '<tr><td class="att-field-head" nowrap>Author:</td>'
+                    + '<td>' + author + '</td></tr>'
+                    + '<tr><td class="att-field-head" nowrap>Date:</td>'
+                    + '<td>' + date + '</td></tr>'
+                    + '<tr><td colspan="2"><hr/></td></tr>'
+                    + '<tr><td nowrap>&nbsp;</td>'
+                    + '<td class="att-body">' + body + '</td></tr>'
+                    + '</table>';
+
+                YAHOO.mbi.modal.show( { mtitle: 'Attachment', 
+                                        title: "Comment", 
+                                        body: bodyHTML } );
+            } 
+            
+        };
+
+        var attFail = function( o ){
+            
+        };
+
+        var attCallback = { cache:false, timeout: 5000, 
+                            success: attSuccess,
+                            failure: attFail
+                          };   
+        try{
+            YAHOO.util.Connect.asyncRequest( 'GET', url, attCallback );        
+        } catch (x) {
+            alert("AJAX Error:"+x);
+        }
+    },
+
     show: function( arg ) {
       
         var title = arg.title;
@@ -125,8 +178,19 @@ YAHOO.mbi.modal = {
             YAHOO.util.Connect.asyncRequest( 'GET', arg.url, helpCallback ); 
         }
 
+        if ( arg.body !== undefined ) {
+            var body =  arg.body;
+            if( arg.title !== undefined && arg.title.length > 0 ){
+                body = '<h2>' + arg.title + '</h2><hr/>' + arg.body;
+            }
+            YAHOO.mbi.modal.my.panel.setBody( body );
+            
+        } else {
+            YAHOO.mbi.modal.my.panel.setBody("");
+        }
+
         YAHOO.mbi.modal.my.panel.setHeader( mtitle );       
-        YAHOO.mbi.modal.my.panel.setBody("");
+        //YAHOO.mbi.modal.my.panel.setBody("");
         YAHOO.mbi.modal.my.panel.show();        
     },
     
