@@ -81,6 +81,42 @@ public class IcAdiDao extends AbstractDAO implements AdiDAO {
 
     //--------------------------------------------------------------------------
 
+    public long countIcCommByRoot( DataItem root ){
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        Long lCnt = null;
+
+        try {
+            Query query =
+                session.createQuery( "select count(*) "
+                                     + " from AttachedDataItem a where "
+                                     + " a.root = :root " );
+            query.setParameter( "root", root );
+            
+            lCnt = (Long) query.uniqueResult() ;
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( "countIcCommByRoot:" + lCnt );
+            
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        if( lCnt != null ){
+            return lCnt.longValue();
+        } 
+        return 0L;            
+    }
+
+    //--------------------------------------------------------------------------
+
     public List<AttachedDataItem> getAdiListByParent( DataItem parent ){
 
         List<AttachedDataItem> alst = null;
@@ -115,6 +151,10 @@ public class IcAdiDao extends AbstractDAO implements AdiDAO {
     //--------------------------------------------------------------------------
 
     public void saveAdi( AttachedDataItem  adi ){
+
+        if( adi.getCrt() == null ){
+            adi.setCrt( new GregorianCalendar() );
+        }
 
         if ( adi  instanceof AttachedDataItem ) {
             super.saveOrUpdate( adi );

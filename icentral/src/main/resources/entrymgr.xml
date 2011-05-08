@@ -146,6 +146,29 @@
      
    </action>
 
+   <action name="attachmgr" class="attachMgrAction">
+     
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">pubmgr</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
+     
+     <result name="json" type="json">
+       <param name="excludeProperties">
+         publicationList.*
+       </param>
+       <param name="includeProperties">
+         attach.*, attachMeta.*
+       </param>
+       <param name="noCache">true</param>
+     </result>
+     
+   </action>
+
+
    <action name="pubnew" class="pubNewAction">
 
      <interceptor-ref name="mgrStack"/>

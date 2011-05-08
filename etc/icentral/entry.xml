@@ -88,6 +88,19 @@
     <property name="mst" value="1:1:2"/>
   </bean>
 
+  <bean id="attachMgrAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.AttachMgrAction">
+    
+    <property name="entryManager" ref="entryManager"/>
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="tracContext" ref="tracContext"/>
+
+
+    <property name="mst" value="1:1:2"/>
+  </bean>
+
 
   <bean id="statsAction" scope="prototype"
       class="edu.ucla.mbi.imex.central.struts.action.StatsAction">

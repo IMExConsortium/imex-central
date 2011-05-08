@@ -146,6 +146,11 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/attachmgr</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/entryedit</url-pattern>
   </filter-mapping>
 

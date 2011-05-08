@@ -14,7 +14,7 @@ YUI download for details on each of the aggregate files and their contents):-->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/imageloader/imageloader-min.js"></script>
 <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js"></script> 
 <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/resize/resize.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/resize/resize-min.js"></script>
 <!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/selector/selector-min.js"></script>  -->
 <!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yuiloader/yuiloader-min.js"></script>  -->
  

@@ -335,7 +335,10 @@ public class EntryMgrAction extends ManagerSupport {
                     // update identifiers
                     //-------------------
 
-                    return updateIcPubIdentifiers( getId(), icpub );
+                    return updateIcPubIdentifiers( icpub,
+                                                   getOpp().get( "pmid" ),
+                                                   getOpp().get( "doi" ),
+                                                   getOpp().get( "jsp" ));
                 }
 
                 //--------------------------------------------------------------
@@ -344,8 +347,10 @@ public class EntryMgrAction extends ManagerSupport {
 
                     // update author/title
                     //--------------------
-
-                    return updateIcPubAuthTitle( getId(), icpub );
+                    
+                    return updateIcPubAuthTitle( icpub, 
+                                                 getOpp().get( "ath" ),
+                                                 getOpp().get( "ttl" ) );
                 }
                 
                 //--------------------------------------------------------------
@@ -539,7 +544,7 @@ public class EntryMgrAction extends ManagerSupport {
     // validation
     //-----------
     
-    public void validate() {
+    public void validateXXX() {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "EntryMgrAction: validate" );
@@ -815,30 +820,36 @@ public class EntryMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
-    public String updateIcPubIdentifiers( int id, Publication pub ) {
+    public String updateIcPubIdentifiers( IcPub pub,
+                                          String nPmid, 
+                                          String nDoi, String nJsp) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( " updateIcPubIds: id=" + id );
+        log.info( "NEW: pmid=  " + nPmid + " doi=" + nDoi + " jsp=" + nJsp );
+                  
+        pub.setPmid( sanitize( nPmid ) );
+        pub.setDoi( sanitize( nDoi ) );
+        pub.setJournalSpecific( sanitize( nJsp ) );
+
+        entryManager.updateIcPubIdentifiers( pub.getId(), pub );
         
-        IcPub uPub =  entryManager.updateIcPubIdentifiers( id, pub );
-        if( uPub != null ) {
-            this.setPub( uPub );
-        }
-        return SUCCESS;
+        return JSON;
     }
 
     //--------------------------------------------------------------------------
 
-    public String updateIcPubAuthTitle( int id, Publication pub ) {
+    public String updateIcPubAuthTitle( IcPub pub, 
+                                        String nAuth, String nTitle ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( " updateIcPubAuthTitle: id=" + id );
+        log.info( "NEW: auth=" + nAuth + " title=" + nTitle );
+        
+        pub.setAuthor( sanitize( nAuth ) );
+        pub.setTitle( sanitize( nTitle ) );
 
-        IcPub uPub =  entryManager.updateIcPubAuthTitle( id, pub );
-        if( uPub != null ) {
-            this.setPub( uPub );
-        }
-        return SUCCESS;
+        entryManager.updateIcPubAuthTitle( pub.getId(), pub );
+
+        return JSON;
     }
 
     //--------------------------------------------------------------------------
@@ -1218,16 +1229,43 @@ public class EntryMgrAction extends ManagerSupport {
                 
                 log.debug( "Y=" + year + " M=" + month + " D=" + day );
                 
-                GregorianCalendar dateGC = 
-                    new GregorianCalendar( Integer.parseInt( year ),
-                                           Integer.parseInt( month )-1,
-                                           Integer.parseInt( day ) );
-                
-                return dateGC;                
+                if( Integer.parseInt( year ) <1900 ||
+                    Integer.parseInt( month ) < 1 ||
+                    Integer.parseInt( day ) < 1 ){
+                    return null;
+                } else {
+
+                    GregorianCalendar dateGC = 
+                        new GregorianCalendar( Integer.parseInt( year ),
+                                               Integer.parseInt( month )-1,
+                                               Integer.parseInt( day ) );
+
+
+                    return dateGC;                
+                }
             }
         } catch( Exception ex ) {
+
+            ex.printStackTrace();
             // ignore == parse to null
         }
         return null;        
+    }
+
+    //--------------------------------------------------------------------------
+    
+    private String sanitize( String str ){
+
+        if( str != null ){
+            try{
+                str = str.replaceAll("^\\s+","");
+                str = str.replaceAll("\\s+$","");
+            } catch( Exception ex ){
+                
+            }
+        } else {
+            str = "";
+        }
+        return str;
     }
 }

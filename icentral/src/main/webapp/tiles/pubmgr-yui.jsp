@@ -1,22 +1,33 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-
+<script src="js/util-yui.js" type="text/javascript"></script>
 <h1>Publication Manager</h1>
 <s:if test="id > 0">
-
+ <script src="js/calendar-yui.js" type="text/javascript"></script>
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
+ <script src="js/attach-yui.js" type="text/javascript"></script>
  <t:insertDefinition name="pubedit"/>
   <script type="text/javascript">
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubedit.init, 
-                                 {id:"<s:property value="id"/>",imexACC:"<s:property value="pub.imexId"/>"} ) ;
+    YAHOO.util.Event.addListener( 
+         window, "load", YAHOO.imex.pubedit.init, 
+         {id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"} 
+      );
 
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init ) ;
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
+
+    YAHOO.util.Event.addListener( 
+         window, "load", YAHOO.imex.attedit.init, 
+         {id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"}  
+      );
+
  </script>
-
 </s:if>
 <s:else>
-
- <script src="js/pubmgr-yui.js" type="text/javascript"></script>
+  <script src="js/pubmgr-yui.js" type="text/javascript"></script>
 
  <div class="yui-skin-sam" width="100%">
   <center>
