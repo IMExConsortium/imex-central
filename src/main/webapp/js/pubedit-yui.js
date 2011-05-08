@@ -1,200 +1,16 @@
 YAHOO.namespace("imex");
 
-
-YAHOO.imex.util = {
-  copyField : function( inField, outField ) {
-        
-        var h = YAHOO.util.Dom.get( inField );
-        if(h) {
-            var opp = YAHOO.util.Dom.get( outField );
-            if( opp ) {
-                opp.value = h.value; 
-            }
-        }
-  }
-};
-
-YAHOO.imex.calendar = {
-    calDialog : null,
-    cal : null, 
-    dtf : null, 
-    
-    init : function(e, obj ) {
-
-        YAHOO.imex.util.copyField( "pubedit_pub_expectedPubDateStr", "pubedit_opp_epd" );        
-        YAHOO.imex.util.copyField( "pubedit_pub_pubDateStr", "pubedit_opp_pd" );
-        YAHOO.imex.util.copyField( "pubedit_pub_releaseDateStr", "pubedit_opp_rd" );
-
-        YAHOO.util.Event.on( YAHOO.util.Dom.get( "epd-show"), "click", 
-                             YAHOO.imex.calendar.open, 
-                             { button:"epd-show", 
-                               date:"pubedit_opp_epd"});
-        YAHOO.util.Event.on( YAHOO.util.Dom.get( "pd-show"), "click", 
-                             YAHOO.imex.calendar.open, 
-                             { button:"pd-show", 
-                             date:"pubedit_opp_pd"} );
-        YAHOO.util.Event.on( YAHOO.util.Dom.get( "rd-show"), "click", 
-                             YAHOO.imex.calendar.open, 
-                             { button:"rd-show",
-                               date:"pubedit_opp_rd"});
-    },
-
-    close : function(e) {
-        YAHOO.imex.calendar.calDialog.hide();
-        YAHOO.imex.calendar.dtf = null;
-    },
-
-    reset : function(e) {
-        // Reset the current calendar page to the select date, or 
-        // to today if nothing is selected.
-        var selDates = YAHOO.imex.calendar.cal.getSelectedDates();
-        var resetDate;
-        
-        if (selDates.length > 0) {
-            resetDate = selDates[0];
-        } else {
-            resetDate = YAHOO.imex.calendar.cal.today;
-        }
-        
-        YAHOO.imex.calendar.cal.cfg.setProperty( "pagedate", resetDate );
-        YAHOO.imex.calendar.cal.render();
-    },
-
-    clear : function(e) {
-        YAHOO.imex.calendar.cal.deselectAll();
-        YAHOO.imex.calendar.cal.render();        
-        if( YAHOO.imex.calendar.dtf ) {
-            YAHOO.imex.calendar.dtf.value = "0000/00/00";
-        }
-        YAHOO.imex.calendar.calDialog.hide();
-        YAHOO.imex.calendar.dtf = null;
-    },
-
-    select : function( e, par ) {        
-        YAHOO.imex.calendar.calDialog.hide();        
-        if ( YAHOO.imex.calendar.cal.getSelectedDates().length > 0 ) {
-            var selDate = YAHOO.imex.calendar.cal.getSelectedDates()[0];
-            
-            var dStr = selDate.getDate();
-            if ( dStr < 10 ) {
-                dStr = "0" + dStr;
-            }
-
-            var mStr = selDate.getMonth()+1;
-            if ( mStr < 10 ) {
-                mStr = "0" + mStr;
-            }
-            var yStr = selDate.getFullYear();
-            
-            YAHOO.imex.calendar.dtf.value = yStr  + "/" + mStr + "/" + dStr;
-        } else {
-            YAHOO.imex.calendar.dtf.value = "0000/00/00";
-        }
-        YAHOO.imex.calendar.calDialog.hide();
-        YAHOO.imex.calendar.dtf = null;
-    },
-    
-    // date/calendar setup
-    //--------------------
-    
-    open : function( e, obj ) {
-        try{
-            
-            var btn = YAHOO.util.Dom.get( obj.button );
-            var dtf = YAHOO.util.Dom.get( obj.date );
-            YAHOO.imex.calendar.dtf = dtf;            
-            
-            if( !YAHOO.imex.calendar.calDialog ) {
-                
-                YAHOO.imex.calendar.calDialog = new YAHOO.widget.Dialog(
-                    "container", 
-                    {visible:false,
-                     context:[btn, "tl", "bl"],
-                     buttons:[ { text:"Clear",
-                                 handler: YAHOO.imex.calendar.clear }], 
-                     //          { text:"Close", isDefault:true,
-                     //            handler: YAHOO.imex.calendar.close }],
-                     draggable:false,
-                     close:true
-                    });               
-                
-                YAHOO.imex.calendar.calDialog.setHeader('Pick A Date');
-                YAHOO.imex.calendar.calDialog.setBody('<div id="cal"></div>');
-                YAHOO.imex.calendar.calDialog.render( document.body );
-            
-                YAHOO.imex.calendar.calDialog.showEvent.subscribe(
-                    function() {
-                        if (YAHOO.env.ua.ie) {
-                            YAHOO.imex.calendar.calDialog.fireEvent(
-                                "changeContent");
-                        }
-                    });
-            } else {
-                YAHOO.imex.calendar.calDialog.cfg.setProperty( 
-                    "context", [btn,"tl", "bl"] );
-            }
-
-            if (!YAHOO.imex.calendar.cal ) {
-            
-                YAHOO.imex.calendar.cal = new YAHOO.widget.Calendar(
-                    "cal", 
-                    { iframe:false, hide_blank_weeks:true } );
-                
-
-                YAHOO.imex.calendar.cal.cfg.setProperty("DATE_FIELD_DELIMITER","/");
-                YAHOO.imex.calendar.cal.cfg.setProperty("DATE_RANGE_DELIMITER","-");
-                YAHOO.imex.calendar.cal.cfg.setProperty("MDY_YEAR_POSITION",1);
-                YAHOO.imex.calendar.cal.cfg.setProperty("MDY_MONTH_POSITION",2);
-                YAHOO.imex.calendar.cal.cfg.setProperty("MDY_DAY_POSITION",3);
-                
-                YAHOO.imex.calendar.cal.cfg.setProperty("MD_MONTH_POSITION",1);
-                YAHOO.imex.calendar.cal.cfg.setProperty("MD_DAY_POSITION",2);
-                
-                YAHOO.imex.calendar.cal.render();
-            
-                YAHOO.imex.calendar.cal.selectEvent.subscribe( 
-                    YAHOO.imex.calendar.select, "foo" );
-                
-            
-                YAHOO.imex.calendar.cal.renderEvent.subscribe(
-                    function() {
-                        YAHOO.imex.calendar.calDialog.fireEvent("changeContent");
-                    });
-            }
-
-            
-            if ( dtf.value !== "0000/00/00" && dtf.value !== "" ) {
-                YAHOO.imex.calendar.cal.cfg.setProperty(
-                    "selected", dtf.value );
-            } else {
-                YAHOO.imex.calendar.cal.deselectAll();
-                YAHOO.imex.calendar.cal.render();
-            }
-            
-            var seldate = YAHOO.imex.calendar.cal.getSelectedDates();
-        
-            if (seldate.length > 0) {
-                
-                YAHOO.imex.calendar.cal.cfg.setProperty("pagedate", seldate[0]);
-                YAHOO.imex.calendar.cal.render();
-            }
-        
-            YAHOO.imex.calendar.calDialog.show();    
-
-        } catch ( ex ) {
-            alert("YUI Exception: " + ex );
-        }        
-    }   
-};
-
-
-
 YAHOO.imex.pubedit = {
 
     pubId: 0,
     stateButton: null,
     init: function( e, obj ) {
 
+        // main tab panel
+        //---------------
+
+        YAHOO.imex.pubedit.tabs = new YAHOO.widget.TabView("pubTab");
+        
         YAHOO.imex.pubedit.pubId = obj.id;
         
         YAHOO.imex.util.copyField( "pubedit_pub_owner_login", "pubedit_opp_neo" );             
@@ -218,12 +34,27 @@ YAHOO.imex.pubedit = {
         
         var onImexClick = function ( event ) {
             
-            var oMenuItem = event.newValue;
+
+            var imexUpdate = function ( o ) {
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var pid = messages.id;
+                var imexACC = messages.pub.imexId;
+                o.argument.btn.set("label",imexACC);
+                o.argument.btn.set("disabled",true);        
+            };
+        
+            var imexUpdateFail = function ( o ) {
+                alert( "AJAX Error update failed: id=" + o.argument.id ); 
+            };
+
+            try{
+                
+            //var oMenuItem = event.newValue;
             var imexCallback = { cache:false, timeout: 5000, 
                                  success: imexUpdate,
                                  failure: imexUpdateFail,
                                  argument:{ id:obj.id, btn:imexButton } };                  
-            
+            alert("confirm?");
             var r = confirm("Confirm IMEx Accession request ?");
             if ( r == true ) {
                 try{
@@ -236,35 +67,17 @@ YAHOO.imex.pubedit = {
                 }
             } else {
                 // do nothing
-            }    
-        };
-        
-        var imexUpdate = function ( o ) {
-            var messages = YAHOO.lang.JSON.parse( o.responseText );
-            var pid = messages.id;
-            var imexACC = messages.pub.imexId;
-            o.argument.btn.set("label",imexACC);
-            o.argument.btn.set("disabled",true);        
-        };
-        
-        var imexUpdateFail = function ( o ) {
-            alert( "AJAX Error update failed: id=" + o.argument.id ); 
+            }   
+
+            } catch (x) {
+                alert(x);
+            } 
         };
 
-        var stateUpdate = function ( o ) {
-            var messages = YAHOO.lang.JSON.parse( o.responseText );
-            var pid = messages.id;
-            var imexACC = messages.pub.imexId;
-            o.argument.btn.set("label",imexACC);
-            o.argument.btn.set("disabled",true);        
-        };
-        
-        var stateUpdateFail = function ( o ) {
-            alert( "AJAX Error update failed: id=" + o.argument.id ); 
-        };
-        
+                
         // new status 
         //-----------
+
         
         var stateSel = [ 
             { text: "NEW", value: "1" },
@@ -285,6 +98,7 @@ YAHOO.imex.pubedit = {
         
         //var hsv = YAHOO.util.Dom.get( "nsn" );
         //var hsv = stateSel[0].text;
+
         YAHOO.imex.pubedit.stateButton.my = { items: stateSel, 
                                               value:stateSel[0].value,  
                                               text:stateSel[0].text};
@@ -327,7 +141,9 @@ YAHOO.imex.pubedit = {
         
         imexButton.my = { items: stateSel, value: "" };
         imexButton.on("click", onImexClick );
+
     },
+
 
     setTargetStates: function ( id, stateButton ) {
             
@@ -369,6 +185,62 @@ YAHOO.imex.pubedit = {
         
     targetStateUpdateFail: function ( o ) {
         alert("AJAX Error:  Update of the target state list failed");
+    },
+
+    identUpdate: function ( o ) {
+        try {
+            var acl = /ACL Violation/; 
+            if( acl.test(o.responseText) ) {
+                YAHOO.mbi.modal.spcstat("ACL Violation");
+            } else {
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var pid = messages.id;
+                var pmid = messages.pub.pmid;
+                var doi = messages.pub.doi;
+                var jsp = messages.pub.journalSpecific;
+
+                YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value = pmid;
+                YAHOO.util.Dom.get("pub-det-edit_pub_doi").value = doi;
+                YAHOO.util.Dom.get("pub-det-edit_pub_journalSpecific").value = jsp;
+            }
+        } catch(x) {
+            alert("AJAX Error: " + x );
+        }
+    },
+    
+    identUpdateFail: function ( o ) {
+        alert( "AJAX Error update failed: id=" + o.argument.id ); 
+    },
+
+    authTitleUpdate: function ( o ) {
+        try {
+            var acl = /ACL Violation/; 
+            if( acl.test(o.responseText) ) {
+                YAHOO.mbi.modal.spcstat("ACL Violation");
+            } else {
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var pid = messages.id;
+                var auth = messages.pub.author;
+                var title = messages.pub.title;
+                var ttl = title;
+                if( ttl.length >78){
+                    ttl = ttl.substring(0,75);
+                    ttl = ttl.replace( /\.+$/, "" );
+                    ttl = ttl+"...";
+                }
+
+                YAHOO.util.Dom.get("pub-det-edit_pub_author").value = auth;
+                YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;                
+                YAHOO.util.Dom.get("pub_ttl").innerHTML = "<b><i>"+ttl+"</i></b>";
+               
+            }
+        } catch(x) {
+            alert("AJAX Error: " + x );
+        }
+    },
+        
+    authTitleUpdateFail: function ( o ) {
+        alert( "AJAX Error update failed: id=" + o.argument.id ); 
     },
     
     pubState: function(op) {
@@ -415,7 +287,7 @@ YAHOO.imex.pubedit = {
                     .asyncRequest( 'GET', 
                                    'pubedit?op.emup=update' 
                                    + '&id=' + YAHOO.imex.pubedit.pubId
-                                   + '&opp.necm=' + YAHOO.util.Dom.get("pubedit_opp_necm").value, 
+                                   + '&opp.necm=' + YAHOO.util.Dom.get("pub-stat-edit_opp_necm").value, 
                                    setContactMailCallback );
             } 
 
@@ -438,9 +310,9 @@ YAHOO.imex.pubedit = {
                     .asyncRequest( 'GET', 
                                    'pubedit?op.edup=update' 
                                    + '&id=' + YAHOO.imex.pubedit.pubId
-                                   + '&opp.epd=' + YAHOO.util.Dom.get("pubedit_opp_epd").value
-                                   + '&opp.pd=' + YAHOO.util.Dom.get("pubedit_opp_pd").value
-                                   + '&opp.rd=' + YAHOO.util.Dom.get("pubedit_opp_rd").value, 
+                                   + '&opp.epd=' + YAHOO.util.Dom.get("pub-stat-edit_opp_epd").value
+                                   + '&opp.pd=' + YAHOO.util.Dom.get("pub-stat-edit_opp_pd").value
+                                   + '&opp.rd=' + YAHOO.util.Dom.get("pub-stat-edit_opp_rd").value, 
                                    setDateCallback );
             } 
 
@@ -450,6 +322,54 @@ YAHOO.imex.pubedit = {
         return false; 
     },
 
+    pubIdent: function(op) {
+        
+        var pubIdentCallback = { cache:false, timeout: 5000, 
+                                success: YAHOO.imex.pubedit.identUpdate,
+                                failure: YAHOO.imex.pubedit.identUpdateFail,
+                                argument:{ id:YAHOO.imex.pubedit.pubId } };
+        try{
+            
+            if( op === 'update' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.eidu=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.pmid=' + YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value
+                                   + '&opp.doi=' + YAHOO.util.Dom.get("pub-det-edit_pub_doi").value
+                                   + '&opp.jsp=' + YAHOO.util.Dom.get("pub-det-edit_pub_journalSpecific").value, 
+                                   pubIdentCallback );
+            } 
+
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+        return false; 
+    },
+
+
+    pubAuthTitle: function(op) {
+        var pubAuthTitleCallback = { cache:false, timeout: 5000, 
+                                     success: YAHOO.imex.pubedit.authTitleUpdate,
+                                     failure: YAHOO.imex.pubedit.authTitleUpdateFail,
+                                     argument:{ id:YAHOO.imex.pubedit.pubId } };
+        try{
+            
+            if( op === 'update' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.eatu=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.ath=' + YAHOO.util.Dom.get("pub-det-edit_pub_author").value
+                                   + '&opp.ttl=' + YAHOO.util.Dom.get("pub-det-edit_pub_title").value, 
+                                   pubAuthTitleCallback );
+            } 
+
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }   
+        return false; 
+    },
 
     pubAdminUser: function( op ) {
         
@@ -463,7 +383,7 @@ YAHOO.imex.pubedit = {
                     .asyncRequest( 'GET', 
                                    'pubedit?op.eauadd=update' 
                                    + '&id=' + YAHOO.imex.pubedit.pubId
-                                   + '&opp.eauadd=' + YAHOO.util.Dom.get("pubedit_opp_eauadd").value,
+                                   + '&opp.eauadd=' + YAHOO.util.Dom.get("pub-acc-edit_opp_eauadd").value,
                                    setAdminUserCallback );
             } 
             
@@ -514,7 +434,7 @@ YAHOO.imex.pubedit = {
                     .asyncRequest( 'GET', 
                                    'pubedit?op.eagadd=update' 
                                    + '&id=' + YAHOO.imex.pubedit.pubId
-                                   + '&opp.eagadd=' + YAHOO.util.Dom.get("pubedit_opp_eagadd").value,
+                                   + '&opp.eagadd=' + YAHOO.util.Dom.get("pub-acc-edit_opp_eagadd").value,
                                    setAdminGroupCallback );
             } 
             
@@ -524,7 +444,6 @@ YAHOO.imex.pubedit = {
                 var eagdel = ",";
                 
                 for( var i = 0; i < drops.length; i++ ) {
-                    //alert("val=" + drops[i].value + " chk=" + drops[i].checked);
                     if( drops[i].checked ) {
                         eagdel = eagdel + drops[i].value + ",";
                     }
@@ -535,7 +454,6 @@ YAHOO.imex.pubedit = {
                         eagdel = eagdel + drops.value + ",";
                     }
                 }
-                alert("eagdel="+eagdel);
                 if( eagdel !== "," ) {   
                     YAHOO.util.Connect
                         .asyncRequest( 'GET', 
@@ -567,31 +485,31 @@ YAHOO.imex.pubedit = {
 
                 for( var i = 0; i < messages.pub.adminUsers.length; i++ ) {
                     
-                    nih = nih + '<input type="checkbox" id="pubedit_opp_eaudel" value="' + 
+                    nih = nih + '<input type="checkbox" id="pub-acc-edit_opp_eaudel" value="' + 
                         messages.pub.adminUsers[i].id +
                         '" name="opp.eaudel" class="admin-user-drop">';
 
                     nih = nih + '<input type="hidden" value="' + 
                         messages.pub.adminUsers[i].id + 
-                        '" name="__checkbox_opp.eaudel" id="__checkbox_pubedit_opp_eaudel">';
+                        '" name="__checkbox_opp.eaudel" id="__checkbox_pub-acc-edit_opp_eaudel">';
 
                     nih = nih + messages.pub.adminUsers[i].login;
                 }              
                 tau.innerHTML = nih;
-                YAHOO.util.Dom.get("pubedit_opp_eauadd").value ="";
+                YAHOO.util.Dom.get("pub-acc-edit_opp_eauadd").value ="";
 
                 var tag = YAHOO.util.Dom.get( "td-admin-group" );
                 var nig = "";
 
                 for( var i = 0; i < messages.pub.adminGroups.length; i++ ) {
                     
-                    nig = nig + '<input type="checkbox" id="pubedit_opp_eagdel" value="' + 
+                    nig = nig + '<input type="checkbox" id="pub-acc-edit_opp_eagdel" value="' + 
                         messages.pub.adminGroups[i].id +
                         '" name="opp.eagdel" class="admin-group-drop">';
 
                     nig = nig + '<input type="hidden" value="' + 
                         messages.pub.adminGroups[i].id + 
-                        '" name="__checkbox_opp.eagdel" id="__checkbox_pubedit_opp_eagdel">';
+                        '" name="__checkbox_opp.eagdel" id="__checkbox_pub-acc-edit_opp_eagdel">';
 
                     nig = nig + messages.pub.adminGroups[i].label;
                 }              
@@ -624,23 +542,23 @@ YAHOO.imex.pubedit = {
                         ' <i>change to</i> ';
                 }
 
-                nih = nih + '<input type="text" id="pubedit_opp_necm" ' +
+                nih = nih + '<input type="text" id="pub-stat-edit_opp_necm" ' +
                     'value="" maxlength="32" size="32" name="opp.necm">'; 
                 tcm.innerHTML = nih;                
 
-                //var cem = YAHOO.util.Dom.get( "pubedit_opp_ecm" );
+                //var cem = YAHOO.util.Dom.get( "pub-stat-edit_opp_ecm" );
                 //var cem_val = messages.pub.contactEmail;               
                 //cem.value = cem_val;
 
-                var pd = YAHOO.util.Dom.get( "pubedit_opp_pd" );
+                var pd = YAHOO.util.Dom.get( "pub-stat-edit_opp_pd" );
                 var pd_val = messages.pub.pubDateStr;               
                 pd.value = pd_val;               
 
-                var epd = YAHOO.util.Dom.get( "pubedit_opp_epd" );
+                var epd = YAHOO.util.Dom.get( "pub-stat-edit_opp_epd" );
                 var epd_val = messages.pub.expectedPubDateStr;               
                 epd.value = epd_val;
 
-                var rd = YAHOO.util.Dom.get( "pubedit_opp_rd" );
+                var rd = YAHOO.util.Dom.get( "pub-stat-edit_opp_rd" );
                 var rd_val = messages.pub.releaseDateStr;               
                 rd.value = rd_val;                
             }
@@ -657,5 +575,3 @@ YAHOO.imex.pubedit = {
         alert(o.responseText);
     }
 };
-
-
