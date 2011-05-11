@@ -111,7 +111,7 @@
      <xs:sequence>
       <xs:element name="publicationList" type="ic:publicationList" 
                   minOccurs="1" />
-      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
+      <xs:element name="lastRec" type="xs:long" minOccurs="0" />
      </xs:sequence>
     </xs:complexType> 
    </xs:element>
@@ -143,8 +143,7 @@
    <xs:element name="getPublicationByOwner">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="owner" type="xs:string" 
-                  minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="owner" type="xs:string" />
       <xs:element name="firstRec" type="xs:int" minOccurs="0" />
       <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
@@ -154,8 +153,7 @@
    <xs:element name="getPublicationByStatus">
     <xs:complexType>
      <xs:sequence>
-      <xs:element name="status" type="xs:string" 
-                  minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="status" type="xs:string" />
       <xs:element name="firstRec" type="xs:int" minOccurs="0" />
       <xs:element name="maxRec" type="xs:int" minOccurs="0" />
      </xs:sequence>
@@ -306,7 +304,7 @@
      <xs:sequence>
       <xs:element name="attachmentList" type="ic:attachmentList" 
                   minOccurs="1" />
-      <xs:element name="maxRec" type="xs:int" minOccurs="0" />
+      <xs:element name="lastRec" type="xs:long" minOccurs="0" />
      </xs:sequence>
     </xs:complexType> 
    </xs:element>

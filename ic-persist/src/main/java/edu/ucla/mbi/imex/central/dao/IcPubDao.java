@@ -293,9 +293,12 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         try {
             //startOperation();
             Criteria crit = session.createCriteria( IcPub.class );
-            crit.setFirstResult( firstRecord );
-            crit.setMaxResults( blockSize );
 
+            if( firstRecord >= 0 && blockSize > 0 ){
+                crit.setFirstResult( firstRecord );
+                crit.setMaxResults( blockSize );
+            }
+            
             if (skey != null && skey.length() > 0 ) {
                 if ( asc ) {
                     crit.addOrder( Order.asc( skey ) );
@@ -500,6 +503,15 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             crit.createAlias( "adminUsers", "au" )
                 .add( Restrictions.eq( "au.login",
                                        flt.get( "editor" )
+                                       ) );
+        }
+
+
+        if( flt.get( "owner" ) != null && 
+            !flt.get("owner").equals("") ){
+            crit.createAlias( "owner", "ow" )
+                .add( Restrictions.eq( "ow.login",
+                                       flt.get( "owner" )
                                        ) );
         }
         

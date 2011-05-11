@@ -13,9 +13,13 @@ my $pmid="";
 my $imex="";
 my $op="";
 my $stat="";
+my $owner="";
 my $usr ="foo";
 my $pass ="bar";
 my $create="false";
+
+my $firstRec = 0;
+my $maxRec = 0;
 
 my $ausr = "";
 my $agrp = "";
@@ -72,6 +76,17 @@ for( my $i=0; $i < @ARGV; $i++ ) {
 
     if( $ARGV[$i]=~/ST=(.+)/ ) {
         $stat=$1;
+    }
+
+    if( $ARGV[$i]=~/OW=(.+)/ ) {
+        $owner=$1;
+    }
+
+    if( $ARGV[$i]=~/FREC=(.+)/ ) {
+        $firstRec=$1;
+    }
+    if( $ARGV[$i]=~/MREC=(.+)/ ) {
+        $maxRec=$1;
     }
 
     if( $ARGV[$i]=~/USR=(.+)/ ) {
@@ -172,6 +187,34 @@ if($op ne "" ) {
                                                              "<identifier ns='$ns' ac='$ac' />" ),
                                            SOAP::Data->name("create" => $create) );
     }
+
+
+    if( $op eq "getPublicationByStatus" ) {
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->getPublicationByStatus( SOAP::Data->type( 'xml' =>
+                                                    "<status>$stat</status>" ),
+                                     SOAP::Data->type( 'xml' =>
+                                                       "<firstRec>$firstRec</firstRec>" ),
+                                     SOAP::Data->type( 'xml' =>
+                                                       "<maxRec>$maxRec</maxRec>" ));
+    }
+
+    if( $op eq "getPublicationByOwner" ) {  
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->getPublicationByOwner( SOAP::Data->type( 'xml' =>
+                                                       "<owner>$owner</owner>" ),
+                                     SOAP::Data->type( 'xml' =>
+                                                       "<firstRec>$firstRec</firstRec>" ),
+                                     SOAP::Data->type( 'xml' =>
+                                                       "<maxRec>$maxRec</maxRec>" ));
+    }
+
 
     if( $op eq "addAdminUser" ) {
         my $ac = $pmid;
