@@ -208,43 +208,102 @@ public class IcentralPortImpl implements IcentralPort {
     
     //--------------------------------------------------------------------------
     
-    public void getPublicationByOwner( List<String> owner,
+    public void getPublicationByOwner( String owner,
                                        Integer firstRec,
-                                       Holder<Integer> maxRec,
-                                       Holder<PublicationList> publicationList)
+                                       Integer maxRec,
+                                       Holder<PublicationList> publicationList,
+                                       Holder<Long> lastRec )
         throws IcentralFault {
 
+        // NOTE: only first owner considered
+        //----------------------------------
+
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByOwner" );
+        log.debug( "IcentralPortImpl: getPublicationByOwner" );
+        log.debug( "IcentralPortImpl: firstRec=" + firstRec 
+                   + " maxRec=" + maxRec);
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+  
+        if( owner == null )  throw Fault.ID_MISSING;
+      
+        User user = entryManager.getUserContext()
+            .getUserDao().getUser( owner );
         
-        throw Fault.UNSUP;
+        if( user == null ) throw Fault.USR_UNKNOWN;       
+        
+        long pubCnt = entryManager.getPubCountByOwner( user );
+        lastRec.value = new Long( pubCnt );
+
+        if( maxRec != null && maxRec.intValue() > 0 ){
+            List<IcPub> icPubList 
+                = entryManager.getPublicationByOwner( user, 
+                                                      firstRec, maxRec );
+            
+            if( icPubList == null || icPubList.size() == 0 ) 
+                throw Fault.NO_RECORD;
+            publicationList.value = buildPublicationList( icPubList );
+      
+            log.debug( " owner: " + owner
+                       + " count: " + icPubList.size()
+                       + " last: " + pubCnt );
+        }
     }
 
     //--------------------------------------------------------------------------
     
-    public void getPublicationByStatus( List<String> status,
+    public void getPublicationByStatus( String status,
                                         Integer firstRec,
-                                        Holder<Integer> maxRec,
-                                        Holder<PublicationList> publicationList)
+                                        Integer maxRec,
+                                        Holder<PublicationList> publicationList,
+                                        Holder<Long> lastRec)
         throws IcentralFault { 
+
+        // NOTE: only first owner considered
+        //----------------------------------
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByStatus" );
+        log.debug( "IcentralPortImpl: getPublicationByStatus" );
+        log.debug( "IcentralPortImpl: firstRec=" + firstRec 
+                   + " maxRec=" + maxRec);
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         
-        throw Fault.UNSUP;
+        if( status == null )  throw Fault.ID_MISSING;
+
+        DataState state = entryManager.getWorkflowContext()
+            .getWorkflowDao().getDataState( status );
+
+        log.debug( " status: " + state );
+        if( state == null ) throw Fault.STAT_UNKNOWN;
+        
+        long pubCnt = entryManager.getPubCountByStatus( state );
+        lastRec.value = new Long( pubCnt );
+        
+        if( maxRec != null && maxRec.intValue() > 0 ){
+
+            List<IcPub> icPubList 
+                = entryManager.getPublicationByStatus( state,
+                                                       firstRec, maxRec );
+                   
+            if( icPubList == null || icPubList.size() == 0 ) 
+                throw Fault.NO_RECORD;
+            publicationList.value = buildPublicationList( icPubList );
+        
+            log.debug( " status: " + state.getName() 
+                       + " count: " + icPubList.size() 
+                       + " last: " + pubCnt );
+        }
     }
 
     //--------------------------------------------------------------------------
 
-    public void queryPublication( String query, Integer firstRec,
-                                  Holder<Integer> maxRec,
-                                  Holder<PublicationList> publicationList )
+    public void queryPublication( String query, 
+                                  Integer firstRec, Integer maxRec,
+                                  Holder<PublicationList> publicationList,
+                                  Holder<Long> lastRec )
         throws IcentralFault {
     
         Log log = LogFactory.getLog( this.getClass() );
@@ -264,7 +323,7 @@ public class IcentralPortImpl implements IcentralPort {
         throws IcentralFault {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByStatus" );
+        log.info( "IcentralPortImpl: updatePublication" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
@@ -280,7 +339,7 @@ public class IcentralPortImpl implements IcentralPort {
         throws IcentralFault {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationByStatus" );
+        log.info( "IcentralPortImpl: updatePublicationIdentifier" );
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
@@ -689,11 +748,13 @@ public class IcentralPortImpl implements IcentralPort {
         }
         
     }
-    
+
+    //--------------------------------------------------------------------------    
+
     public void queryAttachment( String query,
-                                 Integer firstRec,
-                                 Holder<Integer> maxRec,
-                                 Holder<AttachmentList> attachmentList )
+                                 Integer firstRec, Integer maxRec,
+                                 Holder<AttachmentList> attachmentList,
+                                 Holder<Long> lastRec )
         throws IcentralFault{
     
         Log log = LogFactory.getLog( this.getClass() );
@@ -719,9 +780,9 @@ public class IcentralPortImpl implements IcentralPort {
     
     public void getAttachmentByParent( Identifier parent,
                                        String type,
-                                       Integer firstRec,
-                                       Holder<Integer> maxRec,
-                                       Holder<AttachmentList> attachmentList )
+                                       Integer firstRec, Integer maxRec,
+                                       Holder<AttachmentList> attachmentList,
+                                       Holder<Long> lastRec )
         throws IcentralFault {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl: getAttachmentByParent" );
@@ -922,6 +983,27 @@ public class IcentralPortImpl implements IcentralPort {
         pub.setOwner( icp.getOwner().getLogin() );
 
         return pub;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private edu.ucla.mbi.imex.central.ws.v20.PublicationList
+        buildPublicationList( List<IcPub> pubList ){
+
+        edu.ucla.mbi.imex.central.ws.v20.PublicationList
+            pl = of.createPublicationList();
+        
+        for( Iterator<IcPub> 
+                 ii = pubList.iterator(); ii.hasNext(); ){
+            
+            IcPub icpub = ii.next();
+            
+            edu.ucla.mbi.imex.central.ws.v20.Publication cpub 
+                = buildPub( icpub );
+            pl.getPublication().add( cpub );
+        
+        }
+        return pl;
     }
 
     //--------------------------------------------------------------------------

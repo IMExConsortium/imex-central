@@ -139,9 +139,9 @@ public class EntryManager {
         
         return oldPub;
     }
-
-    //---------------------------------------------------------------------
     
+    //--------------------------------------------------------------------------
+
     public IcPub getIcPubByIcKey( String key ) {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -155,8 +155,97 @@ public class EntryManager {
         
         return oldPub;
     }
+
+    //--------------------------------------------------------------------------
+
+    public long getPubCountByStatus( DataState state ){
+        Map<String, String> crit = new HashMap<String, String>();
+        crit.put( "status", state.getName());
+
+        return tracContext.getPubDao().getPublicationCount( crit );
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<IcPub> getPublicationByStatus( DataState state,
+                                               Integer firstRec,
+                                               Integer maxRec ){
+        if( firstRec == null || firstRec.intValue() < 0) 
+            firstRec = new Integer(0);
+        
+        if( maxRec == null || maxRec.intValue()<=0 ) maxRec = 5;
+        
+        String skey ="id";
+        boolean asc = true;
+
+        Map<String, String> crit = new HashMap<String, String>();
+        crit.put( "status", state.getName());
+
+        List<Publication> pl = tracContext.getPubDao()
+            .getPublicationList( firstRec.intValue(), maxRec.intValue(), 
+                                 skey, asc, crit);
+        
+        if( pl != null ){
+            List<IcPub> res = new ArrayList<IcPub>();
+            for( Iterator<Publication> ip = pl.iterator(); ip.hasNext(); ){
+                Publication cp = ip.next(); 
+                if( cp instanceof IcPub ){
+                    res.add( (IcPub) cp );
+                }
+            }
+            if( res.size() > 0 ) return res;
+        }
+        
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
     
-    //---------------------------------------------------------------------
+    public long getPubCountByOwner( User owner ){
+        
+        Map<String, String> crit = new HashMap<String, String>();
+        crit.put( "owner", owner.getLogin());
+
+        return tracContext.getPubDao().getPublicationCount( crit );        
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<IcPub> getPublicationByOwner( User owner,
+                                              Integer firstRec,
+                                              Integer maxRec ){
+        
+        if( firstRec == null || firstRec.intValue() < 0) 
+            firstRec = new Integer(0);
+        
+        if( maxRec == null || maxRec.intValue()<=0 ) maxRec = 5;
+        
+        
+        String skey ="id";
+        boolean asc = true;
+
+        Map<String, String> crit = new HashMap<String, String>();
+        crit.put( "owner", owner.getLogin());
+
+        List<Publication> pl = tracContext.getPubDao()
+            .getPublicationList( firstRec.intValue(), maxRec.intValue(),
+                                 skey, asc, crit);
+        
+        if( pl != null ){
+            List<IcPub> res = new ArrayList<IcPub>();
+            for( Iterator<Publication> ip = pl.iterator(); ip.hasNext(); ){
+                Publication cp = ip.next(); 
+                if( cp instanceof IcPub ){
+                    res.add( (IcPub) cp );
+                }
+            }
+            if( res.size() > 0 ) return res;
+        }
+        
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
     // get through proxy
     //------------------
 
