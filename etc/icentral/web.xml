@@ -111,6 +111,11 @@
 
   <filter-mapping>
     <filter-name>action2</filter-name>
+    <url-pattern>/acom</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>action2</filter-name>
     <url-pattern>/pubsrc</url-pattern>
   </filter-mapping>
 

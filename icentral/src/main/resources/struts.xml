@@ -173,14 +173,18 @@
 
 
 
+   <action name="acom" class="acomAction" >
+    <interceptor-ref name="defaultStack"/>
+    <interceptor-ref name="timer"/>
 
-
-
-
-
-
-
-
+     <result name="json"  type="json">
+       <param name="includeProperties">
+        acom.*
+       </param>
+       <param name="noCache">true</param>
+     </result>
+     
+   </action>
  </package>
 
 </struts>

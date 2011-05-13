@@ -25,6 +25,9 @@ import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
+
+import edu.ucla.mbi.util.User;
+
        
 public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
@@ -414,6 +417,77 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
     //---------------------------------------------------------------------
 
+    public List<User> getOwners( String qstr ) {
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
+        List<User> ulst = null;
+
+        if( qstr!= null ){
+            qstr = qstr.toUpperCase();
+        }
+
+        try {
+            Query query = session
+                .createQuery( "select distinct p.owner from IcPub p "
+                              + " where upper( p.owner.login ) like :q "
+                              + " order by p.owner.login" );
+            query.setParameter("q", qstr );
+            ulst = (List<User>) query.list();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            e.printStackTrace();
+        } catch( Exception ex ) {
+            ex.printStackTrace();
+        } finally {
+
+            session.close();
+        }
+
+        return ulst;
+    }
+
+    //---------------------------------------------------------------------
+
+    public List<User>  getAdminUsers( String qstr ){
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        List<User> ulst = null;
+
+        if( qstr!= null ){
+            qstr = qstr.toUpperCase();
+        }
+
+        try {
+            Query query = session
+                .createQuery( "select distinct au from IcPub as p"
+                              + " join p.adminUsers as au"
+                              + " where upper( au.login ) like :q "
+                              + " order by au.login" );
+            query.setParameter("q", qstr );
+            ulst = (List<User>) query.list();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            e.printStackTrace();
+        } catch( Exception ex ) {
+            ex.printStackTrace();
+        } finally {
+
+            session.close();
+        }
+
+        return ulst;
+    }
+    
+    //--------------------------------------------------------------------------
+    
     public long getPublicationCount(  Map<String,String> flt ) {
 
         long count = 0;
@@ -450,7 +524,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return count;
     }
 
-    //---------------------------------------------------------------------
+   
+
+    //--------------------------------------------------------------------------
 
     public void savePublication( Publication publication ) { 
         
