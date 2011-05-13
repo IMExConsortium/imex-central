@@ -246,6 +246,23 @@ public class EntryManager {
     }
 
     //--------------------------------------------------------------------------
+
+    public List<User> acomOwner( String query ) {
+
+        List<User> ulist 
+            = tracContext.getPubDao().getOwners( query ); 
+        return ulist;
+    }
+
+    public List<User> acomCurator( String query ) {
+
+        List<User> ulist 
+            = tracContext.getPubDao().getAdminUsers( query ); 
+        return ulist;
+    }
+
+
+    //--------------------------------------------------------------------------
     // get through proxy
     //------------------
 

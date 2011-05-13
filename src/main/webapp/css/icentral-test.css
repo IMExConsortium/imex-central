@@ -1500,3 +1500,17 @@ a.disabled {
 #dt-pag-nav {
   margin: 0 0 6px 0;
 }       
+
+
+.acom { 
+     width:10em;
+} 
+
+.pubsrc-sub {
+    position:absolute; left:10em; margin-left:1.3em;
+}
+
+.pubsrc-td {
+    height: 3.2em;
+    padding: 0 0 0 20px; 
+}

@@ -32,6 +32,7 @@ public class EntryMgrAction extends ManagerSupport {
     private final String PUBEDIT = "pubedit";
     private final String PUBNEW = "pubnew";
     private final String JSON = "json";
+    private final String INPUT = "input";
 
     public static final String ACL_PAGE = "acl_page";
     public static final String ACL_OPER = "acl_oper";
@@ -674,23 +675,28 @@ public class EntryMgrAction extends ManagerSupport {
 
         }
 
-        IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
         
-        if ( oldPub != null ) {
-            icpub = oldPub;
-            setId( oldPub.getId() );
-            return PUBEDIT;
-        }
+        if( pub!= null && pub.getPmid() != null ){
+            IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
+            
+            if ( oldPub != null ) {
+                icpub = oldPub;
+                setId( oldPub.getId() );
+                return PUBEDIT;
+            }
         
-        if( pub !=null && pub.getPmid() != null && 
-            !pub.getPmid().equals("") ) {
-            this.setPmid( pub.getPmid() );
+            if( !pub.getPmid().equals("") ) {
+                this.setPmid( pub.getPmid() );
+                
+                return PUBNEW;
+            }
+                
+            addActionError( "No publication found" ) ;
+            return NOPUB;
+        } 
+        
+        return INPUT;
 
-            return PUBNEW;
-        }
-        
-        addActionError( "No publication found" ) ;
-        return NOPUB;
     }
     
     //---------------------------------------------------------------------

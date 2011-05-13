@@ -30,11 +30,10 @@
       <legend class="qlegend">By PubMed Identifier</legend>
       <table width="100%" class="qtable">
        <tr>
-        <th align="right" width="50%" nowrap>
-         PMID: <s:textfield name="pub.pmid"  size="16" maxlength="128" />
-        </th>
-        <td align="left">
-         <input type="submit" id="pubedit_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
+        <td class="pubsrc-td" align="left" valign="top" nowrap>
+         <b>PMID:</b><br> 
+         <s:textfield name="pub.pmid"  size="16" maxlength="128" />
+         <s:submit theme="simple" name="op.esrc" value="SEARCH"/>
         </td>
        </tr>
       </table>
@@ -51,11 +50,10 @@
       <legend class="qlegend">By IMEX Accession</legend>
       <table width="100%" class="qtable">
        <tr>
-        <th align="right" width="50%" nowrap>
-         IMEX ID: <s:textfield name="opp.imex"  size="16" maxlength="128" />
-        </th>
-        <td align="left">
-         <input type="submit" id="pubedit_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
+        <td class="pubsrc-td" align="left" valign="top" nowrap>
+         <b>IMEX ID:</b><br>
+          <s:textfield name="opp.imex"  size="16" maxlength="128" />
+          <s:submit theme="simple" name="op.esrc" value="SEARCH"/>
         </td>
        </tr>
       </table>
@@ -64,4 +62,68 @@
    </center>
   </td>
  </tr>
+
+ <tr>
+  <td>
+   <center>
+    <s:form theme="simple" action="pubsrc">
+     <fieldset class="qfield">
+      <legend class="qlegend">By Record Owner/Creator</legend>
+      <table width="100%" class="qtable">
+       <tr>
+        <td class="pubsrc-td" align="left" valign="top" nowrap>
+         <b>Owner:</b>
+          <div class="acom"> 
+           <s:textfield name="opp.owner"/>
+           <s:submit theme="simple" name="op.esrc" value="SEARCH" cssClass="pubsrc-sub"/>
+           <div id="poo_cnt">
+         </div>
+        </td>
+       </tr>
+      </table>
+     </fieldset>
+    </s:form>
+   </center>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <center>
+    <s:form theme="simple" action="pubsrc">
+     <fieldset class="qfield">
+      <legend class="qlegend">By Record Curator</legend>
+      <table width="100%" class="qtable">
+       <tr>
+        <td class="pubsrc-td" align="left" valign="top" nowrap>
+         <b>Curator:</b>
+         <div class="acom"> 
+          <s:textfield name="opp.curator" />          
+          <s:submit theme="simple" name="op.esrc" value="SEARCH" cssClass="pubsrc-sub"/>
+          <div id="poc_cnt">
+         </div>
+        </td>
+       </tr>
+      </table>
+     </fieldset>
+    </s:form>
+   </center>
+  </td>
+ </tr>
+
 </table>
+
+<script type="text/javascript">
+   YAHOO.util.Event.addListener(
+         window, "load", YAHOO.imex.autocom.init,
+         { inp:"pubsrc_opp_curator", cnt:"poc_cnt",opt:"curac" }
+      );
+
+   YAHOO.util.Event.addListener(
+         window, "load", YAHOO.imex.autocom.init,
+         { inp:"pubsrc_opp_owner", cnt:"poo_cnt",opt:"ownac" }
+      );
+
+
+</script>
+
