@@ -49,9 +49,9 @@
       <div class="yui-skin-sam">
        <div id="pubTab" class="yui-navset"> 
         <ul class="yui-nav"> 
-             <li class="selected"><a href="#tab1"><em>Status</em></a></li> 
-              <li><a href="#tab2"><em>Details</em></a></li> 
-              <li><a href="#tab3"><em>Access</em></a></li> 
+             <li class="selected"><a href="#tab1"><em>Record Status</em></a></li> 
+              <li><a href="#tab2"><em>Publication Details</em></a></li> 
+              <li><a href="#tab3"><em>User Access</em></a></li> 
               <li><a href="#tab4"><em>Comments</em></a></li> 
               <li><a href="#tab5"><em>Attachments</em></a></li>
         </ul>         

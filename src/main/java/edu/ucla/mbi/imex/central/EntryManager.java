@@ -246,18 +246,30 @@ public class EntryManager {
     }
 
     //--------------------------------------------------------------------------
+    // autocompletion
+    //---------------
 
     public List<User> acomOwner( String query ) {
-
         List<User> ulist 
             = tracContext.getPubDao().getOwners( query ); 
         return ulist;
     }
 
     public List<User> acomCurator( String query ) {
-
         List<User> ulist 
             = tracContext.getPubDao().getAdminUsers( query ); 
+        return ulist;
+    }
+    
+    public List<DataState> acomStatus( String query ) {
+        List<DataState> ulist 
+            = tracContext.getPubDao().getStates( query ); 
+        return ulist;
+    }
+    
+    public List<Group> acomGroup( String query ) {
+        List<Group> ulist 
+            = tracContext.getPubDao().getAdminGroups( query ); 
         return ulist;
     }
 
