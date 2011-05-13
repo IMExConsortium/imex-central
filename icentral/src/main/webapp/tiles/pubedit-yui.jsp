@@ -260,17 +260,17 @@
           <s:form id="pub-acc-edit" theme="simple" action="pubedit">
            <table width="100%" border="1">
             <tr>
-              <th width="15%" align="right" nowrap>Owner</th>
-              <td align="left" width="75%">
+              <th width="15%" align="right" nowrap>Submitted By</th>
+              <td align="left" width="80%">
                <s:hidden name="pub.owner.login"/>
-               <s:textfield theme="simple" name="opp.neo" size="32" maxLength="64"/>
+               <s:textfield theme="simple" name="pub.owner.login" size="32" maxLength="64" disabled="true"/>
               </td>
-              <th rowspan="1" width="10%">
-               <s:submit theme="simple" name="op.eoup" value="UPDATE" disabled="true" />
+              <th rowspan="1" width="5%">
+               &nbsp;
               </th>
             </tr>
             <tr>
-              <th rowspan="2" align="right" nowrap>Admin Users</th>
+              <th rowspan="2" align="right" nowrap>Admin Users<br>(<i>Curators</i>)</th>
               <td colspan="1" id="td-admin-user" >
                 <s:iterator value="pub.adminUsers" id="u" status="upos">
                   <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop" />
@@ -292,7 +292,7 @@
               </th>
             </tr>
             <tr>
-                <th rowspan="2" align="right" nowrap>Admin Groups</th>
+                <th rowspan="2" align="right" nowrap>Admin Groups<br>(<i>IMEx Partners</i>)</b></th>
                 <td colspan="1" id="td-admin-group" >
                  <s:iterator value="pub.adminGroups" id="g" status="gpos">
                   <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop" />

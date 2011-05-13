@@ -28,6 +28,15 @@
 </s:if>
 <s:else>
   <script src="js/pubmgr-yui.js" type="text/javascript"></script>
+  <s:if test="opp.ou.length() > 0 ">
+    <h2 class="pubmgr">Records submitted by: <i><s:property value="opp.ou"/></i></h2>
+  </s:if>
+  <s:else>
+    <s:if test="opp.au.length() > 0 ">
+    <h2 class="pubmgr">Records curated by: <i><s:property value="opp.au"/></i></h2>
+    </s:if>
+
+  </s:else>
 
  <div class="yui-skin-sam" width="100%">
   <center>
@@ -37,8 +46,6 @@
      <td class="filter-name">By Status</td>
      <td>&nbsp;</td>
      <td class="filter-name">By Partner</td>
-     <td>&nbsp;</td>
-     <td class="filter-name">By Curator</td> 
     </tr>
     <tr>
      <td><div id="dt-pag-nav"></div></td>
@@ -47,13 +54,6 @@
      <td class="filter-container"><label id="state-button-container"/></td>
      <th width="1%">and</th>
      <td class="filter-container"><label id="partner-button-container"/></td>
-     <th width="1%" nowrap>and</th>
-     <td valign="middle">
-      <div id="myAutoCompleteEditor">     
-       <input id="myEditorInput" type="text"> 
-       <div id="myEditorContainer"></div> 
-      </div> 
-     </td>
     </tr> 
    </table>
   </center>    
@@ -78,7 +78,10 @@
  </div>
  
  <script type="text/javascript">
-  YAHOO.util.Event.addListener( window, "load", YAHOO.imex.pubmgr ) ;
+  YAHOO.util.Event.addListener( window, "load", 
+                                YAHOO.imex.pubmgr(
+                                   { owner:"<s:property value="opp.ou"/>", 
+                                     admus:"<s:property value="opp.au"/>" }));
  </script>
 
 </s:else>

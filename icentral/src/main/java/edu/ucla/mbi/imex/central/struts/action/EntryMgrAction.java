@@ -262,7 +262,16 @@ public class EntryMgrAction extends ManagerSupport {
             log.debug(  "op=" + key + "  val=" + val );
 
             if ( val != null && val.length() > 0 ) {
+
+                //--------------------------------------------------------------
+                // initialize
+                //-----------
+                if ( key.equalsIgnoreCase( "init" ) ) {
+                    return SUCCESS;                    
+                }
                 
+                //--------------------------------------------------------------
+
                 if ( key.equalsIgnoreCase( "esrc" ) ) {
                     String imex = null ;
                     if ( getOpp() != null ) {
@@ -529,11 +538,13 @@ public class EntryMgrAction extends ManagerSupport {
                         "" :  getOpp().get( "sfv" );
                     String pfv = getOpp().get( "pfv" ) == null ?
                         "" :  getOpp().get( "pfv" );;
+                    String ofv = getOpp().get( "ofv" ) == null ?
+                        "" :  getOpp().get( "ofv" );
                     String efv = getOpp().get( "efv" ) == null ?
                         "" :  getOpp().get( "efv" );
                     
                     return getIcPubRecords( max, off, skey, sdir,
-                                            sfv, pfv, efv );
+                                            sfv, pfv, ofv, efv );
                 }
             }
         }
@@ -1046,12 +1057,13 @@ public class EntryMgrAction extends ManagerSupport {
     //---------------------------------------------------------------------
 
     public String getIcPubRecords() {
-        return this.getIcPubRecords( "", "", "", "", "", "", "" );
+        return this.getIcPubRecords( "", "", "", "", "", "", "", "" );
     }
     
     public String getIcPubRecords( String max, String off, 
                                    String skey, String sdir, 
-                                   String sfv, String pfv, String efv ) {
+                                   String sfv, String pfv, 
+                                   String ofv, String efv ) {
 
         if ( tracContext.getPubDao() == null ) return null;
 
@@ -1101,7 +1113,7 @@ public class EntryMgrAction extends ManagerSupport {
         List<Publication> pl = new ArrayList<Publication>();
         long total = 0;
         log.debug( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv);
-        if ( sfv.equals("") && pfv.equals("") && efv.equals("") ) {
+        if ( sfv.equals("") && pfv.equals("") && ofv.equals("") && efv.equals("") ) {
             
             log.debug( "getPubRecords: unfiltered" );
             
@@ -1117,6 +1129,7 @@ public class EntryMgrAction extends ManagerSupport {
 
             flt.put("status", sfv);
             flt.put("partner", pfv);
+            flt.put("owner", ofv);
             flt.put("editor", efv);
             
             pl = tracContext.getPubDao()

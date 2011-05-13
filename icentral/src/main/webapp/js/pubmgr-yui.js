@@ -1,6 +1,6 @@
 YAHOO.namespace("imex");
 
-YAHOO.imex.pubmgr = function() {
+YAHOO.imex.pubmgr = function( init ) {
     
     var onSelectedMenuItemChange = function (event) {
         var oMenuItem = event.newValue;
@@ -15,6 +15,14 @@ YAHOO.imex.pubmgr = function() {
         this.set("label", ("<em class=\"yui-button-label\">" + 
                            oMenuItem.cfg.getProperty("text") + "</em>"));       
     };
+
+    var admus="";
+    var owner="";
+
+    if( init !== undefined ){
+        admus = init.admus;
+        owner = init.owner;
+    }
 
 
     // status filter 
@@ -66,19 +74,6 @@ YAHOO.imex.pubmgr = function() {
     partnerButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
 
 
-    // editor filter
-    //--------------
-    
-    var editorArray = ["lukasz", "skerrien", "hhm", "doe_99"]; 
-    var oACS = new YAHOO.util.LocalDataSource( editorArray );  
-    oACS.responseSchema = {fields : ["editor"]};
-    
-    var acEditor = new YAHOO.widget.AutoComplete(
-        "myEditorInput", "myEditorContainer", oACS);
-    acEditor.my = {};
-    
-    acEditor.prehighlightClassName = "yui-ac-prehighlight"; 
-    acEditor.useShadow = true; 
     
     // custom formatters
     //------------------
@@ -186,7 +181,7 @@ YAHOO.imex.pubmgr = function() {
           children:[
              { key:"date",  label:"Date",sortable:true, resizeable:false, 
                formatter:"crt" },
-             { key:"owner", label:"Owner",sortable:true, resizeable:false, 
+             { key:"owner", label:"Submitted By",sortable:true, resizeable:false, 
                formatter:"list" }
           ]
         },
@@ -212,17 +207,23 @@ YAHOO.imex.pubmgr = function() {
 
         var sfVal = oSelf.my.stateFlt.my.value;
         var pfVal = oSelf.my.partnerFlt.my.value;
-        var efVal = oSelf.my.editorFlt.getInputEl().value;
+
+
+        var efVal = oSelf.my.admusFlt;
+        var ofVal = oSelf.my.ownerFlt;
+        
+
 
         var req = "opp.skey=" + sort +
             "&opp.sfv=" + sfVal +
             "&opp.pfv=" + pfVal +
             "&opp.efv=" + efVal +
+            "&opp.ofv=" + ofVal +
             "&opp.sdir=" + dir +
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
 
-        //alert("request: " + req);
+        alert("request: " + req);
         
         // build custom request
         //---------------------
@@ -258,6 +259,10 @@ YAHOO.imex.pubmgr = function() {
     // datatable configuration
     //------------------------
     
+    var initReq = "opp.off=0&opp.max=25"
+        + "&opp.ofv=" + owner+ "&opp.efv=" + admus;
+
+
     var myConfig = {
         paginator : new YAHOO.widget.Paginator(
             { containers: ["dt-pag-nav"], 
@@ -266,7 +271,7 @@ YAHOO.imex.pubmgr = function() {
               rowsPerPageOptions: [5,10,25,50,100], 
               pageLinks: 5 
             }), 
-        initialRequest: "opp.off=0&opp.max=25",
+        initialRequest: initReq,
         dynamicData : true,
         draggableColumns: true,
         generateRequest : myRequestBuilder
@@ -280,7 +285,8 @@ YAHOO.imex.pubmgr = function() {
     
     myDataTable.my = { stateFlt: stateButton, 
                        partnerFlt: partnerButton,
-                       editorFlt: acEditor,
+                       ownerFlt: owner,
+                       admusFlt: admus,
                        requestBuilder: myRequestBuilder
                      };
     
@@ -303,20 +309,14 @@ YAHOO.imex.pubmgr = function() {
 
     partnerButton.on("selectedMenuItemChange",
                      tableReload , myDataTable, myDataTable );
-
-
-    acEditor.my = { table: myDataTable };
-
+    
     var acSelectHandler = function( sType, aArgs ) {
         var oMyAcInstance = aArgs[0];
         tableReload( oMyAcInstance.my.table, oMyAcInstance.my.table );
     };
     
     try{
-        
-        acEditor.itemSelectEvent.subscribe( acSelectHandler );
-        
-        
+               
         myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
         
         var oConfMenu = [[{text:"Preferences" }],
