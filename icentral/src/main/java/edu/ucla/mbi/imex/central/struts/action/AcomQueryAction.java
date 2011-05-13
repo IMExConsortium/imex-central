@@ -93,6 +93,28 @@ public class AcomQueryAction extends ManagerSupport {
                     }
                     return acomCurator( query );
                 }
+
+                //--------------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "pstac" ) ) {
+                    String query = null ;
+                    if ( getOpp() != null ) {
+                        query = getOpp().get( "q" );
+                    }
+                    return acomStatus( query );
+                }
+
+                //--------------------------------------------------------------
+
+                if ( key.equalsIgnoreCase( "pagac" ) ) {
+                    String query = null ;
+                    if ( getOpp() != null ) {
+                        query = getOpp().get( "q" );
+                    } else {
+                        query = "role:partner";
+                    }
+                    return acomGroup( query );
+                }
             }
         }
         return JSON;
@@ -138,6 +160,49 @@ public class AcomQueryAction extends ManagerSupport {
                 User cu = ii.next();
                 Map <String,String> cr = new HashMap<String,String>();
                 cr.put("name",cu.getLogin());
+                getAcom().add( cr );
+            }
+        }
+        return JSON;
+    }
+
+    //---------------------------------------------------------------------
+
+    public String acomStatus( String q ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " q=" + q );
+        
+        List<DataState> stateList = entryManager.acomStatus( q );
+        
+        if( stateList != null && stateList.size() > 0 ){
+            
+            for( Iterator<DataState> ii 
+                     = stateList.iterator(); ii.hasNext(); ){
+                DataState cs = ii.next();
+                Map <String,String> cr = new HashMap<String,String>();
+                cr.put("name",cs.getName());
+                getAcom().add( cr );
+            }
+        }
+        return JSON;
+    }
+
+    //---------------------------------------------------------------------
+
+    public String acomGroup( String q ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " q=" + q );
+        
+        List<Group> groupList = entryManager.acomGroup( q );
+        
+        if( groupList != null && groupList.size() > 0 ){
+            
+            for( Iterator<Group> ii = groupList.iterator(); ii.hasNext(); ){
+                Group cg = ii.next();
+                Map <String,String> cr = new HashMap<String,String>();
+                cr.put("name",cg.getLabel());
                 getAcom().add( cr );
             }
         }

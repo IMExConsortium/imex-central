@@ -27,7 +27,7 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 
 import edu.ucla.mbi.util.User;
-
+import edu.ucla.mbi.util.Group;
        
 public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
@@ -390,7 +390,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         
         return plst;
     }
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
 
     public long getPublicationCount() {
 
@@ -415,7 +416,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return count;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<User> getOwners( String qstr ) {
 
@@ -450,7 +451,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return ulst;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<User>  getAdminUsers( String qstr ){
 
@@ -485,8 +486,93 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
         return ulst;
     }
+
+    //--------------------------------------------------------------------------
+
+    public List<Group>  getAdminGroups( String qstr ){
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        List<Group> glst = null;
+
+        if( qstr!= null && qstr.toUpperCase().equals("ROLE:PARTNER" ) ){
+            try {
+                Query query = session
+                    .createQuery( "select distinct gr from IcGroup as gr"
+                                  + " join gr.roles as rl"
+                                  + " where upper( rl.name ) like :q " 
+                                  + " order by gr.name" );
+                query.setParameter("q", "%PARTNER%" );
+                glst = (List<Group>) query.list();
+                tx.commit();
+            } catch ( HibernateException e ) {
+                handleException( e );
+                e.printStackTrace();
+            } catch( Exception ex ) {
+                ex.printStackTrace();
+            } finally {
+                session.close();
+            } 
+        } else {
+            try {
+                Query query = session
+                    .createQuery( "select distinct gr from IcGroup as gr"
+                                  + " order by gr.name" );
+                //query.setParameter("q", qstr );
+                glst = (List<Group>) query.list();
+                tx.commit();
+            } catch ( HibernateException e ) {
+                handleException( e );
+                e.printStackTrace();
+            } catch( Exception ex ) {
+                ex.printStackTrace();
+            } finally {
+                session.close();
+            }
+        }
+        return glst;
+    }
     
     //--------------------------------------------------------------------------
+
+    public List<DataState> getStates( String qstr ){
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        List<DataState> slst = null;
+
+        if( qstr!= null ){
+            qstr = qstr.toUpperCase();
+        }
+
+        try {
+            Query query = session
+                .createQuery( "select distinct ds from IcDataState as ds"
+                              + " order by ds.name" );
+            //query.setParameter( "q", qstr );
+            slst = (List<DataState>) query.list();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            e.printStackTrace();
+        } catch( Exception ex ) {
+            ex.printStackTrace();
+        } finally {
+
+            session.close();
+        }
+
+        return slst;
+    }
+
+
+    //--------------------------------------------------------------------------
+
+
     
     public long getPublicationCount(  Map<String,String> flt ) {
 

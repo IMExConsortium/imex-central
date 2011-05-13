@@ -24,7 +24,6 @@ YAHOO.imex.pubmgr = function( init ) {
         owner = init.owner;
     }
 
-
     // status filter 
     //-------------
 
@@ -72,7 +71,6 @@ YAHOO.imex.pubmgr = function( init ) {
     partnerButton.my = { items: partnerSel, value: "" };
     
     partnerButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
-
 
     
     // custom formatters
@@ -223,7 +221,8 @@ YAHOO.imex.pubmgr = function( init ) {
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
 
-        alert("request: " + req);
+        req = encodeURI(req);
+        //alert("request: " + req);
         
         // build custom request
         //---------------------
