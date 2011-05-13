@@ -66,16 +66,17 @@
  <tr>
   <td>
    <center>
-    <s:form theme="simple" action="pubsrc">
+    <s:form theme="simple" action="pubmgr">
      <fieldset class="qfield">
-      <legend class="qlegend">By Record Owner/Creator</legend>
+      <legend class="qlegend">By Record Submitter</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
-         <b>Owner:</b>
-          <div class="acom"> 
-           <s:textfield name="opp.owner"/>
-           <s:submit theme="simple" name="op.esrc" value="SEARCH" cssClass="pubsrc-sub"/>
+         <b>Submitter:</b>
+          <div class="acom">
+           <s:hidden name="op.init" />  
+           <s:textfield name="opp.ou"/>
+           <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
            <div id="poo_cnt">
          </div>
         </td>
@@ -90,7 +91,7 @@
  <tr>
   <td>
    <center>
-    <s:form theme="simple" action="pubsrc">
+    <s:form theme="simple" action="pubmgr">
      <fieldset class="qfield">
       <legend class="qlegend">By Record Curator</legend>
       <table width="100%" class="qtable">
@@ -98,8 +99,9 @@
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Curator:</b>
          <div class="acom"> 
-          <s:textfield name="opp.curator" />          
-          <s:submit theme="simple" name="op.esrc" value="SEARCH" cssClass="pubsrc-sub"/>
+          <s:hidden name="op.init" />          
+          <s:textfield name="opp.au" />          
+          <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
           <div id="poc_cnt">
          </div>
         </td>
@@ -116,12 +118,12 @@
 <script type="text/javascript">
    YAHOO.util.Event.addListener(
          window, "load", YAHOO.imex.autocom.init,
-         { inp:"pubsrc_opp_curator", cnt:"poc_cnt",opt:"curac" }
+         { inp:"pubmgr_opp_au", cnt:"poc_cnt",opt:"curac" }
       );
 
    YAHOO.util.Event.addListener(
          window, "load", YAHOO.imex.autocom.init,
-         { inp:"pubsrc_opp_owner", cnt:"poo_cnt",opt:"ownac" }
+         { inp:"pubmgr_opp_ou", cnt:"poo_cnt",opt:"ownac" }
       );
 
 

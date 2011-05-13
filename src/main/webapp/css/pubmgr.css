@@ -261,3 +261,20 @@
 }
 
 
+h2.pubmgr{
+   padding-left: 0.5em;
+}
+
+.acom {
+     width:10em;
+}
+
+.pubsrc-sub {
+    position:absolute; left:10em; margin-left:1.3em;
+}
+
+.pubsrc-td {
+    height: 3.2em;
+    padding: 0 0 0 20px;
+}
+

@@ -2,6 +2,9 @@
   pubmgr:{
     order:["operation"],
     operation:{
+      init: {
+        order:["ANY"]
+      },
       ppg:{
         order:["ANY"]
       },
