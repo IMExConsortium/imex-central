@@ -79,7 +79,7 @@
  
  <script type="text/javascript">
   YAHOO.util.Event.addListener( window, "load", 
-                                YAHOO.imex.pubmgr(
+                                YAHOO.imex.pubmgr.init(
                                    { owner:"<s:property value="opp.ou"/>", 
                                      admus:"<s:property value="opp.au"/>" }));
  </script>
