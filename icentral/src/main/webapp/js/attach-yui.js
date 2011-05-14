@@ -94,9 +94,10 @@ YAHOO.imex.attedit = {
                 = new YAHOO.widget.DataTable("com-tbview",
                                              YAHOO.imex.attedit.comColDef, 
                                              YAHOO.imex.attedit.comDtaSrc,
-                                             { scrollable:true, 
-                                               width:"100%", 
-                                               height: "10em" });
+                                             { scrollable:false,
+                                               dynamicData : true,
+                                               draggableColumns: true
+                                             });
             
             YAHOO.imex.attedit.tabs.getTab(2).addListener(
                 "click", 
