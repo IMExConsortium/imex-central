@@ -2,6 +2,11 @@
    width: 100%;
 }
 
+#com-tbview table {
+   width: 100%;
+}
+
+
 .pubtab th {
     vertical-align: middle;
     text-align: center;
