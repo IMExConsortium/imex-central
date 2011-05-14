@@ -1,8 +1,79 @@
 YAHOO.namespace("imex");
 
-YAHOO.imex.pubmgr = function( init ) {
+
+YAHOO.imex.pubmgr = {
+
+    admus: "",
+    owner: "",
+
+    stateSel: [ 
+        { text: "---ANY---", value: "" } 
+        //{ text: "NEW", value: "NEW" }, 
+        //{ text: "Reserved", value: "RESERVED" },
+        //{ text: "Incomplete", value: "INCOMPLETE" },        
+        //{ text: "Processing", value: "INPROGRESS" },
+        //{ text: "Discarded", value: "DISCARDED" },
+        //{ text: "Released", value: "RELEASED" } 
+    ],
     
-    var onSelectedMenuItemChange = function (event) {
+    partnerSel: [
+        { text: "---ANY---", value: "" }
+        //{ text: "DIP", value: "DIP" },
+        //{ text: "IntAct", value: "INTACT" },
+        //{ text: "MINT", value: "MINT" },
+        //{ text: "MPIDB", value: "MPIDB" }
+    ],
+        
+    init: function( init ) { 
+        
+        if( init !== undefined ){
+            YAHOO.imex.pubmgr.admus = init.admus;
+            YAHOO.imex.pubmgr.owner = init.owner;
+        }
+
+        
+        var partnerSuccess = function( o ){
+
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+            YAHOO.imex.pubmgr.partnerButtonInit( {items: messages.acom });
+            YAHOO.imex.pubmgrOld();
+        };
+    
+        var stateSuccess = function( o ){
+
+            var messages = YAHOO.lang.JSON.parse(o.responseText);
+
+            YAHOO.imex.pubmgr.stateButtonInit( {items: messages.acom } );            
+
+            var partnerCallback = { cache:false, timeout: 5000, 
+                                    success: partnerSuccess,
+                                    failure: partnerSuccess,
+                                    argument:{}}; // id:obj.id, btn:imexButton } };                  
+            try{
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   "acom?op.pagac=ac", 
+                                   partnerCallback );        
+            } catch (x) {
+                alert("AJAX Error:"+x);
+            }        
+        };
+        
+        var stateCallback = { cache:false, timeout: 5000, 
+                              success: stateSuccess,
+                              failure: stateSuccess,
+                              argument:{}}; // id:obj.id, btn:imexButton } };                  
+        try{
+            YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               "acom?op.pstac=ac" , 
+                               stateCallback );        
+        } catch (x) {
+            alert("AJAX Error:"+x);
+        }        
+    },
+
+    onSelectedMenuItemChange: function (event) {
         var oMenuItem = event.newValue;
         var text = oMenuItem.cfg.getProperty("text");
         
@@ -14,64 +85,77 @@ YAHOO.imex.pubmgr = function( init ) {
         
         this.set("label", ("<em class=\"yui-button-label\">" + 
                            oMenuItem.cfg.getProperty("text") + "</em>"));       
-    };
+    },
+    
+    stateButtonInit: function( o ) {
+        
+        // status filter 
+        //-------------
+        
+        for( var i = 0; i < o.items.length; i++){
+            var name = o.items[i].name;
+            var text = o.items[i].text;
+            if(text === undefined ){
+                text = name;
+            }
+            YAHOO.imex.pubmgr.stateSel.push( {name: name, text: text} );        
+        }
+            
+        
+        YAHOO.imex.pubmgr.stateButton = new YAHOO.widget.Button(
+            { id: "state-button",  
+              name: "state-button", 
+              label: "<em class=\"yui-button-label\">---ANY---</em>", 
+              type: "menu",   
+              menu: YAHOO.imex.pubmgr.stateSel,  
+              container: "state-button-container" }); 
+        
+        YAHOO.imex.pubmgr.stateButton.my 
+            = { items: YAHOO.imex.pubmgr.stateSel, value: "" };
+        YAHOO.imex.pubmgr.stateButton.on( 
+            "selectedMenuItemChange", 
+            YAHOO.imex.pubmgr.onSelectedMenuItemChange );
+        
+    },
 
-    var admus="";
-    var owner="";
+    partnerButtonInit: function( o ) {
+        
+        for( var i = 0; i < o.items.length; i++){
+            var name = o.items[i].name;
+            var text = o.items[i].text;
+            if(text === undefined ){
+                text = name;
+            }
+            YAHOO.imex.pubmgr.partnerSel.push( {name: name, text: text} );        
+        }
+        
 
-    if( init !== undefined ){
-        admus = init.admus;
-        owner = init.owner;
+        // partner filter
+        //---------------
+        
+        YAHOO.imex.pubmgr.partnerButton = new YAHOO.widget.Button(
+            { id: "partner-button",
+              name: "partner-button",
+              label: "<em class=\"yui-button-label\">---ANY---</em>",
+              type: "menu",
+              menu: YAHOO.imex.pubmgr.partnerSel,
+              container: "partner-button-container" });
+        
+        YAHOO.imex.pubmgr.partnerButton.my 
+            = { items: YAHOO.imex.pubmgr.partnerSel, value: "" };
+        
+        YAHOO.imex.pubmgr.partnerButton.on( "selectedMenuItemChange", 
+                          YAHOO.imex.pubmgr.onSelectedMenuItemChange );
+        
     }
 
-    // status filter 
-    //-------------
-
-    var stateSel = [ 
-        { text: "---ANY---", value: "" }, 
-        { text: "NEW", value: "NEW" }, 
-        { text: "Reserved", value: "RESERVED" },
-        { text: "Incomplete", value: "INCOMPLETE" },        
-        { text: "Processing", value: "INPROGRESS" },
-        { text: "Discarded", value: "DISCARDED" },
-        { text: "Released", value: "RELEASED" } 
-    ]; 
-        
-    var stateButton = new YAHOO.widget.Button(
-        { id: "state-button",  
-          name: "state-button", 
-          label: "<em class=\"yui-button-label\">---ANY---</em>", 
-          type: "menu",   
-          menu: stateSel,  
-          container: "state-button-container" }); 
-    
-    stateButton.my = { items: stateSel, value: "" };
-    stateButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+};
 
 
-    // partner filter
-    //---------------
-    
-    var partnerSel = [
-        { text: "---ANY---", value: "" },
-        { text: "DIP", value: "DIP" },
-        { text: "IntAct", value: "INTACT" },
-        { text: "MINT", value: "MINT" },
-        { text: "MPIDB", value: "MPIDB" }
-    ];
-    
-    var partnerButton = new YAHOO.widget.Button(
-        { id: "partner-button",
-          name: "partner-button",
-          label: "<em class=\"yui-button-label\">---ANY---</em>",
-          type: "menu",
-          menu: partnerSel,
-          container: "partner-button-container" });
-    
-    partnerButton.my = { items: partnerSel, value: "" };
-    
-    partnerButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
 
+
+YAHOO.imex.pubmgrOld = function( init ) {
+    
     
     // custom formatters
     //------------------
@@ -259,7 +343,7 @@ YAHOO.imex.pubmgr = function( init ) {
     //------------------------
     
     var initReq = "opp.off=0&opp.max=25"
-        + "&opp.ofv=" + owner+ "&opp.efv=" + admus;
+        + "&opp.ofv=" + YAHOO.imex.pubmgr.owner+ "&opp.efv=" + YAHOO.imex.pubmgr.admus;
 
 
     var myConfig = {
@@ -282,15 +366,15 @@ YAHOO.imex.pubmgr = function( init ) {
         "pubtab", myColumnDefs, myDataSource, myConfig
     );
     
-    myDataTable.my = { stateFlt: stateButton, 
-                       partnerFlt: partnerButton,
-                       ownerFlt: owner,
-                       admusFlt: admus,
+    myDataTable.my = { stateFlt: YAHOO.imex.pubmgr.stateButton, 
+                       partnerFlt: YAHOO.imex.pubmgr.partnerButton,
+                       ownerFlt: YAHOO.imex.pubmgr.owner,
+                       admusFlt: YAHOO.imex.pubmgr.admus,
                        requestBuilder: myRequestBuilder
                      };
     
-    stateButton.my.table = myDataTable;
-    partnerButton.my.table = myDataTable;
+    YAHOO.imex.pubmgr.stateButton.my.table = myDataTable;
+    YAHOO.imex.pubmgr.partnerButton.my.table = myDataTable;
 
     // Show loading message while page is being rendered
     
@@ -303,11 +387,15 @@ YAHOO.imex.pubmgr = function( init ) {
             return oPayload; 
         }; 
     
-    stateButton.on("selectedMenuItemChange",
-                   tableReload , myDataTable, myDataTable );
+    YAHOO.imex.pubmgr.stateButton.on( "selectedMenuItemChange",
+                                      tableReload, 
+                                      myDataTable, 
+                                      myDataTable );
 
-    partnerButton.on("selectedMenuItemChange",
-                     tableReload , myDataTable, myDataTable );
+    YAHOO.imex.pubmgr.partnerButton.on( "selectedMenuItemChange",
+                                        tableReload, 
+                                        myDataTable, 
+                                        myDataTable );
     
     var acSelectHandler = function( sType, aArgs ) {
         var oMyAcInstance = aArgs[0];
