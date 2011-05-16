@@ -4,15 +4,17 @@ YAHOO.namespace("mbi.view");
 
 YAHOO.mbi.view.panel = {
 
-    index: function( url, ptd ){
+    index: function( url, self ){
 
         var ctab = { my:{} } ;        
-        YAHOO.mbi.view.panel.build( ctab, ptd );
+        YAHOO.mbi.view.panel.build( ctab, self );
         var setSidebarContent = function(o) {
             ctab.my.sidediv.innerHTML = o.responseText;
+            ctab.my.sidediv.content = o.responseText;
         };
         var setSidebarError = function(o) {
             ctab.my.sidediv.innerHTML = "";
+            ctab.my.sidediv.content = "";
         };
 
         var sidebarCallback = {success:setSidebarContent,
@@ -22,25 +24,25 @@ YAHOO.mbi.view.panel = {
        
     },
 
-    build : function ( ctab, ptd ) {
+    build : function ( ctab, self ) {
                       
         /* side panel: td  */
 
         /*YAHOO.mbi.view.panel.build( tab,
                                      document.getElementById('summary-panel');
          */
-        ctab.my.panel = ptd; // document.createElement("td");
+        ctab.my.panel = self; // document.createElement("td");
         
         YAHOO.util.Dom.setAttribute( ctab.my.panel,'valign','top');
         YAHOO.util.Dom.addClass( ctab.my.panel, 'rec-tab-filter');
 
-        //side panel header/control
+        /* side panel header/control */
         
         var fhd =  document.createElement("div");
         YAHOO.util.Dom.addClass( fhd, 'rec-tab-filter-hd');  
         YAHOO.util.Dom.addClass( fhd, 'yui-layout-hd');
         ctab.my.panel.appendChild( fhd );
-        
+         
         var fhdc = document.createElement("div");
         ctab.my.collapse = YAHOO.util.Dom.generateId( fhdc );
         ctab.my.fop = true; 
@@ -60,6 +62,7 @@ YAHOO.mbi.view.panel = {
                     YAHOO.util.Dom.setAttribute( 
                         this.my.collapse, 'title',
                         'Click to collapse this pane.');
+                    /* ctab.my.sidediv.innerHTML = ctab.my.sidediv.content; */
                 } else {
                     YAHOO.util.Dom.replaceClass( this.my.panel, 
                                                  'rec-tab-filter',
@@ -67,13 +70,13 @@ YAHOO.mbi.view.panel = {
                     YAHOO.util.Dom.setAttribute( 
                         this.my.collapse, 'title',
                         'Click to expand this pane.');
+                    /* ctab.my.sidediv.innerHTML = ""; */
                 }
                 
             }, ctab, true ); 
         
-        // panel content
-        //--------------
-        
+        /* left panel content */
+
         var lpanel = document.createElement( 'table' );
         ctab.my.lpanel = YAHOO.util.Dom.generateId( lpanel );
         YAHOO.util.Dom.setAttribute( lpanel, 'cellpadding', '0');
@@ -85,8 +88,6 @@ YAHOO.mbi.view.panel = {
 
         ctab.my.ptop = document.createElement('td');
         YAHOO.util.Dom.setAttribute( ctab.my.ptop, 'valign', 'top');
-        YAHOO.util.Dom.setAttribute( ctab.my.ptop, 'align', 'left');
-
         lpr0.appendChild( ctab.my.ptop );
   
         var lpr1 = document.createElement('tr');
@@ -95,7 +96,11 @@ YAHOO.mbi.view.panel = {
         ctab.my.pbot = document.createElement('td');
         YAHOO.util.Dom.setAttribute( ctab.my.pbot, 'valign', 'bottom');
         lpr1.appendChild( ctab.my.pbot );  
-        
+
+        ctab.my.sidediv = document.createElement('div');
+        YAHOO.util.Dom.addClass(ctab.my.sidediv, 'rec-tab-filter-body');
+        ctab.my.ptop.appendChild(ctab.my.sidediv);
+
         return self;
     }    
 };
