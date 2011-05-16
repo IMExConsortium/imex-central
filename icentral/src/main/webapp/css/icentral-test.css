@@ -51,10 +51,18 @@ h2 {
 }
 
 .pagebody {
-  padding: 25px;
+  padding: 0px 25px 25px 0px ;
   font-size: 0.85em;
   background-color: white;
 }
+
+.page {
+  padding: 0px 0px 0px 25px ;
+  font-size: 0.85em;
+  background-color: white;
+}
+
+
 
 .pagebody_record {
   padding: 25px 0px 0px 0px;

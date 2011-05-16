@@ -14,4 +14,5 @@
 
 <link rel="stylesheet" href="css/accordion.css" type="text/css">
 <link rel="stylesheet" href="css/edit.css" type="text/css">
+<link rel="stylesheet" href="css/tmgr-yui.css" type="text/css">
 

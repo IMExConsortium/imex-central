@@ -11,12 +11,33 @@
         viewtype:"file-html",
         viewpath:"/pages/cover.html"
       },
+      test:{
+        active:true,
+        title:"ImexCentral: Test Page",
+        menusel:"1:1",
+        urlindex:"pages/test-index.html",
+        showindex:"true",
+        viewtype:"file-html",
+        viewpath:"/pages/browse.html"
+      },
+
       browse:{
         active:true,
         title:"ImexCentral: Browse",
         menusel:"1:1",
+        urlindex:"pages/test-index.html",
+        showindex:"false",
         viewtype:"file-html",
         viewpath:"/pages/browse.html"
+      },
+      index:{
+        active:true,
+        title:"ImexCentral: Index",
+        menusel:"1:1",
+        urlindex:"",
+        showindex:"false",
+        viewtype:"file-html",
+        viewpath:"/pages/index.html"
       },
       search:{
         active:true,
