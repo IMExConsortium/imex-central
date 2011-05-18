@@ -17,7 +17,6 @@
   <constant name="struts.objectFactory" value="spring" />
   <constant name="struts.devMode" value="false" />
 
-
   <!-- user mamagement -->
 
   <include file="usermgr.xml"/>
@@ -46,6 +45,42 @@
     <interceptors>
      <interceptor name="menu"
          class="edu.ucla.mbi.util.struts2.interceptor.MenuInterceptor"/>
+
+     <interceptor name="acl" class="aclInterceptor"/>
+
+     <interceptor-stack name="mgrStack">
+       <interceptor-ref name="exception"/>
+       <interceptor-ref name="alias"/>
+       <interceptor-ref name="servletConfig"/>
+       <interceptor-ref name="prepare"/>
+       <interceptor-ref name="i18n"/>
+       <interceptor-ref name="chain"/>
+       <interceptor-ref name="debugging"/>
+       <interceptor-ref name="profiling"/>
+       <interceptor-ref name="scopedModelDriven"/>
+       <interceptor-ref name="modelDriven"/>
+       <interceptor-ref name="fileUpload">
+         <param name="maximumSize">5000000</param>
+         <param name="allowedTypes"> image/jpeg,image/gif,image/png</param>
+       </interceptor-ref>
+       <interceptor-ref name="checkbox"/>
+       <interceptor-ref name="staticParams"/>
+       <interceptor-ref name="params">
+        <param name="excludeParams">dojo\..*</param>
+       </interceptor-ref>
+       <interceptor-ref name="conversionError"/>
+
+       <interceptor-ref name="menu"/>
+       <interceptor-ref name="acl"/>
+
+       <interceptor-ref name="validation">
+         <param name="excludeMethods">input,back,cancel,browse</param>
+       </interceptor-ref>
+       <interceptor-ref name="workflow">
+         <param name="excludeMethods">input,back,cancel,browse</param>
+       </interceptor-ref>
+     </interceptor-stack>
+
     </interceptors>
    
    <!-- ============================================================ Actions -->
@@ -94,6 +129,43 @@
       <param name="id">${pageid}</param>
      </result>
     </action>
+
+    <action name="image" class="imageAction">
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+     <interceptor-ref name="menu"/>
+
+     <result name="imap"  type="json">
+       <param name="ignoreHierarchy">false</param>
+       <param name="noCache">true</param>
+
+       <param name="includeProperties">
+        imageMap.*
+      </param>
+     </result>
+
+     <result name="preview" type="tiles">ipreview</result>
+
+     <result name="page" type="redirect-action">
+       <param name="actionName">page</param>
+       <param name="namespace"></param>
+       <param name="parse">true</param>
+       <param name="id">${pageid}</param>
+       <param name="site">icentral</param>
+       <param name="skn">icentral</param>
+     </result>
+    </action>
+
+
+
+
+
+
+
+
+
+
+
     
   <!-- user management -->
     

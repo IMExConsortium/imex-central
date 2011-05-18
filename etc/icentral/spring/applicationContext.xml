@@ -32,6 +32,11 @@
         http://jax-ws.dev.java.net/spring/servlet
         http://jax-ws.dev.java.net/spring/servlet.xsd">
 
+
+<!-- ========================================================== CONFIGUATION -->
+
+ <import resource="context.xml" />
+
 <!-- ========================================================= ENTRY MANAGER -->
 
  <bean id="entryManager" init-method="initialize" destroy-method="cleanup"

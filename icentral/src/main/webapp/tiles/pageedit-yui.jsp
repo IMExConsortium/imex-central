@@ -144,9 +144,11 @@
              <td class="img-lst-tbl-td">
               <table width="100%">
                <tr>
-                <td align="right" width="34%" nowrap>Image ID <s:textfield size="16" value="" name="opp.name"/></td>                
-                <td align="right" width="10%" nowrap>|| Portal <s:checkbox name="opp.portal" /> |</td>
-                <td align="right" width="5%" nowrap>| Skin <s:checkbox name="opp.skin"  />||</td>
+                <td align="right" width="34%" nowrap>Image ID <s:textfield size="16" value="" name="opp.name"/></td>
+<%--      
+                <td align="right" width="10%" nowrap>|| Portal <s:checkbox name="opp.portal" disabled="true"/> |</td>
+                <td align="right" width="5%" nowrap>| Skin <s:checkbox name="opp.skin"  disabled="true"/>||</td>
+--%>
                 <td align="right" width="30%" nowrap>File <s:file name="upload"/></td>
                 <td align="left" width="20%"><s:submit theme="simple" name="op.upload" value="Upload" /></td>
                </tr>

@@ -44,6 +44,7 @@
  <definition name="page" template="/tiles/page.jsp"/>
  <definition name="editpage" template="/tiles/editpage.jsp"/>
 
+ <definition name="ipreview" template="/tiles/ipreview.jsp" />
 
  <definition name="uedit" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Login" />

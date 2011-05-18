@@ -220,6 +220,11 @@
     <url-pattern>/stats</url-pattern>
   </filter-mapping>
 
+  <filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/image</url-pattern>
+  </filter-mapping>
+
 
 
 <!-- =================================================== =============== -->
