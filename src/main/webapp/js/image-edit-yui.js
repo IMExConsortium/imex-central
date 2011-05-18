@@ -3,8 +3,8 @@ YAHOO.namespace( "mbi.imgedit" );
 YAHOO.mbi.imgedit = {
 
     coldef:[{ key: "image", label: "Image", width:600},
-            { key: "global", label: "Portal", formatter: "checkbox", width: 80 },
-            { key: "skin", label: "Skin", formatter: "checkbox", width: 80 },
+           // { key: "global", label: "Portal", formatter: "checkbox", width: 80 },
+           // { key: "skin", label: "Skin", formatter: "checkbox", width: 80 },
             { key: "edit", label: "", formatter: "myImageEdit" }
            ],
     images: {},

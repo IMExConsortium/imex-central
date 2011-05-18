@@ -1,4 +1,4 @@
-/* record rendering */
+/* icentral: modal windows */
 
 YAHOO.namespace("mbi.modal");
 
@@ -36,6 +36,11 @@ YAHOO.mbi.modal = {
     help: function( title, id ) {
         var url = 'page?ret=body&id=' + id;
         YAHOO.mbi.modal.show({ mtitle: 'Help', title: title, url: url } );
+    },
+
+    iview: function( image ) {
+        var url = 'image?op.view=view&opp.name=' + image ;
+        YAHOO.mbi.modal.show({ mtitle: 'Image Preview', mid: 'modal-panel', url: url } );
     },
 
     attachment:function( arg ){

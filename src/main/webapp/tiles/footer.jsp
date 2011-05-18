@@ -10,7 +10,7 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2010 IMEx Consortium
+       Copyright 2008-2011 IMEx Consortium
       </td>
       <td width="5%" class="copyright3" align="center" nowrap>
        <A HREF=".">Imex Central Site</A>.
