@@ -47,3 +47,14 @@ $Id$
   - web service fault codes added (unknown user/group)
   - partial switch to log4j logging
 
+
+2011/05/25 BETA-0.80
+  - GUI updates:
+     - added searches by submitter (owner) and by curator
+     - added create/view comment tab  
+     - added image upload
+     - added updates to record identifiers  
+  - login errors fixed
+  - web services version 2.0 added
+     - implemented record identifier updates
+
