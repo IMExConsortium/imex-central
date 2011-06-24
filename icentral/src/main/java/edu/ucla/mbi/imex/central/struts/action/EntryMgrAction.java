@@ -362,6 +362,17 @@ public class EntryMgrAction extends ManagerSupport {
                                                  getOpp().get( "ath" ),
                                                  getOpp().get( "ttl" ) );
                 }
+
+                //--------------------------------------------------------------
+         
+                if ( key.equalsIgnoreCase( "epmr" ) ) {
+
+                    // resync with pubMed
+                    //--------------------
+                    
+                    return resyncIcPubPubmed( icpub, 
+                                              getOpp().get( "pmid" ) );
+                }
                 
                 //--------------------------------------------------------------
                 
@@ -866,6 +877,24 @@ public class EntryMgrAction extends ManagerSupport {
 
         entryManager.updateIcPubAuthTitle( pub.getId(), pub );
 
+        return JSON;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public String resyncIcPubPubmed( IcPub pub, 
+                                     String pmid ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "RESYNC: pmid=" + pmid );
+        
+        //pub.setPmid( sanitize( pmid ) );
+        
+        IcPub uPub = entryManager.resyncIcPubPubmed( pub.getId(), pub );
+        if( uPub != null ){
+            setPub( uPub );
+        }
+        
         return JSON;
     }
 

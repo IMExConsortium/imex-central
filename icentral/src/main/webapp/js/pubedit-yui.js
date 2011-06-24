@@ -212,6 +212,35 @@ YAHOO.imex.pubedit = {
         alert( "AJAX Error update failed: id=" + o.argument.id ); 
     },
 
+
+
+    pubmedUpdate: function ( o ) {
+        try {
+            var acl = /ACL Violation/; 
+            if( acl.test(o.responseText) ) {
+                YAHOO.mbi.modal.spcstat("ACL Violation");
+            } else {
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var pid = messages.id;
+                var pmid = messages.pub.pmid;
+                var author = messages.pub.author;
+                var title = messages.pub.title;
+                var abst = messages.pub.abstract;
+
+                YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value = pmid;
+                YAHOO.util.Dom.get("pub-det-edit_pub_author").value = author;
+                YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;
+                YAHOO.util.Dom.get("pub-det-edit_pub_abstract").value = abst;
+            }
+        } catch(x) {
+            alert("AJAX Error: " + x );
+        }
+    },
+    
+    pubmedUpdateFail: function ( o ) {
+        alert( "AJAX Error pubmed update failed: id=" + o.argument.id ); 
+    },
+
     authTitleUpdate: function ( o ) {
         try {
             var acl = /ACL Violation/; 
@@ -328,6 +357,11 @@ YAHOO.imex.pubedit = {
                                 success: YAHOO.imex.pubedit.identUpdate,
                                 failure: YAHOO.imex.pubedit.identUpdateFail,
                                 argument:{ id:YAHOO.imex.pubedit.pubId } };
+
+        var pubEpmrCallback = { cache:false, timeout: 5000, 
+                                success: YAHOO.imex.pubedit.pubmedUpdate,
+                                failure: YAHOO.imex.pubedit.pubmedUpdateFail,
+                                argument:{ id:YAHOO.imex.pubedit.pubId } };
         try{
             
             if( op === 'update' ) {
@@ -339,7 +373,16 @@ YAHOO.imex.pubedit = {
                                    + '&opp.doi=' + YAHOO.util.Dom.get("pub-det-edit_pub_doi").value
                                    + '&opp.jsp=' + YAHOO.util.Dom.get("pub-det-edit_pub_journalSpecific").value, 
                                    pubIdentCallback );
-            } 
+            }
+
+            if( op === 'epmr' ) {
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'pubedit?op.epmr=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId
+                                   + '&opp.pmid=' + YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value, 
+                                   pubEpmrCallback );
+            }
 
         } catch (x) {
             alert("AJAX Error: " + x );
