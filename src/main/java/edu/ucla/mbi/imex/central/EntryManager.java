@@ -442,8 +442,6 @@ public class EntryManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "EntryManager.updateIcPubProps: pub id=" + pub.getId()) ;
 
-        
-
         tracContext.getPubDao().updatePublication( pub );
 
         return pub;
@@ -560,6 +558,23 @@ public class EntryManager {
             uPub.setAuthor( pub.getAuthor() );
             uPub.setTitle( pub.getTitle() );
             tracContext.getPubDao().savePublication( uPub );
+        }
+        return uPub;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public IcPub resyncIcPubPubmed( int id, Publication pub ) {
+        
+        IcPub uPub = (IcPub) tracContext.getPubDao().getPublication( id );
+        if( uPub != null ) {
+
+            Publication pmPub = this.getPubByPmid( pub.getPmid() );
+            if( pmPub != null ){
+                uPub.setAuthor( pmPub.getAuthor() );
+                uPub.setTitle( pmPub.getTitle() );
+                tracContext.getPubDao().savePublication( uPub );
+            }
         }
         return uPub;
     }

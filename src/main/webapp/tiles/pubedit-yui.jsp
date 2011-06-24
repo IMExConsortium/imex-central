@@ -54,6 +54,7 @@
               <li><a href="#tab3"><em>User Access</em></a></li> 
               <li><a href="#tab4"><em>Comments</em></a></li> 
               <li><a href="#tab5"><em>Attachments</em></a></li>
+              <li><a href="#tab6"><em>Record Log</em></a></li>
         </ul>         
         <div class="yui-content">
          <div>
@@ -196,6 +197,8 @@
               <th align="right"  width="15%" nowrap>PubMed</th>
               <td width="75%" nowrap>
                <s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/>
+                <s:submit theme="simple" name="op.epmr" value="Synchronize" disabled="false"
+                  onclick="return YAHOO.imex.pubedit.pubIdent('epmr');"/> 
               </td>
               <th rowspan="3" width="10%">
                <s:submit theme="simple" name="op.eidu" value="UPDATE" disabled="false"
@@ -374,6 +377,22 @@
                <s:submit theme="simple" name="op.ecup" value="UPDATE" disabled="true"/>
              </th>
             </tr>
+           </table>
+          </s:form>
+         </div>
+
+         <!-- log pane -->
+
+         <div id="log-pane">
+          <s:form id="cmtmgr" theme="simple" action="attachmgr">
+           <table width="100%" border="1">
+            <s:hidden name="id" value="%{id}"/>
+            <s:hidden name="pub.id" value="%{id}"/>            
+            <tr>
+             <td colspan="4">
+              <div id="log-tbview"></div>
+             </td>
+            </tr>       
            </table>
           </s:form>
          </div>

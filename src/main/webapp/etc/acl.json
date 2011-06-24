@@ -98,6 +98,14 @@
           group:["ADMIN","CURATOR"]
         }
       },
+      epmr:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
       esup:{
         order:["allow"],
         allow:{
