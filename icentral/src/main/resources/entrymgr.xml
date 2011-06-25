@@ -35,6 +35,7 @@
          class="edu.ucla.mbi.util.struts2.interceptor.JsonTableInterceptor"/>
 
       <interceptor name="acl" class="aclInterceptor"/>
+      <interceptor name="op-log" class="logInterceptor"/>
 
       <interceptor-stack name="mgrStack">
         <interceptor-ref name="exception"/>
@@ -57,6 +58,7 @@
 
         <interceptor-ref name="menu"/>
         <interceptor-ref name="acl"/>
+        <interceptor-ref name="op-log"/>
 
         <interceptor-ref name="validation">
           <param name="excludeMethods">input,back,cancel,browse</param>
