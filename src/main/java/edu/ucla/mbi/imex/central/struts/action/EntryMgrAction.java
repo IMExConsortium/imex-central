@@ -26,7 +26,7 @@ import edu.ucla.mbi.util.struts2.interceptor.*;
 
 import edu.ucla.mbi.imex.central.*;
 
-public class EntryMgrAction extends ManagerSupport {
+public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     private final String NOPUB = "notfound";
     private final String PUBEDIT = "pubedit";
