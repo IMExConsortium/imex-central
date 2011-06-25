@@ -1,9 +1,9 @@
 package edu.ucla.mbi.util.struts2.interceptor;
 
 /* =============================================================================
- # $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-util-strut#$
- # $Id:: AclInterceptor.java 927 2010-02-27 19:19:00Z lukasz                   $
- # Version: $Rev:: 927                                                         $
+ # $HeadURL::                                                                  $
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
  #==============================================================================
  #
  # LogInterceptor: controlls access to actions/operations

@@ -1,9 +1,9 @@
 package edu.ucla.mbi.util.struts2.interceptor;
 
 /* =========================================================================
- # $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-util-s#$
- # $Id:: AclAware.java 516 2009-09-04 19:36:16Z lukasz                     $
- # Version: $Rev:: 516                                                     $
+ # $HeadURL::                                                              $
+ # $Id::                                                                   $
+ # Version: $Rev::                                                         $
  #==========================================================================
  #
  # AclAware interface: must be implemented by classes interceptable 
