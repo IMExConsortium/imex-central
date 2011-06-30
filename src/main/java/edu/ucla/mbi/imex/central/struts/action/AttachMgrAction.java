@@ -49,6 +49,20 @@ public class AttachMgrAction extends ManagerSupport {
     public EntryManager getEntryManager() {
         return this.entryManager;
     }
+
+    ////------------------------------------------------------------------------
+    /// Attachment Manager
+    //--------------------
+    
+    private AttachmentManager attachmentManager;
+
+    public void setAttachmentManager( AttachmentManager manager ) {
+        this.attachmentManager = manager;
+    }
+
+    public AttachmentManager getAttachmentManager() {
+        return this.attachmentManager;
+    }
     
     ////--------------------------------------------------------------------------
     ///  TracContext
@@ -136,6 +150,12 @@ public class AttachMgrAction extends ManagerSupport {
                     // get all comments
                     //-----------------
                     attlist = getCommByRoot( icpub );
+                }
+
+               if ( key.equalsIgnoreCase( "halg" ) ) {
+                    // get all history log entries
+                    //----------------------------
+                    attlist = getLogEntryByRoot( icpub );
                 }
 
                 if ( key.equalsIgnoreCase( "cidg" ) ) {
@@ -259,6 +279,31 @@ public class AttachMgrAction extends ManagerSupport {
     }
 
     //--------------------------------------------------------------------------
+
+    private List getLogEntryByRoot( IcPub icpub ){
+        
+        IcAdiDao adiDao = (IcAdiDao)
+            entryManager.getTracContext().getAdiDao();
+
+        List<AttachedDataItem> adiList =
+            adiDao.getAdiListByRoot( icpub );
+
+        List clist = new ArrayList();
+        
+        for( Iterator<AttachedDataItem> 
+                 ii = adiList.iterator(); ii.hasNext(); ){
+        
+            AttachedDataItem cadi = ii.next();
+            if( cadi instanceof IcLogEntry ){
+                IcLogEntry ic = (IcLogEntry) cadi;
+                clist.add( buildLogEntryMap(ic) );
+            }
+        }
+
+        return clist;
+    }
+
+    //--------------------------------------------------------------------------
     
 
     private long  countCommByRoot( IcPub icpub ){
@@ -274,6 +319,25 @@ public class AttachMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     private Map buildCommentMap( IcComment ic ){
+        
+        Map<String,Object> cmap = new HashMap<String,Object>();
+        String sub = ic.getLabel();
+        String bdy = ic.getBody();
+        String crt = String.format( "%1$ta %1$tb %1$td %1$tT %1$tZ %1$tY", ic.getCrt() );
+        String aut = ic.getOwner().getLogin();
+
+        cmap.put("id",ic.getId() );
+        cmap.put("root",ic.getRoot().getId());
+        cmap.put("subject",sub);
+        cmap.put("body",bdy);
+        cmap.put("date",crt);
+        cmap.put("author",aut);
+        
+        return cmap;
+    }    
+    //--------------------------------------------------------------------------
+
+    private Map buildLogEntryMap( IcLogEntry ic ){
         
         Map<String,Object> cmap = new HashMap<String,Object>();
         String sub = ic.getLabel();

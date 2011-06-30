@@ -35,4 +35,6 @@ public class LogManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "LogManager: monitor called: " + operation );
     }
+
+
 }

@@ -307,7 +307,8 @@ public class IcentralPortImpl implements IcentralPort {
         // update status
         //--------------
         
-        IcPub icPub = entryManager.updateIcPubState( icp, state );
+        IcPub icPub = 
+            entryManager.updateIcPubState( icp, c.loggedUser(), state );
         return buildPub( icPub );
     }
 
@@ -342,7 +343,7 @@ public class IcentralPortImpl implements IcentralPort {
 
         if( ( icp.getImexId() == null || icp.getImexId().equals("N/A") )
             && create ) {
-            icp = entryManager.genIcPubImex( icp );
+            icp = entryManager.genIcPubImex( icp, c.loggedUser() );
         }
 
         if( icp.getImexId() == null || icp.getImexId().equals("N/A") ) {
@@ -436,7 +437,8 @@ public class IcentralPortImpl implements IcentralPort {
             }
             
             if( drop ) {
-                IcPub icpub = entryManager.delAdminUsers( icp, udel ); 
+                IcPub icpub = entryManager.delAdminUsers( icp, c.loggedUser(), 
+                                                          udel ); 
                 return buildPub( icpub ); 
             }
         }
@@ -461,7 +463,8 @@ public class IcentralPortImpl implements IcentralPort {
             //---------
 
             if( usr != null ) {
-                IcPub icpub = entryManager.addAdminUser( icp, usr );
+                IcPub icpub = entryManager.addAdminUser( icp, c.loggedUser(),
+                                                         usr );
                 return buildPub( icpub );
             } else {
                 throw Fault.USR_UNKNOWN;
@@ -532,7 +535,8 @@ public class IcentralPortImpl implements IcentralPort {
             }
             
             if( drop ) {
-                IcPub icpub = entryManager.delAdminGroups( icp, gdel ); 
+                IcPub icpub = entryManager.delAdminGroups( icp, c.loggedUser(),
+                                                           gdel ); 
                 return buildPub( icpub ); 
             }
         }
@@ -557,7 +561,8 @@ public class IcentralPortImpl implements IcentralPort {
             //----------
 
             if( grp != null ) {
-                IcPub icpub = entryManager.addAdminGroup( icp, grp );
+                IcPub icpub = entryManager.addAdminGroup( icp, c.loggedUser(),
+                                                          grp );
                 return buildPub( icpub );
             } else {
                 throw Fault.GRP_UNKNOWN;
@@ -694,6 +699,13 @@ public class IcentralPortImpl implements IcentralPort {
                 return user.testPassword( pass );
             } 
             return false;            
+        }
+        
+        public User loggedUser(){
+            
+            UserDao dao = entryManager.getUserContext().getUserDao();
+            if ( dao == null ) return null;
+            return dao.getUser( login );
         }
     }
 }

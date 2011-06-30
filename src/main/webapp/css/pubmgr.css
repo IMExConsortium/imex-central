@@ -6,6 +6,9 @@
    width: 100%;
 }
 
+#history-tbview table {
+   width: 100%;
+}
 
 .pubtab th {
     vertical-align: middle;

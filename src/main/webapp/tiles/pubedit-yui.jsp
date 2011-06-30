@@ -54,7 +54,7 @@
               <li><a href="#tab3"><em>User Access</em></a></li> 
               <li><a href="#tab4"><em>Comments</em></a></li> 
               <li><a href="#tab5"><em>Attachments</em></a></li>
-              <li><a href="#tab6"><em>Record Log</em></a></li>
+              <li><a href="#tab6"><em>Record History</em></a></li>
         </ul>         
         <div class="yui-content">
          <div>
@@ -338,7 +338,7 @@
              <td rowspan="2" width="50%">&nbsp;</td>      
              <td rowspan="2" width="2%">
                <s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false"
-                  onclick="return YAHOO.imex.attedit.pubAttach('add');"/>
+                  onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/>
              </td>
             </tr>
             <tr>
@@ -390,7 +390,7 @@
             <s:hidden name="pub.id" value="%{id}"/>            
             <tr>
              <td colspan="4">
-              <div id="log-tbview"></div>
+              <div id="history-tbview"></div>
              </td>
             </tr>       
            </table>

@@ -48,11 +48,11 @@ public class LogInterceptor implements Interceptor{
 
     //--------------------------------------------------------------------------
     
-    private void logInitialize ( LogAware action ) {
+    private void logInitialize ( LogAware action, boolean force ) {
 	
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " logCtx(i)=" +logCtx);
-        if ( logCtx.getJsonConfigObject() == null ) {
+        if ( logCtx.getJsonConfigObject() == null || force ) {
 	    log.info( " initilizing LOG defs..." );
             String jsonPath =
                 (String) logCtx.getConfig().get( "json-config" );
@@ -96,7 +96,7 @@ public class LogInterceptor implements Interceptor{
         LogAware law = (LogAware) invocation.getAction();
         Map sss = law.getSession();
         
-        logInitialize( law ); 	    
+        logInitialize( law, true ); 	    
         
         // action name
         //------------
@@ -105,19 +105,22 @@ public class LogInterceptor implements Interceptor{
         log.info( "LOG: action name=" + actionName );
         log.info( "LOG: JsonConfig=" + logCtx.getJsonConfig() );
         
-        //Map<String,Object> acl = 
-        //    (Map<String,Object>) logCtx.getJsonConfig().get( "op-log" );
+        Map<String,Object> loglst = 
+            (Map<String,Object>) logCtx.getJsonConfig().get( "op-log" );
         
-        //Map<String,Object> acr = 
-        //    (Map<String,Object>) acl.get( actionName );
+        Map<String,Object> alog = 
+            (Map<String,Object>) loglst.get( actionName );
         
-        if ( null == null ) return invocation.invoke(); // action not logged
+        if ( alog == null ) return invocation.invoke(); // action not logged
 
         //----------------------------------------------------------------------
         // logged action/operation  
         //------------------------
 
+        String retval = invocation.invoke();
+
         //log.info( "LOG:  ruleset=" + acr );
-        return "success";
+
+        return retval;
     }
 }
