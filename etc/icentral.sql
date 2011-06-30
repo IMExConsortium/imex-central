@@ -221,3 +221,16 @@ CREATE TABLE comment (
 CREATE INDEX com_1 on comment (adi_id);
 CREATE INDEX com_2 on comment (subject);
 CREATE INDEX com_3 on comment (body);
+
+
+CREATE TABLE log (
+     id serial NOT NULL primary key,
+     adi_id integer,
+     subject text not null default '',
+     body text not null default ''
+
+);
+
+CREATE INDEX log_1 on log (adi_id);
+CREATE INDEX log_2 on log (subject);
+CREATE INDEX log_3 on log (body);

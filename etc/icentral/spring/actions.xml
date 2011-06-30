@@ -5,13 +5,13 @@
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
-      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     
       http://www.springframework.org/schema/tx 
-      http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+      http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
       
       http://www.springframework.org/schema/aop 
-      http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
 <!-- static content -->
  
@@ -77,6 +77,13 @@
   <bean id="aclInterceptor"
         class="edu.ucla.mbi.util.struts2.interceptor.AclInterceptor">
     <property name="aclContext" ref="aclContext"/>
+  </bean>
+
+ <!-- access control list/interceptor -->
+
+  <bean id="logInterceptor"
+        class="edu.ucla.mbi.util.struts2.interceptor.LogInterceptor">
+    <property name="logContext" ref="logContext"/>
   </bean>
 
   <!-- user management actions -->

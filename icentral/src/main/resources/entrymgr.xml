@@ -58,7 +58,7 @@
 
         <interceptor-ref name="menu"/>
         <interceptor-ref name="acl"/>
-        <interceptor-ref name="op-log"/>
+<!--        <interceptor-ref name="op-log"/> -->
 
         <interceptor-ref name="validation">
           <param name="excludeMethods">input,back,cancel,browse</param>
@@ -160,7 +160,7 @@
      
      <result name="json" type="json">
        <param name="excludeProperties">
-         publicationList.*
+         publicationList.*,attachmentManager.*
        </param>
        <param name="includeProperties">
          attach.*, attachMeta.*

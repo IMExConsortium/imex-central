@@ -218,6 +218,15 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         log.debug(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
         
         if ( tracContext.getPubDao() == null ) return SUCCESS;
+
+        Integer iusr = (Integer) getSession().get( "USER_ID" );
+        log.debug( " login id=" + iusr );
+        
+        User luser = null;
+        if( iusr != null) {
+            luser = getUserContext().getUserDao().getUser( iusr.intValue() );
+            log.debug( " user set to: " + luser );
+        }
         
         if ( getId() > 0 && icpub == null && getOp() == null ) {
             
@@ -289,7 +298,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                 //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "edel" ) ) {
-                    return deleteIcPub( icpub );
+                    return deleteIcPub( icpub, luser );
                 }
 
                 //--------------------------------------------------------------
@@ -321,7 +330,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                         } catch ( Exception ex ) {
                             // should not happen
                         }
-                        return deleteIcPubList( uidl );
+                        return deleteIcPubList( uidl, luser );
                     }
                     return SUCCESS;
                 }
@@ -329,13 +338,13 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "epup" ) ) {
-                    return updateIcPubProperties( getId(), icpub );
+                    return updateIcPubProperties( getId(), luser, icpub );
                 }
 
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "epix" ) ) {
-                    return genIcPubImex( getId(), icpub );
+                    return genIcPubImex( getId(), luser, icpub );
                 }
                 
                 //--------------------------------------------------------------
@@ -345,7 +354,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     // update identifiers
                     //-------------------
 
-                    return updateIcPubIdentifiers( icpub,
+                    return updateIcPubIdentifiers( icpub, luser,
                                                    getOpp().get( "pmid" ),
                                                    getOpp().get( "doi" ),
                                                    getOpp().get( "jsp" ));
@@ -358,7 +367,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     // update author/title
                     //--------------------
                     
-                    return updateIcPubAuthTitle( icpub, 
+                    return updateIcPubAuthTitle( icpub, luser,
                                                  getOpp().get( "ath" ),
                                                  getOpp().get( "ttl" ) );
                 }
@@ -370,7 +379,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     // resync with pubMed
                     //--------------------
                     
-                    return resyncIcPubPubmed( icpub, 
+                    return resyncIcPubPubmed( icpub, luser,
                                               getOpp().get( "pmid" ) );
                 }
                 
@@ -387,7 +396,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     GregorianCalendar pGD = parseDate( getOpp().get( "pd" ) );
                     GregorianCalendar rGD = parseDate( getOpp().get( "rd" ) );
                     
-                    updateIcPubDates( getId(), epGD, pGD, rGD );
+                    updateIcPubDates( getId(), luser, epGD, pGD, rGD );
 
                     return JSON;
 
@@ -400,16 +409,16 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     int sid=0;
                    
                     log.debug( "opp=" + getOpp() );
-
+                    
                     if ( getOpp() == null ) return SUCCESS;
                     String nsid = getOpp().get( "nsn" );
                     log.debug( "opp.nsn=" + nsid );
                     try {
                         sid = Integer.parseInt(nsid);
-                        updateIcPubState( getId(), sid );
+                        updateIcPubState( getId(), luser, sid );
                     } catch ( Exception ex ) {
                         // should not happen
-                        updateIcPubState( getId(), nsid );
+                        updateIcPubState( getId(), luser, nsid );
                         
                     }
                                         
@@ -428,10 +437,10 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     String necm = getOpp().get( "necm" );
                     log.debug( "opp.necm=" + necm );
                     try {
-                        updateIcPubContactMail( getId(), necm );
+                        updateIcPubContactMail( getId(), luser, necm );
                     } catch ( Exception ex ) {
                         // should not happen
-                        //updateIcPubContactMail( getId(), necm );
+                        //updateIcPubContactMail( getId(), luser, necm );
                     }
                     
                     return JSON;
@@ -444,7 +453,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     
                     String ulogin = getOpp().get( "eauadd" );
                     try {
-                        addIcPubAdminUser( getId(), ulogin );
+                        addIcPubAdminUser( getId(), luser, ulogin );
                         return JSON;
                     } catch( NumberFormatException nfe ) {
                         // abort on error
@@ -460,7 +469,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     String sgid = getOpp().get( "eagadd" );
                     try {
                         int gid = Integer.parseInt( sgid );
-                        addIcPubAdminGroup( getId(), gid );
+                        addIcPubAdminGroup( getId(), luser,  gid );
                         return JSON;
                         
                     } catch( NumberFormatException nfe ) {
@@ -489,7 +498,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                                      uidl.add( Integer.valueOf( us[ii] ) );
                                  }
                              }
-                             delIcPubAdminUsers( getId(), uidl );
+                             delIcPubAdminUsers( getId(), luser, uidl );
                              return JSON;
                         } catch ( Exception ex ) {
                             // should not happen
@@ -520,7 +529,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                                      gidl.add( Integer.valueOf( gs[ii] ) );
                                  }
                              }
-                             delIcPubAdminGroups( getId(), gidl );
+                             delIcPubAdminGroups( getId(), luser, gidl );
                              return JSON;
                              
                         } catch ( Exception ex ) {
@@ -771,9 +780,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     
     //---------------------------------------------------------------------
 
-    public String deleteIcPub( Publication pub ) {
+    public String deleteIcPub( Publication pub, User luser ) {
 
-        entryManager.deleteIcPub( null );
+        entryManager.deleteIcPub( null, luser );
         return SUCCESS;
 
         /*
@@ -795,9 +804,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //---------------------------------------------------------------------
 
-    private String deleteIcPubList( List<Integer> pubs ) {
+    private String deleteIcPubList( List<Integer> pubs, User luser ) {
         
-        entryManager.deleteIcPub( null );
+        entryManager.deleteIcPub( null, luser );
         return SUCCESS;
 
         /*
@@ -821,9 +830,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //--------------------------------------------------------------------------
     
-    public String updateIcPubProperties( int id, Publication pub ) {
+    public String updateIcPubProperties( int id, User luser, Publication pub ) {
 
-        entryManager.updateIcPubProps( null );
+        entryManager.updateIcPubProps( null, luser );
         return SUCCESS;
 
         /*
@@ -848,7 +857,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //--------------------------------------------------------------------------
 
-    public String updateIcPubIdentifiers( IcPub pub,
+    public String updateIcPubIdentifiers( IcPub pub, User user,
                                           String nPmid, 
                                           String nDoi, String nJsp) {
 
@@ -859,14 +868,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         pub.setDoi( sanitize( nDoi ) );
         pub.setJournalSpecific( sanitize( nJsp ) );
 
-        entryManager.updateIcPubIdentifiers( pub.getId(), pub );
+        entryManager.updateIcPubIdentifiers( pub, user, pub );
         
         return JSON;
     }
 
     //--------------------------------------------------------------------------
 
-    public String updateIcPubAuthTitle( IcPub pub, 
+    public String updateIcPubAuthTitle( IcPub pub, User user,
                                         String nAuth, String nTitle ) {
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -875,22 +884,21 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         pub.setAuthor( sanitize( nAuth ) );
         pub.setTitle( sanitize( nTitle ) );
 
-        entryManager.updateIcPubAuthTitle( pub.getId(), pub );
+        entryManager.updateIcPubAuthTitle( pub, user, pub );
 
         return JSON;
     }
 
     //--------------------------------------------------------------------------
 
-    public String resyncIcPubPubmed( IcPub pub, 
-                                     String pmid ) {
+    public String resyncIcPubPubmed( IcPub pub, User user, String pmid ) {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "RESYNC: pmid=" + pmid );
         
         //pub.setPmid( sanitize( pmid ) );
         
-        IcPub uPub = entryManager.resyncIcPubPubmed( pub.getId(), pub );
+        IcPub uPub = entryManager.resyncIcPubPubmed( pub, user, pub );
         if( uPub != null ){
             setPub( uPub );
         }
@@ -901,9 +909,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     //--------------------------------------------------------------------------
 
 
-    public String genIcPubImex( int id, IcPub pub ) {
-
-        IcPub oldPub = entryManager.genIcPubImex( pub );
+    public String genIcPubImex( int id, User luser, IcPub pub ) {
+        
+        IcPub oldPub = entryManager.genIcPubImex( pub, luser );
         
         if ( oldPub != null ) {
             icpub = oldPub;
@@ -928,60 +936,78 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //--------------------------------------------------------------------------
     
-    private String updateIcPubContactMail( int id, String mail ) {
+    private String updateIcPubContactMail( int id, User luser, String mail ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "id=" + id + " mail=" + mail );
 
-        IcPub pub =  entryManager.updateIcPubContactMail( id, mail );
-        if( pub != null ) {
-            this.setPub( pub );
-        }        
+        IcPub pub = entryManager.getIcPub( id );
+        if(pub != null ){
+            IcPub uPub =  entryManager
+                .updateIcPubContactMail( pub, luser, mail );
+            if( uPub != null ) {
+                this.setPub( uPub );
+            }        
+        }
         return SUCCESS;
     }
-
-
-    private String updateIcPubDates( int  id, GregorianCalendar epd, 
+    
+    //--------------------------------------------------------------------------
+    
+    private String updateIcPubDates( int  id, User luser,
+                                     GregorianCalendar epd, 
                                      GregorianCalendar pd, 
                                      GregorianCalendar rd ) {
         
-        IcPub pub = entryManager.updateIcPubDates( id, epd, pd, rd );
-        if ( pub != null ) {
-            this.setPub( pub );
+        IcPub pub = entryManager.getIcPub( id );
+
+        if( pub != null ){
+            IcPub uPub = entryManager.updateIcPubDates( pub, luser, 
+                                                        epd, pd, rd );
+            if ( uPub != null ) {
+                this.setPub( uPub );
+            }
         }
         return SUCCESS;
     }
 
     //--------------------------------------------------------------------------
     
-    private String updateIcPubState( int id, String state ) {
+    
+    private  String updateIcPubState( int id, User user, String state ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "id=" + id + " state=" + state );
+        
+        IcPub pub = entryManager.getIcPub( id );
 
-        IcPub pub =  entryManager.updateIcPubState( id, state );
-        if( pub != null ) {
-            this.setPub( pub );
-        }        
+        if( pub != null ){
+            IcPub uPub =  entryManager.updateIcPubState( pub, user, state );
+            if( uPub != null ) {
+                this.setPub( uPub );
+            }        
+        }
         return SUCCESS;
-
     }
-
-    private String updateIcPubState( int id, int sid ) {
+    
+    private String updateIcPubState( int id, User user, int sid ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "id=" + id + " sid=" + sid );
 
-        IcPub pub =  entryManager.updateIcPubState( id, sid );
-        if( pub != null ) {
-            this.setPub( pub );
-        }        
+        IcPub pub = entryManager.getIcPub( id );
+        if( pub != null ){
+            IcPub uPub =  entryManager.updateIcPubState( pub, user, sid );
+            if( uPub != null ) {
+                this.setPub( uPub );
+            }        
+        }
         return SUCCESS;
     }    
-
+    
     //---------------------------------------------------------------------
     
-    public String addIcPubAdminGroup( int id, int grp ) {
+    public String addIcPubAdminGroup( int id, User user, int grp ) {
                         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "add EAG: id=" + id + " ag= " + grp );
@@ -991,7 +1017,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         if ( oldPub != null && agrp != null ) {
             
-            entryManager.addAdminGroup( oldPub, agrp );
+            entryManager.addAdminGroup( oldPub, user, agrp );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1003,7 +1029,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //---------------------------------------------------------------------
 
-    public String delIcPubAdminGroups( int id, List<Integer> gidl ) {
+    public String delIcPubAdminGroups( int id, User user, 
+                                       List<Integer> gidl ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "drop EAG: id=" + id + " aglist= " + gidl );
@@ -1011,7 +1038,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && gidl != null ) {
             
-            entryManager.delAdminGroups( oldPub, gidl );
+            entryManager.delAdminGroups( oldPub, user, gidl );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1023,7 +1050,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //---------------------------------------------------------------------
     
-    public String addIcPubAdminUser( int id, String ulogin ) {
+    public String addIcPubAdminUser( int id, User user,
+                                     String ulogin ) {
                         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "add EAU: id=" + id + " au= " + ulogin );
@@ -1033,7 +1061,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         if ( oldPub != null && ausr != null ) {
             
-            entryManager.addAdminUser( oldPub, ausr );
+            entryManager.addAdminUser( oldPub, user, ausr );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
@@ -1045,7 +1073,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     //---------------------------------------------------------------------
 
-    public String delIcPubAdminUsers( int id, List<Integer> uidl ) {
+    public String delIcPubAdminUsers( int id, User user,
+                                      List<Integer> uidl ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "drop EAU: id=" + id + " aulist= " + uidl );
@@ -1053,7 +1082,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && uidl != null ) {
 
-            entryManager.delAdminUsers( oldPub, uidl );
+            entryManager.delAdminUsers( oldPub, user, uidl );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             

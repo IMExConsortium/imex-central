@@ -614,20 +614,24 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
     //--------------------------------------------------------------------------
 
-    public void savePublication( Publication publication ) { 
+    public Publication savePublication( Publication publication ) { 
         
         if ( publication  instanceof IcPub ) {
             super.saveOrUpdate( publication );
+            return publication;
         } else {
-            super.saveOrUpdate( new IcPub( publication ) );
+            IcPub icp = new IcPub( publication);
+            super.saveOrUpdate( icp );
+            return icp;
         }
     }
     
     //---------------------------------------------------------------------
     
-    public void updatePublication( Publication publication ) { 
+    public Publication updatePublication( Publication publication ) { 
         
         super.saveOrUpdate( publication );
+        return publication;
     }
     
     //---------------------------------------------------------------------

@@ -5,13 +5,13 @@
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
-      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     
       http://www.springframework.org/schema/tx 
-      http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+      http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
       
       http://www.springframework.org/schema/aop 
-      http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
 <!-- icentral context: configuration files -->
  
@@ -96,6 +96,21 @@
         <entry key="json-source">
           <bean class="edu.ucla.mbi.util.SpringFileResource">
             <property name="file" value="etc/acl.json"/>
+          </bean>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+ <!-- operation logger/interceptor -->
+
+  <bean id="logContext" class="edu.ucla.mbi.util.JsonContext">
+    <property name="config">
+      <map>
+        <entry key="json-config" value="/etc/logger.json"/>
+        <entry key="json-source">
+          <bean class="edu.ucla.mbi.util.SpringFileResource">
+            <property name="file" value="etc/logger.json"/>
           </bean>
         </entry>
       </map>

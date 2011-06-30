@@ -17,9 +17,21 @@
 
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
 
-    YAHOO.util.Event.addListener( 
-         window, "load", YAHOO.imex.attedit.init, 
-         {id:"<s:property value="id"/>",
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+         {aclass:"comment",
+          apane:"com-tbview",tabno:3,
+          url:"attachmgr?op.calg=calg&id=",
+          cname:{"author":"Author","subject":"Subject","date":"Date"},
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"}  
+      );
+
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+         {aclass:"history",apane:"history-tbview",tabno:5,
+          url:"attachmgr?op.halg=halg&id=",
+          cname:{"author":"User","subject":"Operation","date":"Date"},
+          id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
           login:"<s:property value="#session['LOGIN']" />"}  
       );

@@ -349,8 +349,11 @@ public class EntryManager {
                             .addAll( icp.getSource().getAdminGroups() );
                     }
 
-                    tracContext.getPubDao().savePublication( icp );
-                    return icp;
+                    return (IcPub) 
+                        tracContext.getPubDao().savePublication( icp );
+                    
+                    //return icp;
+         
                     //return (IcPub) tracContext.getPubDao()
                     //    .getPublicationByPmid( icp.getPmid() );
                 }
@@ -419,9 +422,11 @@ public class EntryManager {
                         .addAll( icp.getSource().getAdminGroups() );
                 }
                 
-                tracContext.getPubDao().savePublication( icp );
-                return (IcPub) tracContext.getPubDao()
-                    .getPublicationByPmid( icp.getPmid() );
+                return (IcPub) tracContext.getPubDao().savePublication( icp );
+
+
+                //return (IcPub) tracContext.getPubDao()
+                //    .getPublicationByPmid( icp.getPmid() );
             }
         }                
         return null;
@@ -429,13 +434,13 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
-    public void deleteIcPub( IcPub pub ) {
+    public void deleteIcPub( IcPub pub, User user ) {
         
     }
 
     //--------------------------------------------------------------------------
 
-    public IcPub updateIcPubProps( IcPub pub ) {
+    public IcPub updateIcPubProps( IcPub pub, User luser ) {
 
         if( pub == null ) return pub;
 
@@ -481,7 +486,7 @@ public class EntryManager {
     
     //--------------------------------------------------------------------------
 
-    public IcPub genIcPubImex( IcPub pub ) {
+    public IcPub genIcPubImex( IcPub pub, User owner ) {
 
         if( pub == null ) { return null; }
         
@@ -502,178 +507,183 @@ public class EntryManager {
     }
 
 
-    //--------------------------------------------------------------------------
-
-    public IcPub updateIcPubState( IcPub pub, DataState state ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        
-        if( pub != null && state !=null ) {
-            pub.setState( state );
-            tracContext.getPubDao().savePublication( pub );
-        }
-        return pub;
-    }
 
     //--------------------------------------------------------------------------
 
-    public IcPub updateIcPubDates( int id, GregorianCalendar epd, 
+    public IcPub updateIcPubDates( IcPub pub, User luser,
+                                   GregorianCalendar epd, 
                                    GregorianCalendar pd, 
                                    GregorianCalendar rd ) {
         
-        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
-
-        if( pub != null ) {
+        if( pub != null && luser != null ) {
             pub.setExpectedPubDate( epd );
             pub.setPubDate( pd );
             pub.setReleaseDate( rd );
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( " EntryManager.updateIcPubDates: calling updateIcPubProps");
+            this.updateIcPubProps( pub, luser );
             
-            tracContext.getPubDao().savePublication( pub );
+            //tracContext.getPubDao().savePublication( pub );
+            return pub;
         }
-        return pub;
+        return null;
     }
 
     //--------------------------------------------------------------------------
 
 
-    public IcPub updateIcPubIdentifiers( int id, Publication pub ) {
+    public IcPub updateIcPubIdentifiers( IcPub pub, User luser, 
+                                         Publication npub ) {
         
-        IcPub uPub = (IcPub) tracContext.getPubDao().getPublication( id );
-
-        if( uPub != null ) {
-            uPub.setDoi( pub.getDoi() );
-            uPub.setPmid( pub.getPmid() );
-            uPub.setJournalSpecific( pub.getJournalSpecific() );
-            tracContext.getPubDao().savePublication( uPub );
+        if( pub != null && npub != null && luser != null) {
+            pub.setDoi( npub.getDoi() );
+            pub.setPmid( npub.getPmid() );
+            pub.setJournalSpecific( npub.getJournalSpecific() );
+            this.updateIcPubProps( pub, luser );
+           
+            //tracContext.getPubDao().savePublication( uPub );
+            return pub;
         }
-        return uPub;
+        return null;
     }
     
     //--------------------------------------------------------------------------
 
-    public IcPub updateIcPubAuthTitle( int id, Publication pub ) {
+    public IcPub updateIcPubAuthTitle( IcPub pub, User user, Publication npub ) {
         
-        IcPub uPub = (IcPub) tracContext.getPubDao().getPublication( id );
-        if( uPub != null ) {
-            uPub.setAuthor( pub.getAuthor() );
-            uPub.setTitle( pub.getTitle() );
-            tracContext.getPubDao().savePublication( uPub );
+        if( pub != null ) {
+            pub.setAuthor( npub.getAuthor() );
+            pub.setTitle( npub.getTitle() );
+            updateIcPubProps( pub, user );
+            
+            //tracContext.getPubDao().savePublication( uPub );
+            return pub;
         }
-        return uPub;
+        return null;
     }
 
     //--------------------------------------------------------------------------
 
-    public IcPub resyncIcPubPubmed( int id, Publication pub ) {
+    public IcPub resyncIcPubPubmed( IcPub pub, User luser, Publication npub ) {
         
-        IcPub uPub = (IcPub) tracContext.getPubDao().getPublication( id );
-        if( uPub != null ) {
-
-            Publication pmPub = this.getPubByPmid( pub.getPmid() );
-            if( pmPub != null ){
-                uPub.setAuthor( pmPub.getAuthor() );
-                uPub.setTitle( pmPub.getTitle() );
-                tracContext.getPubDao().savePublication( uPub );
-            }
+        if( pub == null || luser == null || npub == null ) return null;
+        
+        Publication pmPub = this.getPubByPmid( npub.getPmid() );
+        if( pmPub != null ){
+            pub.setAuthor( pmPub.getAuthor() );
+            pub.setTitle( pmPub.getTitle() );
+            this.updateIcPubProps( pub, luser );
+            
+            //tracContext.getPubDao().savePublication( uPub );
         }
-        return uPub;
+        return pub; 
     }
 
     //--------------------------------------------------------------------------
 
-    public IcPub updateIcPubState( int id, String stateName ) {
+    public IcPub updateIcPubState( IcPub pub, User luser, DataState state ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        if( pub != null && state !=null ) {
 
-        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
+            /*  test of allowed transition ???
+              if ( wflowContext.getWorkflowDao() == null ||
+              !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
+
+               Log log = LogFactory.getLog( this.getClass() );
+               log.info( "id=" + id + " from=" + fid + " to=" + tid );
+        
+               Transition oldTrans = wflowContext.getWorkflowDao().getTrans( id );
+               DataState fState = wflowContext.getWorkflowDao().getDataState( fid );
+               DataState tState = wflowContext.getWorkflowDao().getDataState( tid );
+              
+               if ( oldTrans == null ||
+               fState == null || tState == null ) return SUCCESS;
+
+               oldTrans.setFromState( fState );
+               oldTrans.setToState( tState );
+               wflowContext.getWorkflowDao().updateTrans( oldTrans );
+              
+               this.trans = wflowContext.getWorkflowDao().getTrans( id );
+               log.info( "updated trans(states)=" +this.trans );
+              
+             */
+            
+            pub.setState( state );
+            tracContext.getPubDao().savePublication( pub );
+        
+            return pub;
+        }
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
+
+    
+    public IcPub updateIcPubState( IcPub pub, User user, String stateName ) {
+
         DataState state = wflowContext.getWorkflowDao().getDataState( stateName );
 
         if( pub != null && state != null ) {
-            pub.setState( state );
-            tracContext.getPubDao().savePublication( pub );
+            this.updateIcPubState( pub, user, state ); 
+            return pub;
         }
-
-        return pub;
+        return null;
     }
-
+    
     //--------------------------------------------------------------------------
-
-    public IcPub updateIcPubState( int id, int sid ) {
+    
+    public  IcPub updateIcPubState( IcPub pub, User user, int sid ) {
         
-        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
         DataState state = wflowContext.getWorkflowDao().getDataState( sid );
-
+        
         if( pub != null && state != null ) {
-            pub.setState( state );
-            tracContext.getPubDao().savePublication( pub );
+            this.updateIcPubState( pub, user, state );
+            return pub;
         }
-        
-        /*
-        if ( wflowContext.getWorkflowDao() == null ||
-             !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
+        return null;
 
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( "id=" + id + " from=" + fid + " to=" + tid );
-        
-        Transition oldTrans = wflowContext.getWorkflowDao().getTrans( id );
-        DataState fState = wflowContext.getWorkflowDao().getDataState( fid );
-        DataState tState = wflowContext.getWorkflowDao().getDataState( tid );
-
-        if ( oldTrans == null ||
-             fState == null || tState == null ) return SUCCESS;
-
-        oldTrans.setFromState( fState );
-        oldTrans.setToState( tState );
-        wflowContext.getWorkflowDao().updateTrans( oldTrans );
-
-        this.trans = wflowContext.getWorkflowDao().getTrans( id );
-        log.info( "updated trans(states)=" +this.trans );
-
-        */
-
-        return pub;
     }
-
-
+    
     //--------------------------------------------------------------------------
 
-    public IcPub  updateIcPubContactMail( int id, String mail ) {
+    public IcPub  updateIcPubContactMail( IcPub pub, User user, String mail ) {
         
-        IcPub pub = (IcPub) tracContext.getPubDao().getPublication( id );
-        
-        if( pub != null && mail != null ) {
+        if( pub != null && user != null && mail != null ) {
             pub.setContactEmail( mail );
-            tracContext.getPubDao().savePublication( pub );
+            updateIcPubProps( pub, user );
+            //tracContext.getPubDao().savePublication( pub );
         }
         return pub;
     }
 
     //--------------------------------------------------------------------------
 
-    public IcPub addAdminUser( Publication pub, User user ) {
+    public IcPub addAdminUser( Publication pub, User luser, User auser ) {
         
         IcPub oldPub = (IcPub) tracContext.getPubDao()
             .getPublication( pub.getId() );
 
         if ( oldPub != null ) {
-            oldPub.getAdminUsers().add( user );
-            tracContext.getPubDao()
-                .updatePublication( oldPub );
+            oldPub.getAdminUsers().add( auser );
+            tracContext.getPubDao().updatePublication( oldPub );
         }
-
+        
         return oldPub;        
     }
     
     //-------------------------------------------------------------------------
 
 
-    public IcPub addAdminGroup( Publication pub, Group group ) {
+    public IcPub addAdminGroup( Publication pub, User luser, Group agroup ) {
         
         IcPub oldPub = (IcPub) tracContext.getPubDao()
             .getPublication( pub.getId() );
 
         if ( oldPub != null ) {
-            oldPub.getAdminGroups().add( group );
-            tracContext.getPubDao()
-                .updatePublication( oldPub );
+            oldPub.getAdminGroups().add( agroup );
+            tracContext.getPubDao().updatePublication( oldPub );
         }
 
         return oldPub;        
@@ -681,7 +691,8 @@ public class EntryManager {
 
     //---------------------------------------------------------------------
     
-    public IcPub delAdminUsers( Publication pub, List<Integer> udel ) {
+    public IcPub delAdminUsers( Publication pub, User luser, 
+                                List<Integer> udel ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         
@@ -692,18 +703,18 @@ public class EntryManager {
 
             IcPub oldPub = (IcPub) tracContext.getPubDao()
                 .getPublication( pub.getId() );
-            User user = getUserContext().getUserDao().getUser( duid );
+            User duser = getUserContext().getUserDao().getUser( duid );
 
             log.info( "pub=" + oldPub.getId() + " uid=" + duid);
             
-            if ( user != null && oldPub != null) {
+            if ( duser != null && oldPub != null) {
                 Set<User> users = oldPub.getAdminUsers();
                 
                 for ( Iterator<User> iu = users.iterator();
                       iu.hasNext(); ) {
 
                     User ou = iu.next();
-                    if ( ou.getId() == user.getId() ) {
+                    if ( ou.getId() == duser.getId() ) {
                         oldPub.getAdminUsers().remove( ou );
                         break;
                     }
@@ -719,7 +730,8 @@ public class EntryManager {
 
     //---------------------------------------------------------------------
 
-    public IcPub delAdminGroups( Publication pub, List<Integer> gdel ) {
+    public IcPub delAdminGroups( Publication pub, User luser,
+                                 List<Integer> gdel ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         

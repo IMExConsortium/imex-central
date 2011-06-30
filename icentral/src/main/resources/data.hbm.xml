@@ -140,7 +140,7 @@
 
  </class>
 
- <!-- Comment -->
+ <!-- Comment/LogEntry -->
 
   <class name="edu.ucla.mbi.util.data.AttachedDataItem" 
          table="adi" lazy="false">
@@ -161,16 +161,23 @@
 
    <many-to-one name="parent" column="parent_id"
                 class="edu.ucla.mbi.util.data.AttachedDataItem"/>
-
-    
+ 
    <joined-subclass name="edu.ucla.mbi.imex.central.IcComment" 
                      table="comment" lazy="false">
-
+     
      <key column="adi_id"/> 
      <property name="subject" column="subject" />
      <property name="body" column="body" />
-    </joined-subclass>   
-
+   </joined-subclass>
+   
+   <joined-subclass name="edu.ucla.mbi.imex.central.IcLogEntry" 
+                     table="log" lazy="false">
+     
+     <key column="adi_id"/> 
+     <property name="subject" column="subject" />
+     <property name="body" column="body" />
+   </joined-subclass>   
+   
   </class>
 
 </hibernate-mapping> 

@@ -8,11 +8,19 @@ YAHOO.imex.attedit = {
 
         // main tab panel
         //---------------
-
-        YAHOO.imex.attedit.tabs = new YAHOO.widget.TabView("pubTab");
-        
-        YAHOO.imex.attedit.pubId = obj.id;
-        YAHOO.imex.attedit.login = obj.login;
+        if( YAHOO.imex.attedit.conf === undefined ){
+            YAHOO.imex.attedit.conf=[];
+        }
+        YAHOO.imex.attedit.conf[obj.aclass]=[];
+     
+        YAHOO.imex.attedit.conf[obj.aclass].tabs = YAHOO.imex.pubedit.tabs, 
+                              //new YAHOO.widget.TabView("pubTab");
+        YAHOO.imex.attedit.conf[obj.aclass].tabno = obj.tabno;
+        YAHOO.imex.attedit.conf[obj.aclass].pubId = obj.id;
+        YAHOO.imex.attedit.conf[obj.aclass].login = obj.login;
+        YAHOO.imex.attedit.conf[obj.aclass].url = obj.url;
+        YAHOO.imex.attedit.conf[obj.aclass].apane = obj.apane;
+        YAHOO.imex.attedit.conf[obj.aclass].cname = obj.cname;
         
         if( obj.login === "XXXX" ){
             var commAddButton = YAHOO.util.Dom.get("cmtmgr_op_ecadd");
@@ -21,105 +29,118 @@ YAHOO.imex.attedit = {
 
         var countCallback = { cache:false, timeout: 5000, 
                               success: YAHOO.imex.attedit.attachInitList,
-                              failure: YAHOO.imex.attedit.attachInitListFail
+                              failure: YAHOO.imex.attedit.attachInitListFail,
+                              argument: obj.aclass
                             };   
         try{
-            YAHOO.util.Connect
-                .asyncRequest( 'GET', 
-                               'attachmgr?op.ccnt=ccnt&id=' + YAHOO.imex.pubedit.pubId, 
-                               countCallback );        
-        } catch (x) {
-            alert("AJAX Error:"+x);
+            var url = YAHOO.imex.attedit.conf[obj.aclass].url 
+                + YAHOO.imex.attedit.conf[obj.aclass].pubId;
+            YAHOO.util.Connect.asyncRequest( 'GET', url, countCallback );        
+        } catch( ex ) {
+            alert( "AJAX Error:" + ex );
         }
-       
     },
 
     attachInitList: function( o ){
         
-        var messages = YAHOO.lang.JSON.parse( o.responseText);
-        var tbvhandle = YAHOO.util.Dom.get( "com-tbview" );
-
-        if( tbvhandle === undefined ) return;
+        var aclass= o.argument;
         
+        var messages = YAHOO.lang.JSON.parse( o.responseText);
+        var tbvhandle = YAHOO.util.Dom.get( YAHOO.imex.attedit.conf[aclass].apane );
+       
+        if( tbvhandle === undefined ) return;
         if( messages.attachMeta.total === 0 ){
             YAHOO.util.Dom.addClass( tbvhandle, "yui-hidden" );
         } else {
 
             YAHOO.util.Dom.removeClass( tbvhandle, "yui-hidden" );
             
-            YAHOO.imex.attedit.comDtaSrc 
-                = new YAHOO.util.DataSource( "attachmgr?op.calg=calg&id=" 
-                                             + YAHOO.imex.pubedit.pubId ); 
-            YAHOO.imex.attedit.comDtaSrc.responseType 
-                = YAHOO.util.DataSource.TYPE_JSON; 
-        
-            YAHOO.imex.attedit.comDtaSrc.responseSchema = {
+            var url = YAHOO.imex.attedit.conf[aclass].url 
+                + YAHOO.imex.attedit.conf[aclass].pubId;
+                        
+            YAHOO.imex.attedit.conf[aclass].comDtaSrc 
+                = new YAHOO.util.DataSource( url );
+ 
+            YAHOO.imex.attedit.conf[aclass].comDtaSrc.maxCacheEntries=0;
+ 
+            YAHOO.imex.attedit.conf[aclass].comDtaSrc.responseType 
+                = YAHOO.util.DataSource.TYPE_JSON;
+            
+            YAHOO.imex.attedit.conf[aclass].comDtaSrc.responseSchema = {
                 resultsList: "attach",
                 fields: ["id","root","subject","body","date","author"]    
             };
 
-            
             this.mySubFormatter = function( elLiner, oRecord, oColumn, oData ) { 
                 
                 if( oRecord.getData("body") === "" ){ 
                     elLiner.innerHTML = oRecord.getData("subject");
                 } else {
-                    /*
-                    elLiner.innerHTML = oRecord.getData("subject") 
-                        + ' (<a href="attachmgr?op.cidg=cidg'
-                        + '&opp.cid=' + oRecord.getData("id")
-                        + '&id=' + oRecord.getData("root")
-                        + '">more</a>)';
-                     */
-                    
                     elLiner.innerHTML = oRecord.getData("subject") 
                         + ' (<a onclick="YAHOO.mbi.modal.attachment({'
                         + 'rid:' + oRecord.getData("root")
                         + ',aid:' + oRecord.getData("id")
                         + '}); return false;" href="" >more</a>)';
-                    
                 }
             }; 
 
             YAHOO.widget.DataTable.Formatter.subject = this.mySubFormatter; 
 
-            YAHOO.imex.attedit.comColDef = [
+            YAHOO.imex.attedit.conf[aclass].comColDef = [
                 //{key:"id", label:"ID"},
-                {key:"author",width:100,label:"Author" },
-                {key:"date", width:240, label:"Date" },
-                {key:"subject", width:650, label:"Subject", formatter:"subject" }
+                { key:"author",width:100,
+                  label:YAHOO.imex.attedit.conf[aclass].cname["author"] },
+                { key:"date", width:240, 
+                  label:YAHOO.imex.attedit.conf[aclass].cname["date"] },
+                { key:"subject", width:650, formatter:"subject",
+                  label:YAHOO.imex.attedit.conf[aclass].cname["subject"] 
+                }
             ];
         
-            YAHOO.imex.attedit.comTable 
-                = new YAHOO.widget.DataTable("com-tbview",
-                                             YAHOO.imex.attedit.comColDef, 
-                                             YAHOO.imex.attedit.comDtaSrc,
+            YAHOO.imex.attedit.conf[aclass].comTable 
+                = new YAHOO.widget.DataTable(YAHOO.imex.attedit.conf[aclass].apane,
+                                             YAHOO.imex.attedit.conf[aclass].comColDef, 
+                                             YAHOO.imex.attedit.conf[aclass].comDtaSrc,
                                              { scrollable:false,
                                                dynamicData : true,
                                                draggableColumns: true
                                              });
             
-            YAHOO.imex.attedit.tabs.getTab(2).addListener(
+            var tabno = YAHOO.imex.attedit.conf[aclass].tabno;
+            YAHOO.imex.attedit.conf[aclass].tabs.getTab(tabno).addListener(
                 "click", 
-                function(){ YAHOO.imex.attedit.comTable.onShow();} );
+                function(){
+                    try{                        
+                        var dtb = YAHOO.imex.attedit.conf[this].comTable;
+                        dtb.getDataSource().sendRequest(
+                            '',
+                            {success: dtb.onDataReturnInitializeTable,
+                             failure: alert,
+                             scope: dtb});
+                    } catch (x) {
+                        alert("AJAX error:"+x);
+                    }
+                },
+                aclass,
+                true
+            );
         }  
     },
-
     
     attachInitListFail: function( o ){
-        alert(o);  
+        alert( "InitListFail:" + o );  
     },
-
     
-    pubAttach: function( op ){
+    pubAttach: function( aclass, op ){ // NOTE: hardwired submit form
         
         var sub = YAHOO.util.Dom.get("cmtmgr_opp_encs").value;
         var bdy = YAHOO.util.Dom.get("cmtmgr_opp_encb").value;
 
         var attachCallback = { cache:false, timeout: 5000, 
                                success: YAHOO.imex.attedit.attachUpdate,
-                               failure: YAHOO.imex.attedit.attachUpdateFail
-                                };   
+                               failure: YAHOO.imex.attedit.attachUpdateFail,
+                               argument: {aclass: aclass }
+                             };   
         try{
             var eSub=  encodeURIComponent( sub );
             var eBdy=  encodeURIComponent( bdy );
@@ -133,8 +154,8 @@ YAHOO.imex.attedit = {
                 .asyncRequest( 'POST', 
                                'attachmgr', attachCallback, postMsg );
 
-        } catch (x) {
-            alert("AJAX Error:"+x);
+        } catch( ex ) {
+            alert( "AJAX Error:" + ex );
         }
         
         YAHOO.util.Dom.get("cmtmgr_opp_encs").value="";
@@ -143,19 +164,21 @@ YAHOO.imex.attedit = {
         return false;
     },
 
-    attachUpdate: function(){
+    attachUpdate: function( o ) {
         try{
-            var dtb = YAHOO.imex.attedit.comTable;
-            dtb.getDataSource().sendRequest( '',
-                                             { success: dtb.onDataReturnInitializeTable,
-                                               scope: dtb });
+            
+            var dtb = YAHOO.imex.attedit.conf[o.argument.aclass].comTable;
+            dtb.getDataSource().sendRequest( 
+                '',
+                { success: dtb.onDataReturnInitializeTable,
+                  scope: dtb });
         } catch (x) {
-            alert(x);
+            alert("Update: " + x);
         }
     },
-
-    attachUpdateFail: function(){
-          YAHOO.imex.attedit.comTable.onShow();
+    
+    attachUpdateFail: function() {
+        YAHOO.imex.attedit.conf[o.argument.aclass].comTable.onShow();
     },
 
     comRender: function() {
@@ -163,12 +186,9 @@ YAHOO.imex.attedit = {
         var cpanel = YAHOO.imex.attedit.comPanel;
        
         var t = cpanel.getUnitByPosition( 'top' );
-
         t.set('body','<textarea rows="15" cols="80"/>');
-
+        
         var c = cpanel.getUnitByPosition( 'center' );
         c.set('body','<textarea rows="5" cols="80"/>');
     }
 };
-
-

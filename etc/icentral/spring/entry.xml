@@ -5,13 +5,13 @@
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
-      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     
       http://www.springframework.org/schema/tx 
-      http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+      http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
       
       http://www.springframework.org/schema/aop 
-      http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
   <!-- trac content -->
  
@@ -22,12 +22,13 @@
     <property name="pubDao" ref="pubDao"/>
     <property name="icStatsDao" ref="icStatsDao"/>
     <property name="adiDao" ref="adiDao"/>
+    <property name="workflowDao" ref="workflowDao"/>
     
     <property name="ncbiProxyClient" ref="ncbiProxyClient" />
 
   </bean>
 
-  <!-- workflow persistence -->
+  <!-- trac persistence: NOTE: workflowDAO defined in workflow.xml -->
 
   <bean id="journalDao" class="edu.ucla.mbi.imex.central.dao.IcJournalDao"/>
   <bean id="pubDao" class="edu.ucla.mbi.imex.central.dao.IcPubDao"/>
@@ -92,6 +93,7 @@
       class="edu.ucla.mbi.imex.central.struts.action.AttachMgrAction">
     
     <property name="entryManager" ref="entryManager"/>
+    <property name="attachmentManager" ref="attachmentManager"/>
 
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>

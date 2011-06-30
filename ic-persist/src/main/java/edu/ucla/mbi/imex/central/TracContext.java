@@ -75,6 +75,18 @@ public class TracContext extends JsonContext {
         icAdiDao = dao;
     }
 
+    //--------------------------------------------------------------------------
+
+    private IcWorkflowDao icWorkflowDao;
+
+    public IcWorkflowDao getWorkflowDao() {
+        return icWorkflowDao;
+    }
+
+    public void setWorkflowDao( IcWorkflowDao dao ) {
+        icWorkflowDao = dao;
+    }
+
 
     //--------------------------------------------------------------------------
     //  NCBI Proxy Access

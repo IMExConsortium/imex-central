@@ -36,6 +36,9 @@
 <!-- ========================================================== CONFIGUATION -->
 
  <import resource="context.xml" />
+ <import resource="aop-logger.xml" />
+
+
 
 <!-- ========================================================= ENTRY MANAGER -->
 
@@ -49,7 +52,17 @@
    
  </bean>
 
-<!-- ======================================================== DIP PROXY ACCESS -->
+<!-- ==================================================== ATTACHMENT MANAGER -->
+
+ <bean id="attachmentManager" init-method="initialize" destroy-method="cleanup"
+       class="edu.ucla.mbi.imex.central.AttachmentManager">
+
+   <property name="tracContext" ref="tracContext"/>
+   <property name="userContext" ref="userContext"/>
+   
+ </bean>
+
+<!-- ====================================================== DIP PROXY ACCESS -->
 
  <bean id="ncbiProxyClient" init-method="initialize"
           class="edu.ucla.mbi.imex.central.NcbiProxyClient">
@@ -58,16 +71,15 @@
   <property name="debug" value="false" />
  </bean>
 
-<!-- ========================================================== STRUTS ACTIONS -->
+<!-- ======================================================== STRUTS ACTIONS -->
 
  <import resource="actions.xml" />
-
  <import resource="workflow.xml" />
-
  <import resource="keyspace.xml" />
  <import resource="entry.xml" />
 
-<!-- ============================================================ WEB SERVICES -->
+
+<!-- ========================================================== WEB SERVICES -->
 <!-- ver 1.x -->
 
  <bean id="ws-v10" 
@@ -90,7 +102,5 @@
 
  <ws:service  id="ics-v20" bean="#ws-v20"/>
  <wss:binding url="/ws-v20" service="#ics-v20" />
-
-
 
 </beans>
