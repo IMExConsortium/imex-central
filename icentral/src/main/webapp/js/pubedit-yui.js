@@ -34,7 +34,6 @@ YAHOO.imex.pubedit = {
         
         var onImexClick = function ( event ) {
             
-
             var imexUpdate = function ( o ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
@@ -42,33 +41,32 @@ YAHOO.imex.pubedit = {
                 o.argument.btn.set("label",imexACC);
                 o.argument.btn.set("disabled",true);        
             };
-        
+            
             var imexUpdateFail = function ( o ) {
                 alert( "AJAX Error update failed: id=" + o.argument.id ); 
             };
 
             try{
                 
-            //var oMenuItem = event.newValue;
-            var imexCallback = { cache:false, timeout: 5000, 
-                                 success: imexUpdate,
-                                 failure: imexUpdateFail,
-                                 argument:{ id:obj.id, btn:imexButton } };                  
-            alert("confirm?");
-            var r = confirm("Confirm IMEx Accession request ?");
-            if ( r == true ) {
-                try{
-                    YAHOO.util.Connect
-                        .asyncRequest( 'GET', 
-                                       'pubedit?op.epix=update&id=' + obj.id, 
-                                       imexCallback );        
-                } catch (x) {
-                    alert("AJAX Error:"+x);
-                }
-            } else {
-                // do nothing
-            }   
-
+                //var oMenuItem = event.newValue;
+                var imexCallback = { cache:false, timeout: 5000, 
+                                     success: imexUpdate,
+                                     failure: imexUpdateFail,
+                                     argument:{ id:obj.id, btn:imexButton } };                  
+                var r = confirm("Confirm IMEx Accession request ?");
+                if ( r == true ) {
+                    try{
+                        YAHOO.util.Connect
+                            .asyncRequest( 'GET', 
+                                           'pubedit?op.epix=update&id=' + obj.id, 
+                                           imexCallback );        
+                    } catch (x) {
+                        alert("AJAX Error:"+x);
+                    }
+                } else {
+                    // do nothing
+                }   
+                
             } catch (x) {
                 alert(x);
             } 

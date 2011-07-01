@@ -93,7 +93,45 @@ public class IcAdiDao extends AbstractDAO implements AdiDAO {
             Query query =
                 session.createQuery( "select count(*) "
                                      + " from AttachedDataItem a where "
-                                     + " a.root = :root " );
+                                     + " a.class = IcComment "
+                                     + "  and a.root = :root " );
+            query.setParameter( "root", root );
+            
+            lCnt = (Long) query.uniqueResult() ;
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( "countIcCommByRoot:" + lCnt );
+            
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        if( lCnt != null ){
+            return lCnt.longValue();
+        } 
+        return 0L;            
+    }
+
+    //--------------------------------------------------------------------------
+
+    public long countIcLogEntryByRoot( DataItem root ){
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        Long lCnt = null;
+
+        try {
+            Query query =
+                session.createQuery( "select count(*) "
+                                     + " from AttachedDataItem a where "
+                                     + " a.class = IcLogEntry "
+                                     + "  and a.root = :root " );
             query.setParameter( "root", root );
             
             lCnt = (Long) query.uniqueResult() ;

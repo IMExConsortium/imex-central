@@ -230,10 +230,8 @@ public class AttachMgrAction extends ManagerSupport {
                                          subject, body);
         icCom.setOwner( owner );
         
-        IcAdiDao adiDao = (IcAdiDao)
-            entryManager.getTracContext().getAdiDao();
-        adiDao.saveAdi( icCom );
-        
+        attachmentManager.addIcAdi( icCom, owner );
+
         return JSON;
     }
 
@@ -241,10 +239,7 @@ public class AttachMgrAction extends ManagerSupport {
 
     private Map getCommById( int id ){
         
-        IcAdiDao adiDao = (IcAdiDao)
-            entryManager.getTracContext().getAdiDao();
-        
-        AttachedDataItem cadi = adiDao.getAdi( id );
+        AttachedDataItem cadi = attachmentManager.getIcAdi( id );
         
         if( cadi != null && cadi instanceof IcComment ){
             IcComment icom = (IcComment) cadi;
@@ -257,12 +252,15 @@ public class AttachMgrAction extends ManagerSupport {
 
     private List getCommByRoot( IcPub icpub ){
         
-        IcAdiDao adiDao = (IcAdiDao)
-            entryManager.getTracContext().getAdiDao();
+        //IcAdiDao adiDao = (IcAdiDao)
+        //    entryManager.getTracContext().getAdiDao();
 
-        List<AttachedDataItem> adiList =
-            adiDao.getAdiListByRoot( icpub );
+        //List<AttachedDataItem> adiList =
+        //    adiDao.getAdiListByRoot( icpub );
 
+        List<AttachedDataItem> adiList 
+            = attachmentManager.getAdiListByRoot( icpub );
+        
         List clist = new ArrayList();
         
         for( Iterator<AttachedDataItem> 
@@ -282,11 +280,14 @@ public class AttachMgrAction extends ManagerSupport {
 
     private List getLogEntryByRoot( IcPub icpub ){
         
-        IcAdiDao adiDao = (IcAdiDao)
-            entryManager.getTracContext().getAdiDao();
+        //IcAdiDao adiDao = (IcAdiDao)
+        //    entryManager.getTracContext().getAdiDao();
 
-        List<AttachedDataItem> adiList =
-            adiDao.getAdiListByRoot( icpub );
+        //List<AttachedDataItem> adiList =
+        //    adiDao.getAdiListByRoot( icpub );
+
+        List<AttachedDataItem> adiList
+            = attachmentManager.getAdiListByRoot( icpub );
 
         List clist = new ArrayList();
         
@@ -308,12 +309,24 @@ public class AttachMgrAction extends ManagerSupport {
 
     private long  countCommByRoot( IcPub icpub ){
 
-        IcAdiDao adiDao = (IcAdiDao)
-            entryManager.getTracContext().getAdiDao();
+        //IcAdiDao adiDao = (IcAdiDao)
+        //    entryManager.getTracContext().getAdiDao();
         
-        long cnt = adiDao.countIcCommByRoot( icpub );
+        //long cnt = adiDao.countIcCommByRoot( icpub );
         
-        return cnt;
+        return attachmentManager.countCommByRoot( icpub ); 
+    }
+
+    //--------------------------------------------------------------------------
+    
+    private long  countLogEntryByRoot( IcPub icpub ){
+
+        //IcAdiDao adiDao = (IcAdiDao)
+        //    entryManager.getTracContext().getAdiDao();
+        
+        //long cnt = adiDao.countIcLogEntryByRoot( icpub );
+        
+        return attachmentManager.countLogEntryByRoot( icpub );
     }
 
     //--------------------------------------------------------------------------

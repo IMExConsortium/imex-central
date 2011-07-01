@@ -486,7 +486,7 @@ public class EntryManager {
     
     //--------------------------------------------------------------------------
 
-    public IcPub genIcPubImex( IcPub pub, User owner ) {
+    public IcPub genIcPubImex( IcPub pub, User luser ) {
 
         if( pub == null ) { return null; }
         
