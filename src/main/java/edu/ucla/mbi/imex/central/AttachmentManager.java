@@ -79,40 +79,78 @@ public class AttachmentManager {
     public void initialize(){
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "AttachmentManager: initializing" );
+
+        // read Attachment/LogContext here ? 
     }
     
     //--------------------------------------------------------------------------
     // Operations
     //--------------------------------------------------------------------------
-    // IcLogEntry management
-    //----------------------
+    // AttachedDataItem management
+    //----------------------------
     
-    public IcLogEntry getIcLogEntry( int id ) {
+    public AttachedDataItem getIcAdi( int id ) {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " get IcLogEntry -> id=" + id );
+        log.info( " get IcAdi -> id=" + id );
         
-        IcLogEntry lent =  (IcLogEntry) tracContext.getAdiDao()
-            .getAdi( id );
+        AttachedDataItem adi 
+            = (AttachedDataItem) tracContext.getAdiDao().getAdi( id );
 
-        return lent;
+        return adi;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<AttachedDataItem> getAdiListByRoot( IcPub icpub ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " get getAdiListByRoot" );
+
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+
+        List<AttachedDataItem> adiList =
+            adiDao.getAdiListByRoot( icpub );
+        
+        return adiList;
+    }
+
+
+    //--------------------------------------------------------------------------
+
+    public long countCommByRoot( IcPub icpub ){
+
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+        
+        long cnt = adiDao.countIcCommByRoot( icpub );
+        return cnt;
+    }
+
+    public long countLogEntryByRoot( IcPub icpub ){
+        
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+        
+        long cnt = adiDao.countIcLogEntryByRoot( icpub );
+        return cnt;
     }
 
     //--------------------------------------------------------------------------
     
-    public IcLogEntry addIcLogEntry( IcLogEntry lent, User owner ) {
+    public AttachedDataItem addIcAdi( AttachedDataItem adi, User owner ) {
         
         Log log = LogFactory.getLog( this.getClass() );
         
-        if ( lent == null || owner == null) {
-            log.info( " new log entry/owner -> null");
+        if ( adi == null || owner == null) {
+            log.info( " new  adi/owner -> null");
             return null;
         }
 
-        IcAdiDao adiDao = (IcAdiDao) getTracContext().getAdiDao();
-        adiDao.saveAdi( lent );
-
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+        adiDao.saveAdi( adi );
         
-        return lent;
+        return adi;
     }
+
+    
+
 }
