@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    
+      http://www.springframework.org/schema/tx 
+      http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+      
+      http://www.springframework.org/schema/aop 
+      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+  <bean id="logAdviceBean" class="edu.ucla.mbi.imex.central.LogAdvice">
+     <property name="attachmentManager" ref="attachmentManager"/>
+  </bean>     
+
+  <aop:config>
+    <aop:aspect id="logAspect" ref="logAdviceBean">
+      
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addPmidIcPub(..)) 
+                  and args( pub, owner, state )"        
+        method="addPubMonitor" />    
+      
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addIcPub(..)) 
+                  and args( pub, owner, state )"        
+        method="addPubMonitor" />    
+      
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubState(..)) 
+                  and args( pub, luser, state )"        
+        method="statePubMonitor" />    
+      
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubDates(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubContactMail(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.resyncIcPubPubmed(..))
+                  and args( pub, luser, ..)"          
+        method="updatePubMonitor" />
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubIdentifiers(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubAuthTitle(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addAdminUser(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addAdminGroup(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.delAdminUsers(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.delAdminGroups(..))
+                  and args( pub, luser, ..)"
+        method="updatePubMonitor" />    
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.genIcPubImex(..))
+                  and args( pub, luser)"
+        method="genImexMonitor" />    
+
+    </aop:aspect>
+  </aop:config>
+
+
+</beans>
