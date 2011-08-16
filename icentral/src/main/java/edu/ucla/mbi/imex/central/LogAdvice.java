@@ -118,10 +118,19 @@ public class LogAdvice {
                   + " pub=" + pub + " luser=" + luser
                   + " state=" + state );
 
+        
+
         if( 1 == 1 ){  // from LogContext configureation file
 
+            String stateName = "";
+            if( state instanceof java.lang.String){
+                stateName = (String) state;
+            } else {
+                stateName = ((DataState)state).getName();
+            }
+
             DataState ds = getAttachmentManager().getTracContext()
-                .getWorkflowDao().getDataState( (String) state );
+                .getWorkflowDao().getDataState( stateName );
             
                     
             IcLogEntry ile 
