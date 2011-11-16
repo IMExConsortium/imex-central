@@ -9,7 +9,6 @@
   <name>Web Application module</name>
 
   <properties>
-
       <icentral.version>${project.version}</icentral.version> 
       <icentral.bld>$Rev$</icentral.bld> 
        <icentral.wsver>1.0</icentral.wsver>
