@@ -63,22 +63,22 @@
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addAdminUser(..))
                   and args( pub, luser, ..)"
-        method="updatePubMonitor" />    
+        method="updatePubAdminUserMonitor" />    
 
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addAdminGroup(..))
                   and args( pub, luser, ..)"
-        method="updatePubMonitor" />    
+        method="updatePubAdminGroupMonitor" />    
 
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.delAdminUsers(..))
                   and args( pub, luser, ..)"
-        method="updatePubMonitor" />    
+        method="updatePubAdminUserMonitor" />    
 
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.delAdminGroups(..))
                   and args( pub, luser, ..)"
-        method="updatePubMonitor" />    
+        method="updatePubAdminGroupMonitor" />    
 
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.genIcPubImex(..))

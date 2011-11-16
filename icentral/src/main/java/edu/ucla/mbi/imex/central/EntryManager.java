@@ -572,6 +572,16 @@ public class EntryManager {
         if( pmPub != null ){
             pub.setAuthor( pmPub.getAuthor() );
             pub.setTitle( pmPub.getTitle() );
+            pub.setAbstract( pmPub.getAbstract() );
+      
+            IcJournal journal = 
+                this.addIcJournal( ((Journal) pmPub.getSource()).getNlmid(),
+                                   luser );
+            pub.setSource( journal );
+ 
+            Log log = LogFactory.getLog( this.getClass() );
+            //log.debug( "abst=" + pmPub.getAbstract() );
+
             this.updateIcPubProps( pub, luser );
             
             //tracContext.getPubDao().savePublication( uPub );

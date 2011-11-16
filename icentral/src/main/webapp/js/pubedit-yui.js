@@ -218,6 +218,7 @@ YAHOO.imex.pubedit = {
             if( acl.test(o.responseText) ) {
                 YAHOO.mbi.modal.spcstat("ACL Violation");
             } else {
+                
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
                 var pmid = messages.pub.pmid;
@@ -234,9 +235,42 @@ YAHOO.imex.pubedit = {
             alert("AJAX Error: " + x );
         }
     },
-    
+
     pubmedUpdateFail: function ( o ) {
         alert( "AJAX Error pubmed update failed: id=" + o.argument.id ); 
+    },
+    
+    epmrUpdate: function ( o ) {
+        try {
+            var acl = /ACL Violation/; 
+            if( acl.test(o.responseText) ) {
+                YAHOO.mbi.modal.spcstat("ACL Violation");
+            } else {
+                
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+                var pid = messages.id;
+                var pmid = messages.pub.pmid;
+                var author = messages.pub.author;
+                var title = messages.pub.title;
+                var abst = messages.pub.abstract;
+                var sid = messages.pub.source.id;
+
+                YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value = pmid;
+                YAHOO.util.Dom.get("pub-det-edit_pub_author").value = author;
+                YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;
+                YAHOO.util.Dom.get("pub-det-edit_pub_abstract").value = abst;
+                YAHOO.util.Dom.get("pub-det-edit_opp_jid").value = sid;
+
+                //NOTE: add new sid/text to list of options if needed
+
+            }
+        } catch(x) {
+            alert("AJAX Error: " + x );
+        }
+    },
+    
+    epmrUpdateFail: function ( o ) {
+        alert( "AJAX Error pmid resync failed: id=" + o.argument.id ); 
     },
 
     authTitleUpdate: function ( o ) {
@@ -357,11 +391,13 @@ YAHOO.imex.pubedit = {
                                 argument:{ id:YAHOO.imex.pubedit.pubId } };
 
         var pubEpmrCallback = { cache:false, timeout: 5000, 
-                                success: YAHOO.imex.pubedit.pubmedUpdate,
-                                failure: YAHOO.imex.pubedit.pubmedUpdateFail,
+                                success: YAHOO.imex.pubedit.epmrUpdate,
+                                failure: YAHOO.imex.pubedit.epmrUpdateFail,
                                 argument:{ id:YAHOO.imex.pubedit.pubId } };
         try{
-            
+
+            //alert("op=" + op + " id=" + YAHOO.imex.pubedit.pubId);
+ 
             if( op === 'update' ) {
                 YAHOO.util.Connect
                     .asyncRequest( 'GET', 
