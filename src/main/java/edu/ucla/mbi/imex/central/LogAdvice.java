@@ -70,15 +70,21 @@ public class LogAdvice {
         //    .getWorkflowDao().getDataState( (String) state );
 
         DataState ds = (DataState) state;
-
-        IcLogEntry ile 
-            = new IcLogEntry( (User) owner, (IcPub) rpub,
-                              "Publication record created."
-                              + " State: " + ds.getName(), "" );
-
-        getAttachmentManager().getTracContext()
-            .getAdiDao().saveAdi( ile );
         
+        if( pub instanceof IcPub && ((IcPub)pub).getId() != null ){
+            
+            IcLogEntry ile 
+                = new IcLogEntry( (User) owner, (IcPub) pub,
+                                  "Publication record created."
+                                  + " State: " + ds.getName(), "" );
+            getAttachmentManager().getTracContext()
+                .getAdiDao().saveAdi( ile );
+        } else {
+            log.warn( "LogManager: add publication monitor warning:"
+                      + " pub=" + pub
+                      + " state=" + state
+                      + " own=" + owner );
+        }
     }
 
     public void updatePubMonitor( Object pub, Object luser, 
@@ -91,6 +97,36 @@ public class LogAdvice {
         IcLogEntry ile 
             = new IcLogEntry( (User) luser, (IcPub) pub,
                               "Publication record updated.", "" );
+        getAttachmentManager().getTracContext()
+            .getAdiDao().saveAdi( ile );
+    }
+
+
+    
+    public void updatePubAdminUserMonitor( Object pub, Object luser, 
+                                           Object rpub ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "LogManager: update publication monitor called:" 
+                  + " pub=" + pub 
+                  + " luser=" + luser);
+
+        IcLogEntry ile 
+            = new IcLogEntry( (User) luser, (IcPub) pub,
+                              "Admin user information updated.", "" );
+        getAttachmentManager().getTracContext()
+            .getAdiDao().saveAdi( ile );
+    }
+
+    public void updatePubAdminGroupMonitor( Object pub, Object luser, 
+                                            Object rpub ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "LogManager: update publication monitor called:" 
+                  + " pub=" + pub 
+                  + " luser=" + luser);
+
+        IcLogEntry ile 
+            = new IcLogEntry( (User) luser, (IcPub) pub,
+                              "Admin group information updated.", "" );
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
     }
