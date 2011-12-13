@@ -116,7 +116,7 @@
 
     <dependency>
       <groupId>edu.ucla.mbi.imex</groupId>
-      <artifactId>ic-api</artifactId>
+      <artifactId>icentral-api</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
