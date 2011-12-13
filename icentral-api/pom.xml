@@ -3,7 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.ucla.mbi.imex</groupId>
-  <artifactId>ic-api</artifactId>
+  <artifactId>icentral-api</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>Web service API module</name>
@@ -34,18 +34,10 @@
       <version>3.8.1</version>
       <scope>test</scope>
    </dependency>
-   <!--
-   <dependency>
-     <groupId>edu.ucla.mbi.dip</groupId>
-     <artifactId>dip-proxy-ws</artifactId>
-     <version>0.01</version>
-     <classifier>api</classifier>
-   </dependency>
--->   
   </dependencies>
 
   <build>
-    <finalName>ic-api</finalName>
+    <finalName>icentral-api</finalName>
 
     <plugins>
       <plugin>
@@ -112,6 +104,28 @@
 
     </plugins>
    
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>public</id>
+      <name>IMEx Public Maven Reopsitory</name>
+      <url>http://imex.mbi.ucla.edu/archiva/repository/public/</url>
+    </repository>
+
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Archiva Managed Snapshot Repository</name>
+      <url>http://imex.mbi.ucla.edu/archiva/repository/snapshots/</url>
+    </snapshotRepository>
+
+  </distributionManagement>
 
 </project>

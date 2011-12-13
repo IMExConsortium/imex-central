@@ -30,9 +30,10 @@
 
   <modules>
    <module>icentral</module>
+   <module>icentral-api</module>
    <module>ic-model</module>
    <module>ic-persist</module>
-   <module>ic-api</module>
+
   </modules>
   
   <build>
