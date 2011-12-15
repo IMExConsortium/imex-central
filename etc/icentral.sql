@@ -228,6 +228,7 @@ CREATE TABLE comment (
 CREATE INDEX com_1 on comment (adi_id);
 CREATE INDEX com_2 on comment (subject);
 CREATE INDEX com_3 on comment (body);
+CREATE INDEX com_4 on comment (cflag_id);
 
 CREATE TABLE cflag (
     id serial primary key, 
@@ -235,7 +236,7 @@ CREATE TABLE cflag (
     comments character varying(256) not null default ''
 );
 
-CREATE INDEX cflag_1 on  (name);
+CREATE INDEX cflag_1 on cflag (name);
 
 
 CREATE TABLE log (
