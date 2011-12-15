@@ -43,7 +43,7 @@
        <s:submit theme="simple" name="op.del" value="DELETE" disabled="true" />
       </s:form>
      </th>
-    </tr>
+    </tr> 
     <tr>
      <td colspan="2">
       <div class="yui-skin-sam">
@@ -51,7 +51,7 @@
         <ul class="yui-nav"> 
              <li class="selected"><a href="#tab1"><em>Record Status</em></a></li> 
               <li><a href="#tab2"><em>Publication Details</em></a></li> 
-              <li><a href="#tab3"><em>User Access</em></a></li> 
+              <li><a href="#tab3"><em>Curator Access</em></a></li> 
               <li><a href="#tab4"><em>Comments</em></a></li> 
               <li><a href="#tab5"><em>Attachments</em></a></li>
               <li><a href="#tab6"><em>Record History</em></a></li>
@@ -325,26 +325,36 @@
 
          <div id="cmt-pane">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
-           <table width="100%" border="1">
+           <table width="100%" border="0" cellspacing="2px">
             <s:hidden name="id" value="%{id}"/>
             <s:hidden name="pub.id" value="%{id}"/>
-            <tr>
+            <tr cellpadding="1">
              <td>
               <b>Subject:</b> 
              </td>
              <td>
-              <s:textfield theme="simple" name="opp.encs" size="100"/>
+              <s:textfield theme="simple" name="opp.encs" size="80" value=""/>
              </td>
-             <td rowspan="2" width="50%">&nbsp;</td>      
-             <td rowspan="2" width="2%">
+             <td align="center" nowrap>
+               <b>Flag:</b>
+<!--               <label id="flag-label" class="flag-label">Flag</label> -->
+                 <s:select name="opp.encf" headerKey="-1" headerValue="----------" 
+                          list="#{'1':'QControl'}" value="-1"/>
+
+             </td>      
+             <td rowspan="2" width="10%" align ="center">
                <s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false"
                   onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/>
              </td>
             </tr>
+              
             <tr>
-             <td colspan="2">
-              <s:textarea theme="simple" name="opp.encb" cols="128"rows="5"/>
+             <td colspan="3" align="center">
+              <s:textarea theme="simple" name="opp.encb" cols="128"rows="5" value=""/>
              </td>
+            </tr>
+            <tr>
+              <td colspan="4"><hr/></td>  
             </tr>
             <tr>
              <td colspan="4">
@@ -385,7 +395,7 @@
 
          <div id="log-pane">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
-           <table width="100%" border="1">
+           <table width="100%" border="0">
             <s:hidden name="id" value="%{id}"/>
             <s:hidden name="pub.id" value="%{id}"/>            
             <tr>

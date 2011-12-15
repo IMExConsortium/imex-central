@@ -113,7 +113,40 @@
   </td>
  </tr>
 
+ <tr>
+  <td>
+   <center>
+    <s:form theme="simple" action="pubmgr">
+     <fieldset class="qfield">
+      <legend class="qlegend">By Comment Flag</legend>
+      <table width="100%" class="qtable">
+       <tr>
+        <td class="pubsrc-td" align="left" valign="top" nowrap>
+         <b>Flag:</b>
+         <div class="acom"> 
+          <s:hidden name="op.init" />           
+          <s:select name="opp.encf" headerKey="-1" headerValue="----------"
+                    list="#{'QControl':'QControl'}" value="-1" cssClass="pubsrc-flag"/>
+          
+          <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sel-sub" onclick=""/>
+          <div id="poc_cnt">
+         </div>
+        </td>
+       </tr>
+      </table>
+     </fieldset>
+    </s:form>
+   </center>
+  </td>
+ </tr>
+
 </table>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 <script type="text/javascript">
    YAHOO.util.Event.addListener(

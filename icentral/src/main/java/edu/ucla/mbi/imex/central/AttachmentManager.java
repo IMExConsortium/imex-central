@@ -115,7 +115,19 @@ public class AttachmentManager {
         return adiList;
     }
 
+    //--------------------------------------------------------------------------
+    
+    public IcFlag getIcFlag( int id ){
 
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " get getIcFlag" );
+
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+
+        IcFlag flag = adiDao.getIcFlag( id );
+        return flag;
+    }
+    
     //--------------------------------------------------------------------------
 
     public long countCommByRoot( IcPub icpub ){

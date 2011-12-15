@@ -32,5 +32,14 @@ public class IcComment extends Comment {
         this.setLabel( label );
         this.setBody( body );
     }
+
+    public IcFlag getIcFlag(){
+        return (IcFlag) this.getState();
+    }
+
+    public IcComment setIcFlag( IcFlag flag ){
+        this.setState( flag );
+        return this;
+    }
 }
 

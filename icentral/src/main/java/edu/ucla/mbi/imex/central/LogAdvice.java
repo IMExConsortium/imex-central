@@ -61,27 +61,30 @@ public class LogAdvice {
     public void addPubMonitor( Object pub,  Object owner, 
                                Object state, Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: add publication monitor called:" 
-                  + " pub=" + pub 
-                  + " state=" + state 
-                  + " own=" + owner);
-
+        log.debug( "LogManager: add publication monitor called:" 
+                   + " rpub=" + rpub 
+                   + " state=" + state 
+                   + " own=" + owner);
+        
         //DataState ds = getAttachmentManager().getTracContext()
         //    .getWorkflowDao().getDataState( (String) state );
 
         DataState ds = (DataState) state;
         
-        if( pub instanceof IcPub && ((IcPub)pub).getId() != null ){
+        if( rpub instanceof IcPub && ((IcPub)rpub).getId() != null ){
             
             IcLogEntry ile 
-                = new IcLogEntry( (User) owner, (IcPub) pub,
+                = new IcLogEntry( (User) owner, (IcPub) rpub,
                                   "Publication record created."
                                   + " State: " + ds.getName(), "" );
+
+            log.debug( "LogManager->addPubMonitor: id(pub)=" + ile.getRoot().getId() );
+
             getAttachmentManager().getTracContext()
                 .getAdiDao().saveAdi( ile );
         } else {
             log.warn( "LogManager: add publication monitor warning:"
-                      + " pub=" + pub
+                      + " pub=" + rpub
                       + " state=" + state
                       + " own=" + owner );
         }
@@ -90,9 +93,9 @@ public class LogAdvice {
     public void updatePubMonitor( Object pub, Object luser, 
                                   Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: update publication monitor called:" 
-                  + " pub=" + pub 
-                  + " luser=" + luser);
+        log.debug( "LogManager: update publication monitor called:" 
+                   + " pub=" + pub 
+                   + " luser=" + luser);
 
         IcLogEntry ile 
             = new IcLogEntry( (User) luser, (IcPub) pub,
@@ -100,15 +103,13 @@ public class LogAdvice {
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
     }
-
-
     
     public void updatePubAdminUserMonitor( Object pub, Object luser, 
                                            Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: update publication monitor called:" 
-                  + " pub=" + pub 
-                  + " luser=" + luser);
+        log.debug( "LogManager: update publication monitor called:" 
+                   + " pub=" + pub 
+                   + " luser=" + luser);
 
         IcLogEntry ile 
             = new IcLogEntry( (User) luser, (IcPub) pub,
@@ -120,10 +121,10 @@ public class LogAdvice {
     public void updatePubAdminGroupMonitor( Object pub, Object luser, 
                                             Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: update publication monitor called:" 
-                  + " pub=" + pub 
-                  + " luser=" + luser);
-
+        log.debug( "LogManager: update publication monitor called:" 
+                   + " pub=" + pub 
+                   + " luser=" + luser);
+        
         IcLogEntry ile 
             = new IcLogEntry( (User) luser, (IcPub) pub,
                               "Admin group information updated.", "" );
@@ -134,11 +135,11 @@ public class LogAdvice {
     public void genImexMonitor( Object pub, Object luser, 
                                 Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: imex ac monitor called:" 
-                  + " pub=" + pub 
-                  + " luser=" + luser 
-                  + " imexac=" + ((IcPub)rpub).getImexId() );
-
+        log.debug( "LogManager: imex ac monitor called:" 
+                   + " pub=" + pub 
+                   + " luser=" + luser 
+                   + " imexac=" + ((IcPub)rpub).getImexId() );
+        
         IcLogEntry ile 
             = new IcLogEntry( (User) luser, (IcPub) pub,
                               "IMEx accession assigned. IMEx Id=" 
@@ -150,12 +151,10 @@ public class LogAdvice {
     public void statePubMonitor( Object pub,  Object luser, 
                                  Object state, Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: update publication state monitor called:"
-                  + " pub=" + pub + " luser=" + luser
-                  + " state=" + state );
-
+        log.debug( "LogManager: update publication state monitor called:"
+                   + " pub=" + pub + " luser=" + luser
+                   + " state=" + state );
         
-
         if( 1 == 1 ){  // from LogContext configureation file
 
             String stateName = "";

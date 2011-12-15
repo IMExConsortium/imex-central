@@ -146,38 +146,53 @@
          table="adi" lazy="false">
 
     <id name="id" column="id" >
-    <generator class="sequence">
-     <param name="sequence">adi_id_seq</param>
-    </generator>
-   </id>
+     <generator class="sequence">
+      <param name="sequence">adi_id_seq</param>
+     </generator>
+    </id>
 
-  <property name="crt" column="crt"/> 
+    <property name="crt" column="crt"/> 
 
-   <many-to-one name="owner" column="owner_uid"
-                class="edu.ucla.mbi.imex.central.IcUser" />
+    <many-to-one name="owner" column="owner_uid"
+                 class="edu.ucla.mbi.imex.central.IcUser" />
 
-   <many-to-one name="root" column="root_id"
-                class="edu.ucla.mbi.imex.central.IcPub" />
+    <many-to-one name="root" column="root_id"
+                 class="edu.ucla.mbi.imex.central.IcPub" />
 
-   <many-to-one name="parent" column="parent_id"
-                class="edu.ucla.mbi.util.data.AttachedDataItem"/>
- 
-   <joined-subclass name="edu.ucla.mbi.imex.central.IcComment" 
+    <many-to-one name="parent" column="parent_id"
+                 class="edu.ucla.mbi.util.data.AttachedDataItem"/>
+    
+    <joined-subclass name="edu.ucla.mbi.imex.central.IcComment" 
                      table="comment" lazy="false">
      
-     <key column="adi_id"/> 
-     <property name="subject" column="subject" />
-     <property name="body" column="body" />
-   </joined-subclass>
+      <key column="adi_id"/> 
+
+      <many-to-one name="icFlag" column="cflag_id"
+                   class="edu.ucla.mbi.imex.central.IcFlag" />
+
+      <property name="subject" column="subject" />
+      <property name="body" column="body" />
+    </joined-subclass>
    
-   <joined-subclass name="edu.ucla.mbi.imex.central.IcLogEntry" 
+    <joined-subclass name="edu.ucla.mbi.imex.central.IcLogEntry" 
                      table="log" lazy="false">
      
      <key column="adi_id"/> 
      <property name="subject" column="subject" />
      <property name="body" column="body" />
-   </joined-subclass>   
+    </joined-subclass>   
    
+  </class>
+
+  <class name="edu.ucla.mbi.imex.central.IcFlag" table="cflag" lazy="false">
+    <id name="id" column="id" >
+      <generator class="sequence">
+        <param name="sequence">cflag_id_seq</param>
+      </generator>
+    </id>
+
+    <property name="name" column="name" />
+    <property name="comments" column="comments" />
   </class>
 
 </hibernate-mapping> 

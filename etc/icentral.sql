@@ -71,6 +71,13 @@ CREATE TABLE datastate (
 CREATE INDEX datastate_1 on datastate (name);
 
 
+CREATE TABLE cflag (
+    id serial primary key, 
+    name character varying(32) UNIQUE not null default '',
+    comments character varying(256) not null default ''
+);
+CREATE INDEX cflag_1 on  (name);
+
 CREATE TABLE trans (
     id serial primary key, 
     name character varying(32) not null default '',
@@ -212,15 +219,23 @@ CREATE INDEX adi_4 on adi (crt);
 CREATE TABLE comment (
      id serial NOT NULL primary key,
      adi_id integer,
+     cflag_id integer,
      subject text not null default '',
      body text not null default ''
 
 );
 
-
 CREATE INDEX com_1 on comment (adi_id);
 CREATE INDEX com_2 on comment (subject);
 CREATE INDEX com_3 on comment (body);
+
+CREATE TABLE cflag (
+    id serial primary key, 
+    name character varying(32) UNIQUE not null default '',
+    comments character varying(256) not null default ''
+);
+
+CREATE INDEX cflag_1 on  (name);
 
 
 CREATE TABLE log (

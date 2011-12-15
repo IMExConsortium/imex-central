@@ -173,7 +173,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     private String pmid = null;
 
     public void setPmid( String pmid ) {
-        this.pmid = pmid;
+        this.pmid = sanitize( pmid );
     }
     
     public String getPmid(){
@@ -240,7 +240,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         } 
         
         if( getPmid() != null ) {
-            log.debug( "no ic pub record pmid=" + getPmid() );
+            log.debug( "no ic pub record pmid=" + getPmid() +"<" );
             Publication nicp = entryManager.getPubByPmid( getPmid() );
              
             log.debug("nicp="+nicp);
@@ -562,9 +562,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                         "" :  getOpp().get( "ofv" );
                     String efv = getOpp().get( "efv" ) == null ?
                         "" :  getOpp().get( "efv" );
+                    String ffv = getOpp().get( "ffv" ) == null ?
+                        "" :  getOpp().get( "ffv" );
                     
                     return getIcPubRecords( max, off, skey, sdir,
-                                            sfv, pfv, ofv, efv );
+                                            sfv, pfv, ofv, efv, ffv );
                 }
             }
         }
@@ -706,8 +708,10 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         }
 
-        
         if( pub!= null && pub.getPmid() != null ){
+
+            pub.setPmid( sanitize( pub.getPmid() ) );
+            
             IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
             
             if ( oldPub != null ) {
@@ -738,6 +742,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         log.debug( " new pub -> id=" + pub.getId() +
                   " pmid=" + pub.getPmid() );
 
+        pub.setPmid( sanitize( pub.getPmid() ) );
+        
         // test if already in 
         //-------------------
         
@@ -1115,13 +1121,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     //---------------------------------------------------------------------
 
     public String getIcPubRecords() {
-        return this.getIcPubRecords( "", "", "", "", "", "", "", "" );
+        return this.getIcPubRecords( "", "", "", "", "", "", "", "","" );
     }
     
     public String getIcPubRecords( String max, String off, 
                                    String skey, String sdir, 
                                    String sfv, String pfv, 
-                                   String ofv, String efv ) {
+                                   String ofv, String efv,
+                                   String ffv ) {
 
         if ( tracContext.getPubDao() == null ) return null;
 
@@ -1170,8 +1177,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         List<Publication> pl = new ArrayList<Publication>();
         long total = 0;
-        log.debug( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv);
-        if ( sfv.equals("") && pfv.equals("") && ofv.equals("") && efv.equals("") ) {
+        log.debug( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv + " :: " + ffv);
+        if ( sfv.equals("") && pfv.equals("") && ofv.equals("") 
+             && efv.equals("") && ffv.equals("") ){
             
             log.debug( "getPubRecords: unfiltered" );
             
@@ -1185,10 +1193,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
             Map<String,String> flt = new HashMap<String,String>();
 
-            flt.put("status", sfv);
-            flt.put("partner", pfv);
-            flt.put("owner", ofv);
-            flt.put("editor", efv);
+            flt.put( "status", sfv );
+            flt.put( "partner", pfv );
+            flt.put( "owner", ofv );
+            flt.put( "editor", efv );
+            flt.put( "cflag", ffv );
             
             pl = tracContext.getPubDao()
                 .getPublicationList( first, blockSize, sortKey, asc, flt );            

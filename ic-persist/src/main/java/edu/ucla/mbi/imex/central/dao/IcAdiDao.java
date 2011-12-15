@@ -46,6 +46,22 @@ public class IcAdiDao extends AbstractDAO implements AdiDAO {
     }
 
     //--------------------------------------------------------------------------
+    
+    public IcFlag getIcFlag( int id ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcAdiDao->getIcFlag: id(int)=" + id  );
+
+        if( id <= 0 ) return null;
+        
+        IcFlag flag = (IcFlag) super.find( IcFlag.class,
+                                           new Integer( id ) );
+        
+        log.info( "IcAdiDao->getIcFlag: id=" + id + " ::DONE"  );
+        return flag;
+    }       
+    
+    //--------------------------------------------------------------------------
 
     public List<AttachedDataItem> getAdiListByRoot( DataItem root ){
 

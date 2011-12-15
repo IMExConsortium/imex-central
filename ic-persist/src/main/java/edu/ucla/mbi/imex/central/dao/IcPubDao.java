@@ -341,8 +341,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         List<Publication> plst = new ArrayList<Publication>();
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
-        log.info( "IcPubDao:getPublicationList(block) filt(partner)=:" + 
+        log.debug( "IcPubDao:getPublicationList(block) sort=:" + skey );
+        log.debug( "IcPubDao:getPublicationList(block) filt(partner)=:" + 
                   flt.get("partner") );
 
         Session session =
@@ -350,12 +350,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         Transaction tx = session.beginTransaction();
         
         try {
-            //startOperation();
             
             Criteria crit = session.createCriteria( IcPub.class );
-            crit.setFirstResult( firstRecord );
-            crit.setMaxResults( blockSize );
-
+            
             if (skey != null && skey.length() > 0 ) {
                 if ( asc ) {
                     crit.addOrder( Order.asc( skey ) );
@@ -368,10 +365,13 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
                 crit = this.addFilter( crit, flt );
             }
             
+            crit.setFirstResult( firstRecord );
+            crit.setMaxResults( blockSize );
+            
             plst = crit.list();
             
-            log.info( "IcPubDao: plst=" + plst); 
-            log.info( "IcPubDao: size=" + plst.size()); 
+            log.debug( "IcPubDao: plst=" + plst); 
+            log.debug( "IcPubDao: size=" + plst.size()); 
             
             tx.commit();
         } catch ( HibernateException e ) {
@@ -583,8 +583,6 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         Transaction tx = session.beginTransaction();
         
         try {
-            //startOperation();
-            
             Criteria crit = session.createCriteria( IcPub.class );
             
             if ( flt != null ) {
@@ -592,10 +590,10 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             }
             
             List foo = crit.setProjection( Projections.rowCount()).list();
-            
-            Log log = LogFactory.getLog( this.getClass() );
             count  = ((Integer) foo.get(0) ).longValue() ;
-            log.info( "count=" + count );
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.debug( "count=" + count );
             tx.commit();
         } catch ( HibernateException e ) {
             handleException( e );
@@ -609,19 +607,25 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
 
         return count;
     }
-
-   
-
+    
     //--------------------------------------------------------------------------
 
     public Publication savePublication( Publication publication ) { 
+
+        Log log = LogFactory.getLog( this.getClass() );
         
         if ( publication  instanceof IcPub ) {
             super.saveOrUpdate( publication );
+
+            log.info( "IcPubDao->savePublication: id(pub)=" + publication.getId() );
+
             return publication;
         } else {
             IcPub icp = new IcPub( publication);
             super.saveOrUpdate( icp );
+
+            log.info( "IcPubDao->savePublication: id(icpub)=" + icp.getId() );
+
             return icp;
         }
     }
@@ -679,6 +683,21 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
                 .add( Restrictions.eq( "ow.login",
                                        flt.get( "owner" )
                                        ) );
+        }
+
+        if( flt.get( "cflag" ) != null && 
+            !flt.get("cflag").equals("") ){
+                      
+            DetachedCriteria critt = DetachedCriteria.forClass( IcComment.class );
+                        
+            critt.createAlias("icFlag","flg")
+                .add(  Restrictions.eq( "flg.name", flt.get( "cflag" ) ) )
+                .setProjection( Projections.property("root.id") );
+            
+            crit.add( Property.forName("id").in(critt) );
+            
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info("Flag crt: " + flt.get( "cflag") );
         }
         
         return crit;

@@ -5,8 +5,8 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral-api</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>Web service API module</name>
+  <version>2.0</version>
+  <name>IMEx Central Web Service API module</name>
 
   <parent>
    <groupId>edu.ucla.mbi.imex</groupId>
@@ -102,8 +102,27 @@
         </configuration>
       </plugin>
 
+      <plugin>
+       <artifactId>maven-assembly-plugin</artifactId>
+       <version>2.2-beta-2</version>
+       <executions>
+        <execution>
+         <id>create-source</id>
+         <phase>package</phase>
+         <goals>
+          <goal>single</goal>
+         </goals>
+         <configuration>
+          <descriptorRefs>
+           <descriptorRef>src</descriptorRef>
+          </descriptorRefs>        
+         </configuration>
+        </execution>
+       </executions>
+      </plugin>
+
     </plugins>
-   
+  
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -117,7 +136,7 @@
     <repository>
       <id>public</id>
       <name>IMEx Public Maven Reopsitory</name>
-      <url>http://imex.mbi.ucla.edu/archiva/repository/public/</url>
+      <url>http://imex.mbi.ucla.edu/archiva/repository/imex-public/</url>
     </repository>
 
     <snapshotRepository>

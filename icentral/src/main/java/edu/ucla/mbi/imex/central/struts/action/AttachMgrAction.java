@@ -187,10 +187,18 @@ public class AttachMgrAction extends ManagerSupport {
                     
                     String sub = getOpp().get( "encs" );
                     String bdy = getOpp().get( "encb" );
+                    String flag = getOpp().get( "encf" );
+                    int iflag = -1;
+                    try{
+                        if( flag != null ){
+                            iflag = Integer.parseInt(flag);
+                        } 
+                    } catch(Exception ex){
+                        // ignore formatting errors
+                    }
+                    log.info(  "sub=" + sub + " bdy=" + bdy + " sflag="+flag);
                     
-                    log.debug(  "sub=" + sub + " bdy=" + bdy );
-                    
-                    return addComment( icpub, sub, bdy );
+                    return addComment( icpub, sub, bdy, iflag );
                 }
 
                 if ( key.equalsIgnoreCase( "ccnt" ) ) {
@@ -211,7 +219,8 @@ public class AttachMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     
-    private String  addComment( IcPub icpub, String subject, String body ){
+    private String  addComment( IcPub icpub, String subject, String body, 
+                                int iflag ){
         
         Log log = LogFactory.getLog( this.getClass() );
         
@@ -229,6 +238,13 @@ public class AttachMgrAction extends ManagerSupport {
         IcComment icCom = new IcComment( owner, icpub,
                                          subject, body);
         icCom.setOwner( owner );
+
+        if( iflag > 0 ){
+            IcFlag flag =  attachmentManager.getIcFlag( iflag );
+            if( flag != null ){
+                icCom.setIcFlag( flag );
+            }
+        }
         
         attachmentManager.addIcAdi( icCom, owner );
 
@@ -346,6 +362,10 @@ public class AttachMgrAction extends ManagerSupport {
         cmap.put("date",crt);
         cmap.put("author",aut);
         
+        if( ic.getIcFlag() != null ){
+            cmap.put("flagId",ic.getIcFlag().getId());            
+            cmap.put("flagName",ic.getIcFlag().getName());
+        }
         return cmap;
     }    
     //--------------------------------------------------------------------------
