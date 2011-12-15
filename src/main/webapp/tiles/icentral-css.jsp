@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" href="css/pubmgr.css" type="text/css">
 <link rel="stylesheet" href="css/pubnew.css" type="text/css">
+<link rel="stylesheet" href="css/pubedit.css" type="text/css">
 
 <link rel="stylesheet" href="css/attachment.css" type="text/css">
 

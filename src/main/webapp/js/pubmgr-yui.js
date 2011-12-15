@@ -4,6 +4,7 @@ YAHOO.imex.pubmgr = {
 
     admus: "",
     owner: "",
+    cflag: "",
     
     stateBtn: { my:{value:"",foo:"state"}},    
     stateSel: [ 
@@ -79,12 +80,14 @@ YAHOO.imex.pubmgr = {
         
         var efVal = oSelf.my.admusFlt;
         var ofVal = oSelf.my.ownerFlt;
+        var ffVal = oSelf.my.cflagFlt;
         
         var req = "opp.skey=" + sort +
             "&opp.sfv=" + sfVal +
             "&opp.pfv=" + pfVal +
             "&opp.efv=" + efVal +
             "&opp.ofv=" + ofVal +
+            "&opp.ffv=" + ffVal +
             "&opp.sdir=" + dir +
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
@@ -130,8 +133,11 @@ YAHOO.imex.pubmgr = {
         if( init !== undefined ){
             YAHOO.imex.pubmgr.admus = init.admus;
             YAHOO.imex.pubmgr.owner = init.owner;
+            YAHOO.imex.pubmgr.cflag = init.cflag;
         }
         
+        //alert("init: "+ init.cflag);
+
         var partnerSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse( o.responseText );
             YAHOO.imex.pubmgr.selBtnInit( 
@@ -209,7 +215,9 @@ YAHOO.imex.pubmgr = {
         //------------------------
         
         var initReq = "opp.off=0&opp.max=25"
-            + "&opp.ofv=" + YAHOO.imex.pubmgr.owner+ "&opp.efv=" + YAHOO.imex.pubmgr.admus;
+            + "&opp.ofv=" + YAHOO.imex.pubmgr.owner 
+            + "&opp.efv=" + YAHOO.imex.pubmgr.admus 
+            + "&opp.ffv=" + YAHOO.imex.pubmgr.cflag;
 
         var myConfig = {
             paginator : this.myPaginator,
@@ -232,6 +240,7 @@ YAHOO.imex.pubmgr = {
             partnerFlt: YAHOO.imex.pubmgr.partnerBtn,
             ownerFlt: YAHOO.imex.pubmgr.owner,
             admusFlt: YAHOO.imex.pubmgr.admus,
+            cflagFlt: YAHOO.imex.pubmgr.cflag,
             requestBuilder: YAHOO.imex.pubmgr.myRequestBuilder
         };
         

@@ -65,11 +65,38 @@ YAHOO.imex.attedit = {
  
             YAHOO.imex.attedit.conf[aclass].comDtaSrc.responseType 
                 = YAHOO.util.DataSource.TYPE_JSON;
+
+            var rsFields= ["id","root","subject","body","date","author"];             
+
+            if(aclass === 'comment'){
+                rsFields.push("flagName");
+            }
             
             YAHOO.imex.attedit.conf[aclass].comDtaSrc.responseSchema = {
                 resultsList: "attach",
-                fields: ["id","root","subject","body","date","author"]    
+                fields: rsFields
             };
+            
+          
+            YAHOO.imex.attedit.conf[aclass].comColDef = [
+                //{key:"id", label:"ID"},
+                { key:"author",width:100,
+                  label:YAHOO.imex.attedit.conf[aclass].cname["author"] },
+                { key:"date", width:240, 
+                  label:YAHOO.imex.attedit.conf[aclass].cname["date"] },
+                { key:"subject", width:500, formatter:"subject",
+                  label:YAHOO.imex.attedit.conf[aclass].cname["subject"] 
+                }
+            ];
+
+            if(aclass === 'comment'){
+              
+                YAHOO.imex.attedit.conf[aclass]
+                    .comColDef.push(
+                        { key:"flagName", width:100, formatter:"flag", 
+                          label:YAHOO.imex.attedit.conf[aclass].cname["flagName"] }
+                    );
+            }
 
             this.mySubFormatter = function( elLiner, oRecord, oColumn, oData ) { 
                 
@@ -83,20 +110,22 @@ YAHOO.imex.attedit = {
                         + '}); return false;" href="" >more</a>)';
                 }
             }; 
+            
+            this.myFlagFormatter = function( elLiner, oRecord, oColumn, oData ) { 
+                
+                if( oRecord.getData("flagName") === undefined ||
+                    oRecord.getData("flagName") === "" ){ 
+                        elLiner.innerHTML = "<center>---</center>";
+                    } else {
+                        elLiner.innerHTML = 
+                            '<center>' + oRecord.getData("flagName") + '</center>';
+                    }
+            }; 
+            
 
             YAHOO.widget.DataTable.Formatter.subject = this.mySubFormatter; 
+            YAHOO.widget.DataTable.Formatter.flag= this.myFlagFormatter; 
 
-            YAHOO.imex.attedit.conf[aclass].comColDef = [
-                //{key:"id", label:"ID"},
-                { key:"author",width:100,
-                  label:YAHOO.imex.attedit.conf[aclass].cname["author"] },
-                { key:"date", width:240, 
-                  label:YAHOO.imex.attedit.conf[aclass].cname["date"] },
-                { key:"subject", width:650, formatter:"subject",
-                  label:YAHOO.imex.attedit.conf[aclass].cname["subject"] 
-                }
-            ];
-        
             YAHOO.imex.attedit.conf[aclass].comTable 
                 = new YAHOO.widget.DataTable(YAHOO.imex.attedit.conf[aclass].apane,
                                              YAHOO.imex.attedit.conf[aclass].comColDef, 
@@ -135,6 +164,7 @@ YAHOO.imex.attedit = {
         
         var sub = YAHOO.util.Dom.get("cmtmgr_opp_encs").value;
         var bdy = YAHOO.util.Dom.get("cmtmgr_opp_encb").value;
+        var flg = YAHOO.util.Dom.get("cmtmgr_opp_encf").value;
 
         var attachCallback = { cache:false, timeout: 5000, 
                                success: YAHOO.imex.attedit.attachUpdate,
@@ -148,7 +178,8 @@ YAHOO.imex.attedit = {
             var postMsg = 'op.eca=add&id=' 
                 + YAHOO.imex.pubedit.pubId 
                 + "&opp.encs=" + eSub 
-                + "&opp.encb=" + eBdy;
+                + "&opp.encb=" + eBdy 
+                + "&opp.encf=" + flg;
             
             YAHOO.util.Connect
                 .asyncRequest( 'POST', 

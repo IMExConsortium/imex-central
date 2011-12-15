@@ -21,7 +21,7 @@
          {aclass:"comment",
           apane:"com-tbview",tabno:3,
           url:"attachmgr?op.calg=calg&id=",
-          cname:{"author":"Author","subject":"Subject","date":"Date"},
+          cname:{"author":"Author","subject":"Subject","date":"Date", "flagName":"Flag"},
           id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
           login:"<s:property value="#session['LOGIN']" />"}  
@@ -47,7 +47,11 @@
     <s:if test="opp.au.length() > 0 ">
     <h2 class="pubmgr">Records curated by: <i><s:property value="opp.au"/></i></h2>
     </s:if>
-
+    <s:else>
+      <s:if test="opp.encf.length() > 0 ">
+        <h2 class="pubmgr">Records Flagged as: <i><s:property value="opp.encf"/></i></h2>
+      </s:if>  
+    </s:else>
   </s:else>
 
  <div class="yui-skin-sam" width="100%">
@@ -93,7 +97,8 @@
   YAHOO.util.Event.addListener( window, "load", 
                                 YAHOO.imex.pubmgr.init(
                                    { owner:"<s:property value="opp.ou"/>", 
-                                     admus:"<s:property value="opp.au"/>" }));
+                                     admus:"<s:property value="opp.au"/>",
+                                     cflag:"<s:property value="opp.encf"/>" }));
  </script>
 
 </s:else>

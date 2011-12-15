@@ -422,11 +422,7 @@ public class EntryManager {
                         .addAll( icp.getSource().getAdminGroups() );
                 }
                 
-                return (IcPub) tracContext.getPubDao().savePublication( icp );
-
-
-                //return (IcPub) tracContext.getPubDao()
-                //    .getPublicationByPmid( icp.getPmid() );
+                return (IcPub) tracContext.getPubDao().savePublication( icp );  
             }
         }                
         return null;
@@ -451,8 +447,7 @@ public class EntryManager {
 
         return pub;
     }
-
-
+    
     //--------------------------------------------------------------------------
 
     public List<String> getTargetStates( IcPub pub, String mode ) {
