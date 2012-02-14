@@ -103,6 +103,10 @@
     <property name="mst" value="1:1:2"/>
   </bean>
 
+ <bean id="wikiParseAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.WikiParseAction">
+
+ </bean>
 
   <bean id="statsAction" scope="prototype"
       class="edu.ucla.mbi.imex.central.struts.action.StatsAction">

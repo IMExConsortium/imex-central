@@ -115,6 +115,13 @@
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
       },
+      dbsettings:{
+        active:true,
+        title:"ImexCentral: Database Settings",
+        menusel:"4",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
 
 
 

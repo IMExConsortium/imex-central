@@ -1953,4 +1953,6 @@ a.graph {
   border-width: 0px;
 }
 
-
+.att-body {
+  padding: 0px 1.5em 0px 1.5em;
+}

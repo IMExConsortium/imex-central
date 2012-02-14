@@ -172,6 +172,7 @@
 
       <property name="subject" column="subject" />
       <property name="body" column="body" />
+      <property name="format" column="format" />
     </joined-subclass>
    
     <joined-subclass name="edu.ucla.mbi.imex.central.IcLogEntry" 

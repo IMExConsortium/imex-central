@@ -29,10 +29,17 @@
     <interceptors>
       <interceptor name="menu" 
          class="edu.ucla.mbi.util.struts2.interceptor.MenuInterceptor"/>
+
       <interceptor name="accession" 
          class="edu.ucla.mbi.util.struts2.interceptor.AccessionInterceptor"/>
+
       <interceptor name="jsonTable" 
          class="edu.ucla.mbi.util.struts2.interceptor.JsonTableInterceptor"/>
+
+     <interceptor name="wikiToHtml"
+         class="edu.ucla.mbi.util.struts2.interceptor.WikiParseInterceptor">
+       <param name="field">attach.body</param>
+     </interceptor>
 
       <interceptor name="acl" class="aclInterceptor"/>
       <interceptor name="op-log" class="logInterceptor"/>
@@ -56,6 +63,7 @@
         </interceptor-ref>
         <interceptor-ref name="conversionError"/>
 
+        <interceptor-ref name="wikiToHtml"/>
         <interceptor-ref name="menu"/>
         <interceptor-ref name="acl"/>
 <!--        <interceptor-ref name="op-log"/> -->
@@ -170,6 +178,12 @@
      
    </action>
 
+   <action name="wikiparse" class="wikiParseAction">  
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="json" type="json"/>
+   </action>
 
    <action name="pubnew" class="pubNewAction">
 

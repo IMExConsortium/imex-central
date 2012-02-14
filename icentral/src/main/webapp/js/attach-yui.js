@@ -14,7 +14,7 @@ YAHOO.imex.attedit = {
         YAHOO.imex.attedit.conf[obj.aclass]=[];
      
         YAHOO.imex.attedit.conf[obj.aclass].tabs = YAHOO.imex.pubedit.tabs, 
-                              //new YAHOO.widget.TabView("pubTab");
+        //new YAHOO.widget.TabView("pubTab");
         YAHOO.imex.attedit.conf[obj.aclass].tabno = obj.tabno;
         YAHOO.imex.attedit.conf[obj.aclass].pubId = obj.id;
         YAHOO.imex.attedit.conf[obj.aclass].login = obj.login;
@@ -35,6 +35,7 @@ YAHOO.imex.attedit = {
         try{
             var url = YAHOO.imex.attedit.conf[obj.aclass].url 
                 + YAHOO.imex.attedit.conf[obj.aclass].pubId;
+            //alert(url);
             YAHOO.util.Connect.asyncRequest( 'GET', url, countCallback );        
         } catch( ex ) {
             alert( "AJAX Error:" + ex );
@@ -160,6 +161,20 @@ YAHOO.imex.attedit = {
         alert( "InitListFail:" + o );  
     },
     
+    pubPreview: function( aclass, op ){
+
+        var sub = YAHOO.util.Dom.get("cmtmgr_opp_encs").value;
+        var bdy = YAHOO.util.Dom.get("cmtmgr_opp_encb").value;
+        var flg = YAHOO.util.Dom.get("cmtmgr_opp_encf").value;
+        
+        var prev = { subject: sub, body: bdy, "body-type": "WIKI",
+                     author: "N/A", date: "N/A"};
+ 
+        YAHOO.mbi.modal.attachment( {prev:prev} );
+                                     
+        return false;
+    },
+
     pubAttach: function( aclass, op ){ // NOTE: hardwired submit form
         
         var sub = YAHOO.util.Dom.get("cmtmgr_opp_encs").value;
@@ -179,6 +194,7 @@ YAHOO.imex.attedit = {
                 + YAHOO.imex.pubedit.pubId 
                 + "&opp.encs=" + eSub 
                 + "&opp.encb=" + eBdy 
+                + "&opp.encbt=WIKI" +  
                 + "&opp.encf=" + flg;
             
             YAHOO.util.Connect
@@ -203,8 +219,8 @@ YAHOO.imex.attedit = {
                 '',
                 { success: dtb.onDataReturnInitializeTable,
                   scope: dtb });
-        } catch (x) {
-            alert("Update: " + x);
+        }catch(ex){
+            alert( "AJAX Error: " + ex );
         }
     },
     
@@ -213,7 +229,7 @@ YAHOO.imex.attedit = {
     },
 
     comRender: function() {
-        alert("comrender");
+        //alert("comrender");
         var cpanel = YAHOO.imex.attedit.comPanel;
        
         var t = cpanel.getUnitByPosition( 'top' );

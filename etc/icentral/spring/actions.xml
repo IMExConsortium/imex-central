@@ -43,7 +43,7 @@
     
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
-    <property name="mst" value="1:1"/>
+    <property name="mst" value="4:1"/>
     
     <property name="notifyFrom" value="dip@mbi.ucla.edu" />
     <property name="notifyServer" value="imex.mbi.ucla.edu" />

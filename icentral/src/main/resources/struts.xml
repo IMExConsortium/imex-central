@@ -207,8 +207,8 @@
      <interceptor-ref name="menu"/>
 
      <result name="success">index.jsp</result>
-     <result name="input">uedit.jsp</result>
-     <result name="uedit">uedit.jsp</result>
+     <result name="input">uedit.jsp</result>  <!-- NOTE: also point to uedit tile ? -->
+     <result name="uedit" type="tiles">uedit</result>
      <result name="home">index.jsp</result>
     </action>
 
