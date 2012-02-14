@@ -118,7 +118,6 @@ public class AttachMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     public String execute() throws Exception {
-
         
         attlist = new ArrayList();
 
@@ -187,6 +186,10 @@ public class AttachMgrAction extends ManagerSupport {
                     
                     String sub = getOpp().get( "encs" );
                     String bdy = getOpp().get( "encb" );
+                    String bdyTp = getOpp().get( "encbt" );
+                    if( bdyTp == null || bdyTp.equals("") ){
+                        bdyTp = "WIKI";
+                    }
                     String flag = getOpp().get( "encf" );
                     int iflag = -1;
                     try{
@@ -196,9 +199,8 @@ public class AttachMgrAction extends ManagerSupport {
                     } catch(Exception ex){
                         // ignore formatting errors
                     }
-                    log.info(  "sub=" + sub + " bdy=" + bdy + " sflag="+flag);
-                    
-                    return addComment( icpub, sub, bdy, iflag );
+                    log.debug(  "sub=" + sub + " bdy=" + bdy + " sflag="+flag);
+                    return addComment( icpub, sub, bdy, bdyTp, iflag );
                 }
 
                 if ( key.equalsIgnoreCase( "ccnt" ) ) {
@@ -219,7 +221,8 @@ public class AttachMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     
-    private String  addComment( IcPub icpub, String subject, String body, 
+    private String  addComment( IcPub icpub, String subject, 
+                                String body, String bdyTp, 
                                 int iflag ){
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -236,7 +239,7 @@ public class AttachMgrAction extends ManagerSupport {
         log.debug( " owner set to: " + owner );
         
         IcComment icCom = new IcComment( owner, icpub,
-                                         subject, body);
+                                         subject, body, "WIKI" );
         icCom.setOwner( owner );
 
         if( iflag > 0 ){
@@ -352,6 +355,8 @@ public class AttachMgrAction extends ManagerSupport {
         Map<String,Object> cmap = new HashMap<String,Object>();
         String sub = ic.getLabel();
         String bdy = ic.getBody();
+        String bdyTp = ic.getBodyType();
+
         String crt = String.format( "%1$ta %1$tb %1$td %1$tT %1$tZ %1$tY", ic.getCrt() );
         String aut = ic.getOwner().getLogin();
 
@@ -359,6 +364,7 @@ public class AttachMgrAction extends ManagerSupport {
         cmap.put("root",ic.getRoot().getId());
         cmap.put("subject",sub);
         cmap.put("body",bdy);
+        cmap.put("body-type",bdyTp);
         cmap.put("date",crt);
         cmap.put("author",aut);
         

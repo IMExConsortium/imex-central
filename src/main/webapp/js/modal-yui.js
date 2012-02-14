@@ -47,57 +47,138 @@ YAHOO.mbi.modal = {
     
         var rid = arg.rid;
         var aid = arg.aid;
+        var prev = arg.prev;
 
-        var url = 'attachmgr?op.cidg=cidg'
-            + '&opp.cid=' + aid 
-            + '&id=' + rid;
+        var header = '<tr>'
+            + '<td class="att-field-head" width="10%" nowrap>Subject:</td>'
+            + '<td>%SUB%</td></tr>';
+
+        if( rid > 0 && aid > 0){
+            
+            header += '<tr><td class="att-field-head" nowrap>Author:</td>'
+                + '<td>%AUTH%</td></tr>'
+                + '<tr><td class="att-field-head" nowrap>Date:</td>'
+                + '<td>%DATE%</td></tr>';
+        }
         
         var attSuccess = function( o ){
-
-            var messages = YAHOO.lang.JSON.parse( o.responseText);
-            if( messages.attach[0] !== undefined ){
-                
+            
+            var messages = {attach:[]};
+            var header = "";
+            
+            if( o.responseText !== undefined ){
+                header = o.argument.header;
+                messages = YAHOO.lang.JSON.parse( o.responseText);
+            } else{                           
+                if( o.prev !== undefined ){
+                    messages.attach[0] = prev;
+                    header = o.header;
+                }
+            }
+           
+            if( messages.attach[0] !== undefined ){                
                 var subject = messages.attach[0].subject;
                 var body = messages.attach[0].body;
+                var bodyTp = messages.attach[0]["body-type"];
                 var author = messages.attach[0].author;
                 var date =  messages.attach[0].date;
+                
+                header = header.replace( "%SUB%", subject );
+                header = header.replace( "%AUTH%", author );
+                header = header.replace( "%DATE%", date );
+                
+                if( bodyTp === "WIKI" ){
 
-                var bodyHTML = '<table width="99%">'
-                    + '<tr><td class="att-field-head" width="10%" nowrap>Subject:</td>'
-                    + '<td>'+subject+'</td></tr>'
-                    + '<tr><td class="att-field-head" nowrap>Author:</td>'
-                    + '<td>' + author + '</td></tr>'
-                    + '<tr><td class="att-field-head" nowrap>Date:</td>'
-                    + '<td>' + date + '</td></tr>'
-                    + '<tr><td colspan="2"><hr/></td></tr>'
-                    + '<tr><td nowrap>&nbsp;</td>'
-                    + '<td class="att-body">' + body + '</td></tr>'
-                    + '</table>';
+                    var wikiUrl = "wikiparse";
+                    
+                    var postData = "txt=" + encodeURIComponent(body);
+                    
+                    var wikiSuccess = function( o ){
+                        
+                        var messages = YAHOO.lang.JSON.parse( o.responseText);        
+                        var header = o.argument.header;
+                        YAHOO.mbi.modal.showComment( { header:header,
+                                                       bodyTp:"HTML", 
+                                                       body: messages["html"] } );
+                    };
 
-                YAHOO.mbi.modal.show( { mtitle: 'Attachment', 
-                                        title: "Comment", 
-                                        body: bodyHTML } );
-            } 
-            
+                    var wikiFail = function( o ){
+                        
+                    };
+
+                    var wikiCallback = { cache:false, timeout: 5000, 
+                                         success: wikiSuccess,
+                                         failure: wikiFail,
+                                         argument:{header:header}
+                                       };      
+                    
+                    try{
+                        YAHOO.util.Connect.asyncRequest( 'POST', 
+                                                         wikiUrl,
+                                                         wikiCallback, 
+                                                         postData  );        
+                    } catch (x) {
+                        alert("AJAX Error:"+x);
+                    }
+                    
+                } else {
+                    
+                    YAHOO.mbi.modal.showComment( { header:header,
+                                                   body:bodyTp, body:body } );
+                } 
+            }
         };
 
         var attFail = function( o ){
             
         };
-
+        
         var attCallback = { cache:false, timeout: 5000, 
                             success: attSuccess,
-                            failure: attFail
+                            failure: attFail,
+                            argument:{ header:header }
                           };   
-        try{
-            YAHOO.util.Connect.asyncRequest( 'GET', url, attCallback );        
-        } catch (x) {
-            alert("AJAX Error:"+x);
+
+        if( aid > 0 && rid > 0 ){
+            var url = 'attachmgr?op.cidg=cidg'
+                + '&opp.cid=' + aid 
+                + '&id=' + rid;        
+            
+            try{
+                YAHOO.util.Connect.asyncRequest( 'GET', url, attCallback );        
+            } catch (x) {
+                alert("AJAX Error:"+x);
+            }
+        } else {
+            if( prev !== undefined ){
+                attSuccess({ header: header, prev: prev } );
+            }
         }
     },
 
+    showComment: function( arg ){
+        
+        var bodyHTML = '<table width="99%">'
+            + arg.header
+            + '<tr><td colspan="2"><hr/></td></tr>'
+            + '<tr><td class="att-body" colspan="2">';
+                            
+        if( arg.bodyTp === "TEXT" ){
+            bodyHTML += '<pre>' + arg.body + '</pre>';
+        }
+                
+        if( arg.bodyTp === "HTML" ){
+            bodyHTML += arg.body;
+        }
+        bodyHTML += "</td></tr></table>";
+
+        YAHOO.mbi.modal.show( { mtitle: 'Comment', 
+                                title: "", 
+                                body: bodyHTML } );         
+    },
+    
     show: function( arg ) {
-      
+        
         var title = arg.title;
         var mtitle = arg.mtitle === undefined ? title : arg.mtitle; 
         var id = arg.id;
@@ -195,7 +276,6 @@ YAHOO.mbi.modal = {
         }
 
         YAHOO.mbi.modal.my.panel.setHeader( mtitle );       
-        //YAHOO.mbi.modal.my.panel.setBody("");
         YAHOO.mbi.modal.my.panel.show();        
     },
     

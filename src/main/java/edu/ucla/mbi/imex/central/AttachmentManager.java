@@ -163,6 +163,4 @@ public class AttachmentManager {
         return adi;
     }
 
-    
-
 }

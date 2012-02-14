@@ -233,7 +233,8 @@ public class UserAction extends UserSupport {
 	    setPass1("");
 	    setPass2("");
 
-	    return UEDIT;
+	    //return UEDIT;
+            return HOME;
 	}
 
 	return HOME;
@@ -303,6 +304,7 @@ public class UserAction extends UserSupport {
                 getSession().put( "USER_GROUP", groups );
                 log.debug( " login: session set" );
 
+                this.setMst("1:1");
 		return HOME;
 	    }
 
@@ -332,7 +334,8 @@ public class UserAction extends UserSupport {
 	getSession().put( "USER_ID", -1 );
 	getSession().put( "USER_ROLE", null );
 	getSession().put( "LOGIN", "" );
-	
+
+        this.setMst("1:1"); // NOTE: should be set in struts action conf
 	return HOME;
     }
 
@@ -442,6 +445,9 @@ public class UserAction extends UserSupport {
 	    // test recaptcha
 	    //---------------
 
+            log.debug( "UserAction->validate: recaptcha=" + recaptcha );
+            log.debug( "UserAction->validate: rcf=" + rcf + " rrf=" + rrf );
+            
 	    if( recaptcha != null ) {
 
 		ReCaptchaResponse reCaptchaResponse = 

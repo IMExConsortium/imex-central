@@ -329,35 +329,44 @@
             <s:hidden name="id" value="%{id}"/>
             <s:hidden name="pub.id" value="%{id}"/>
             <tr cellpadding="1">
-             <td>
+             <td width="5%">
               <b>Subject:</b> 
              </td>
-             <td>
-              <s:textfield theme="simple" name="opp.encs" size="80" value=""/>
+             <td align="left">
+              <s:textfield theme="simple" name="opp.encs" size="50" value=""/>  
+             <td align="right">
+<%--              <b>Format:</b> %>
              </td>
-             <td align="center" nowrap>
+
+             <td align="left"> 
+<%--           <s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> %>
+               &nbsp;
+             </td>
+             <td align="right" nowrap>
                <b>Flag:</b>
-<!--               <label id="flag-label" class="flag-label">Flag</label> -->
+<%--               <label id="flag-label" class="flag-label">Flag</label> %>
                  <s:select name="opp.encf" headerKey="-1" headerValue="----------" 
                           list="#{'1':'QControl'}" value="-1"/>
 
-             </td>      
-             <td rowspan="2" width="10%" align ="center">
-               <s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false"
-                  onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/>
              </td>
-            </tr>
-              
+             <td>&nbsp;</td>
+             </tr>
             <tr>
-             <td colspan="3" align="center">
+             <td colspan="5" align="center">
               <s:textarea theme="simple" name="opp.encb" cols="128"rows="5" value=""/>
              </td>
+              <td rowspan="1" width="10%" align ="center">
+               <s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false"
+                  onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/>
+               <br/>
+               <i><a href="" onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');">preview</a></i>
+             </td>
             </tr>
             <tr>
-              <td colspan="4"><hr/></td>  
+              <td colspan="6"><hr/></td>  
             </tr>
             <tr>
-             <td colspan="4">
+             <td colspan="6">
               <div id="com-tbview"></div>
              </td>
             </tr>       

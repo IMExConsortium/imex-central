@@ -142,12 +142,12 @@
        "disabled":"false",
        menu:[
          {label:"Account Settings",
-          link:"user?op=reg",
+          link:"user?op=edit",
           "disabled":"false",
           menu:[]
          },
          {label:"Database",
-          link:"user?op=reg",
+          link:"page?id=dbsettings",
           "disabled":"false",
           menu:[]
          }]
