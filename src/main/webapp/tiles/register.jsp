@@ -180,10 +180,10 @@
             <tr>
              <td>
               <script type="text/javascript"                             
-                 src="https://api-secure.recaptcha.net/challenge?k=${recaptcha.publicKey}">
+                 src="${recaptcha.recaptchaServer}/challenge?k=${recaptcha.publicKey}">
               </script>
               <noscript>
-               <iframe src="https://api-secure.recaptcha.net/noscript?k=${recaptcha.publicKey}" 
+               <iframe src="${recaptcha.recaptchaServer}/noscript?k=${recaptcha.publicKey}" 
                   height="300" width="500" frameborder="0">
                </iframe><br/>
                <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>

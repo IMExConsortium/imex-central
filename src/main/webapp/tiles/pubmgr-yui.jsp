@@ -2,6 +2,9 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <script src="js/util-yui.js" type="text/javascript"></script>
 <h1>Publication Manager</h1>
+
+
+
 <s:if test="id > 0">
  <script src="js/calendar-yui.js" type="text/javascript"></script>
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
@@ -40,6 +43,11 @@
 </s:if>
 <s:else>
   <script src="js/pubmgr-yui.js" type="text/javascript"></script>
+
+  <!--    history   -->
+
+  
+
   <s:if test="opp.ou.length() > 0 ">
     <h2 class="pubmgr">Records submitted by: <i><s:property value="opp.ou"/></i></h2>
   </s:if>

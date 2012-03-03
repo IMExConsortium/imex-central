@@ -12,6 +12,15 @@
          beta:   V - #82689c  Y: #ffdd99  G: #eeeeee
 */
 
+#icentral-history-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+}
+
 /* GENERAL STYLES */
 
 body {

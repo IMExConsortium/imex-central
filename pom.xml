@@ -26,7 +26,7 @@
       <!-- foo.org: global key -->
       <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
       <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
-      <recaptcha.recaptchaServer>https://api-secure.recaptcha.net</recaptcha.recaptchaServer>
+      <recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</recaptcha.recaptchaServer>
 
       <icentral.jdbc>jdbc/icentral</icentral.jdbc>
 
@@ -37,7 +37,7 @@
   <profiles>
 
    <profile>
-     <id>test</id>
+     <id>icentraltest</id>
      <activation>
        <property>
         <name>build</name>
