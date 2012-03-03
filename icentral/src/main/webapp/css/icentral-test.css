@@ -9,6 +9,15 @@
     - bottom menu (menu3) lt blue: #e3edff #eeeeee
 */
 
+#icentral-history-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+}
+
 /* GENERAL STYLES */
 
 body {

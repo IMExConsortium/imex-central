@@ -10,7 +10,7 @@ YUI download for details on each of the aggregate files and their contents):-->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script> 
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script> 
 <!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/get/get-min.js"></script>  -->
-<!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/history/history-min.js"></script>  -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/history/history-min.js"></script>
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/imageloader/imageloader-min.js"></script>
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script> 
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>

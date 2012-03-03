@@ -14,6 +14,8 @@
  <t:insertDefinition name="htmlhead"/>
  </head>
  <body class="yui-skin-sam">
+ <iframe id="yui-history-iframe" src="img/imex_central_logo_small.png"></iframe>
+ <input id="yui-history-field" type="hidden">
 
   <center>
    <t:insertDefinition name="header"/>
