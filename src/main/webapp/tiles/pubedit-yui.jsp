@@ -335,16 +335,16 @@
              <td align="left">
               <s:textfield theme="simple" name="opp.encs" size="50" value=""/>  
              <td align="right">
-<%--              <b>Format:</b> %>
+<%--              <b>Format:</b> --%>
              </td>
 
              <td align="left"> 
-<%--           <s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> %>
+<%--           <s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> --%>
                &nbsp;
              </td>
              <td align="right" nowrap>
                <b>Flag:</b>
-<%--               <label id="flag-label" class="flag-label">Flag</label> %>
+<%--               <label id="flag-label" class="flag-label">Flag</label> --%>
                  <s:select name="opp.encf" headerKey="-1" headerValue="----------" 
                           list="#{'1':'QControl'}" value="-1"/>
 

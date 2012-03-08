@@ -26,7 +26,7 @@ YUI download for details on each of the aggregate files and their contents):-->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js"></script> 
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/charts/charts-min.js"></script> 
 <!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/colorpicker/colorpicker-min.js"></script>  -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js"></script> 
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-debug.js"></script> 
 <!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js"></script> -->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/layout/layout-min.js"></script>
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js"></script>

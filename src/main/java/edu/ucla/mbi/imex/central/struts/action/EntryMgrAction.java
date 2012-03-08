@@ -1153,6 +1153,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             } catch ( NumberFormatException nex ) {
                 // ignore == use default
             }
+        } else {
+            max ="";
         }
 
         if ( sdir != null && sdir.equals( "false" ) ) {
@@ -1163,7 +1165,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         
         String sortKey ="id";
         
-        if ( skey != null ) {
+        if ( skey != null && !skey.equals("")) {
             if ( skey.equals( "pub" ) ) {
                 sortKey ="author";
             }
@@ -1178,6 +1180,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         List<Publication> pl = new ArrayList<Publication>();
         long total = 0;
         log.debug( "getPubRecords: " + sfv + " :: " + pfv + " :: " + efv + " :: " + ffv);
+
+        Map<String,String> flt = new HashMap<String,String>();
+        flt.put( "status", sfv );
+        flt.put( "partner", pfv );
+        flt.put( "owner", ofv );
+        flt.put( "editor", efv );
+        flt.put( "cflag", ffv );
+        
         if ( sfv.equals("") && pfv.equals("") && ofv.equals("") 
              && efv.equals("") && ffv.equals("") ){
             
@@ -1190,21 +1200,12 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         } else {
             
             log.debug( "getPubRecords: filtered" );
-
-            Map<String,String> flt = new HashMap<String,String>();
-
-            flt.put( "status", sfv );
-            flt.put( "partner", pfv );
-            flt.put( "owner", ofv );
-            flt.put( "editor", efv );
-            flt.put( "cflag", ffv );
             
             pl = tracContext.getPubDao()
                 .getPublicationList( first, blockSize, sortKey, asc, flt );            
-
+            
             total = tracContext.getPubDao().getPublicationCount( flt );
-
-
+            
         }
 
         log.debug( "getPubRecords: total=" + total);
@@ -1219,6 +1220,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         records.put("sort", skey );
         records.put("dir", sdir );
         records.put("pageSize", max );
+        records.put("filter", flt );
 
         List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
         records.put("records", rl );
