@@ -26,48 +26,64 @@ YAHOO.imex.pubmgr = {
     myColumnDefs: [
         //{ key:"del",label:"",  sortable:false, resizeable:false,
         //  formatter:"checkbox", className:"checkbox" },
-        { key:"pub", label:"Publication", sortable:true, resizeable:true, 
-          formatter:"publication", maxAutoWidth:1000, menuLabel:"Publication" },
-        { key:"pmid", label:"PMID", sortable:true, resizeable:true, 
-          formatter:"center", className:"pmid", menuLabel:"PMID" },
-        { key:"imexId", label:"<center>Imex<br/>Accession</center>", sortable:true, resizeable:true, 
+        { key:"pub", label:"Publication", menuLabel:"Publication",
+          sortable:true, resizeable:true, 
+          formatter:"publication", maxAutoWidth:1000  },
+        { key:"pmid", label:"PMID", menuLabel:"PMID", 
+          sortable:true, resizeable:true, 
+          formatter:"center", className:"pmid" },
+        { key:"imexId", label:"<center>Imex<br/>Accession</center>", 
+          sortable:true, resizeable:true, 
           formatter:"center",menuLabel:"Imex Accession" },
-        { key:"imexDb", label:"<center>Imex<br/>Partner</center>", sortable:true, resizeable:true, 
+        { key:"imexDb", label:"<center>Imex<br/>Partner</center>", 
+          sortable:true, resizeable:true, 
           formatter:"partnerList",menuLabel:"Imex Partner" },
-        { key:"state", label:"Status", sortable:true, resizeable:false, 
-          formatter:"center",menuLabel:"Status" },
-        { label:"Submission", menuLabel:"Submission",key:"submission",
+        { key:"state", label:"Status", 
+          sortable:true, resizeable:false, 
+          formatter:"center", menuLabel:"Status" },
+        { label:"Submission", menuLabel:"Submission", key:"submission",
           children:[
-             { key:"date",  label:"Date",sortable:true, resizeable:false, 
-               formatter:"crt" },
-             { key:"owner", label:"Submitted By",sortable:true, resizeable:false, 
-               formatter:"list" }
+             { key:"date",  label:"Date", 
+               sortable:true, resizeable:false, formatter:"crt" },
+             { key:"owner", label:"Submitted By",
+               sortable:true, resizeable:false, formatter:"list" }
           ]
         },
-        { key:"editor", label:"Curator(s)", sortable:true, resizeable:true, 
-          formatter:"editorList",menuLabel:"Curator(s)" },
-        { key:"detail", label:"",sortable:false, resizeable:true, 
+        { key:"editor", label:"Curator(s)", menuLabel:"Curator(s)",
+          sortable:true, resizeable:true, 
+          formatter:"editorList" },
+        { key:"detail", label:"",
+          sortable:false, resizeable:true, 
           formatter:"elink", className:"detail" }
     ],
     
-    myRequestBuilder: function( oState, oSelf ) {
+    requestBuilder: function( oState, oSelf ) {
 
-        //alert("myRequestBuilder");
+        alert("myRequestBuilder");
 
         // get state (or use defaults)
         //----------------------------
 
         oState = oState || {pagination:null, sortedBy:null};
         var sort = (oState.sortedBy) ? oState.sortedBy.key : "id";
-        var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "false" : "true";
-        var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
-        var results = (oState.pagination) ? oState.pagination.rowsPerPage : 10;
+        var dir = 
+            (oState.sortedBy 
+             && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC)
+            ? "false" : "true";
+        var startIndex = (oState.pagination) 
+            ? oState.pagination.recordOffset : 0;
+        var results = (oState.pagination) 
+            ? oState.pagination.rowsPerPage : 10;
         
         // filters
         //--------
-                   
-        var sfVal = YAHOO.imex.pubmgr.stateBtn.my.value;   //oSelf.my.stateFlt.my.value;
-        var pfVal = YAHOO.imex.pubmgr.partnerBtn.my.value; // oSelf.my.partnerFlt.my.value;
+
+        //oSelf.my.stateFlt.my.value;
+        var sfVal = YAHOO.imex.pubmgr.stateBtn.my.value;
+        
+        // oSelf.my.partnerFlt.my.value;
+        var pfVal = YAHOO.imex.pubmgr.partnerBtn.my.value;
+        
         if( sfVal === undefined ){
             sfVal = "";
         }
@@ -125,15 +141,188 @@ YAHOO.imex.pubmgr = {
             alert(x);
         }
     },
-    
-    init: function( init ) { 
 
+
+    init: function( init ){
+        this.initView(init);
+        this.historyInit();
+    },
+
+    historyInit: function(){
+        
+        var defstate = {
+            startIndex: 0,
+            pageSize: 2,
+            filter:{ status: "",
+                     partner:"",
+                     editor:"",
+                     owner:"",
+                     cflag:""},
+            sort: "id",
+            dir: "asc" };
+                 
+        var dst = YAHOO.lang.JSON.stringify( defstate );
+        
+        var bState = YAHOO.util.History.getBookmarkedState( "pubmgr" );
+        var iState = bState || dst;
+        
+        var PMGR = YAHOO.imex.pubmgr;
+        
+        //alert("ISTATE=" + iState );
+
+        YAHOO.util.History.register( "pubmgr", iState, 
+                                     PMGR.handleHistoryNavigation ); 
+        
+        YAHOO.util.History.onReady( PMGR.historyReadyHandler );    
+        
+        try{
+            YAHOO.util.History.initialize( "yui-history-field", 
+                                           "yui-history-iframe" );
+        } catch (x) {
+            alert(x);
+        }
+        
+        //alert("historyInit: DONE");
+        
+    },
+
+    handleFilter: function( ev, o ){
+
+        var filter = o.filter;
+        var newVal = ev.newValue.value;
+        
+        var PMGR = YAHOO.imex.pubmgr;
+        
+        var newState = PMGR.myDataSource.my.myState;
+        newState.startIndex = 0;
+        newState.filter[filter] = newVal;
+        
+        YAHOO.util.History
+            .navigate( "pubmgr", 
+                       PMGR.generateStateString( newState ) );
+    },
+
+    handlePagination: function( state, datatable ){
+        
+        var PMGR = YAHOO.imex.pubmgr;
+        var newState = PMGR.myDataSource.my.myState;
+        
+        newState.startIndex = state.recordOffset;
+        newState.pageSize = state.rowsPerPage;
+        
+        YAHOO.util.History
+            .navigate( "pubmgr", 
+                       PMGR.generateStateString( newState ) );
+    },
+    
+    handleHistoryNavigation: function( state ){
+
+        var PMGR = YAHOO.imex.pubmgr;
+
+        //alert( "HHN:" + state );
+        
+        var parsed = PMGR.parseStateString( state );      
+        var request = PMGR.buildRequest( parsed );
+        
+        PMGR.myDataSource.my.myState = parsed;
+        
+        // update filters
+        //---------------
+
+        var flt, 
+        sflt = "";
+        
+        for( flt in parsed.filter){
+            sflt += "{" + flt + "=" + parsed.filter[flt] + "}";
+            
+        }
+
+        //alert( sflt );
+
+        // reset filter buttons/menus
+        //---------------------------
+        
+        var statusLabel = "---ANY---";
+        var partnerLabel = "---ANY---";
+
+        if( parsed.filter.status !== ""){
+            statusLabel = parsed.filter.status;
+        }
+
+        if( parsed.filter.partner !== ""){
+            partnerLabel = parsed.filter.partner;
+        }
+        
+        if( PMGR.stateBtn.set !== undefined ){           
+            PMGR.stateBtn.set( "label", 
+                               ("<em class=\"yui-button-label\">" + 
+                                statusLabel + "</em>"));
+        }
+        
+        if( PMGR.partnerBtn.set!== undefined ){
+            PMGR.partnerBtn.set( "label", 
+                                 ("<em class=\"yui-button-label\">" + 
+                                  partnerLabel + "</em>"));
+        }
+        
+        // reload data
+        //------------
+
+        var mdt = PMGR.myDataTable;
+
+        PMGR.myDataSource
+            .sendRequest( request, {
+                              success: mdt.onDataReturnSetRows,
+                              failure: mdt.onDataReturnSetRows,
+                              scope: mdt,
+                              argument: {}
+                          });        
+    },
+
+    generateStateString: function( state ){            
+        return YAHOO.lang.JSON.stringify( state );
+    },
+
+    parseStateString: function( statStr ){
+        return YAHOO.lang.JSON.parse(statStr);
+    },
+
+    buildRequest: function ( state ){
+      
+        var req = "opp.off=" + state.startIndex + 
+            "&opp.max=" + state.pageSize + 
+            "&opp.sfv=" + state.filter.status +
+            "&opp.pfv=" + state.filter.partner +
+            "&opp.efv=" + state.filter.editor +
+            "&opp.ofv=" + state.filter.owner +
+            "&opp.ffv=" + state.filter.cflag +
+            "&opp.skey=" + state.sort +
+            "&opp.sdir=" + state.dir;
+
+        return encodeURI(req);
+        
+    },
+
+    historyReadyHandler: function(){
+
+        try{
+            var cState = YAHOO.util.History.getCurrentState( "pubmgr" );
+            YAHOO.imex.pubmgr.handleHistoryNavigation( cState );
+        } catch (x) {
+            alert(x);
+        }
+    },
+
+    initView: function( init ) { 
+
+        var PMGR = YAHOO.imex.pubmgr;
+        
         this.formatterInit();
         
         if( init !== undefined ){
-            YAHOO.imex.pubmgr.admus = init.admus;
-            YAHOO.imex.pubmgr.owner = init.owner;
-            YAHOO.imex.pubmgr.cflag = init.cflag;
+            PMGR.admus = init.admus;
+            PMGR.owner = init.owner;
+            PMGR.cflag = init.cflag;
         }
         
         //alert("init: "+ init.cflag);
@@ -141,7 +330,9 @@ YAHOO.imex.pubmgr = {
         var partnerSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse( o.responseText );
             YAHOO.imex.pubmgr.selBtnInit( 
-                { items: messages.acom,
+                { pmgr: YAHOO.imex.pubmgr,
+                  filter: "partner",
+                  items: messages.acom,
                   selmnu: YAHOO.imex.pubmgr.partnerSel,
                   selbtn: "partnerBtn",
                   selcnt: "partner-button-container",
@@ -156,7 +347,9 @@ YAHOO.imex.pubmgr = {
         var stateSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse(o.responseText);
             YAHOO.imex.pubmgr.selBtnInit( 
-                { items: messages.acom,
+                { pmgr: YAHOO.imex.pubmgr,
+                  filter: "status",
+                  items: messages.acom,
                   selmnu: YAHOO.imex.pubmgr.stateSel,
                   selbtn: "stateBtn",
                   selcnt: "state-button-container",
@@ -183,10 +376,10 @@ YAHOO.imex.pubmgr = {
         // create datasource
         //------------------
 
-        YAHOO.imex.pubmgr.myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=44&"); 
+        PMGR.myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=44&"); 
         
-        YAHOO.imex.pubmgr.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
-        YAHOO.imex.pubmgr.myDataSource.responseSchema = { 
+        PMGR.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
+        PMGR.myDataSource.responseSchema = { 
             resultsList: "records.records", 
             fields: ["id","author","title","pmid","imexId",
                      "owner","state","date","time","imexDb","editor"], 
@@ -195,14 +388,22 @@ YAHOO.imex.pubmgr = {
                 paginationRecordOffset : "records.startIndex", 
                 paginationRowsPerPage : "records.pageSize", 
                 sortKey: "records.sort", 
-                sortDir: "records.dir" 
+                sortDir: "records.dir",
+                fOwr: "records.filter.owner",
+                fEdr: "records.filter.editor",
+                fSte: "records.filter.status",
+                fPar: "records.filter.partner",
+                fFlg: "records.filter.cflag" 
             }
         }; 
+
+        PMGR.myDataSource.my = { myState: null };
+        
         
         // create paginator
         //-----------------
         
-        YAHOO.imex.pubmgr.myPaginator = new YAHOO.widget.Paginator(
+        PMGR.myPaginator = new YAHOO.widget.Paginator(
             { containers: ["dt-pag-nav"], 
               rowsPerPage: 25, 
               template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE, 
@@ -221,84 +422,112 @@ YAHOO.imex.pubmgr = {
 
         var myConfig = {
             paginator : this.myPaginator,
-            initialRequest: initReq,
+            initialLoad: false,
             dynamicData : true,
-            draggableColumns: true,
-            generateRequest : this.myRequestBuilder
+            draggableColumns: true
         };
-    
+        
         // Instantiate DataTable
         //----------------------
     
-        YAHOO.imex.pubmgr.myDataTable = new YAHOO.widget.DataTable(
-            "pubtab", YAHOO.imex.pubmgr.myColumnDefs, 
-            YAHOO.imex.pubmgr.myDataSource, myConfig
+        PMGR.myDataTable = new YAHOO.widget.DataTable(
+            "pubtab", PMGR.myColumnDefs, 
+            PMGR.myDataSource, myConfig
         );
         
-        YAHOO.imex.pubmgr.myDataTable.my = { 
-            stateFlt: YAHOO.imex.pubmgr.stateBtn, 
-            partnerFlt: YAHOO.imex.pubmgr.partnerBtn,
-            ownerFlt: YAHOO.imex.pubmgr.owner,
-            admusFlt: YAHOO.imex.pubmgr.admus,
-            cflagFlt: YAHOO.imex.pubmgr.cflag,
-            requestBuilder: YAHOO.imex.pubmgr.myRequestBuilder
+        PMGR.myPaginator
+            .unsubscribe( "changeRequest", 
+                          PMGR.myDataTable.onPaginatorChangeRequest );
+        PMGR.myPaginator
+            .subscribe( "changeRequest", 
+                        PMGR.handlePagination, PMGR.myDataTable, true );
+
+
+        PMGR.myDataTable.my = { 
+            stateFlt: PMGR.stateBtn, 
+            partnerFlt: PMGR.partnerBtn,
+            ownerFlt: PMGR.owner,
+            admusFlt: PMGR.admus,
+            cflagFlt: PMGR.cflag,
+            requestBuilder: PMGR.requestBuilder
         };
         
-        YAHOO.imex.pubmgr.stateBtn.my.table = YAHOO.imex.pubmgr.myDataTable;
-        YAHOO.imex.pubmgr.partnerBtn.my.table = YAHOO.imex.pubmgr.myDataTable;
+        PMGR.stateBtn.my.table = PMGR.myDataTable;
+        PMGR.partnerBtn.my.table = PMGR.myDataTable;
         
         // Show loading message while page is being rendered
         
-        YAHOO.imex.pubmgr.myDataTable.showTableMessage( YAHOO.imex.pubmgr.myDataTable.get("MSG_LOADING"), 
-                                           YAHOO.widget.DataTable.CLASS_LOADING);
-        
-        YAHOO.imex.pubmgr.myDataTable.handleDataReturnPayload = 
-            function(oRequest, oResponse, oPayload) { 
-                oPayload.totalRecords = oResponse.meta.totalRecords;
-                return oPayload; 
-            }; 
-        
-        if( YAHOO.imex.pubmgr.stateBtn.on !== undefined ){
-            
-            YAHOO.imex.pubmgr.stateBtn.on( "selectedMenuItemChange",
-                                           YAHOO.imex.pubmgr.tableReload, 
-                                           YAHOO.imex.pubmgr.myDataTable, 
-                                           YAHOO.imex.pubmgr.myDataTable );
-        }
-        if( YAHOO.imex.pubmgr.partnerBtn.on !== undefined ){
-            
-            YAHOO.imex.pubmgr.partnerBtn.on( "selectedMenuItemChange",
-                                             YAHOO.imex.pubmgr.tableReload, 
-                                             YAHOO.imex.pubmgr.myDataTable, 
-                                             YAHOO.imex.pubmgr.myDataTable );
-        }
-        
-        var acSelectHandler = function( sType, aArgs ) {
-            var oMyAcInstance = aArgs[0];
-            YAHOO.imex.pubmgr.tableReload( oMyAcInstance.my.table, 
-                                           oMyAcInstance.my.table );
+        PMGR.myDataTable
+            .showTableMessage( PMGR.myDataTable.get("MSG_LOADING"), 
+                               YAHOO.widget.DataTable.CLASS_LOADING);
+
+        //PMGR.myDataTable.handleDataReturnPayload = 
+        //    function(oRequest, oResponse, oPayload) { 
+        //        oPayload.totalRecords = oResponse.meta.totalRecords;
+        //        return oPayload; 
+        //    }; 
+         
+        PMGR.myDataTable.doBeforeLoadData = 
+            function( oRequest, oResponse, oPayload ){
+                           
+                var meta = oResponse.meta;
+                oPayload.totalRecords 
+                    = meta.totalRecords || oPayload.totalRecords;
+                
+                //alert( "dbld: response=" + 
+                //       YAHOO.lang.JSON.stringify(oResponse));
+                oPayload.pagination = {
+                    rowsPerPage: meta.paginationRowsPerPage || 10,
+                    recordOffset: meta.paginationRecordOffset || 0
+                    };
+                /*
+                oPayload.sortedBy = {
+                    key: meta.sortKey || "id",
+                    dir: (meta.sortDir) 
+                         ? "yui-dt-" + meta.sortDir : "yui-dt-asc"                    
+                };
+                alert( "dbld: payload=" + 
+                       YAHOO.lang.JSON.stringify(oPayload));
+                 */
+                return true;
         };
         
+        /*
+        if( PMGR.stateBtn.on !== undefined ){
+            PMGR.stateBtn.on( "selectedMenuItemChange",
+                              PMGR.handleFilter, 
+                              {filter: "state"}, 
+                              PMGR.myDataTable );
+             
+        }
+        if( PMGR.partnerBtn.on !== undefined ){
+            
+            PMGR.partnerBtn.on( "selectedMenuItemChange",
+                                PMGR.handleFilter, 
+                                {filter:"partner"}, 
+                                PMGR.myDataTable );
+        }
+        */
         try{
             
-            YAHOO.imex.pubmgr.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
+            PMGR.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
             
             var oConfMenu = [[{text:"Preferences" }],
                              [{text: "Show Columns", 
-                               submenu: YAHOO.imex.pubmgr.myDataTable.my.colmenu }],
+                               submenu: PMGR.myDataTable.my.colmenu }],
                              [{text:"Save...", disabled: true}]
                             ];        
             
             var clist=[];
             var trigger=[];
             
-            for( var i = 0;  i < YAHOO.imex.pubmgr.myColumnDefs.length; i++ ) {
-                if( YAHOO.imex.pubmgr.myColumnDefs[i].menuLabel !== undefined ) {
-                    var item= {text: YAHOO.imex.pubmgr.myColumnDefs[i].menuLabel,
+            for( var i = 0;  i < PMGR.myColumnDefs.length; i++ ) {
+                if( PMGR.myColumnDefs[i].menuLabel !== undefined ) {
+                    var item= {text: PMGR.myColumnDefs[i].menuLabel,
                                checked: true };
                     clist.push(item);
-                    var trg = YAHOO.imex.pubmgr.myDataTable.getColumn( 
-                        YAHOO.imex.pubmgr.myColumnDefs[i].key );
+                    var trg = PMGR.myDataTable.getColumn( 
+                        PMGR.myColumnDefs[i].key );
                     //alert( myColumnDefs[i].key+ "::"+trg);
                     if( trg !== null ) {
                         trigger.push( trg.getThEl() );
@@ -307,14 +536,13 @@ YAHOO.imex.pubmgr = {
                 }
             }
             
-            YAHOO.imex.pubmgr.myDataTable.my.colmenu.addItems( clist );
+            PMGR.myDataTable.my.colmenu.addItems( clist );
             
-            YAHOO.imex.pubmgr.myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
+            PMGR.myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
                 "configmenu", { trigger: trigger } );
             
-            YAHOO.imex.pubmgr.myDataTable.my.configmenu.addItems( oConfMenu );
-            
-            YAHOO.imex.pubmgr.myDataTable.my.configmenu.render("pubtab");
+            PMGR.myDataTable.my.configmenu.addItems( oConfMenu );
+            PMGR.myDataTable.my.configmenu.render("pubtab");
             
         } catch (x) {
             alert(x);
@@ -322,8 +550,8 @@ YAHOO.imex.pubmgr = {
 
         
         return { 
-            ds: YAHOO.imex.pubmgr.myDataSource, 
-            dt: YAHOO.imex.pubmgr.myDataTable 
+            ds: PMGR.myDataSource, 
+            dt: PMGR.myDataTable 
         };
         
         //YAHOO.imex.pubmgrOld();        
@@ -348,46 +576,49 @@ YAHOO.imex.pubmgr = {
     },
     
     selBtnInit: function( o ) {
-        
-        // status filter 
-        //-------------
-        
-        for( var i = 0; i < o.items.length; i++){
-            var text = o.items[i].name;
-            var value = o.items[i].value;
-            if(value === undefined ){
-                value = text;
-            }
-          
-            //alert("name=" + name + " text="+ text);
-            o.selmnu.push( {value: value, text: text} );        
-        }
+        try{
             
-        //alert(YAHOO.imex.pubmgr[o.selbtn].my.foo);
+            // status filter 
+            //-------------
         
-        YAHOO.imex.pubmgr[o.selbtn] = new YAHOO.widget.Button(
-            { id: o.selnme,  
-              name: o.selnme, 
-              label: "<em class=\"yui-button-label\">---ANY---</em>", 
-              type: "menu",   
-              menu: o.selmnu,  
-              container: o.selcnt }); 
-        
-        YAHOO.imex.pubmgr[o.selbtn].my 
-            = { items: o.selmnu, value: "", name: o.selnme };
-
-        YAHOO.imex.pubmgr[o.selbtn].on( 
-            "selectedMenuItemChange", 
-            YAHOO.imex.pubmgr.onSelectedMenuItemChange );
-
-        //alert(YAHOO.imex.pubmgr.stateBtn.my.name);
-        
-        if( YAHOO.imex.pubmgr.myDataTable !== null ){  
-            YAHOO.imex.pubmgr[o.selbtn]
-                .on( "selectedMenuItemChange",
-                     YAHOO.imex.pubmgr.tableReload, 
-                     YAHOO.imex.pubmgr.myDataTable, 
-                     YAHOO.imex.pubmgr.myDataTable );
+            for( var i = 0; i < o.items.length; i++){
+                var text = o.items[i].name;
+                var value = o.items[i].value;
+                if( value === undefined ){
+                    value = text;
+                }
+                
+                //alert("name=" + name + " text="+ text);
+                o.selmnu.push( {value: value, text: text} );        
+            }
+            
+            //alert(YAHOO.imex.pubmgr[o.selbtn].my.foo);
+            
+            o.pmgr[o.selbtn] = new YAHOO.widget.Button(
+                { id: o.selnme,  
+                  name: o.selnme, 
+                  label: "<em class=\"yui-button-label\">---ANY---</em>", 
+                  type: "menu",   
+                  menu: o.selmnu,  
+                  container: o.selcnt }); 
+            
+            o.pmgr[o.selbtn].my 
+                = { items: o.selmnu, value: "", name: o.selnme };
+            
+            o.pmgr[o.selbtn].on( 
+                "selectedMenuItemChange", 
+                o.pmgr.onSelectedMenuItemChange );
+            
+            if( o.pmgr.myDataTable !== null ){  
+                o.pmgr[o.selbtn]
+                    .on( "selectedMenuItemChange",
+                         o.pmgr.handleFilter, 
+                         {filter: o.filter}, // o.pmgr.myDataTable, 
+                         o.pmgr.myDataTable );
+            }
+            
+        } catch (x) {
+            alert(x);
         }
     },
 
