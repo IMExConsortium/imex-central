@@ -1157,12 +1157,23 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             max ="";
         }
 
+        /*
         if ( sdir != null && sdir.equals( "false" ) ) {
             asc = false;
         } else {
             sdir ="true";
         }
-        
+        */
+
+        if ( sdir != null &&
+             ( sdir.equals( "false" )
+               || sdir.equals( "desc" ) ) ){
+            asc = false;
+            sdir ="desc";
+        } else {
+            sdir ="asc";
+        }
+
         String sortKey ="id";
         
         if ( skey != null && !skey.equals("")) {
