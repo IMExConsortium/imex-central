@@ -1176,12 +1176,21 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         String sortKey ="id";
         
-        if ( skey != null && !skey.equals("")) {
-            if ( skey.equals( "pub" ) ) {
+        if( skey != null && !skey.equals("") ){
+            if( skey.equals( "pub" ) ){
                 sortKey ="author";
             }
-            if ( skey.equals( "date" ) ) {
+            if( skey.equals( "date" ) ){
                 sortKey ="crt";
+            }
+            if( skey.equals( "owner" ) ){
+                sortKey ="owner";
+            }
+            if( skey.equals( "pmid" ) ){
+                sortKey ="pmid";
+            }
+            if( skey.equals( "imexId" ) ){
+                sortKey ="imex";
             }
         } else {
             skey = "id";

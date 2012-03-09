@@ -31,10 +31,10 @@ YAHOO.imex.pubmgr = {
           sortable:true, resizeable:true, 
           formatter:"center",menuLabel:"Imex Accession" },
         { key:"imexDb", label:"<center>Imex<br/>Partner</center>", 
-          sortable:true, resizeable:true, 
+          sortable:false, resizeable:true, 
           formatter:"partnerList",menuLabel:"Imex Partner" },
         { key:"state", label:"Status", 
-          sortable:true, resizeable:false, 
+          sortable:false, resizeable:false, 
           formatter:"center", menuLabel:"Status" },
         { label:"Submission", menuLabel:"Submission", key:"submission",
           children:[
@@ -45,7 +45,7 @@ YAHOO.imex.pubmgr = {
           ]
         },
         { key:"editor", label:"Curator(s)", menuLabel:"Curator(s)",
-          sortable:true, resizeable:true, 
+          sortable:false, resizeable:true, 
           formatter:"editorList" },
         { key:"detail", label:"",
           sortable:false, resizeable:true, 
