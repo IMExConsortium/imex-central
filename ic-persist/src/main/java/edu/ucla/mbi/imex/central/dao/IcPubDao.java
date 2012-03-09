@@ -1,14 +1,14 @@
 package edu.ucla.mbi.imex.central.dao;
 
-/*===========================================================================
- * $HeadURL::                                                               $
- * $Id::                                                                    $
- * Version: $Rev::                                                          $
- *===========================================================================
+/*=============================================================================
+ * $HeadURL::                                                                 $
+ * $Id::                                                                      $
+ * Version: $Rev::                                                            $
+ *=============================================================================
  *
  * IcJournalDAO:
  *
- *========================================================================= */
+ *=========================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,7 +42,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public Publication getPublication( String title ) { 
         
@@ -71,7 +71,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public Publication getPublicationByPmid( String pmid ) { 
         
@@ -105,7 +105,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public Publication getPublicationByDoi( String doi ) { 
         
@@ -139,7 +139,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public Publication getPublicationByJint( String jint ) { 
         
@@ -173,7 +173,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public Publication getPublicationByKey( String key ) { 
         
@@ -209,7 +209,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return pub; 
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<Publication> getPublicationList() {
         
@@ -243,7 +243,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return plst;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<Publication> getPublicationList( int firstRecord, 
                                                  int blockSize ) {
@@ -278,7 +278,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return plst;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<Publication> getPublicationList( int firstRecord, 
                                                  int blockSize,
@@ -302,11 +302,21 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
                 crit.setMaxResults( blockSize );
             }
             
-            if (skey != null && skey.length() > 0 ) {
-                if ( asc ) {
-                    crit.addOrder( Order.asc( skey ) );
-                } else {
-                    crit.addOrder( Order.desc( skey ) );
+            if( skey != null && skey.length() > 0 ){
+                if( asc ){
+                    if( skey.equals( "imex" ) ){
+                        crit.createAlias( "icKey", "imex" )
+                            .addOrder( Order.asc( "imex.value" ) );
+                    }else{
+                        crit.addOrder( Order.asc( skey ) );
+                    }
+                }else{
+                    if( skey.equals( "imex" ) ){
+                        crit.createAlias( "icKey", "imex" )
+                            .addOrder( Order.desc( "imex.value" ) );
+                    }else{
+                        crit.addOrder( Order.desc( skey ) );
+                    }
                 }
             }
 
@@ -331,7 +341,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         return plst;
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<Publication> getPublicationList( int firstRecord,
                                                  int blockSize,
@@ -355,9 +365,19 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             if (skey != null && skey.length() > 0 ) {
                 if ( asc ) {
-                    crit.addOrder( Order.asc( skey ) );
+                    if( skey.equals( "imex" ) ){
+                        crit.createAlias( "icKey", "imex" )
+                            .addOrder( Order.asc( "imex.value" ) );
+                    }else{
+                        crit.addOrder( Order.asc( skey ) );
+                    }
                 } else {
-                    crit.addOrder( Order.desc( skey ) );
+                    if( skey.equals( "imex" ) ){
+                        crit.createAlias( "icKey", "imex" )
+                            .addOrder( Order.desc( "imex.value" ) );
+                    }else{
+                        crit.addOrder( Order.desc( skey ) );
+                    }
                 }
             }
 
