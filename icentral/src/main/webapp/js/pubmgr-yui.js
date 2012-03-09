@@ -6,19 +6,11 @@ YAHOO.imex.pubmgr = {
     owner: "",
     cflag: "",
     
-    stateBtn: { my:{value:"",foo:"state"}},    
-    stateSel: [ 
-        { text: "---ANY---", value: "" } 
-    ],
+    stateBtn: { my:{value:"",foo:"state"} },    
+    stateSel: [ { text: "---ANY---", value: "" } ],
     
-    partnerBtn: { my:{value:"",foo:"partner"}},    
-    partnerSel: [
-        { text: "---ANY---", value: "" }
-        //{ text: "DIP", value: "DIP" },
-        //{ text: "IntAct", value: "INTACT" },
-        //{ text: "MINT", value: "MINT" },
-        //{ text: "MPIDB", value: "MPIDB" }    ],
-    ],
+    partnerBtn: { my:{value:"",foo:"partner"} },    
+    partnerSel: [ { text: "---ANY---", value: "" } ],
 
     myDataSource: null,
     myPaginator: null,
@@ -483,16 +475,10 @@ YAHOO.imex.pubmgr = {
         PMGR.myDataTable
             .showTableMessage( PMGR.myDataTable.get("MSG_LOADING"), 
                                YAHOO.widget.DataTable.CLASS_LOADING);
-
-        //PMGR.myDataTable.handleDataReturnPayload = 
-        //    function(oRequest, oResponse, oPayload) { 
-        //        oPayload.totalRecords = oResponse.meta.totalRecords;
-        //        return oPayload; 
-        //    }; 
-         
+        
         PMGR.myDataTable.doBeforeLoadData = 
             function( oRequest, oResponse, oPayload ){
-
+                
                 try{
                     
                     var meta = oResponse.meta;
@@ -523,22 +509,6 @@ YAHOO.imex.pubmgr = {
                 return true;
         };
         
-        /*
-        if( PMGR.stateBtn.on !== undefined ){
-            PMGR.stateBtn.on( "selectedMenuItemChange",
-                              PMGR.handleFilter, 
-                              {filter: "state"}, 
-                              PMGR.myDataTable );
-             
-        }
-        if( PMGR.partnerBtn.on !== undefined ){
-            
-            PMGR.partnerBtn.on( "selectedMenuItemChange",
-                                PMGR.handleFilter, 
-                                {filter:"partner"}, 
-                                PMGR.myDataTable );
-        }
-        */
         try{
             
             PMGR.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
@@ -724,4 +694,3 @@ YAHOO.imex.pubmgr = {
 
 //YAHOO.util.Event.addListener(
 //    window, "load", YAHOO.imex.pubmgr ) ;
-
