@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===========================================================================
+ ! $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/central/trunk/etc/icentral/#$
+ ! $Id:: applicationContext.xml 217 2011-06-30 14:11:44Z lukasz                $
+ ! Version: $Rev:: 217                                                         $
+ !==============================================================================
+ !
+ ! IMEx Central: application context
+ !
+ !========================================================================== -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+
+    xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+    xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+
+
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+
+        http://jax-ws.dev.java.net/spring/core
+        http://jax-ws.dev.java.net/spring/core.xsd
+        http://jax-ws.dev.java.net/spring/servlet
+        http://jax-ws.dev.java.net/spring/servlet.xsd">
+
+
+<!-- ========================================================== CONFIGUATION -->
+
+<!--
+ <import resource="context.xml" />
+ <import resource="aop-logger.xml" />
+-->
+
+<!-- ======================================================== STRUTS ACTIONS -->
+<!--
+ <import resource="actions.xml" />
+-->
+<!-- ========================================================== WEB SERVICES -->
+<!-- ver 1.1 -->
+
+ <bean id="psq-ws-1.1-imp"  class="org.hupo.psi.mi.psq.server.PsqPortImpl">
+<!--
+   <property name="entryManager" ref="entryManager"/>
+   <property name="delay" value="5"/>       
+-->
+ </bean>
+
+ <ws:service  id="psq-ws-1.1" bean="#psq-ws-1.1-imp"/>
+ <wss:binding url="/ws" service="#psq-ws-1.1" />
+ <wss:binding url="/ws-v11" service="#psq-ws-1.1" />
+
+</beans>

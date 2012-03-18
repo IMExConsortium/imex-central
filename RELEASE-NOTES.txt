@@ -59,10 +59,22 @@ $Id$
      - implemented record identifier updates
 
 
-2011/12/15 BETA-0.83
+2011/12/15 BETA-0.83 (not in repository ?)
   - GUI updates:
      - added comment flags and searching by flag
      - added record history tab
   - web services API ver 2.0  artifact deployed on public
     maven repository 
 
+
+2012/03/09 BETA-0.84
+  - GUI updates:
+      - publication manager updates:
+         - implemented browsing history 
+         - implemented sorting by:
+             - publication (ie author)
+             - pmid
+             - IMEx accession
+             - date
+             - record owner
+      - updated location of the recaptcha server
