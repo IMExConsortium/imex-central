@@ -119,7 +119,7 @@
       this dispatcher as <dispatcher>FORWARD</dispatcher>.
     -->
     <filter-name>SolrRequestFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/solr/*</url-pattern>
   </filter-mapping>
 
 
@@ -214,12 +214,12 @@
 
   <servlet-mapping>
     <servlet-name>SolrServer</servlet-name>
-    <url-pattern>/solr/select/*</url-pattern>
+    <url-pattern>/select/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>SolrUpdate</servlet-name>
-    <url-pattern>/solr/update/*</url-pattern>
+    <url-pattern>/update/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -228,7 +228,6 @@
   </servlet-mapping>
 
 <!--
-
   <servlet-mapping>
     <servlet-name>SolrServer</servlet-name>
     <url-pattern>/solr/*</url-pattern>
