@@ -7,19 +7,23 @@
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>PSICQUIC Web Service server</name>
-<!--
-  <parent>
-   <groupId>org.hupo.psi.mi</groupId>
-   <artifactId>ic-psq-server</artifactId>
-   <version>1.0-SNAPSHOT</version>
-  </parent>
--->
+
+  <properties>
+      <psq.version>${project.version}</psq.version>
+  </properties>
+ 
   <dependencies>
 
    <dependency>
       <groupId>org.hupo.psi.mi</groupId>
       <artifactId>ic-psq-api</artifactId>
       <version>1.1</version>
+   </dependency>
+
+   <dependency>
+      <groupId>edu.ucla.mbi.dip</groupId>
+      <artifactId>dip-util-struts</artifactId>
+      <version>0.01</version>
    </dependency>
    
    <dependency>
@@ -45,11 +49,23 @@
      <groupId>org.apache.solr</groupId>
      <version>3.5.0</version>
    </dependency>
-
+   
+   <dependency>
+     <groupId>org.apache.derby</groupId>
+     <artifactId>derby</artifactId>
+     <version>10.8.2.2</version>
+   </dependency>
+   
    <dependency>
      <groupId>commons-logging</groupId>
      <artifactId>commons-logging</artifactId>
      <version>1.1.1</version>
+   </dependency>
+
+   <dependency>
+    <groupId>commons-cli</groupId>
+    <artifactId>commons-cli</artifactId>
+    <version>1.2</version>
    </dependency>
 
    <dependency>
@@ -120,6 +136,24 @@
     </dependency>
 
    <dependency>
+    <groupId>org.apache.struts</groupId>
+    <artifactId>struts2-core</artifactId>
+    <version>2.1.8</version>
+   </dependency>
+
+   <dependency>
+    <groupId>org.apache.struts</groupId>
+    <artifactId>struts2-spring-plugin</artifactId>
+    <version>2.1.8</version>
+   </dependency>
+
+   <dependency>
+    <groupId>org.apache.struts</groupId>
+    <artifactId>struts2-tiles-plugin</artifactId>
+    <version>2.1.8</version>
+   </dependency>
+
+   <dependency>
     <groupId>javax.servlet</groupId>
     <artifactId>servlet-api</artifactId>
     <version>2.5</version>
@@ -182,6 +216,25 @@
                 <include>*.xml</include>
               </includes>
             </resource>
+
+            <resource>
+              <directory>${basedir}/../etc/ic-psq/server/struts</directory>
+              <targetPath>WEB-INF/classes</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>*.xml</include>
+              </includes>
+            </resource>
+
+            <resource>
+              <directory>${basedir}/../etc/ic-psq/server</directory>
+              <targetPath>etc</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>*.json</include>
+              </includes>
+            </resource>
+
 <!--
             <resource>
               <directory>${basedir}/../etc/ic-psq/server</directory>
@@ -259,26 +312,20 @@
         </configuration>
       </plugin>
 
-<!--
+
       <plugin>
-       <artifactId>maven-assembly-plugin</artifactId>
-       <version>2.2-beta-2</version>
-       <executions>
-        <execution>
-         <id>create-source</id>
-         <phase>package</phase>
-         <goals>
-          <goal>single</goal>
-         </goals>
-         <configuration>
-          <descriptorRefs>
-           <descriptorRef>src</descriptorRef>
-          </descriptorRefs>        
-         </configuration>
-        </execution>
-       </executions>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+         <archive>
+          <manifest>
+           <mainClass>org.hupo.psi.mi.psq.server.index.solr.BuildSolrIndex</mainClass>
+          </manifest>
+         </archive>
+         <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+         </descriptorRefs>
+        </configuration>
       </plugin>
--->
     </plugins>
   
     <extensions>

@@ -10,41 +10,81 @@ import org.apache.solr.common.SolrDocumentList;
 import java.net.MalformedURLException;
 
 import org.hupo.psi.mi.psq.server.index.*;
+import org.hupo.psi.mi.psq.server.data.*;
+
+import edu.ucla.mbi.util.JsonContext;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class SolrIndex implements Index{
-    
-    String url = "http://10.1.1.206:8080/ic-psq-server/solr/psq-01";
-    
-    public SolrIndex(){
-
-        // configuration info should be set here
         
+    String coreUrl = null;
+    JsonContext context = null;
+    
+    public void setContext( JsonContext context ){
+        this.context = context;
     }
 
+    public SolrIndex(){}
+    
+    public SolrIndex( JsonContext context ){
+        this.context = context;
+        initialize( true );
+    }
+    
+    public void initialize(){
+        initialize( false );
+    }
+    
+    public void initialize( boolean force ){
+        
+        if( force || coreUrl == null ){
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( " initilizing SolrIndex" );
+            
+            if( context != null && context.getJsonConfig() != null ){
+            
+                log.info( "    solr-url=" + context.getJsonConfig().get("solr-url") );
+                log.info( "    solr-url=" + context.getJsonConfig().get("solr-core") );
+                
+                coreUrl = (String) context.getJsonConfig().get("solr-url");
+                if( context.getJsonConfig().get("solr-core") != null ){
+                    coreUrl+= (String) context.getJsonConfig().get("solr-core");
+                }                
+            }
+        }
+    }
+    
     public ResultSet query( String query ){
 
         ResultSet rs = new ResultSet();
 
         try{
-            SolrServer solr = new CommonsHttpSolrServer( url );
-            
-            ModifiableSolrParams params = new ModifiableSolrParams();
-            params.set("q", query);
+            if( coreUrl == null ){ initialize(); }
+            if( coreUrl != null ){
 
-            try{            
-                QueryResponse response = solr.query( params );
-                System.out.println( "response = " + response );
+                SolrServer solr = new CommonsHttpSolrServer( coreUrl );
+                ModifiableSolrParams params = new ModifiableSolrParams();
+                params.set( "q", query );
 
-                SolrDocumentList res = response.getResults();
-                rs.setResultList( res );
-                
-            } catch( SolrServerException sex ){
-                sex.printStackTrace();
+                try{            
+                    QueryResponse response = solr.query( params );
+                    System.out.println( "response = " + response );
+
+                    SolrDocumentList res = response.getResults();
+                    rs.setResultList( res );
+
+                    
+
+                } catch( SolrServerException sex ){
+                    sex.printStackTrace();
+                }
             }
         } catch( MalformedURLException mex ){
             mex.printStackTrace();
         }
         return rs;
-
     }
 }

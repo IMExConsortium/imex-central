@@ -63,20 +63,24 @@
 
   <!-- ====================================================== STRUTS2 filter -->
 
-<!--
+
   <filter>
-    <filter-name>action2</filter-name>
+    <filter-name>struts</filter-name>
     <filter-class>
       org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
     </filter-class>
+    <init-param>
+        <param-name>actionPackages</param-name>
+        <param-value>org.hupo.psi.mi.psq.server.struts.action</param-value>
+        </init-param>
   </filter>
 
   <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/image</url-pattern>
+    <filter-name>struts</filter-name>
+    <url-pattern>/recordmgr</url-pattern>
   </filter-mapping>
 
--->
+
 
   <!-- ========================================================= SOLR filter -->
 
@@ -227,12 +231,30 @@
     <url-pattern>/solr/admin/logging</url-pattern>
   </servlet-mapping>
 
-<!--
+<!-- -->
   <servlet-mapping>
     <servlet-name>SolrServer</servlet-name>
-    <url-pattern>/solr/*</url-pattern>
+    <url-pattern>/solr/select/*</url-pattern>
   </servlet-mapping>
--->
+
+ <servlet-mapping>
+    <servlet-name>SolrUpdate</servlet-name>
+    <url-pattern>/solr/update/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>SolrServer</servlet-name>
+    <url-pattern>/solr/psq-01/select/*</url-pattern>
+  </servlet-mapping>
+
+ <servlet-mapping>
+    <servlet-name>SolrUpdate</servlet-name>
+    <url-pattern>/solr/psq-01/update/*</url-pattern>
+  </servlet-mapping>
+
+
+
+
 
 <!-- ======================================================= =============== -->
 <!-- ========================================================== MIME mapping -->

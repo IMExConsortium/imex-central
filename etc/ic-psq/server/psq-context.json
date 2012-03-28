@@ -1,0 +1,5 @@
+{
+ "solr-url":"http://127.0.0.1:8080/${project.build.finalName}/solr",
+ "solr-core":"/psq-01",
+ "derby-db":"/opt/psq-data/psq-derby"
+}
