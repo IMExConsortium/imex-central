@@ -19,24 +19,30 @@ YAHOO.imex.pubmgr = {
         //{ key:"del",label:"",  sortable:false, resizeable:false,
         //  formatter:"checkbox", className:"checkbox" },
         { key:"id", label:"ICID", menuLabel:"ICID",
-          sortable:true, resizeable:true, hidden: true,
+          sortable:true, resizeable:true, hidden: true, hideable: true,
           formatter:"icid" },
+
         { key:"pub", label:"Publication", menuLabel:"Publication",
-          sortable:true, resizeable:true, 
+          sortable:true, resizeable:true, hideable: false,
           formatter:"publication", maxAutoWidth:1000  },
+
         { key:"pmid", label:"PMID", menuLabel:"PMID", 
-          sortable:true, resizeable:true, 
+          sortable:true, resizeable:true,  hideable: true,
           formatter:"center", className:"pmid" },
+
         { key:"imexId", label:"<center>Imex<br/>Accession</center>", 
-          sortable:true, resizeable:true, 
+          sortable:true, resizeable:true, hideable: true,
           formatter:"center",menuLabel:"Imex Accession" },
+
         { key:"imexDb", label:"<center>Imex<br/>Partner</center>", 
-          sortable:false, resizeable:true, 
+          sortable:false, resizeable:true, hideable: true,
           formatter:"partnerList",menuLabel:"Imex Partner" },
+
         { key:"state", label:"Status", 
-          sortable:false, resizeable:false, 
+          sortable:false, resizeable:false, hideable: true, 
           formatter:"center", menuLabel:"Status" },
-        { label:"Submission", menuLabel:"Submission", key:"submission",
+
+        { label:"Submission", menuLabel:"Submission", key:"submission", hideable: true,
           children:[
              { key:"date",  label:"Date", 
                sortable:true, resizeable:false, formatter:"crt" },
@@ -45,10 +51,10 @@ YAHOO.imex.pubmgr = {
           ]
         },
         { key:"editor", label:"Curator(s)", menuLabel:"Curator(s)",
-          sortable:false, resizeable:true, 
+          sortable:false, resizeable:true, hideable: true,
           formatter:"editorList" },
         { key:"detail", label:"",
-          sortable:false, resizeable:true, 
+          sortable:false, resizeable:true, hideable: true,
           formatter:"elink", className:"detail" }
     ],
     
@@ -476,6 +482,7 @@ YAHOO.imex.pubmgr = {
             .showTableMessage( PMGR.myDataTable.get("MSG_LOADING"), 
                                YAHOO.widget.DataTable.CLASS_LOADING);
         
+               
         PMGR.myDataTable.doBeforeLoadData = 
             function( oRequest, oResponse, oPayload ){
                 
@@ -508,47 +515,19 @@ YAHOO.imex.pubmgr = {
                 }
                 return true;
         };
+       
+        PMGR.myDataTable.handleReorder =
+            function( ev, o ){
+                //alert("reorder");                
+                try{
+                    PMGR.myDataTable.my.configmenu.destroy();
+                    PMGR.contextMenuInit( PMGR );
+                } catch (x) {}
+            };
         
-        try{
-            
-            PMGR.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
-            
-            var oConfMenu = [[{text:"Preferences" }],
-                             [{text: "Show Columns", 
-                               submenu: PMGR.myDataTable.my.colmenu }],
-                             [{text:"Save...", disabled: true}]
-                            ];        
-            
-            var clist=[];
-            var trigger=[];
-            
-            for( var i = 0;  i < PMGR.myColumnDefs.length; i++ ) {
-                if( PMGR.myColumnDefs[i].menuLabel !== undefined ) {
-                    var item= {text: PMGR.myColumnDefs[i].menuLabel,
-                               checked: true };
-                    clist.push(item);
-                    var trg = PMGR.myDataTable.getColumn( 
-                        PMGR.myColumnDefs[i].key );
-                    //alert( myColumnDefs[i].key+ "::"+trg);
-                    if( trg !== null ) {
-                        trigger.push( trg.getThEl() );
-                        //alert(trg.getThEl());
-                    }
-                }
-            }
-            
-            PMGR.myDataTable.my.colmenu.addItems( clist );
-            
-            PMGR.myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
-                "configmenu", { trigger: trigger } );
-            
-            PMGR.myDataTable.my.configmenu.addItems( oConfMenu );
-            PMGR.myDataTable.my.configmenu.render("pubtab");
-            
-        } catch (x) {
-            alert(x);
-        }
-        
+        PMGR.contextMenuInit( PMGR );
+        PMGR.myDataTable.on( "columnReorderEvent",
+                             PMGR.myDataTable.handleReorder );     
         return { 
             ds: PMGR.myDataSource, 
             dt: PMGR.myDataTable 
@@ -622,6 +601,74 @@ YAHOO.imex.pubmgr = {
         }
     },
 
+    contextMenuInit: function( o ){
+        
+        try{
+            
+            o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
+            
+            var oConfMenu = [[{text:"Preferences" }],
+                             [{text: "Show Columns", 
+                               submenu: o.myDataTable.my.colmenu }],
+                             [{text:"Save...", disabled: true}]
+                            ];        
+            
+            var clist=[];
+            var trigger=[];
+            
+            for( var i = 0;  i < o.myColumnDefs.length; i++ ) {
+                if( o.myColumnDefs[i].menuLabel !== undefined ) {
+
+                    var trg = o.myDataTable.getColumn( 
+                        o.myColumnDefs[i].key ); 
+
+                    var item= {text: o.myColumnDefs[i].menuLabel,
+                               checked: !trg.hidden, disabled:  !o.myColumnDefs[i].hideable,
+                               onclick: { fn: o.hiddenColToggle,
+                                          obj: { tbl: o.myDataTable ,col: trg } } };
+                    clist.push( item );
+
+                        
+                    //alert( myColumnDefs[i].key+ "::" + trg);
+                    if( trg !== null ) {
+                        trigger.push( trg.getThEl() );
+                        //alert(trg.getThEl());
+                    }
+                }
+            }
+            
+            o.myDataTable.my.colmenu.addItems( clist );
+            
+            o.myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
+                "configmenu", { trigger: trigger } );
+            
+            o.myDataTable.my.configmenu.addItems( oConfMenu );
+            o.myDataTable.my.configmenu.render("pubtab");
+            
+        } catch (x) {
+            alert(x);
+        }
+    },
+
+    hiddenColToggle: function( tp, ev, o ){
+
+        //alert( "col-toggle:" + o);  
+        try{
+            if( o.col.hidden){
+                o.tbl.showColumn( o.col );
+                
+            } else {
+                o.tbl.hideColumn( o.col );                
+            }
+            o.tbl.render();
+            o.tbl.my.configmenu.destroy();
+            YAHOO.imex.pubmgr.contextMenuInit( YAHOO.imex.pubmgr );
+        } catch (x) {
+            alert("toggle:" + x);
+        }
+
+    },
+
     myIcidFormatter: function( elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = "IC-" + oRecord.getData("id") + "-PUB"; 
@@ -681,7 +728,7 @@ YAHOO.imex.pubmgr = {
         //--------------------------
  
         var YDTF = YAHOO.widget.DataTable.Formatter;
-        YDTF.icid = this.myPubIcidFormatter;; 
+        YDTF.icid = this.myIcidFormatter;; 
         YDTF.publication = this.myPubFormatter; 
         YDTF.elink = this.myElinkFormatter; 
         YDTF.crt = this.myDateFormatter; 
