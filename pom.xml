@@ -75,4 +75,30 @@
 
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>Repository Proxy</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <repositories>
+        <repository>
+          <id>public</id>
+          <name>IMEx Public Maven Reopsitory</name>
+          <url>http://imex.mbi.ucla.edu/archiva/repository/imex-public/</url>
+        </repository>
+
+        <repository>
+          <id>snapshots</id>
+          <name>Archiva Managed Snapshot Repository</name>
+          <url>http://imex.mbi.ucla.edu/archiva/repository/internal/</url>
+        </repository>
+      </repositories>
+
+      <pluginRepositories/>
+
+     </profile>
+  </profiles>
+
 </project>
