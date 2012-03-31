@@ -15,52 +15,57 @@ YAHOO.imex.pubmgr = {
     myDataSource: null,
     myPaginator: null,
     
-    myColumnDefs: [
-        //{ key:"del",label:"",  sortable:false, resizeable:false,
-        //  formatter:"checkbox", className:"checkbox" },
-        { key:"id", label:"ICID", menuLabel:"ICID",
-          sortable:true, resizeable:true, hidden: true, hideable: true,
-          formatter:"icid" },
+    myCD: { 
+        "id":{ key:"id", label:"ICID", menuLabel:"ICID",
+               sortable:true, resizeable:true, hidden: true, hideable: true,
+               formatter:"icid" },
+        
+        "pub":{ key:"pub", label:"Publication", menuLabel:"Publication",
+                sortable:true, resizeable:true, hideable: false,
+                formatter:"publication", maxAutoWidth:1000  },
 
-        { key:"pub", label:"Publication", menuLabel:"Publication",
-          sortable:true, resizeable:true, hideable: false,
-          formatter:"publication", maxAutoWidth:1000  },
+        "pmid":{ key:"pmid", label:"PMID", menuLabel:"PMID", 
+                 sortable:true, resizeable:true,  hideable: true,
+                 formatter:"center", className:"pmid" },
 
-        { key:"pmid", label:"PMID", menuLabel:"PMID", 
-          sortable:true, resizeable:true,  hideable: true,
-          formatter:"center", className:"pmid" },
+        "imexId":{ key:"imexId", label:"<center>Imex<br/>Accession</center>", 
+                   sortable:true, resizeable:true, hideable: true,
+                   formatter:"center",menuLabel:"Imex Accession" },
 
-        { key:"imexId", label:"<center>Imex<br/>Accession</center>", 
-          sortable:true, resizeable:true, hideable: true,
-          formatter:"center",menuLabel:"Imex Accession" },
+        "imexDb":{ key:"imexDb", label:"<center>Imex<br/>Partner</center>", 
+                   sortable:false, resizeable:true, hideable: true,
+                   formatter:"partnerList",menuLabel:"Imex Partner" },
 
-        { key:"imexDb", label:"<center>Imex<br/>Partner</center>", 
-          sortable:false, resizeable:true, hideable: true,
-          formatter:"partnerList",menuLabel:"Imex Partner" },
+        "state":{ key:"state", label:"Status", 
+                  sortable:false, resizeable:false, hideable: true, 
+                  formatter:"center", menuLabel:"Status" },
 
-        { key:"state", label:"Status", 
-          sortable:false, resizeable:false, hideable: true, 
-          formatter:"center", menuLabel:"Status" },
+        "submission":{ label:"Submission", menuLabel:"Submission", key:"submission", hideable: true,
+                       children:[
+                           { key:"date",  label:"Date", 
+                             sortable:true, resizeable:false, formatter:"crt" },
+                           { key:"owner", label:"Submitted By",
+                             sortable:true, resizeable:false, formatter:"list" }
+                       ]
+                     },
+        "editor":{ key:"editor", label:"Curator(s)", menuLabel:"Curator(s)",
+                   sortable:false, resizeable:true, hideable: true,
+                   formatter:"editorList" },
+        "detail":{ key:"detail", label:"",
+                   sortable:false, resizeable:true, hideable: true,
+                   formatter:"elink", className:"detail" }        
+    },
 
-        { label:"Submission", menuLabel:"Submission", key:"submission", hideable: true,
-          children:[
-             { key:"date",  label:"Date", 
-               sortable:true, resizeable:false, formatter:"crt" },
-             { key:"owner", label:"Submitted By",
-               sortable:true, resizeable:false, formatter:"list" }
-          ]
-        },
-        { key:"editor", label:"Curator(s)", menuLabel:"Curator(s)",
-          sortable:false, resizeable:true, hideable: true,
-          formatter:"editorList" },
-        { key:"detail", label:"",
-          sortable:false, resizeable:true, hideable: true,
-          formatter:"elink", className:"detail" }
-    ],
-    
+
+    myCP: { "date": "submission"},
+
+    myCL: [ "id", "pub", "pmid", "imexId", "imexDb",
+            "state", "submission", "editor", "detail" ],
+    myColumnDefs: [],
+
     requestBuilder: function( oState, oSelf ) {
 
-        alert("myRequestBuilder");
+        //alert("myRequestBuilder");
 
         // get state (or use defaults)
         //----------------------------
@@ -110,7 +115,7 @@ YAHOO.imex.pubmgr = {
             "&opp.max=" + results; 
 
         req = encodeURI(req);
-        //alert("request: " + req);
+        alert("request: " + req);
         
         // build custom request
         //---------------------
@@ -145,8 +150,104 @@ YAHOO.imex.pubmgr = {
 
 
     init: function( init ){
-        this.initView(init);
+
+        var cord=[];
+        var chid=[];
+                
+        try{
+            var cookie = YAHOO.util.Cookie.get("pubmgr");
+            //alert("INIT: cookie="+ cookie);
+            if( cookie == null ){
+                var nc = "";
+                for(var i = 0; i < this.myCL.length; i++ ){
+
+                    var hidden= false;
+                    if(  this.myCD[this.myCL[i]].hidden === true ){
+                        hidden= true;
+                    }
+                    nc += this.myCD[this.myCL[i]].key + ":" + hidden +"|";
+                }
+                YAHOO.util.Cookie.set( "pubmgr", nc );
+                cookie = nc;
+            }
+
+            //alert( " INIT: cookie(i)=" + cookie );
+            
+            if( cookie !== null ){
+
+                this.buildCDefs( cookie );
+                
+                /*
+                var col = cookie.split("|");        
+                for( var i =0; i < col.length-1; i++ ){
+                    var cs = col[i].split(":");
+                    this.myColumnDefs[i] = this.myCD[cs[0]];
+                    if(cs[1] === 'true'){
+                       this.myColumnDefs[i].hidden = true;
+                    } else {
+                       this.myColumnDefs[i].hidden = false;
+                    }
+                }
+                 */
+            }
+        } catch (x) {
+            alert("INIT: ex="+ x);
+        }
+        this.initView( init );
         this.historyInit();
+    },
+
+    buildCDefs: function( cookie ){
+        var PMGR = YAHOO.imex.pubmgr;
+       
+        var col = cookie.split("|");
+        //for( var i = 0; i < col.length-1; i++ ){
+        //    PMGR.myColumnDefs[i] = {};
+        //}
+        for( var i =0; i < col.length-1; i++ ){
+            try{
+                
+                var cs = col[i].split(":");
+                if( PMGR.myCD[cs[0]] !== undefined ){
+                
+                    PMGR.myColumnDefs.push(PMGR.myCD[cs[0]]);
+                    if(cs[1] === 'true'){
+                        PMGR.myColumnDefs[PMGR.myColumnDefs.length-1].hidden = true;
+                    } else {
+                        PMGR.myColumnDefs[PMGR.myColumnDefs.length-1].hidden = false;
+                    }
+                }
+
+            } catch (x) {
+                alert( "I:"+ i + "-> " + cs[0] + " ex=" + x );
+            }
+        }        
+    },
+
+    buildCookie: function(){
+        var PMGR = YAHOO.imex.pubmgr;
+        var cookie = "";
+        
+        var ac = PMGR.myDataTable.getColumnSet().keys;
+        
+        for(var i=0; i< ac.length; i++ ){
+
+            var key = ac[i].getKey();
+            var hid = ac[i].hidden;
+            
+            //alert("bc key=" + key + "("+ hid + ") -> " +  PMGR.myCD[key]);
+            if( PMGR.myCD[key] !== undefined ){
+                cookie += key + ":" + hid + "|";
+            } else {
+                key = PMGR.myCP[key];
+                //alert( "undef: " + key + "::" + PMGR.myCD[key]);
+                if( PMGR.myCD[key] !== undefined ){
+                    cookie += key + ":" + hid + "|";
+                }
+            }
+        }
+        //alert("NC:" + cookie);
+        return cookie;
     },
 
     historyInit: function(){
@@ -290,7 +391,7 @@ YAHOO.imex.pubmgr = {
         //------------
 
         var mdt = PMGR.myDataTable;
-
+        
         PMGR.myDataSource
             .sendRequest( request, {
                               success: mdt.onDataReturnSetRows,
@@ -334,7 +435,7 @@ YAHOO.imex.pubmgr = {
         }
     },
 
-    initView: function( init ) { 
+    initView: function( init, cord, chid ) { 
 
         var PMGR = YAHOO.imex.pubmgr;
         
@@ -522,6 +623,9 @@ YAHOO.imex.pubmgr = {
                 try{
                     PMGR.myDataTable.my.configmenu.destroy();
                     PMGR.contextMenuInit( PMGR );
+
+                    var nCookie = YAHOO.imex.pubmgr.buildCookie();
+                    YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
                 } catch (x) {}
             };
         
@@ -667,6 +771,8 @@ YAHOO.imex.pubmgr = {
             alert("toggle:" + x);
         }
 
+        var nCookie = YAHOO.imex.pubmgr.buildCookie();
+        YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
     },
 
     myIcidFormatter: function( elLiner, oRecord, oColumn, oData) {

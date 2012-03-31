@@ -1250,7 +1250,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             Map<String,Object> r = new HashMap<String,Object>();  
             r.put( "id", ip.getId() );
             r.put( "pmid", ip.getPmid() );
+            r.put( "doi", ip.getDoi() );
+            r.put( "jintId", ip.getJournalSpecific() );
             r.put( "imexId", ip.getImexId() );
+            r.put( "cEmail", ip.getContactEmail() );
+
             r.put( "title", ip.getTitle() );
             r.put( "author", ip.getAuthor() );
             r.put( "owner", ip.getOwner().getLogin() );
