@@ -150,13 +150,9 @@ YAHOO.imex.pubmgr = {
 
 
     init: function( init ){
-
-        var cord=[];
-        var chid=[];
-                
+        
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
-            //alert("INIT: cookie="+ cookie);
             if( cookie == null ){
                 var nc = "";
                 for(var i = 0; i < this.myCL.length; i++ ){
@@ -170,25 +166,9 @@ YAHOO.imex.pubmgr = {
                 YAHOO.util.Cookie.set( "pubmgr", nc );
                 cookie = nc;
             }
-
-            //alert( " INIT: cookie(i)=" + cookie );
             
             if( cookie !== null ){
-
-                this.buildCDefs( cookie );
-                
-                /*
-                var col = cookie.split("|");        
-                for( var i =0; i < col.length-1; i++ ){
-                    var cs = col[i].split(":");
-                    this.myColumnDefs[i] = this.myCD[cs[0]];
-                    if(cs[1] === 'true'){
-                       this.myColumnDefs[i].hidden = true;
-                    } else {
-                       this.myColumnDefs[i].hidden = false;
-                    }
-                }
-                 */
+                this.buildCDefs( cookie );                
             }
         } catch (x) {
             alert("INIT: ex="+ x);
@@ -201,9 +181,6 @@ YAHOO.imex.pubmgr = {
         var PMGR = YAHOO.imex.pubmgr;
        
         var col = cookie.split("|");
-        //for( var i = 0; i < col.length-1; i++ ){
-        //    PMGR.myColumnDefs[i] = {};
-        //}
         for( var i =0; i < col.length-1; i++ ){
             try{
                 
@@ -225,9 +202,9 @@ YAHOO.imex.pubmgr = {
     },
 
     buildCookie: function(){
+
         var PMGR = YAHOO.imex.pubmgr;
         var cookie = "";
-        
         var ac = PMGR.myDataTable.getColumnSet().keys;
         
         for(var i=0; i< ac.length; i++ ){
@@ -235,18 +212,15 @@ YAHOO.imex.pubmgr = {
             var key = ac[i].getKey();
             var hid = ac[i].hidden;
             
-            //alert("bc key=" + key + "("+ hid + ") -> " +  PMGR.myCD[key]);
             if( PMGR.myCD[key] !== undefined ){
                 cookie += key + ":" + hid + "|";
-            } else {
+            } else { // nested column
                 key = PMGR.myCP[key];
-                //alert( "undef: " + key + "::" + PMGR.myCD[key]);
                 if( PMGR.myCD[key] !== undefined ){
                     cookie += key + ":" + hid + "|";
                 }
             }
         }
-        //alert("NC:" + cookie);
         return cookie;
     },
 
