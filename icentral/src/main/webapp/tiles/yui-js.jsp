@@ -6,7 +6,7 @@ YUI download for details on each of the aggregate files and their contents):-->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script> 
 
-<!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js"></script>  -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js"></script> 
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script> 
 <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script> 
 <!-- <script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/get/get-min.js"></script>  -->
