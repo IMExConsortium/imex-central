@@ -9,6 +9,8 @@ import org.apache.solr.common.SolrDocumentList;
 
 import java.net.MalformedURLException;
 
+import java.util.Map;
+
 import org.hupo.psi.mi.psq.server.index.*;
 import org.hupo.psi.mi.psq.server.data.*;
 
