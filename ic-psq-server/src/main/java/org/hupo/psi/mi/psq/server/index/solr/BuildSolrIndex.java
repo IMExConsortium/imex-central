@@ -3,15 +3,6 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Clob;
-import java.sql.PreparedStatement;
-
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 
@@ -37,17 +28,18 @@ import java.lang.Thread.State;
 
 public class BuildSolrIndex{
 
-    private String[] solrURL = { "http://localhost:8080/ic-psq-server/solr/psq-01" };
-    private String[] rmgrURL = { "http://localhost:8080/ic-psq-server/recordmgr" };
-    private String derbyDb="/opt/psq-data/psq-derby";
+    private String[] solrURL 
+        = { "http://localhost:8080/ic-psq-server/solr/psq-01" };
 
+    private String[] rmgrURL 
+        = { "http://localhost:8080/ic-psq-server/recordmgr" };
+    
     String mif2psq = "../etc/ic-psq/server/solr/config/mif254psq.xsl";
     String mif2tab = "../etc/ic-psq/server/solr/config/mif254tab.xsl";
 
     String mifDir =  "/home/lukasz/imex_test";
         
     SolrServer solr = null;
-    //Connection derby = null;
 
     Transformer psqtr = null;
     Transformer tabtr = null;
@@ -56,12 +48,6 @@ public class BuildSolrIndex{
 
         try{
 
-            // connect to derby
-            //-----------------
-
-            //Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            //derby = DriverManager.getConnection("jdbc:derby:" + derbyDb + "");
-            
             // connect to solr
             //----------------
             
@@ -117,35 +103,30 @@ public class BuildSolrIndex{
     }
 
     public void start(){
+    
         File dirFl = new File( mifDir );
-        
         try{
-            processFiles( dirFl );
-
-            //derby.commit();
-            //derby.close();
-        
+            processFiles( dirFl.getCanonicalPath(), dirFl );
         } catch(Exception ex){
             ex.printStackTrace();
         }
-
     }
     
-    private void processFiles( File file ){
+    private void processFiles( String root, File file ){
         
         File[] filesAndDirs = file.listFiles();
         List<File> filesDirs = Arrays.asList( filesAndDirs );
         for(File sfile : filesDirs) {
             if ( ! sfile.isFile() ) {
                 //recursive call: must be a directory
-                processFiles( sfile );
+                processFiles( root, sfile );
             } else {
-                index( sfile );                
+                index( root, sfile );                
             }
         }
     }
     
-    public void index( File file ){
+    public void index( String root, File file ){
         System.out.println( file );
 
         // transform/add -> index
@@ -158,14 +139,16 @@ public class BuildSolrIndex{
 
             //transform into psq dom
             //----------------------
-
+            psqtr.clearParameters();
+            psqtr.setParameter( "file", 
+                                file.getCanonicalPath().replace(root,"") );
+            
             psqtr.transform( ssNative, domResult );           
             Node nd = domResult.getNode().getFirstChild();
             
             NodeList dl = nd.getChildNodes();
             for( int i = 0; i< dl.getLength() ;i++ ){
                 if(dl.item(i).getNodeName().equals("doc")){
-
                     SolrInputDocument doc =  new SolrInputDocument();
                     NodeList field = dl.item(i).getChildNodes();
                     for( int j = 0; j< field.getLength() ;j++ ){
@@ -173,17 +156,13 @@ public class BuildSolrIndex{
                             Element fe = (Element) field.item(j);
                             String name = fe.getAttribute("name");
                             String value = fe.getFirstChild().getNodeValue();
-                            
-                            if( name.equals("pid") ){
-                                value = file + "::" + value;
-                            }
                             doc.addField( name,value );
                         }
                     }                    
                     solr.add( doc );
                 }
             }
-
+            
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -191,7 +170,6 @@ public class BuildSolrIndex{
         // transform/add -> mitab
         //-----------------------
 
-        
         try{
 
             StreamSource ssNative = new StreamSource( file );
@@ -202,7 +180,9 @@ public class BuildSolrIndex{
             
             String pid = "";
             String mtb = "";
-            
+            tabtr.clearParameters();
+            tabtr.setParameter( "file",
+                                file.getCanonicalPath().replace(root,"") );            
             tabtr.transform( ssNative, domResult );           
             Node nd = domResult.getNode().getFirstChild();
             
@@ -217,24 +197,19 @@ public class BuildSolrIndex{
                         if( field.item(j).getNodeName().equals("field") ){
                             Element fe = (Element) field.item(j);
                             String name = fe.getAttribute("name");
-                            
-                            if( name.equals("pid") ){
-                                String value = fe.getFirstChild().getNodeValue();
-                                pid += file + "::" + value+ "\n";
-                            }
-                            
                             if( name.equals("mitab") ){
-                                String value = fe.getFirstChild().getNodeValue();
+                                String value = 
+                                    fe.getFirstChild().getNodeValue();
                                 mtb += value+"\n";
                             }
                         }
                     }                    
                 }
             }
-            
 
             // add mitab
             //----------
+
             try{
                 String postData = URLEncoder.encode("op", "UTF-8") + "=" 
                     + URLEncoder.encode( "add", "UTF-8");
@@ -246,12 +221,14 @@ public class BuildSolrIndex{
                 URL url = new URL( rmgrURL[0] );
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput( true );
-                OutputStreamWriter wr = new OutputStreamWriter( conn.getOutputStream() );
+                OutputStreamWriter wr = 
+                    new OutputStreamWriter( conn.getOutputStream() );
                 wr.write(postData);
                 wr.flush();
-                
+
                 // Get the response
-                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                BufferedReader rd = 
+                    new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String line;
                 while ((line = rd.readLine()) != null) {
                     System.out.println(line);
@@ -263,8 +240,7 @@ public class BuildSolrIndex{
             
         }catch(Exception ex){
             ex.printStackTrace();
-        }
-       
+        }       
     }
 
     //--------------------------------------------------------------------------

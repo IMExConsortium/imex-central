@@ -196,6 +196,8 @@ public class PsqPortImpl implements PsqPort {
         throw new NotSupportedMethodException( "", null );
     };
 
+    //--------------------------------------------------------------------------
+
     public QueryResponse getByInteractorList( List<DbRef> dbRef,
                                               RequestInfo infoRequest,
                                               String operand )
@@ -206,9 +208,13 @@ public class PsqPortImpl implements PsqPort {
         throw new NotSupportedMethodException( "", null );
     };
 
+    //--------------------------------------------------------------------------
+
     public List<String> getSupportedDbAcs(){
         return null;
     };
+
+    //--------------------------------------------------------------------------
 
     public QueryResponse getByInteractionList( List<DbRef> dbRef,
                                                RequestInfo infoRequest )
@@ -218,10 +224,14 @@ public class PsqPortImpl implements PsqPort {
         throw new NotSupportedMethodException( "", null );
     };
 
+    //--------------------------------------------------------------------------
+
     public String getProperty( String property ){     
         return null;
     };
     
+    //--------------------------------------------------------------------------
+
     public List<Property> getProperties(){
         return null;
     };

@@ -45,17 +45,20 @@ public class SolrIndex implements Index{
             log.info( " initilizing SolrIndex" );
             
             if( context != null && context.getJsonConfig() != null ){
-            
-                log.info( "    solr-url=" + context.getJsonConfig().get("solr-url") );
-                log.info( "    solr-url=" + context.getJsonConfig().get("solr-core") );
+                Map jCon =  context.getJsonConfig(); 
+
+                log.info( "    solr-url=" + jCon.get("solr-url") );
+                log.info( "    solr-url=" + jCon.get("solr-core") );
                 
-                coreUrl = (String) context.getJsonConfig().get("solr-url");
-                if( context.getJsonConfig().get("solr-core") != null ){
-                    coreUrl+= (String) context.getJsonConfig().get("solr-core");
+                coreUrl = (String) jCon.get("solr-url");
+                if( jCon.get("solr-core") != null ){
+                    coreUrl+= (String) jCon.get("solr-core");
                 }                
             }
         }
     }
+    
+    //--------------------------------------------------------------------------
     
     public ResultSet query( String query ){
 
