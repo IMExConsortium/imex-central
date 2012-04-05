@@ -670,7 +670,7 @@ YAHOO.imex.pubmgr = {
                 o.pmgr[o.selbtn]
                     .on( "selectedMenuItemChange",
                          o.pmgr.handleFilter, 
-                         {filter: o.filter}, // o.pmgr.myDataTable, 
+                         {filter: o.filter},
                          o.pmgr.myDataTable );
             }
             
@@ -685,7 +685,7 @@ YAHOO.imex.pubmgr = {
             
             o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
             
-            var oConfMenu = [[{text:"Preferences" }],
+            var oConfMenu = [[{text:"Preferences", disabled: true }],
                              [{text: "Show Columns", 
                                submenu: o.myDataTable.my.colmenu }],
                              [{text:"Save...", disabled: true}]
