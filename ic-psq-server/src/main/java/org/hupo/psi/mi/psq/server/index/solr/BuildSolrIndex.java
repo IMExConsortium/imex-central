@@ -1,4 +1,14 @@
 package org.hupo.psi.mi.psq.server.index.solr;
+
+/* =============================================================================
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
+ #==============================================================================
+ #
+ # BuildSolrIndex: Build Solr-based index
+ #
+ #=========================================================================== */
+
 import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -26,16 +36,25 @@ import org.apache.solr.client.solrj.response.*;
 import java.util.zip.CRC32;
 import java.lang.Thread.State;
 
+import edu.ucla.mbi.util.JsonContext;
+
 public class BuildSolrIndex{
 
-    private String[] solrURL 
-        = { "http://localhost:8080/ic-psq-server/solr/psq-01" };
-
-    private String[] rmgrURL 
-        = { "http://localhost:8080/ic-psq-server/recordmgr" };
+    private List<String> solrURL = 
+        Arrays.asList( "http://localhost:8080/ic-psq/solr/psq-01" );    
+    private String rmgrURL = 
+        "http://localhost:8080/ic-psq/recordmgr";
     
-    String mif2psq = "../etc/ic-psq/server/solr/config/mif254psq.xsl";
-    String mif2tab = "../etc/ic-psq/server/solr/config/mif254tab.xsl";
+    public static final String 
+        CONTEXT = "../etc/ic-psq/server/psq-context.json";
+    
+    public static final String 
+        RFRMT = "mif254";
+    
+    Map<String,String> xsltIndex;
+    Map<String,String> xsltRecord;
+    
+    String rfrmt;
 
     String mifDir =  "/home/lukasz/imex_test";
         
@@ -44,14 +63,88 @@ public class BuildSolrIndex{
     Transformer psqtr = null;
     Transformer tabtr = null;
 
-    public BuildSolrIndex(){
+    //--------------------------------------------------------------------------
+
+    JsonContext psqContext;
+    
+    public void setPsqContext( JsonContext context ){
+        psqContext = context;
+    }
+
+    public JsonContext getPsqContext(){
+        return psqContext;
+    }
+
+    //--------------------------------------------------------------------------
+    
+    
+    public BuildSolrIndex( String ctx, String rfrmt ){
+        
+        // get context
+        //------------
+
+        psqContext = new JsonContext();
+
+        try{                     
+            psqContext.readJsonConfigDef( new FileInputStream( ctx ) );
+            Map jctx = (Map) getPsqContext().getJsonConfig();
+
+            // index transformers
+            //-------------------
+
+            xsltIndex = (Map<String,String>) ((Map) jctx.get( "index" ))
+                .get( "xslt" );
+            
+            // SOLR server(s)
+            //---------------
+
+            List slst = 
+                (List) ((Map) ((Map) jctx.get( "index" )).get( "solr" ))
+                .get("server");
+            
+            if( slst != null ){
+
+                solrURL = new ArrayList<String>();
+
+                for( Iterator i = slst.iterator(); i.hasNext(); ){
+
+                    Map ci = (Map) i.next();
+                    String url = (String) ci.get("url");
+                    String core = (String) ci.get("core");
+                    
+                    solrURL.add( url + core );
+                }
+            }
+
+            // record manager
+            //---------------
+
+            rmgrURL = (String) ((Map) jctx.get( "store" ))
+                .get( "record-mgr" );
+            
+
+            // record transformers
+            //--------------------
+
+            xsltRecord = (Map<String,String>) ((Map) jctx.get( "store" ))
+                .get( "xslt" );
+            
+            
+        } catch( Exception ex ){
+            ex.printStackTrace();
+        }
 
         try{
-
+            
             // connect to solr
             //----------------
+
+            System.out.println( " Solr URL: " + solrURL.get(0) );
+            System.out.println( " RecordMgr URL: " + rmgrURL );
+            System.out.println( " Index XSLT: " + xsltIndex.get( rfrmt ) );
+            System.out.println( " Record XSLT: " + xsltRecord.get( rfrmt ) );
             
-            solr = new CommonsHttpSolrServer( solrURL[0] );
+            solr = new CommonsHttpSolrServer( solrURL.get(0) );
             
             //set mif2psq transformer
             //-----------------------
@@ -62,7 +155,7 @@ public class BuildSolrIndex{
                 dbf.setNamespaceAware( true );
 
                 DocumentBuilder db = dbf.newDocumentBuilder();               
-                Document xslDoc = db.parse( new File( mif2psq ) );
+                Document xslDoc = db.parse( new File( xsltIndex.get( rfrmt ) ) );
 
                 DOMSource xslDomSource = new DOMSource( xslDoc );
                 TransformerFactory
@@ -84,7 +177,7 @@ public class BuildSolrIndex{
                 dbf.setNamespaceAware( true );
 
                 DocumentBuilder db = dbf.newDocumentBuilder();               
-                Document xslDoc = db.parse( new File( mif2tab ) );
+                Document xslDoc = db.parse( new File( xsltRecord.get( rfrmt ) ) );
                 
                 DOMSource xslDomSource = new DOMSource( xslDoc );
                 TransformerFactory
@@ -218,7 +311,7 @@ public class BuildSolrIndex{
                 postData += "&" + URLEncoder.encode("mitab", "UTF-8") + "=" 
                     + URLEncoder.encode( mtb, "UTF-8");
                 
-                URL url = new URL( rmgrURL[0] );
+                URL url = new URL( rmgrURL );
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput( true );
                 OutputStreamWriter wr = 
@@ -228,7 +321,7 @@ public class BuildSolrIndex{
 
                 // Get the response
                 BufferedReader rd = 
-                    new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    new BufferedReader( new InputStreamReader(conn.getInputStream()));
                 String line;
                 while ((line = rd.readLine()) != null) {
                     System.out.println(line);
@@ -263,6 +356,24 @@ public class BuildSolrIndex{
 
         options.addOption( urlOption );
         
+        Option ctxOption = OptionBuilder.withLongOpt( "context" )
+            .withArgName( "file.json" ).hasArg()
+            .withDescription( "configuration file" )
+            .create( "ctx" );
+
+        options.addOption( ctxOption );
+        
+        String context = BuildSolrIndex.CONTEXT;
+ 
+        Option iftOption = OptionBuilder.withLongOpt( "iformat" )
+            .withArgName( "format" ).hasArg()
+            .withDescription( "input record format" )
+            .create( "ift" );
+        
+        options.addOption( iftOption );
+        
+        String ifrmt = BuildSolrIndex.RFRMT;
+        
         try{
             CommandLineParser parser = new PosixParser();
             CommandLine cmd = parser.parse( options, args);
@@ -270,20 +381,30 @@ public class BuildSolrIndex{
             if( cmd.hasOption("help") ){
 
                 HelpFormatter formatter = new HelpFormatter();
-                formatter.setWidth(127);
+                formatter.setWidth( 127 );
                 formatter.printHelp( "BuildSolrIndex", options );
-                return;
+                System.exit(0);
             }
 
+            if( cmd.hasOption("ctx") ){
+                context = cmd.getOptionValue("ctx");
+            }
+        
+            if( cmd.hasOption("ift") ){
+                ifrmt = cmd.getOptionValue( "ift" );
+            }
         } catch( Exception exp ) {
             System.out.println( "BuildSolrIndex: Options parsing failed. " +
                                 "Reason: " + exp.getMessage() );
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(127);
             formatter.printHelp( "BuildSolrIndex", options );
+            System.exit(1);
         }
 
-        BuildSolrIndex psi = new BuildSolrIndex();
+        System.out.println( "Context: " + context );
+        
+        BuildSolrIndex psi = new BuildSolrIndex( context, ifrmt );
         psi.start();
         
     }

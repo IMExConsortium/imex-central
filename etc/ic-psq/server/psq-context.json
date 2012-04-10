@@ -1,5 +1,41 @@
 {
- "solr-url":"http://127.0.0.1:8080/${project.build.finalName}/solr",
- "solr-core":"/psq-01",
- "derby-db":"/opt/psq-data/psq-derby"
+  "index":{
+     "solr":{ 
+        "solr-url":"http://127.0.0.1:8080/${project.build.finalName}/solr",
+        "solr-core":"/psq-01"
+       }
+  },
+  "store":{
+     "derby":{
+        "derby-db":"/opt/psq-data/psq-derby"
+     }
+  },
+  "service":{
+     "soap":{
+        "version":"1.1",
+        "properties":{
+           "implementation":"ic-psq-0.01",
+           "last-protein-update":"01-Jan-12"
+          },
+        "supported-return-type":[
+           "psi-mi/tab25",
+           "psi-mi/xml25" ],
+        "supported-db-ac":[ 
+           "MI:0670", 
+           "MI:0481", 
+           "MI:0486" ]
+     },
+     "rest":{
+        "version":"1.1",
+        "properties":{},
+        "supported-return-type":[
+           "psi-mi/tab25",
+           "psi-mi/xml25" ],
+        "supported-db-ac":[
+           "MI:0670",
+           "MI:0481",
+           "MI:0486" ]
+     }
+  }
 }
+

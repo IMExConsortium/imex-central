@@ -1,5 +1,14 @@
 package org.hupo.psi.mi.psq.server.index.solr;
 
+/* =============================================================================
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
+ #==============================================================================
+ #
+ # PsqPortImpl: implementation of PSICQUIC 1.1 SOAP service
+ #
+ #=========================================================================== */
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;

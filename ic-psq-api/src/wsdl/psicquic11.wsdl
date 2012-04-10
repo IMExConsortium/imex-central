@@ -578,8 +578,9 @@
     </binding>
 
     <!-- SERVICE -->
-    <service name="psicquicService">
-        <port name="psicquic" binding="psq:psicquicSoapBinding">
+    <service name="PsicquicService">
+        <port name="IndexBasedPsicquicServicePort" 
+              binding="psq:psicquicSoapBinding">
             <soap:address location=""/>
         </port>
     </service>

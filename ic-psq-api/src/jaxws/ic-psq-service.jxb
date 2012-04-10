@@ -118,7 +118,7 @@
   </bindings>
 
 -->
- <bindings node="wsdl:definitions/wsdl:service[@name='psicquicService']">
+ <bindings node="wsdl:definitions/wsdl:service[@name='PsicquicService']">
   <class name="PsqService"/>
  </bindings>
 
