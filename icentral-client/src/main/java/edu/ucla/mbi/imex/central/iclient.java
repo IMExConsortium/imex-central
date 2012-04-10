@@ -17,7 +17,9 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.namespace.QName;
 import java.net.URL;
 
-import edu.ucla.mbi.imex.central.ws.*;
+//import edu.ucla.mbi.imex.central.ws.*;
+//import edu.ucla.mbi.imex.central.ws.v10.*;
+import edu.ucla.mbi.imex.central.ws.v20.*;
 
 public class iclient {
 
@@ -33,7 +35,8 @@ public class iclient {
             QName qn = new QName("http://imex.mbi.ucla.edu/icentral/ws",
                                  "ImexCentralService");
             service = new IcentralService( url, qn );
-            port = service.getImexCentralPort();
+            //port = service.getImexCentralPort();
+            port = service.getIcp20();
             
             ( (BindingProvider) port ).getRequestContext()
                 .put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
@@ -65,7 +68,8 @@ public class iclient {
         id.setAc(ac);
         idl.add(id);
         try{
-            PublicationList pl = port.getPublicationById( idl );
+            /*
+            PublicationList pl = port.getPublicationById( id );
             
             if( pl != null ) {
                 for ( Iterator<Publication> 
@@ -77,7 +81,15 @@ public class iclient {
                     System.out.println( " Title: " + p.getTitle() );
                 }
             }
-            
+            */
+
+            Publication p = port.getPublicationById( id );
+
+            if( p != null ) {
+                System.out.println( " Author: " + p.getAuthor() );
+                System.out.println( " Title: " + p.getTitle() );
+            }
+
         } catch ( IcentralFault icf ){
             System.out.println( "SERVER FAULT: CODE:" + icf.getFaultInfo().getFaultCode() + 
                                 " MESSAGE: " + icf.getFaultInfo().getMessage()  );

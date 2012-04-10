@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 use SOAP::Lite;
 use XML::XPath;
 use XML::XPath::XMLParser;
@@ -27,6 +28,7 @@ my $agrp = "";
 my $ver="";
 
 my $ac="";
+my $ns="";
 
 my $newNS="";
 my $newAC="";
@@ -46,8 +48,12 @@ for( my $i=0; $i < @ARGV; $i++ ) {
         $pmid=$1;
     }
 
-    if( $ARGV[$i]=~/AC=(.+)/ ) {
+    if( $ARGV[$i]=~/^AC=(.+)/ ) {
         $ac=$1;
+    }
+
+    if( $ARGV[$i]=~/^NS=(.+)/ ) {
+        $ns=$1;
     }
 
     if( $ARGV[$i]=~/NEWAC=(.+)/ ) {
@@ -57,11 +63,7 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/NEWNS=(.+)/ ) {
         $newNS=$1;
     }
-
-    if( $ARGV[$i]=~/AC=(.+)/ ) {
-        $ac=$1;
-    }
-
+    
     if( $ARGV[$i]=~/VER=2/ ) {
         $ver="-v20";
     }
@@ -123,7 +125,6 @@ if($op ne "" ) {
     
     $rns ="http://imex.mbi.ucla.edu/icentral/ws";    
         
-
     if( $op eq "createPublicationById" ) {        
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
@@ -139,27 +140,35 @@ if($op ne "" ) {
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationStatus( SOAP::Data->type( 'xml' =>
-                                                         "<identifier ns='pmid' ac='$pmid' />" ),
+                                                         "<identifier ns='$ns' ac='$ac' />" ),
                                        SOAP::Data->name("status" => $stat) );
     }
 
     if( $op eq "updatePubId") {   
 
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+
+            print "XXXXXXXXXX";
+        }
+
         print "URL: ",$URL.$ver,"\n";
+        print "NS=".$ns." AC=".$ac."\n";
+        
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
             ->default_ns($rns)
             ->outputxml('true')
             ->updatePublicationIdentifier( SOAP::Data->type( 'xml' =>
-                                                             "<identifier ns='pmid' ac='$pmid' />" ),
+                                                             "<identifier ns='$ns' ac='$ac' />" ),
                                            SOAP::Data->type( 'xml' =>
                                                              "<newIdentifier ns='$newNS' ac='$newAC' />" )
                                            );
     }
     
     if( $op eq "getPublicationById" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
+       
         if( $imex ne "" ) {
             $ac = $imex;
             $ns = "imex";
@@ -217,10 +226,12 @@ if($op ne "" ) {
 
 
     if( $op eq "addAdminUser" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
-
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+        }
         print "NS=".$ns." AC=".$ac."\n";
+        
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
             ->default_ns($rns)
@@ -232,10 +243,13 @@ if($op ne "" ) {
     }
 
     if( $op eq "dropAdminUser" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
-
+        
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+        }
         print "NS=".$ns." AC=".$ac."\n";
+        
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
             ->default_ns($rns)
@@ -246,10 +260,12 @@ if($op ne "" ) {
                                           SOAP::Data->name("user" => $ausr) );
     }
     if( $op eq "addAdminGroup" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
-
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+        }
         print "NS=".$ns." AC=".$ac."\n";
+
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
             ->default_ns($rns)
@@ -261,10 +277,12 @@ if($op ne "" ) {
     }
 
     if( $op eq "dropAdminGroup" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
-
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+        }
         print "NS=".$ns." AC=".$ac."\n";
+        
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
             ->default_ns($rns)
@@ -277,11 +295,11 @@ if($op ne "" ) {
 
 
     if( $op eq "addAtt" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
-
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+        }
         print "URL: ".$URL.$ver."\n";
-
         print "NS=".$ns." AC=".$ac."\n";
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
@@ -298,9 +316,10 @@ if($op ne "" ) {
     }
 
     if( $op eq "getAttByParent" ) {
-        my $ac = $pmid;
-        my $ns = "pmid";
-
+        if( $pmid ne "" ){
+            $ac = $pmid;
+            $ns = "pmid";
+        }
         print "URL: ".$URL.$ver."\n";
 
         print "NS=".$ns." AC=".$ac."\n";

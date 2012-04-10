@@ -43,6 +43,13 @@
          <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
          </descriptorRefs>
+
+          <archive>
+            <manifest>
+              <mainClass>edu.ucla.mbi.imex.central.iclient</mainClass>
+            </manifest>
+          </archive>
+
        </configuration>
      </plugin>
    </plugins>
