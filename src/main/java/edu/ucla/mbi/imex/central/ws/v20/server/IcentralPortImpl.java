@@ -525,10 +525,15 @@ public class IcentralPortImpl implements IcentralPort {
         // get publication
         //----------------
         
-        if( !identifier.getNs().equals("pmid") ) throw Fault.ID_UNKNOWN;
+        //if( !identifier.getNs().equals("pmid") ) throw Fault.ID_UNKNOWN;
+        
+        String ns = identifier.getNs();
+        String ac = identifier.getAc();
+        
+        IcPub icp = getIcPub( ns, ac );
         
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
-        IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
+        // IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
         if ( icp == null ) throw Fault.NO_RECORD;
         
         if( operation.toUpperCase().equals("DROP") ) {
@@ -624,10 +629,15 @@ public class IcentralPortImpl implements IcentralPort {
         // get publication
         //----------------
         
-        if( !identifier.getNs().equals("pmid") ) throw Fault.ID_UNKNOWN;
+        //if( !identifier.getNs().equals("pmid") ) throw Fault.ID_UNKNOWN;
+
+        String ns = identifier.getNs();
+        String ac = identifier.getAc();
+        
+        IcPub icp = getIcPub( ns, ac );
         
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
-        IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
+        //IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
         if ( icp == null ) throw Fault.NO_RECORD;
         
         if( operation.toUpperCase().equals("DROP") ) {
