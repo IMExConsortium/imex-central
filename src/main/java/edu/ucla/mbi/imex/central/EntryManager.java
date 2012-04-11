@@ -24,6 +24,8 @@ import edu.ucla.mbi.util.dao.*;
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
+import edu.ucla.mbi.imex.central.dao.*;
+
 public class EntryManager {
     
     public EntryManager() {
@@ -124,6 +126,38 @@ public class EntryManager {
         return oldPub;
     }
 
+    //---------------------------------------------------------------------
+    
+    public IcPub getIcPubByNsAc( String ns, String ac ) {
+
+        if( ns == null || ac == null ) return null;
+
+        if( ns.equalsIgnoreCase( "pmid" ) ){
+            return (IcPub) tracContext.getPubDao()
+                .getPublicationByPmid( ac );
+        }
+
+        if( ns.equalsIgnoreCase( "imex" ) ){
+            return (IcPub) tracContext.getPubDao()
+                .getPublicationByKey( ac );
+        }
+
+        if(  tracContext.getPubDao() instanceof IcPubDao ){
+            
+            IcPubDao dao = (IcPubDao) tracContext.getPubDao();
+            
+            if( ns.equalsIgnoreCase( "doi" ) ){
+                return (IcPub) dao.getPublicationByDoi( ac );
+            }
+        
+            if( ns.equalsIgnoreCase( "jint" ) ){
+                return (IcPub) dao.getPublicationByJint( ac );
+            }
+        }
+        
+        return null;
+    }
+    
     //---------------------------------------------------------------------
     
     public IcPub getIcPubByPmid( String pmid ) {
@@ -392,14 +426,30 @@ public class EntryManager {
                 log.info( " IcPub=" + icp );
                 
                 if( icp.getSource() == null ) {
-                    
                     log.info( " IcPub: no source" );
+                    
+                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
+                        .getJournal( "UNPUBLISHED" );
+                    
+                    icp.setSource( icj );
 
                 } else {
                     Journal j = (Journal) icp.getSource();
-                    
-                    IcJournal icj = (IcJournal) tracContext.getJournalDao()
-                        .getJournalByNlmid( j.getNlmid() );
+                    IcJournal icj = null;
+
+                    try{
+
+                        log.info( " IcPub: getting source info" );
+
+                        icj = (IcJournal) tracContext.getJournalDao()
+                            .getJournalByNlmid( j.getNlmid() );
+                        
+                    }catch( Exception ex ){
+                        ex.printStackTrace();
+
+                        icj = (IcJournal) tracContext.getJournalDao()
+                            .getJournal( "UNPUBLISHED" );
+                    }
                     
                     if ( icj == null ) {
                         icj = this.addIcJournal( j, owner );
@@ -421,7 +471,7 @@ public class EntryManager {
                     icp.getAdminGroups()
                         .addAll( icp.getSource().getAdminGroups() );
                 }
-                
+                               
                 return (IcPub) tracContext.getPubDao().savePublication( icp );  
             }
         }                

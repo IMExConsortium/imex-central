@@ -6,7 +6,7 @@
 <table width="100%" class="yui-skin-sam">
  <s:if test="hasActionErrors()">
   <tr>
-   <td align="left">
+   <td align="left" colspan="2">
     <br/>
      <table width="66%" cellspacing="1" cellpadding="3">
      <tr><td>
@@ -22,17 +22,20 @@
    </td>
   </tr>
  </s:if>
+
  <tr>
   <td>
    <center>
     <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
-      <legend class="qlegend">By PubMed Identifier</legend>
+      <legend class="qlegend">By Record Identifier</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
-         <b>PMID:</b><br> 
-         <s:textfield name="pub.pmid"  size="16" maxlength="128" />
+         <b>Identifier:</b><br> 
+         <s:select name="opp.ns" headerKey="-1" headerValue="-- select --"
+                    list="#{'pmid':'pmid','doi':'doi','jint':'internal','imex':'imex'}" value="-1" cssClass="pubsrc-flag"/>
+         <s:textfield name="opp.ac"  size="16" maxlength="128" />
          <s:submit theme="simple" name="op.esrc" value="SEARCH"/>
         </td>
        </tr>
@@ -41,19 +44,23 @@
     </s:form>
    </center>
   </td>
- </tr>
- <tr>
+
   <td>
    <center>
-    <s:form theme="simple" action="pubsrc">
+    <s:form theme="simple" action="pubmgr">
      <fieldset class="qfield">
-      <legend class="qlegend">By IMEX Accession</legend>
+      <legend class="qlegend">By Comment Flag</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
-         <b>IMEX ID:</b><br>
-          <s:textfield name="opp.imex"  size="16" maxlength="128" />
-          <s:submit theme="simple" name="op.esrc" value="SEARCH"/>
+         <b>Flag:</b>
+         <div class="acom"> 
+          <s:hidden name="op.init" />           
+          <s:select name="opp.encf" headerKey="-1" headerValue="-- select --"
+                    list="#{'QControl':'QControl'}" value="-1" cssClass="pubsrc-flag"/>
+          
+          <s:submit theme="simple" name="opp.sub" value="SEARCH" onclick=""/>
+         </div>
         </td>
        </tr>
       </table>
@@ -64,7 +71,7 @@
  </tr>
 
  <tr>
-  <td>
+  <td colspan="2">
    <center>
     <s:form theme="simple" action="pubmgr">
      <fieldset class="qfield">
@@ -77,7 +84,7 @@
            <s:hidden name="op.init" />  
            <s:textfield name="opp.ou"/>
            <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
-           <div id="poo_cnt">
+           <div id="poo_cnt"></div>
          </div>
         </td>
        </tr>
@@ -89,7 +96,7 @@
  </tr>
 
  <tr>
-  <td>
+  <td colspan="2">
    <center>
     <s:form theme="simple" action="pubmgr">
      <fieldset class="qfield">
@@ -102,33 +109,6 @@
           <s:hidden name="op.init" />          
           <s:textfield name="opp.au" />          
           <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
-          <div id="poc_cnt">
-         </div>
-        </td>
-       </tr>
-      </table>
-     </fieldset>
-    </s:form>
-   </center>
-  </td>
- </tr>
-
- <tr>
-  <td>
-   <center>
-    <s:form theme="simple" action="pubmgr">
-     <fieldset class="qfield">
-      <legend class="qlegend">By Comment Flag</legend>
-      <table width="100%" class="qtable">
-       <tr>
-        <td class="pubsrc-td" align="left" valign="top" nowrap>
-         <b>Flag:</b>
-         <div class="acom"> 
-          <s:hidden name="op.init" />           
-          <s:select name="opp.encf" headerKey="-1" headerValue="----------"
-                    list="#{'QControl':'QControl'}" value="-1" cssClass="pubsrc-flag"/>
-          
-          <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sel-sub" onclick=""/>
           <div id="poc_cnt">
          </div>
         </td>

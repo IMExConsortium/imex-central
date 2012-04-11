@@ -282,9 +282,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                 //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "esrc" ) ) {
+
                     String imex = null ;
                     if ( getOpp() != null ) {
-                        imex = getOpp().get( "imex" );
+                        String ns  = getOpp().get( "ns" );
+                        String ac  = getOpp().get( "ac" );
+
+                        return searchIcPub( ns, ac );
+                        
                     }
                     return searchIcPub( icpub, imex );
                 }
@@ -732,6 +737,29 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         
         return INPUT;
 
+    }
+
+    //------------------------------------------------------------------------------
+
+    public String searchIcPub( String ns, String ac ) {
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        if( ns == null ||  ac == null ){
+            addActionError( "No publication found" ) ;
+            return NOPUB; 
+        }
+        
+        IcPub oldPub = entryManager.getIcPubByNsAc( ns, ac );
+        
+        if ( oldPub != null ) {
+            icpub = oldPub;
+            setId( oldPub.getId() );
+            return PUBEDIT;
+        } else {
+            addActionError( "No publication found" ) ;
+            return NOPUB;
+        }
     }
     
     //---------------------------------------------------------------------
