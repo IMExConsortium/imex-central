@@ -582,6 +582,13 @@ public class EntryManager {
         
         if( pub != null && npub != null && luser != null) {
             pub.setDoi( npub.getDoi() );
+
+
+            // test if pmid already there !!!!
+
+
+
+
             pub.setPmid( npub.getPmid() );
             pub.setJournalSpecific( npub.getJournalSpecific() );
             this.updateIcPubProps( pub, luser );

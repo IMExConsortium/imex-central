@@ -22,6 +22,12 @@
   </property>
  -->
 
+ <property name="hibernate.current_session_context_class">
+    thread
+  </property>
+ 
+
+
   <!-- postgresql connection -->
 
   <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>

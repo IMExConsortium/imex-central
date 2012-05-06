@@ -26,6 +26,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.handler.MessageContext; 
 
+import java.io.InputStream;
 import java.util.*;
 import javax.annotation.*;         
 
@@ -62,6 +63,67 @@ public class IcentralPortImpl implements IcentralPort {
     public EntryManager getEntryManager() {
         return this.entryManager;
     }
+
+    //--------------------------------------------------------------------------
+    // ACL Validator
+    //--------------
+
+    private AclValidator aclv;
+
+    public void setAclValidator( AclValidator validator ){
+        aclv = validator;
+    }
+
+    public AclValidator getAclValidator(){
+        return aclv;
+    }
+
+
+    /*
+    private JsonContext aclContext;
+
+    public void setAclContext( JsonContext context ){
+        aclContext = context;
+    }
+
+    public JsonContext getAclContext(){
+        return aclContext;
+    }
+
+    public void initialize( boolean force ){
+
+        if ( getAclContext().getJsonConfig() == null || force ) {
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( " initilizing acl context" );
+            String jsonPath =
+                (String) getAclContext().getConfig().get( "json-config" );
+            log.info( "JsonAclDef=" + jsonPath );
+
+            if ( jsonPath != null && jsonPath.length() > 0 ) {
+
+                String cpath = jsonPath.replaceAll("^\\s+","" );
+                cpath = jsonPath.replaceAll("\\s+$","" );
+
+                try {
+                    InputStream is =
+                        ApplicationContextProvider.getResourceAsStream( cpath );
+                    getAclContext().readJsonConfigDef( is );
+
+                } catch ( Exception e ){
+                    log.info( "JsonConfig reading error" );
+                }
+            }
+        }
+    }
+    */
+
+    public void initialize(){
+        //initialize( false );
+    }
+    
+
+    //--------------------------------------------------------------------------
 
     static DatatypeFactory dtf;
     static {

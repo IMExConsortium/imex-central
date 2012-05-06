@@ -29,6 +29,7 @@ import javax.xml.ws.handler.MessageContext;
 import java.util.*;
 import java.util.regex.*;
 import java.text.DecimalFormat;
+import java.io.InputStream;
 
 import javax.annotation.*;         
 
@@ -51,7 +52,13 @@ public class IcentralPortImpl implements IcentralPort {
 
     @Resource 
         WebServiceContext wsContext;
- 
+    
+    //--------------------------------------------------------------------------
+    
+    private static String WS_ACTION ="ws-v20";
+    private static String WS_UPD = "update";
+    private static String WS_SRC = "search";
+    
     //--------------------------------------------------------------------------
     // Entry Manager
     //--------------
@@ -75,6 +82,82 @@ public class IcentralPortImpl implements IcentralPort {
         }
     }
     
+    //--------------------------------------------------------------------------
+    // ACL Validator
+    //--------------
+
+    private AclValidator aclv;
+
+    public void setAclValidator( AclValidator validator ){
+        aclv = validator;
+    }
+    
+    public AclValidator getAclValidator(){
+        return aclv;
+    }
+    
+    public void initialize( boolean force ){
+        
+        if ( aclv.getAclContext().getJsonConfig() == null || force ) {
+            
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( " initilizing acl context" );
+            String jsonPath =
+                (String) aclv.getAclContext().getConfig().get( "json-config" );
+            log.info( "JsonAclDef=" + jsonPath );
+
+            if ( jsonPath != null && jsonPath.length() > 0 ) {
+                
+                String cpath = jsonPath.replaceAll("^\\s+","" );
+                cpath = jsonPath.replaceAll("\\s+$","" );
+
+                try {
+                    InputStream is =
+                        ApplicationContextProvider.getResourceAsStream( cpath );
+                    aclv.getAclContext().readJsonConfigDef( is );
+                    
+                } catch ( Exception e ){
+                    log.info( "JsonConfig reading error" );
+                }
+            }
+        }
+    }
+    
+    public void initialize(){
+        initialize( false );
+    }
+
+    //--------------------------------------------------------------------------    
+
+    private void aclVerify( String action, String op, User usr )
+        throws IcentralFault {
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "aclVerify: action=" + action + " op=" + op 
+                  + " usr=" + usr );
+        
+        if( ! aclv.verify( action, op,
+                           usr.getLogin(), usr.getAllRoleNames(),
+                           usr.getGroupNames() ) ) throw Fault.AUTH;
+    }
+    
+    private void aclVerify( String action, String op, User usr, DataItem pub)
+        throws IcentralFault {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "aclVerify: action=" + action + " op=" + op 
+                  + " usr=" + usr + " tgt=" + pub );
+
+        if( ! aclv.verify( action, op,
+                           usr.getLogin(), usr.getAllRoleNames(),
+                           usr.getGroupNames(),
+                           pub.getOwner().getLogin(),
+                           pub.getAdminUserNames(),
+                           pub.getAdminGroupNames() ) ) throw Fault.AUTH;
+    }
+
+    
+    //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 
     private long delay = 30L;
@@ -125,7 +208,9 @@ public class IcentralPortImpl implements IcentralPort {
         log.debug( " credentials test=" +  c.test() );
         
         if ( ! c.test() ) throw Fault.AUTH;
-        
+    
+        User usr = c.loggedUser();
+    
         String ns = id.getNs();
         String ac = id.getAc();
         
@@ -140,19 +225,18 @@ public class IcentralPortImpl implements IcentralPort {
 
         if ( icPub == null ) {
 
+            aclVerify( WS_ACTION, WS_UPD, usr ); 
             edu.ucla.mbi.util.data.Publication
                 newPub = entryManager.getPubByPmid( ac );
             if( newPub != null ) {
                 icPub = new IcPub( newPub );
             }
+        } else {
+            aclVerify( WS_ACTION, WS_UPD, usr, icPub );
         }
         if ( icPub != null ) {
             log.info( " icPub=" + icPub + " ID=" + icPub.getId());
             if ( icPub.getId() == null ) {
-                
-                // ACL target control NOTE: implement as needed
-                //---------------------------------------------
-                /* if ( ownerMatch != null && ownerMatch.size() > 0 ) { } */
                 
                 User owner = entryManager.getUserContext()
                     .getUserDao().getUser( c.getLogin() );
@@ -190,6 +274,8 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         if ( id == null ) throw Fault.ID_MISSING;
+
+        User usr = c.loggedUser();
         
         String ns = id.getNs();
         String ac = id.getAc();
@@ -199,9 +285,10 @@ public class IcentralPortImpl implements IcentralPort {
         IcPub icp = getIcPub( ns, ac );
         
         if( icp != null ) {
+            aclVerify( WS_ACTION, WS_SRC, usr, icp );
             return buildPub( icp );
         }
-        
+        aclVerify( WS_ACTION, WS_SRC, usr );
         throw Fault.NO_RECORD;
     }
 
@@ -225,7 +312,11 @@ public class IcentralPortImpl implements IcentralPort {
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
-  
+
+        User usr = c.loggedUser();
+        
+        aclVerify( WS_ACTION, WS_SRC, usr );
+
         if( owner == null )  throw Fault.ID_MISSING;
       
         User user = entryManager.getUserContext()
@@ -270,6 +361,10 @@ public class IcentralPortImpl implements IcentralPort {
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+
+        User usr = c.loggedUser();
+
+        aclVerify( WS_ACTION, WS_SRC, usr );
         
         if( status == null )  throw Fault.ID_MISSING;
 
@@ -312,6 +407,9 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
+        User usr = c.loggedUser();
+        aclVerify( WS_ACTION, WS_SRC, usr );
+
         throw Fault.UNSUP;
     }
     
@@ -328,6 +426,9 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
+        User usr = c.loggedUser();
+        aclVerify( WS_ACTION, WS_UPD, usr );
+        
         throw Fault.UNSUP;
     }
 
@@ -345,21 +446,20 @@ public class IcentralPortImpl implements IcentralPort {
         if ( ! c.test() ) throw Fault.AUTH;
         if ( id == null ) throw Fault.ID_MISSING;
 
+        User usr = c.loggedUser();
+
         String ns = id.getNs();
         String ac = id.getAc();
 
         log.debug( " ns=" + ns + " ac=" + ac );
 
-        //IcPub icp = getIcPub( ns, ac );
-
-        //if( icp != null ) {
-        //    return buildPub( icp );
-        //}
-        
-        //log.debug( " ns=" + ns + " ac=" + ac );
-
         IcPub icp = getIcPub( ns, ac );
-        if( icp == null ) throw Fault.NO_RECORD;
+
+        if( icp == null ){
+            aclVerify( WS_ACTION, WS_SRC, usr );
+            throw Fault.NO_RECORD;
+        }
+        aclVerify( WS_ACTION, WS_UPD, usr, icp );
         
         String nNs = newId.getNs();
         String nAc = newId.getAc();
@@ -405,6 +505,8 @@ public class IcentralPortImpl implements IcentralPort {
         if ( ! c.test() ) throw Fault.AUTH;
         if ( id == null ) throw Fault.ID_MISSING;
         
+        User usr = c.loggedUser();
+
         String ns = id.getNs();
         String ac = id.getAc();
             
@@ -417,8 +519,12 @@ public class IcentralPortImpl implements IcentralPort {
         IcPub icp = (IcPub) pubDao.getPublicationByPmid( ac );
         log.debug( " icp=" + icp );
         
-        if ( icp == null ) throw Fault.NO_RECORD;
-        
+        if ( icp == null ){
+            aclVerify( WS_ACTION, WS_SRC, usr );
+            throw Fault.NO_RECORD;
+        }
+        aclVerify( WS_ACTION, WS_UPD, usr, icp );
+
         DataState state = entryManager.getWorkflowContext()
             .getWorkflowDao().getDataState( status );
         
@@ -445,9 +551,10 @@ public class IcentralPortImpl implements IcentralPort {
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
-
         if( id == null )  throw Fault.ID_MISSING;
 
+        User usr = c.loggedUser();
+        
         String ns = id.getNs();
         String ac = id.getAc();
 
@@ -458,8 +565,13 @@ public class IcentralPortImpl implements IcentralPort {
 
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
         IcPub icp = (IcPub) pubDao.getPublicationByPmid( ac );       
-        if ( icp == null ) throw Fault.NO_RECORD;
 
+        if ( icp == null ){
+            aclVerify( WS_ACTION, WS_SRC, usr );
+            throw Fault.NO_RECORD;
+        }
+        aclVerify( WS_ACTION, WS_UPD, usr, icp );
+        
         log.debug( " imexid(old)=" + icp.getImexId() );
 
         if( ( icp.getImexId() == null || icp.getImexId().equals("N/A") )
@@ -512,6 +624,8 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
+        User lusr = c.loggedUser();
+        
         if( operation == null || identifier == null || user == null ) {
             throw Fault.UNSUP;
         }
@@ -534,16 +648,17 @@ public class IcentralPortImpl implements IcentralPort {
         
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
         // IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
-        if ( icp == null ) throw Fault.NO_RECORD;
+        
+        if ( icp == null ){
+            aclVerify( WS_ACTION, WS_SRC, lusr );
+            throw Fault.NO_RECORD;
+        }
+        aclVerify( WS_ACTION, WS_UPD, lusr, icp );
         
         if( operation.toUpperCase().equals("DROP") ) {
          
             log.debug( "IcentralPortImpl: AdminUser DROP");
-   
-            //------------------------------------------------------------------
-            // check authorisation
-            //--------------------
-
+            
             //------------------------------------------------------------------
             // drop user
             //----------
@@ -572,11 +687,7 @@ public class IcentralPortImpl implements IcentralPort {
         if( operation != null && operation.toUpperCase().equals("ADD") ) {
             
             log.debug( "IcentralPortImpl: AdminUser ADD");
-
-            //------------------------------------------------------------------
-            // check authorisation
-            //--------------------
-
+            
             //------------------------------------------------------------------
             // get user
             //---------
@@ -619,12 +730,13 @@ public class IcentralPortImpl implements IcentralPort {
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
-        
+
+        User lusr = c.loggedUser();
+
         log.debug( "IcentralPortImpl: identifier.ns=" + identifier.getNs() );
         log.debug( "IcentralPortImpl: identifier.ac=" + identifier.getAc() );
         log.debug( "IcentralPortImpl: operation=" + operation );
         log.debug( "IcentralPortImpl: group=" + group);
-        
         
         // get publication
         //----------------
@@ -638,15 +750,16 @@ public class IcentralPortImpl implements IcentralPort {
         
         IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
         //IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
-        if ( icp == null ) throw Fault.NO_RECORD;
+        
+        if( icp == null ){
+            aclVerify( WS_ACTION, WS_SRC, lusr );
+            throw Fault.NO_RECORD;
+        }
+        aclVerify( WS_ACTION, WS_UPD, lusr, icp );
         
         if( operation.toUpperCase().equals("DROP") ) {
         
             log.debug( "IcentralPortImpl: AdminGroup DROP");
-    
-            //------------------------------------------------------------------
-            // check authorisation
-            //--------------------
 
             //------------------------------------------------------------------
             // drop group
@@ -675,10 +788,6 @@ public class IcentralPortImpl implements IcentralPort {
         if( operation != null && operation.toUpperCase().equals("ADD") ) {
             
             log.debug( "IcentralPortImpl: AdminGroup ADD");
-
-            //------------------------------------------------------------------
-            // check authorisation
-            //--------------------
 
             //------------------------------------------------------------------
             // get group
@@ -715,6 +824,8 @@ public class IcentralPortImpl implements IcentralPort {
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
 
+        User usr = c.loggedUser();
+        
         // get parent
         //-----------
         
@@ -723,7 +834,12 @@ public class IcentralPortImpl implements IcentralPort {
 
         if( ns == null || ac== null ) throw Fault.ID_MISSING;
         IcPub icParent = getIcPub( ns, ac );
-        
+
+        if ( icParent == null ){
+            aclVerify( WS_ACTION, WS_SRC, usr );
+            throw Fault.NO_RECORD;
+        }
+
         // build attachment
         //-----------------
         
@@ -805,6 +921,7 @@ public class IcentralPortImpl implements IcentralPort {
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
+        User usr = c.loggedUser();
         
         // get parent
         //-----------
@@ -813,10 +930,14 @@ public class IcentralPortImpl implements IcentralPort {
         String ac = parent.getAc();
 
         log.info( "type: "+type+"  ns: "+ns+ "   ac: " +ac);
-
-
+        
         if( ns == null || ac== null ) throw Fault.ID_MISSING;
         IcPub icParent = getIcPub( ns, ac );
+
+        if ( icParent == null ){
+            aclVerify( WS_ACTION, WS_SRC, usr );
+            throw Fault.NO_RECORD;
+        }
 
         IcAdiDao adiDao = (IcAdiDao)
             entryManager.getTracContext().getAdiDao();
@@ -845,7 +966,8 @@ public class IcentralPortImpl implements IcentralPort {
 
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
-
+        User usr = c.loggedUser();
+        
         String ns = identifier.getNs();
         String ac = identifier.getAc();
         log.info( "IcentralPortImpl: ns=" + ns + " ac=" + ac);
@@ -879,12 +1001,14 @@ public class IcentralPortImpl implements IcentralPort {
             entryManager.getTracContext().getAdiDao();
         AttachedDataItem adi =  adiDao.getAdi( id );
 
-        if(adi == null){
+        if ( adi == null ){
+            aclVerify( WS_ACTION, WS_SRC, usr );
             throw Fault.NO_RECORD;
-        } 
-        
-        log.info( "IcentralPortImpl: adi id=" + adi.getId());
+        }
 
+        aclVerify( WS_ACTION, WS_UPD, usr, adi );
+        log.info( "IcentralPortImpl: adi id=" + adi.getId());
+        
         Attachment nAtt = buildAttachment( adi );
         return nAtt;
 
@@ -934,20 +1058,40 @@ public class IcentralPortImpl implements IcentralPort {
     
     //--------------------------------------------------------------------------
 
-    
     private edu.ucla.mbi.imex.central.ws.v20.Publication buildPub( IcPub icp ) {
         
         edu.ucla.mbi.imex.central.ws.v20.Publication 
             pub = of.createPublication();
 
-        Identifier pmid = of.createIdentifier();
-        pmid.setNs( "pmid" );
-        pmid.setAc( icp.getPmid() );
-        
+        // identifiers
+        //------------
 
-        pub.getIdentifier().add( pmid );
-        //pub.getIdentifier().setNs( "pmid" );
-        //pub.getIdentifier().setAc( icp.getPmid() );
+        if( icp.getDoi() != null && 
+            !icp.getDoi().equals("") ){
+            
+            Identifier doi = of.createIdentifier();
+            doi.setNs( "doi" );
+            doi.setAc( icp.getDoi() );
+            pub.getIdentifier().add( doi );
+        }
+
+        if( icp.getPmid() != null 
+            && !icp.getPmid().equals("") ){
+            
+            Identifier pmid = of.createIdentifier();
+            pmid.setNs( "pmid" );
+            pmid.setAc( icp.getPmid() );
+            pub.getIdentifier().add( pmid );
+        }
+
+        if( icp.getJournalSpecific() != null 
+            && !icp.getJournalSpecific().equals("") ){
+            
+            Identifier jint = of.createIdentifier();
+            jint.setNs( "jint" );
+            jint.setAc( icp.getJournalSpecific() );
+            pub.getIdentifier().add( jint );
+        }
         
         pub.setAuthor( icp.getAuthor() );
         pub.setTitle( icp.getTitle() );
@@ -1150,7 +1294,6 @@ public class IcentralPortImpl implements IcentralPort {
         }
         return atl;
     }
-    
     
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------

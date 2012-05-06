@@ -233,8 +233,8 @@ public class UserAction extends UserSupport {
 	    setPass1("");
 	    setPass2("");
 
-	    //return UEDIT;
-            return HOME;
+	    return UEDIT;
+            //return HOME;
 	}
 
 	return HOME;
