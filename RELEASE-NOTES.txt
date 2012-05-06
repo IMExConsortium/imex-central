@@ -78,3 +78,13 @@ $Id$
              - date
              - record owner
       - updated location of the recaptcha server
+
+2012/04/11 BETA-0.85
+   - GUI updates:
+      - publication manager updates:
+          - show/hide columns
+      - publication search
+          - search by pmid/imex/doi/jint identifiers supported
+   - guard against dysfunctional NML service added
+
+  - initial implementation of PSICQUIC server added

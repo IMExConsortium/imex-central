@@ -33,7 +33,7 @@ import org.apache.solr.client.solrj.*;
 import org.apache.solr.client.solrj.impl.*;
 import org.apache.solr.client.solrj.response.*;
 
-import java.util.zip.CRC32;
+import java.util.zip.*;
 import java.lang.Thread.State;
 
 import edu.ucla.mbi.util.JsonContext;
@@ -56,7 +56,11 @@ public class BuildSolrIndex{
     
     String rfrmt;
 
-    String mifDir =  "/home/lukasz/imex_test";
+    //String mifDir =  "/home/lukasz/imex_test";
+
+    String rootDir= null;
+    boolean zip = false;
+
         
     SolrServer solr = null;
 
@@ -78,8 +82,13 @@ public class BuildSolrIndex{
     //--------------------------------------------------------------------------
     
     
-    public BuildSolrIndex( String ctx, String rfrmt ){
+    public BuildSolrIndex( String ctx, String rfrmt,
+                           String dir, boolean zip ){
         
+        this.zip = zip;
+        this.rfrmt = rfrmt;
+        this.rootDir = dir;
+
         // get context
         //------------
 
@@ -197,7 +206,7 @@ public class BuildSolrIndex{
 
     public void start(){
     
-        File dirFl = new File( mifDir );
+        File dirFl = new File( rootDir );
         try{
             processFiles( dirFl.getCanonicalPath(), dirFl );
         } catch(Exception ex){
@@ -227,7 +236,17 @@ public class BuildSolrIndex{
 
         try{
 
-            StreamSource ssNative = new StreamSource( file );
+            InputStream is = null;
+            
+            if( zip ){
+                ZipFile zf = new ZipFile( file );
+                is = zf.getInputStream( zf.entries().nextElement() );
+            } else {
+                is = new FileInputStream( file );  
+            }
+            
+            StreamSource ssNative = new StreamSource( is );
+            
             DOMResult domResult = new DOMResult();
 
             //transform into psq dom
@@ -264,8 +283,18 @@ public class BuildSolrIndex{
         //-----------------------
 
         try{
-
-            StreamSource ssNative = new StreamSource( file );
+            
+            InputStream is = null;
+            
+            if( zip ){
+                ZipFile zf = new ZipFile( file );
+                is = zf.getInputStream( zf.entries().nextElement() );
+            } else {
+                is = new FileInputStream( file );  
+            }
+            
+            StreamSource ssNative = new StreamSource( is );
+            
             DOMResult domResult = new DOMResult();
             
             //transform into mitab dom
@@ -334,78 +363,5 @@ public class BuildSolrIndex{
         }catch(Exception ex){
             ex.printStackTrace();
         }       
-    }
-
-    //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
-
-    public static void main( String [ ] args ){
-        
-        Options options = new Options();
- 
-        Option hlpOption = OptionBuilder.withLongOpt( "help" )
-            .withDescription( "help " )
-            .create( "help" );
-
-        options.addOption( hlpOption );
-        
-        Option urlOption = OptionBuilder.withLongOpt( "url" )
-            .withArgName( "url" ).hasArg()
-            .withDescription( "server url" )
-            .create( "url" );
-
-        options.addOption( urlOption );
-        
-        Option ctxOption = OptionBuilder.withLongOpt( "context" )
-            .withArgName( "file.json" ).hasArg()
-            .withDescription( "configuration file" )
-            .create( "ctx" );
-
-        options.addOption( ctxOption );
-        
-        String context = BuildSolrIndex.CONTEXT;
- 
-        Option iftOption = OptionBuilder.withLongOpt( "iformat" )
-            .withArgName( "format" ).hasArg()
-            .withDescription( "input record format" )
-            .create( "ift" );
-        
-        options.addOption( iftOption );
-        
-        String ifrmt = BuildSolrIndex.RFRMT;
-        
-        try{
-            CommandLineParser parser = new PosixParser();
-            CommandLine cmd = parser.parse( options, args);
-
-            if( cmd.hasOption("help") ){
-
-                HelpFormatter formatter = new HelpFormatter();
-                formatter.setWidth( 127 );
-                formatter.printHelp( "BuildSolrIndex", options );
-                System.exit(0);
-            }
-
-            if( cmd.hasOption("ctx") ){
-                context = cmd.getOptionValue("ctx");
-            }
-        
-            if( cmd.hasOption("ift") ){
-                ifrmt = cmd.getOptionValue( "ift" );
-            }
-        } catch( Exception exp ) {
-            System.out.println( "BuildSolrIndex: Options parsing failed. " +
-                                "Reason: " + exp.getMessage() );
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.setWidth(127);
-            formatter.printHelp( "BuildSolrIndex", options );
-            System.exit(1);
-        }
-
-        System.out.println( "Context: " + context );
-        
-        BuildSolrIndex psi = new BuildSolrIndex( context, ifrmt );
-        psi.start();
-        
     }
 }

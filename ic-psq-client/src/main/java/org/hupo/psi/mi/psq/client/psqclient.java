@@ -209,7 +209,8 @@ public class psqclient {
 
                 if( qr.getResultSet() != null ){
                     System.out.println( qr.getResultSet().getMitab() );
-                }
+                    System.out.println( qr.getResultSet().getEntrySet() );
+                } 
             }            
             System.exit(0);
         }

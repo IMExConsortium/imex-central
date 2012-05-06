@@ -42,6 +42,10 @@
       </map>
     </property>
   </bean>
+
+ <bean id="applicationContextProvider" 
+       class="org.hupo.psi.mi.psq.server.PsqApplicationContextProvider" />
+
   
 <!-- ================================================================= INDEX -->
   
@@ -68,7 +72,7 @@
 <!-- ========================================================== WEB SERVICES -->
 <!-- ver 1.1 -->
 
-  <bean id="psq-ws-1.1-imp"  class="org.hupo.psi.mi.psq.server.PsqPortImpl">
+  <bean id="psq-ws-1.1-imp"  class="org.hupo.psi.mi.psq.server.PsqPortImpl" scope="prototype" init-method="initialize">
     <property name="psqContext" ref="psqContext"/>
     <property name="index" ref="solrIndex"/> 
     <property name="recordDao" ref="derbyDao"/> 

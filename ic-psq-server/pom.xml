@@ -318,7 +318,7 @@
         <configuration>
          <archive>
           <manifest>
-           <mainClass>org.hupo.psi.mi.psq.server.index.solr.BuildSolrIndex</mainClass>
+           <mainClass>org.hupo.psi.mi.psq.server.index.solr.buildindex</mainClass>
           </manifest>
          </archive>
          <descriptorRefs>

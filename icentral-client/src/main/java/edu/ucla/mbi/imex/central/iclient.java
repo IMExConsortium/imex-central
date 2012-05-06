@@ -25,7 +25,7 @@ public class iclient {
 
     static IcentralService service;
     static IcentralPort port;
-    static String endpoint = "https://imexcentral.org/icentraltest/ws";
+    static String endpoint = "https://imexcentral.org/icentralbeta/ws-v20";
     
     public static void connect(String[] args) {
 
@@ -33,8 +33,10 @@ public class iclient {
             URL url = new URL( endpoint + "?wsdl" );
             System.out.println( "WSDL: " + endpoint + "?wsdl" );
             QName qn = new QName("http://imex.mbi.ucla.edu/icentral/ws",
-                                 "ImexCentralService");
+                                 //"ImexCentralService");
+                                 "ics20");
             service = new IcentralService( url, qn );
+            //service = new IcentralService( url, qn );
             //port = service.getImexCentralPort();
             port = service.getIcp20();
             

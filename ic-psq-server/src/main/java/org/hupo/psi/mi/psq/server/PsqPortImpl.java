@@ -46,6 +46,10 @@ public class PsqPortImpl implements PsqPort {
     @Resource
         WebServiceContext wsContext;
 
+    @Resource
+        ServletContext sc;
+
+
     org.hupo.psi.mi.psq.ObjectFactory psqOF =
         new org.hupo.psi.mi.psq.ObjectFactory();
     
@@ -85,7 +89,7 @@ public class PsqPortImpl implements PsqPort {
     private void initialize() {
         initialize( false );
     }
-
+    
     //--------------------------------------------------------------------------
     
     private void initialize( boolean force) {
@@ -102,16 +106,12 @@ public class PsqPortImpl implements PsqPort {
 
                 String cpath = jsonPath.replaceAll("^\\s+","" );
                 cpath = jsonPath.replaceAll("\\s+$","" );
-
-                ServletContext sc = (ServletContext) 
-                    wsContext.getMessageContext()
-                    .get( MessageContext.SERVLET_CONTEXT );
-                    
-                log.info( "ServletContext =" + sc );
                 
                 try {
                     InputStream is =
-                        sc.getResourceAsStream( cpath );
+                        //sc.getResourceAsStream( cpath );
+                        PsqApplicationContextProvider.getResourceAsStream( cpath );
+
                     getPsqContext().readJsonConfigDef( is );
                     
                 } catch ( Exception e ){
@@ -141,8 +141,6 @@ public class PsqPortImpl implements PsqPort {
         throws NotSupportedMethodException, 
                NotSupportedTypeException, 
                PsicquicServiceException {
-
-        initialize();
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "PsqPortImpl: getByQuery: context =" + psqContext);
@@ -218,7 +216,6 @@ public class PsqPortImpl implements PsqPort {
 
     public List<String> getSupportedReturnTypes(){
         
-        initialize();
         return (List<String>) ((Map) ((Map) getPsqContext().getJsonConfig()
                                       .get( "service" )).get( "soap" ))
             .get( "supported-return-type" );
@@ -227,7 +224,7 @@ public class PsqPortImpl implements PsqPort {
     //--------------------------------------------------------------------------
     
     public String getVersion(){
-        initialize();
+        
         return (String) ((Map) ((Map) getPsqContext().getJsonConfig()
                                 .get( "service" )).get( "soap" ))
             .get( "version" );
@@ -237,7 +234,6 @@ public class PsqPortImpl implements PsqPort {
     
     public List<String> getSupportedDbAcs(){
         
-        initialize();
         return (List<String>) ((Map) ((Map) getPsqContext().getJsonConfig()
                                       .get( "service" )).get( "soap" ))
             .get( "supported-db-ac" );
@@ -247,7 +243,6 @@ public class PsqPortImpl implements PsqPort {
 
     public String getProperty( String property ){     
         
-        initialize();
         return (String) ((Map) ((Map) ((Map) getPsqContext().getJsonConfig()
                                        .get( "service" )) .get( "soap" )) 
                          .get( "properties" ))
@@ -257,8 +252,7 @@ public class PsqPortImpl implements PsqPort {
     //--------------------------------------------------------------------------
     
     public List<Property> getProperties(){
-
-        initialize();
+        
         Map propmap = (Map) ((Map) ((Map) getPsqContext().getJsonConfig()
                                     .get( "service" )).get( "soap" ))
             .get( "properties" );

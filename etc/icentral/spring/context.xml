@@ -88,7 +88,7 @@
 
 
  <!-- access control list/interceptor -->
-
+  
   <bean id="aclContext" class="edu.ucla.mbi.util.JsonContext">
     <property name="config">
       <map>
@@ -101,7 +101,7 @@
       </map>
     </property>
   </bean>
-
+    
  <!-- operation logger/interceptor -->
 
   <bean id="logContext" class="edu.ucla.mbi.util.JsonContext">

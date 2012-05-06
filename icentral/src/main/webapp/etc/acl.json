@@ -1,4 +1,44 @@
 {acl:{
+  "ws-v20":{      
+    order:["operation"],
+    operation:{
+      "comment":"web service-based search",
+      "search":{
+        order:["target-deny","allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator"],
+          group:["ADMIN","DIP Curators"]
+        },
+        "target-deny":{
+            ousr:[],
+            ausr:[],
+            agrp:["HIDDEN"]
+        }
+      },
+      "update":{
+        "comment":"web service-based updates",
+        order:["allow","target-deny","target"],
+        allow:{
+            "comment":"",
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["USR","ADMIN"]
+        },
+        "target":{
+            "comment":"",
+            ousr:["__LOGIN"],
+            ausr:["__LOGIN","DIP"],
+            agrp:["__LOGIN","USR","DIP"]
+        },
+        "target-deny":{
+            ousr:[],
+            ausr:[],
+            agrp:["HIDDEN"]
+        }          
+      }
+    }
+  },
   pubmgr:{
     order:["operation"],
     operation:{
@@ -34,7 +74,7 @@
           role:["administrator"],
           group:["ADMIN"]
         }
-      }
+      },
     }
   },
 
