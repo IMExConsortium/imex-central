@@ -1,13 +1,38 @@
 {
   "index":{
      "solr":{ 
-        "solr-url":"http://127.0.0.1:8080/${project.build.finalName}/solr",
-        "solr-core":"/psq-01"
-       }
+        "url":"http://127.0.0.1:8080/${project.build.finalName}/solr/psq-01",
+        "shard":["127.0.0.1:8080/${project.build.finalName}/solr/psq-01",
+                 "127.0.0.1:8080/${project.build.finalName}/solr/psq-02",
+                 "127.0.0.1:8080/${project.build.finalName}/solr/psq-03"]
+       },
+      "transform":{
+          "mif254":{
+             "type":"xslt", 
+             "config":"../etc/ic-psq/server/solr/config/mif2index.xml"
+          }
+      }
   },
   "store":{
      "derby":{
         "derby-db":"/opt/psq-data/psq-derby"
+     },
+     "record-mgr": "http://localhost:8080/ic-psq-server/recordmgr",
+     "transform":{
+        "mif254":[
+            { "format":"psi-mi/tab25", 
+               "type":"xslt", 
+               "config":"../etc/ic-psq/server/solr/config/mif2mitab25view.xml"
+            },
+            { "format":"psi-mi/tab27", 
+               "type":"xslt", 
+               "config":"../etc/ic-psq/server/solr/config/mif2mitab25view.xml"
+            },
+            { "format":"psi-mi/xml25", 
+               "type":"xslt", 
+               "config":"../etc/ic-psq/server/solr/config/mif2mitab25view.xml"
+            }
+        ]
      }
   },
   "service":{
@@ -19,6 +44,7 @@
           },
         "supported-return-type":[
            "psi-mi/tab25",
+           "psi-mi/tab27",
            "psi-mi/xml25" ],
         "supported-db-ac":[ 
            "MI:0670", 
@@ -30,6 +56,7 @@
         "properties":{},
         "supported-return-type":[
            "psi-mi/tab25",
+           "psi-mi/tab27",
            "psi-mi/xml25" ],
         "supported-db-ac":[
            "MI:0670",

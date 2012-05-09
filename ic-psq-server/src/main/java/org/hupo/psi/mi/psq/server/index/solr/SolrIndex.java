@@ -29,8 +29,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class SolrIndex implements Index{
-        
-    String coreUrl = null;
+
+    String baseUrl = null;
+    String queryUrl = null;
+    List<String> shardUrl = null;
+
     JsonContext context = null;
     
     public void setContext( JsonContext context ){
@@ -50,7 +53,7 @@ public class SolrIndex implements Index{
     
     public void initialize( boolean force ){
         
-        if( force || coreUrl == null ){
+        if( force || queryUrl == null ){
 
             Log log = LogFactory.getLog( this.getClass() );
             log.info( " initilizing SolrIndex" );
@@ -58,12 +61,27 @@ public class SolrIndex implements Index{
             if( context != null && context.getJsonConfig() != null ){
                 Map jCon =  context.getJsonConfig(); 
 
-                log.info( "    solr-url=" + jCon.get("solr-url") );
-                log.info( "    solr-url=" + jCon.get("solr-core") );
+                log.info( "    url=" + jCon.get("url") );
+                log.info( "    shard=" + jCon.get("shard") );
                 
-                coreUrl = (String) jCon.get("solr-url");
-                if( jCon.get("solr-core") != null ){
-                    coreUrl+= (String) jCon.get("solr-core");
+                baseUrl = (String) jCon.get("url");
+                queryUrl = baseUrl + "?";
+            
+                if( jCon.get("shard") != null ){
+                    List shardList = (List) jCon.get("shard");
+                    String shardStr= "";
+                    for( Iterator is = shardList.iterator(); is.hasNext(); ){
+                        String csh = (String) is.next();
+                        shardStr += csh + ",";
+                        if(shardUrl == null){
+                            shardUrl = new ArrayList<String>();
+                        }
+                        shardUrl.add( csh );
+                    }
+                    if( !shardStr.equals("") ){
+                        shardStr = shardStr.substring( 0, shardStr.length()-1);
+                        queryUrl += "shards=" + shardStr + "&";                    
+                    }
                 }                
             }
         }
@@ -99,4 +117,9 @@ public class SolrIndex implements Index{
         }
         return rs;
     }
+
+    //--------------------------------------------------------------------------
+
+
+
 }
