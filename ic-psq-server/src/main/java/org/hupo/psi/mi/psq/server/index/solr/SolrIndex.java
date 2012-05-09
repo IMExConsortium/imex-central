@@ -89,9 +89,7 @@ public class SolrIndex implements Index{
 
                     SolrDocumentList res = response.getResults();
                     rs.setResultList( res );
-
                     
-
                 } catch( SolrServerException sex ){
                     sex.printStackTrace();
                 }

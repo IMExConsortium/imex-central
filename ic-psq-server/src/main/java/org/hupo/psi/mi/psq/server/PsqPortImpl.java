@@ -18,10 +18,7 @@ import java.io.InputStream;
 
 import javax.jws.WebService;
 
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.WebServiceContext;
-
-import javax.servlet.ServletContext;
+//import javax.xml.ws.handler.MessageContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,14 +39,7 @@ import javax.annotation.*;
              wsdlLocation = "/WEB-INF/wsdl/psicquic11.wsdl")
 
 public class PsqPortImpl implements PsqPort {
-
-    @Resource
-        WebServiceContext wsContext;
-
-    @Resource
-        ServletContext sc;
-
-
+    
     org.hupo.psi.mi.psq.ObjectFactory psqOF =
         new org.hupo.psi.mi.psq.ObjectFactory();
     
@@ -79,11 +69,7 @@ public class PsqPortImpl implements PsqPort {
     public void setPsqContext( JsonContext context ){
         psqContext = context;
     }
-
-    public JsonContext getPsqContext(){
-        return psqContext;
-    }
-
+    
     //--------------------------------------------------------------------------
 
     private void initialize() {
@@ -94,30 +80,16 @@ public class PsqPortImpl implements PsqPort {
     
     private void initialize( boolean force) {
 
-        if ( getPsqContext().getJsonConfig() == null || force ) {
+        if ( psqContext.getJsonConfig() == null || force ) {
 
             Log log = LogFactory.getLog( this.getClass() );
             log.info( " initilizing psq context" );
-            String jsonPath =
-                (String) getPsqContext().getConfig().get( "json-config" );
-            log.info( "JsonPsqDef=" + jsonPath );
-            
-            if ( jsonPath != null && jsonPath.length() > 0 ) {
 
-                String cpath = jsonPath.replaceAll("^\\s+","" );
-                cpath = jsonPath.replaceAll("\\s+$","" );
-                
-                try {
-                    InputStream is =
-                        //sc.getResourceAsStream( cpath );
-                        PsqApplicationContextProvider.getResourceAsStream( cpath );
-
-                    getPsqContext().readJsonConfigDef( is );
-                    
-                } catch ( Exception e ){
-                    log.info( "JsonConfig reading error" );
-                }
-            }
+            try {
+                psqContext.readJsonConfigDef();
+            } catch ( Exception e ){
+                log.info( "JsonConfig reading error" );
+            }            
         }
     }
 
@@ -216,7 +188,7 @@ public class PsqPortImpl implements PsqPort {
 
     public List<String> getSupportedReturnTypes(){
         
-        return (List<String>) ((Map) ((Map) getPsqContext().getJsonConfig()
+        return (List<String>) ((Map) ((Map) psqContext.getJsonConfig()
                                       .get( "service" )).get( "soap" ))
             .get( "supported-return-type" );
     };
@@ -225,7 +197,7 @@ public class PsqPortImpl implements PsqPort {
     
     public String getVersion(){
         
-        return (String) ((Map) ((Map) getPsqContext().getJsonConfig()
+        return (String) ((Map) ((Map) psqContext.getJsonConfig()
                                 .get( "service" )).get( "soap" ))
             .get( "version" );
     };
@@ -234,7 +206,7 @@ public class PsqPortImpl implements PsqPort {
     
     public List<String> getSupportedDbAcs(){
         
-        return (List<String>) ((Map) ((Map) getPsqContext().getJsonConfig()
+        return (List<String>) ((Map) ((Map) psqContext.getJsonConfig()
                                       .get( "service" )).get( "soap" ))
             .get( "supported-db-ac" );
     };
@@ -243,7 +215,7 @@ public class PsqPortImpl implements PsqPort {
 
     public String getProperty( String property ){     
         
-        return (String) ((Map) ((Map) ((Map) getPsqContext().getJsonConfig()
+        return (String) ((Map) ((Map) ((Map) psqContext.getJsonConfig()
                                        .get( "service" )) .get( "soap" )) 
                          .get( "properties" ))
             .get( property );
@@ -253,7 +225,7 @@ public class PsqPortImpl implements PsqPort {
     
     public List<Property> getProperties(){
         
-        Map propmap = (Map) ((Map) ((Map) getPsqContext().getJsonConfig()
+        Map propmap = (Map) ((Map) ((Map) psqContext.getJsonConfig()
                                     .get( "service" )).get( "soap" ))
             .get( "properties" );
         

@@ -511,15 +511,9 @@ public class IcentralPortImpl implements IcentralPort {
         String ac = id.getAc();
             
         if( ns == null || ac == null )  throw Fault.ID_MISSING;
-        if( !ns.equals("pmid") ) throw Fault.ID_UNKNOWN;
-
         log.debug( " ns=" + ns + " ac=" + ac );
        
-        //IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();      
-        //IcPub icp = (IcPub) pubDao.getPublicationByPmid( ac );
-
         IcPub icp = getIcPub( ns, ac );
-
         log.debug( " icp=" + icp );
         
         if ( icp == null ){
@@ -562,12 +556,7 @@ public class IcentralPortImpl implements IcentralPort {
         String ac = id.getAc();
 
         if( ns == null || ac == null )  throw Fault.ID_MISSING;
-        // if( !ns.equals("pmid") ) throw Fault.ID_UNKNOWN;
-        
         log.debug( " ns=" + ns + " ac=" + ac + "create=" + create );
-
-        //IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
-        //IcPub icp = (IcPub) pubDao.getPublicationByPmid( ac );       
 
         IcPub icp = getIcPub( ns, ac );
         
@@ -647,9 +636,6 @@ public class IcentralPortImpl implements IcentralPort {
         String ac = identifier.getAc();
         
         IcPub icp = getIcPub( ns, ac );
-        
-        // IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
-        // IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
         
         if ( icp == null ){
             aclVerify( WS_ACTION, WS_SRC, lusr );
@@ -747,9 +733,6 @@ public class IcentralPortImpl implements IcentralPort {
         String ac = identifier.getAc();
         
         IcPub icp = getIcPub( ns, ac );
-        
-        //IcPubDao pubDao = (IcPubDao) entryManager.getTracContext().getPubDao();
-        //IcPub icp = (IcPub) pubDao.getPublicationByPmid( identifier.getAc() );
         
         if( icp == null ){
             aclVerify( WS_ACTION, WS_SRC, lusr );

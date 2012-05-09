@@ -44,7 +44,7 @@
   </bean>
 
  <bean id="applicationContextProvider" 
-       class="org.hupo.psi.mi.psq.server.PsqApplicationContextProvider" />
+       class="edu.ucla.mbi.util.ApplicationContextProvider" />
 
   
 <!-- ================================================================= INDEX -->
