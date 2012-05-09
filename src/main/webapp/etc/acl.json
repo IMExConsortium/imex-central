@@ -4,11 +4,11 @@
     operation:{
       "comment":"web service-based search",
       "search":{
-        order:["target-deny","allow"],
-        allow:{
+        "order":["target-deny","allow"],
+        "allow":{
           user:["ADMIN"],
-          role:["administrator"],
-          group:["ADMIN","DIP Curators"]
+          role:["administrator","curator"],
+          group:["ADMIN"]
         },
         "target-deny":{
             ousr:[],
@@ -18,18 +18,18 @@
       },
       "update":{
         "comment":"web service-based updates",
-        order:["allow","target-deny","target"],
-        allow:{
-            "comment":"",
+        "order":["allow","target-deny","target"],
+        "allow":{
+            "comment":"administrative override",
             user:["ADMIN"],
             role:["administrator"],
-            group:["USR","ADMIN"]
+            group:["ADMIN"]
         },
         "target":{
             "comment":"",
             ousr:["__LOGIN"],
-            ausr:["__LOGIN","DIP"],
-            agrp:["__LOGIN","USR","DIP"]
+            ausr:["__LOGIN"],
+            agrp:["__LOGIN"]
         },
         "target-deny":{
             ousr:[],
