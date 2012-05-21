@@ -1,4 +1,4 @@
-package org.hupo.psi.mi.psq.server.index.solr;
+package org.hupo.psi.mi.psq.builder;
 
 /* =============================================================================
  # $Id::                                                                       $
@@ -36,12 +36,14 @@ import org.apache.solr.client.solrj.response.*;
 import java.util.zip.CRC32;
 import java.lang.Thread.State;
 
+//import org.hupo.psi.mi.psq.index.solr.BuildSolrDerbyIndex;
+
 import edu.ucla.mbi.util.JsonContext;
 
 public class buildindex{
     
     public static final String 
-        CONTEXT = "../etc/ic-psq/server/psq-context.json";
+        CONTEXT = "/etc/psq-context-default.json";
     
     public static final String 
         RFRMT = "mif254";   
@@ -90,7 +92,7 @@ public class buildindex{
 
         options.addOption( ctxOption );
         
-        String context = BuildSolrIndex.CONTEXT;
+        String context = null;
  
         Option iftOption = OptionBuilder.withLongOpt( "iformat" )
             .withArgName( "format" ).hasArg()
@@ -99,7 +101,7 @@ public class buildindex{
         
         options.addOption( iftOption );
         
-        String ifrmt = BuildSolrIndex.RFRMT;
+        String ifrmt = BuildSolrDerbyIndex.RFRMT;
         
         try{
             CommandLineParser parser = new PosixParser();
@@ -109,13 +111,13 @@ public class buildindex{
 
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.setWidth( 127 );
-                formatter.printHelp( "BuildSolrIndex", options );
+                formatter.printHelp( "BuildSolrDerbyIndex", options );
                 System.exit(0);
             }
 
             if( cmd.hasOption("ctx") ){
                 context = cmd.getOptionValue("ctx");
-            }
+            } 
         
             if( cmd.hasOption("ift") ){
                 ifrmt = cmd.getOptionValue( "ift" );
@@ -130,22 +132,36 @@ public class buildindex{
             }
 
         } catch( Exception exp ) {
-            System.out.println( "BuildSolrIndex: Options parsing failed. " +
+            System.out.println( "BuildSolrDerbyIndex: Options parsing failed. " +
                                 "Reason: " + exp.getMessage() );
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(127);
-            formatter.printHelp( "BuildSolrIndex", options );
+            formatter.printHelp( "BuildSolrDerbyIndex", options );
             System.exit(1);
         }
 
-        System.out.println( "Context: " + context );
+       
+        BuildSolrDerbyIndex psi = null;
         
-        BuildSolrIndex psi = new BuildSolrIndex( context, ifrmt,
-                                                 dir, zip );
-
-        psi.initialize();
-
+        if( context != null ){
+            System.out.println( "Context: " + context );
+            psi = new BuildSolrDerbyIndex( context, ifrmt,
+                                           dir, zip );
+        }else{
+            
+            System.out.println( "Context(default): " 
+                                + BuildSolrDerbyIndex.CONTEXT );
+            try{
+                InputStream ctxStream = buildindex.class
+                    .getResourceAsStream( BuildSolrDerbyIndex.CONTEXT );
+                
+                psi = new BuildSolrDerbyIndex( ctxStream, ifrmt, dir, zip );
+            } catch( Exception ex){
+                ex.printStackTrace();
+            }
+            
+        }
         psi.start();
-        
+
     }
 }

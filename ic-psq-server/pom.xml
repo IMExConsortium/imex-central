@@ -2,13 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>opt.hupo.psi.mi</groupId>
+  <groupId>org.hupo.psi.mi</groupId>
   <artifactId>ic-psq-server</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>PSICQUIC Web Service server</name>
 
   <properties>
+      <psq.server>ic-psq-server</psq.server>
       <psq.version>${project.version}</psq.version>
   </properties>
  
@@ -162,6 +163,9 @@
 
   </dependencies>
 
+
+
+
   <build>
     <finalName>ic-psq-server</finalName>
 
@@ -232,6 +236,15 @@
               <filtering>true</filtering>
               <includes>
                 <include>*.json</include>
+              </includes>
+            </resource>
+
+           <resource>
+              <directory>${basedir}/../etc/ic-psq/server/xsl</directory>
+              <targetPath>etc/xsl</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>*.xml</include>
               </includes>
             </resource>
 
@@ -312,7 +325,7 @@
         </configuration>
       </plugin>
 
-
+<!--
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -327,7 +340,27 @@
         </configuration>
       </plugin>
     </plugins>
-  
+-->
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+         <finalName>ic-psq</finalName>
+         <archive>
+          <manifest>
+           <mainClass>org.hupo.psi.mi.psq.builder.buildindex</mainClass>
+          </manifest>
+         </archive>
+
+          <descriptors>
+            <descriptor>src/main/assembly/builder.xml</descriptor>
+          </descriptors>
+
+        </configuration>
+      </plugin>
+    </plugins>
+
+
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>

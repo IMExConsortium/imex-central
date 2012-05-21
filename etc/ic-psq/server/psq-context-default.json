@@ -2,13 +2,15 @@
   "index":{
      "solr":{ 
         "url":"http://127.0.0.1:8080/${project.build.finalName}/solr/psq-01",
-        "shard":["127.0.0.1:8080/${psq.server}/solr/psq-01",
-                 "127.0.0.1:8080/${psq.server}/solr/psq-02"]
+        "shard":[
+            "127.0.0.1:8080/${psq.server}/solr/psq-01",
+            "127.0.0.1:8080/${psq.server}/solr/psq-02"
+        ]
        },
       "transform":{
           "mif254":{
              "type":"xslt", 
-             "config":"../etc/xsl/mif2index2-xpsq.xml"
+             "config":"etc/xsl/mif2index2-xpsq.xml"
           }
       }
   },
@@ -22,20 +24,20 @@
      },
      "transform":{
         "mif254":[
-            { "view":"psi-mi/tab25", 
-              "type":"xslt", 
-              "config":"etc/xsl/mif2mitab25view2-xpsq.xml",
-              "active":true
+            {  "type":"xslt", 
+               "view":"psi-mi/tab25", 
+               "config":"etc/xsl/mif2mitab25view2-xpsq.xml",
+               "active":true
             },
-            { "view":"psi-mi/tab27", 
-              "type":"xslt", 
-              "config":"etc/xsl/mif2mitab25view2-xpsq.xsl",
-              "active":false
+            {  "type":"xslt",
+               "view":"psi-mi/tab27", 
+               "config":"etc/xsl/mif2mitab25view2-xpsq.xml",
+               "active":false
             },
-            { "view":"psi-mi/xml25", 
-              "type":"xslt", 
-              "config":"etc/xsl/mif2mitab25view2-xpsq.xsl",
-              "active":false
+            {  "type":"xslt",
+               "format":"psi-mi/xml25", 
+               "config":"etc/xsl/mif2mitab25view2-xpsq.xml",
+               "active":false
             }
         ]
      }

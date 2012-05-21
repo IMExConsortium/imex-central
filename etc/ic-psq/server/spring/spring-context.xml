@@ -56,13 +56,13 @@
 <!-- ============================================================ DATA STORE -->
   
   <bean id="derbyDao" destroy-method="shutdown" 
-        class="org.hupo.psi.mi.psq.server.data.derby.DerbyRecordDao">
+        class="org.hupo.psi.mi.psq.server.store.derby.DerbyRecordDao">
     <property name="context" ref="psqContext"/>     
   </bean>
 
 <!-- ======================================================== STRUTS ACTIONS -->
 
-  <bean id="recordMgrAction" 
+  <bean id="recordMgrAction" scope="prototype"
         class="org.hupo.psi.mi.psq.server.struts.action.RecordMgrAction">
     <property name="recordDao" ref="derbyDao"/>
     <property name="psqContext" ref="psqContext"/>     
@@ -72,7 +72,8 @@
 <!-- ========================================================== WEB SERVICES -->
 <!-- ver 1.1 -->
 
-  <bean id="psq-ws-1.1-imp"  class="org.hupo.psi.mi.psq.server.PsqPortImpl" scope="prototype" init-method="initialize">
+  <bean id="psq-ws-1.1-imp" scope="prototype" init-method="initialize"
+        class="org.hupo.psi.mi.psq.server.PsqPortImpl">
     <property name="psqContext" ref="psqContext"/>
     <property name="index" ref="solrIndex"/> 
     <property name="recordDao" ref="derbyDao"/> 

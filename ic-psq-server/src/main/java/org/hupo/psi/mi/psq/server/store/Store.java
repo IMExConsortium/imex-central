@@ -1,9 +1,8 @@
-package org.hupo.psi.mi.psq.server.data;
+package org.hupo.psi.mi.psq.server.store;
 
 import java.util.List;
 
-public interface RecordDao{
-    public void addRecord( String id, String record, String format );
+public interface Store{
     public String getRecord( String id, String format );
     public List<String> getRecordList( List<String> id, String format );
 }

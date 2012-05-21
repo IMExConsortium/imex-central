@@ -67,6 +67,9 @@ public class BuildSolrIndex{
     Transformer psqtr = null;
     Transformer tabtr = null;
 
+
+    SolrIndex sIndex = null;
+
     //--------------------------------------------------------------------------
 
     JsonContext psqContext;
@@ -88,7 +91,7 @@ public class BuildSolrIndex{
         this.zip = zip;
         this.rfrmt = rfrmt;
         this.rootDir = dir;
-
+        
         // get context
         //------------
 
@@ -97,15 +100,25 @@ public class BuildSolrIndex{
         try{                     
             psqContext.readJsonConfigDef( new FileInputStream( ctx ) );
             Map jctx = (Map) getPsqContext().getJsonConfig();
+            
+            // SOLR Index
+            //-----------
+
+            if( ((Map)jctx.get( "index" )).get( "solr" ) != null ){
+                sIndex = new SolrIndex( psqContext );
+                sIndex.initialize();
+            }
+
+            /*
 
             // index transformers
             //-------------------
-
+            
             xsltIndex = (Map<String,String>) ((Map) jctx.get( "index" ))
                 .get( "xslt" );
             
-            // SOLR server(s)
-            //---------------
+            // SOLR Index
+            //-----------
 
             List slst = 
                 (List) ((Map) ((Map) jctx.get( "index" )).get( "solr" ))
@@ -131,20 +144,22 @@ public class BuildSolrIndex{
             rmgrURL = (String) ((Map) jctx.get( "store" ))
                 .get( "record-mgr" );
             
+                
+
 
             // record transformers
             //--------------------
 
             xsltRecord = (Map<String,String>) ((Map) jctx.get( "store" ))
                 .get( "xslt" );
-            
+            */
             
         } catch( Exception ex ){
             ex.printStackTrace();
         }
 
         try{
-            
+            /*
             // connect to solr
             //----------------
 
@@ -197,12 +212,21 @@ public class BuildSolrIndex{
             } catch( Exception ex ) {
                 ex.printStackTrace();
             }
-
+            */
             
         }catch(Exception ex){
             ex.printStackTrace();
         }
     }
+
+    //--------------------------------------------------------------------------
+
+    public void initialize(){
+
+
+    }
+
+    //--------------------------------------------------------------------------
 
     public void start(){
     
@@ -245,6 +269,10 @@ public class BuildSolrIndex{
                 is = new FileInputStream( file );  
             }
             
+            sIndex.addFile( rfrmt, 
+                            file.getCanonicalPath().replace( root, "" ), is );
+            
+            /*
             StreamSource ssNative = new StreamSource( is );
             
             DOMResult domResult = new DOMResult();
@@ -274,11 +302,14 @@ public class BuildSolrIndex{
                     solr.add( doc );
                 }
             }
-            
+            */
+
         }catch(Exception ex){
             ex.printStackTrace();
         }
-        
+            
+
+
         // transform/add -> mitab
         //-----------------------
 

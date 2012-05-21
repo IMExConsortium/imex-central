@@ -1,4 +1,4 @@
-package org.hupo.psi.mi.psq.server.data.derby;
+package org.hupo.psi.mi.psq.server.store.derby;
 
 /* =============================================================================
  # $Id:: PsqPortImpl.java 259 2012-05-06 16:29:56Z lukasz                      $
@@ -24,7 +24,7 @@ import edu.ucla.mbi.util.JsonContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.hupo.psi.mi.psq.server.data.*;
+import org.hupo.psi.mi.psq.server.store.*;
 
 //------------------------------------------------------------------------------
 
@@ -47,16 +47,20 @@ public class DerbyRecordDao implements RecordDao{
     }
     
     private void connect(){
-
+        
         if( dbcon == null ){
-
+            
             Log log = LogFactory.getLog( this.getClass() );
-            log.info( "DerbyRecordDao(connect): ");
+            log.info( "DerbyRecordDao:connect" );
             
             if( context != null && context.getJsonConfig() != null ){
+                
+                Map derbyCfg = (Map)
+                    ((Map) context.getJsonConfig().get("store")).get("derby");
                 try{
-                    String derbydb = 
-                        (String) context.getJsonConfig().get("derby-db");
+                    String derbydb = (String) derbyCfg.get("derby-db");
+                    log.info( "               location: " + derbydb );
+
                     dbcon = 
                         DriverManager.getConnection( "jdbc:derby:" + 
                                                      derbydb + ";create=true");
@@ -64,6 +68,7 @@ public class DerbyRecordDao implements RecordDao{
                 } catch( Exception ex ){
                     ex.printStackTrace();
                 }
+                
                 
                 try{
                     Statement st = dbcon.createStatement();
@@ -90,9 +95,12 @@ public class DerbyRecordDao implements RecordDao{
             Statement statement = dbcon.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             
-            statement.executeUpdate( "create table record (id varchar(256)," +
-                                     " record clob, format varchar(32) )");
-            statement.executeUpdate( "create index r_id on record (id)" );
+            statement.executeUpdate( "create table record " +
+                                     "(pk int generated always as identity," +
+                                     " rid varchar(256),"+
+                                     " format varchar(32), record clob )");
+
+            statement.executeUpdate( "create index r_rid on record (rid)" );
             statement.executeUpdate( "create index r_ft on record (format)" );
             
         } catch( Exception ex ){
@@ -117,14 +125,14 @@ public class DerbyRecordDao implements RecordDao{
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 
-    public void addRecord( String id, String record, String format ){
+    public void addRecord( String rid, String record, String format ){
         connect();
         try{
             PreparedStatement pst = dbcon
-                .prepareStatement( "insert into record (id, record, format)" +
+                .prepareStatement( "insert into record (rid, record, format)" +
                                    " values (?,?,?)" );
             
-            pst.setString( 1, id );
+            pst.setString( 1, rid );
             
             if( record != null && format != null ){
                 pst.setString( 2, record );
@@ -139,16 +147,16 @@ public class DerbyRecordDao implements RecordDao{
 
     //--------------------------------------------------------------------------
 
-    public String getRecord( String id, String format ){
+    public String getRecord( String rid, String format ){
         connect();
         String record = "";
 
         try{
             PreparedStatement pst = dbcon
-                .prepareStatement( "select id, record from record" +
-                                   " where id = ? and format= ?" );
+                .prepareStatement( "select rid, record from record" +
+                                   " where rid = ? and format= ?" );
             
-            pst.setString( 1, id );
+            pst.setString( 1, rid );
             pst.setString( 2, format );
             ResultSet rs =  pst.executeQuery();
             while( rs.next() ){
@@ -164,17 +172,17 @@ public class DerbyRecordDao implements RecordDao{
 
     //--------------------------------------------------------------------------
     
-    public List<String> getRecordList( List<String> id, String format ){
+    public List<String> getRecordList( List<String> rid, String format ){
         
         connect();
         List<String> recordList = new ArrayList<String>();
         
         try{
             PreparedStatement pst = dbcon
-                .prepareStatement( "select id, record from record" +
-                                   " where id = ? and format = ?" );
+                .prepareStatement( "select rid, record from record" +
+                                   " where rid = ? and format = ?" );
             
-            for( Iterator<String> i = id.iterator(); i.hasNext(); ){
+            for( Iterator<String> i = rid.iterator(); i.hasNext(); ){
                 pst.setString( 1, i.next() );
                 pst.setString( 2, format );
                 ResultSet rs =  pst.executeQuery();

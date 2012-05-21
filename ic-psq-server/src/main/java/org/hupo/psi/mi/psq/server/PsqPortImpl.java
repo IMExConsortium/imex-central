@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.hupo.psi.mi.psq.*;
 import org.hupo.psi.mi.psq.server.index.*;
-import org.hupo.psi.mi.psq.server.data.*;
+import org.hupo.psi.mi.psq.server.store.*;
 
 import edu.ucla.mbi.util.JsonContext;
 

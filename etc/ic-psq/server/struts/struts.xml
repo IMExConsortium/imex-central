@@ -90,7 +90,7 @@
 
     <result name="success" type="json">
        <param name="includeProperties">
-        mitab,pid
+        pid,vt,vv
        </param>
        <param name="noCache">true</param>
     </result>

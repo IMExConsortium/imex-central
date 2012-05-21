@@ -28,13 +28,13 @@
     Default web.xml file.  
     This file is applied to a Web application before it's own WEB_INF/web.xml file
   </description>
-
+<!--
    <env-entry>
        <env-entry-name>solr/home</env-entry-name>
        <env-entry-value>/opt/psq-solr</env-entry-value>
        <env-entry-type>java.lang.String</env-entry-type>
     </env-entry>
-
+-->
 
   <!-- ==================================================================== -->
   <!-- Context params to control Session Cookies                            -->

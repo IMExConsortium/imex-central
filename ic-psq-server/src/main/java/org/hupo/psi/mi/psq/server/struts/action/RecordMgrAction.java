@@ -12,8 +12,8 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.ucla.mbi.util.JsonContext;
 
-import org.hupo.psi.mi.psq.server.data.*;
-import org.hupo.psi.mi.psq.server.data.derby.*;
+import org.hupo.psi.mi.psq.server.store.*;
+import org.hupo.psi.mi.psq.server.store.derby.*;
 
 public class RecordMgrAction extends ActionSupport
     implements ServletContextAware{
@@ -71,8 +71,12 @@ public class RecordMgrAction extends ActionSupport
     //--------------------------------------------------------------------------
 
     String op="";
-    String mitab="";
     String pid="";
+
+    String vt="";
+    String vv="";
+
+    String mitab=""; // ???
     
     public void setOp( String op ){
         this.op = op;
@@ -82,11 +86,11 @@ public class RecordMgrAction extends ActionSupport
         return pid;
     }
     
-    public void setPid(String pid){
+    public void setPid( String pid){
         this.pid=pid;
     }
 
-    public void setMitab(String mitab){
+    public void setMitab( String mitab){
         this.mitab=mitab;
     }
     
@@ -94,6 +98,22 @@ public class RecordMgrAction extends ActionSupport
         return mitab;
     }
 
+    public void setVt( String viewType ){
+        vt = viewType;
+    }
+    
+    public String getVt(){
+        return vt;
+    }
+    
+    public void setVv( String viewValue ){
+        vv = viewValue;
+    }
+    
+    public String getVv(){
+        return vv;
+    }
+    
     //--------------------------------------------------------------------------
 
     RecordDao  rdao = null;
@@ -108,33 +128,30 @@ public class RecordMgrAction extends ActionSupport
     public String execute() throws Exception {
 
         initialize();
-        System.out.println("OP="+ op);
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "OP=" + op + " ID=" + pid + " VT=" + vt );
         
         if( op != null && op.equals( "add" ) ){
-            String[] pida = null;
-            String[] mtba = null;
-            if( pid != null && mitab != null ){
-                try{
-                    pida = pid.split("\\n");
-                    mtba = mitab.split("\\n");            
-                }catch(Exception ex){
-                }
-            }
-
-            if( pida != null && mtba!= null ){
-
-                for( int i=0; i<pida.length; i++ ){
-                    rdao.addRecord( pida[i], mtba[i], null );
-                }
+            if( pid != null && vt != null && vv != null ){
+                rdao.addRecord( pid, vv, vt );
+                vv="";
             }
         }
+        
+        if( op != null && op.equals( "get" ) ){
+            if( pid != null && vt!= null ){
+                vv = rdao.getRecord( pid, vt );
+            }
 
+        }
         return ActionSupport.SUCCESS;
     }
 
     //--------------------------------------------------------------------------
     // ServletContextAware interface implementation
     //---------------------------------------------
+
     private ServletContext servletContext;
 
     public void setServletContext( ServletContext context){

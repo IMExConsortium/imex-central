@@ -28,13 +28,13 @@
   <system-property javax.xml.parsers.SAXParserFactory=
              "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"/>
    -->
-<!--
+
   <env-entry>
        <env-entry-name>solr/home</env-entry-name>
-       <env-entry-value></env-entry-value>
+       <env-entry-value>ssssolr/homesss</env-entry-value>
        <env-entry-type>java.lang.String</env-entry-type>
     </env-entry>
- -->
+
 <!-- ========================================================= ============= -->
 <!-- ========================================================= CONTEXT setup -->
 <!-- ========================================================= ============= -->

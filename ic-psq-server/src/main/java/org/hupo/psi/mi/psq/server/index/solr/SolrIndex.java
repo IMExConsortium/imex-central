@@ -9,19 +9,32 @@ package org.hupo.psi.mi.psq.server.index.solr;
  #
  #=========================================================================== */
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
+//import org.apache.solr.client.solrj.SolrServer;
+//import org.apache.solr.client.solrj.SolrServerException;
+//import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+//import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.SolrDocumentList;
 
 import java.net.MalformedURLException;
 
-import java.util.Map;
+import java.io.*;
+import java.util.*;
+import java.util.zip.CRC32;
+
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+
+import org.apache.solr.core.*;
+import org.apache.solr.common.*;
+import org.apache.solr.client.solrj.*;
+import org.apache.solr.client.solrj.impl.*;
+import org.apache.solr.client.solrj.response.*;
+
 
 import org.hupo.psi.mi.psq.server.index.*;
-import org.hupo.psi.mi.psq.server.data.*;
+//import org.hupo.psi.mi.psq.server.data.*;
+import org.hupo.psi.mi.psq.server.*;
 
 import edu.ucla.mbi.util.JsonContext;
 
@@ -30,11 +43,17 @@ import org.apache.commons.logging.LogFactory;
 
 public class SolrIndex implements Index{
 
-    String baseUrl = null;
-    String queryUrl = null;
-    List<String> shardUrl = null;
-
     JsonContext context = null;
+
+    String baseUrl = null;
+    SolrServer baseSolr = null;
+
+    List<String> shardUrl = null;
+    List<SolrServer> shSolr = null;
+    CRC32 shCRC = null;
+
+    Map<String,Map> ricon = null;
+    Map<String,Map> rscon = null;
     
     public void setContext( JsonContext context ){
         this.context = context;
@@ -53,36 +72,52 @@ public class SolrIndex implements Index{
     
     public void initialize( boolean force ){
         
-        if( force || queryUrl == null ){
-
+        if( force || baseUrl == null ){
+            
             Log log = LogFactory.getLog( this.getClass() );
             log.info( " initilizing SolrIndex" );
             
             if( context != null && context.getJsonConfig() != null ){
-                Map jCon =  context.getJsonConfig(); 
 
-                log.info( "    url=" + jCon.get("url") );
-                log.info( "    shard=" + jCon.get("shard") );
+                // SOLR URLs
+                //----------
+
+                Map jSolrCon = (Map) 
+                    ((Map) context.getJsonConfig().get("index")).get("solr");
+
+                log.info( "    url=" + jSolrCon.get("url") );
+                log.info( "    shard=" + jSolrCon.get("shard") );
                 
-                baseUrl = (String) jCon.get("url");
-                queryUrl = baseUrl + "?";
-            
-                if( jCon.get("shard") != null ){
-                    List shardList = (List) jCon.get("shard");
+                baseUrl = (String) jSolrCon.get("url");
+                
+                if( jSolrCon.get("shard") != null ){
+                    List shardList = (List) jSolrCon.get("shard");
                     String shardStr= "";
                     for( Iterator is = shardList.iterator(); is.hasNext(); ){
                         String csh = (String) is.next();
                         shardStr += csh + ",";
-                        if(shardUrl == null){
+                        if( shardUrl == null ){
                             shardUrl = new ArrayList<String>();
                         }
-                        shardUrl.add( csh );
+                        shardUrl.add( "http://" + csh );
                     }
                     if( !shardStr.equals("") ){
                         shardStr = shardStr.substring( 0, shardStr.length()-1);
-                        queryUrl += "shards=" + shardStr + "&";                    
                     }
-                }                
+                }
+                
+                Map jFmtCon = (Map) ((Map) context.getJsonConfig().get("index"))
+                    .get("transform");
+                
+                ricon = new HashMap<String,Map>();
+
+                for( Iterator ik = jFmtCon.keySet().iterator(); ik.hasNext(); ){
+                    
+                    String rtp = (String) ik.next();
+                    Map rtr = (Map) jFmtCon.get( rtp );
+
+                    ricon.put( rtp, rtr );
+                }
             }
         }
     }
@@ -94,12 +129,16 @@ public class SolrIndex implements Index{
         ResultSet rs = new ResultSet();
 
         try{
-            if( coreUrl == null ){ initialize(); }
-            if( coreUrl != null ){
+            if( baseUrl == null ){ initialize(); }
+            if( baseUrl != null ){
 
-                SolrServer solr = new CommonsHttpSolrServer( coreUrl );
+                SolrServer solr = new CommonsHttpSolrServer( baseUrl );
                 ModifiableSolrParams params = new ModifiableSolrParams();
                 params.set( "q", query );
+                
+                // set shards if needed ?
+                //-----------------------
+                
 
                 try{            
                     QueryResponse response = solr.query( params );
@@ -119,7 +158,146 @@ public class SolrIndex implements Index{
     }
 
     //--------------------------------------------------------------------------
+    
+    public void connect() throws MalformedURLException{
 
+        
+        baseSolr = new CommonsHttpSolrServer( baseUrl );
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "   SolrIndex: connecting" );
 
+        
+        if( shardUrl.size() > 0 ){
+
+            shSolr = new ArrayList<SolrServer>();
+            
+            for( Iterator<String> is = shardUrl.iterator(); is.hasNext(); ){
+                shSolr.add( new CommonsHttpSolrServer( is.next() ) );                        
+            }
+        } 
+
+        log.info( "              shards: total=" + shardUrl.size() 
+                  + " connected=" + shSolr.size() );
+
+    }
+    
+    public void add( SolrInputDocument doc ) 
+        throws SolrServerException,IOException{
+        
+        baseSolr.add( doc );
+    }
+    
+    public void add( int shard, SolrInputDocument doc ) 
+        throws SolrServerException,IOException{
+        
+        shSolr.get( shard ).add( doc );
+    }
+
+    
+    public void commit()
+        throws SolrServerException,IOException{
+
+        if( shSolr != null && shSolr.size() > 0 ){
+            for( Iterator<SolrServer> is = shSolr.iterator(); is.hasNext(); ){
+                is.next().commit();
+            } 
+        } else {
+            baseSolr.commit();
+        }    
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public void addFile( String format, String fileName, InputStream is ){
+        
+        Map rtr = ricon.get( format );
+        
+        List<SolrInputDocument> output = new ArrayList<SolrInputDocument>();
+
+        if( ((String) rtr.get("type")).equalsIgnoreCase("XSLT") ){
+            if( rtr.get( "transformer" ) == null ){
+
+                Log log = LogFactory.getLog( this.getClass() );
+                log.info( " Initializing transformer: format=" + format
+                          + " type=XSLT config=" + rtr.get("config") );
+
+                RecTransformer rt = 
+                    new RecTransformer( "XSLT", (String) rtr.get("config") );
+                rtr.put( "transformer",rt );
+            }
+            
+            RecTransformer rt = (RecTransformer) rtr.get( "transformer" );
+
+            Node  rnode = rt.transform( fileName, is );
+            
+            NodeList dl = rnode.getFirstChild().getChildNodes();
+            for( int i = 0; i< dl.getLength() ;i++ ){
+                if(dl.item(i).getNodeName().equals("doc")){
+
+                    String pid = fileName;
+                    
+                    SolrInputDocument doc =  new SolrInputDocument();
+                    NodeList field = dl.item(i).getChildNodes();
+                    for( int j = 0; j< field.getLength() ;j++ ){
+                        if( field.item(j).getNodeName().equals("field") ){
+                            Element fe = (Element) field.item(j);
+                            String name = fe.getAttribute("name");
+                            String value = fe.getFirstChild().getNodeValue();
+                            doc.addField( name,value );
+
+                            if( name.equals( "pid" ) ){
+                                pid = value;
+                            }
+                        }
+                    }
+
+                    try{
+                        if( shSolr.size() > 1 ){
+                            
+                            int shard = this.shardSelect( pid );
+
+                            Log log = LogFactory.getLog( this.getClass() );
+                            int shMax = shSolr.size() - 1;
+                            log.info( " SolrIndex(add): pid=" + pid 
+                                      + " shard= " + shard 
+                                      + " (max= " + shMax +")" );
+                                  
+                            this.add( shard, doc );
+                        } else {
+                            this.add( doc );
+                        }
+                    } catch(Exception ex){
+                        ex.printStackTrace();
+                    }                    
+                }
+            }
+            
+            try{
+                this.commit();   
+            }catch( Exception ex ){
+                ex.printStackTrace();
+            }
+        }   
+    }
+
+    public int shardSelect( String id ){
+        
+        if( shCRC == null ){
+            shCRC = new CRC32();
+        }
+
+        shCRC.reset();
+        shCRC.update( id.getBytes() ); 
+        
+        Long crc =  new Long( shCRC.getValue() );
+        int shc = shSolr.size();
+      
+        if( crc.intValue() > 0 ){
+            return crc.intValue() % shc;
+        } else {
+            return - crc.intValue() % shc;
+        }
+    }
 
 }
