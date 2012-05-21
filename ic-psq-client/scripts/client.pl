@@ -7,6 +7,7 @@ my $URLTEST = "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
 my $URLBETA = "https://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws";
 my $URL = $URLTEST;
 my $PURL= "http://10.1.1.%%%:8080/ic-psq-server/ws";
+#my $PURL= "http://128.97.39.203:8081/ic-psq-server/ws";
 
 my $ip="";
 my $pmid="";
@@ -124,12 +125,16 @@ my $rns ="";
 if($op ne "" ) {
     
     $rns ="http://psi.hupo.org/mi/psicquic";    
-    
-    my $rqinfo = "<requestInfo>".
+   
+    my $rqinfo = "<query>$query</query>". 
+        "<requestInfo>".
         "<resultType/>".
         "<firstResult>0</firstResult>".
         "<blockSize>50</blockSize>".
         "</requestInfo>";
+
+
+# SOAP::Data->name("query" => $query) )
 
     if( $op eq "getByQuery" ) {        
 
@@ -138,7 +143,7 @@ if($op ne "" ) {
             ->proxy($URL)
             ->default_ns($rns)
             ->outputxml('true')
-            ->getByQuery( SOAP::Data->type( SOAP::Data->name("query" => $query) ),
+            ->getByQuery( SOAP::Data->type( 'xml' => $query), 
                           SOAP::Data->type( 'xml' => $rqinfo) );
     }
 

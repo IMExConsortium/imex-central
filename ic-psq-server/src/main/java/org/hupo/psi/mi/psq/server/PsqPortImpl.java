@@ -138,7 +138,7 @@ public class PsqPortImpl implements PsqPort {
             
             String pid = (String) in.get("pid");
 
-            String drecord =  rdao.getRecord( pid ,"" );
+            String drecord =  rdao.getRecord( pid ,"psi-mi/tab25" );
         
             log.info( " SolrDoc: pid=" + pid + " :: "  + drecord );
             mitab += drecord + "\n";
