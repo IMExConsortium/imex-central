@@ -36,7 +36,6 @@ YAHOO.imex.pubedit = {
         };
         
         var onImexClick = function ( event ) {
-            alert("hi");
             var imexUpdate = function ( o ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
