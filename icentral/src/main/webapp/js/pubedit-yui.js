@@ -684,6 +684,8 @@ YAHOO.imex.pubedit = {
         var state =  YAHOO.util.History.getCurrentState("pubedit"); 
         //sets the active tab by index number
 	tabManager.tabs.set("activeIndex", state.substr(3)); 
+        //hack to remove focus from the last clicked button staying highlighted on back navigation
+        document.getElementsByClassName("selected")[0].firstChild.focus();
 
     },
     // when a tab is clicked, navigate to the correct tab
