@@ -88,3 +88,17 @@ $Id$
    - guard against dysfunctional NML service added
 
   - initial implementation of PSICQUIC server added
+  
+  
+2012/05/09 BETA-0.86
+   - GUI updates:
+      - user editor action fix
+      - web services updates:
+          - ACL-based access control added (ws-v2.0)
+          - publication record returns all identifiers
+                                    
+      - PSICQUIC server updates
+
+2012/07/24 BETA-0.87
+  - GUI updates:
+      - implemented record tabs history
