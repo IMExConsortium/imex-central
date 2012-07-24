@@ -10,7 +10,10 @@ YAHOO.imex.pubedit = {
         //---------------
 
         YAHOO.imex.pubedit.tabs = new YAHOO.widget.TabView("pubTab");
-        
+        //this listener is for when a tab is clicked. 
+        YAHOO.imex.pubedit.tabs.addListener("activeTabChange", 
+                                    YAHOO.imex.pubedit.handleHistoryNavigation); 
+
         YAHOO.imex.pubedit.pubId = obj.id;
         
         YAHOO.imex.util.copyField( "pubedit_pub_owner_login", "pubedit_opp_neo" );             
@@ -33,7 +36,6 @@ YAHOO.imex.pubedit = {
         };
         
         var onImexClick = function ( event ) {
-            
             var imexUpdate = function ( o ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
@@ -139,6 +141,7 @@ YAHOO.imex.pubedit = {
         
         imexButton.my = { items: stateSel, value: "" };
         imexButton.on("click", onImexClick );
+        YAHOO.imex.pubedit.historyInit();
 
     },
 
@@ -454,7 +457,7 @@ YAHOO.imex.pubedit = {
                                      success: YAHOO.imex.pubedit.adminUpdate,
                                      failure: YAHOO.imex.pubedit.updateFail,
                                      argument:{ id:YAHOO.imex.pubedit.pubId } };
-        try{
+        try{historyInit
             if( op === 'add' ) {
                 YAHOO.util.Connect
                     .asyncRequest( 'GET', 
@@ -650,5 +653,64 @@ YAHOO.imex.pubedit = {
 
     updateFail: function( o ) {
         alert(o.responseText);
-    }
+    },
+
+    historyInit: function(){
+        //initialize the default state
+        var bookmarkedTabViewState = YAHOO.util.History.getBookmarkedState("pubedit");
+        var initialTabViewState = bookmarkedTabViewState || "tab0";
+        //get the instance of the manager
+        var tabManager = YAHOO.imex.pubedit;
+        //register the module
+        YAHOO.util.History.register("pubedit", initialTabViewState, this.historyReadyHandler);
+        //makes sure the handler is called when the DOM is ready (?)
+        YAHOO.util.History.onReady( tabManager.historyReadyHandler );
+        // Initialize the browser history management library.
+        try {
+          YAHOO.util.History.initialize("yui-history-field", "yui-history-iframe");
+        } catch (x) {
+          // The only exception that gets thrown here is when the browser is
+          // not supported (Opera, or not A-grade) Degrade gracefully.
+          alert(x);
+        }
+    },
+
+    //Handles page back and forward as well as refreshes
+    //as you can see there is no navigate() so it wont
+    //load the page, run the js and load the page again
+    historyReadyHandler: function(){
+        var tabManager = YAHOO.imex.pubedit;
+        //gets the cuurent state in the yui history. 
+        var state =  YAHOO.util.History.getCurrentState("pubedit"); 
+        //sets the active tab by index number
+	tabManager.tabs.set("activeIndex", state.substr(3)); 
+        //hack to remove focus from the last clicked button staying highlighted on back navigation
+        document.getElementsByClassName("selected")[0].firstChild.focus();
+
+    },
+    // when a tab is clicked, navigate to the correct tab
+    // the new tab is also loaded into the yui history.     
+    handleHistoryNavigation: function(state){
+        var tabManager = YAHOO.imex.pubedit;
+        var currentState, newState,newTab;
+        //gets the state of the tab from the object passed from the click listener
+        var newTab =  tabManager.tabs.getTabIndex(state.newValue);
+        if(newTab === null)
+        {
+            YAHOO.util.History.navigate("pubedit", "tab0");
+        }
+        var newState = "tab" + newTab;
+        
+        try {
+            currentState = YAHOO.util.History.getCurrentState("pubedit");
+            // The following test is crucial. Otherwise, we end up circling forever.
+            // Indeed, YAHOO.util.History.navigate will call the module onStateChange
+            // callback, which will call this handler and it keeps going from here...
+            if (newState != currentState && newState != "tabnull") {
+                YAHOO.util.History.navigate("pubedit", newState);
+            }
+        } catch (e) {
+            alert(e);
+        } 
+     }
 };
