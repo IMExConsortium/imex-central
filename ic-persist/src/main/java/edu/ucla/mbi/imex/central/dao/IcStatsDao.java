@@ -129,7 +129,7 @@ public class IcStatsDao extends AbstractDAO {
             handleException( e );
             // log error ?
         } finally {
-            System.out.println("Session closed (exeption)");
+            //System.out.println("Session closed (exeption)");
             //HibernateUtil.closeSession();
             session.close();
         }
@@ -178,7 +178,7 @@ public class IcStatsDao extends AbstractDAO {
             handleException( e );
             // log error ?
         } finally {
-            System.out.println("Session closed (exeption)");
+            //System.out.println("Session closed (exeption)");
             //HibernateUtil.closeSession();
             session.close();
         }

@@ -9,40 +9,30 @@
   <name>Web Application module</name>
 
   <properties>
-      <icentral.version>${project.version}</icentral.version> 
-      <icentral.bld>$Rev$</icentral.bld> 
-       <icentral.wsver>1.0</icentral.wsver>
-       <jdbc.user>dip</jdbc.user>
-       <jdbc.pass>444dip444</jdbc.pass>
-<!--       <jdbc.url>jdbc:postgresql://10.1.2.212:5432/icentral_test</jdbc.url> -->
-       <jdbc.dburl>jdbc:postgresql://imex.mbi.ucla.edu:50012/icentral_test</jdbc.dburl>
-       <jdbc.dbnme>icentral_test</jdbc.dbnme>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-<!--   <jdbc.srvname>10.1.2.212</jdbc.srvname> -->
-<!--   <jdbc.srvport>5432</jdbc.srvport> -->
+    <icentral.version>${project.version}</icentral.version> 
+    <icentral.bld>$Rev$</icentral.bld> 
+    <icentral.wsver>1.0</icentral.wsver>
 
-       <jdbc.srvname>imex.mbi.ucla.edu</jdbc.srvname>
-       <jdbc.srvport>50012</jdbc.srvport>
+    <icentral.css>icentral-test.css</icentral.css>
 
-      <icentral.jdbc>jdbc/icentral</icentral.jdbc>
+   <!-- foo.org: global key -->
+    <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
+    <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
+    <recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</recaptcha.recaptchaServer>
 
-      <icentral.css>icentral-test.css</icentral.css>
-
-      <!-- foo.org: global key -->
-      <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
-      <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
-      <recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</recaptcha.recaptchaServer>
-
-      <icentral.jdbc>jdbc/icentral</icentral.jdbc>
-
-      <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
+    <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
+    
+    <icentral.jdbc.dburl>jdbc:postgresql://imex.mbi.ucla.edu:50012/icentral_test</icentral.jdbc.dburl>
+    <icentral.jdbc.user>****</icentral.jdbc.user>
+    <icentral.jdbc.pass>****</icentral.jdbc.pass>
 
   </properties>
    
   <profiles>
-
    <profile>
-     <id>icentraltest</id>
+     <id>icentral-test</id>
      <activation>
        <property>
         <name>build</name>
@@ -50,14 +40,7 @@
       </property>
      </activation>
      <properties>
-       <environment.srv>tomcat</environment.srv>
-       <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
-       <jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral_test</jdbc.dburl>
-       <jdbc.dbnme>icentral_test</jdbc.dbnme>
-       <jdbc.srvname>10.1.2.212</jdbc.srvname>
-       <jdbc.srvport>5432</jdbc.srvport>
-
-
+       <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral_test</icentral.jdbc.dburl>
      </properties>
      <build>
       <finalName>icentraltest</finalName>
@@ -65,7 +48,7 @@
    </profile>
 
    <profile>
-     <id>beta</id>
+     <id>icentral-beta</id>
      <activation>
        <property>
         <name>build</name>
@@ -73,9 +56,8 @@
       </property>
      </activation>
      <properties>
-       <environment.srv>tomcat</environment.srv>
-       <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
-      <icentral.css>icentral-beta.css</icentral.css>
+       <icentral.css>icentral-beta.css</icentral.css>
+       <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral</icentral.jdbc.dburl>
      </properties>
      <build>
       <finalName>icentralbeta</finalName>
@@ -83,7 +65,7 @@
    </profile>
 
    <profile>
-     <id>production</id>
+     <id>icentral-prod</id>
      <activation>
        <property>
          <name>build</name>
@@ -91,9 +73,8 @@
        </property> 
      </activation>
      <properties>
-      <environment.srv>tomcat</environment.srv>
-      <icentral.jdbc>java:/comp/env/jdbc/icentral</icentral.jdbc>
       <icentral.css>icentral.css</icentral.css>
+      <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral</icentral.jdbc.dburl>
      </properties>
    </profile>
 
@@ -164,6 +145,12 @@
     </dependency>
 
     <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>2.2</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
       <version>1.6.1</version>
@@ -187,13 +174,11 @@
      <version>2.1.3</version>
     </dependency>
 
-
     <dependency>
      <groupId>org.jvnet.jax-ws-commons.spring</groupId>
      <artifactId>jaxws-spring</artifactId>
      <version>1.8</version>
     </dependency>
-
 
     <dependency>
       <groupId>org.apache.xbean</groupId>
@@ -253,7 +238,6 @@
               <filtering>true</filtering>
               <includes>
                 <include>*.xml</include>
-                <exclude>context.xml</exclude>
               </includes>
             </resource>
 
@@ -274,16 +258,7 @@
                 <include>log4j.properties</include>
               </includes>
             </resource>
-            
-            <resource>
-              <directory>${basedir}/../etc/icentral</directory>
-              <targetPath>META-INF</targetPath>
-              <filtering>true</filtering>
-              <includes>
-                <include>context.xml</include>
-              </includes>
-            </resource>
-
+                        
             <resource>
               <directory>${basedir}/src/main/webapp/tiles</directory>
               <targetPath>tiles</targetPath>
@@ -300,7 +275,7 @@
               <targetPath>WEB-INF/classes</targetPath>
               <filtering>true</filtering>
               <includes>
-                <include>hibernate.cfg.xml</include>
+                <include>hibernate.*</include>
               </includes>
             </resource>
 
