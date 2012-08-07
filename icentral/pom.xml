@@ -18,13 +18,13 @@
     <icentral.css>icentral-test.css</icentral.css>
 
    <!-- foo.org: global key -->
-    <recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</recaptcha.publicKey>
-    <recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</recaptcha.privateKey>
-    <recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</recaptcha.recaptchaServer>
+    <icentral.recaptcha.publicKey>****</icentral.recaptcha.publicKey>
+    <icentral.recaptcha.privateKey>****</icentral.recaptcha.privateKey>
+    <icentral.recaptcha.recaptchaServer>****</icentral.recaptcha.recaptchaServer>
 
     <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
     
-    <icentral.jdbc.dburl>jdbc:postgresql://imex.mbi.ucla.edu:50012/icentral_test</icentral.jdbc.dburl>
+    <icentral.jdbc.dburl>****</icentral.jdbc.dburl>
     <icentral.jdbc.user>****</icentral.jdbc.user>
     <icentral.jdbc.pass>****</icentral.jdbc.pass>
 
@@ -265,6 +265,7 @@
               <filtering>true</filtering>
               <includes>
                 <include>register.jsp</include>
+                <include>feedback.jsp</include>
                 <include>footer.jsp</include>
                 <include>icentral-css.jsp</include>
               </includes>
