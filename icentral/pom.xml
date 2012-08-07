@@ -9,7 +9,6 @@
   <name>Web Application module</name>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <icentral.version>${project.version}</icentral.version> 
     <icentral.bld>$Rev$</icentral.bld> 
@@ -27,20 +26,16 @@
     <icentral.jdbc.dburl>****</icentral.jdbc.dburl>
     <icentral.jdbc.user>****</icentral.jdbc.user>
     <icentral.jdbc.pass>****</icentral.jdbc.pass>
-
   </properties>
    
   <profiles>
    <profile>
      <id>icentral-test</id>
      <activation>
-       <property>
-        <name>build</name>
-        <value>test</value>
-      </property>
+      <activeByDefault>false</activeByDefault>
      </activation>
      <properties>
-       <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral_test</icentral.jdbc.dburl>
+       <icentral.css>icentral-test.css</icentral.css>       
      </properties>
      <build>
       <finalName>icentraltest</finalName>
@@ -50,32 +45,27 @@
    <profile>
      <id>icentral-beta</id>
      <activation>
-       <property>
-        <name>build</name>
-        <value>beta</value>
-      </property>
+       <activeByDefault>false</activeByDefault>
      </activation>
      <properties>
        <icentral.css>icentral-beta.css</icentral.css>
-       <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral</icentral.jdbc.dburl>
      </properties>
      <build>
-      <finalName>icentralbeta</finalName>
+       <finalName>icentralbeta</finalName>
      </build>
    </profile>
-
+     
    <profile>
      <id>icentral-prod</id>
      <activation>
-       <property>
-         <name>build</name>
-         <value>prod</value>
-       </property> 
+       <activeByDefault>false</activeByDefault>
      </activation>
      <properties>
-      <icentral.css>icentral.css</icentral.css>
-      <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral</icentral.jdbc.dburl>
+       <icentral.css>icentral.css</icentral.css>
      </properties>
+     <build>
+       <finalName>icentral</finalName>
+     </build>
    </profile>
 
   </profiles>
@@ -118,13 +108,11 @@
       <version>0.0.7</version>
     </dependency>
 
-
     <dependency>
       <groupId>info.bliki.wiki</groupId>
       <artifactId>bliki-core</artifactId>
       <version>3.0.16</version>
     </dependency>
-
 
     <dependency>
      <groupId>commons-lang</groupId>

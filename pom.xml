@@ -9,6 +9,10 @@
   <name>IMEx Central</name>
   <url>https://imex.mbi.ucla.edu/trac/imexcentral</url>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <organization>
    <name>UCLA-DOE Institute for Genomics and Proteomics</name>
    <url>http://www.ucla-doe.mbi.ucla.edu</url>
