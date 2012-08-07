@@ -68,10 +68,10 @@
          <tr>
           <td align="left">
            <script type="text/javascript"
-             src="https://api-secure.recaptcha.net/challenge?k=6LfVAwcAAAAAACFlY-X-icWpaoVMxHFyFVu3eIgc">
+             src="${icentral.recaptcha.recaptchaServer}/challenge?k=${icentral.recaptcha.publicKey}">             
            </script>
            <noscript>
-            <iframe src="https://api-secure.recaptcha.net/noscript?k=6LfVAwcAAAAAACFlY-X-icWpaoVMxHFyFVu3eIgc"
+            <iframe src="${icentral.recaptcha.recaptchaServer}/noscript?k=${icentral.recaptcha.publicKey}"
                 height="300" width="500" frameborder="0">
             </iframe><br/>
             <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
