@@ -24,7 +24,7 @@
     <table width="98%" cellspacing="0">
      <tr>
       <td align="left" nowrap>
-       <font size="-5">Ver: ${icentral.version} (${icentral.bld})</font>
+       <font size="-5">Ver: 1.0-SNAPSHOT ($Rev$)</font>
       </td>
       <td align="right" nowrap>
        <font size="-5">
