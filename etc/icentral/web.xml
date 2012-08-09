@@ -29,7 +29,7 @@
       org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG
     </param-name>
     <param-value>
-      /WEB-INF/tiles-zacktest.xml
+      /WEB-INF/tiles.xml
     </param-value>
 
   <!-- ================================================= SPRING context  -->
