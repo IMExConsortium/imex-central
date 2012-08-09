@@ -382,7 +382,13 @@ YAHOO.imex.pubmgr = {
     parseStateString: function( statStr ){
         return YAHOO.lang.JSON.parse(statStr);
     },
+    generateLinkState: function(status, partner)
+    {
+        var filter = {status:status, partner:partner, editor:'', owner:'', cflag:''  };
+        var state = {startIndex:0, pageSize:25,filter:filter, scol:'id', sdir:'asc' };
+        return YAHOO.lang.JSON.stringify( state );
 
+    },
     buildRequest: function ( state ){
       
         var req = "opp.off=" + state.startIndex + 
