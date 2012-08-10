@@ -24,19 +24,37 @@ YAHOO.imex.stats = function() {
     };
 
     this.myStatFormatter = function(elLiner, oRecord, oColumn, oData) {
-        if( oData == undefined ){
-            oData = "0";
-        }     
         if( oRecord.getData("label") === "Total") {
             YAHOO.util.Dom.addClass( elLiner, "dt-bold");
         }
         if( oRecord.getData("label") === "Unassigned") {
             YAHOO.util.Dom.addClass( elLiner, "dt-italic");
         }
-   
+        if( oData == undefined ){
+            oData = "0";
+        }
+        //some of this is hard coded and I think that makes it fragile
+        //but I dont know how to make it more robust. TODO
+        else if(typeof oData === "number" ){
+             
+            var currentStatus = oColumn.label.toUpperCase();
+            if( currentStatus == 'PROCESSING')
+                currentStatus = 'INPROGRESS';
+            if( currentStatus == 'TOTAL')
+                currentStatus = '';
+
+            var currentDB = oRecord.getData("label");
+            if( currentDB.toUpperCase() == 'TOTAL')
+                currentDB = '';
+
+            var url = "pubmgr#pubmgr=" + encodeURI( YAHOO.imex.pubmgr.generateLinkState( currentStatus, currentDB));
+
+            oData = '<a href="' + url + '">' + oData + '</a>';             
+        }     
+            
         elLiner.innerHTML = oData; 
     };
-    
+
     YAHOO.widget.DataTable.Formatter.elink = this.myElinkFormatter; 
     YAHOO.widget.DataTable.Formatter.crt = this.myDateFormatter; 
     YAHOO.widget.DataTable.Formatter.center = this.myCenterFormatter; 
@@ -141,8 +159,7 @@ YAHOO.imex.stats = function() {
             oPayload.totalRecords = oResponse.meta.totalRecords;
             return oPayload; 
         }; 
-    
-    
+  
     //acEditor.my = { table: myDataTable };
 
     //var acSelectHandler = function( sType, aArgs ) {
