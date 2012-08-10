@@ -3,6 +3,7 @@
 <h1>Record Status</h1>
 
  <script src="js/stats-yui.js" type="text/javascript"></script>
+ <script src="js/pubmgr-yui.js" type="text/javascript"></script> 
  
  <div class="yui-skin-sam" width="100%">   
   <br/>
