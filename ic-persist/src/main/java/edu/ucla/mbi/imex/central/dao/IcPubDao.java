@@ -395,6 +395,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             tx.commit();
         } catch ( HibernateException e ) {
+            e.printStackTrace();
             handleException( e );
             
             // log exception ?
@@ -552,6 +553,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
                 session.close();
             }
         }
+        Group unassigned = new Group();
+        unassigned.setLabel("Unassigned");
+        glst.add( unassigned );
         return glst;
     }
     
@@ -670,6 +674,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
     
     private  Criteria addFilter( Criteria crit, Map<String,String> flt ) {
         
+        Log log = LogFactory.getLog( this.getClass() );
         if( flt.get("status") != null && 
             !flt.get("status").equals("") ){
             
@@ -682,10 +687,17 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
         if( flt.get("partner") != null && 
             !flt.get("partner").equals("") ){
             
-            crit.createAlias( "adminGroups", "ag" )
-                .add( Restrictions.eq( "ag.label",
-                                       flt.get( "partner" )
-                                       ) );
+            if( flt.get("partner").equals("Unassigned"))
+            {
+                crit.add( Restrictions.isEmpty( "adminGroups" ) );
+            } 
+            else
+            {
+                crit.createAlias( "adminGroups", "ag" )
+                    .add( Restrictions.eq( "ag.label",
+                                           flt.get( "partner" )
+                                           ) );
+            }
         }
         
         if( flt.get("editor") != null && 
@@ -716,10 +728,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDAO {
             
             crit.add( Property.forName("id").in(critt) );
             
-            Log log = LogFactory.getLog( this.getClass() );
             log.info("Flag crt: " + flt.get( "cflag") );
         }
-        
         return crit;
     }
 
