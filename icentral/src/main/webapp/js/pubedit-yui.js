@@ -457,7 +457,7 @@ YAHOO.imex.pubedit = {
                                      success: YAHOO.imex.pubedit.adminUpdate,
                                      failure: YAHOO.imex.pubedit.updateFail,
                                      argument:{ id:YAHOO.imex.pubedit.pubId } };
-        try{historyInit
+        try{
             if( op === 'add' ) {
                 YAHOO.util.Connect
                     .asyncRequest( 'GET', 
