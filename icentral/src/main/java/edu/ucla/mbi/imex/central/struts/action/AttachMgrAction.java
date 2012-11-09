@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
+import java.io.*;
 import java.util.*;
 
 
@@ -33,6 +34,7 @@ import edu.ucla.mbi.imex.central.dao.*;
 public class AttachMgrAction extends ManagerSupport {
     
     private static final String JSON = "json";    
+    private static final String REDIRECT = "redirect";    
     private static final String ACL_PAGE = "acl_page";
     private static final String ACL_OPER = "acl_oper";
     
@@ -113,6 +115,12 @@ public class AttachMgrAction extends ManagerSupport {
         }
         return attmeta;
     }
+
+    private InputStream dstream;
+
+    public InputStream getData() {
+        return dstream;
+    } 
     
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -146,17 +154,26 @@ public class AttachMgrAction extends ManagerSupport {
             if ( val != null && val.length() > 0 ) {
                 
                 if ( key.equalsIgnoreCase( "calg" ) ) {
+
                     // get all comments
                     //-----------------
                     attlist = getCommByRoot( icpub );
                 }
 
                if ( key.equalsIgnoreCase( "halg" ) ) {
+
                     // get all history log entries
                     //----------------------------
                     attlist = getLogEntryByRoot( icpub );
                 }
 
+               if ( key.equalsIgnoreCase( "dalg" ) ) {
+
+                    // get all data attachments
+                    //-------------------------
+                    attlist = getADataByRoot( icpub );
+                }
+ 
                 if ( key.equalsIgnoreCase( "cidg" ) ) {
 
                     // get comment by id
@@ -179,9 +196,42 @@ public class AttachMgrAction extends ManagerSupport {
                     return JSON;
                 }
                 
-                if ( key.equalsIgnoreCase( "eca" ) ) {
-                    // get all comments
+                if ( key.equalsIgnoreCase( "aidg" ) ) {
 
+                    // get attached data by id
+                    //------------------------
+                    
+                    if ( getOpp() == null ) return JSON;
+                    String sid = getOpp().get( "aid" );
+                    int cid = -1;
+                    try{
+                        cid = Integer.parseInt( sid );
+                    } catch (Exception ex){
+                        // skip format error 
+                    }
+                    
+                    Map icom = getADataById( cid );
+                    if( icom != null ){
+                        attlist = new ArrayList();
+                        attlist.add( icom );
+                    }
+
+                    if( getOpp().get( "rt" ) != null){ 
+
+                        if( getOpp().get( "rt" ).equalsIgnoreCase( "data" ) ){
+                            dstream = new StringBufferInputStream( (String) icom.get("body") );
+                            
+                        }
+                        return getOpp().get( "rt" );
+                    } else {
+                        return JSON;
+                    }
+                }
+
+                if ( key.equalsIgnoreCase( "eca" ) ) {
+
+                    // get all comments
+                    //-----------------
                     if ( getOpp() == null ) return JSON;
                     
                     String sub = getOpp().get( "encs" );
@@ -212,9 +262,87 @@ public class AttachMgrAction extends ManagerSupport {
                     getAttachMeta().put( "total", attCnt );
                 }
                 
+                if ( key.equalsIgnoreCase( "edda" ) ) {
+
+                    // delete data attachment
+                    //-----------------------
+
+                    if ( getOpp() == null ) return JSON;
+
+                    String daIdStr = getOpp().get( "daid" );
+                    int daId = -1;
+                    
+                    if( daIdStr != null && !daIdStr.equals("") ){
+                        try{
+                            daId = Integer.parseInt(daIdStr);
+                        } catch( Exception ex ){
+                        }
+                    }
+                    
+                    return dropAttachment( icpub, daId );
+                    
+                }
+                
+                if ( key.equalsIgnoreCase( "eada" ) ) {
+
+                    // add data attachment
+                    //--------------------
+                    
+                    if ( getOpp() == null ) return SUCCESS;
+
+                    String aName = getOpp().get( "edan" );
+                    String fName = getOpp().get( "edafile" );
+                    
+                    String daTpStr = getOpp().get( "edat" );
+                    int daTp = 0;
+                    if( daTpStr != null && !daTpStr.equals("") ){
+                        try{
+                            daTp = Integer.parseInt(daTpStr); 
+                        } catch(Exception ex){
+                        }
+                    } 
+                    String flag = getOpp().get( "edaf" );
+                    int iflag = -1;
+                    try{
+                        if( flag != null ){
+                            iflag = Integer.parseInt( flag );
+                        }
+                    } catch(Exception ex){
+                        // ignore formatting errors
+                    }
+                    
+                    log.info( "name=" + aName + " type=" + daTp 
+                              + " sflag=" + flag + " file=" + fName );                      
+                    
+                    StringBuffer abody = new StringBuffer();
+                    try{
+                        FileReader fr = new FileReader( fName );
+                        BufferedReader br = new BufferedReader( fr );
+                        
+                        char[] buffer = new char[4096];
+                        
+                        while(true) {
+                            int read = br.read( buffer, 0, 4096);
+                            abody.append( new String( buffer, 0, read ) );
+
+                            if( read < 4096 ){
+                                break;
+                            }
+                        }
+                        br.close();
+                        
+                    }catch(Exception e){
+                    }
+                    
+                    if( abody.length() > 0 ){
+                        return addAttachment( icpub, aName, abody.toString(), 
+                                       daTp, iflag );
+
+                    }
+                    return REDIRECT;
+                }                
             }
         }
-
         return JSON;
     }
 
@@ -256,6 +384,77 @@ public class AttachMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
+    
+    private String  addAttachment( IcPub icpub, String subject, 
+                                   String body, int bdyTp, int iflag ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        Integer usr = (Integer) getSession().get( "USER_ID" );
+        log.debug( " login id=" + usr );
+
+        log.debug( " login id=" + usr );
+        if ( usr == null )  return ACL_OPER;
+
+        User owner =
+            getUserContext().getUserDao().getUser( usr.intValue() );
+        if ( owner == null )  return ACL_OPER;
+        log.debug( " owner set to: " + owner );
+        
+        IcAttachment icAtt = new IcAttachment( owner, icpub,
+                                               subject, body );
+        
+        if( iflag > 0 ){
+            IcFlag flag =  attachmentManager.getIcFlag( iflag );
+            if( flag != null ){
+                icAtt.setIcFlag( flag );
+            }
+        }
+        
+        if( bdyTp > 0 ){
+            icAtt.setFormat(bdyTp);
+        }
+        
+        log.info( " DAtt Format: " + icAtt.getFormat() + ":(" + bdyTp + ")" );
+        
+        attachmentManager.addIcAdi( icAtt, owner );
+
+        return REDIRECT;
+    }
+
+    private String dropAttachment( IcPub pub, int aid ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        Integer usrId = (Integer) getSession().get( "USER_ID" );
+        log.debug( " login id=" + usrId );
+
+        log.debug( " login id=" + usrId );
+        if ( usrId == null )  return ACL_OPER;
+
+        User usr =
+            getUserContext().getUserDao().getUser( usrId.intValue() );
+        if ( usr == null )  return ACL_OPER;
+
+        attachmentManager.dropIcAdi( aid, usr );        
+        return REDIRECT;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private Map getADataById( int id ){
+        
+        AttachedDataItem aadi = attachmentManager.getIcAdi( id );
+        
+        if( aadi != null && aadi instanceof IcAttachment ){
+            IcAttachment icom = (IcAttachment) aadi;
+            return buildIcAttachmentMap( icom, true );
+        }
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
+
     private Map getCommById( int id ){
         
         AttachedDataItem cadi = attachmentManager.getIcAdi( id );
@@ -266,6 +465,8 @@ public class AttachMgrAction extends ManagerSupport {
         }
         return null;
     }
+
+
     
     //--------------------------------------------------------------------------
 
@@ -296,7 +497,7 @@ public class AttachMgrAction extends ManagerSupport {
     }
 
     //--------------------------------------------------------------------------
-
+    
     private List getLogEntryByRoot( IcPub icpub ){
         
         //IcAdiDao adiDao = (IcAdiDao)
@@ -317,6 +518,34 @@ public class AttachMgrAction extends ManagerSupport {
             if( cadi instanceof IcLogEntry ){
                 IcLogEntry ic = (IcLogEntry) cadi;
                 clist.add( buildLogEntryMap(ic) );
+            }
+        }
+
+        return clist;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private List getADataByRoot( IcPub icpub ){
+        
+        //IcAdiDao adiDao = (IcAdiDao)
+        //    entryManager.getTracContext().getAdiDao();
+
+        //List<AttachedDataItem> adiList =
+        //    adiDao.getAdiListByRoot( icpub );
+
+        List<AttachedDataItem> adiList
+            = attachmentManager.getAdiListByRoot( icpub );
+
+        List clist = new ArrayList();
+        
+        for( Iterator<AttachedDataItem> 
+                 ii = adiList.iterator(); ii.hasNext(); ){
+        
+            AttachedDataItem cadi = ii.next();
+            if( cadi instanceof IcAttachment ){
+                IcAttachment ic = (IcAttachment) cadi;
+                clist.add( buildIcAttachmentMap(ic, false) );
             }
         }
 
@@ -364,7 +593,7 @@ public class AttachMgrAction extends ManagerSupport {
         cmap.put("root",ic.getRoot().getId());
         cmap.put("subject",sub);
         cmap.put("body",bdy);
-        cmap.put("body-type",bdyTp);
+        cmap.put("bodyType",bdyTp);
         cmap.put("date",crt);
         cmap.put("author",aut);
         
@@ -391,6 +620,36 @@ public class AttachMgrAction extends ManagerSupport {
         cmap.put("date",crt);
         cmap.put("author",aut);
         
+        return cmap;
+    } 
+
+    //--------------------------------------------------------------------------
+
+    private Map buildIcAttachmentMap( IcAttachment ic, boolean bflag ){
+        
+        Map<String,Object> cmap = new HashMap<String,Object>();
+        String sub = ic.getLabel();
+
+        String crt = String.format( "%1$ta %1$tb %1$td %1$tT %1$tZ %1$tY", ic.getCrt() );
+        String aut = ic.getOwner().getLogin();
+        String bdyTp = ic.getDataType();
+
+        cmap.put("id",ic.getId() );
+        cmap.put("aid",ic.getId() );
+        cmap.put("root",ic.getRoot().getId());
+        cmap.put("subject",sub);
+        cmap.put("date",crt);
+        cmap.put("author",aut);
+        cmap.put("bodyType", bdyTp );
+        if( ic.getIcFlag() != null ){
+            cmap.put("flagId",ic.getIcFlag().getId());
+            cmap.put("flagName",ic.getIcFlag().getName());
+        }
+
+        if( bflag ){
+            String bdy = ic.getBody();
+            cmap.put("body", bdy );
+        }
         return cmap;
     }    
 }

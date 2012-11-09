@@ -178,6 +178,36 @@ public class LogAdvice {
         }
     }
     
+    public void addAttMonitor( Object att,  Object luser, Object ratt ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "LogManager: attachment monitor called:"
+                   + " att=" + att + " luser=" + luser );
+        
+        if( 1 == 1 ){  // from LogContext configureation file
+            
+            if( att == null || ! (att instanceof AttachedDataItem) ) return;
 
-    
+            AttachedDataItem adi = (AttachedDataItem) att;
+            IcPub pub = (IcPub) adi.getRoot();
+            
+            String attName="";
+            
+            if( adi instanceof IcAttachment){
+                attName = ((IcAttachment)adi).getSubject();
+            } 
+            if( adi instanceof IcComment ){  
+                attName = ((IcComment)adi).getSubject();
+            }
+            
+            // log only attachments/comments
+                
+            IcLogEntry ile 
+                = new IcLogEntry( (User) luser, pub,
+                                  "Attachment added(ID#" + adi.getId() 
+                                  + ": " + attName +")", "" );
+            
+            getAttachmentManager().getTracContext()
+                .getAdiDao().saveAdi( ile );
+        }
+    }
 }

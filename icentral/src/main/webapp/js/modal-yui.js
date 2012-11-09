@@ -43,11 +43,87 @@ YAHOO.mbi.modal = {
         YAHOO.mbi.modal.show({ mtitle: 'Image Preview', mid: 'modal-panel', url: url } );
     },
 
+
+    adataView:function( arg ){
+        var rid = arg.rid;
+        var aid = arg.aid;
+
+        var header = '<tr>'
+            + '<td class="att-field-head" width="10%" nowrap>Name:</td>'
+            + '<td>%SUB% [<a href="%DWN%">download</a>]</td></tr>';
+        
+        var attSuccess = function( o ){
+            
+            var messages = {attach:[]};
+            var header = "";
+            
+            if( o.responseText !== undefined ){
+                header = o.argument.header;
+                messages = YAHOO.lang.JSON.parse( o.responseText);
+            } else{                           
+                if( o.prev !== undefined ){
+                    messages.attach[0] = prev;
+                    header = o.header;
+                }
+            }
+           
+            if( messages.attach[0] !== undefined ){                
+                var subject = messages.attach[0].subject;
+                var body = messages.attach[0].body;
+                var bodyTp = messages.attach[0]["bodyType"];
+                
+                var dwnUrl = "attachmgr?op.aidg=aidg&id=" + rid
+                    + "&opp.aid=" + aid + "&opp.rt=data";
+
+                header = header.replace( "%SUB%", subject );
+                header = header.replace( "%DWN%", dwnUrl );
+                
+                YAHOO.mbi.modal.showAData( { header:header, 
+                                             body:bodyTp, body:body } );
+            }
+        };
+
+        var attFail = function( o ){
+            alert(o);
+        };
+        
+        var attCallback = { cache:false, timeout: 5000, 
+                            success: attSuccess,
+                            failure: attFail,
+                            argument:{ header:header }
+                          };   
+
+        if( aid > 0 && rid > 0 ){
+            var url = 'attachmgr?op.aidg=aidg'
+                + '&opp.aid=' + aid 
+                + '&id=' + rid;        
+            
+            try{
+                YAHOO.util.Connect.asyncRequest( 'GET', url, attCallback );        
+            } catch (x) {
+                alert("AJAX Error:"+x);
+            }
+        } else {
+            if( prev !== undefined ){
+                attSuccess({ header: header, prev: prev } );
+            }
+        }
+        
+    },
+
+
     attachment:function( arg ){
     
         var rid = arg.rid;
         var aid = arg.aid;
+
+        var atp = arg.atp;
         var prev = arg.prev;
+        
+        if( atp !== null && atp == "adata" ){
+            this.adataView( { "rid":rid, "aid":aid } );
+            return;
+        }
 
         var header = '<tr>'
             + '<td class="att-field-head" width="10%" nowrap>Subject:</td>'
@@ -79,7 +155,7 @@ YAHOO.mbi.modal = {
             if( messages.attach[0] !== undefined ){                
                 var subject = messages.attach[0].subject;
                 var body = messages.attach[0].body;
-                var bodyTp = messages.attach[0]["body-type"];
+                var bodyTp = messages.attach[0]["bodyType"];
                 var author = messages.attach[0].author;
                 var date =  messages.attach[0].date;
                 
@@ -123,7 +199,7 @@ YAHOO.mbi.modal = {
                     
                 } else {
                     
-                    YAHOO.mbi.modal.showComment( { header:header,
+                    YAHOO.mbi.modal.showComment( { header:header, 
                                                    body:bodyTp, body:body } );
                 } 
             }
@@ -154,6 +230,26 @@ YAHOO.mbi.modal = {
                 attSuccess({ header: header, prev: prev } );
             }
         }
+    },
+
+    showAData: function( arg ){
+        
+        var bodyHTML = '<table width="99%">'
+            + arg.header
+            + '<tr><td colspan="2"><hr/></td></tr>'
+            + '<tr><td class="att-body" colspan="2">';
+                            
+        if( arg.bodyTp !== "HTML" ){
+            bodyHTML += '<pre>' + arg.body + '</pre>';
+        } else {
+            bodyHTML += arg.body;
+        }
+        
+        bodyHTML += "</td></tr></table>";
+
+        YAHOO.mbi.modal.show( { mtitle: 'Attachment:', 
+                                title: "", 
+                                body: bodyHTML } );         
     },
 
     showComment: function( arg ){
