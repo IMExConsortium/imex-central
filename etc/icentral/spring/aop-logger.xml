@@ -84,7 +84,12 @@
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.genIcPubImex(..))
                   and args( pub, luser)"
         method="genImexMonitor" />    
-
+      
+      <aop:after-returning returning="ratt"
+        pointcut="execution(* edu.ucla.mbi.imex.central.AttachmentManager.addIcAdi(..))
+                  and args( att, luser)"
+        method="addAttMonitor" />    
+      
     </aop:aspect>
   </aop:config>
 

@@ -197,10 +197,6 @@ create table key (
 CREATE INDEX key_1 on key (value);
 CREATE INDEX key_2 on key (keyspace_id,value);
 
-
-
-
-
 CREATE TABLE adi (
     id serial NOT NULL primary key,
     owner_uid integer not null default 0,
@@ -220,6 +216,7 @@ CREATE TABLE comment (
      id serial NOT NULL primary key,
      adi_id integer,
      cflag_id integer,
+     format integer not null default 0,
      subject text not null default '',
      body text not null default ''
 
@@ -250,3 +247,19 @@ CREATE TABLE log (
 CREATE INDEX log_1 on log (adi_id);
 CREATE INDEX log_2 on log (subject);
 CREATE INDEX log_3 on log (body);
+
+
+CREATE TABLE attachment (
+     id serial NOT NULL primary key,
+     adi_id integer,
+     cflag_id integer,
+     format integer not null default 0,
+     subject text not null default '',
+     body text not null default '',
+     
+);
+
+CREATE INDEX att_1 on attachment (adi_id);
+CREATE INDEX att_2 on attachment (subject);
+CREATE INDEX att_3 on attachment (body);
+

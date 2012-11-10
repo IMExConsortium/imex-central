@@ -190,7 +190,7 @@
 
            <!-- detail pane -->
 
-         <div>
+         <div class="yui-hidden">
           <s:form id="pub-det-edit" theme="simple" action="pubedit">  
            <table width="100%" border="1">
              <tr>
@@ -259,7 +259,7 @@
          
           <!-- access pane -->
     
-         <div>
+         <div class="yui-hidden">
           <s:form id="pub-acc-edit" theme="simple" action="pubedit">
            <table width="100%" border="1">
             <tr>
@@ -323,7 +323,7 @@
          
        <!-- comments pane -->
 
-         <div id="cmt-pane">
+         <div id="cmt-pane" class="yui-hidden">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
            <table width="100%" border="0" cellspacing="2px">
             <s:hidden name="id" value="%{id}"/>
@@ -376,33 +376,64 @@
 
        <!-- attachment pane -->
       
-         <div id="att-pane">
-          <s:form id="attmgr" theme="simple" action="attachmgr">
-           <table width="100%" border="1">        
+         <div id="att-pane" class="yui-hidden">
+
+          <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
+           <table width="100%" border="0" cellspacing="2px">
             <s:hidden name="id" value="%{id}"/>
-            <s:hidden name="pub.id" value="%{id}"/>
-            <tr>
-             <th align="right" width="15%" nowrap>Attachments</th>
-             <td>
-              <table width="100%" border="1">
-               <tr>
-                <td align="left">
-                   [---------]
-                </td>
-               </tr>
-              </table>
+            <s:hidden name="opp.pubid" value="%{id}"/>
+            <tr cellpadding="1">
+             <td width="5%" nowrap>
+              <b>Name</b> (<i>optional</i>)<b>:</b> 
              </td>
-             <th width="5%">
-               <s:submit theme="simple" name="op.ecup" value="UPDATE" disabled="true"/>
-             </th>
+             <td align="left" width="25%">
+              <s:textfield theme="simple" name="opp.edan" size="50" value=""/>  
+             <td align="right">
+              <b>Format:</b>
+             </td>
+             <td align="left" nowrap width="10%"> 
+               <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/>
+               &nbsp;
+             </td>
+             <td align="left" width="30%" nowrap>
+               <b>Flag:</b>  
+<%--               <label id="flag-label" class="flag-label">Flag</label> --%>
+                 <s:select name="opp.edaf" headerKey="-1" headerValue="----------" 
+                          list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/>
+
+             </td>
+             <td>&nbsp;</td>
+
+             <td colspan="1" rowspan="2" width="10%" align ="center" valign="middle">
+               <s:submit theme="simple" name="op.eada" value="ADD" disabled="false"
+                  onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan',
+                                                       'ff':'attmgr_opp_edafile'}); 
+                           return true;"/> 
+<%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
+               </td>
+             </tr>
+            <tr>
+             <td colspan="5" align="left">
+              <s:file theme="simple" name="opp.edafile"  accept="text/*" size="80" />
+             </td>
+              
             </tr>
+            <tr>
+              <td colspan="8"><hr/></td>  
+            </tr>
+            <tr>
+             <td colspan="8">
+              <div id="adata-tbview"></div>
+             </td>
+            </tr>       
            </table>
           </s:form>
+
          </div>
 
          <!-- log pane -->
 
-         <div id="log-pane">
+         <div id="log-pane" class="yui-hidden">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
            <table width="100%" border="0">
             <s:hidden name="id" value="%{id}"/>

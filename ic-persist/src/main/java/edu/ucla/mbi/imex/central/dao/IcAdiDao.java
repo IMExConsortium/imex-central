@@ -86,6 +86,7 @@ public class IcAdiDao extends AbstractDAO implements AdiDAO {
             
             tx.commit();
         } catch ( HibernateException e ) {
+            e.printStackTrace();
             handleException( e );
             // log error ?
         } finally {
@@ -227,6 +228,16 @@ public class IcAdiDao extends AbstractDAO implements AdiDAO {
     public void deleteAdi( AttachedDataItem adi ){
         super.delete( adi );
     }
+
+    public void deleteAdi( int aid ){
+
+        AttachedDataItem adi = this.getAdi( aid );
+        if( adi != null ){
+            super.delete( adi );
+        }
+    }
+
+
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
