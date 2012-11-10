@@ -163,4 +163,17 @@ public class AttachmentManager {
         return adi;
     }
 
+    public void dropIcAdi( int aid, User owner ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        if ( owner == null) {
+            log.info( " missing user info");
+            return;
+        }
+        
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+        adiDao.deleteAdi( aid );
+    }
+    
 }

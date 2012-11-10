@@ -175,7 +175,17 @@
        </param>
        <param name="noCache">true</param>
      </result>
-     
+
+     <result name="data" type="stream">
+       <param name="contentType">text/plain</param>
+       <param name="inputName">data</param>
+     </result>
+
+     <result name="redirect" type="redirectAction">
+       <param name="actionName">pubedit</param>
+       <param name="id">${id}</param>
+     </result>
+    
    </action>
 
    <action name="wikiparse" class="wikiParseAction">  

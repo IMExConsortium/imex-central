@@ -140,7 +140,7 @@
 
  </class>
 
- <!-- Comment/LogEntry -->
+ <!-- Comment/LogEntry/Attachment -->
 
   <class name="edu.ucla.mbi.util.data.AttachedDataItem" 
          table="adi" lazy="false">
@@ -175,6 +175,7 @@
       <property name="format" column="format" />
     </joined-subclass>
    
+
     <joined-subclass name="edu.ucla.mbi.imex.central.IcLogEntry" 
                      table="log" lazy="false">
      
@@ -182,8 +183,23 @@
      <property name="subject" column="subject" />
      <property name="body" column="body" />
     </joined-subclass>   
-   
+
+
+    <joined-subclass name="edu.ucla.mbi.imex.central.IcAttachment" 
+                     table="attachment" lazy="false">
+     
+      <key column="adi_id"/> 
+
+      <many-to-one name="icFlag" column="cflag_id"
+                   class="edu.ucla.mbi.imex.central.IcFlag" />
+
+      <property name="subject" column="subject" />
+      <property name="body" column="body" />
+      <property name="format" column="format" />
+    </joined-subclass>
+
   </class>
+
 
   <class name="edu.ucla.mbi.imex.central.IcFlag" table="cflag" lazy="false">
     <id name="id" column="id" >

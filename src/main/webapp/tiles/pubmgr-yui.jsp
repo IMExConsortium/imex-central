@@ -39,6 +39,22 @@
           login:"<s:property value="#session['LOGIN']" />"}  
       );
 
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+         {aclass:"adata",apane:"adata-tbview",tabno:5,
+          url:"attachmgr?op.dalg=dalg&id=",
+          cname:{"author":"Author", "subject":"Name", "date":"Date", 
+                 "bodyType":"Format", "flagName":"Flag", "aid":""},
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"}  
+      );
+    function attclear(){
+      try{   
+        YAHOO.util.Dom.get('attmgr_opp_edan').value='';
+        YAHOO.util.Dom.get('attmgr_opp_edafile').value='';
+      }catch(x){};
+    };
+    YAHOO.util.Event.addListener( window, "load", attclear );
  </script>
 </s:if>
 <s:else>
@@ -107,6 +123,7 @@
                                    { owner:"<s:property value="opp.ou"/>", 
                                      admus:"<s:property value="opp.au"/>",
                                      cflag:"<s:property value="opp.encf"/>" }));
+
  </script>
 
 </s:else>

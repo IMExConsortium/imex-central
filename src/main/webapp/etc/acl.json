@@ -197,6 +197,60 @@
     }
   },
 
+  attachmgr:{
+    order:[ "operation"],
+    operation:{
+      calg:{
+        order:["ANY"]
+      },
+      halg:{
+        order:["ANY"]
+      },
+      dalg:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
+      cidg:{
+        order:["ANY"]
+      },
+
+      aidg:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
+      eca:{
+        order:["ANY"]
+      },
+      ccnt:{
+        order:["ANY"]
+      },
+      edda:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      },
+      eada:{
+        order:["allow"],
+        allow:{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN","CURATOR"]
+        }
+      }
+    }
+  },
+
   journalmgr:{
     order:[ "operation"],
     operation:{

@@ -861,6 +861,30 @@ public class IcentralPortImpl implements IcentralPort {
             
             attachment.value= nAtt;
         }
+
+        if( attType != null 
+            && attType.toLowerCase().equals( "txt/data" ) ){
+                
+            IcAttachment icAtt = new IcAttachment( owner, icParent, 
+                                                   attLabel, attBody);
+
+            icAtt.setOwner( owner ); 
+            //icCom.setRoot( icParent ); 
+            
+            icAtt.setLabel( attLabel );
+            icAtt.setBody( attBody );
+
+            
+            IcAdiDao adiDao = (IcAdiDao) 
+                entryManager.getTracContext().getAdiDao();
+            adiDao.saveAdi( icAtt );
+
+            Attachment nAtt = 
+                buildAttachment( icAtt.getId(), icParent, null, attType, 
+                                 attLabel, attBody, owner );
+            
+            attachment.value= nAtt;
+        }
         
     }
 
