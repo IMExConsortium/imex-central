@@ -151,6 +151,21 @@
           "disabled":"false",
           menu:[]
          }]
+      },
+      {label:"About",
+       link:"page?id=about",
+       "disabled":"false",
+       menu:[
+         {label:"Help",
+          link:"page?id=help",
+          "disabled":"false",
+          menu:[]
+         },
+         {label:"FAQ",
+          link:"page?id=faq",
+          "disabled":"false",
+          menu:[]
+         }]
       }]
   }]
 }

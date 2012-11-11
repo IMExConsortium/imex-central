@@ -46,7 +46,10 @@
                  "bodyType":"Format", "flagName":"Flag", "aid":""},
           id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
-          login:"<s:property value="#session['LOGIN']" />"}  
+          login:"<s:property value="#session['LOGIN']" />",
+          loginid:"<s:property value="#session['USER_ID']" />",
+          curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
+          owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
       );
     function attclear(){
       try{   
