@@ -57,7 +57,7 @@
         active:true,
         title:"About IMEx Central",
         menudef:"0:2",
-        menusel:"3:0",
+        menusel:"5:0",
         viewtype:"file-html",
         viewpath:"/pages/about.html"
       },
@@ -235,6 +235,22 @@
         menusel:"0:0:0",
         viewtype:"file-html",
         viewpath:"/pages/template.html"
+      },
+      help:{
+        active:true,
+        title:"IMEx Central Help",
+        menudef:"0:2",
+        menusel:"5:1",
+        viewtype:"file-html",
+        viewpath:"/pages/help.html"
+      },
+      faq:{
+        active:true,
+        title:"IMEx Central FAQ",
+        menudef:"0:2",
+        menusel:"5:2",
+        viewtype:"file-html",
+        viewpath:"/pages/faq.html"
       }
     }
   }
