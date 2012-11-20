@@ -1,63 +1,26 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<table width="100%" class="yui-skin-sam">
- <tr>
-  <td align="left">
-   <br/>
-   <s:if test="hasActionErrors()">
-    <table width="66%" cellspacing="1" cellpadding="3"> 
-     <tr><td>  
-      <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
-       <span class="error">
-        <s:iterator value="actionErrors">
-         <span class="errorMessage"><s:property escape="false" /></span>
-        </s:iterator>
-       </span>
-      </div>
-     </td></tr>
-    </table>  
-   </s:if>
-  </td>
- </tr>
- <tr>
-  <td>
-   <table width="100%" border="1">
-    <tr>
-     <th width="5%" nowrap><i>IC-<s:property value="pub.id"/>-PUB</i></th>     
-     <td id="pub_ttl" align="left" width="85%" nowrap>
-      <b><i>
+<div width="100%" class="yui-skin-sam">
+    <h2>IC-<s:property value="pub.id"/>-PUB</h2>
+    <p><em>
        <s:if test="pub.title.length()>78">
         <s:property value="pub.title.substring(0,75)"/>...
        </s:if>
        <s:else>
         <s:property value="pub.title"/>
        </s:else>
-      </i></b>             
-     </td> 
-     <th width="5%">
-      <s:form id="pubedit" theme="simple" action="pubedit"> 
-       <s:hidden name="id" value="%{id}"/>
-       <s:hidden name="pub.id" value="%{id}"/>
-      </s:form>
-      <s:form id="pub-del" theme="simple" action="pubedit"> 
-       <s:submit theme="simple" name="op.del" value="DELETE" disabled="true" />
-      </s:form>
-     </th>
-    </tr> 
-    <tr>
-     <td colspan="2">
-      <div class="yui-skin-sam">
-       <div id="pubTab" class="yui-navset"> 
+     </em><p>
+    <div class="yui-skin-sam">
+     <div id="pubTab" class="yui-navset"> 
         <ul class="yui-nav"> 
-             <li class="selected"><a href="#tab1"><em>Record Status</em></a></li> 
-              <li><a href="#tab2"><em>Publication Details</em></a></li> 
-              <li><a href="#tab3"><em>Curator Access</em></a></li> 
-              <li><a href="#tab4"><em>Comments</em></a></li> 
-              <li><a href="#tab5"><em>Attachments</em></a></li>
-              <li><a href="#tab6"><em>Record History</em></a></li>
-        </ul>         
+            <li class="selected"><a href="#tab1"><em>Record Status</em></a></li>
+            <li><a href="#tab2"><em>Publication Details</em></a></li>
+            <li><a href="#tab3"><em>Curator Access</em></a></li>
+            <li><a href="#tab4"><em>Comments</em></a></li> 
+            <li><a href="#tab5"><em>Attachments</em></a></li>
+            <li><a href="#tab6"><em>Record History</em></a></li>
+        </ul>
         <div class="yui-content">
-         <div>
           <s:form id="pub-stat-edit" theme="simple" action="pubedit">  
            <table width="100%" border="1">
             <tr>
@@ -186,7 +149,7 @@
             </tr>
            </table>
           </s:form>
-         </div> 
+
 
            <!-- detail pane -->
 
@@ -449,11 +412,6 @@
 
         </div> 
        </div> 
-      </div>      
-     </td>
-    </tr>
-   </table>
-  </td>
- </tr>
-</table>
-<br/><br/><br/><br/>
+</div>
+         </div> 
+      </div>
