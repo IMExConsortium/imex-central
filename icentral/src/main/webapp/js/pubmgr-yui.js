@@ -354,12 +354,16 @@ YAHOO.imex.pubmgr = {
                                ("<em class=\"yui-button-label\">" + 
                                 statusLabel + "</em>"));
         }
+        else
+			PMGR.stateSel[0].text = statusLabel;
         
         if( PMGR.partnerBtn.set!== undefined ){
             PMGR.partnerBtn.set( "label", 
                                  ("<em class=\"yui-button-label\">" + 
                                   partnerLabel + "</em>"));
         }
+        else
+			PMGR.partnerSel[0].text = partnerLabel;
         
         // reload data
         //------------
@@ -438,7 +442,9 @@ YAHOO.imex.pubmgr = {
                   selmnu: YAHOO.imex.pubmgr.partnerSel,
                   selbtn: "partnerBtn",
                   selcnt: "partner-button-container",
-                  selnme: "partner-button" });
+                  selnme: "partner-button" ,
+                  seltext: YAHOO.imex.pubmgr.partnerSel[0].text});
+                  
         };
     
         var partnerCallback = { cache:false, timeout: 5000, 
@@ -455,7 +461,8 @@ YAHOO.imex.pubmgr = {
                   selmnu: YAHOO.imex.pubmgr.stateSel,
                   selbtn: "stateBtn",
                   selcnt: "state-button-container",
-                  selnme: "state-button" });
+                  selnme: "state-button", 
+                  seltext: YAHOO.imex.pubmgr.stateSel[0].text});
         };
         
         var stateCallback = { cache:false, timeout: 5000, 
@@ -660,7 +667,7 @@ YAHOO.imex.pubmgr = {
             o.pmgr[o.selbtn] = new YAHOO.widget.Button(
                 { id: o.selnme,  
                   name: o.selnme, 
-                  label: "<em class=\"yui-button-label\">---ANY---</em>", 
+                  label: "<em class=\"yui-button-label\">" + o.seltext +"</em>", 
                   type: "menu",   
                   menu: o.selmnu,  
                   container: o.selcnt }); 
