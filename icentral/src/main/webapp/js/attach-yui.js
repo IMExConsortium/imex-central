@@ -362,11 +362,29 @@ YAHOO.imex.attedit = {
     },
     
     attachDropFail: function( o ){
-      alert(o);  
-    },
+      alert(o);      },
 
     attachReload: function( o ) {
         var aclass = o.argument;
         YAHOO.imex.attedit.conf[aclass].comTable.load(); 
-    }
+    },
+    testing: function(){
+		var formElement = document.getElementById("attmgr");
+		var textField = formElement.elements.namedItem('opp.edan');
+		var fileField = formElement.elements.namedItem('opp.edafile');
+		
+		if(fileField.files[0].size + textField.value.length < 2095000 && fileField.files.length > 0)
+		{
+			var btn = YAHOO.util.Dom.get('attmgr_op_eada');
+			var form = new FormData(formElement);
+			var xhr = new XMLHttpRequest();
+			form.append(btn.name, btn.value);
+			xhr.open("POST", "/icentral/attachmgr", false);
+			xhr.send(form);
+			formElement.reset();
+			YAHOO.imex.attedit.attachReload({'argument':'adata'});
+		}
+		else
+			alert('file either missing or too big (> 2MB)');
+	}
 };
