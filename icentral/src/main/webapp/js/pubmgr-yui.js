@@ -1,8 +1,7 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.pubmgr = {
-
-    admus: "",
+	    admus: "",
     owner: "",
     cflag: "",
     
@@ -619,12 +618,19 @@ YAHOO.imex.pubmgr = {
         PMGR.contextMenuInit( PMGR );
         PMGR.myDataTable.on( "columnReorderEvent",
                              PMGR.myDataTable.handleReorder );     
+                             
+        //tossing in some css to add a black separator between the rows
+        var sheet = document.createElement('style');
+		sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
+		document.body.appendChild(sheet); 
+        
         return { 
             ds: PMGR.myDataSource, 
             dt: PMGR.myDataTable 
         };
         
-        //YAHOO.imex.pubmgrOld();        
+        //YAHOO.imex.pubmgrOld();    
+           
     },
 
     onSelectedMenuItemChange: function (event) {

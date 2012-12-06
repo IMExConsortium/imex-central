@@ -9,7 +9,7 @@ body {
   font-size: medium;
   background-color: white;
   margin: 0px;
-  padding: 0px;
+  padding: 0 0 50px 0;
 }
 
 form {
@@ -26,7 +26,7 @@ p {
 caption {
   text-align: left;
 }
-
+/*
 h1 {
   font-size: large;
   font-weight: bold;
@@ -42,7 +42,7 @@ h2 {
   padding: 0px;
   margin: 8px 0px;
 }
-
+*/
 .pagettl {
   text-align: left;
   padding: 15px 20px 0px 20px;
@@ -1964,4 +1964,8 @@ a.graph {
   width: 1px;
   height: 1px;
   visibility: hidden;
+}
+.page table {
+	border: 1px lightGrey;
+	border-spacing: 0;
 }
