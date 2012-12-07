@@ -371,7 +371,7 @@
                <s:submit theme="simple" name="op.eada" value="ADD" disabled="false"
                   onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan',
                                                        'ff':'attmgr_opp_edafile'}); 
-                           YAHOO.imex.attedit.testing();
+                           YAHOO.imex.attedit.UploadFile();
                            return false;"/> 
 <%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
                </td>

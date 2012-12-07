@@ -243,16 +243,19 @@ YAHOO.imex.attedit = {
     attachInitListFail: function( o ){
         alert( "InitListFail:" + o );  
     },
-
     nameSet: function( o ){
         
         var nameFld = YAHOO.util.Dom.get( o.nf );
         var fileFld = YAHOO.util.Dom.get( o.ff );
-        
+        //nothing in the name field
         if( nameFld.value == null || nameFld.value == '' ){
-            nameFld.value = fileFld.value;
-        } else {   
-            nameFld.value = nameFld.value + " (" + fileFld.value +")";
+            nameFld.value = fileFld.files[0].name;
+        } 
+        //same value in the name field as what will be inserted
+        else if(fileFld.files[0].name == nameFld.value){}
+        //insert the file name
+        else {   
+            nameFld.value = nameFld.value + " (" + fileFld.files[0].name +")";
         }
     },
 
@@ -368,23 +371,26 @@ YAHOO.imex.attedit = {
         var aclass = o.argument;
         YAHOO.imex.attedit.conf[aclass].comTable.load(); 
     },
-    testing: function(){
+    //this upload function may make some code unnecessary. re-factor is in order  
+    UploadFile: function(){
 		var formElement = document.getElementById("attmgr");
 		var textField = formElement.elements.namedItem('opp.edan');
 		var fileField = formElement.elements.namedItem('opp.edafile');
-		
+/*
 		if(fileField.files[0].size + textField.value.length < 2095000 && fileField.files.length > 0)
 		{
-			var btn = YAHOO.util.Dom.get('attmgr_op_eada');
-			var form = new FormData(formElement);
-			var xhr = new XMLHttpRequest();
-			form.append(btn.name, btn.value);
-			xhr.open("POST", "/icentral/attachmgr", false);
-			xhr.send(form);
-			formElement.reset();
+*/
+		var btn = YAHOO.util.Dom.get('attmgr_op_eada');
+		var form = new FormData(formElement);
+		var xhr = new XMLHttpRequest();
+		form.append(btn.name, btn.value);
+		xhr.open("POST", "/icentral/attachmgr", false);
+		xhr.send(form);
+		formElement.reset();
+		if(xhr.status != 404)
 			YAHOO.imex.attedit.attachReload({'argument':'adata'});
-		}
 		else
-			alert('file either missing or too big (> 2MB)');
+			alert('Error during file upload. Check if file is too large');
+
 	}
 };
