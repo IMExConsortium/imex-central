@@ -109,6 +109,7 @@ YAHOO.imex.attedit = {
                         { key:"flagName", width:100, formatter:"flag", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["flagName"] }
                     );
+                    YAHOO.imex.attedit.addTitleCount(messages.attach.length, 'Comments');
             }
 
             if(aclass === 'adata'){
@@ -134,6 +135,7 @@ YAHOO.imex.attedit = {
                         { key:"aid", width:100, formatter:"dll", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["aid"] }
                     );
+                    YAHOO.imex.attedit.addTitleCount(messages.attach.length, 'Attachments');
             }
 
             this.mySubFormatter = function( elLiner, oRecord, oColumn, oData ) { 
@@ -239,7 +241,20 @@ YAHOO.imex.attedit = {
             );
         }  
     },
-    
+    addTitleCount: function( count, label )
+    {
+		tabs = YAHOO.imex.pubedit.tabs.get('tabs');
+		for(var i = 0;i < tabs.length; i++)
+		{
+			currentLabel = tabs[i].get('label');
+			if(currentLabel == label)
+			{
+				tabs[i].set('label', currentLabel +' (' + count+ ')' );
+				return
+			}
+		}
+		
+	}, 
     attachInitListFail: function( o ){
         alert( "InitListFail:" + o );  
     },
