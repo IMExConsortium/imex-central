@@ -225,34 +225,7 @@
               <include>*.wsdl</include>
             </includes>
            </resource>
-
-            <resource>
-              <directory>${basedir}/../etc/icentral</directory>
-              <targetPath>WEB-INF</targetPath>
-              <filtering>true</filtering>
-              <includes>
-                <include>*.xml</include>
-              </includes>
-            </resource>
-
-            <resource>
-              <directory>${basedir}/../etc/icentral/spring</directory>
-              <targetPath>WEB-INF</targetPath>
-              <filtering>true</filtering>
-              <includes>
-                <include>*.xml</include>
-              </includes>
-            </resource>
-
-            <resource>
-              <directory>${basedir}/../etc/icentral</directory>
-              <targetPath>WEB-INF/classes</targetPath>
-              <filtering>true</filtering>
-              <includes>
-                <include>log4j.properties</include>
-              </includes>
-            </resource>
-                        
+            
             <resource>
               <directory>${basedir}/src/main/webapp/tiles</directory>
               <targetPath>tiles</targetPath>
