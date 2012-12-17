@@ -20,13 +20,12 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import java.util.*;
 
-import edu.ucla.mbi.util.*;
+
 import edu.ucla.mbi.util.data.*;
+import edu.ucla.mbi.util.data.dao.*;
 
-import edu.ucla.mbi.util.dao.*;
-
-import edu.ucla.mbi.util.struts2.action.*;
-import edu.ucla.mbi.util.struts2.interceptor.*;
+import edu.ucla.mbi.util.struts.action.*;
+import edu.ucla.mbi.util.struts.interceptor.*;
 
 import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;

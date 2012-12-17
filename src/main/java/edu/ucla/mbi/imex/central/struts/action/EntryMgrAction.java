@@ -17,12 +17,11 @@ import java.util.regex.*;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 
-import edu.ucla.mbi.util.*;
-import edu.ucla.mbi.util.dao.*;
+import edu.ucla.mbi.util.context.*;
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
-import edu.ucla.mbi.util.struts2.action.*;
-import edu.ucla.mbi.util.struts2.interceptor.*;
+import edu.ucla.mbi.util.struts.action.*;
+import edu.ucla.mbi.util.struts.interceptor.*;
 
 import edu.ucla.mbi.imex.central.*;
 
@@ -423,8 +422,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                         updateIcPubState( getId(), luser, sid );
                     } catch ( Exception ex ) {
                         // should not happen
-                        updateIcPubState( getId(), luser, nsid );
-                        
+                        String res = updateIcPubState( getId(), luser, nsid );
+                        return res.equals(ACL_OPER) ? ACL_OPER : JSON;
                     }
                                         
                     return JSON;
@@ -442,7 +441,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     String necm = getOpp().get( "necm" );
                     log.debug( "opp.necm=" + necm );
                     try {
-                        updateIcPubContactMail( getId(), luser, necm );
+                        String res 
+                            = updateIcPubContactMail( getId(), luser, necm );
+                        return res.equals(ACL_OPER) ? ACL_OPER : JSON;
                     } catch ( Exception ex ) {
                         // should not happen
                         //updateIcPubContactMail( getId(), luser, necm );
@@ -458,8 +459,10 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     
                     String ulogin = getOpp().get( "eauadd" );
                     try {
-                        addIcPubAdminUser( getId(), luser, ulogin );
-                        return JSON;
+                        String res 
+                            = addIcPubAdminUser( getId(), luser, ulogin );
+                        return res.equals(ACL_OPER) ? ACL_OPER : JSON;
+                        
                     } catch( NumberFormatException nfe ) {
                         // abort on error
                     }
@@ -474,8 +477,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     String sgid = getOpp().get( "eagadd" );
                     try {
                         int gid = Integer.parseInt( sgid );
-                        addIcPubAdminGroup( getId(), luser,  gid );
-                        return JSON;
+                        
+                        String res = addIcPubAdminGroup( getId(), luser,  gid );
+                        return res.equals(ACL_OPER) ? ACL_OPER : JSON;
                         
                     } catch( NumberFormatException nfe ) {
                         // abort on error
@@ -503,13 +507,15 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                                      uidl.add( Integer.valueOf( us[ii] ) );
                                  }
                              }
-                             delIcPubAdminUsers( getId(), luser, uidl );
-                             return JSON;
+                             String res 
+                                 = delIcPubAdminUsers( getId(), luser, uidl );
+                             return res.equals(ACL_OPER) ? ACL_OPER : JSON;
                         } catch ( Exception ex ) {
                             // should not happen
                         }
                     } else {
                         icpub = entryManager.getIcPub( getId() );
+                        // validate access according to acl ???
                         setId( icpub.getId() );
                     }
                     return JSON;
@@ -534,14 +540,16 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                                      gidl.add( Integer.valueOf( gs[ii] ) );
                                  }
                              }
-                             delIcPubAdminGroups( getId(), luser, gidl );
-                             return JSON;
+                             String res 
+                                 = delIcPubAdminGroups( getId(), luser, gidl );
+                             return res.equals(ACL_OPER) ? ACL_OPER : JSON;
                              
                         } catch ( Exception ex ) {
                             // should not happen
                         }
                     } else {
                         icpub = entryManager.getIcPub( getId() );
+                        // validate access according to acl ???
                         setId( icpub.getId() );
                     }
                     return JSON;
@@ -676,6 +684,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             }
         }
     }
+    
+    private boolean aclTargetValidate( Publication pub ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "EntryMgrAction: aclTargetValidate"  );
+        
+        return pub.testAcl( ownerMatch, adminUserMatch, adminGroupMatch);
+    }
      
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
@@ -701,8 +717,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         if ( imex != null && !imex.equals("") ) {
             IcPub oldPub = entryManager.getIcPubByIcKey( imex );
-
+            
             if ( oldPub != null ) {
+                 
+                if( !aclTargetValidate( oldPub ) ) return ACL_OPER;
+                
                 icpub = oldPub;
                 setId( oldPub.getId() );
                 return PUBEDIT;
@@ -720,6 +739,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
             
             if ( oldPub != null ) {
+
+                if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
+                    
                 icpub = oldPub;
                 setId( oldPub.getId() );
                 return PUBEDIT;
@@ -753,6 +775,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub oldPub = entryManager.getIcPubByNsAc( ns, ac );
         
         if ( oldPub != null ) {
+
+            if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
+                
             icpub = oldPub;
             setId( oldPub.getId() );
             return PUBEDIT;
@@ -778,6 +803,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub oldPub = entryManager.getIcPubByPmid( pub.getPmid() );
         
         if ( oldPub != null ) {
+
+            if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
+                
             icpub = oldPub;
             setId( oldPub.getId() );
             return PUBEDIT;
@@ -816,77 +844,30 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     public String deleteIcPub( Publication pub, User luser ) {
 
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
         entryManager.deleteIcPub( null, luser );
         return SUCCESS;
-
-        /*
-        if( wflowContext.getWorkflowDao() == null || 
-            state == null ) return SUCCESS;
-        
-        Transition oldTrans = wflowContext.getWorkflowDao()
-            .getTrans( trans.getId() );
-        if ( oldTrans == null ) return SUCCESS;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.debug( " delete trans -> id=" + oldTrans.getId() );
-        wflowContext.getWorkflowDao().deleteTrans( oldTrans );        
-        
-        this.trans = null;
-        setId( 0 );
-        */
     }
 
     //---------------------------------------------------------------------
 
     private String deleteIcPubList( List<Integer> pubs, User luser ) {
         
+        //if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+        
         entryManager.deleteIcPub( null, luser );
-        return SUCCESS;
-
-        /*
-        if( wflowContext.getWorkflowDao() == null || 
-            trans == null ) return SUCCESS;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        
-        for ( Iterator<Integer> ii = trans.iterator();
-              ii.hasNext(); ) {
-            
-            int gid = ii.next();
-            Transition t = wflowContext.getWorkflowDao()
-                .getTrans( gid );
-                                     
-            log.debug( " delete trans -> id=" + t.getId() );
-            wflowContext.getWorkflowDao().deleteTrans( t );                
-        }
-        */
+        return SUCCESS;        
     }
 
     //--------------------------------------------------------------------------
     
     public String updateIcPubProperties( int id, User luser, Publication pub ) {
 
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
         entryManager.updateIcPubProps( null, luser );
         return SUCCESS;
-
-        /*
-        if( wflowContext.getWorkflowDao() == null ) return SUCCESS;
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "id=" + id );
-
-        Transition oldTrans = wflowContext.getWorkflowDao()
-            .getTrans( id );
-        if ( oldTrans == null ) return SUCCESS;
-        
-        oldTrans.setName( trans.getName() );
-        oldTrans.setComments( trans.getComments() );
-        
-        wflowContext.getWorkflowDao().updateTrans( oldTrans );
-        this.trans = wflowContext.getWorkflowDao().getTrans( id );
-        
-        log.debug( " updated trans(props) -> id=" + id );
-        */
     }
 
     //--------------------------------------------------------------------------
@@ -894,6 +875,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     public String updateIcPubIdentifiers( IcPub pub, User user,
                                           String nPmid, 
                                           String nDoi, String nJsp) {
+
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "NEW: pmid=  " + nPmid + " doi=" + nDoi + " jsp=" + nJsp );
@@ -912,6 +895,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     public String updateIcPubAuthTitle( IcPub pub, User user,
                                         String nAuth, String nTitle ) {
 
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "NEW: auth=" + nAuth + " title=" + nTitle );
         
@@ -926,6 +911,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     //--------------------------------------------------------------------------
 
     public String resyncIcPubPubmed( IcPub pub, User user, String pmid ) {
+
+
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "RESYNC: pmid=" + pmid );
@@ -945,6 +933,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     public String genIcPubImex( int id, User luser, IcPub pub ) {
         
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
         IcPub oldPub = entryManager.genIcPubImex( pub, luser );
         
         if ( oldPub != null ) {
@@ -962,6 +952,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
     public String getTargetStates( IcPub pub, String mode ) {
 
+        if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
         List<String> states = entryManager.getTargetStates( pub, mode );
         targetStates = states;
         return JSON;
@@ -977,6 +969,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         IcPub pub = entryManager.getIcPub( id );
         if(pub != null ){
+            if( ! aclTargetValidate( pub ) ) return ACL_OPER;
             IcPub uPub =  entryManager
                 .updateIcPubContactMail( pub, luser, mail );
             if( uPub != null ) {
@@ -996,6 +989,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub pub = entryManager.getIcPub( id );
 
         if( pub != null ){
+
+            if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
             IcPub uPub = entryManager.updateIcPubDates( pub, luser, 
                                                         epd, pd, rd );
             if ( uPub != null ) {
@@ -1016,6 +1012,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub pub = entryManager.getIcPub( id );
 
         if( pub != null ){
+
+            if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
             IcPub uPub =  entryManager.updateIcPubState( pub, user, state );
             if( uPub != null ) {
                 this.setPub( uPub );
@@ -1031,6 +1030,9 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         IcPub pub = entryManager.getIcPub( id );
         if( pub != null ){
+
+            if( ! aclTargetValidate( pub ) ) return ACL_OPER;
+
             IcPub uPub =  entryManager.updateIcPubState( pub, user, sid );
             if( uPub != null ) {
                 this.setPub( uPub );
@@ -1051,6 +1053,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         if ( oldPub != null && agrp != null ) {
             
+            if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
+
             entryManager.addAdminGroup( oldPub, user, agrp );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
@@ -1072,6 +1076,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && gidl != null ) {
             
+            if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
+
             entryManager.delAdminGroups( oldPub, user, gidl );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
@@ -1091,10 +1097,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         log.debug( "add EAU: id=" + id + " au= " + ulogin );
                 
         IcPub oldPub = entryManager.getIcPub( id );
+
+        
         User ausr = getUserContext().getUserDao().getUser( ulogin );
 
         if ( oldPub != null && ausr != null ) {
-            
+        
+            if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
+    
             entryManager.addAdminUser( oldPub, user, ausr );
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
@@ -1115,6 +1125,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
         IcPub oldPub = entryManager.getIcPub( id );
         if ( oldPub != null && uidl != null ) {
+
+            if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
 
             entryManager.delAdminUsers( oldPub, user, uidl );
             icpub = entryManager.getIcPub( id );

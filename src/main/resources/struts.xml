@@ -44,7 +44,7 @@
    
     <interceptors>
      <interceptor name="menu"
-         class="edu.ucla.mbi.util.struts2.interceptor.MenuInterceptor"/>
+         class="edu.ucla.mbi.util.struts.interceptor.MenuInterceptor"/>
 
      <interceptor name="acl" class="aclInterceptor"/>
 
@@ -155,17 +155,6 @@
        <param name="skn">icentral</param>
      </result>
     </action>
-
-
-
-
-
-
-
-
-
-
-
     
   <!-- user management -->
     
@@ -224,7 +213,6 @@
     <result name="accepted" type="tiles">feedback-ack</result>
    </action>
 
-
   <!-- stats -->
 
    <action name="stats" class="statsAction" >
@@ -242,8 +230,6 @@
      </result>
      
    </action>
-
-
 
    <action name="acom" class="acomAction" >
     <interceptor-ref name="defaultStack"/>

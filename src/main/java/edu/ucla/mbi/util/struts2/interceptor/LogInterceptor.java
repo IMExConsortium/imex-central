@@ -25,8 +25,9 @@ import java.io.*;
 import java.io.InputStream;
 import javax.servlet.ServletContext;
 
-import edu.ucla.mbi.util.*;
-import edu.ucla.mbi.util.struts2.action.*;
+import edu.ucla.mbi.util.context.*;
+import edu.ucla.mbi.util.data.*;
+import edu.ucla.mbi.util.struts.action.*;
 
 
 public class LogInterceptor implements Interceptor{
