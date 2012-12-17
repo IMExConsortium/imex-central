@@ -36,7 +36,7 @@
 <!-- ========================================================== CONFIGUATION -->
 
   <bean id="applicationContextProvider"
-       class="edu.ucla.mbi.util.ApplicationContextProvider" />
+       class="edu.ucla.mbi.util.context.ApplicationContextProvider" />
 
   <import resource="context.xml" />
   <import resource="aop-logger.xml" />
@@ -63,7 +63,7 @@
    
  </bean>
 
-  <bean id="aclVal" class="edu.ucla.mbi.util.AclValidator">
+  <bean id="aclVal" class="edu.ucla.mbi.util.struts.AclValidator">
      <property name="aclContext" ref="aclContext"/>
   </bean>
 

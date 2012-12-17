@@ -1,4 +1,45 @@
 {acl:{
+  "ws-v10":{      
+    order:["operation"],
+    operation:{
+      "comment":"web service-based search",
+      "search":{
+        "order":["target-deny","allow"],
+        "allow":{
+          user:["ADMIN"],
+          role:["administrator","curator"],
+          group:["ADMIN"]
+        },
+        "target-deny":{
+            ousr:[],
+            ausr:[],
+            agrp:["HIDDEN"]
+        }
+      },
+      "update":{
+        "comment":"web service-based updates",
+        "order":["allow","target-deny","target"],
+        "allow":{
+            "comment":"administrative override",
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+        },
+        "target":{
+            "comment":"",
+            ousr:["__LOGIN"],
+            ausr:["__LOGIN"],
+            agrp:["__LOGIN"]
+        },
+        "target-deny":{
+            ousr:[],
+            ausr:[],
+            agrp:["HIDDEN"]
+        }          
+      }
+    }
+  },
+
   "ws-v20":{      
     order:["operation"],
     operation:{
@@ -39,6 +80,7 @@
       }
     }
   },
+
   pubmgr:{
     order:["operation"],
     operation:{
@@ -163,35 +205,65 @@
         }
       },
       eaudel:{
-        order:["allow"],
+        "comment":"delete admin user",
+        order:["allow","target"],
         allow:{
-          user:["ADMIN"],
-          role:["administrator","curator"],
-          group:["ADMIN","CURATOR"]
+           user:["ADMIN"],
+           role:["administrator"],
+           group:["ADMIN"]
+        },
+        "target":{
+           "comment":"",
+           ousr:["__LOGIN"],
+           ausr:["__LOGIN"],
+           agrp:["__LOGIN"]
         }
       },
       eauadd:{
-        order:["allow"],
+        "comment":"add admin user",
+        order:["allow","target"],
         allow:{
+          "comment":"administrative override",
           user:["ADMIN"],
-          role:["administrator","curator"],
-          group:["ADMIN","CURATOR"]
+          role:["administrator"],
+          group:["ADMIN"]
+        },
+        "target":{
+            "comment":"",
+            ousr:["__LOGIN"],
+            ausr:["__LOGIN"],
+            agrp:["__LOGIN"]
         }
       },
       eagdel:{
-        order:["allow"],
+        "comment":"delete admin group",
+        order:["allow","target"],
         allow:{
           user:["ADMIN"],
-          role:["administrator","curator"],
-          group:["ADMIN","CURATOR"]
+          role:["administrator"],
+          group:["ADMIN"]
+        },
+        "target":{
+           "comment":"",
+           ousr:["__LOGIN"],
+           ausr:["__LOGIN"],
+           agrp:["__LOGIN"]
         }
       },
       eagadd:{
-        order:["allow"],
+        "comment":"add admin group",
+        order:["allow","target"],
         allow:{
+          "comment":"administrative override",
           user:["ADMIN"],
-          role:["administrator","curator"],
-          group:["ADMIN","CURATOR"]
+          role:["administrator"],
+          group:["ADMIN"]
+        },
+        "target":{
+            "comment":"",
+            ousr:["__LOGIN"],
+            ausr:["__LOGIN"],
+            agrp:["__LOGIN"]
         }
       }
     }

@@ -26,7 +26,7 @@ import java.net.*;
 import java.util.*;
 import java.sql.*;
 
-public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDAO {
+public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDao {
     
     //--------------------------------------------------------------------------
     // KeyspaceDAO implementation

@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
-import edu.ucla.mbi.util.Role;
+import edu.ucla.mbi.util.data.Role;
 
 public class IcRole extends Role {
 

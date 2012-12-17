@@ -28,16 +28,16 @@
 
     <interceptors>
       <interceptor name="menu" 
-         class="edu.ucla.mbi.util.struts2.interceptor.MenuInterceptor"/>
+         class="edu.ucla.mbi.util.struts.interceptor.MenuInterceptor"/>
 
       <interceptor name="accession" 
-         class="edu.ucla.mbi.util.struts2.interceptor.AccessionInterceptor"/>
+         class="edu.ucla.mbi.util.struts.interceptor.AccessionInterceptor"/>
 
       <interceptor name="jsonTable" 
-         class="edu.ucla.mbi.util.struts2.interceptor.JsonTableInterceptor"/>
+         class="edu.ucla.mbi.util.struts.interceptor.JsonTableInterceptor"/>
 
      <interceptor name="wikiToHtml"
-         class="edu.ucla.mbi.util.struts2.interceptor.WikiParseInterceptor">
+         class="edu.ucla.mbi.util.struts.interceptor.WikiParseInterceptor">
        <param name="field">attach.body</param>
      </interceptor>
 

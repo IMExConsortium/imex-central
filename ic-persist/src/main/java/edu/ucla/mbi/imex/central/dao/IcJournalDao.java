@@ -25,7 +25,7 @@ import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
 
-public class IcJournalDao extends AbstractDAO implements JournalDAO {
+public class IcJournalDao extends AbstractDAO implements JournalDao {
 
     public Journal getJournal( int id ) { 
         

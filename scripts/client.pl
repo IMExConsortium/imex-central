@@ -4,8 +4,8 @@ use SOAP::Lite;
 use XML::XPath;
 use XML::XPath::XMLParser;
 
-my $URLTEST = "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
-my $URLBETA = "https://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws";
+my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
+my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws";
 my $URL = $URLTEST;
 my $PURL= "http://%USR%:%PASS%\@10.1.1.%%%:8080/icentral/ws";
 
@@ -169,6 +169,8 @@ if($op ne "" ) {
     
     if( $op eq "getPublicationById" ) {
        
+        print "XX\n";
+
         if( $imex ne "" ) {
             $ac = $imex;
             $ns = "imex";
@@ -181,6 +183,8 @@ if($op ne "" ) {
             ->outputxml('true')
             ->getPublicationById( SOAP::Data->type( 'xml' =>
                                                     "<identifier ns='$ns' ac='$ac' />" ));
+
+        print $som;
     }
 
     if( $op eq "getPublicationImexAccession" ) {

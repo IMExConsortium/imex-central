@@ -15,7 +15,7 @@
 
 <!-- icentral context: configuration files -->
  
- <bean id="portalContext" class="edu.ucla.mbi.util.PortalContext">
+ <bean id="portalContext" class="edu.ucla.mbi.util.context.PortalContext">
 
     <property name="portal">
       <map>
@@ -39,7 +39,7 @@
 
   </bean>
 
-  <bean id="pageContext" class="edu.ucla.mbi.util.JsonContext">
+  <bean id="pageContext" class="edu.ucla.mbi.util.context.JsonContext">
     <property name="config">
       <map>
         <entry key="json-config" value="/etc/pages.json"/>
@@ -47,7 +47,7 @@
     </property>
   </bean>
 
-  <bean id="menuContext" class="edu.ucla.mbi.util.JsonContext">
+  <bean id="menuContext" class="edu.ucla.mbi.util.context.JsonContext">
     <property name="config">
       <map>
         <entry key="json-config" value="/etc/menu.json"/>
@@ -61,13 +61,13 @@
   <!-- usr context -->
 
   <bean id="userContext" init-method="initialize"
-          class="edu.ucla.mbi.util.UserContext">
+          class="edu.ucla.mbi.util.context.UserContext">
 
      <property name="config">
       <map>
         <entry key="json-config" value="/etc/userconfig.json"/>
         <entry key="json-source">
-          <bean class="edu.ucla.mbi.util.SpringFileResource">
+          <bean class="edu.ucla.mbi.util.context.SpringFileResource">
             <property name="file" value="etc/userconfig.json"/>
           </bean>
          </entry>
@@ -88,13 +88,13 @@
 
 
  <!-- access control list/interceptor -->
-  
-  <bean id="aclContext" class="edu.ucla.mbi.util.JsonContext">
+
+  <bean id="aclContext" class="edu.ucla.mbi.util.context.JsonContext">
     <property name="config">
       <map>
         <entry key="json-config" value="/etc/acl.json"/>
         <entry key="json-source">
-          <bean class="edu.ucla.mbi.util.SpringFileResource">
+          <bean class="edu.ucla.mbi.util.context.SpringFileResource">
             <property name="file" value="etc/acl.json"/>
           </bean>
         </entry>
@@ -104,12 +104,12 @@
     
  <!-- operation logger/interceptor -->
 
-  <bean id="logContext" class="edu.ucla.mbi.util.JsonContext">
+  <bean id="logContext" class="edu.ucla.mbi.util.context.JsonContext">
     <property name="config">
       <map>
         <entry key="json-config" value="/etc/logger.json"/>
         <entry key="json-source">
-          <bean class="edu.ucla.mbi.util.SpringFileResource">
+          <bean class="edu.ucla.mbi.util.context.SpringFileResource">
             <property name="file" value="etc/logger.json"/>
           </bean>
         </entry>

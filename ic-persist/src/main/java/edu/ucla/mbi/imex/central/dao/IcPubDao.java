@@ -25,11 +25,8 @@ import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
-
-import edu.ucla.mbi.util.User;
-import edu.ucla.mbi.util.Group;
        
-public class IcPubDao extends AbstractDAO implements PublicationDAO {
+public class IcPubDao extends AbstractDAO implements PublicationDao {
 
     public Publication getPublication( int id ) { 
 

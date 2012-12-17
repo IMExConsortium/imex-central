@@ -16,12 +16,12 @@
   <!-- workflow content -->
  
   <bean id="keyspaceContext" init-method="initialize"
-          class="edu.ucla.mbi.util.data.KeyspaceContext">
+          class="edu.ucla.mbi.util.context.KeyspaceContext">
 
      <property name="config">
       <map>
         <entry key="json-source">
-          <bean class="edu.ucla.mbi.util.SpringFileResource">
+          <bean class="edu.ucla.mbi.util.context.SpringFileResource">
             <property name="file" value="/etc/keyspace.json"/>
           </bean>
          </entry>

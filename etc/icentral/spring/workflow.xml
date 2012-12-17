@@ -15,18 +15,21 @@
 
   <!-- workflow content -->
  
-  <bean id="workflowContext" init-method="initialize"
-          class="edu.ucla.mbi.util.data.WorkflowContext">
+<!-- init-method="initialize" -->
+
+  <bean id="workflowContext" 
+          class="edu.ucla.mbi.util.context.WorkflowContext">
 
      <property name="config">
       <map>
         <entry key="json-source">
-          <bean class="edu.ucla.mbi.util.SpringFileResource">
+          <bean class="edu.ucla.mbi.util.context.SpringFileResource">
             <property name="file" value="/etc/workflow.json"/>
           </bean>
          </entry>
       </map>
     </property>
+
     <property name="workflowDao" ref="workflowDao"/>
   </bean>
 

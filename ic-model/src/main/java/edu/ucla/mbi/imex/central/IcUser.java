@@ -20,7 +20,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 
-import edu.ucla.mbi.util.User;
+import edu.ucla.mbi.util.data.User;
 
 public class IcUser extends User {
 

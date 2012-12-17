@@ -13,24 +13,12 @@ package edu.ucla.mbi.imex.central.struts.action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 
-import edu.ucla.mbi.util.*;
-import edu.ucla.mbi.util.struts2.action.*;
-import edu.ucla.mbi.util.struts2.interceptor.*;
+import edu.ucla.mbi.util.data.*;
+import edu.ucla.mbi.util.struts.action.*;
+import edu.ucla.mbi.util.struts.interceptor.*;
 
 import java.util.*;
 
 public class GroupMgrAction extends GroupMgrSupport {
-
-    //public String addGroup( Group group ) {
-    //  return SUCCESS;
-    //}
-    
-    //public String deleteGroup( Group group ) {
-    //  return SUCCESS;
-    //}
-
-    //public String updateGroup( Group group ) {
-    //  return SUCCESS;
-    //}
 
 }

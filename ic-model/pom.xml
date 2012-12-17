@@ -19,8 +19,15 @@
    <dependency>
     <groupId>edu.ucla.mbi.dip</groupId>
     <artifactId>dip-util-data</artifactId>
-    <version>0.01</version>
+    <version>0.03</version>
    </dependency>
+
+   <dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>mail</artifactId>
+    <version>1.4.1</version>
+   </dependency>
+
 
   </dependencies>
 

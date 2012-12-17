@@ -14,7 +14,7 @@ package edu.ucla.mbi.imex.central.struts.action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 
-import edu.ucla.mbi.util.struts2.action.PageSupport;
+import edu.ucla.mbi.util.struts.action.PageSupport;
 
 public class PageAction extends PageSupport {
 }

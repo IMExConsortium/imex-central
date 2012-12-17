@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
-import edu.ucla.mbi.util.Group;
+import edu.ucla.mbi.util.data.Group;
 
 public class IcGroup extends Group {
 

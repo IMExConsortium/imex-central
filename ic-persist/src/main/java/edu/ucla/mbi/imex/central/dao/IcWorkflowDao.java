@@ -25,7 +25,7 @@ import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
        
-public class IcWorkflowDao extends AbstractDAO implements WorkflowDAO {
+public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
     
     //---------------------------------------------------------------------
     // DataState

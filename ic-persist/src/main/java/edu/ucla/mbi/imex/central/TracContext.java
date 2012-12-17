@@ -18,7 +18,7 @@ import java.util.*;
 import java.io.*;
 import org.json.*;
 
-import edu.ucla.mbi.util.*;
+import edu.ucla.mbi.util.context.*;
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
@@ -28,25 +28,25 @@ import edu.ucla.mbi.imex.central.dao.*;
 
 public class TracContext extends JsonContext {
 
-    private PublicationDAO pubDao;
+    private PublicationDao pubDao;
 
-    public PublicationDAO getPubDao() {
+    public PublicationDao getPubDao() {
         return pubDao;
     }
 
-    public void setPubDao( PublicationDAO dao ) {
+    public void setPubDao( PublicationDao dao ) {
         pubDao = dao;
     }
 
     //--------------------------------------------------------------------------
 
-    private JournalDAO journalDao;
+    private JournalDao journalDao;
 
-    public JournalDAO getJournalDao() {
+    public JournalDao getJournalDao() {
         return journalDao;
     }
 
-    public void setJournalDao( JournalDAO dao ) {
+    public void setJournalDao( JournalDao dao ) {
         journalDao = dao;
     }
 

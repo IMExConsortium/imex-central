@@ -75,14 +75,14 @@
  <!-- access control list/interceptor -->
 
   <bean id="aclInterceptor"
-        class="edu.ucla.mbi.util.struts2.interceptor.AclInterceptor">
+        class="edu.ucla.mbi.util.struts.interceptor.AclInterceptor">
     <property name="aclContext" ref="aclContext"/>
   </bean>
 
  <!-- access control list/interceptor -->
 
   <bean id="logInterceptor"
-        class="edu.ucla.mbi.util.struts2.interceptor.LogInterceptor">
+        class="edu.ucla.mbi.util.struts.interceptor.LogInterceptor">
     <property name="logContext" ref="logContext"/>
   </bean>
 

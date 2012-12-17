@@ -20,8 +20,8 @@ import org.hibernate.*;
 
 import edu.ucla.mbi.orm.*;
 
-import edu.ucla.mbi.util.*;
-import edu.ucla.mbi.util.dao.*;
+import edu.ucla.mbi.util.data.*;
+import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
 

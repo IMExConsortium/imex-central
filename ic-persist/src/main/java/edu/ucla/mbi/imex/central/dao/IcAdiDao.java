@@ -26,7 +26,7 @@ import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
 
-public class IcAdiDao extends AbstractDAO implements AdiDAO {
+public class IcAdiDao extends AbstractDAO implements AdiDao {
     
     // AdiDAO
     //--------------------------------------------------------------------------    
