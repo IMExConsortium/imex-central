@@ -25,7 +25,7 @@ body {
   font-size: medium;
   background-color: white;
   margin: 0px;
-  padding: 0px;
+  padding: 0 0 50px 0;
 }
 
 form {
@@ -42,8 +42,9 @@ p {
 caption {
   text-align: left;
 }
-
+/*
 h1 {
+
   font-size: large;
   font-weight: bold;
   white-space: nowrap;
@@ -58,7 +59,7 @@ h2 {
   padding: 0px;
   margin: 8px 0px;
 }
-
+*/
 .pagebody {
   padding: 0px 25px 25px 0px ;
   font-size: 0.85em;

@@ -117,7 +117,6 @@
     </tr>
    </s:form>
   </table>
-  <br/><br/><br/><br/><br/>
  </div>
  
  <script type="text/javascript">

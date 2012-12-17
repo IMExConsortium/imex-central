@@ -111,6 +111,4 @@
    </td>
   </tr>
  </table>
- <br/>
- <br/>
 </s:else>

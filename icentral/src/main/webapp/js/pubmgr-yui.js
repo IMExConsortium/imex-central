@@ -1,8 +1,7 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.pubmgr = {
-
-    admus: "",
+	    admus: "",
     owner: "",
     cflag: "",
     
@@ -354,12 +353,16 @@ YAHOO.imex.pubmgr = {
                                ("<em class=\"yui-button-label\">" + 
                                 statusLabel + "</em>"));
         }
+        else
+			PMGR.stateSel[0].text = statusLabel;
         
         if( PMGR.partnerBtn.set!== undefined ){
             PMGR.partnerBtn.set( "label", 
                                  ("<em class=\"yui-button-label\">" + 
                                   partnerLabel + "</em>"));
         }
+        else
+			PMGR.partnerSel[0].text = partnerLabel;
         
         // reload data
         //------------
@@ -438,7 +441,9 @@ YAHOO.imex.pubmgr = {
                   selmnu: YAHOO.imex.pubmgr.partnerSel,
                   selbtn: "partnerBtn",
                   selcnt: "partner-button-container",
-                  selnme: "partner-button" });
+                  selnme: "partner-button" ,
+                  seltext: YAHOO.imex.pubmgr.partnerSel[0].text});
+                  
         };
     
         var partnerCallback = { cache:false, timeout: 5000, 
@@ -455,7 +460,8 @@ YAHOO.imex.pubmgr = {
                   selmnu: YAHOO.imex.pubmgr.stateSel,
                   selbtn: "stateBtn",
                   selcnt: "state-button-container",
-                  selnme: "state-button" });
+                  selnme: "state-button", 
+                  seltext: YAHOO.imex.pubmgr.stateSel[0].text});
         };
         
         var stateCallback = { cache:false, timeout: 5000, 
@@ -612,12 +618,19 @@ YAHOO.imex.pubmgr = {
         PMGR.contextMenuInit( PMGR );
         PMGR.myDataTable.on( "columnReorderEvent",
                              PMGR.myDataTable.handleReorder );     
+                             
+        //tossing in some css to add a black separator between the rows
+        var sheet = document.createElement('style');
+		sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
+		document.body.appendChild(sheet); 
+        
         return { 
             ds: PMGR.myDataSource, 
             dt: PMGR.myDataTable 
         };
         
-        //YAHOO.imex.pubmgrOld();        
+        //YAHOO.imex.pubmgrOld();    
+           
     },
 
     onSelectedMenuItemChange: function (event) {
@@ -660,7 +673,7 @@ YAHOO.imex.pubmgr = {
             o.pmgr[o.selbtn] = new YAHOO.widget.Button(
                 { id: o.selnme,  
                   name: o.selnme, 
-                  label: "<em class=\"yui-button-label\">---ANY---</em>", 
+                  label: "<em class=\"yui-button-label\">" + o.seltext +"</em>", 
                   type: "menu",   
                   menu: o.selmnu,  
                   container: o.selcnt }); 
@@ -822,6 +835,7 @@ YAHOO.imex.pubmgr = {
         YDTF.partnerList = this.myPartnerListFormatter; 
         YDTF.editorList = this.myEditorListFormatter; 
     }
+
 
 };
 
