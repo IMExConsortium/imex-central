@@ -1,7 +1,7 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.pubedit = {
-
+	
     pubId: 0,
     stateButton: null,
     init: function( e, obj ) {

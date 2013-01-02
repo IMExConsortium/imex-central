@@ -9,7 +9,7 @@
        <s:else>
         <s:property value="pub.title"/>
        </s:else>
-     </em><p>
+     </em></p>
     <div class="yui-skin-sam">
      <div id="pubTab" class="yui-navset"> 
         <ul class="yui-nav"> 
@@ -21,134 +21,74 @@
             <li><a href="#tab6"><em>Record History</em></a></li>
         </ul>
         <div class="yui-content">
-          <s:form id="pub-stat-edit" theme="simple" action="pubedit">  
-           <table width="100%" border="1">
-            <tr>
-             <th align="right" width="15%" nowrap>Availability<br/>Status</th>
-             <td width="75%">
-              <table width="100%" border="1">
-               <tr>
-                <th width="33%" nowrap>Publication Date (expected)</th>
-                <th width="33%" nowrap>Publication Date</th>
-                <th width="33%" nowrap>Release Date</th>
-               </tr>
-               <tr> 
-                <td align="center">
-                  <table border="0" cellspacing="0">
-                   <tr>
-                    <td>
-                     <s:hidden name="pub.expectedPubDateStr"/>
-                     <s:textfield theme="simple" name="opp.epd" size="10" maxLength="10"/>
-                    </td>
-                    <td>
-                     <button type="button" id="epd-show" title="Show Calendar">
-                      <img src="img/calbtn.gif" width="18" height="18" alt="Calendar">
-                     </button>
-                    </td>
-                   </tr>
-                  </table>
-                </td>
-                <td align="center">
-                  <table border="0" cellspacing="0">
-                   <tr>
-                    <td>
-                     <s:hidden name="pub.pubDateStr"/>
-                     <s:textfield theme="simple" name="opp.pd" size="10" maxLength="10"/>
-                    </td>
-                    <td>
-                     <button type="button" id="pd-show" title="Show Calendar">
-                      <img src="img/calbtn.gif" width="18" height="18" alt="Calendar">
-                     </button>
-                    </td>
-                   </tr>
-                  </table>
-                </td>
-                <td align="center">
-                  <table border="0" cellspacing="0">
-                   <tr>
-                    <td>
-                     <s:hidden name="pub.releaseDateStr"/>
-                     <s:textfield theme="simple" name="opp.rd" size="10" maxLength="10"/>
-                    </td>
-                    <td>
-                     <button type="button" id="rd-show" title="Show Calendar">
-                      <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" >
-                     </button>
-                    </td>
-                   </tr>
-                  </table>
-                </td>
-               </tr>
-              </table>
-             </td>
-             <th width="10%">
-               <s:submit theme="simple" name="op.edup" value="UPDATE"
-                onclick="return YAHOO.imex.pubedit.pubDate('update');" />
-             </th>
-            </tr>
-            <tr>
-              <th align="right" nowrap>Contact<br/>Email</th>
-              <td id="td-contact-mail">
-               <s:if test="pub.contactEmail.length() > 0">
-                <s:a id="cm-link" href="%{'mailto:'+pub.contactEmail}">
-                 <s:property value="pub.contactEmail"/>
-                </s:a>
-                <i>change to</i>
-               </s:if>
-               <s:textfield theme="simple" name="opp.necm" size="32" maxLength="32"/>
-              </td>
-              <th>
-               <s:submit theme="simple" name="op.emup" value="UPDATE"
-                  onclick="return YAHOO.imex.pubedit.pubContactMail('update');" />
-              </th>
-            </tr>
-            <tr>
-              <th align="right" nowrap>Curation<br/>Status</th>
-              <td>
-               <table width="100%" border="0">
-                <tr>
-                 <td align="right" valign="middle" width="5%">        
-                  <label id="state-label" class="pub-state-label"></label>
-                 </td>
-                 <td align="center" valign="middle" width="5%" nowrap>  
-                  <i>change to</i>
-                 </td>
-                 <td align="left" valign="middle" width="90%">  
-                  <label id="state-button-container"></label>
-                 </td>
-                </tr>
-               </table>
-              </td>
-              <th>
-               <s:hidden id="nsn" name="opp.nsn" value="%{pub.state.name}"/>
-               <s:submit theme="simple" name="op.esup" value="UPDATE" 
-                  onclick="return YAHOO.imex.pubedit.pubState('update');"/>
-              </th>
-            </tr>
-            <tr>
-              <th align="right" nowrap>IMEx ID</th>
-              <td>
-               <label id="imex-button-container"></label>
-              </td>
-              <td>&nbsp;</td>
-            </tr>  
-            <tr>
-             <th align="right" nowrap>IMEx Records</th>
-             <td>
-               <table width="100%" border="1">
-                <tr>
-                 <td align="left">
-                  [---------]
-                 </td>
-                </tr>
-               </table>
-             </td>
-             <th>
-               <s:submit theme="simple" name="op.pav" value="UPDATE" disabled="true"/>
-             </th>
-            </tr>
-           </table>
-          </s:form>
+		 
+		 <s:form id="pub-stat-edit" theme="simple" action="pubedit">
+		 
+		 <div class='top-padding'>
+		  <fieldset>
+		    <legend><h3>Availability Status</h3></legend>
+		    <p>Publication Date (expected)
+			    <s:hidden name="pub.expectedPubDateStr" />
+			    <s:textfield theme="simple" name="opp.epd" size="10" maxlength="10" />
+			    <button type="button" id="epd-show" title="Show Calendar">
+				 <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" />
+			    </button>
+		   </p>
+		   <p>Publication Date
+			<s:hidden name="pub.pubDateStr" />
+			<s:textfield theme="simple" name="opp.pd" size="10" maxlength="10" />
+			<button type="button" id="pd-show" title="Show Calendar">
+			 <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" />
+			</button></p>
+		   
+		    <p>Release Date
+		    <s:hidden name="pub.releaseDateStr" />
+		    <s:textfield theme="simple" name="opp.rd" size="10" maxlength="10" />
+		    <button type="button" id="rd-show" title="Show Calendar">
+		    <img src="img/calbtn.gif" width="18" height="18" alt="Calendar" />
+		    </button></p>
+		    <s:submit theme="simple" name="op.edup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubDate('update');" />
+		   </fieldset>
+		  </div>
+		  
+		  <div class='top-padding'>
+		   <fieldset>
+		    <legend><h3>Contact Email</h3></legend>
+		    <p>
+		    <span id='td-contact-mail'>
+		    <s:if test="pub.contactEmail.length()&gt; 0">
+		 	   <s:a id="cm-link" href="%{'mailto:'+pub.contactEmail}">
+				  <s:property value="pub.contactEmail" />
+			   </s:a>
+			   <em>change to</em>
+		    </s:if>
+		    <s:textfield theme="simple" name="opp.necm" size="32" maxlength="32" /></span>
+		    </p>
+		    <s:submit theme="simple" name="op.emup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubContactMail('update');" />
+		   </fieldset>
+		  </div>
+		  
+		  <div class='top-padding'>
+		   <fieldset>
+		    <legend><h3>Curation Status</h3></legend>
+		    <label id="state-label" class="pub-state-label"></label>
+		    <em>change to</em>
+		    <label id="state-button-container"></label>
+		    <s:hidden id="nsn" name="opp.nsn" value="%{pub.state.name}" />
+		    <s:submit theme="simple" name="op.esup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubState('update');" />
+		   </fieldset></div>
+		 
+		  <div class='top-padding'>
+		   <fieldset>
+		    <legend><h3>IMEx ID</h3></legend>
+		    <label id="imex-button-container"></label>
+		 	 IMEx Records [---------] 
+		    <s:submit theme="simple" name="op.pav" value="UPDATE" disabled="true" />
+		   </fieldset>
+		  </div>
+		  
+		</s:form>
+
 
 
            <!-- detail pane -->
@@ -413,6 +353,7 @@
 
         </div> 
        </div> 
-</div>
-         </div> 
       </div>
+     </div> 
+</div>
+

@@ -1511,3 +1511,10 @@ a.disabled {
   margin: 0 0 6px 0;
 }
 
+/*Additions by zack*/
+.yui-nav {
+white-space: nowrap;
+} 
+.top-padding{
+padding-top: 10px
+}

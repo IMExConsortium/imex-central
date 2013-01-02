@@ -114,7 +114,7 @@ YAHOO.imex.pubmgr = {
             "&opp.max=" + results; 
 
         req = encodeURI(req);
-        alert("request: " + req);
+        console.log("request: " + req);
         
         // build custom request
         //---------------------
@@ -143,7 +143,7 @@ YAHOO.imex.pubmgr = {
             dt.getDataSource().sendRequest( reloadRequest, 
                                             reloadCallback );
         } catch (x) {   
-            alert(x);
+            console.log(x);
         }
     },
 
@@ -170,7 +170,7 @@ YAHOO.imex.pubmgr = {
                 this.buildCDefs( cookie );                
             }
         } catch (x) {
-            alert("INIT: ex="+ x);
+            console.log("INIT: ex="+ x);
         }
         this.initView( init );
         this.historyInit();
@@ -195,7 +195,7 @@ YAHOO.imex.pubmgr = {
                 }
 
             } catch (x) {
-                alert( "I:"+ i + "-> " + cs[0] + " ex=" + x );
+                console.log( "I:"+ i + "-> " + cs[0] + " ex=" + x );
             }
         }        
     },
@@ -252,7 +252,7 @@ YAHOO.imex.pubmgr = {
             YAHOO.util.History.initialize( "yui-history-field", 
                                            "yui-history-iframe" );
         } catch (x) {
-            alert(x);
+            console.log(x);
         }                
     },
 
@@ -307,7 +307,7 @@ YAHOO.imex.pubmgr = {
                 .navigate( "pubmgr", 
                            PMGR.generateStateString( newState ) );
         } catch (x) {
-            alert(x);
+            console.log(x);
         }
         
     },
@@ -414,7 +414,7 @@ YAHOO.imex.pubmgr = {
             var cState = YAHOO.util.History.getCurrentState( "pubmgr" );
             YAHOO.imex.pubmgr.handleHistoryNavigation( cState );
         } catch (x) {
-            alert(x);
+            console.log(x);
         }
     },
 
@@ -478,7 +478,7 @@ YAHOO.imex.pubmgr = {
                                "acom?op.pagac=ac", 
                                partnerCallback );        
         } catch (x) {
-            alert("AJAX Error:"+x);
+            console.log("AJAX Error:"+x);
         }
 
         // create datasource
@@ -598,7 +598,7 @@ YAHOO.imex.pubmgr = {
                     //       "\n payload(new)=" + YAHOO.lang.JSON.stringify( oPayload  ));
                     
                 } catch (x) {
-                    alert(x);
+                    console.log(x);
                 }
                 return true;
         };
@@ -694,7 +694,7 @@ YAHOO.imex.pubmgr = {
             }
             
         } catch (x) {
-            alert(x);
+            console.log(x);
         }
     },
 
@@ -743,7 +743,7 @@ YAHOO.imex.pubmgr = {
             o.myDataTable.my.configmenu.render("pubtab");
             
         } catch (x) {
-            alert(x);
+            console.log(x);
         }
     },
 
@@ -761,7 +761,7 @@ YAHOO.imex.pubmgr = {
             o.tbl.my.configmenu.destroy();
             YAHOO.imex.pubmgr.contextMenuInit( YAHOO.imex.pubmgr );
         } catch (x) {
-            alert("toggle:" + x);
+            console.log("toggle:" + x);
         }
 
         var nCookie = YAHOO.imex.pubmgr.buildCookie();
