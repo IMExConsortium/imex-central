@@ -163,65 +163,70 @@
     
          <div class="yui-hidden">
           <s:form id="pub-acc-edit" theme="simple" action="pubedit">
-           <table width="100%" border="1">
-            <tr>
-              <th width="15%" align="right" nowrap>Submitted By</th>
-              <td align="left" width="80%">
+           <p>            
+              Submitted By: 
+              
                <s:hidden name="pub.owner.login"/>
                <s:textfield theme="simple" name="pub.owner.login" size="32" maxLength="64" disabled="true"/>
-              </td>
-              <th rowspan="1" width="5%">
-               &nbsp;
-              </th>
-            </tr>
-            <tr>
-              <th rowspan="2" align="right" nowrap>Admin Users<br>(<i>Curators</i>)</th>
-              <td colspan="1" id="td-admin-user" >
-                <s:iterator value="pub.adminUsers" id="u" status="upos">
+               </p>
+               <h3>Admin Users (Curators)</h3>
+		<div class='top-padding'>
+		  <fieldset>
+		    <legend>Drop User</legend>
+              <p>  <s:iterator value="pub.adminUsers" id="u" status="upos">
                   <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop" />
                  <s:property value="#u.login"/>
                 </s:iterator>
-              </td>
-              <th>
+              </p>
+              <p>
                 <s:submit theme="simple" name="op.eaudel" value="DROP" 
                    onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');" />
-              </th>
-            </tr>
-            <tr>
-              <td colspan="1">
-                 <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
-              </td>
-              <th>
+              </p>
+              </fieldset>
+             </div>
+          <div class='top-padding'>
+		  <fieldset>
+		    <legend>Add User</legend>
+              <p>
+               <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
+			  </p>
+			  <p>
                  <s:submit theme="simple" name="op.eauadd" value="ADD"
                     onclick="return YAHOO.imex.pubedit.pubAdminUser('add');" />
-              </th>
-            </tr>
-            <tr>
-                <th rowspan="2" align="right" nowrap>Admin Groups<br>(<i>IMEx Partners</i>)</b></th>
-                <td colspan="1" id="td-admin-group" >
-                 <s:iterator value="pub.adminGroups" id="g" status="gpos">
+              </p>
+          </fieldset>
+         </div>
+         <h3>Admin Groups (IMEx Partners)</h3>
+         <div class='top-padding'>
+		  <fieldset>
+		    <legend>Drop Users</legend>
+                <p><s:iterator value="pub.adminGroups" id="g" status="gpos">
                   <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop" />
                   <s:property value="#g.label"/>
                  </s:iterator>
-                </td>
-                <th>
+                 </p>
+                 <p>
                  <s:submit theme="simple" name="op.eagdel" value="DROP"
                     onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');" />
-                </th>
-            </tr>
-            <tr>
-                <td colspan="1">
-                 <s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
+                </p>
+                </fieldset>
+         </div>
+                <div class='top-padding'>
+		  <fieldset>
+		    <legend>Add User</legend>
+                <p><s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
                            list="groupAll" listKey="id" listValue="label" />  
-                </td>
-                <th>
+                </p>
+                <p>
+                
                  <s:submit theme="simple" name="op.eagadd" value="ADD"
                     onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');" />
-                </th>
-            </tr>
-           </table>
+                </p>
+                </fieldset>
+         </div>
           </s:form>
          </div>
+
          
 <!-- comments pane -->
 
