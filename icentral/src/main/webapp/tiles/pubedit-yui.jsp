@@ -21,6 +21,8 @@
             <li><a href="#tab6"><em>Record History</em></a></li>
         </ul>
         <div class="yui-content">
+        
+<!--Record Status Tab-->
 		 
 		 <s:form id="pub-stat-edit" theme="simple" action="pubedit">
 		 
@@ -86,81 +88,78 @@
 		    <s:submit theme="simple" name="op.pav" value="UPDATE" disabled="true" />
 		   </fieldset>
 		  </div>
+		  </s:form>
 		  
-		</s:form>
+<!--Publication Details Tab-->
 
+		<div class="yui-hidden">
 
-
-           <!-- detail pane -->
-
-         <div class="yui-hidden">
           <s:form id="pub-det-edit" theme="simple" action="pubedit">  
-           <table width="100%" border="1">
-             <tr>
-              <th align="right"  width="15%" nowrap>PubMed</th>
-              <td width="75%" nowrap>
+          <div class='top-padding'>
+		  <fieldset>
+		    <legend><h3>[Add a Title]</h3></legend>
+             <p>PubMed              
                <s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/>
                 <s:submit theme="simple" name="op.epmr" value="Synchronize" disabled="false"
                   onclick="return YAHOO.imex.pubedit.pubIdent('epmr');"/> 
-              </td>
-              <th rowspan="3" width="10%">
-               <s:submit theme="simple" name="op.eidu" value="UPDATE" disabled="false"
-                  onclick="return YAHOO.imex.pubedit.pubIdent('update');"/>
-              </th>
-             </tr>
-             <tr>
-              <th align="right" nowrap>DOI</th>     
-              <td>
+			</p>
+             <p>DOI     
                <s:textfield theme="simple" name="pub.doi" size="32" maxLength="64"/>
-              </td>
-             </tr>
-             <tr>
-              <th align="right" nowrap>Internal</th>
-              <td>
+             </p> 
+             <p> 
+              Internal
                <s:textfield theme="simple" name="pub.journalSpecific" size="32" maxLength="64"/>
-              </td>
-             </tr>
-             <tr>
-              <th align="right" width="15%" nowrap>Journal</th>
-              <td width="75%" nowrap>
+               <p> 
+                              <s:submit theme="simple" name="op.eidu" value="UPDATE" disabled="false"
+                  onclick="return YAHOO.imex.pubedit.pubIdent('update');"/>            
+               </p> 
+              </p> 
+              </fieldset>
+              </div>
+              <div class='top-padding'>
+		  <fieldset>
+		    <legend><h3>Journal</h3></legend>
+              <p>
                <s:select name="opp.jid" headerKey="-1" headerValue="---Select Journal---" 
                      value="pub.source.id" list="journalList" 
                      listKey="id" listValue="title" />                  
-              </td>
-              <th width="10%">
+              
                <s:submit theme="simple" name="op.jset" value="UPDATE" disabled="true"/>
-              </th>
-             </tr>
-             <tr>
-              <th align="right" nowrap>Author(s)</th>
-              <td width="75%" nowrap>
+               </p> 
+           </fieldset>
+              </div>
+              <div class='top-padding'>
+                           <fieldset>
+		    <legend><h3>[Add a Title]</h3></legend>
+              <p>Author(s)
                <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
-              </td>
-              <th rowspan="2">
-               <s:submit theme="simple" name="op.eatu" value="UPDATE" disabled="false"
-                  onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/>
-              </th>
-             </tr>
-             <tr>
-              <th align="right" nowrap>Title</th>
-              <td>
+              </p> 
+              <p>Title             
                <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>
-              </td>
-             </tr>
-             <tr>
-              <th align="right" nowrap>Abstract</th>
-              <td width="75%" nowrap>
+              
+              </p>  
+              <p> <s:submit theme="simple" name="op.eatu" value="UPDATE" disabled="false"
+                  onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/> 
+                  </fieldset>
+              </div>
+                     <div class='top-padding'>
+                           <fieldset>
+		    <legend><h3>Abstract</h3></legend>
+             
+               <p>
                <s:textarea name="pub.abstract" value="%{pub.abstract}" cols="100" rows="12"/>
-              </td>
-              <th>
+              </p> 
+               <p> 
                <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
-              </th>
-             </tr> 
-           </table>
+               </p> 
+              
+            </fieldset>
+              </div>
           </s:form>
          </div> 
+
          
-          <!-- access pane -->
+<!-- access pane -->
     
          <div class="yui-hidden">
           <s:form id="pub-acc-edit" theme="simple" action="pubedit">
@@ -224,7 +223,7 @@
           </s:form>
          </div>
          
-       <!-- comments pane -->
+<!-- comments pane -->
 
          <div id="cmt-pane" class="yui-hidden">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
