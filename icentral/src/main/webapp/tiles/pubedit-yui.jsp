@@ -73,19 +73,23 @@
 		  <div class='top-padding'>
 		   <fieldset>
 		    <legend><h3>Curation Status</h3></legend>
+		    <p>
 		    <label id="state-label" class="pub-state-label"></label>
 		    <em>change to</em>
 		    <label id="state-button-container"></label>
 		    <s:hidden id="nsn" name="opp.nsn" value="%{pub.state.name}" />
+		    </p>
+		    <p>
 		    <s:submit theme="simple" name="op.esup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubState('update');" />
+		    </p>
 		   </fieldset></div>
 		 
 		  <div class='top-padding'>
 		   <fieldset>
 		    <legend><h3>IMEx ID</h3></legend>
-		    <label id="imex-button-container"></label>
-		 	 IMEx Records [---------] 
-		    <s:submit theme="simple" name="op.pav" value="UPDATE" disabled="true" />
+		    <p> <label id="imex-button-container"></label>
+		 	IMEx Records [---------] </p>
+		    <p><s:submit theme="simple" name="op.pav" value="UPDATE" disabled="true" /></p>
 		   </fieldset>
 		  </div>
 		  </s:form>
@@ -97,7 +101,7 @@
           <s:form id="pub-det-edit" theme="simple" action="pubedit">  
           <div class='top-padding'>
 		  <fieldset>
-		    <legend><h3>[Add a Title]</h3></legend>
+		    <legend><h3>Identifiers</h3></legend>
              <p>PubMed              
                <s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/>
                 <s:submit theme="simple" name="op.epmr" value="Synchronize" disabled="false"
@@ -118,7 +122,7 @@
               </div>
               <div class='top-padding'>
 		  <fieldset>
-		    <legend><h3>Journal</h3></legend>
+		    <legend><h3>Journal Title</h3></legend>
               <p>
                <s:select name="opp.jid" headerKey="-1" headerValue="---Select Journal---" 
                      value="pub.source.id" list="journalList" 
@@ -130,7 +134,7 @@
               </div>
               <div class='top-padding'>
                            <fieldset>
-		    <legend><h3>[Add a Title]</h3></legend>
+		    <legend><h3>Authors/Title</h3></legend>
               <p>Author(s)
                <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
               </p> 
@@ -147,12 +151,11 @@
 		    <legend><h3>Abstract</h3></legend>
              
                <p>
-               <s:textarea name="pub.abstract" value="%{pub.abstract}" cols="100" rows="12"/>
+               <s:textarea name="pub.abstract" value="%{pub.abstract}" cols="75" rows="12"/>
               </p> 
                <p> 
                <s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/>
                </p> 
-              
             </fieldset>
               </div>
           </s:form>
@@ -170,7 +173,6 @@
                <s:textfield theme="simple" name="pub.owner.login" size="32" maxLength="64" disabled="true"/>
                </p>
                <h3>Admin Users (Curators)</h3>
-		<div class='top-padding'>
 		  <fieldset>
 		    <legend>Drop User</legend>
               <p>  <s:iterator value="pub.adminUsers" id="u" status="upos">
@@ -183,7 +185,6 @@
                    onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');" />
               </p>
               </fieldset>
-             </div>
           <div class='top-padding'>
 		  <fieldset>
 		    <legend>Add User</legend>
@@ -197,7 +198,6 @@
           </fieldset>
          </div>
          <h3>Admin Groups (IMEx Partners)</h3>
-         <div class='top-padding'>
 		  <fieldset>
 		    <legend>Drop Users</legend>
                 <p><s:iterator value="pub.adminGroups" id="g" status="gpos">
@@ -210,15 +210,14 @@
                     onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');" />
                 </p>
                 </fieldset>
-         </div>
-                <div class='top-padding'>
+         
+         <div class='top-padding'>
 		  <fieldset>
 		    <legend>Add User</legend>
                 <p><s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
                            list="groupAll" listKey="id" listValue="label" />  
                 </p>
                 <p>
-                
                  <s:submit theme="simple" name="op.eagadd" value="ADD"
                     onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');" />
                 </p>
@@ -232,52 +231,38 @@
 
          <div id="cmt-pane" class="yui-hidden">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
-           <table width="100%" border="0" cellspacing="2px">
+           
             <s:hidden name="id" value="%{id}"/>
             <s:hidden name="pub.id" value="%{id}"/>
-            <tr cellpadding="1">
-             <td width="5%">
-              <b>Subject:</b> 
-             </td>
-             <td align="left">
+            
+           <fieldset>
+		    <legend><h3>Add a Comment</h3></legend>
+              <p><strong>Subject:</strong> 
+             
+             
               <s:textfield theme="simple" name="opp.encs" size="50" value=""/>  
-             <td align="right">
-<%--              <b>Format:</b> --%>
-             </td>
-
-             <td align="left"> 
-<%--           <s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> --%>
-               &nbsp;
-             </td>
-             <td align="right" nowrap>
-               <b>Flag:</b>
+             </p>
+<%--  <p><strong>Format:</strong> --</p>%>
+<%--  <p><s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> </p>--%>             
+             <p>
+               <strong>Flag:</strong>
 <%--               <label id="flag-label" class="flag-label">Flag</label> --%>
                  <s:select name="opp.encf" headerKey="-1" headerValue="----------" 
                           list="#{'1':'QControl'}" value="-1"/>
-
-             </td>
-             <td>&nbsp;</td>
-             </tr>
-            <tr>
-             <td colspan="5" align="center">
-              <s:textarea theme="simple" name="opp.encb" cols="128"rows="5" value=""/>
-             </td>
-              <td rowspan="1" width="10%" align ="center">
+             </p>
+             <p><strong>Body:</strong></p>
+             <p>
+              <s:textarea theme="simple" name="opp.encb" cols="50"rows="5" value=""/>
+             </p>
+              <p>
                <s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false"
                   onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/>
-               <br/>
-               <i><a href="" onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');">preview</a></i>
-             </td>
-            </tr>
-            <tr>
-              <td colspan="6"><hr/></td>  
-            </tr>
-            <tr>
-             <td colspan="6">
+			 </p>
+			 <em><a href="" onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');">preview</a></em>
+			 </fieldset>
+			 <h3>Comments</h3>
+               
               <div id="com-tbview"></div>
-             </td>
-            </tr>       
-           </table>
           </s:form>
          </div>
 
