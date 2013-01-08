@@ -87,9 +87,9 @@ YAHOO.imex.attedit = {
           
             YAHOO.imex.attedit.conf[aclass].comColDef = [
                 //{key:"id", label:"ID"},
-                { key:"author",width:100,
+                { key:"author",/*width:100,*/
                   label:YAHOO.imex.attedit.conf[aclass].cname["author"] },
-                { key:"date", width:240, 
+                { key:"date", /*width:240,*/ 
                   label:YAHOO.imex.attedit.conf[aclass].cname["date"] },
             ];
             
@@ -97,7 +97,7 @@ YAHOO.imex.attedit = {
               
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"subject", width:500, formatter:"subject", 
+                        { key:"subject", /*width:500,*/ formatter:"subject", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["subject"] }
                     );
             }
@@ -106,7 +106,7 @@ YAHOO.imex.attedit = {
               
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"flagName", width:100, formatter:"flag", 
+                        { key:"flagName", /*width:100,*/ formatter:"flag", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["flagName"] }
                     );
                     YAHOO.imex.attedit.addTitleCount(messages.attach.length, 'Comments');
@@ -116,23 +116,23 @@ YAHOO.imex.attedit = {
                 
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"subject", width:500, formatter:"asubject", 
+                        { key:"subject", /*width:500,*/ formatter:"asubject", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["subject"] }
                     );
                 
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"bodyType", width:100, formatter:"btype", 
+                        { key:"bodyType", /*width:100,*/ formatter:"btype", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["bodyType"] }
                     );
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"flagName", width:100, formatter:"flag", 
+                        { key:"flagName", /*width:100,*/ formatter:"flag", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["flagName"] }
                     );
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"aid", width:100, formatter:"dll", 
+                        { key:"aid", /*width:100,*/ formatter:"dll", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["aid"] }
                     );
                     YAHOO.imex.attedit.addTitleCount(messages.attach.length, 'Attachments');

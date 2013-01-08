@@ -189,7 +189,7 @@
 		  <fieldset>
 		    <legend>Add User</legend>
               <p>
-               <s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
+               [Add a user to be an administrator of this publication]<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
 			  </p>
 			  <p>
                  <s:submit theme="simple" name="op.eauadd" value="ADD"
@@ -214,7 +214,8 @@
          <div class='top-padding'>
 		  <fieldset>
 		    <legend>Add User</legend>
-                <p><s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
+                <p>[Add a group to give them administator rights to this publication]
+                <s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
                            list="groupAll" listKey="id" listValue="label" />  
                 </p>
                 <p>
@@ -266,65 +267,45 @@
           </s:form>
          </div>
 
-       <!-- attachment pane -->
+<!-- attachment pane -->
       
-         <div id="att-pane" class="yui-hidden">
-
-          <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
-           <table width="100%" border="0" cellspacing="2px">
+        <div id="att-pane" class="yui-hidden">
+			<fieldset>
+		     <legend><h3>Add a File</h3></legend>
+		     
+            
+           <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
+          
             <s:hidden name="id" value="%{id}"/>
             <s:hidden name="opp.pubid" value="%{id}"/>
-            <tr cellpadding="1">
-             <td width="5%" nowrap>
-              <b>Name</b> (<i>optional</i>)<b>:</b> 
-             </td>
-             <td align="left" width="25%">
+              
+             <p>File: <s:file theme="simple" name="opp.edafile"  accept="text/*" size="80" /></p> 
+             <p>
+              <strong>Name</strong> (<em>optional</em>):
               <s:textfield theme="simple" name="opp.edan" size="50" value=""/>  
-             <td align="right">
-              <b>Format:</b>
-             </td>
-             <td align="left" nowrap width="10%"> 
-               <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/>
-               &nbsp;
-             </td>
-             <td align="left" width="30%" nowrap>
-               <b>Flag:</b>  
-<%--               <label id="flag-label" class="flag-label">Flag</label> --%>
-                 <s:select name="opp.edaf" headerKey="-1" headerValue="----------" 
+             </p>
+             <p>
+              <strong>Format:</strong>
+              <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/>
+             </p>
+              <strong>Flag:</strong>  
+<%--            <label id="flag-label" class="flag-label">Flag</label> --%>
+                <s:select name="opp.edaf" headerKey="-1" headerValue="----------" 
                           list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/>
-
-             </td>
-             <td>&nbsp;</td>
-
-             <td colspan="1" rowspan="2" width="10%" align ="center" valign="middle">
-               <s:submit theme="simple" name="op.eada" value="ADD" disabled="false"
+                          
+                <s:submit theme="simple" name="op.eada" value="ADD" disabled="false"
                   onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan',
                                                        'ff':'attmgr_opp_edafile'}); 
                            YAHOO.imex.attedit.UploadFile();
                            return false;"/> 
 <%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
-               </td>
-             </tr>
-            <tr>
-             <td colspan="5" align="left">
-              <s:file theme="simple" name="opp.edafile"  accept="text/*" size="80" />
-             </td>
-              
-            </tr>
-            <tr>
-              <td colspan="8"><hr/></td>  
-            </tr>
-            <tr>
-             <td colspan="8">
+			</fieldset>
               <div id="adata-tbview"></div>
-             </td>
-            </tr>       
-           </table>
           </s:form>
 
          </div>
 
-         <!-- log pane -->
+<!-- log pane -->
 
          <div id="log-pane" class="yui-hidden">
           <s:form id="cmtmgr" theme="simple" action="attachmgr">
