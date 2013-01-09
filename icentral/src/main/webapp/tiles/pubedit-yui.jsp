@@ -172,9 +172,9 @@
                <s:hidden name="pub.owner.login"/>
                <s:textfield theme="simple" name="pub.owner.login" size="32" maxLength="64" disabled="true"/>
                </p>
-               <h3>Admin Users (Curators)</h3>
+               <h3>Curators</h3>
 		  <fieldset>
-		    <legend>Drop User</legend>
+		    <legend>Drop Curators</legend>
               <p>  <s:iterator value="pub.adminUsers" id="u" status="upos">
                   <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop" />
                  <s:property value="#u.login"/>
@@ -187,9 +187,9 @@
               </fieldset>
           <div class='top-padding'>
 		  <fieldset>
-		    <legend>Add User</legend>
+		    <legend>Add Curators</legend>
               <p>
-               [Add a user to be an administrator of this publication]<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
+               Curators username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/>
 			  </p>
 			  <p>
                  <s:submit theme="simple" name="op.eauadd" value="ADD"
@@ -197,9 +197,9 @@
               </p>
           </fieldset>
          </div>
-         <h3>Admin Groups (IMEx Partners)</h3>
+         <h3>Curator Groups</h3>
 		  <fieldset>
-		    <legend>Drop Users</legend>
+		    <legend>Drop Curator Group</legend>
                 <p><s:iterator value="pub.adminGroups" id="g" status="gpos">
                   <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop" />
                   <s:property value="#g.label"/>
@@ -213,8 +213,8 @@
          
          <div class='top-padding'>
 		  <fieldset>
-		    <legend>Add User</legend>
-                <p>[Add a group to give them administator rights to this publication]
+		    <legend>Add Curator Group</legend>
+                <p>
                 <s:select name="opp.eagadd"  headerKey="-1" headerValue="---Select Group---"
                            list="groupAll" listKey="id" listValue="label" />  
                 </p>
