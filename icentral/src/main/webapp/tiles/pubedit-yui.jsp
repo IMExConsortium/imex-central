@@ -102,7 +102,7 @@
 						<h3>Curators</h3>
 						<fieldset>
 							<legend>Drop Curators</legend>
-							<p><s:iterator value="pub.adminUsers" id="u" status="upos"><s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/></s:iterator></p>
+							<p id="td-admin-user"><s:iterator value="pub.adminUsers" id="u" status="upos"><s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/></s:iterator></p>
 							<p><s:submit theme="simple" name="op.eaudel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');"/></p>
 						</fieldset>
 						<div class="top-padding">
@@ -115,7 +115,7 @@
 						<h3>Curator Groups</h3>
 						<fieldset>
 							<legend>Drop Curator Group</legend>
-							<p><s:iterator value="pub.adminGroups" id="g" status="gpos"><s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/></s:iterator></p>
+							<p id="td-admin-group"><s:iterator value="pub.adminGroups" id="g" status="gpos"><s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/></s:iterator></p>
 							<p><s:submit theme="simple" name="op.eagdel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');"/></p>
 						</fieldset>
 						<div class="top-padding">
