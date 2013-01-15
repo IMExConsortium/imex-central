@@ -738,28 +738,24 @@ public class EntryManager {
 
 
     public IcPub addAdminGroup( Publication pub, User luser, Group agroup ) {
-        Log log = LogFactory.getLog( this.getClass() );
-        
-        //log.info( "pub=" + oldPub.getId() + " uid=" + duid);
+        int ImexPartnerID = 15;
         
         IcPub oldPub = (IcPub) tracContext.getPubDao()
             .getPublication( pub.getId() );
         Set<Group> testing =  pub.getAdminGroups();
-            
-        //log.info( "Set<group> of pub-get admin groups= " + testing.toString() + "\nthe number of groups present = " + testing.size() + "\nuser to add is " + agroup.getRoles() );
+        
+        Role role = userContext.getRoleDao().getRole( ImexPartnerID );     
        
-            
-        if ( oldPub != null ) {
-			
-			int ImexPartnerID = 15;
+        if ( oldPub != null ) 
+        {
 			boolean doAdd = true;
 			
-			if(isRoleIdInGroup(agroup,ImexPartnerID) )
+			if( agroup.getRoles().contains(role) )
 			{
 				Iterator groupIterator = testing.iterator();	
 				while(groupIterator.hasNext())
 				{
-					if(isRoleIdInGroup((Group) groupIterator.next(), ImexPartnerID))
+					if(((Group) groupIterator.next()).getRoles().contains(role))
 					{
 						doAdd = false;
 						break;
@@ -772,26 +768,12 @@ public class EntryManager {
 				tracContext.getPubDao().updatePublication( oldPub );
 			}
 			else
+			{
 				return null;
+			}
         }
-
         return oldPub;        
     }
-	public boolean isRoleIdInGroup(Group group, int roleId)
-	{
-		
-		Iterator roleIterator = group.getRoles().iterator();
-		while(roleIterator.hasNext())
-		{
-			Role role = (Role) roleIterator.next();
-			if(role.getId() == roleId)
-				return true;
-		}	
-		return false;
-			
-			//log.info( "Set<group> = " + grpItr.getRoles().getId() /*+ "agroup.toString()" + agroup.toString() + " roles "  + agroup.getRoles()  */);
-	
-	}
     //---------------------------------------------------------------------
     
     public IcPub delAdminUsers( Publication pub, User luser, 
