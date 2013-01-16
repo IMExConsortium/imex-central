@@ -580,6 +580,8 @@ public class IcentralPortImpl implements IcentralPort {
             if( usr != null ) {
                 IcPub icpub = entryManager.addAdminUser( icp, c.loggedUser(),
                                                          usr );
+                 if(icpub == null)
+					throw Fault.UNSUP;
                 return buildPub( icpub );
             } else {
                 throw Fault.USR_UNKNOWN;
