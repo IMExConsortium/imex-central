@@ -129,6 +129,7 @@
 				<!-- comments pane -->
 				<div id="cmt-pane" class="yui-hidden">
 					<s:form id="cmtmgr" theme="simple" action="attachmgr"><s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
+					<s:if test="#session['USER_ID'] > 0">
 						<fieldset>
 							<legend>
 								<h3>Add a Comment</h3>
@@ -141,23 +142,31 @@
 							<p><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></p>
 							<em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
 						</fieldset>
+						</s:if>
 						<h3>Comments</h3>
 						<div id="com-tbview"></div>
 					</s:form></div>
 				<!-- attachment pane -->
 				<div id="att-pane" class="yui-hidden">
-					<legend>
-						<h3>Add a File</h3>
-					</legend> <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
-						<fieldset>
-							<s:hidden name="id" value="%{id}"/><s:hidden name="opp.pubid" value="%{id}"/>
-							<p>File: <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
-							<p><strong>Name</strong> (<em>optional</em>): <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
-							<p><strong>Format:</strong> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
-							<strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/><s:submit theme="simple" name="op.eada" value="ADD" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
-						</fieldset>
-						<div id="adata-tbview"></div>
-					</s:form></div>
+					<s:if test="#session['USER_ID'] > 0">
+						<legend>
+							<h3>Add a File</h3>
+						</legend> <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
+							<fieldset>
+								<s:hidden name="id" value="%{id}"/><s:hidden name="opp.pubid" value="%{id}"/>
+								<p>File: <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
+								<p><strong>Name</strong> (<em>optional</em>): <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
+								<p><strong>Format:</strong> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
+								<strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/><s:submit theme="simple" name="op.eada" value="ADD" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
+							</fieldset>
+							<div id="adata-tbview"></div>
+						</s:form>
+					</s:if>	
+					<s:else>
+					<h3>Add a File</h3>					
+						<p>Please <a href="user">Log in</a> to add and view attachments</p>
+					</s:else>
+				</div>
 				<!-- log pane -->
 				<div id="log-pane" class="yui-hidden">
 					<s:form id="cmtmgr" theme="simple" action="attachmgr">
