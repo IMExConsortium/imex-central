@@ -1494,15 +1494,19 @@ a.disabled {
 
 /*Additions by zack*/
 .yui-nav {
-white-space: nowrap;
+  white-space: nowrap;
 } 
 .top-padding{
-padding-top: 10px;
+  padding-top: 10px;
 }
 #pubTab{
-max-width: 800px;
+  max-width: 800px;
 }
 #pubTab input[type="submit"] {
-margin:	0 35px 0 0;
-float: right;
+  margin:	0 35px 0 0;
+  float: right;
+}
+.limit-width
+{
+  max-width:615px;
 }
