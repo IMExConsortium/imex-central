@@ -84,7 +84,7 @@ YAHOO.mbi.modal = {
         };
 
         var attFail = function( o ){
-            alert(o);
+            consol.log(o);
         };
         
         var attCallback = { cache:false, timeout: 5000, 

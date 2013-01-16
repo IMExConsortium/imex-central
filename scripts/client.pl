@@ -7,7 +7,7 @@ use XML::XPath::XMLParser;
 my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
 my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws";
 my $URL = $URLTEST;
-my $PURL= "http://%USR%:%PASS%\@10.1.1.%%%:8080/icentral/ws";
+my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/icentral/ws";
 
 my $ip="";
 my $pmid="";

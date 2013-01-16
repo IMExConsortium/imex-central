@@ -738,18 +738,42 @@ public class EntryManager {
 
 
     public IcPub addAdminGroup( Publication pub, User luser, Group agroup ) {
+        int ImexPartnerID = 15;
         
         IcPub oldPub = (IcPub) tracContext.getPubDao()
             .getPublication( pub.getId() );
-
-        if ( oldPub != null ) {
-            oldPub.getAdminGroups().add( agroup );
-            tracContext.getPubDao().updatePublication( oldPub );
+        Set<Group> testing =  pub.getAdminGroups();
+        
+        Role role = userContext.getRoleDao().getRole( ImexPartnerID );     
+       
+        if ( oldPub != null ) 
+        {
+			boolean doAdd = true;
+			
+			if( agroup.getRoles().contains(role) )
+			{
+				Iterator groupIterator = testing.iterator();	
+				while(groupIterator.hasNext())
+				{
+					if(((Group) groupIterator.next()).getRoles().contains(role))
+					{
+						doAdd = false;
+						break;
+					}
+				}
+			}
+			if(doAdd)
+			{
+				oldPub.getAdminGroups().add( agroup );
+				tracContext.getPubDao().updatePublication( oldPub );
+			}
+			else
+			{
+				return null;
+			}
         }
-
         return oldPub;        
     }
-
     //---------------------------------------------------------------------
     
     public IcPub delAdminUsers( Publication pub, User luser, 

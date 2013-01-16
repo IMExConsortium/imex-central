@@ -1055,7 +1055,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             
             if( ! aclTargetValidate( oldPub ) ) return ACL_OPER;
 
-            entryManager.addAdminGroup( oldPub, user, agrp );
+            if(entryManager.addAdminGroup( oldPub, user, agrp ) == null)
+				return ACL_OPER;
             icpub = entryManager.getIcPub( id );
             setId( icpub.getId() );
             
