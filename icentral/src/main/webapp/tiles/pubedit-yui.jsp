@@ -80,7 +80,7 @@
 								<legend>
 									<h3>Authors/Title</h3>
 								</legend>
-								<p>Author(s) <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/></p>
+								<p>Author(s) <s:textfield theme="simple" name="pub.author" size="90" maxLength="512"/></p>
 								<p>Title <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/></p>
 								<p><s:submit theme="simple" name="op.eatu" value="UPDATE" disabled="false" onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/></p>
 							</fieldset>
@@ -136,52 +136,50 @@
 							</legend>
 							<p><strong>Subject:</strong> <s:textfield theme="simple" name="opp.encs" size="50" value=""/></p>
 							<%--  <p><strong>Format:</strong> --</p>%><%--  <p><s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> </p>--%>
-							<p><strong>Flag:</strong> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl'}" value="-1"/></p>
 							<p><strong>Body:</strong></p>
+							<p><strong>Flag:</strong> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl'}" value="-1"/></p>
 							<p><s:textarea theme="simple" name="opp.encb" cols="50" rows="5" value=""/></p>
 							<p><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></p>
 							<em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
 						</fieldset>
+						<h3>Comments</h3>
+						<div id="com-tbview"></div>
 						</s:if>
 						<s:else>
 							<h3>Add a Comment</h3>					
 							<p>Please <a href="user">Log in</a> to add a comment</p>
 						</s:else>
-						<h3>Comments</h3>
-						<div id="com-tbview"></div>
+
 					</s:form></div>
 				<!-- attachment pane -->
 				<div id="att-pane" class="yui-hidden">
-					<s:if test="#session['USER_ID'] > 0">
-						<legend>
-							<h3>Add a File</h3>
-						</legend> <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
+					<s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
+						 <s:form id="attmgr" theme="simple" action="attachmgr" method="post" enctype="multipart/form-data" onsubmit="return true;">
 							<fieldset>
+								<legend>
+									<h3>Add a File</h3>
+								</legend>
 								<s:hidden name="id" value="%{id}"/><s:hidden name="opp.pubid" value="%{id}"/>
-								<p>File: <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
-								<p><strong>Name</strong> (<em>optional</em>): <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
+								<p><strong>File:</strong> <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
+								<p><strong>Name:</strong> <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
 								<p><strong>Format:</strong> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
 								<strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/><s:submit theme="simple" name="op.eada" value="ADD" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
 							</fieldset>
+							<h3>Attachments</h3>
 							<div id="adata-tbview"></div>
 						</s:form>
 					</s:if>	
 					<s:else>
 					<h3>Add a File</h3>					
-						<p>Please <a href="user">Log in</a> to add and view attachments</p>
+						<p>If you are a Curator or are the owner of this Publication, Please <a href="user">Log in</a> to add and view attachments. Attachments are not public</p>
 					</s:else>
 				</div>
 				<!-- log pane -->
 				<div id="log-pane" class="yui-hidden">
 					<s:form id="cmtmgr" theme="simple" action="attachmgr">
-						<table width="100%" border="0">
+						<h3>Record History</h3>
 							<s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
-							<tr>
-								<td colspan="4">
-									<div id="history-tbview"></div>
-								</td>
-							</tr>
-						</table>
+							<div id="history-tbview"></div>
 					</s:form></div>
 			</div>
 		</div>
