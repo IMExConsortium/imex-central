@@ -143,6 +143,10 @@
 							<em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
 						</fieldset>
 						</s:if>
+						<s:else>
+							<h3>Add a Comment</h3>					
+							<p>Please <a href="user">Log in</a> to add a comment</p>
+						</s:else>
 						<h3>Comments</h3>
 						<div id="com-tbview"></div>
 					</s:form></div>
