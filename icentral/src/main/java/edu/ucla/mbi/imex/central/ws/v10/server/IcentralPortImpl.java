@@ -678,7 +678,6 @@ public class IcentralPortImpl implements IcentralPort {
             if( grp != null ) {
                 IcPub icpub = entryManager.addAdminGroup( icp, c.loggedUser(),
                                                           grp );
-                                                          log.info(icpub);
                  if(icpub == null)
 					throw Fault.INVALID_OP;
                 return buildPub( icpub );
