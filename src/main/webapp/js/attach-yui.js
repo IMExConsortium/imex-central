@@ -87,9 +87,9 @@ YAHOO.imex.attedit = {
           
             YAHOO.imex.attedit.conf[aclass].comColDef = [
                 //{key:"id", label:"ID"},
-                { key:"author",width:100,
+                { key:"author",/*width:100,*/
                   label:YAHOO.imex.attedit.conf[aclass].cname["author"] },
-                { key:"date", width:240, 
+                { key:"date", /*width:240,*/ 
                   label:YAHOO.imex.attedit.conf[aclass].cname["date"] },
             ];
             
@@ -97,7 +97,7 @@ YAHOO.imex.attedit = {
               
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"subject", width:500, formatter:"subject", 
+                        { key:"subject", /*width:500,*/ formatter:"subject", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["subject"] }
                     );
             }
@@ -106,7 +106,7 @@ YAHOO.imex.attedit = {
               
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"flagName", width:100, formatter:"flag", 
+                        { key:"flagName", /*width:100,*/ formatter:"flag", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["flagName"] }
                     );
                     YAHOO.imex.attedit.addTitleCount(messages.attach.length, 'Comments');
@@ -116,23 +116,23 @@ YAHOO.imex.attedit = {
                 
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"subject", width:500, formatter:"asubject", 
+                        { key:"subject", /*width:500,*/ formatter:"asubject", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["subject"] }
                     );
                 
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"bodyType", width:100, formatter:"btype", 
+                        { key:"bodyType", /*width:100,*/ formatter:"btype", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["bodyType"] }
                     );
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"flagName", width:100, formatter:"flag", 
+                        { key:"flagName", /*width:100,*/ formatter:"flag", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["flagName"] }
                     );
                 YAHOO.imex.attedit.conf[aclass]
                     .comColDef.push(
-                        { key:"aid", width:100, formatter:"dll", 
+                        { key:"aid", /*width:100,*/ formatter:"dll", 
                           label:YAHOO.imex.attedit.conf[aclass].cname["aid"] }
                     );
                     YAHOO.imex.attedit.addTitleCount(messages.attach.length, 'Attachments');
@@ -247,8 +247,10 @@ YAHOO.imex.attedit = {
 		for(var i = 0;i < tabs.length; i++)
 		{
 			currentLabel = tabs[i].get('label');
-			if(currentLabel == label)
+			if(currentLabel.indexOf(label) >= 0)
 			{
+				if(currentLabel.indexOf('(') > 0)
+					currentLabel = currentLabel.slice(0, currentLabel.indexOf('(') - 1);
 				tabs[i].set('label', currentLabel +' (' + count+ ')' );
 				return
 			}
@@ -263,15 +265,18 @@ YAHOO.imex.attedit = {
         var nameFld = YAHOO.util.Dom.get( o.nf );
         var fileFld = YAHOO.util.Dom.get( o.ff );
         //nothing in the name field
-        if( nameFld.value == null || nameFld.value == '' ){
-            nameFld.value = fileFld.files[0].name;
-        } 
-        //same value in the name field as what will be inserted
-        else if(fileFld.files[0].name == nameFld.value){}
-        //insert the file name
-        else {   
-            nameFld.value = nameFld.value + " (" + fileFld.files[0].name +")";
-        }
+        if(typeof fileFld.files[0] != "undefined")
+        {
+			if( nameFld.value == null || nameFld.value == '' ){
+				nameFld.value = fileFld.files[0].name;
+			} 
+			//same value in the name field as what will be inserted
+			else if(fileFld.files[0].name == nameFld.value){}
+			//insert the file name
+			else {   
+				nameFld.value = nameFld.value + " (" + fileFld.files[0].name +")";
+			}
+		}
     },
 
     pubPreview: function( aclass, op ){
@@ -395,17 +400,23 @@ YAHOO.imex.attedit = {
 		if(fileField.files[0].size + textField.value.length < 2095000 && fileField.files.length > 0)
 		{
 */
-		var btn = YAHOO.util.Dom.get('attmgr_op_eada');
-		var form = new FormData(formElement);
-		var xhr = new XMLHttpRequest();
-		form.append(btn.name, btn.value);
-		xhr.open("POST", "/icentral/attachmgr", false);
-		xhr.send(form);
-		formElement.reset();
-		if(xhr.status != 404)
-			YAHOO.imex.attedit.attachReload({'argument':'adata'});
-		else
-			alert('Error during file upload. Check if file is too large');
-
+		if(typeof fileField.files[0] != "undefined")
+		{
+			var btn = YAHOO.util.Dom.get('attmgr_op_eada');
+			var form = new FormData(formElement);
+			var xhr = new XMLHttpRequest();
+			form.append(btn.name, btn.value);
+			xhr.open("POST", "/icentral/attachmgr", false);
+			xhr.send(form);
+			formElement.reset();
+			if(xhr.status != 404)
+			{
+				var edit = YAHOO.imex.attedit
+				edit.attachReload({'argument':'adata'});
+				edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, 'Attachments')
+			}
+			else
+				alert('Error during file upload. Check if file is too large');
+		}
 	}
 };

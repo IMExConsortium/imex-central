@@ -580,6 +580,7 @@ public class IcentralPortImpl implements IcentralPort {
             if( usr != null ) {
                 IcPub icpub = entryManager.addAdminUser( icp, c.loggedUser(),
                                                          usr );
+                                                         
                 return buildPub( icpub );
             } else {
                 throw Fault.USR_UNKNOWN;
@@ -677,6 +678,8 @@ public class IcentralPortImpl implements IcentralPort {
             if( grp != null ) {
                 IcPub icpub = entryManager.addAdminGroup( icp, c.loggedUser(),
                                                           grp );
+                 if(icpub == null)
+					throw Fault.INVALID_OP;
                 return buildPub( icpub );
             } else {
                 throw Fault.GRP_UNKNOWN;

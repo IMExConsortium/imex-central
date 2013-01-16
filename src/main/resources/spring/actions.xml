@@ -65,9 +65,9 @@
   </bean>
 
   <bean id="reCaptcha" class="net.tanesha.recaptcha.ReCaptchaImpl">
-    <property name="privateKey" value="${recaptcha.privateKey}"/>
-    <property name="publicKey" value="${recaptcha.publicKey}"/>
-    <property name="recaptchaServer" value="${recaptcha.recaptchaServer}"/>
+    <property name="privateKey" value="${icentral.recaptcha.privateKey}"/>
+    <property name="publicKey" value="${icentral.recaptcha.publicKey}"/>
+    <property name="recaptchaServer" value="${icentral.recaptcha.recaptchaServer}"/>
     <property name="includeNoscript" value="false"/>
   </bean>
 
