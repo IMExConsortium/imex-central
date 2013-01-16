@@ -247,6 +247,15 @@
               </includes>
             </resource>
 
+            <resource>
+              <directory>${basedir}/src/main/resources/spring</directory>
+              <targetPath>WEB-INF/classes/spring</targetPath>
+              <filtering>true</filtering>
+              <includes>
+                <include>*.xml</include>
+              </includes>
+            </resource>
+
           </webResources>
         </configuration>
       </plugin>
