@@ -25,7 +25,7 @@ YAHOO.imex.pubmgr = {
 
         "pmid":{ key:"pmid", label:"PMID", menuLabel:"PMID", 
                  sortable:true, resizeable:true,  hideable: true,
-                 formatter:"center", className:"pmid" },
+                 formatter:"pmid", className:"pmid" },
 
         "imexId":{ key:"imexId", label:"<center>Imex<br/>Accession</center>", 
                    sortable:true, resizeable:true, hideable: true,
@@ -785,6 +785,13 @@ YAHOO.imex.pubmgr = {
             oRecord.getData("title") + '</td></tr></table>';        
     }, 
     
+    myPmidFormatter: function(elLiner, oRecord, oColumn, oData) {
+        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+        elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
+            oRecord.getData( "pmid" ) + 
+            '">'+ oRecord.getData( "pmid" ) +'</a>';
+    },
+    
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = '<a href="pubmgr?id=' + 
@@ -829,6 +836,7 @@ YAHOO.imex.pubmgr = {
         var YDTF = YAHOO.widget.DataTable.Formatter;
         YDTF.icid = this.myIcidFormatter;; 
         YDTF.publication = this.myPubFormatter; 
+        YDTF.pmid = this.myPmidFormatter;
         YDTF.elink = this.myElinkFormatter; 
         YDTF.crt = this.myDateFormatter; 
         YDTF.center = this.myCenterFormatter; 
