@@ -1491,6 +1491,31 @@ a.disabled {
   margin: 0 0 6px 0;
 }
 
+.pub-edit-head {
+
+    background-color: #efefef;
+    border: 1px solid #888888;
+    max-width: 800px;
+    margin: 1em 1em 1em 0;
+    padding: 0;
+}
+
+.pub-edit-head h2 {
+    margin: 0.5em 0 0;
+    padding: 0 0 0.2em 0.5em;
+}
+
+.pub-edit-head p{
+   padding: 0 0 0 1.5em;
+}
+
+.pub-edit-sect {
+    background-color: #efefef;
+    border: 1px solid #888888;
+    margin: 1em 0 1em 0;
+    padding: 0.3em;
+}
+
 
 /*Additions by zack*/
 .yui-nav {

@@ -10,10 +10,10 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2012 IMEx Consortium
+       Copyright 2008-2013 IMEx Consortium
       </td>
       <td width="5%" class="copyright3" align="center" nowrap>
-       <A HREF=".">Imex Central Site</A>.
+       <A HREF="http://www.imexconsortium.org">Imex Consortium</A>.
       </td>
      </tr>
     </table>
@@ -28,7 +28,8 @@
       </td>
       <td align="right" nowrap>
        <font size="-5">
-         <i>Code by:<A HREF="mailto:lukasz@mbi.ucla.edu">LS</A>.</i>
+         <i>Code by:<A HREF="mailto:lukasz@mbi.ucla.edu">LS</A>,
+                    <A HREF="mailto:zplat@mbi.ucla.edu">ZP</A>.</i>
          <i>Design by:<A HREF="mailto:rebecca@mbi.ucla.edu">RN</A>.</i>
        </font>
       </td>
