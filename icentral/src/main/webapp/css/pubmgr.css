@@ -1,12 +1,4 @@
-#pubtab table {
-   width: 100%;
-}
-
-#com-tbview table {
-   width: 100%;
-}
-
-#history-tbview table {
+#pubtab table, #com-tbview table, #history-tbview table, #adata-tbview table {
    width: 100%;
 }
 
