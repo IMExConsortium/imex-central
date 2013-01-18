@@ -30,6 +30,17 @@
       </roles>
       <timezone>-8</timezone>
     </developer>
+    <developer>
+      <id>zplat</id>
+      <name>Zachary Plat</name>
+      <url>http://dip.mbi.ucla.edu/dip/developers/wyu</url>
+      <organization>UCLA-DOE Institute for Genomics and Proteomics</organization>
+      <organizationUrl>http://www.ucla-doe.mbi.ucla.edu</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-8</timezone>
+    </developer>
   </developers>
 
   <modules>

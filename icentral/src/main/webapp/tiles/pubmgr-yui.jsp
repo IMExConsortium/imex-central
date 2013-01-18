@@ -1,14 +1,14 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <script src="js/util-yui.js" type="text/javascript"></script>
-<h1>Publication Manager</h1>
-
-
 
 <s:if test="id > 0">
  <script src="js/calendar-yui.js" type="text/javascript"></script>
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
  <script src="js/attach-yui.js" type="text/javascript"></script>
+
+  <h1>Publication Editor</h1>
+
  <t:insertDefinition name="pubedit"/>
   <script type="text/javascript">
     YAHOO.util.Event.addListener( 
@@ -65,7 +65,7 @@
 
   <!--    history   -->
 
-  
+  <h1>Publication Manager</h1>
 
   <s:if test="opp.ou.length() > 0 ">
     <h2 class="pubmgr">Records submitted by: <i><s:property value="opp.ou"/></i></h2>
