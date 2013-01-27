@@ -159,7 +159,27 @@
          {label:"Help",
           link:"page?id=help",
           "disabled":"false",
-          menu:[]
+          menu:[
+            {label:"User Signup",
+             link:"page?id=help-signup",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Curation Records",
+             link:"page?id=help-records",
+             "disabled":"true",
+             menu:[]
+            },
+            {label:"Curation Requests",
+             link:"page?id=help-register",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Data Submission",
+             link:"page?id=help-attach",
+             "disabled":"false",
+             menu:[]
+            }]
          },
          {label:"FAQ",
           link:"page?id=faq",

@@ -27,6 +27,7 @@ CREATE TABLE usr (
     act_key character varying(64) not null default '',
     act_flag boolean not null default false,
     enable_flag boolean not null default true,
+    prefs text not null default '',
     time_cr timestamp not null default now()
 );
 CREATE INDEX usr_idx1 ON usr (login);
@@ -262,4 +263,14 @@ CREATE TABLE attachment (
 CREATE INDEX att_1 on attachment (adi_id);
 CREATE INDEX att_2 on attachment (subject);
 CREATE INDEX att_3 on attachment (body);
+
+       
+CREATE TABLE sorel (
+    id serial NOT NULL,
+    subject_id integer not null default 0,
+    user_id integer not null default 0
+);
+
+CREATE INDEX sorel_1 on sorel (subject_id);
+CREATE INDEX sorel_2 on sorel (user_id);
 

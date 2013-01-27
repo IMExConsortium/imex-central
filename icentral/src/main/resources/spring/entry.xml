@@ -23,6 +23,8 @@
     <property name="icStatsDao" ref="icStatsDao"/>
     <property name="adiDao" ref="adiDao"/>
     <property name="workflowDao" ref="workflowDao"/>
+
+    <property name="obsMgrDao" ref="obsMgrDao"/>
     
     <property name="ncbiProxyClient" ref="ncbiProxyClient" />
 
@@ -34,6 +36,8 @@
   <bean id="pubDao" class="edu.ucla.mbi.imex.central.dao.IcPubDao"/>
   <bean id="icStatsDao" class="edu.ucla.mbi.imex.central.dao.IcStatsDao"/>
   <bean id="adiDao" class="edu.ucla.mbi.imex.central.dao.IcAdiDao"/>
+
+  <bean id="obsMgrDao" class="edu.ucla.mbi.imex.central.dao.IcObsMgrDao"/>
 
  <!-- actions -->
 
