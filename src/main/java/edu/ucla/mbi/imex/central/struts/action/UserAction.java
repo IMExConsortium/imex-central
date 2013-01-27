@@ -184,60 +184,86 @@ public class UserAction extends UserSupport {
         
 	int uid = (Integer) getSession().get( "USER_ID" );
         
-	if ( uid > 0 ){
+        if( uid <= 0) return HOME;
 
-            UserDao dao = getUserContext().getUserDao();
-            IcUser icUser = (IcUser) 
-		dao.getUser( (String) getSession().get( "LOGIN") );
-            if ( icUser != null ) {
-                log.debug( " icUser=" + icUser );
-		if ( uedit != null && uedit.equalsIgnoreCase( "save" ) ) {
+        UserDao dao = getUserContext().getUserDao();
+        IcUser icUser = (IcUser) 
+            dao.getUser( (String) getSession().get( "LOGIN") );
+        
+        if ( icUser != null ) {
 
-		    log.info( " edit: updating uid=" + uid );
-
-		    // incorporate form changes
-		    //-------------------------
-
-		    icUser.setFirstName( getUser().getFirstName() );
-		    icUser.setLastName( getUser().getLastName() );
-		    icUser.setAffiliation( getUser().getAffiliation() );
-		    icUser.setEmail( getUser().getEmail() );
- 
-		    if ( pass0 != null && icUser.testPassword( pass0 ) ) {
-			icUser.encryptPassword( pass1 );			
-		    }
-
-		    // store new settings
-		    //-------------------
-		    
-		    dao.updateUser( icUser );				    		    
-		}
+            log.debug( " icUser=" + icUser );
+            
+            // get preferences
+            //----------------
+            
+            if( getOp()!= null && getOp().equalsIgnoreCase( "getprefs" ) ){
+                setUser( new User() );
+                getUser().setPrefs( icUser.getPrefs() );
+                return JSON;
+            }
+            
+            // set preferences
+            //----------------
+            
+            if( getOp()!= null && getOp().equalsIgnoreCase( "setprefs" ) ){
+                log.info( " edit: setprefs" );
+                log.info( " edit:" + this.prefs );
                 
-		if ( uedit != null && uedit.equalsIgnoreCase( "reset" ) ) {
+                icUser.setPrefs( this.prefs );
+                
+                // store new settings
+                //-------------------
 
-		    log.debug( " edit: resetting uid=" + uid );
-		}
+                dao.updateUser( icUser );
 
-		if (getUser() == null ){
-		    setUser( new User() );
-		}
-                getUser().setLogin( (String) getSession().get( "LOGIN"));
-		getUser().setFirstName( icUser.getFirstName() );
-		getUser().setLastName( icUser.getLastName() );
-		getUser().setAffiliation( icUser.getAffiliation() );
-		getUser().setEmail( icUser.getEmail() );
+                setUser( new User() );
+                getUser().setPrefs( icUser.getPrefs() );
+                return JSON;
+            }
+            
+            if ( uedit != null && uedit.equalsIgnoreCase( "save" ) ) {
+                    
+                log.info( " edit: updating uid=" + uid );
 
-	    }
+                // incorporate form changes
+                //-------------------------
+                
+                icUser.setFirstName( getUser().getFirstName() );
+                icUser.setLastName( getUser().getLastName() );
+                icUser.setAffiliation( getUser().getAffiliation() );
+                icUser.setEmail( getUser().getEmail() );
+                
+                if ( pass0 != null && icUser.testPassword( pass0 ) ) {
+                    icUser.encryptPassword( pass1 );			
+                }
+                
+                // store new settings
+                //-------------------
+		
+                dao.updateUser( icUser );				    		    
+            }
+                
+            if ( uedit != null && uedit.equalsIgnoreCase( "reset" ) ) {
+                log.debug( " edit: resetting uid=" + uid );
+            }
+
+            if ( getUser() == null ){
+                setUser( new User() );
+            }
+            getUser().setLogin( (String) getSession().get( "LOGIN"));
+            getUser().setFirstName( icUser.getFirstName() );
+            getUser().setLastName( icUser.getLastName() );
+            getUser().setAffiliation( icUser.getAffiliation() );
+            getUser().setEmail( icUser.getEmail() );
+            
+        }
 	    
-	    setPass0("");
-	    setPass1("");
-	    setPass2("");
-
-	    return UEDIT;
-            //return HOME;
-	}
-
-	return HOME;
+        setPass0("");
+        setPass1("");
+        setPass2("");
+        
+        return UEDIT;        
     }
 
 
@@ -304,6 +330,8 @@ public class UserAction extends UserSupport {
                 getSession().put( "USER_GROUP", groups );
                 log.debug( " login: session set" );
 
+                if( rurl != null ) return REDIRECT;
+                
                 this.setMst("1:1");
 		return HOME;
 	    }
@@ -319,6 +347,9 @@ public class UserAction extends UserSupport {
 	}
 	log.info( " login: unknown user" );
 	addActionError( "User/Password not recognized." );
+
+        if( rurl != null ) return REDIRECT;
+        
 	return INPUT;
     }
 
@@ -335,6 +366,8 @@ public class UserAction extends UserSupport {
 	getSession().put( "USER_ROLE", null );
 	getSession().put( "LOGIN", "" );
 
+        if( rurl != null ) return REDIRECT;
+        
         this.setMst("1:1"); // NOTE: should be set in struts action conf
 	return HOME;
     }

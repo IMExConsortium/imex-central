@@ -5,7 +5,7 @@
     pages:{
       cover:{
         active:true,
-        title:"ImexCentral",
+        title:"Icentral",
         menudef:"0:0",
         menusel:"1",
         viewtype:"file-html",
@@ -13,7 +13,7 @@
       },
       test:{
         active:true,
-        title:"ImexCentral: Test Page",
+        title:"Icentral: Test Page",
         menusel:"1:1",
         urlindex:"pages/test-index.html",
         showindex:"true",
@@ -23,7 +23,7 @@
 
       browse:{
         active:true,
-        title:"ImexCentral: Browse",
+        title:"Icentral: Browse",
         menusel:"1:1",
         urlindex:"pages/test-index.html",
         showindex:"false",
@@ -32,7 +32,7 @@
       },
       index:{
         active:true,
-        title:"ImexCentral: Index",
+        title:"Icentral: Index",
         menusel:"1:1",
         urlindex:"",
         showindex:"false",
@@ -41,21 +41,21 @@
       },
       search:{
         active:true,
-        title:"ImexCentral: Search",
+        title:"Icentral: Search",
         menusel:"1:2",
         viewtype:"file-html",
         viewpath:"/pages/search.html"
       },
       pubadd:{
         active:true,
-        title:"ImexCentral: Add",
+        title:"Icentral: Add",
         menusel:"1:3",
         viewtype:"file-html",
         viewpath:"/pages/pubadd.html"
       },
       about:{
         active:true,
-        title:"About IMEx Central",
+        title:"About Icentral",
         menudef:"0:2",
         menusel:"5:0",
         viewtype:"file-html",
@@ -63,7 +63,7 @@
       },
       admin:{
         active:true,
-        title:"ImexCentral Site Administration",
+        title:"Icentral Site Administration",
         menudef:"0:2",
         menusel:"3",
         viewtype:"file-html",
@@ -71,7 +71,7 @@
       },
       usermgr:{
         active:true,
-        title:"ImexCentral: User Manager",
+        title:"Icentral: User Manager",
         menudef:"0:2:0",
         menusel:"3:1",
         viewtype:"file-html",
@@ -79,7 +79,7 @@
       },
       workflowmgr:{
         active:true,
-        title:"ImexCentral: Workflow Manager",
+        title:"Icentral: Workflow Manager",
         menudef:"0:2:1",
         menusel:"3:2",
         viewtype:"file-html",
@@ -87,7 +87,7 @@
       },
       databasemgr:{
         active:true,
-        title:"ImexCentral: Database Manager",
+        title:"Icentral: Database Manager",
         menudef:"0:2:2",
         menusel:"3:3",
         viewtype:"file-html",
@@ -95,7 +95,7 @@
       },
       accessmgr:{
         active:true,
-        title:"ImexCentral: Access Manager",
+        title:"Icentral: Access Manager",
         menusel:"3:4",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
@@ -110,20 +110,18 @@
       },
       preferences:{
         active:true,
-        title:"ImexCentral: Preferences",
+        title:"Icentral: Preferences",
         menusel:"4",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
       },
       dbsettings:{
         active:true,
-        title:"ImexCentral: Database Settings",
+        title:"Icentral: Database Settings",
         menusel:"4",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
       },
-
-
 
       data:{
         active:true,
@@ -236,17 +234,51 @@
         viewtype:"file-html",
         viewpath:"/pages/template.html"
       },
-      help:{
+      "help":{
         active:true,
-        title:"IMEx Central Help",
+        title:"Icentral Help",
         menudef:"0:2",
         menusel:"5:1",
         viewtype:"file-html",
         viewpath:"/pages/help.html"
       },
+
+      "help-signup":{
+        active:true,
+        title:"Icentral Help: Signing Up",
+        menudef:"0:2:0",
+        menusel:"5:1:1",
+        viewtype:"file-html",
+        viewpath:"/pages/help-signup.html"
+      },
+      "help-records":{
+        active:true,
+        title:"Icentral Help: Curation Records",
+        menudef:"0:2:0",
+        menusel:"5:1:2",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
+      "help-register":{
+        active:true,
+        title:"Icentral Help: Register",
+        menudef:"0:2:0",
+        menusel:"5:1:3",
+        viewtype:"file-html",
+        viewpath:"/pages/help-register.html"
+      },
+      "help-attach":{
+        active:true,
+        title:"Icentral Help: Attach",
+        menudef:"0:2:0",
+        menusel:"5:1:4",
+        viewtype:"file-html",
+        viewpath:"/pages/help-attach.html"
+      },
+      
       faq:{
         active:true,
-        title:"IMEx Central FAQ",
+        title:"Icentral FAQ",
         menudef:"0:2",
         menusel:"5:2",
         viewtype:"file-html",

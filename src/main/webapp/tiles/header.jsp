@@ -115,7 +115,7 @@
           <tr>
            <td align="right" nowrap>
              <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
-                 HREF="page?id=about">Help</a>
+                 HREF="page?id=help">Help</a>
             | <a class="midmenulink" onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'" 
                  HREF="feedback">Contact Us</a>
            </td>
