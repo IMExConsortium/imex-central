@@ -10,7 +10,7 @@
     the account.  Please, 
     <A HREF="mailto:dip@mbi.ucla.edu">contact us</A> if the
     activation key has not arrived within a few minutes after
-    account creation (did you check your spam mailbox ?)   
+    account creation (did you check your spam/junk folder ?)   
    </font>
   </td>
  </tr>
