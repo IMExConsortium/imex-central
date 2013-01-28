@@ -206,9 +206,7 @@ public class LogAdvice {
                                       ((IcComment)adi).getSubject() + ")",
                                       "" );                
             }
-            
-
-                
+                            
             if( ile != null ){
 
                 // log comments & attachments
