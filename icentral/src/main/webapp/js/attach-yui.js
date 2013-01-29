@@ -313,7 +313,7 @@ YAHOO.imex.attedit = {
                     + YAHOO.imex.pubedit.pubId 
                     + "&opp.encs=" + eSub 
                     + "&opp.encb=" + eBdy 
-                    + "&opp.encbt=WIKI" +  
+                    + "&opp.encbt=WIKI"  
                     + "&opp.encf=" + flg;
                 
                 YAHOO.util.Connect

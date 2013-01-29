@@ -17,5 +17,6 @@
    {name:"release",from:"INPROGRESS",to:"RELEASED",
     comments:""
    }
- ]
+ ],
+ "admin-role-unique":["IMEx partner"]
 }
