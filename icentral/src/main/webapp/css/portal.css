@@ -88,7 +88,7 @@ h2 {
   padding: 0px 0px 0px 0px;
 }
 
-.page {
+.content {
   padding: 0px 20px 0px 20px;
 }
 
@@ -1965,7 +1965,7 @@ a.graph {
   height: 1px;
   visibility: hidden;
 }
-.page table {
+.content table {
 	border: 1px lightGrey;
 	border-spacing: 0;
 }
