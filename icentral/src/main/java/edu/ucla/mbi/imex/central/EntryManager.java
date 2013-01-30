@@ -740,6 +740,18 @@ public class EntryManager {
     public IcPub addAdminGroup( Publication pub, User luser, Group agroup ) {
         int ImexPartnerID = 15;
         
+        Log log = LogFactory.getLog( this.getClass() );
+        /*
+        log.info( '\n' + 
+				wflowContext.getWorkflowDao().getDataStateList().toArray()[0].getComments()  + '\n'
+				wflowContext.getWorkflowDao().getDataStateList().toArray()[1].getId() + '\n'
+				wflowContext.getWorkflowDao().getDataStateList().toArray()[2].getName() + '\n'
+				wflowContext.getWorkflowDao().getDataStateList().toArray()[3]+ '\n'
+				 
+          );
+          */
+        log.info( /*(DataState)*/wflowContext.getWorkflowDao().getDataStateList().toArray());//[0]).getComments() );
+        
         IcPub oldPub = (IcPub) tracContext.getPubDao()
             .getPublication( pub.getId() );
         Set<Group> testing =  pub.getAdminGroups();

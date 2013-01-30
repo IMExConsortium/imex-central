@@ -142,7 +142,7 @@
                      <%--  <p><strong>Format:</strong> --</p>%><%--  <p><s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> </p>--%>
                      <p><strong>Body:</strong></p>
                      <p><s:textarea cssClass="limit-width" theme="simple" name="opp.encb" cols="50" rows="5" value=""/></p>
-                     <p><strong>Flag:</strong> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl'}" value="-1"/></p>
+                     <p><strong>Flag:</strong> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request'}" value="-1"/></p>
                      <p><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></p>
                      <em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
                   </fieldset>

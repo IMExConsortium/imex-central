@@ -20,8 +20,6 @@ import java.util.GregorianCalendar;
 import java.util.Calendar;
 import java.lang.reflect.*;
        
-import edu.ucla.mbi.util.*;
-//import edu.ucla.mbi.util.dao.*;
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
@@ -192,22 +190,43 @@ public class LogAdvice {
             
             String attName="";
             
+            IcLogEntry ile = null;
+
             if( adi instanceof IcAttachment){
-                attName = ((IcAttachment)adi).getSubject();
+                ile = new IcLogEntry( (User) luser, pub,
+                                      "Attachment added(ID#" + adi.getId() + 
+                                      ": " + 
+                                      ((IcAttachment)adi).getSubject() + ")", 
+                                      "" );                
             } 
-            if( adi instanceof IcComment ){  
-                attName = ((IcComment)adi).getSubject();
+            if( adi instanceof IcComment ){
+                ile = new IcLogEntry( (User) luser, pub,
+                                      "Comment added(ID#" + adi.getId() +
+                                      ": " +
+                                      ((IcComment)adi).getSubject() + ")",
+                                      "" );                
             }
-            
-            // log only attachments/comments
+                            
+            if( ile != null ){
+
+                // log comments & attachments
+
+                getAttachmentManager().getTracContext()
+                    .getAdiDao().saveAdi( ile );
                 
-            IcLogEntry ile 
-                = new IcLogEntry( (User) luser, pub,
-                                  "Attachment added(ID#" + adi.getId() 
-                                  + ": " + attName +")", "" );
-            
-            getAttachmentManager().getTracContext()
-                .getAdiDao().saveAdi( ile );
+
+                // get observers for <pub> publication
+                //------------------------------------
+                
+              
+                // trigger mail agent process
+                //---------------------------
+
+                
+                
+
+  
+            }
         }
     }
 }

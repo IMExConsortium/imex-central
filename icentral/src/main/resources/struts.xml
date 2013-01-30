@@ -172,12 +172,21 @@
      <result name="logf" type="tiles">login</result>
      <result name="regf" type="tiles">register</result>
      
+     <result name="redirect" type="redirect">${rurl}</result>
+
      <result name="json"  type="json">
+       <param name="ignoreHierarchy">false</param>
+ 
+      <param name="root">user</param>
        <param name="includeProperties">
-        jq.*,menu.*
+        prefs
        </param>
        <param name="noCache">true</param>
      </result>
+
+     <!-- jq.*,menu.*,user.* -->
+
+
     </action>
     
     <action name="register" class="userAction" >
