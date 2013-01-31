@@ -749,17 +749,21 @@ public class EntryManager {
         if ( oldPub != null ) 
         {
             Set<Group> adminGroups =  pub.getAdminGroups();
-            Role role = userContext.getRoleDao().getRole( uniqueRoles.iterator().next().toString() );     
             boolean doAdd = true;
-            if( agroup.getRoles().contains(role) )
+            Iterator uniqueRoleIterator = uniqueRoles.iterator();
+            while(uniqueRoleIterator.hasNext())
             {
-                Iterator groupIterator = adminGroups.iterator();    
-                while(groupIterator.hasNext())
+                Role role = userContext.getRoleDao().getRole( uniqueRoleIterator.next().toString() );     
+                if( agroup.getRoles().contains(role) )
                 {
-                    if(((Group) groupIterator.next()).getRoles().contains(role))
+                    Iterator groupIterator = adminGroups.iterator();    
+                    while(groupIterator.hasNext())
                     {
-                        doAdd = false;
-                        break;
+                        if(((Group) groupIterator.next()).getRoles().contains(role))
+                        {
+                            doAdd = false;
+                            break;
+                        }
                     }
                 }
             }
