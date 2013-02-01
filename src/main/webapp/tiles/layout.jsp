@@ -17,17 +17,17 @@
  <iframe id="yui-history-iframe" src="img/imex_central_logo_small.png"></iframe>
  <input id="yui-history-field" type="hidden">
 
-  <center>
+  <div id="page">
    <t:insertDefinition name="header"/>
-   <table width="95%" cellspacing="0" cellpadding="0">
+   <table class="center" width="95%" cellspacing="0" cellpadding="0">
     <tr>
-     <td class="page">
+     <td class="content">
        <t:insertAttribute name="body" />
      </td>
     </tr>
    </table>
    <t:insertDefinition name="footer" />
-  </center>
- </BODY>
-</HTML>
+  </page>
+ <body>
+</html>
 

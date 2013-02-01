@@ -786,19 +786,23 @@ YAHOO.imex.pubmgr = {
     }, 
     
     myPmidFormatter: function(elLiner, oRecord, oColumn, oData) {
-	var pmid = oRecord.getData("pmid");
-	YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-	if(pmid.length > 0){
-	    if(typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
-		elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
-		    oRecord.getData( "pmid" ) + 
-		    '">'+ oRecord.getData( "pmid" ) +'</a>';
-	    }else{
-		elLiner.innerHTML = pmid;
-            }
-	}else{
-            elLiner.innerHTML = 'N/A';
-        }
+		var pmid = oRecord.getData("pmid");
+		YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+		
+		if(pmid.length > 0)
+		{
+			if(typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" )
+			{
+				
+				elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
+					oRecord.getData( "pmid" ) + 
+					'">'+ oRecord.getData( "pmid" ) +'</a>';
+			}
+			else
+				elLiner.innerHTML = pmid;
+		}
+		else
+			elLiner.innerHTML = 'N/A';
     },
     
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
