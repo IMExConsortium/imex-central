@@ -3,13 +3,10 @@
 
 <script src="js/pubnew-yui.js" type="text/javascript"></script>
 
-<table width="100%">
- <tr>
-  <td align="left">
-   <br/>
-   <table width="66%" cellspacing="1" cellpadding="3">
-    <s:if test="hasActionErrors()">
-     <tr><td>  
+<div width="100%">
+<h1>Add a Publication</h1>
+   <div>
+    <s:if test="hasActionErrors()">    
       <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
        <span class="error">
         <s:iterator value="actionErrors">
@@ -17,103 +14,47 @@
         </s:iterator>
        </span>
       </div>
-     </td></tr>
+     
     </s:if>
-   </table>  
-  </td>
- </tr>
-<s:if test="pub == null or pub.pmid == null or pub.pmid.length() == 0" >
- <tr>
-  <td>
-   <table width="100%" border="1">
-    <s:form theme="simple" action="pubedit">
-     <s:hidden name="id" value="%{id}"/>
-     <s:hidden name="pub.id" value="%{id}"/>
-     <tr>
-      <td>&nbsp;</td>
-      <th width="5%">
-       <s:submit theme="simple" name="op.eadd" value="ADD"/>
-      </th>
-     </tr>
-     <tr>
-      <td colspan="1">
-       <table width="100%" border="1">
-        <tr>
-         <th align="right" nowrap>Author(s)</th>
-         <td width="90%">
-           <s:textfield theme="simple" name="pub.author" size="90" maxLength="128"/>
-         </td>
-        </tr>
-        <tr>
-         <th align="right" nowrap>Title</th>
-         <td>
-          <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>
-         </td>
-        </tr>
-       </table>
-      </td>
-      <td>&nbsp;</td>
-     </tr>
+   </div>  
+ <s:if test="pub == null or pub.pmid == null or pub.pmid.length() == 0" >  
+
+    <s:form theme="simple" action="pubedit" cssClass="stylized">
+    
+    <s:hidden name="id" value="%{id}"/>
+    <s:hidden name="pub.id" value="%{id}"/>
+    
+    <label>Author(s):</label>
+      <s:textfield theme="simple" name="pub.author" size="90" maxLength="256"/>                         
+    <label>Title:</label>
+      <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>                 
+      <button name="op.eadd" value="ADD">Add</button>
+
+
     </s:form>
-   </table>
-  </td>
- </tr>
+
+  
+ 
 </s:if>
 <s:else>
- <tr>
-  <td>
-   <table width="100%" border="1">
-    <s:form theme="simple" action="pubedit"> 
+    <s:form theme="simple" cssClass="stylized" action="pubedit"> 
+
      <s:hidden name="id" value="%{id}"/>
      <s:hidden name="pub.id" value="%{id}"/>
-     <tr>
-      <th width="5%" nowrap>
-        PMID: <s:textfield theme="simple" name="pub.pmid" size="12" maxLength="12"/>
-      </th>
-      <td align="left" width="85%" nowrap>
-       &nbsp;             
-      </td> 
-      <th width="5%">
-       <s:submit theme="simple" name="op.esrc" value="SEARCH"/>
-      </th>
-      <th width="5%">
-       <s:submit theme="simple" name="op.eadd" value="ADD"/>
-      </th>
-     </tr>
-     <tr>
-      <td colspan="3">
-       <table width="100%" border="1">
-        <tr>
-         <th align="right" width="10%" nowrap>Journal</th>
-         <td width="90%" nowrap>
-          <s:property value="pub.source.title" />             
-         </td>
-        </tr>
-        <tr>
-         <th align="right" nowrap>Author(s)</th>
-         <td width="90%">
-           <s:property value="pub.author"/>
-         </td>
-        </tr>
-        <tr>
-         <th align="right" nowrap>Title</th>
-         <td>
-          <s:property value="pub.title"/>
-         </td>
-        </tr>
-        <tr>
-         <th align="right" nowrap>Abstract</th>
-         <td width="90%">
-          <s:property value="%{pub.abstract}"/>
-         </td>
-        </tr> 
-       </table>
-      </td>
-      <td>&nbsp;</td> 
-     </tr>
+     <label>PMID:</label>
+     <div><s:property  value="pub.pmid" /> </div>
+     <label>Journal:</label>
+     <div><s:property value="pub.source.title" /></div>
+          
+     <label>Author(s):</label>
+     <div><s:property value="pub.author"/></div>
+     
+     <label>Title:</label>
+     <div><s:property value="pub.title"/></div>
+     
+     <label>Abstract:</label>
+     <div><s:property value="%{pub.abstract}"/></div>
+     <button name="op.eadd" value="ADD">Add</button>
     </s:form>
-   </table>
-  </td>
- </tr>
 </s:else>
-</table>
+</div>

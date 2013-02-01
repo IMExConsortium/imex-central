@@ -28,8 +28,8 @@ import edu.ucla.mbi.imex.central.dao.*;
 public class EntryManager {
     
     public EntryManager() {
-	Log log = LogFactory.getLog( this.getClass() );
-	log.info( "EntryManager: creating manager" );
+    Log log = LogFactory.getLog( this.getClass() );
+    log.info( "EntryManager: creating manager" );
     }
 
     //---------------------------------------------------------------------
@@ -738,39 +738,44 @@ public class EntryManager {
 
 
     public IcPub addAdminGroup( Publication pub, User luser, Group agroup ) {
-        int ImexPartnerID = 15;
+       
         
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        List uniqueRoles = (List) wflowContext.getJsonConfig().get( "admin-role-unique" ); 
+     
         IcPub oldPub = (IcPub) tracContext.getPubDao()
             .getPublication( pub.getId() );
-        Set<Group> testing =  pub.getAdminGroups();
-        
-        Role role = userContext.getRoleDao().getRole( ImexPartnerID );     
-       
         if ( oldPub != null ) 
         {
-			boolean doAdd = true;
-			
-			if( agroup.getRoles().contains(role) )
-			{
-				Iterator groupIterator = testing.iterator();	
-				while(groupIterator.hasNext())
-				{
-					if(((Group) groupIterator.next()).getRoles().contains(role))
-					{
-						doAdd = false;
-						break;
-					}
-				}
-			}
-			if(doAdd)
-			{
-				oldPub.getAdminGroups().add( agroup );
-				tracContext.getPubDao().updatePublication( oldPub );
-			}
-			else
-			{
-				return null;
-			}
+            Set<Group> adminGroups =  pub.getAdminGroups();
+            boolean doAdd = true;
+            Iterator uniqueRoleIterator = uniqueRoles.iterator();
+            while(uniqueRoleIterator.hasNext())
+            {
+                Role role = userContext.getRoleDao().getRole( uniqueRoleIterator.next().toString() );     
+                if( agroup.getRoles().contains(role) )
+                {
+                    Iterator groupIterator = adminGroups.iterator();    
+                    while(groupIterator.hasNext())
+                    {
+                        if(((Group) groupIterator.next()).getRoles().contains(role))
+                        {
+                            doAdd = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(doAdd)
+            {
+                oldPub.getAdminGroups().add( agroup );
+                tracContext.getPubDao().updatePublication( oldPub );
+            }
+            else
+            {
+                return null;
+            }
         }
         return oldPub;        
     }
