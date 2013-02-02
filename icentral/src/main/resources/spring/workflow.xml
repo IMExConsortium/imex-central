@@ -15,11 +15,8 @@
 
   <!-- workflow content -->
  
-<!-- init-method="initialize"-->
-
-  <bean id="workflowContext" 
-          class="edu.ucla.mbi.util.context.WorkflowContext"
-          init-method="initialize">
+  <bean id="workflowContext"   init-method="initialize"
+          class="edu.ucla.mbi.util.context.WorkflowContext">
      <property name="config">
       <map>
         <entry key="json-source">
