@@ -146,7 +146,10 @@
                      <p><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></p>
                      <em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
                   </fieldset>
+                  </s:if>
+                  </s:form>
                   <h3 class="pub-edit-sect">Comments</h3>
+                  <s:if test="#session['USER_ID'] > 0">
                   <div id="com-tbview"></div>
                   </s:if>
                   <s:else>
@@ -154,7 +157,7 @@
                      <p>Please <a href="user">Log in</a> to add a comment.</p>
                   </s:else>
 
-               </s:form></div>
+               </div>
             <!-- attachment pane -->
             <div id="att-pane" class="yui-hidden">
                <s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
