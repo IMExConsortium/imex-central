@@ -118,8 +118,8 @@ $Id$
   - GUI updates:
      - overhaul of new record page and record editor layout
      - record editor: 
-          - data attachment tab implemented
-     - CSS cleanup     
+          - implemented functionality of the data attachment tab
+     - CSS cleanup 
 
   - help pages added
 
