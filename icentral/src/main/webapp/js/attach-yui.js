@@ -411,54 +411,54 @@ YAHOO.imex.attedit = {
 		{
 			* 
 */
-		var attachmentSuccess = function(o) 
-		{
-			var edit = YAHOO.imex.attedit;
-			edit.attachReload({'argument':'adata'});
-			edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, 'Attachments');
-			formElement.reset();
-		};
-		var attachmentFailure = function(o) 
-		{
-			alert('Error during file upload. Check if file is too large');
-			formElement.reset();
-		};
-		 
-		var callback = {
-		  success:attachmentSuccess,
-		  failure:attachmentFailure
-		};
-		
-		if(typeof fileField.files[0] != "undefined")
-		{
-			var btn = YAHOO.util.Dom.get('attmgr_op_eada');
-			var form = document.getElementById('attmgr');
-			//var form = new FormData(formElement);
-			//var xhr = new XMLHttpRequest();
-			
-			//form.append(btn.name, btn.value);
-			YAHOO.util.Connect.setForm(form, true);
-			var sendForm = YAHOO.util.Connect.asyncRequest('POST', 'attachmgr', callback);
-			//xhr.open("POST", "attachmgr", false);
-			//xhr.send(form);
-			/*
-			if(xhr.status != 404)
-			{
-				var edit = YAHOO.imex.attedit;
-				edit.attachReload({'argument':'adata'});
-				edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, 'Attachments');
-			}
-			else
-				alert('Error during file upload. Check if file is too large');
-				*/
-		}
-		
-		
-
-		
-		
-		
-		
-		
-	}
+        var attachmentSuccess = function(o) 
+        {
+            var edit = YAHOO.imex.attedit;
+            edit.attachReload({'argument':'adata'});
+            edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf['adata'].apane).id);
+            formElement.reset();
+        };
+        var uploadSuccess = function(o) 
+        {
+            var edit = YAHOO.imex.attedit;
+            edit.attachReload({'argument':'adata'});
+            edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf['adata'].apane).id);
+            formElement.reset();
+        };
+        var attachmentFailure = function(o) 
+        {
+            alert('Error during file upload. Check if file is too large');
+            formElement.reset();
+        };
+         
+        var callback = {
+          success:attachmentSuccess,
+          failure:attachmentFailure,
+          upload:uploadSuccess
+        };
+        
+        if(typeof fileField.files[0] != "undefined")
+        {
+            var btn = YAHOO.util.Dom.get('attmgr_op_eada');
+            var form = document.getElementById('attmgr');
+            //var form = new FormData(formElement);
+            //var xhr = new XMLHttpRequest();
+            
+            //form.append(btn.name, btn.value);
+            YAHOO.util.Connect.setForm(form, true);
+            var sendForm = YAHOO.util.Connect.asyncRequest('POST', 'attachmgr', callback);
+            //xhr.open("POST", "attachmgr", false);
+            //xhr.send(form);
+            /*
+            if(xhr.status != 404)
+            {
+                var edit = YAHOO.imex.attedit;
+                edit.attachReload({'argument':'adata'});
+                edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, 'Attachments');
+            }
+            else
+                alert('Error during file upload. Check if file is too large');
+                */
+        }
+    }
 };
