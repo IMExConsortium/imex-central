@@ -19,7 +19,7 @@
 
   <div id="page">
    <t:insertDefinition name="header"/>
-   <table class="center" width="95%" cellspacing="0" cellpadding="0">
+   <table class='center' width="95%" cellspacing="0" cellpadding="0">
     <tr>
      <td class="content">
        <t:insertAttribute name="body" />

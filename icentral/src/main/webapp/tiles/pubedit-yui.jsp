@@ -146,15 +146,18 @@
                      <p><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></p>
                      <em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
                   </fieldset>
-                  <h3 class="pub-edit-sect">Comments</h3>
-                  <div id="com-tbview"></div>
+                  </s:if>
+                  </s:form>
+                  <s:if test="#session['USER_ID'] > 0">
+                     <h3 class="pub-edit-sect">Comments</h3>
+                     <div id="com-tbview"></div>
                   </s:if>
                   <s:else>
                      <h3 class="pub-edit-sect">Add a Comment</h3>               
                      <p>Please <a href="user">Log in</a> to add a comment.</p>
                   </s:else>
 
-               </s:form></div>
+               </div>
             <!-- attachment pane -->
             <div id="att-pane" class="yui-hidden">
                <s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
@@ -164,14 +167,19 @@
                            <h3>Add a File</h3>
                         </legend>
                         <s:hidden name="id" value="%{id}"/><s:hidden name="opp.pubid" value="%{id}"/>
+                        
                         <p><strong>File:</strong> <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
                         <p><strong>Name:</strong> <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
                         <p><strong>Format:</strong> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
-                        <strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/><s:submit theme="simple" name="op.eada" value="ADD" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
+                        <strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/>
+                        <s:hidden name="op.eada" value="ADD"/>
+                        <s:submit theme="simple" name="op.xxx" value="ADD" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
                      </fieldset>
+                  </s:form>
+               </s:if> 
+               <s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
                      <h3 class="pub-edit-sect">Attachments</h3>
                      <div id="adata-tbview"></div>
-                  </s:form>
                </s:if>   
                <s:else>
                <h3 class="pub-edit-sect">Add a File</h3>               

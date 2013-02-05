@@ -552,10 +552,20 @@ YAHOO.imex.pubedit = {
 
     adminUpdate: function( o ) {
 
+//var start = o.responseText.indexOf("<center>");
+//var end = o.responseText.indexOf("</center>") + "</center>".length;
+//var inject = o.responseText.slice(start, end )
         try {
             var acl = /ACL Violation/; 
             if( acl.test( o.responseText ) ) {
-                YAHOO.mbi.modal.spcstat("ACL Violation");
+				var aclViolation = {}
+				aclViolation.title = "ACL Violation";
+				
+				var start = o.responseText.indexOf("<center>");
+				var end = o.responseText.indexOf("</center>") + "</center>".length;
+				var inject = o.responseText.slice(start, end );
+				aclViolation.body = inject;
+                YAHOO.mbi.modal.spcstat( aclViolation );
             } else {
                 
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
