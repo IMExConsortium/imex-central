@@ -380,7 +380,7 @@ YAHOO.imex.attedit = {
         var rid = o.rid;
         
         var dropCallback = { cache:false, timeout: 5000, 
-                             success: YAHOO.imex.attedit.attachReload,
+                             success: YAHOO.imex.attedit.attachDropSuccess,
                              failure: YAHOO.imex.attedit.attachDropFail,
                              argument: "adata" };   
         try{            
@@ -397,6 +397,13 @@ YAHOO.imex.attedit = {
     attachDropFail: function( o ){
       alert(o);      },
 
+    attachDropSuccess: function( o ) {
+        var aclass = o.argument;
+        var edit = YAHOO.imex.attedit;
+            edit.attachReload({'argument':'adata'});
+            edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() -1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf['adata'].apane).id);
+        YAHOO.imex.attedit.conf[aclass].comTable.load(); 
+    },
     attachReload: function( o ) {
         var aclass = o.argument;
         YAHOO.imex.attedit.conf[aclass].comTable.load(); 
