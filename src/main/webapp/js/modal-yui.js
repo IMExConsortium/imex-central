@@ -22,8 +22,8 @@ YAHOO.mbi.modal = {
     },
 
     spcstat: function( arg ) {
-        var ttl = 'Details: '+ arg;
-        YAHOO.mbi.modal.show({ mtitle:ttl });            
+        var title = 'Details: '+ arg.title;
+        YAHOO.mbi.modal.show({ mtitle:title, body:arg.body });            
     },
 
     graph: function( arg ) {
