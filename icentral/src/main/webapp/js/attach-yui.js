@@ -349,12 +349,16 @@ YAHOO.imex.attedit = {
 
     attachUpdate: function( o ) {
         try{
+            var edit = YAHOO.imex.attedit;
+            var aclass = o.argument.aclass;
+            var dtb = edit.conf[o.argument.aclass].comTable;
             
-            var dtb = YAHOO.imex.attedit.conf[o.argument.aclass].comTable;
             dtb.getDataSource().sendRequest( 
                 '',
                 { success: dtb.onDataReturnInitializeTable,
                   scope: dtb });
+            edit.attachReload({'argument':aclass});
+            edit.addTitleCount(edit.conf[aclass].comTable.getRecordSet().getLength() + 1, YAHOO.util.Dom.get( edit.conf[aclass].apane).id);
         }catch(ex){
             alert( "AJAX Error: " + ex );
         }
@@ -400,9 +404,8 @@ YAHOO.imex.attedit = {
     attachDropSuccess: function( o ) {
         var aclass = o.argument;
         var edit = YAHOO.imex.attedit;
-            edit.attachReload({'argument':'adata'});
-            edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() -1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf['adata'].apane).id);
-        YAHOO.imex.attedit.conf[aclass].comTable.load(); 
+            edit.attachReload({'argument':aclass});
+            edit.addTitleCount(edit.conf[aclass].comTable.getRecordSet().getLength() -1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf[aclass].apane).id);
     },
     attachReload: function( o ) {
         var aclass = o.argument;
@@ -421,15 +424,15 @@ YAHOO.imex.attedit = {
         var attachmentSuccess = function(o) 
         {
             var edit = YAHOO.imex.attedit;
-            edit.attachReload({'argument':'adata'});
             edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf['adata'].apane).id);
+            edit.attachReload({'argument':'adata'});
             formElement.reset();
         };
         var uploadSuccess = function(o) 
         {
             var edit = YAHOO.imex.attedit;
-            edit.attachReload({'argument':'adata'});
             edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, YAHOO.util.Dom.get( YAHOO.imex.attedit.conf['adata'].apane).id);
+            edit.attachReload({'argument':'adata'});
             formElement.reset();
         };
         var attachmentFailure = function(o) 
@@ -447,12 +450,11 @@ YAHOO.imex.attedit = {
         if(typeof fileField.files[0] != "undefined")
         {
             var btn = YAHOO.util.Dom.get('attmgr_op_eada');
-            var form = document.getElementById('attmgr');
             //var form = new FormData(formElement);
             //var xhr = new XMLHttpRequest();
             
             //form.append(btn.name, btn.value);
-            YAHOO.util.Connect.setForm(form, true);
+            YAHOO.util.Connect.setForm(formElement, true);
             var sendForm = YAHOO.util.Connect.asyncRequest('POST', 'attachmgr', callback);
             //xhr.open("POST", "attachmgr", false);
             //xhr.send(form);
