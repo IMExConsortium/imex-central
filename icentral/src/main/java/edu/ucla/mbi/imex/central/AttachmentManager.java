@@ -162,17 +162,26 @@ public class AttachmentManager {
         return adi;
     }
 
-    public void dropIcAdi( int aid, User owner ) {
+    //--------------------------------------------------------------------------
+    
+    public AttachedDataItem dropIcAdi( int aid, User owner ) {
         
         Log log = LogFactory.getLog( this.getClass() );
+        log.info("dropIcAdi called: aid=" + aid + " usr=" + owner );
         
         if ( owner == null) {
             log.info( " missing user info");
-            return;
+            return null;
         }
         
         IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
-        adiDao.deleteAdi( aid );
+
+        AttachedDataItem adi = (AttachedDataItem) adiDao.getAdi( aid );
+
+        if( adi != null ){
+            adiDao.deleteAdi( aid );
+        }
+        return adi;
     }
     
 }

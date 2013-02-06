@@ -229,4 +229,60 @@ public class LogAdvice {
             }
         }
     }
+
+    public void delAttMonitor( int aid,  Object luser, Object ratt ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "LogManager: attachment monitor called:"
+                   + " ratt=" + ratt + " luser=" + luser );
+        
+        /*
+        if( 1 == 1 ){  // from LogContext configureation file
+            
+            if( att == null || ! (att instanceof AttachedDataItem) ) return;
+
+            AttachedDataItem adi = (AttachedDataItem) att;
+            IcPub pub = (IcPub) adi.getRoot();
+            
+            String attName="";
+            
+            IcLogEntry ile = null;
+
+            if( adi instanceof IcAttachment){
+                ile = new IcLogEntry( (User) luser, pub,
+                                      "Attachment added(ID#" + adi.getId() + 
+                                      ": " + 
+                                      ((IcAttachment)adi).getSubject() + ")", 
+                                      "" );                
+            } 
+            if( adi instanceof IcComment ){
+                ile = new IcLogEntry( (User) luser, pub,
+                                      "Comment added(ID#" + adi.getId() +
+                                      ": " +
+                                      ((IcComment)adi).getSubject() + ")",
+                                      "" );                
+            }
+                            
+            if( ile != null ){
+
+                // log comments & attachments
+
+                getAttachmentManager().getTracContext()
+                    .getAdiDao().saveAdi( ile );
+                
+
+                // get observers for <pub> publication
+                //------------------------------------
+                
+              
+                // trigger mail agent process
+                //---------------------------
+
+                
+                
+
+  
+            }
+        */
+    }
+    
 }

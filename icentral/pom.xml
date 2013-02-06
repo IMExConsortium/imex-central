@@ -16,7 +16,7 @@
 
     <icentral.css>icentral-test.css</icentral.css>
 
-   <!-- foo.org: global key -->
+   <!-- foo.org: global key  -->
     <icentral.recaptcha.publicKey>****</icentral.recaptcha.publicKey>
     <icentral.recaptcha.privateKey>****</icentral.recaptcha.privateKey>
     <icentral.recaptcha.recaptchaServer>****</icentral.recaptcha.recaptchaServer>

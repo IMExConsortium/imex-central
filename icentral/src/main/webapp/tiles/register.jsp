@@ -22,7 +22,7 @@
    <table width="98%" class="form_descr">
     <tr>
      <td align="left">
-       In orer to gain full access to ImexCentral you must register.
+       In order to gain full access to ImexCentral you must register.
      </td>
     </tr>
    </table>

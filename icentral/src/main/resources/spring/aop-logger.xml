@@ -89,7 +89,16 @@
         pointcut="execution(* edu.ucla.mbi.imex.central.AttachmentManager.addIcAdi(..))
                   and args( att, luser)"
         method="addAttMonitor" />    
+
+      <aop:after-returning returning="ratt"
+        pointcut="execution(* edu.ucla.mbi.imex.central.AttachmentManager.dropIcAdi(..))
+                  and args( aid, luser)"
+        method="delAttMonitor" />    
       
+      <aop:after-returning
+        pointcut="execution(* edu.ucla.mbi.imex.central.dao.IcUserDao.saveUser(..))"
+        method="simpleMonitor" />
+
     </aop:aspect>
   </aop:config>
 
