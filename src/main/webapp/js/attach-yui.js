@@ -385,7 +385,7 @@ YAHOO.imex.attedit = {
         
         var dropCallback = { cache:false, timeout: 5000, 
                              success: YAHOO.imex.attedit.attachDropSuccess,
-                             failure: YAHOO.imex.attedit.attachDropFail,
+                             failure: YAHOO.imex.attedit.attachDropSuccess,
                              argument: "adata" };   
         try{            
             var url = 'attachmgr?op.edda=edda&id=' + rid 
