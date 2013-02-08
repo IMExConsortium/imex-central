@@ -3,7 +3,7 @@
 <div width="100%" class="yui-skin-sam">
    <div class="pub-edit-head">
    <h2>IC-<s:property value="pub.id"/>-PUB</h2>
-   <p><em><s:if test="pub.title.length()>78"><s:property value="pub.title.substring(0,75)"/>... </s:if><s:else><s:property value="pub.title"/></s:else></em></p>
+   <p id="pub_ttl"><em><s:if test="pub.title.length()>78"><s:property value="pub.title.substring(0,75)"/>... </s:if><s:else><s:property value="pub.title"/></s:else></em></p>
    </div>
    <div class="yui-skin-sam">
       <div id="pubTab" class="yui-navset">

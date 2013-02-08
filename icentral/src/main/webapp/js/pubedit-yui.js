@@ -295,7 +295,7 @@ YAHOO.imex.pubedit = {
 
                 YAHOO.util.Dom.get("pub-det-edit_pub_author").value = auth;
                 YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;                
-                YAHOO.util.Dom.get("pub_ttl").innerHTML = "<b><i>"+ttl+"</i></b>";
+                YAHOO.util.Dom.get("pub_ttl").innerHTML = "<em>"+ttl+"</em>";
                
             }
         } catch(x) {
