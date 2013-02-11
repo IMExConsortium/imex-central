@@ -25,9 +25,10 @@ import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
+import edu.ucla.mbi.imex.central.dao.*;
 
 public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
-    
+
     public List<User> getObserverList( DataItem subject ){
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -97,10 +98,19 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
     }
 
     public void addSORel( DataItem subject, User observer ){
-        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info('\n' + "got to addSORel with subject = " + subject + " and  observer = " + observer);
+        SORel newRelationship = new SORel( subject, observer);
+        log.info(newRelationship);
+        super.saveOrUpdate(newRelationship);
     }
 
     public void dropSORel( DataItem subject, User observer ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info('\n' + "got to dropSOrel with subject = " + subject + " and  observer = " + observer);
+        SORel dropRelationship = new SORel( subject, observer);
+        log.info(dropRelationship);
+        super.delete(dropRelationship);
 
     }
 

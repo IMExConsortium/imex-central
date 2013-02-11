@@ -22,6 +22,7 @@ import java.lang.reflect.*;
        
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
+import edu.ucla.mbi.imex.central.dao.*;
 
 public class LogAdvice {
 
@@ -215,10 +216,14 @@ public class LogAdvice {
                     .getAdiDao().saveAdi( ile );
                 
 
-                // get observers for <pub> publication
+                // get observers forf <pub> publication
                 //------------------------------------
-                
-              
+                ObsMgrDao testing = getAttachmentManager().getTracContext().getObsMgrDao();
+                List UsersWatchList = testing.getSubjectList((User)luser);
+                if(UsersWatchList.contains(pub) == false)
+                {
+                	testing.addSORel(pub, (User) luser);
+                }
                 // trigger mail agent process
                 //---------------------------
 
