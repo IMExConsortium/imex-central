@@ -1,7 +1,7 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.pubedit = {
-	
+
     pubId: 0,
     stateButton: null,
     init: function( e, obj ) {
@@ -558,13 +558,13 @@ YAHOO.imex.pubedit = {
         try {
             var acl = /ACL Violation/; 
             if( acl.test( o.responseText ) ) {
-				var aclViolation = {}
-				aclViolation.title = "ACL Violation";
-				
-				var start = o.responseText.indexOf("<center>");
-				var end = o.responseText.indexOf("</center>") + "</center>".length;
-				var inject = o.responseText.slice(start, end );
-				aclViolation.body = inject;
+                var aclViolation = {}
+                aclViolation.title = "ACL Violation";
+                
+                var start = o.responseText.indexOf("<center>");
+                var end = o.responseText.indexOf("</center>") + "</center>".length;
+                var inject = o.responseText.slice(start, end );
+                aclViolation.body = inject;
                 YAHOO.mbi.modal.spcstat( aclViolation );
             } else {
                 

@@ -207,9 +207,7 @@ public class LogAdvice {
                                       ((IcComment)adi).getSubject() + ")",
                                       "" );                
             }
-                            
             if( ile != null ){
-
                 // log comments & attachments
 
                 getAttachmentManager().getTracContext()
@@ -218,19 +216,58 @@ public class LogAdvice {
 
                 // get observers forf <pub> publication
                 //------------------------------------
-                ObsMgrDao testing = getAttachmentManager().getTracContext().getObsMgrDao();
-                List UsersWatchList = testing.getSubjectList((User)luser);
-                if(UsersWatchList.contains(pub) == false)
+                ObsMgrDao sorelManager = getAttachmentManager().getTracContext().getObsMgrDao();
+                List usersWatchList = sorelManager.getObserverList( pub );
+                
+                log.info("usersWatchList = " + usersWatchList);
+                if(usersWatchList.contains( (User) luser ) == false)
                 {
-                	testing.addSORel(pub, (User) luser);
+                    log.info("%%% adding User " + lUser + " %%%");
+                    sorelManager.addSORel(pub, (User) luser);
+                    //add user to UserWatchList
+                    usersWatchList.add((User) luser);
                 }
                 // trigger mail agent process
                 //---------------------------
-
+                //get iterator of UserWatchList
+                Iterator userWatchIterator = usersWatchList.iterator();
                 
-                
-
-  
+                while(userWatchIterator.hasNext())
+                {
+                    String userEmail = ((User) luser).getEmail();
+                    log.info("userEmail = " + userEmail);
+                    log.info( (User)userWatchIterator.next());
+                    try {
+                        File nextFile = new File("/tmp/var/icentral/queue/next.txt");
+                        int jobId = 0;
+                        if(nextFile.exists() && !nextFile.isDirectory())
+                        {
+                            Scanner scan = new Scanner(nextFile);
+                            
+                            if(scan.hasNextInt())
+                                jobId = scan.nextInt();
+                        }
+                        else
+                        {
+                            nextFile.createNewFile();
+                        }
+                        log.info("jobId = " + jobId);
+                        File file = new File("/tmp/var/icentral/queue/" + jobId + ".queue");
+                        jobId++;
+                        file.createNewFile();
+                        FileOutputStream fout = new FileOutputStream(file);
+                        fout.write( ("Today is: " + new java.util.Date()).getBytes());
+                        fout.close();
+                        
+                        FileOutputStream nextOut = new FileOutputStream(nextFile);
+                        //please ignore or edit this quite inefficient int->string->byte[] call...
+                        nextOut.write( ("" + jobId).getBytes() );
+                        nextOut.close();
+                        
+                    }catch ( IOException ex ) { 
+                        System.out.println(ex);
+                    }
+                }
             }
         }
     }
