@@ -21,6 +21,8 @@
  <definition name="icentral-js" template="/tiles/icentral-js.jsp" />
  <definition name="icentral-css" template="/tiles/icentral-css.jsp" />
 
+ <definition name="news-css" template="/tiles/news-css.jsp" />
+
  <definition name="htmlhead" template="/tiles/htmlhead.jsp">
    <put-attribute name="yui-css" type="definition" value="yui-css"/>  
    <put-attribute name="icentral-css" type="definition" value="icentral-css"/>  
@@ -40,11 +42,19 @@
  <definition name="footer.small" template="/tiles/footer.jsp"/>
  <definition name="main" template="/tiles/main.jsp"/>
 
-
  <definition name="page" template="/tiles/page.jsp"/>
  <definition name="editpage" template="/tiles/editpage.jsp"/>
 
  <definition name="ipreview" template="/tiles/ipreview.jsp" />
+
+ <definition name="newsbox" template="/tiles/newsbox.jsp" />
+ <definition name="newscontent" template="/tiles/newscontent.jsp"/>
+
+ <definition name="news" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="Icentral News" />
+  <put-attribute name="body" value="/tiles/news.jsp"/>
+  <put-attribute name="edit" value="/tiles/news-edit.jsp"/>
+ </definition>
 
  <definition name="uedit" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Login" />
@@ -52,7 +62,6 @@
  </definition>
 
  <definition name="menuedit-yui" template="/tiles/menuedit-yui.jsp" />
-
 
  <definition name="login" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Login" />
@@ -79,13 +88,11 @@
   <put-attribute name="body" value="/tiles/feedbackack.jsp"/>
  </definition>
 
-
  <definition name="rolemgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Role Manager" />
   <put-attribute name="body" value="/tiles/rolemgr.jsp"/>
  </definition>
  <definition name="roleedit" template="/tiles/roleedit.jsp"/>
-
 
  <definition name="groupmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Group Manager" />
@@ -128,7 +135,6 @@
 
  <definition name="pubedit" template="/tiles/pubedit-yui.jsp"/>
 
-
  <definition name="pubnew" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Add Publication" />
   <put-attribute name="body" value="/tiles/pubnew-yui.jsp"/>
@@ -140,8 +146,6 @@
   <put-attribute name="body" value="/tiles/journalmgr-yui.jsp"/>
  </definition>
  <definition name="journaledit" template="/tiles/journaledit.jsp"/>
-
-
 
  <definition name="aclpageerror" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:ACL Violation" />
@@ -157,9 +161,6 @@
   <put-attribute name="title" value="ImexCentral:ACL Violation" />
   <put-attribute name="body" value="/tiles/acltargeterror.jsp"/>
  </definition>
-
-
-
 
  <definition name="stats" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:Statistics" />

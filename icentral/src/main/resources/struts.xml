@@ -16,6 +16,7 @@
 <struts>
   <constant name="struts.objectFactory" value="spring" />
   <constant name="struts.devMode" value="false" />
+  <constant name="struts.action.excludePattern" value="/ws.*"/>
 
   <!-- user mamagement -->
 
@@ -155,7 +156,30 @@
        <param name="skn">icentral</param>
      </result>
     </action>
-    
+
+
+    <action name="news" class="newsAction">
+     <interceptor-ref name="defaultStack"/>
+     <interceptor-ref name="timer"/>
+     <interceptor-ref name="menu"/>
+
+     <result name="success" type="tiles">news</result>
+     <result name="input" type="tiles">news</result>
+     <result name="list" type="tiles">newscontent</result>
+
+     <result name="ylist"  type="json">
+      <param name="includeProperties">
+       years.*
+      </param>
+     </result>
+     <result name="nbox"  type="json">
+      <param name="includeProperties">
+       years.*, nbox.*
+      </param>
+     </result>
+    </action>
+
+
   <!-- user management -->
     
     <action name="user" class="userAction" >

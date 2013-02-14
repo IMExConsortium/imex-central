@@ -1,4 +1,26 @@
+<div>
+ <div style="width: 20em; float:left; padding: 0 2em 20em 0">
+  <table cellspacing="0" width="100%" class="ftmain" id="ftmain">
+   <tr>
+    <td class="fttitle">Imex Central News</td>
+   </tr>
+   <tr>
+    <td class="ftbody" valign="top">
+     Recent News:
+     <table class="fnews" id="newsbox"></table>
+    </td>
+   </tr>
+   <tr>
+    <td class="ftfoot" align="right" valign="bottom" nowrap>
+              <i>See more <a href="news">Imex Central News</a></i>
+    </td>
+   </tr>
+  </table>
+ </div>
+
+
 <h1>Welcome to ImexCentral</h1>
+
 <p>IMEx Central is designed to coordinate curation effort and the exchange 
 of completed records on molecular interaction data between the 
 <a href="http://www.imexconsortium.org/">IMEx</a> partners - a group of interaction 
@@ -28,24 +50,31 @@ infrastructure to <a href="http://www.imexconsortium.org/">IMEx</a> requrements.
 <a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed">NCBI</a> 
 PubMed identifier (<a href="http://en.wikipedia.org/wiki/PMID">PMID<a>):
 <br/><br/>
-<center>
- <form id="pubsrc" name="pubsrc" action="pubsrc" method="post">
-  <table width="50%">
-   <tr>
-    <th align="right" width="50%" nowrap>
-     PMID: <input type="text" name="pub.pmid" size="16" maxlength="128" value="" id="pubsrc_pub_pmid"/>
-    </th>
-    <td align="left">
-     <input type="submit" id="pubsrc_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
-    </td>
-   </tr>
-  </table>
- </form>
-</center>
-<br/><br/>
-<p>To recommend an already published paper for curation by one of the IMEx databases, please,
-<a href="register.jsp">register</a> - you will be then able to add a paper you choose to
-the IMEx curation queue. 
+   <br/><br/>
+   <center>
+    <form id="pubsrc" name="pubsrc" action="pubsrc" method="post">
+     <table width="50%">
+      <tr>
+       <th align="right" width="50%" nowrap>
+        PMID: <input type="text" name="pub.pmid" size="16" maxlength="128" value="" id="pubsrc_pub_pmid"/>
+       </th>
+       <td align="left">
+        <input type="submit" id="pubsrc_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
+       </td>
+      </tr>
+     </table>
+    </form>
+   </center>
+   <br/><br/>
+   <p>To recommend an already published paper for curation by one of the IMEx databases, please,
+   <a href="register.jsp">register</a> - you will be then able to add a paper you choose to
+   the IMEx curation queue. 
+
+</div>
+<script>
+  YAHOO.util.Event.addListener( window, "load", YAHOO.mbi.news.newsbox.init( "news" ));
+</script>
+
 <br/><br/><br/><br/><br/><br/><br/><br/>
 <br/><br/><br/><br/><br/><br/><br/><br/>
 

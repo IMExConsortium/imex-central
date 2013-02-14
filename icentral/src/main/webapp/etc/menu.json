@@ -185,6 +185,11 @@
           link:"page?id=faq",
           "disabled":"false",
           menu:[]
+         },
+         {label:"News",
+          link:"news",
+          "disabled":"false",
+          menu:[]
          }]
       }]
   }]
