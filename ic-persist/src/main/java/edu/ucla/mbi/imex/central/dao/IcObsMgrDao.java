@@ -43,7 +43,6 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
         try {
             Query query =
                 session.createQuery( "select sor.observer "
-                session.createQuery( "select sor.observer "
                                      + " from SORel sor where "
                                      + " sor.subject = :subject " );
 
@@ -51,7 +50,6 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
             
             olst = (List<User>) query.list();
             tx.commit();
-            log.info("query????");
         } catch ( HibernateException e ) {
             log.info(e);
             handleException( e );
