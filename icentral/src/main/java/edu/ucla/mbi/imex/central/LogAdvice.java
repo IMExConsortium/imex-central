@@ -222,14 +222,32 @@ public class LogAdvice {
                 log.info("usersWatchList = " + usersWatchList);
                 if(usersWatchList.contains( (User) luser ) == false)
                 {
-                    log.info("%%% adding User " + lUser + " %%%");
+                    log.info("%%% adding User " + luser + " %%%");
                     sorelManager.addSORel(pub, (User) luser);
                     //add user to UserWatchList
                     usersWatchList.add((User) luser);
                 }
                 // trigger mail agent process
                 //---------------------------
-                //get iterator of UserWatchList
+                //Get jobId
+                int jobId = 0;
+                File nextFile = new File("/tmp/var/icentral/queue/next.txt");
+                try {
+                    if(nextFile.exists() && !nextFile.isDirectory())
+                    {
+                        Scanner scan = new Scanner(nextFile);
+                        
+                        if(scan.hasNextInt())
+                            jobId = scan.nextInt();
+                    }
+                    else
+                    {
+                        nextFile.createNewFile();
+                    }
+                }catch ( IOException ex ) { 
+                        System.out.println(ex);
+                }
+                //Get message Information
                 Iterator userWatchIterator = usersWatchList.iterator();
                 
                 while(userWatchIterator.hasNext())
@@ -237,38 +255,83 @@ public class LogAdvice {
                     String userEmail = ((User) luser).getEmail();
                     log.info("userEmail = " + userEmail);
                     log.info( (User)userWatchIterator.next());
-                    try {
-                        File nextFile = new File("/tmp/var/icentral/queue/next.txt");
-                        int jobId = 0;
-                        if(nextFile.exists() && !nextFile.isDirectory())
-                        {
-                            Scanner scan = new Scanner(nextFile);
-                            
-                            if(scan.hasNextInt())
-                                jobId = scan.nextInt();
-                        }
-                        else
-                        {
-                            nextFile.createNewFile();
-                        }
-                        log.info("jobId = " + jobId);
-                        File file = new File("/tmp/var/icentral/queue/" + jobId + ".queue");
-                        jobId++;
-                        file.createNewFile();
-                        FileOutputStream fout = new FileOutputStream(file);
-                        fout.write( ("Today is: " + new java.util.Date()).getBytes());
-                        fout.close();
-                        
-                        FileOutputStream nextOut = new FileOutputStream(nextFile);
-                        //please ignore or edit this quite inefficient int->string->byte[] call...
-                        nextOut.write( ("" + jobId).getBytes() );
-                        nextOut.close();
-                        
-                    }catch ( IOException ex ) { 
-                        System.out.println(ex);
-                    }
                 }
+                //Write message information to queue file
+                try {
+                    log.info("jobId = " + jobId);
+                    File file = new File("/tmp/var/icentral/queue/" + jobId + ".queue");
+                    jobId++;
+                    file.createNewFile();
+                    FileOutputStream fout = new FileOutputStream(file);
+                    fout.write( ("Today is: " + new java.util.Date()).getBytes());
+                    fout.close();
+                    
+                    FileOutputStream nextOut = new FileOutputStream(nextFile);
+                    //please ignore or edit this quite inefficient int->string->byte[] call...
+                    nextOut.write( ("" + jobId).getBytes() );
+                    nextOut.close();
+                        
+                }catch ( IOException ex ) { 
+                    System.out.println(ex);
+                }
+                
             }
         }
     }
+
+    public void delAttMonitor( int aid,  Object luser, Object ratt ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "LogManager: attachment monitor called:"
+                   + " ratt=" + ratt + " luser=" + luser );
+        
+        /*
+        if( 1 == 1 ){  // from LogContext configureation file
+            
+            if( att == null || ! (att instanceof AttachedDataItem) ) return;
+
+            AttachedDataItem adi = (AttachedDataItem) att;
+            IcPub pub = (IcPub) adi.getRoot();
+            
+            String attName="";
+            
+            IcLogEntry ile = null;
+
+            if( adi instanceof IcAttachment){
+                ile = new IcLogEntry( (User) luser, pub,
+                                      "Attachment added(ID#" + adi.getId() + 
+                                      ": " + 
+                                      ((IcAttachment)adi).getSubject() + ")", 
+                                      "" );                
+            } 
+            if( adi instanceof IcComment ){
+                ile = new IcLogEntry( (User) luser, pub,
+                                      "Comment added(ID#" + adi.getId() +
+                                      ": " +
+                                      ((IcComment)adi).getSubject() + ")",
+                                      "" );                
+            }
+                            
+            if( ile != null ){
+
+                // log comments & attachments
+
+                getAttachmentManager().getTracContext()
+                    .getAdiDao().saveAdi( ile );
+                
+
+                // get observers for <pub> publication
+                //------------------------------------
+                
+              
+                // trigger mail agent process
+                //---------------------------
+
+                
+                
+
+  
+            }
+        */
+    }
+    
 }

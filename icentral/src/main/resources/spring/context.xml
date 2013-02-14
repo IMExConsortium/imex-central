@@ -55,6 +55,14 @@
     </property>
   </bean>
 
+  <bean id="newsContext" class="edu.ucla.mbi.util.context.JsonContext">
+    <property name="config">
+      <map>
+       <entry key="json-config" value="/etc/news.json"/>
+      </map>
+    </property>
+  </bean>
+
 
 <!-- user/feedback management -->
 
