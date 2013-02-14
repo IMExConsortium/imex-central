@@ -56,6 +56,16 @@
     </filter-class>
   </filter>
 -->
+
+ <!-- NOTE: check struts.xml for the pattern exclusion list !!! -->
+
+<filter-mapping>
+    <filter-name>action2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+<!--
+
   <filter-mapping>
     <filter-name>action2</filter-name>
     <url-pattern>*.do</url-pattern>
@@ -70,6 +80,7 @@
     <filter-name>action2</filter-name>
     <url-pattern>*.jsp</url-pattern>
   </filter-mapping>
+
 
   <filter-mapping>
     <filter-name>action2</filter-name>
@@ -227,7 +238,7 @@
     <url-pattern>/image</url-pattern>
   </filter-mapping>
 
-
+-->
 
 <!-- =================================================== =============== -->
 <!-- =================================================== LISTENERS setup -->
