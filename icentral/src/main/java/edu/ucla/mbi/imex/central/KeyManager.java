@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central;
 
 /* ========================================================================
- # $Id:: EntryManager.java 93 2009-12-09 02:03:29Z lukasz                 $
- # Version: $Rev:: 93                                                     $
+ # $Id::                                                                  $
+ # Version: $Rev::                                                        $
  #=========================================================================
  #
  # KeyManager - businness logic of imex key management 

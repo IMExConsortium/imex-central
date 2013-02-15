@@ -144,6 +144,36 @@
      <result name="input" type="tiles">usermgr</result>     
    </action>
 
+
+   <!-- user preferences management -->
+   <!--  note need to write/change tile references -->  
+
+   <action name="userprefmgr" class="uprefMgrAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">usermgr</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="input" type="tiles">usermgr</result>
+   </action>
+
+   <!-- watch list management -->
+   <!--  note need to write/change tile references -->  
+
+  <action name="watchmgr" class="watchMgrAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">usermgr</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="input" type="tiles">usermgr</result>
+   </action>
+
+
    <!-- acess control management -->
 
    <action name="aclmgr" class="aclMgrAction">

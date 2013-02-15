@@ -1,9 +1,9 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =============================================================================
- * $HeadURL:: https://lukasz@imex.mbi.ucla.edu/svn/dip-ws/trunk/dip-portal/src#$
- * $Id:: EditAction.java 761 2009-12-09 22:19:13Z lukasz                       $
- * Version: $Rev:: 761                                                         $
+ * $HeadURL::                                                                  $
+ * $Id::                                                                       $
+ * Version: $Rev::                                                             $
  *==============================================================================
  *                                                                             $
  * EditAction - page/menu editing                                              $

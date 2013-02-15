@@ -18,7 +18,7 @@
   <constant name="struts.devMode" value="false" />
   <constant name="struts.action.excludePattern" value="/ws.*"/>
 
-  <!-- user mamagement -->
+  <!-- user/user preferences/watch mamagement -->
 
   <include file="usermgr.xml"/>
 
