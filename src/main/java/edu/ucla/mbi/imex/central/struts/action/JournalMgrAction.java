@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =============================================================================
- * $Id:: EntryMgrAction.java 169 2010-05-26 15:17:24Z lukasz                   $
- * Version: $Rev:: 169                                                         $
+ * $Id::                                                                       $
+ * Version: $Rev::                                                             $
  *==============================================================================
  *
  * JournalMgrAction - web interface to journal management

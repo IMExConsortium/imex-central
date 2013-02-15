@@ -226,4 +226,23 @@
 
   </class>
 
+<!--
+  <class name="edu.ucla.mbi.imex.central.dao.EORel" table="eorel" lazy="false">
+    <id name="id" column="id" >
+      <generator class="sequence">
+        <param name="sequence">eorel_id_seq</param>
+      </generator>
+    </id>
+
+    <property name="event" column="event" />
+
+    <many-to-one name="observer" column="user_id"
+               class="edu.ucla.mbi.imex.central.IcUser" />
+
+  </class>
+-->
+
+
+
+
 </hibernate-mapping> 
