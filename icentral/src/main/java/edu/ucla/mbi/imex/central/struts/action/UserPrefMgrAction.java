@@ -93,7 +93,7 @@ public class UserPrefMgrAction extends ManagerSupport {
         //if ( tracContext.getPubDao() == null ||
         //     tracContext.getAdiDao() == null ) return JSON;
         
-        if( getOp() == null ) return JSON;
+        if( getOp() == null ) return SUCCESS;
 
         //IcPub icpub = null;
 
@@ -130,7 +130,7 @@ public class UserPrefMgrAction extends ManagerSupport {
                 }                            
             }
         }
-        return JSON;
+        return SUCCESS;
     }
 
     //--------------------------------------------------------------------------

@@ -153,10 +153,10 @@
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">usermgr</result>
+     <result name="success" type="tiles">userprefmgr</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
-     <result name="input" type="tiles">usermgr</result>
+     <result name="input" type="tiles">userprefmgr</result>
    </action>
 
    <!-- watch list management -->
@@ -167,10 +167,10 @@
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">usermgr</result>
+     <result name="success" type="tiles">watchmgr</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
-     <result name="input" type="tiles">usermgr</result>
+     <result name="input" type="tiles">watchmgr</result>
    </action>
 
 

@@ -138,16 +138,16 @@
          }]
       },
       {label:"Preferences",
-       link:"page?id=preferences",
+       link:"userprefmgr",
        "disabled":"false",
        menu:[
          {label:"Account Settings",
-          link:"user?op=edit",
+          link:"userprefmgr",
           "disabled":"false",
           menu:[]
          },
-         {label:"Database",
-          link:"page?id=dbsettings",
+         {label:"Watch List",
+          link:"watchmgr",
           "disabled":"false",
           menu:[]
          }]
