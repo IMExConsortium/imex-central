@@ -16,16 +16,16 @@
 
     <icentral.css>icentral-test.css</icentral.css>
 
-   <!-- foo.org: global key  -->
-    <icentral.recaptcha.publicKey>****</icentral.recaptcha.publicKey>
-    <icentral.recaptcha.privateKey>****</icentral.recaptcha.privateKey>
-    <icentral.recaptcha.recaptchaServer>****</icentral.recaptcha.recaptchaServer>
+   <!-- foo.org: global key -->
+    <icentral.recaptcha.publicKey>*****</icentral.recaptcha.publicKey>
+    <icentral.recaptcha.privateKey>*****</icentral.recaptcha.privateKey>
+    <icentral.recaptcha.recaptchaServer>*****</icentral.recaptcha.recaptchaServer>
 
     <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
     
-    <icentral.jdbc.dburl>****</icentral.jdbc.dburl>
-    <icentral.jdbc.user>****</icentral.jdbc.user>
-    <icentral.jdbc.pass>****</icentral.jdbc.pass>
+    <icentral.jdbc.dburl>*****</icentral.jdbc.dburl>
+    <icentral.jdbc.user>*****</icentral.jdbc.user>
+    <icentral.jdbc.pass>*****</icentral.jdbc.pass>
   </properties>
    
   <profiles>
