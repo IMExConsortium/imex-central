@@ -248,14 +248,29 @@ public class LogAdvice {
                         System.out.println(ex);
                 }
                 //Get message Information
+                /*
+                 *  i'd guess it depends on what's convenient when sending it out; from the
+                    point of view of a recepient, the useful info would be:
+                    - pmid (presented as a link)
+                    - a link to the icentral record
+                  * */
+                  String pubAuthor, pubTitle, pubId, pubPmid, alert, message = "Email:";
+                log.info("pub.getId()  = " + (pubId = pub.getId() + "") );
+                log.info("pub.getAuthor() = " + ( pubAuthor = pub.getAuthor()));
+                log.info("pub.getTitle()  = " + (pubTitle = pub.getTitle() ));
+                log.info("pub.getPmid()  = " + (pubPmid = pub.getPmid()) );
+                log.info("ile.getLabel()  = " + (alert = ile.getLabel()));
+                
                 Iterator userWatchIterator = usersWatchList.iterator();
                 
                 while(userWatchIterator.hasNext())
                 {
                     String userEmail = ((User) luser).getEmail();
+                    message += userEmail + ", ";
                     log.info("userEmail = " + userEmail);
                     log.info( (User)userWatchIterator.next());
                 }
+                message += "\nId:" + pubId + "\nAuthor:" + pubAuthor + "\nTitle:" + pubTitle + "\nPmid:" + pubPmid + "\nalert:" + alert;
                 //Write message information to queue file
                 try {
                     log.info("jobId = " + jobId);
@@ -263,7 +278,7 @@ public class LogAdvice {
                     jobId++;
                     file.createNewFile();
                     FileOutputStream fout = new FileOutputStream(file);
-                    fout.write( ("Today is: " + new java.util.Date()).getBytes());
+                    fout.write( ( message ).getBytes());
                     fout.close();
                     
                     FileOutputStream nextOut = new FileOutputStream(nextFile);
