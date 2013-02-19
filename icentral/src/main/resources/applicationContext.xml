@@ -63,6 +63,26 @@
    
  </bean>
 
+<!-- ========================================================= WATCH MANAGER -->
+
+ <bean id="watchManager" init-method="initialize" destroy-method="cleanup"
+       class="edu.ucla.mbi.imex.central.WatchManager">
+
+   <property name="tracContext" ref="tracContext"/>
+   
+ </bean>
+
+<!-- ====================================================== USERPREF MANAGER -->
+
+ <bean id="uprefManager" init-method="initialize" destroy-method="cleanup"
+       class="edu.ucla.mbi.imex.central.UserPrefManager">
+
+   <property name="tracContext" ref="tracContext"/>
+   
+ </bean>
+
+<!-- ======================================================================= -->
+
   <bean id="aclVal" class="edu.ucla.mbi.util.struts.AclValidator">
      <property name="aclContext" ref="aclContext"/>
   </bean>

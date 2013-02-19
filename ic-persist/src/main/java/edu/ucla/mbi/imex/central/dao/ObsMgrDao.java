@@ -20,4 +20,14 @@ public interface ObsMgrDao {
 
     public void addSORel( DataItem subject, User observer );
     public void dropSORel( DataItem subject, User observer );
+
+    
+    /*
+    public List<User> getObserverList( Event obsItem );
+    public List<String> getEventList( User observer );
+
+    public void addEORel( String event, User observer );
+    public void dropEORel( String event, User observer );
+    */
+
 }

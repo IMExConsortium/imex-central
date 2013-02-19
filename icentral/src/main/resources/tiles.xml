@@ -106,6 +106,16 @@
  </definition>
  <definition name="useredit" template="/tiles/useredit.jsp"/>
 
+ <definition name="watchmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral:Watch Manager" />
+  <put-attribute name="body" value="/tiles/watchmgr.jsp"/>
+ </definition>
+
+ <definition name="userprefmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral:Preference Manager" />
+  <put-attribute name="body" value="/tiles/userprefmgr.jsp"/>
+ </definition>
+
  <definition name="aclmgr" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral:ACL Manager" />
   <put-attribute name="body" value="/tiles/aclmgr.jsp"/>
