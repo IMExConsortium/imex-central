@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central;
 
 /* =============================================================================
- # $Id:: EntryManager.java 213 2011-06-24 20:08:57Z lukasz                     $
- # Version: $Rev:: 213                                                         $
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
  #==============================================================================
  #
  # LogAdvice - AOP logger
@@ -229,32 +229,9 @@ public class LogAdvice {
                 }
                 // trigger mail agent process
                 //---------------------------
-                //Get jobId
-                int jobId = 0;
-                File nextFile = new File("/tmp/var/icentral/queue/next.txt");
-                try {
-                    if(nextFile.exists() && !nextFile.isDirectory())
-                    {
-                        Scanner scan = new Scanner(nextFile);
-                        
-                        if(scan.hasNextInt())
-                            jobId = scan.nextInt();
-                    }
-                    else
-                    {
-                        nextFile.createNewFile();
-                    }
-                }catch ( IOException ex ) { 
-                        System.out.println(ex);
-                }
                 //Get message Information
-                /*
-                 *  i'd guess it depends on what's convenient when sending it out; from the
-                    point of view of a recepient, the useful info would be:
-                    - pmid (presented as a link)
-                    - a link to the icentral record
-                  * */
-                  String pubAuthor, pubTitle, pubId, pubPmid, alert, message = "Email:";
+                
+                String pubAuthor, pubTitle, pubId, pubPmid, alert, message;
                 log.info("pub.getId()  = " + (pubId = pub.getId() + "") );
                 log.info("pub.getAuthor() = " + ( pubAuthor = pub.getAuthor()));
                 log.info("pub.getTitle()  = " + (pubTitle = pub.getTitle() ));
@@ -262,29 +239,28 @@ public class LogAdvice {
                 log.info("ile.getLabel()  = " + (alert = ile.getLabel()));
                 
                 Iterator userWatchIterator = usersWatchList.iterator();
-                
+                //turn list of email addresses into csv
+                String recipients = "";
                 while(userWatchIterator.hasNext())
                 {
                     String userEmail = ((User) luser).getEmail();
-                    message += userEmail + ", ";
+                    recipients += userEmail + ", ";
                     log.info("userEmail = " + userEmail);
                     log.info( (User)userWatchIterator.next());
                 }
-                message += "\nId:" + pubId + "\nAuthor:" + pubAuthor + "\nTitle:" + pubTitle + "\nPmid:" + pubPmid + "\nalert:" + alert;
+                message = "EMAIL=\"" + recipients + "\"\n" +
+                    "ID=\"" + pubId + "\"\n" +
+                    "AUTHOR=\"" + pubAuthor + "\"\n" +
+                    "TITLE=\"" + pubTitle + "\"\n" +
+                    "PMID=\"" + pubPmid + "\"\n" +
+                    "ALERT=\"" + alert + "\"\n" ;
                 //Write message information to queue file
                 try {
-                    log.info("jobId = " + jobId);
-                    File file = new File("/tmp/var/icentral/queue/" + jobId + ".queue");
-                    jobId++;
+                    File file = new File("/tmp/var/icentral/queue/" + String.valueOf(System.currentTimeMillis()) + ".queue");
                     file.createNewFile();
                     FileOutputStream fout = new FileOutputStream(file);
                     fout.write( ( message ).getBytes());
                     fout.close();
-                    
-                    FileOutputStream nextOut = new FileOutputStream(nextFile);
-                    //please ignore or edit this quite inefficient int->string->byte[] call...
-                    nextOut.write( ("" + jobId).getBytes() );
-                    nextOut.close();
                         
                 }catch ( IOException ex ) { 
                     System.out.println(ex);
