@@ -190,10 +190,7 @@ YAHOO.imex.pubedit = {
 
     identUpdate: function ( o ) {
         try {
-            var acl = /ACL Violation/; 
-            if( acl.test(o.responseText) ) {
-                YAHOO.mbi.modal.spcstat("ACL Violation");
-            } else {
+            if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
                 var pmid = messages.pub.pmid;
@@ -217,10 +214,7 @@ YAHOO.imex.pubedit = {
 
     pubmedUpdate: function ( o ) {
         try {
-            var acl = /ACL Violation/; 
-            if( acl.test(o.responseText) ) {
-                YAHOO.mbi.modal.spcstat("ACL Violation");
-            } else {
+            if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
                 
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
@@ -245,10 +239,7 @@ YAHOO.imex.pubedit = {
     
     epmrUpdate: function ( o ) {
         try {
-            var acl = /ACL Violation/; 
-            if( acl.test(o.responseText) ) {
-                YAHOO.mbi.modal.spcstat("ACL Violation");
-            } else {
+            if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
                 
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
@@ -278,10 +269,7 @@ YAHOO.imex.pubedit = {
 
     authTitleUpdate: function ( o ) {
         try {
-            var acl = /ACL Violation/; 
-            if( acl.test(o.responseText) ) {
-                YAHOO.mbi.modal.spcstat("ACL Violation");
-            } else {
+            if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
                 var auth = messages.pub.author;
@@ -551,23 +539,9 @@ YAHOO.imex.pubedit = {
     },
 
     adminUpdate: function( o ) {
-
-//var start = o.responseText.indexOf("<center>");
-//var end = o.responseText.indexOf("</center>") + "</center>".length;
-//var inject = o.responseText.slice(start, end )
         try {
-            var acl = /ACL Violation/; 
-            if( acl.test( o.responseText ) ) {
-                var aclViolation = {}
-                aclViolation.title = "ACL Violation";
-                
-                var start = o.responseText.indexOf("<center>");
-                var end = o.responseText.indexOf("</center>") + "</center>".length;
-                var inject = o.responseText.slice(start, end );
-                aclViolation.body = inject;
-                YAHOO.mbi.modal.spcstat( aclViolation );
-            } else {
-                
+            if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
+            
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 
                 var tau = YAHOO.util.Dom.get( "td-admin-user" );
@@ -614,10 +588,7 @@ YAHOO.imex.pubedit = {
 
     stateUpdate: function( o ) { 
         try {
-            var acl = /ACL Violation/; 
-            if( acl.test(o.responseText) ) {
-                YAHOO.mbi.modal.spcstat("ACL Violation");
-            } else {
+            if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var stl = YAHOO.util.Dom.get( "state-label" );
                 stl.innerHTML = messages.pub.state.name;
@@ -722,5 +693,20 @@ YAHOO.imex.pubedit = {
         } catch (e) {
             alert(e);
         } 
+     },
+     aclErrorTest: function(responseText){
+        var acl = /ACL Violation/; 
+        if( acl.test( responseText ) ) {
+            var aclViolation = {};
+            aclViolation.title = "ACL Violation";
+            
+            var start = responseText.indexOf("<center>");
+            var end = responseText.indexOf("</center>") + "</center>".length;
+            var inject = responseText.slice(start, end );
+            aclViolation.body = inject;
+            YAHOO.mbi.modal.spcstat( aclViolation );
+            return true;
+        }
+        return false;
      }
 };

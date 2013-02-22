@@ -237,6 +237,10 @@ public class LogAdvice {
                 log.info("pub.getTitle()  = " + (pubTitle = pub.getTitle() ));
                 log.info("pub.getPmid()  = " + (pubPmid = pub.getPmid()) );
                 log.info("ile.getLabel()  = " + (alert = ile.getLabel()));
+                if(pubAuthor.length() > 70)
+                    pubAuthor = pubAuthor.substring(0, 70);
+                if(pubTitle.length() > 70)
+                    pubTitle = pubTitle.substring(0, 70);
                 
                 Iterator userWatchIterator = usersWatchList.iterator();
                 //turn list of email addresses into csv
@@ -244,7 +248,7 @@ public class LogAdvice {
                 while(userWatchIterator.hasNext())
                 {
                     String userEmail = ((User) luser).getEmail();
-                    recipients += userEmail + ", ";
+                    recipients += userEmail + " ";
                     log.info("userEmail = " + userEmail);
                     log.info( (User)userWatchIterator.next());
                 }
