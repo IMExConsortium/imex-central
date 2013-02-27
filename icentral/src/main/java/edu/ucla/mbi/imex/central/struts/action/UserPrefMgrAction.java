@@ -67,7 +67,12 @@ public class UserPrefMgrAction extends ManagerSupport {
     // results
     //--------
     
+    String preferences;
     
+    public String getPreferences(){
+        return this.preferences;
+    }
+
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 
