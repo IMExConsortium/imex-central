@@ -32,19 +32,27 @@ public class UserPrefManager {
     log.info( "UserPrefManagerManager: creating manager" );
     }
 
-    //---------------------------------------------------------------------
-    //  TracContext
-    //--------------
 
-    private TracContext tracContext;
-    
-    public void setTracContext( TracContext context ) {
-        this.tracContext = context;
+    private UserContext userContext;
+
+    public void setUserContext( UserContext context ) {
+        this.userContext = context;
     }
-    
-    public TracContext getTracContext() {
-        return this.tracContext;
+
+    public UserContext getUserContext() {
+        return this.userContext;
     }
+
+    private String defUserPrefs="";
+
+    public void setDefUserPrefs( String prefs ) {
+        this.defUserPrefs = prefs;
+    }
+
+    public String getDefUserPrefs() {
+        return this.defUserPrefs;
+    }
+
     
     //---------------------------------------------------------------------
     
