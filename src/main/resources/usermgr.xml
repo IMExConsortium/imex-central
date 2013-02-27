@@ -157,6 +157,13 @@
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">userprefmgr</result>
+  
+     <result name="json" type="json">
+        <param name="includeProperties">
+          preferences
+        </param>
+        <param name="noCache">true</param>
+     </result>
    </action>
 
    <!-- watch list management -->
