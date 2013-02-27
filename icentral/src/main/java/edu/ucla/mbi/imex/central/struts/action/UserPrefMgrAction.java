@@ -49,20 +49,6 @@ public class UserPrefMgrAction extends ManagerSupport {
         return this.uprefManager;
     }
     
-    ////--------------------------------------------------------------------------
-    ///  TracContext
-    //--------------
-
-    private TracContext tracContext;
-
-    public void setTracContext( TracContext context ) {
-        this.tracContext = context;
-    }
-
-    public TracContext getTracContext() {
-        return this.tracContext;
-    }
-    
     //--------------------------------------------------------------------------
     // format
     //-------
@@ -81,7 +67,12 @@ public class UserPrefMgrAction extends ManagerSupport {
     // results
     //--------
     
+    String preferences;
     
+    public String getPreferences(){
+        return this.preferences;
+    }
+
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 
