@@ -79,29 +79,49 @@
 
    <property name="userContext" ref="userContext"/>
    <property name="defUserPrefs">
-     { "pref-groups":["auto-watch":{
-                      "label":"Automatic Watch List",
-                      "global":true,
-         "options":[
-            "record-add":{
-               "label":"Automatically add all newly created records",
-               "value":true
-               "opcode":"wl-ara"},
-             "record-owner":{
-                "label":"Automatically add the records that I create",
-                "value":true
-                "opcode":"wl-arc"},
-             "attachment-owner":{...}
-         ]
+    <value>
+{
+    "pref-groups": [
+        {
+            "auto-watch": {
+                "label": "Automatic Watch List",
+                "global": "true",
+                "options": [
+                    {
+                        "record-add": {
+                            "label": "Automatically add all newly created records",
+                            "value": "true",
+                            "opcode": "wl-ara"
+                        }
+                    },
+                    {
+                        "record-owner": {
+                            "label": "Automatically add the records that I create",
+                            "value": "true",
+                            "opcode": "wl-arc"
+                        }
+                    },
+                    {
+                        "attachment-owner": {
+                            
+                        }
+                    }
+                ]
+            }
         },
-        "message-mail":{
-           "label":"Mail Notifications",
-           "global":false,
-           "options":[...]
+        {
+            "message-mail": {
+                "label": "Mail Notifications",
+                "global": false,
+                "options": [
+                    
+                ]
+            }
         }
-       ],
-       opcode:"update"
-     }
+    ],
+    "opcode": "update"
+}
+    </value>
    </property>
    
  </bean>
