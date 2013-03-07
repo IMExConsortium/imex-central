@@ -4,19 +4,49 @@
  <script type="text/javascript">
     var successback = function(response)
                      {
-                        var process = function (key,value) {
-                            console.log(key + " : "+value);
+                        var process = function (key,value, options) {
+                            if(typeof value.value != "undefined")
+                            {
+                                var checkbox = '<input type="checkbox">' + value.value + "</input>"
+                                return  value.label + ": " + checkbox ;
+                            }
+                            else
+                                return  value.label
+                            
                         }
 
                         var traverse = function (o,func) {
-                            for (var i in o) {
-                                func.apply(this,[i,o[i]]);  
+                            var string = "<form>";
+                            for (var i in o) {                                 
+                                if(i =="option-def")
+                                {
+                                    string += "\n<ul>\n"
+                                    for(var j = 0; j < o.options.length; j++)
+                                    {
+                                        string += "<li>" + func.apply(this,[j,o["option-def"][o.options[j]], o["options"]]); 
+                                        //going to step down in the object tree!!
+                                        string += traverse(o["option-def"][o.options[j]],func) + "</li>\n";
+                                    } 
+                                    
+                                    string+="</ul>\n"
+                                }
+                            }
+                            return string
+                        }
+                        /*var traverse = function (o,func) {
+                            for (var i in o) { 
                                 if (typeof(o[i])=="object") {
-                                    //going on step down in the object tree!!
+                                    if(i =="option-def")
+                                    {
+                                        console.log("<ul>");
+                                        func.apply(this,[i,o[i], o["options"]]); 
+                                        console.log("</ul>");
+                                    }
+                                    //going to step down in the object tree!!
                                     traverse(o[i],func);
                                 }
                             }
-                        }
+                        }*/
                         console.log("sucess");
                          var testing;
                          testing = YAHOO.lang.JSON.parse(response.responseText);
@@ -24,8 +54,9 @@
                          console.log(testing);     
                          
                          var content = document.getElementById('content');
-                         var list = document.createElement('ul')
-                         traverse(testing,process);
+                         var string = traverse(testing,process);
+                         console.log (string);
+                         content.innerHTML = content.innerHTML + string + "</form>";
                          /*var i;
                          for(i = 0 ; i < testing['pref-groups'].length; i++)
                          {

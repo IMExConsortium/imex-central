@@ -82,11 +82,11 @@ public class UserPrefMgrAction extends ManagerSupport {
         log.debug(  "|id=" + getId() + " op=" + getOp() );
         
         this.preferences = getUserPrefManager().getDefUserPrefs();
-        this.preferences = this.preferences.replaceAll("\\n","");
-        String testex = "\\\"";
-        log.debug(testex );
+        //this.preferences = this.preferences.replaceAll("\\n","");
+        //String testex = "\\\"";
+        //log.debug(testex );
         
-        this.preferences = this.preferences.replaceAll(testex,"\"");
+       // this.preferences = this.preferences.replaceAll(testex,"\"");
         //if ( tracContext.getPubDao() == null ||
         //     tracContext.getAdiDao() == null ) return JSON;
         
