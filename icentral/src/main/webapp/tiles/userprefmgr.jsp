@@ -12,9 +12,7 @@
                             }
                             else
                                 return  value.label
-                            
                         }
-
                         var traverse = function (o,func) {
                             var string = "<form>";
                             for (var i in o) {                                 
@@ -57,13 +55,6 @@
                          var string = traverse(testing,process);
                          console.log (string);
                          content.innerHTML = content.innerHTML + string + "</form>";
-                         /*var i;
-                         for(i = 0 ; i < testing['pref-groups'].length; i++)
-                         {
-                             for(var key in testing['pref-groups'][i])
-                                console.log('hey');
-                             
-                         }*/
                          
                                          
                      };

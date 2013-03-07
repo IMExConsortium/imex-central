@@ -82,6 +82,8 @@ public class UserPrefMgrAction extends ManagerSupport {
         log.debug(  "|id=" + getId() + " op=" + getOp() );
         
         this.preferences = getUserPrefManager().getDefUserPrefs();
+        if(getId() == 3)
+            log.debug(getUserContext().getUserDao().getUser(getId()).getPrefs());
         //this.preferences = this.preferences.replaceAll("\\n","");
         //String testex = "\\\"";
         //log.debug(testex );
