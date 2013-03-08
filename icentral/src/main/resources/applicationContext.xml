@@ -99,7 +99,7 @@
                             "opcode": "watchlistRecordOwner"   
                     },
                     "attachment-owner": {
-                    }     
+                    }
                 }
         },
         "message-mail": {

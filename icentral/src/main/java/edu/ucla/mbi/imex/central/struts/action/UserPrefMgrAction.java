@@ -79,21 +79,20 @@ public class UserPrefMgrAction extends ManagerSupport {
     public String execute() throws Exception {
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug(  "|id=" + getId() + " op=" + getOp() );
+        log.debug( "|id=" + getId() + " op=" + getOp() );
         
         this.preferences = getUserPrefManager().getDefUserPrefs();
-        if(getId() == 3)
-            log.debug(getUserContext().getUserDao().getUser(getId()).getPrefs());
-        //this.preferences = this.preferences.replaceAll("\\n","");
-        //String testex = "\\\"";
-        //log.debug(testex );
+        if(getId() > 0)
+        {
+            try {
+                log.debug(getUserContext().getUserDao().getUser(getId()).getPrefs());
+            }catch( Exception ex ) {
+                log.debug(ex);
+            }
+        }
         
-       // this.preferences = this.preferences.replaceAll(testex,"\"");
-        //if ( tracContext.getPubDao() == null ||
-        //     tracContext.getAdiDao() == null ) return JSON;
-        
-        if( getOp() == null ) return SUCCESS;
 
+        if( getOp() == null ) return SUCCESS;
         //IcPub icpub = null;
 
         //if(  getId() > 0 ) {           
