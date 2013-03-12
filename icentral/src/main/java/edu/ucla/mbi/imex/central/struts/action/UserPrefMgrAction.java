@@ -80,17 +80,26 @@ public class UserPrefMgrAction extends ManagerSupport {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "|id=" + getId() + " op=" + getOp() );
-        
-        this.preferences = getUserPrefManager().getDefUserPrefs();
+        User user = new User();
+        UserDao userDao = getUserContext().getUserDao();
         if(getId() > 0)
         {
             try {
-                log.debug(getUserContext().getUserDao().getUser(getId()).getPrefs());
+                user = userDao.getUser(getId());
+                log.debug(this.preferences = user.getPrefs());
             }catch( Exception ex ) {
                 log.debug(ex);
             }
         }
-        
+        log.debug( "before if length = : " + this.preferences.length());
+        if(this.preferences == null || this.preferences.length() <= 0)
+        {
+            
+            log.debug( "No prefs found, updating with Defaults" );
+            this.preferences = getUserPrefManager().getDefUserPrefs();
+            user.setPrefs(this.preferences);
+            userDao.updateUser(user);
+        }
 
         if( getOp() == null ) return SUCCESS;
         //IcPub icpub = null;

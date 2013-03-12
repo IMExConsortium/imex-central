@@ -32,8 +32,7 @@ YAHOO.imex.userprefmgr = {
                             string += "<li>" + func.apply(this,[j,o["option-def"][o.options[j]], o["options"]]); 
                             //going to step down in the object tree!!
                             string += traverse(o["option-def"][o.options[j]],func) + "</li>\n";
-                        } 
-                        
+                        }
                         string+="</ul>\n"
                     }
                 }
@@ -77,7 +76,8 @@ YAHOO.imex.userprefmgr = {
         try{
             YAHOO.util.Connect
             .asyncRequest( 'GET', 
-                           'userprefmgr?op.opcode1=update', 
+                           //'userprefmgr?id=' + init.loginid +'&op.opcode1=update', 
+                           'userprefmgr?id=30' +'&op.opcode1=update', 
                            callback );        
         } catch (x) {
             alert("AJAX Error:"+x);
