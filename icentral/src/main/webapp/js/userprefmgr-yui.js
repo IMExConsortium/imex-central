@@ -22,21 +22,21 @@ YAHOO.imex.userprefmgr = {
                 }
             }
             var traverse = function (o,func) {
-                var string = "<form>";
+                var html = '';
                 for (var i in o) {                                 
                     if(i =="option-def")
                     {
-                        string += "\n<ul>\n"
+                        html += "\n<ul>\n"
                         for(var j = 0; j < o.options.length; j++)
                         {
-                            string += "<li>" + func.apply(this,[j,o["option-def"][o.options[j]], o["options"]]); 
+                            html += "<li>" + func.apply(this,[j,o["option-def"][o.options[j]], o["options"]]); 
                             //going to step down in the object tree!!
-                            string += traverse(o["option-def"][o.options[j]],func) + "</li>\n";
+                            html += traverse(o["option-def"][o.options[j]],func) + "</li>\n";
                         }
-                        string+="</ul>\n"
+                        html+="</ul>\n"
                     }
                 }
-                return string
+                return html
             }
             /*var traverse = function (o,func) {
                 for (var i in o) { 
@@ -53,15 +53,17 @@ YAHOO.imex.userprefmgr = {
                 }
             }*/
             console.log("sucess");
-             var testing;
-             testing = YAHOO.lang.JSON.parse(response.responseText);
-             testing = YAHOO.lang.JSON.parse(testing.preferences);
-             console.log(testing);     
-             
-             var content = document.getElementById('content');
-             var string = traverse(testing,process);
-             console.log (string);
-             content.innerHTML = content.innerHTML + string + "</form>";
+            var testing;
+            testing = YAHOO.lang.JSON.parse(response.responseText);
+            testing = YAHOO.lang.JSON.parse(testing.preferences);
+            console.log(testing);     
+
+            var content = document.getElementById('content');
+            var html = '<form id="userprefmgrForm" name="userprefmgrForm" action="/icentral/userprefmgr" method="post">';
+            html += '<input type="hidden" name="op" value="update" id="userprefmgr_op" />'; 
+            html +=traverse(testing,process);
+            console.log (html);
+            content.innerHTML = content.innerHTML + html + '<input type="submit" id="userprefmgrSave" name="userprefmgrForm" value="Save" />' +"</form>";
              
                              
          };
@@ -76,8 +78,8 @@ YAHOO.imex.userprefmgr = {
         try{
             YAHOO.util.Connect
             .asyncRequest( 'GET', 
-                           //'userprefmgr?id=' + init.loginid +'&op.opcode1=update', 
-                           'userprefmgr?id=30' +'&op.opcode1=update', 
+                           //'userprefmgr?id=' + init.loginid +'&op.view=update', 
+                           'userprefmgr?id=30' +'&op.view=true', 
                            callback );        
         } catch (x) {
             alert("AJAX Error:"+x);
