@@ -4,16 +4,19 @@
 <s:if test="#session['USER_ID'] > 0">
 </s:if>
 <s:if test="id == 30">
- <script type="text/javascript">
-  YAHOO.util.Event.addListener( window, "load",
-                                YAHOO.imex.userprefmgr.init(
-                                   { owner:"<s:property value="opp.ou"/>",
-                                     admus:"<s:property value="opp.au"/>",
-                                     cflag:"<s:property value="opp.encf"/>", 
-                                        login:"<s:property value="#session['LOGIN']" />",
-                                      loginid:"<s:property value="#session['USER_ID']" />"}));
+    <script type="text/javascript">
+      YAHOO.util.Event.addListener( window, "load",
+                                    YAHOO.imex.userprefmgr.init(
+                                       { owner:"<s:property value="opp.ou"/>",
+                                         admus:"<s:property value="opp.au"/>",
+                                         cflag:"<s:property value="opp.encf"/>", 
+                                            login:"<s:property value="#session['LOGIN']" />",
+                                          loginid:"<s:property value="#session['USER_ID']" />"}));
 
- </script>
+    </script>
+    <s:form action="userprefmgr" theme="simple" onsubmit="return false;">
+        <s:submit name="op.update" value="Save" theme="simple" onclick="YAHOO.imex.userprefmgr.update()"/>
+    </s:form>
 </s:if>
  <div class="yui-skin-sam" width="100%">
       

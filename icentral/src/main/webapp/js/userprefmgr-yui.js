@@ -2,6 +2,25 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.userprefmgr = {
+    traverse:  function (o,func) {
+        var string = '';
+        for (var i in o) {                                 
+            if(i =="option-def")
+            {
+                html += "\n<ul>\n"
+                for(var j = 0; j < o.options.length; j++)
+                {
+                    string += "<li>" + func.apply(this,[j,o["option-def"][o.options[j]], o["options"]]); 
+                    //going to step down in the object tree!!
+                    string += this.traverse(o["option-def"][o.options[j]],func) + "</li>\n";
+                }
+                
+                html+="</ul>\n"
+            }
+        }
+        return string
+    },
+    
     init: function( init ){
         var Success = function(response)
          {
@@ -21,49 +40,20 @@ YAHOO.imex.userprefmgr = {
                     return  value.label + ": " + checkboxT + " " +  checkboxF;
                 }
             }
-            var traverse = function (o,func) {
-                var html = '';
-                for (var i in o) {                                 
-                    if(i =="option-def")
-                    {
-                        html += "\n<ul>\n"
-                        for(var j = 0; j < o.options.length; j++)
-                        {
-                            html += "<li>" + func.apply(this,[j,o["option-def"][o.options[j]], o["options"]]); 
-                            //going to step down in the object tree!!
-                            html += traverse(o["option-def"][o.options[j]],func) + "</li>\n";
-                        }
-                        html+="</ul>\n"
-                    }
-                }
-                return html
-            }
-            /*var traverse = function (o,func) {
-                for (var i in o) { 
-                    if (typeof(o[i])=="object") {
-                        if(i =="option-def")
-                        {
-                            console.log("<ul>");
-                            func.apply(this,[i,o[i], o["options"]]); 
-                            console.log("</ul>");
-                        }
-                        //going to step down in the object tree!!
-                        traverse(o[i],func);
-                    }
-                }
-            }*/
+
             console.log("sucess");
             var testing;
             testing = YAHOO.lang.JSON.parse(response.responseText);
             testing = YAHOO.lang.JSON.parse(testing.preferences);
             console.log(testing);     
 
-            var content = document.getElementById('content');
-            var html = '<form id="userprefmgrForm" name="userprefmgrForm" action="/icentral/userprefmgr" method="post">';
-            html += '<input type="hidden" name="op" value="update" id="userprefmgr_op" />'; 
-            html +=traverse(testing,process);
+            var form = document.getElementById('userprefmgr');
+            var html = '';
+            //var html = '<form id="userprefmgrForm" name="userprefmgrForm" action="/icentral/userprefmgr" method="post">';
+            //html += '<input type="hidden" name="op.update" value="update" id="userprefmgr_op" />'; 
+            html += YAHOO.imex.userprefmgr.traverse(testing,process);
             console.log (html);
-            content.innerHTML = content.innerHTML + html + '<input type="submit" id="userprefmgrSave" name="userprefmgrForm" value="Save" />' +"</form>";
+            form.innerHTML = html + form.innerHTML ;
              
                              
          };
@@ -84,5 +74,8 @@ YAHOO.imex.userprefmgr = {
         } catch (x) {
             alert("AJAX Error:"+x);
         }
+    },
+    update: function(  ){
+        console.log("In function update");
     }
 }
