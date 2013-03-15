@@ -104,8 +104,8 @@ public class UserPrefMgrAction extends ManagerSupport {
                     return execOp1();
                 }
 
-                if ( key.equalsIgnoreCase( "opcode2" ) ) {
-                    return execOp2();
+                if ( key.equalsIgnoreCase( "update" ) ) {
+                    return update();
                 }
                 
                 if ( key.equalsIgnoreCase( "opcode3" ) ) {
@@ -156,9 +156,13 @@ public class UserPrefMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
-    private String execOp2(){
+    private String update(){
 
+        Log log = LogFactory.getLog( this.getClass() );
         //watchManager.doSomethingElse();
+        log.debug( "|update called" );
+        log.debug( "|update called" );
+        log.debug( "|update called" );
 
         return JSON;
     }
