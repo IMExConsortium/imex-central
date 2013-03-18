@@ -2,4 +2,5 @@
 <script src="js/side-panel-yui.js" type="text/javascript" language="JavaScript"></script>
 <script src="js/autocom-yui.js" type="text/javascript" language="JavaScript"></script>
 <script src="js/news-yui.js" type="text/javascript" language="JavaScript"></script>
+<script src="js/userprefmgr-yui.js" type="text/javascript" language="JavaScript"></script>
 

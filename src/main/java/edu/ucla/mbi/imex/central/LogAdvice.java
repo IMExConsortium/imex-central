@@ -22,6 +22,7 @@ import java.lang.reflect.*;
        
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
+import edu.ucla.mbi.imex.central.dao.*;
 
 public class LogAdvice {
 
@@ -206,26 +207,69 @@ public class LogAdvice {
                                       ((IcComment)adi).getSubject() + ")",
                                       "" );                
             }
-                            
             if( ile != null ){
-
                 // log comments & attachments
 
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );
                 
 
-                // get observers for <pub> publication
+                // get observers forf <pub> publication
                 //------------------------------------
+                ObsMgrDao sorelManager = getAttachmentManager().getTracContext().getObsMgrDao();
+                List usersWatchList = sorelManager.getObserverList( pub );
                 
-              
+                log.info("usersWatchList = " + usersWatchList);
+                if(usersWatchList.contains( (User) luser ) == false)
+                {
+                    log.info("%%% adding User " + luser + " %%%");
+                    sorelManager.addSORel(pub, (User) luser);
+                    //add user to UserWatchList
+                    usersWatchList.add((User) luser);
+                }
                 // trigger mail agent process
                 //---------------------------
-
+                //Get message Information
                 
+                String pubAuthor, pubTitle, pubId, pubPmid, alert, message;
+                log.info("pub.getId()  = " + (pubId = pub.getId() + "") );
+                log.info("pub.getAuthor() = " + ( pubAuthor = pub.getAuthor()));
+                log.info("pub.getTitle()  = " + (pubTitle = pub.getTitle() ));
+                log.info("pub.getPmid()  = " + (pubPmid = pub.getPmid()) );
+                log.info("ile.getLabel()  = " + (alert = ile.getLabel()));
+                if(pubAuthor.length() > 70)
+                    pubAuthor = pubAuthor.substring(0, 70);
+                if(pubTitle.length() > 70)
+                    pubTitle = pubTitle.substring(0, 70);
                 
-
-  
+                Iterator userWatchIterator = usersWatchList.iterator();
+                //turn list of email addresses into csv
+                String recipients = "";
+                while(userWatchIterator.hasNext())
+                {
+                    String userEmail = ((User) luser).getEmail();
+                    recipients += userEmail + " ";
+                    log.info("userEmail = " + userEmail);
+                    log.info( (User)userWatchIterator.next());
+                }
+                message = "EMAIL=\"" + recipients + "\"\n" +
+                    "ID=\"" + pubId + "\"\n" +
+                    "AUTHOR=\"" + pubAuthor + "\"\n" +
+                    "TITLE=\"" + pubTitle + "\"\n" +
+                    "PMID=\"" + pubPmid + "\"\n" +
+                    "ALERT=\"" + alert + "\"\n" ;
+                //Write message information to queue file
+                try {
+                    File file = new File("/tmp/var/icentral/queue/" + String.valueOf(System.currentTimeMillis()) + ".queue");
+                    file.createNewFile();
+                    FileOutputStream fout = new FileOutputStream(file);
+                    fout.write( ( message ).getBytes());
+                    fout.close();
+                        
+                }catch ( IOException ex ) { 
+                    System.out.println(ex);
+                }
+                
             }
         }
     }

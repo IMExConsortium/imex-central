@@ -142,9 +142,7 @@
                      <%--  <p><strong>Format:</strong> --</p>%><%--  <p><s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> </p>--%>
                      <p><strong>Body:</strong></p>
                      <p><s:textarea cssClass="limit-width" theme="simple" name="opp.encb" cols="50" rows="5" value=""/></p>
-                     <p><strong>Flag:</strong> 
-                        <%-- <label id="flag-label" class="flag-label">Flag</label> --%>
-                     <s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request'}" value="-1"/></p>
+                     <p><strong>Flag:</strong> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request'}" value="-1"/></p>
                      <p><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></p>
                      <em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> 
                   </fieldset>
@@ -172,13 +170,10 @@
                         
                         <p><strong>File:</strong> <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
                         <p><strong>Name:</strong> <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
-                        <p><strong>Format:</strong> 
-                          <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
-                        <strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%>
-                          <s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/>
+                        <p><strong>Format:</strong> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
+                        <strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/>
                         <s:hidden name="op.eada" value="ADD"/>
-                        <s:submit theme="simple" name="op.xxx" value="ADD" disabled="false" 
-                                  onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/>
+                        <s:submit theme="simple" name="op.xxx" value="ADD" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
                      </fieldset>
                   </s:form>
                </s:if> 
@@ -188,8 +183,7 @@
                </s:if>   
                <s:else>
                <h3 class="pub-edit-sect">Add a File</h3>               
-                  <p>If you are a curator or are the owner of this publication, please <a href="user">Log in</a> 
-                  to add and view attachments. Attachments are not public.</p>
+                  <p>If you are a curator or are the owner of this publication, please <a href="user">Log in</a> to add and view attachments. Attachments are not public.</p>
                </s:else>
             </div>
             <!-- log pane -->

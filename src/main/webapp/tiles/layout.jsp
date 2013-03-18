@@ -14,14 +14,15 @@
  <t:insertDefinition name="htmlhead"/>
  </head>
  <body class="yui-skin-sam">
- <iframe id="yui-history-iframe" src="img/imex_central_logo_small.png"></iframe>
+ <!--[if IE]>
+ <iframe id="yui-history-iframe" src="/icentral/img/imex_central_logo_small.png"></iframe>
+ <![endif]-->
  <input id="yui-history-field" type="hidden">
-
   <div id="page">
    <t:insertDefinition name="header"/>
    <table class='center' width="95%" cellspacing="0" cellpadding="0">
     <tr>
-     <td class="content">
+     <td id="content">
        <t:insertAttribute name="body" />
      </td>
     </tr>

@@ -252,6 +252,5 @@
      <result name="jedit" type="tiles">journalmgr</result>
           
    </action>
-
  </package>
 </struts>
