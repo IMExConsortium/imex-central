@@ -51,9 +51,7 @@
  </script>
 --%>
 
- <br/><br/><br/><br/><br/><br/><br/><br/>
 </s:if>
 <s:else>
   Must be logged in to access watch list.
- <br/><br/><br/><br/><br/><br/><br/><br/> 
 </s:else>

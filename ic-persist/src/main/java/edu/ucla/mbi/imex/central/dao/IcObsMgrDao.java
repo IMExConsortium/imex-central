@@ -25,9 +25,10 @@ import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
+import edu.ucla.mbi.imex.central.dao.*;
 
 public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
-    
+
     public List<User> getObserverList( DataItem subject ){
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -41,7 +42,7 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
 
         try {
             Query query =
-                session.createQuery( "select sor.user "
+                session.createQuery( "select sor.observer "
                                      + " from SORel sor where "
                                      + " sor.subject = :subject " );
 
@@ -50,6 +51,7 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
             olst = (List<User>) query.list();
             tx.commit();
         } catch ( HibernateException e ) {
+            log.info(e);
             handleException( e );
             // log exception ?
             e.printStackTrace();
@@ -83,6 +85,7 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
             
             slst = (List<DataItem>) query.list();
             tx.commit();
+            
         } catch ( HibernateException e ) {
             handleException( e );
             // log exception ?
@@ -90,17 +93,25 @@ public class IcObsMgrDao extends AbstractDAO implements ObsMgrDao {
         } finally {
             session.close();
         }
-        
         System.out.println( "slist" + slst);
         
         return slst;
     }
 
     public void addSORel( DataItem subject, User observer ){
-        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info('\n' + "got to addSORel with subject = " + subject + " and  observer = " + observer);
+        SORel newRelationship = new SORel( subject, observer);
+        log.info(newRelationship);
+        super.saveOrUpdate(newRelationship);
     }
 
     public void dropSORel( DataItem subject, User observer ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info('\n' + "got to dropSOrel with subject = " + subject + " and  observer = " + observer);
+        SORel dropRelationship = new SORel( subject, observer);
+        log.info(dropRelationship);
+        super.delete(dropRelationship);
 
     }
 

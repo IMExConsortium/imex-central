@@ -125,32 +125,32 @@ public class NewsAction extends ManagerSupport {
     Log log = LogFactory.getLog( this.getClass() );
 
     private void initialize( boolean force ) {
-	
-	Map<String,Object> jpd = newsContext.getJsonConfig();
-	
-	if ( jpd == null || force ) {
-	    log.info( " initilizing page defs..." );
-	    String jsonPath = 
-		(String) newsContext.getConfig().get( "json-config" );
-	    log.info( "JsonPageDef=" + jsonPath );
-	
-	    if ( jsonPath != null && jsonPath.length() > 0 ) {
-		
-		String cpath = jsonPath.replaceAll("^\\s+","" );
-		cpath = jsonPath.replaceAll("\\s+$","" );
+    
+        Map<String,Object> jpd = newsContext.getJsonConfig();
+        
+        if ( jpd == null || force ) {
+            log.info( " initilizing page defs..." );
+            String jsonPath = 
+            (String) newsContext.getConfig().get( "json-config" );
+            log.info( "JsonPageDef=" + jsonPath );
+        
+            if ( jsonPath != null && jsonPath.length() > 0 ) {
+            
+                String cpath = jsonPath.replaceAll("^\\s+","" );
+                cpath = jsonPath.replaceAll("\\s+$","" );
 
-		try {
-		    InputStream is = 
-			getServletContext().getResourceAsStream( cpath );
-		    newsContext.readJsonConfigDef( is );
-		    
-		    jpd = newsContext.getJsonConfig();
-		    
-		} catch ( Exception e ){
-		    log.info( "JsonConfig reading error" );
-		}
-	    }
-	}
+                try {
+                    InputStream is = 
+                    getServletContext().getResourceAsStream( cpath );
+                    newsContext.readJsonConfigDef( is );
+                    
+                    jpd = newsContext.getJsonConfig();
+                    
+                } catch ( Exception e ){
+                    log.info( "JsonConfig reading error" );
+                }
+            }
+        }
     }
         
     private void initialize() {  // default: non-forced call

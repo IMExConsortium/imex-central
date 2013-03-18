@@ -411,13 +411,16 @@ YAHOO.imex.attedit = {
         var aclass = o.argument;
         YAHOO.imex.attedit.conf[aclass].comTable.load(); 
     },
-
     //this upload function may make some code unnecessary. re-factor is in order  
     UploadFile: function(){
 		var formElement = document.getElementById("attmgr");
 		var textField = formElement.elements.namedItem('opp.edan');
 		var fileField = formElement.elements.namedItem('opp.edafile');
-
+/*
+		if(fileField.files[0].size + textField.value.length < 2095000 && fileField.files.length > 0)
+		{
+			* 
+*/
         var attachmentSuccess = function(o) 
         {
             var edit = YAHOO.imex.attedit;
@@ -447,10 +450,24 @@ YAHOO.imex.attedit = {
         if(typeof fileField.files[0] != "undefined")
         {
             var btn = YAHOO.util.Dom.get('attmgr_op_eada');
+            //var form = new FormData(formElement);
+            //var xhr = new XMLHttpRequest();
             
+            //form.append(btn.name, btn.value);
             YAHOO.util.Connect.setForm(formElement, true);
             var sendForm = YAHOO.util.Connect.asyncRequest('POST', 'attachmgr', callback);
-            
+            //xhr.open("POST", "attachmgr", false);
+            //xhr.send(form);
+            /*
+            if(xhr.status != 404)
+            {
+                var edit = YAHOO.imex.attedit;
+                edit.attachReload({'argument':'adata'});
+                edit.addTitleCount(edit.conf['adata'].comTable.getRecordSet().getLength() + 1, 'Attachments');
+            }
+            else
+                alert('Error during file upload. Check if file is too large');
+                */
         }
     }
 };

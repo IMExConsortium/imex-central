@@ -21,7 +21,8 @@ $Id$
          - curation status
          - key assigner
      - journal manager converted to YUI tables
- - CSS modified to visually distinguish between test/beta/production sites 
+ - CSS modified in order to visually distinguish between test/beta/production 
+   sites 
  - pom.xml modifications 
 
 
@@ -98,28 +99,6 @@ $Id$
                                     
       - PSICQUIC server updates
 
-
 2012/07/24 BETA-0.87
   - GUI updates:
       - implemented record tabs history
-
-
-2012/09/13 BETA-0.88
-  - GUI updates:
-      -added links from the statistics page
-
-  - PSICQUIC server code moved into separate project
-
-
-2013/02/05 BETA-0.89
-
-  - completed implementation of ACL control at the 'target' level  
-
-  - GUI updates:
-     - overhaul of new record page and record editor layout
-     - record editor: 
-          - implemented functionality of the data attachment tab
-     - CSS cleanup 
-
-  - help pages added
-
