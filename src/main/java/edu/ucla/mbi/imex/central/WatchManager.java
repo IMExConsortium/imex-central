@@ -78,7 +78,7 @@ public class WatchManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " getPublicationList -> id=" + usr.getId() );
         
-        List<DataItem> diList = getTracContext().getObsMgrDao()
+        List<DataItem> diList = getTracContext().getSorelDao()
             .getSubjectList( usr, firstRecord, blockSize ,skey, asc );
 
         if( diList != null ){
@@ -102,7 +102,7 @@ public class WatchManager {
     //---------------------------------------------------------------------
 
     public long getPublicationCount( User usr ){       
-        return getTracContext().getObsMgrDao().getSubjectCount( usr );
+        return getTracContext().getSorelDao().getSubjectCount( usr );
     }
 
     //---------------------------------------------------------------------
@@ -111,8 +111,8 @@ public class WatchManager {
 
         if( usr == null || pub == null ) return false;
 
-        if( getTracContext().getObsMgrDao()
-            .getWatchStatus( usr, pub )  == null ) return false;
+        if( getTracContext().getSorelDao()
+            .getSORel( usr, pub )  == null ) return false;
             
         return true;
     }
@@ -125,10 +125,10 @@ public class WatchManager {
         if( usr == null || pub == null ) return false;
 
         if( watch ){
-            getTracContext().getObsMgrDao().addSORel( pub, usr );
+            getTracContext().getSorelDao().addSORel( pub, usr );
             return true;
         } else{
-            getTracContext().getObsMgrDao().dropSORel( pub, usr );
+            getTracContext().getSorelDao().dropSORel( pub, usr );
             return false;
         }
     }
