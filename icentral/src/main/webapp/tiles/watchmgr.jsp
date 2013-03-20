@@ -1,8 +1,20 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <h1>Watch Manager</h1>
-<s:if test="id > 0">
- <div class="yui-skin-sam" width="100%">
+
+<s:if test="#session['USER_ID'] > 0">
+ <script type="text/javascript">
+   YAHOO.util.Event.addListener( window, "load",
+                                 YAHOO.imex.watchmgr.init(
+                                    { owner:"<s:property value="opp.ou"/>",
+                                      admus:"<s:property value="opp.au"/>",
+                                      cflag:"<s:property value="opp.encf"/>",
+                                      login:"<s:property value="#session['LOGIN']" />",
+                                      loginid:"<s:property value="#session['USER_ID']" />"}));
+
+  </script>
+
+  <div class="yui-skin-sam" width="100%">
   <center>
    <table width="99%">
     <tr>
@@ -39,18 +51,6 @@
    </s:form>
   </table>
  </div>
-
-<%--
- <script type="text/javascript">
-  YAHOO.util.Event.addListener( window, "load",
-                                YAHOO.imex.watchmgr.init(
-                                   { owner:"<s:property value="opp.ou"/>",
-                                     admus:"<s:property value="opp.au"/>",
-                                     cflag:"<s:property value="opp.encf"/>" }));
-
- </script>
---%>
-
 </s:if>
 <s:else>
   Must be logged in to access watch list.

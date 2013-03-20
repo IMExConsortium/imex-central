@@ -1,9 +1,11 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.pubmgr = {
-	    admus: "",
+
+    admus: "",
     owner: "",
     cflag: "",
+    watch: "",
     
     stateBtn: { my:{value:"",foo:"state"} },    
     stateSel: [ { text: "---ANY---", value: "" } ],
@@ -55,7 +57,7 @@ YAHOO.imex.pubmgr = {
                    formatter:"elink", className:"detail" }        
     },
 
-
+    
     myCP: { "date": "submission"},
 
     myCL: [ "id", "pub", "pmid", "imexId", "imexDb",
@@ -63,8 +65,8 @@ YAHOO.imex.pubmgr = {
     myColumnDefs: [],
 
     requestBuilder: function( oState, oSelf ) {
-
-        //alert("myRequestBuilder");
+        
+        alert("requestBuilder->oState=" + YAHOO.lang.JSON.stringify(oState) );
 
         // get state (or use defaults)
         //----------------------------
@@ -79,6 +81,10 @@ YAHOO.imex.pubmgr = {
             ? oState.pagination.recordOffset : 0;
         var results = (oState.pagination) 
             ? oState.pagination.rowsPerPage : 10;
+
+        // LS: also get watch flag here ?
+
+
         
         // filters
         //--------
@@ -102,8 +108,17 @@ YAHOO.imex.pubmgr = {
         var efVal = oSelf.my.admusFlt;
         var ofVal = oSelf.my.ownerFlt;
         var ffVal = oSelf.my.cflagFlt;
+
+
+        // watch flag 
         
+        var wtFlg = oSelf.my.watchFlg;
+        if( wtFlg === undefined ){
+            wtFlg = "";
+        }
+
         var req = "opp.skey=" + sort +
+            "&opp.wfl=" + wtFlg + 
             "&opp.sfv=" + sfVal +
             "&opp.pfv=" + pfVal +
             "&opp.efv=" + efVal +
@@ -112,7 +127,7 @@ YAHOO.imex.pubmgr = {
             "&opp.sdir=" + dir +
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
-
+        
         req = encodeURI(req);
         console.log("request: " + req);
         
@@ -147,7 +162,6 @@ YAHOO.imex.pubmgr = {
         }
     },
 
-
     init: function( init ){
         
         try{
@@ -173,7 +187,7 @@ YAHOO.imex.pubmgr = {
             console.log("INIT: ex="+ x);
         }
         this.initView( init );
-        this.historyInit();
+        this.historyInit( init );
     },
 
     buildCDefs: function( cookie ){
@@ -223,7 +237,7 @@ YAHOO.imex.pubmgr = {
         return cookie;
     },
 
-    historyInit: function(){
+    historyInit: function( init ){
         
         var defstate = {
             startIndex: 0,
@@ -233,9 +247,14 @@ YAHOO.imex.pubmgr = {
                      editor:"",
                      owner:"",
                      cflag:""},
+            watch: "",
             scol: "id",
             sdir: "asc" };
                  
+        if(  init !== undefined && init.watch !== undefined ){
+            defstate.watch = init.watch;
+        }
+
         var dst = YAHOO.lang.JSON.stringify( defstate );
         
         var bState = YAHOO.util.History.getBookmarkedState( "pubmgr" );
@@ -264,6 +283,9 @@ YAHOO.imex.pubmgr = {
         var PMGR = YAHOO.imex.pubmgr;
         
         var newState = PMGR.myDataSource.my.myState;
+        
+        // LS: watch flag ?
+        
         newState.startIndex = 0;
         newState.filter[filter] = newVal;
         
@@ -313,7 +335,7 @@ YAHOO.imex.pubmgr = {
     },
     
     handleHistoryNavigation: function( state ){
-
+        
         var PMGR = YAHOO.imex.pubmgr;
 
         //alert( "HHN:" + state );
@@ -352,21 +374,21 @@ YAHOO.imex.pubmgr = {
             PMGR.stateBtn.set( "label", 
                                ("<em class=\"yui-button-label\">" + 
                                 statusLabel + "</em>"));
+        }else{
+            PMGR.stateSel[0].text = statusLabel;
         }
-        else
-			PMGR.stateSel[0].text = statusLabel;
         
         if( PMGR.partnerBtn.set!== undefined ){
             PMGR.partnerBtn.set( "label", 
                                  ("<em class=\"yui-button-label\">" + 
                                   partnerLabel + "</em>"));
+        }else{
+	    PMGR.partnerSel[0].text = partnerLabel;
         }
-        else
-			PMGR.partnerSel[0].text = partnerLabel;
         
         // reload data
         //------------
-
+        
         var mdt = PMGR.myDataTable;
         
         PMGR.myDataSource
@@ -381,12 +403,14 @@ YAHOO.imex.pubmgr = {
     generateStateString: function( state ){            
         return YAHOO.lang.JSON.stringify( state );
     },
-
+    
     parseStateString: function( statStr ){
         return YAHOO.lang.JSON.parse(statStr);
     },
     generateLinkState: function(status, partner)
     {
+
+        //LS: watch ?
         var filter = {status:status, partner:partner, editor:'', owner:'', cflag:''  };
         var state = {startIndex:0, pageSize:25,filter:filter, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
@@ -394,7 +418,10 @@ YAHOO.imex.pubmgr = {
     },
     buildRequest: function ( state ){
       
+        //alert("buildRequest->state" +YAHOO.lang.JSON.stringify(state));
+
         var req = "opp.off=" + state.startIndex + 
+            "&opp.wfl=" + state.watch + 
             "&opp.max=" + state.pageSize + 
             "&opp.sfv=" + state.filter.status +
             "&opp.pfv=" + state.filter.partner +
@@ -403,8 +430,8 @@ YAHOO.imex.pubmgr = {
             "&opp.ffv=" + state.filter.cflag +
             "&opp.skey=" + state.scol +
             "&opp.sdir=" + state.sdir;
-
-        return encodeURI(req);
+        
+        return encodeURI( req );
         
     },
 
@@ -428,9 +455,10 @@ YAHOO.imex.pubmgr = {
             PMGR.admus = init.admus;
             PMGR.owner = init.owner;
             PMGR.cflag = init.cflag;
+            PMGR.watch = init.watch;
         }
         
-        //alert("init: "+ init.cflag);
+        //alert( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
 
         var partnerSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse( o.responseText );
@@ -484,7 +512,7 @@ YAHOO.imex.pubmgr = {
         // create datasource
         //------------------
 
-        PMGR.myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=44&"); 
+        PMGR.myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=ppg&"); 
         
         PMGR.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
         PMGR.myDataSource.responseSchema = { 
@@ -504,9 +532,9 @@ YAHOO.imex.pubmgr = {
                 fFlg: "records.filter.cflag" 
             }
         }; 
-
+        
         PMGR.myDataSource.my = { myState: null };
-                
+        
         // create paginator
         //-----------------
         
@@ -523,6 +551,7 @@ YAHOO.imex.pubmgr = {
         //------------------------
         
         var initReq = "opp.off=0&opp.max=25"
+            + "&opp.wfl=" + YAHOO.imex.pubmgr.watch 
             + "&opp.ofv=" + YAHOO.imex.pubmgr.owner 
             + "&opp.efv=" + YAHOO.imex.pubmgr.admus 
             + "&opp.ffv=" + YAHOO.imex.pubmgr.cflag;
@@ -552,6 +581,7 @@ YAHOO.imex.pubmgr = {
         PMGR.myDataTable.sortColumn = PMGR.handleSorting;
 
         PMGR.myDataTable.my = { 
+            watchFlg: PMGR.watch,
             stateFlt: PMGR.stateBtn, 
             partnerFlt: PMGR.partnerBtn,
             ownerFlt: PMGR.owner,
@@ -574,7 +604,6 @@ YAHOO.imex.pubmgr = {
             function( oRequest, oResponse, oPayload ){
                 
                 try{
-                    
                     var meta = oResponse.meta;
                     oPayload.totalRecords 
                         = meta.totalRecords || oPayload.totalRecords;
@@ -609,7 +638,7 @@ YAHOO.imex.pubmgr = {
                 try{
                     PMGR.myDataTable.my.configmenu.destroy();
                     PMGR.contextMenuInit( PMGR );
-
+                    
                     var nCookie = YAHOO.imex.pubmgr.buildCookie();
                     YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
                 } catch (x) {}
@@ -636,7 +665,7 @@ YAHOO.imex.pubmgr = {
     onSelectedMenuItemChange: function (event) {
         var oMenuItem = event.newValue;
         var text = oMenuItem.cfg.getProperty("text");
-
+        
         //alert("menu change: value=" + this.my.value);        
 
         for( var i = 0; i < this.my.items.length; i++ ){
@@ -786,23 +815,20 @@ YAHOO.imex.pubmgr = {
     }, 
     
     myPmidFormatter: function(elLiner, oRecord, oColumn, oData) {
-		var pmid = oRecord.getData("pmid");
-		YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-		
-		if(pmid.length > 0)
-		{
-			if(typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" )
-			{
-				
-				elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
-					oRecord.getData( "pmid" ) + 
-					'">'+ oRecord.getData( "pmid" ) +'</a>';
-			}
-			else
-				elLiner.innerHTML = pmid;
-		}
-		else
-			elLiner.innerHTML = 'N/A';
+	var pmid = oRecord.getData("pmid");
+	YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+	
+	if( pmid.length > 0 ){
+	    if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
+		elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
+		    oRecord.getData( "pmid" ) + 
+		    '">'+ oRecord.getData( "pmid" ) +'</a>';
+	    }
+	    else
+		elLiner.innerHTML = pmid;
+	}
+	else
+	    elLiner.innerHTML = 'N/A';
     },
     
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
@@ -856,8 +882,6 @@ YAHOO.imex.pubmgr = {
         YDTF.partnerList = this.myPartnerListFormatter; 
         YDTF.editorList = this.myEditorListFormatter; 
     }
-
-
 };
 
 //YAHOO.util.Event.addListener(

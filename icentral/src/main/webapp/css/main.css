@@ -1564,3 +1564,9 @@ form.stylized button {
     float: left;
     margin: 10px 0 0 100px;
 }
+
+.page-content {
+  padding: 0px 0px 0px 2em ;
+  font-size: 0.85em;
+  background-color: white;
+}

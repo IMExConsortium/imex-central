@@ -10,7 +10,7 @@
        "disabled":"false",
        menu:[
          {label:"Browse",
-          link:"page?id=browse",
+          link:"pubmgr",
           "disabled":"false",
           menu:[
             {label:"Publications",
@@ -147,7 +147,7 @@
           menu:[]
          },
          {label:"Watch List",
-          link:"watchmgr",
+          link:"pubmgr?opp.wfl=true",
           "disabled":"false",
           menu:[]
          }]

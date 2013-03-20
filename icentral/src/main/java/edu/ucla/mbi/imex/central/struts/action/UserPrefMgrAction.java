@@ -41,7 +41,7 @@ public class UserPrefMgrAction extends ManagerSupport {
     
     private UserPrefManager uprefManager;
 
-    public void setUserPrefManager( UserPrefManager manager ) {
+    public void setUserPrefManager( UserPrefManager manager ){
         this.uprefManager = manager;
     }
 
@@ -101,11 +101,11 @@ public class UserPrefMgrAction extends ManagerSupport {
             if ( val != null && val.length() > 0 ) {
                 
                 if ( key.equalsIgnoreCase( "view" ) ) {
-                    return execOp1();
+                    return execView();
                 }
 
                 if ( key.equalsIgnoreCase( "update" ) ) {
-                    return update();
+                    return execUpdate();
                 }
                 
                 if ( key.equalsIgnoreCase( "opcode3" ) ) {
@@ -125,15 +125,14 @@ public class UserPrefMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     
-    private String execOp1(){
+    private String execView(){
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "|id=" + getId() + " op=" + getOp() );
         
         User user = new User();
         UserDao userDao = getUserContext().getUserDao();
-        if(getId() > 0)
-        {
+        if( getId() > 0 ){
             try {
                 user = userDao.getUser(getId());
                 this.preferences = user.getPrefs();
@@ -144,7 +143,6 @@ public class UserPrefMgrAction extends ManagerSupport {
         log.debug( "before if length = : " + this.preferences.length());
         if(this.preferences == null || this.preferences.length() <= 0)
         {
-            
             log.debug( "No prefs found, updating with Defaults" );
             this.preferences = getUserPrefManager().getDefUserPrefs();
             user.setPrefs(this.preferences);
@@ -156,7 +154,7 @@ public class UserPrefMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
-    private String update(){
+    private String execUpdate(){
 
         Log log = LogFactory.getLog( this.getClass() );
         //watchManager.doSomethingElse();

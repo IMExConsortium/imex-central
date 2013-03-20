@@ -2,8 +2,10 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <h1>Account Settings</h1>
 <s:if test="#session['USER_ID'] > 0">
+<%--
 </s:if>
-<s:if test="id == 30">
+<s:if test="id == 30  || id==4">
+--%>
     <script type="text/javascript">
       YAHOO.util.Event.addListener( window, "load",
                                     YAHOO.imex.userprefmgr.init(
@@ -17,12 +19,10 @@
     <s:form action="userprefmgr" theme="simple" onsubmit="return false;">
         <s:submit name="op.update" value="Save" theme="simple" onclick="YAHOO.imex.userprefmgr.update()"/>
     </s:form>
-</s:if>
+
  <div class="yui-skin-sam" width="100%">
-      
  </div>
-
-
+</s:if>
 <s:else>
   Must be logged in to access user preferences editor.
 </s:else>

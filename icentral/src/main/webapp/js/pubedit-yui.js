@@ -628,12 +628,40 @@ YAHOO.imex.pubedit = {
         }
     },
 
-    stateUpdateFail: function( o ) {
+    stateUpdateFail: function( o ){
         alert(o.responseText);
     },
 
-    updateFail: function( o ) {
+    updateFail: function( o ){
         alert(o.responseText);
+    },
+
+    watchFlag: function( op ){
+        if( op == 'update' ){
+            var wfl = YAHOO.util.Dom.getElementsByClassName("watch-flag");
+            var watch = wfl[0].checked;
+
+            var setWatchFlagCallback = { cache:false, timeout: 5000, 
+                                         success: YAHOO.imex.pubedit.watchUpdate,
+                                         failure: YAHOO.imex.pubedit.updateFail,
+                                         argument:{ chkbox:wfl[0] } };
+            try{
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   'watchmgr?op.wflu=update' 
+                                   + '&id=' + YAHOO.imex.pubedit.pubId 
+                                   + '&opp.wfl=' + watch,
+                                   setWatchFlagCallback );
+            } catch(x){
+                alert( x );
+            }
+        }
+        return false;
+    },
+
+    watchUpdate: function( o ){
+        var messages = YAHOO.lang.JSON.parse( o.responseText );        
+        //alert( "watchUpdate->response=" + o.responseText );
     },
 
     historyInit: function(){

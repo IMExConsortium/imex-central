@@ -13,7 +13,7 @@ YAHOO.imex.userprefmgr = {
         for (var i in object) {                                 
             if(i =="option-def")
             {
-                html += "\n<ul>\n"
+                html += "\n<ul>\n";
                 for(var j = 0; j < object.options.length; j++)
                 {
                     html += "<li>" + func.apply(this,[j,object["option-def"][object.options[j]], object["options"]]); 
@@ -21,7 +21,7 @@ YAHOO.imex.userprefmgr = {
                     html += this.traverse(object["option-def"][object.options[j]],func) + "</li>\n";
                 }
                 
-                html+="</ul>\n"
+                html+="</ul>\n";
             }
         }
         return html
@@ -31,12 +31,10 @@ YAHOO.imex.userprefmgr = {
      * also creates the structure and displays the form element on the page
      *************************************************************************/ 
     init: function( init ){
-        var userprefmgr = YAHOO.imex.userprefmgr
-        var Success = function(response)
-         {
+        var userprefmgr = YAHOO.imex.userprefmgr;
+        var Success = function(response){
             var process = function (key,value, options) {
-                if(typeof value.value != "undefined")
-                {
+                if( typeof value.value != "undefined"){
                     if(value.value )
                     {
                         var checkboxT = '<input type="radio" id="' + options[key] +'True" name="' + options[key] +'" checked="checked"><strong>True</strong></input>';
@@ -49,8 +47,9 @@ YAHOO.imex.userprefmgr = {
                     }
                     return  value.label + ": " + checkboxT + " " +  checkboxF;
                 }
-            }
-
+                return "";
+            };
+            
             console.log("sucess");
             
             userprefmgr.preferences = YAHOO.lang.JSON.parse(response.responseText);
@@ -78,8 +77,8 @@ YAHOO.imex.userprefmgr = {
         try{
             YAHOO.util.Connect
             .asyncRequest( 'GET', 
-                           //'userprefmgr?id=' + init.loginid +'&op.view=true', 
-                           'userprefmgr?id=30' +'&op.view=true', 
+                           'userprefmgr?id=' + init.loginid +'&op.view=true', 
+                           //'userprefmgr?id=30' +'&op.view=true', 
                            callback );        
         } catch (x) {
             console.log("AJAX Error:"+x);
@@ -97,7 +96,8 @@ YAHOO.imex.userprefmgr = {
                     value.value = !value.value;
                 return  value.label ;
             }
-        }
+            return "";
+        };
         var checkPrefs = YAHOO.lang.JSON.parse( YAHOO.lang.JSON.stringify( userprefmgr.preferences) );
         html += userprefmgr.traverse(checkPrefs,process);
         if(!(YAHOO.lang.JSON.stringify( userprefmgr.preferences) === YAHOO.lang.JSON.stringify( checkPrefs )))
@@ -127,4 +127,4 @@ YAHOO.imex.userprefmgr = {
         }
         
     }
-}
+};

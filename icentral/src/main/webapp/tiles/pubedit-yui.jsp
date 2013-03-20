@@ -12,8 +12,9 @@
             <li><a href="#tab2"><em>Publication Details</em></a></li>
             <li><a href="#tab3"><em>Curator Access</em></a></li>
             <li><a href="#tab4"><em>Comments</em></a></li>
-            <li><a href="#tab5"><em>Attachments</em></a></li>
-            <li><a href="#tab6"><em>Record History</em></a></li>
+            <li><a href="#tab5"><em>Attachments</em></a></li>          
+            <li><a href="#tab6"><em>Watch Status</em></a></li>
+            <li><a href="#tab7"><em>Record History</em></a></li>
          </ul>
          <div class="yui-content">
             <!--Record Status Tab--><s:form id="pub-stat-edit" theme="simple" action="pubedit">
@@ -186,10 +187,32 @@
                   <p>If you are a curator or are the owner of this publication, please <a href="user">Log in</a> to add and view attachments. Attachments are not public.</p>
                </s:else>
             </div>
+            <!-- watch pane -->
+            <div id="watch-pane" class="yui-hidden">
+              <s:if test="#session['USER_ID'] > 0">
+               <s:form id="watchmgr" theme="simple" action="watchmgr">            
+                  <s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
+                  <div class="top-padding">
+                   <fieldset>
+                     <legend>
+                        <h3>Watch Status</h3>
+                     </legend>
+                     <p>Watch On <s:hidden name="flags.watch" value="%{flags.watch}"/>
+                     <s:checkbox theme="simple" name="flags.watch" cssClass="watch-flag" 
+                                 fieldValue="true" value="%{flags.watch}"/>
+                     <s:submit theme="simple" name="op.wfls" value="UPDATE" 
+                         onclick="return YAHOO.imex.pubedit.watchFlag('update');"/>
+                  </fieldset>
+               </s:form></div>
+              </s:if>
+              <s:else>
+                 <h3 class="pub-edit-sect">Publication Watch</h3>
+                 <p>Please <a href="user">Log in</a> to set/remove a record watch.</p>
+              </s:else>
             <!-- log pane -->
             <div id="log-pane" class="yui-hidden">
                <s:form id="cmtmgr" theme="simple" action="attachmgr">
-                  <h3 class="pub-edit-sect">Record History</h3>
+                  <h3 class="pub-edit-sect">Record History</h3>                  
                      <s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
                      <div id="history-tbview"></div>
                </s:form></div>

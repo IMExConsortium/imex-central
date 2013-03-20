@@ -66,7 +66,7 @@
       </td>
      </tr>
      <tr>
-      <td colspan="3" class="content">
+      <td colspan="3" class="page-content">
        <s:property value="source" escape="false" />
        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
       </td>

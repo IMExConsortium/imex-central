@@ -68,18 +68,18 @@
   <h1>Publication Manager</h1>
 
   <s:if test="opp.ou.length() > 0 ">
-    <h2 class="pubmgr">Records submitted by: <i><s:property value="opp.ou"/></i></h2>
+   <h2 class="pubmgr">Records submitted by: <i><s:property value="opp.ou"/></i></h2>
   </s:if>
-  <s:else>
-    <s:if test="opp.au.length() > 0 ">
-    <h2 class="pubmgr">Records curated by: <i><s:property value="opp.au"/></i></h2>
-    </s:if>
-    <s:else>
-      <s:if test="opp.encf.length() > 0 ">
-        <h2 class="pubmgr">Records Flagged as: <i><s:property value="opp.encf"/></i></h2>
-      </s:if>  
-    </s:else>
-  </s:else>
+  <s:elseif test="opp.au.length() > 0 ">
+   <h2 class="pubmgr">Records curated by: <i><s:property value="opp.au"/></i></h2>
+  </s:elseif>
+  <s:elseif test="opp.encf.length() > 0 ">
+   <h2 class="pubmgr">Records Flagged as: <i><s:property value="opp.encf"/></i></h2>
+  </s:elseif>
+  <s:elseif test='opp.wfl.length() > 0'>  <%-- && #session['USER_ID'] > 0 ??? --%>
+   <h2 class="pubmgr">Watched Records</h2>
+  </s:elseif>
+  <s:else></s:else>
 
  <div class="yui-skin-sam" width="100%">
   <center>
@@ -124,7 +124,8 @@
                                 YAHOO.imex.pubmgr.init(
                                    { owner:"<s:property value="opp.ou"/>", 
                                      admus:"<s:property value="opp.au"/>",
-                                     cflag:"<s:property value="opp.encf"/>" }));
+                                     cflag:"<s:property value="opp.encf"/>",
+                                     watch:"<s:property value="opp.wfl"/>" }));
 
  </script>
 
