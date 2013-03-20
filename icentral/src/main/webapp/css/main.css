@@ -1529,6 +1529,7 @@ a.disabled {
     margin:	0 35px 0 0;
     float: right;
 }
+
 .limit-width
 {
     max-width:615px;
@@ -1569,4 +1570,10 @@ form.stylized button {
   padding: 0px 0px 0px 2em ;
   font-size: 0.85em;
   background-color: white;
+}
+
+/* added by LS */
+
+#pubtab{
+  border: 1px solid #888888;
 }

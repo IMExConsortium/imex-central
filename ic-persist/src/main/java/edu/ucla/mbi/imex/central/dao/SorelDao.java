@@ -6,7 +6,7 @@ package edu.ucla.mbi.imex.central.dao;
  * Version: $Rev::                                                             $
  *==============================================================================
  *
- * SorelDao: Access to subject-object relationships
+ * SorelDao: Access to subject-object relationship data
  *
  *=========================================================================== */
 
@@ -100,6 +100,10 @@ public class SorelDao extends AbstractDAO implements ObsMgrDao {
         return watchStatus;
     }
 
+    //--------------------------------------------------------------------------
+    // List queries
+    // ------------
+
     public List<User> getObserverList( DataItem subject ){
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -134,6 +138,8 @@ public class SorelDao extends AbstractDAO implements ObsMgrDao {
 
         return olst;
     }
+
+    //--------------------------------------------------------------------------
     
     public List<DataItem> getSubjectList( User observer ){
         
@@ -318,9 +324,11 @@ public class SorelDao extends AbstractDAO implements ObsMgrDao {
             tx.commit();
                 
         } catch ( HibernateException e ) {
+
+            e.printStackTrace();
             handleException( e );
             // log exception ?
-            e.printStackTrace();
+           
         } finally {
             session.close();
         }
@@ -329,6 +337,8 @@ public class SorelDao extends AbstractDAO implements ObsMgrDao {
     }
 
     //--------------------------------------------------------------------------
+    // Count queries
+    //--------------
 
     public long getSubjectCount( User observer ){
         
@@ -387,14 +397,15 @@ public class SorelDao extends AbstractDAO implements ObsMgrDao {
             }
 
             List foo = crit.setProjection( Projections.rowCount()).list();
-            count  = ((Integer) foo.get(0) ).longValue() ;
+            count  = ((Long) foo.get(0) ).longValue() ;
             log.debug( "count=" + count );
 
             tx.commit();            
         } catch ( HibernateException e ) {
+            e.printStackTrace();
             handleException( e );
             // log exception ?
-            e.printStackTrace();
+
         } finally {
             session.close();
         }

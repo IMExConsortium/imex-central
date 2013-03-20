@@ -1200,7 +1200,6 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
 
-    
     private boolean getWatchStatus( User usr, Publication pub ){ 
         return watchManager.getWatchStatus( usr, pub );       
     }
@@ -1209,7 +1208,6 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         return this.getWatchedRecords( usr, 
                                        "", "", "", "", "", "", "", "","" );
     }
-
     
     public String getWatchedRecords( User usr, 
                                      String max, String off,
@@ -1352,14 +1350,16 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             
             if( usr == null ){
                 pl = tracContext.getPubDao()
-                    .getPublicationList( first, blockSize, sortKey, asc, flt );            
+                    .getPublicationList( first, blockSize, 
+                                         sortKey, asc, flt );            
                 
                 total = tracContext.getPubDao().getPublicationCount( flt );
             } else {
                 pl = watchManager
-                    .getPublicationList( usr, first, blockSize, sortKey, asc );
+                    .getPublicationList( usr, first, blockSize, 
+                                         sortKey, asc, flt );
                 total = watchManager
-                    .getPublicationCount( usr );
+                    .getPublicationCount( usr, flt );
             }   
         }
 
