@@ -98,6 +98,38 @@ public class WatchManager {
             return null;
         }
     }
+    //---------------------------------------------------------------------
+    
+    public List<Publication> 
+        getPublicationList( User usr, 
+                            int firstRecord, int blockSize,
+                            String skey, boolean asc, 
+                            Map<String,String> flt ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " getPublicationList -> id=" + usr.getId() );
+        
+        List<DataItem> diList = getTracContext().getSorelDao()
+            .getSubjectList( usr, firstRecord, blockSize ,
+                             skey, asc, flt );
+
+        if( diList != null ){
+
+            List<Publication> pl = new ArrayList<Publication>();
+            
+            for( Iterator<DataItem> dii = diList.iterator(); 
+                 dii.hasNext(); ){
+
+                Publication p = (Publication) dii.next();
+                log.debug( "getPublicationList: add id=" + p.getId() );
+                pl.add( p );
+            }
+            
+            return pl;
+        } else {
+            return null;
+        }
+    }
 
     //---------------------------------------------------------------------
 
@@ -105,6 +137,12 @@ public class WatchManager {
         return getTracContext().getSorelDao().getSubjectCount( usr );
     }
 
+    //---------------------------------------------------------------------
+
+    public long getPublicationCount( User usr, Map<String,String> flt ){       
+        return getTracContext().getSorelDao().getSubjectCount( usr, flt );
+    }
+    
     //---------------------------------------------------------------------
     
     public boolean getWatchStatus( User usr, Publication pub ){
