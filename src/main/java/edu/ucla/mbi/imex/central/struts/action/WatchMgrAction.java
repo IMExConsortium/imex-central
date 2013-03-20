@@ -49,20 +49,6 @@ public class WatchMgrAction extends ManagerSupport {
         return this.watchManager;
     }
     
-    ////--------------------------------------------------------------------------
-    ///  TracContext
-    //--------------
-
-    private TracContext tracContext;
-
-    public void setTracContext( TracContext context ) {
-        this.tracContext = context;
-    }
-
-    public TracContext getTracContext() {
-        return this.tracContext;
-    }
-    
     //--------------------------------------------------------------------------
     // format
     //-------
@@ -81,6 +67,13 @@ public class WatchMgrAction extends ManagerSupport {
     // results
     //--------
     
+    //--------------------------------------------------------------------------
+
+    Map<String,Object> flags = null;
+
+    public Map<String,Object> getFlags(){
+        return this.flags;
+    }
     
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -89,20 +82,25 @@ public class WatchMgrAction extends ManagerSupport {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug(  "id=" + getId() + " op=" + getOp() );
-
-        //if ( tracContext.getPubDao() == null ||
-        //     tracContext.getAdiDao() == null ) return JSON;
+        
+        Integer iusr = (Integer) getSession().get( "USER_ID" );
+        log.debug( " login id=" + iusr );
+        
+        User luser = null;
+        if( iusr != null) {
+            luser = getUserContext().getUserDao().getUser( iusr.intValue() );
+            log.debug( " user set to: " + luser );
+        }
         
         if( getOp() == null ) return SUCCESS;
 
-        //IcPub icpub = null;
+        IcPub icpub = null;
 
-        //if(  getId() > 0 ) {           
-        //    icpub = entryManager.getIcPub( getId() );
-        //}
-        
-        //if( icpub == null ) return JSON;
-        
+        if(  getId() > 0 ) {           
+            icpub = (IcPub) getWatchManager().getTracContext().getPubDao()
+                .getPublication( getId() );
+        }
+               
         for ( Iterator<String> i = getOp().keySet().iterator();
               i.hasNext(); ) {
             
@@ -111,23 +109,16 @@ public class WatchMgrAction extends ManagerSupport {
 
             if ( val != null && val.length() > 0 ) {
                 
-                if ( key.equalsIgnoreCase( "opcode1" ) ) {
-                    return execOp1();
+                if ( key.equalsIgnoreCase( "wpg" ) ) {
+                    return getWatchPage( getId(), getOpp() );
                 }
 
-                if ( key.equalsIgnoreCase( "opcode2" ) ) {
-                    return execOp2();
+                if ( key.equalsIgnoreCase( "wflu" ) ) {
+                    if( icpub != null && getOpp() != null ){
+                        String wfl = getOpp().get( "wfl" );
+                        return updateWatchStatus( luser, icpub,  wfl );
+                    }
                 }
-                
-                if ( key.equalsIgnoreCase( "opcode3" ) ) {
-                    
-                    // get comment by id
-                    //------------------
-                    
-                    if ( getOpp() == null ) return JSON;
-                    String prop1 = getOpp().get( "prop1" );
-                    return execOp3( prop1 );
-                }                            
             }
         }
         return SUCCESS;
@@ -136,28 +127,24 @@ public class WatchMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     
-    private String execOp1(){
+    private String getWatchPage( int id, Map opp ){
         
-        //watchManager.doSomething();
+        //watchManager.getWatchPage( id );
 
         return JSON;
     }
 
     //--------------------------------------------------------------------------
 
-    private String execOp2(){
-
-        //watchManager.doSomethingElse();
-
+    private String updateWatchStatus( User usr, Publication pub,  String wfl ){
+        
+        boolean watch 
+            = (wfl!= null && wfl.equalsIgnoreCase("true") ) ? true : false;
+        
+        flags = new HashMap<String,Object>();
+        
+        flags.put("watch", watchManager.setWatchStatus( usr, pub, watch ) );
+                  
         return JSON;
     }
-
-    //--------------------------------------------------------------------------
-
-    private String execOp3(String param){
-
-        //watchManager.doSomethingElse( param );
-        return JSON;  // ACL_PAGE/ACL_ERROR
-    }
-
 }

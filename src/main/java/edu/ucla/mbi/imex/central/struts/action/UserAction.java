@@ -332,7 +332,7 @@ public class UserAction extends UserSupport {
 
                 if( rurl != null ) return REDIRECT;
                 
-                this.setMst("1:1");
+                //this.setMst("1:1");
 		return HOME;
 	    }
 
@@ -368,7 +368,7 @@ public class UserAction extends UserSupport {
 
         if( rurl != null ) return REDIRECT;
         
-        this.setMst("1:1"); // NOTE: should be set in struts action conf
+        //this.setMst("1:1"); // NOTE: should be set in struts action conf
 	return HOME;
     }
 

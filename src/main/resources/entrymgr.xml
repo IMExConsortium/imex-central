@@ -122,7 +122,7 @@
          publicationList.*,.*roles.*,.*password.*,.*allRoles.*
         </param>
         <param name="includeProperties">
-          records.*,pub.*
+          records.*,pub.*,flags.*
         </param>
         <param name="noCache">true</param>
       </result>

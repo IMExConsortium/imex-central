@@ -45,7 +45,7 @@ public class WatchManager {
     public TracContext getTracContext() {
         return this.tracContext;
     }
-    
+        
     //---------------------------------------------------------------------
     
     boolean debug = false;
@@ -70,24 +70,68 @@ public class WatchManager {
     // Operations
     //---------------------------------------------------------------------
     
-    public void op1( int id ) {
+    public List<Publication> 
+        getPublicationList( User usr, 
+                            int firstRecord, int blockSize,
+                            String skey, boolean asc ){
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " op1 -> id=" + id );
+        log.info( " getPublicationList -> id=" + usr.getId() );
         
-        return;
+        List<DataItem> diList = getTracContext().getObsMgrDao()
+            .getSubjectList( usr, firstRecord, blockSize ,skey, asc );
+
+        if( diList != null ){
+
+            List<Publication> pl = new ArrayList<Publication>();
+            
+            for( Iterator<DataItem> dii = diList.iterator(); 
+                 dii.hasNext(); ){
+
+                Publication p = (Publication) dii.next();
+                log.debug( "getPublicationList: add id=" + p.getId() );
+                pl.add( p );
+            }
+            
+            return pl;
+        } else {
+            return null;
+        }
+    }
+
+    //---------------------------------------------------------------------
+
+    public long getPublicationCount( User usr ){       
+        return getTracContext().getObsMgrDao().getSubjectCount( usr );
     }
 
     //---------------------------------------------------------------------
     
-    public void op2( int id, String par1 ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " op1 -> id=" + id + " par1->" + par1);
+    public boolean getWatchStatus( User usr, Publication pub ){
 
-        return;
+        if( usr == null || pub == null ) return false;
+
+        if( getTracContext().getObsMgrDao()
+            .getWatchStatus( usr, pub )  == null ) return false;
+            
+        return true;
     }
 
+    //---------------------------------------------------------------------
+
+    public boolean setWatchStatus( User usr, Publication pub, 
+                                   boolean watch ){
+        
+        if( usr == null || pub == null ) return false;
+
+        if( watch ){
+            getTracContext().getObsMgrDao().addSORel( pub, usr );
+            return true;
+        } else{
+            getTracContext().getObsMgrDao().dropSORel( pub, usr );
+            return false;
+        }
+    }
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     // private methods 

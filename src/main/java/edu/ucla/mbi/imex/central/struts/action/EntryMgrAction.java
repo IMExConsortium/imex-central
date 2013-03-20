@@ -8,7 +8,7 @@ package edu.ucla.mbi.imex.central.struts.action;
  * EntryMgrAction - web interface to entry management
  *
  ============================================================================ */
-
+ 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory; 
 
@@ -51,6 +51,20 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     
     public EntryManager getEntryManager() {
         return this.entryManager;
+    }
+
+    ////------------------------------------------------------------------------
+    /// Watch Manager
+    //--------------
+
+    private WatchManager watchManager;
+    
+    public void setWatchManager( WatchManager manager ) {
+        this.watchManager = manager;
+    }
+    
+    public WatchManager getWatchManager() {
+        return this.watchManager;
     }
 
     //--------------------------------------------------------------------------
@@ -193,7 +207,14 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         return this.format;
     }
 
+    //--------------------------------------------------------------------------
+    
+    Map<String,Object> flags = null;
 
+    public Map<String,Object> getFlags(){
+        return this.flags;
+    }
+    
     //--------------------------------------------------------------------------
     // target states
     //--------------
@@ -231,7 +252,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             
             log.debug(  "setting icpub=" + getId() );
             icpub = entryManager.getIcPub( getId() );
-
+            
+            if( luser != null && icpub != null ){ 
+                flags = new HashMap<String,Object>();
+                flags.put( "watch", getWatchStatus( luser, icpub ) );  
+            }
             if( format != null && format.toUpperCase().equals("JSON") ) {
                 return JSON;
             } 
@@ -555,13 +580,19 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     return JSON;
                 }
 
-                if ( key.equalsIgnoreCase( "ppg" ) ) {
+                if ( key.equalsIgnoreCase( "ppg" ) ){
 
                     log.debug(  "\n\nop=" + getOp() );
                     log.debug(  "opp=" + getOpp() );
+                    log.debug(  "luser=" + luser +"\n\n" );
+
                     if ( getOpp() == null ) {
                         return getIcPubRecords();
                     }
+                    
+                    String wfl= getOpp().get( "wfl" ) == null ?
+                        "" :  getOpp().get( "wfl" );
+                    
                     String max= getOpp().get( "max" );
                     String off= getOpp().get( "off" );
                     String skey= getOpp().get( "skey" );
@@ -577,10 +608,18 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                         "" :  getOpp().get( "efv" );
                     String ffv = getOpp().get( "ffv" ) == null ?
                         "" :  getOpp().get( "ffv" );
-                    
-                    return getIcPubRecords( max, off, skey, sdir,
-                                            sfv, pfv, ofv, efv, ffv );
-                }
+                
+                    if( !wfl.equalsIgnoreCase("true") || luser == null ){
+    
+                        return getIcPubRecords( max, off, skey, sdir,
+                                                sfv, pfv, ofv, efv, ffv );
+
+                    } else {
+                        return getWatchedRecords( luser, 
+                                                  max, off, skey, sdir,
+                                                  sfv, pfv, ofv, efv, ffv );
+                    }
+                }                
             }
         }
         return SUCCESS;
@@ -1161,8 +1200,35 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
 
+    
+    private boolean getWatchStatus( User usr, Publication pub ){ 
+        return watchManager.getWatchStatus( usr, pub );       
+    }
+
+    public String getWatchedRecords( User usr ) {
+        return this.getWatchedRecords( usr, 
+                                       "", "", "", "", "", "", "", "","" );
+    }
+
+    
+    public String getWatchedRecords( User usr, 
+                                     String max, String off,
+                                     String skey, String sdir,
+                                     String sfv, String pfv,
+                                     String ofv, String efv,
+                                     String ffv ) {
+        
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "getWatchedRecords: uid=" + usr.getId() );
+
+        return getIcPubRecords( usr , max, off, skey, sdir, sfv, pfv,
+                                ofv, efv, ffv);
+        
+    }
+    
     public String getIcPubRecords() {
-        return this.getIcPubRecords( "", "", "", "", "", "", "", "","" );
+        return this.getIcPubRecords( null, "", "", "", "", "", "", "", "","" );
     }
     
     public String getIcPubRecords( String max, String off, 
@@ -1170,7 +1236,17 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                                    String sfv, String pfv, 
                                    String ofv, String efv,
                                    String ffv ) {
+        return getIcPubRecords( null, max, off, skey, sdir, sfv, pfv, 
+                                ofv, efv, ffv);
+    }
 
+    public String getIcPubRecords( User usr, 
+                                   String max, String off, 
+                                   String skey, String sdir, 
+                                   String sfv, String pfv, 
+                                   String ofv, String efv,
+                                   String ffv ) {
+        
         if ( tracContext.getPubDao() == null ) return null;
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -1254,19 +1330,37 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             
             log.debug( "getPubRecords: unfiltered" );
             
-            pl = tracContext.getPubDao()
-                .getPublicationList( first, blockSize, sortKey, asc );
-            total = tracContext.getPubDao().getPublicationCount();
+            if( usr == null ){
+                pl = tracContext.getPubDao()
+                    .getPublicationList( first, blockSize, sortKey, asc );
+                total = tracContext.getPubDao().getPublicationCount();
+            } else {
 
+                log.debug( "getting list" );
+                pl = watchManager
+                    .getPublicationList( usr, first, blockSize, sortKey, asc );
+
+                log.debug( "getting count" );
+                total = watchManager
+                    .getPublicationCount( usr );
+                log.debug( "got count" );
+            }
+            
         } else {
             
             log.debug( "getPubRecords: filtered" );
             
-            pl = tracContext.getPubDao()
-                .getPublicationList( first, blockSize, sortKey, asc, flt );            
-            
-            total = tracContext.getPubDao().getPublicationCount( flt );
-            
+            if( usr == null ){
+                pl = tracContext.getPubDao()
+                    .getPublicationList( first, blockSize, sortKey, asc, flt );            
+                
+                total = tracContext.getPubDao().getPublicationCount( flt );
+            } else {
+                pl = watchManager
+                    .getPublicationList( usr, first, blockSize, sortKey, asc );
+                total = watchManager
+                    .getPublicationCount( usr );
+            }   
         }
 
         log.debug( "getPubRecords: total=" + total);

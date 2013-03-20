@@ -6,8 +6,7 @@
       cover:{
         active:true,
         title:"Icentral",
-        menudef:"0:0",
-        menusel:"1",
+        menusel:"1:0:0",
         viewtype:"file-html",
         viewpath:"/pages/cover.html"
       },

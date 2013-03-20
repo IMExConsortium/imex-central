@@ -81,6 +81,24 @@
     }
   },
 
+  watchmgr:{
+    order:["operation"],
+    operation:{
+      "wflu": {
+        order:["ANY"]
+      },
+      "watu": {
+        order:["ANY"]
+      },
+      "wstu": {
+        order:["ANY"]
+      },
+      "wcmu": {
+        order:["ANY"]
+      }
+    } 
+  },
+
   pubmgr:{
     order:["operation"],
     operation:{
@@ -88,6 +106,9 @@
         order:["ANY"]
       },
       ppg:{
+        order:["ANY"]
+      },
+      wpg:{
         order:["ANY"]
       },
       esrc:{

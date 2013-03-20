@@ -94,7 +94,7 @@ YAHOO.mbi.news.newsbox = {
                 var nyi = 1+parseInt(o.argument.yi);
                 var nn = n-i;
                 var nyr = messages.years[nyi];
-                if( defined(messages.years[nyi] ) ){
+                if( messages.years[nyi] !== undefined ){
                     
                     var src = feed + '?ret=nbox&year=' + nyr;
                 

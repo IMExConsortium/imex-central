@@ -189,7 +189,7 @@
      
      <result name="success" type="tiles">register</result>
      <result name="input" type="tiles">register</result>
-     <result name="home">index.jsp</result>
+     <result name="home" type="redirect">/</result>
      <result name="uedit" type="tiles">uedit</result>
      <result name="activate" type="tiles">activate</result>
      
