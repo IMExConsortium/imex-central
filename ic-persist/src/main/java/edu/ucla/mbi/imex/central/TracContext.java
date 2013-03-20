@@ -88,16 +88,15 @@ public class TracContext extends JsonContext {
     }
 
     //--------------------------------------------------------------------------
-
-
-    private IcObsMgrDao icObsMgrDao;
-
-    public IcObsMgrDao getObsMgrDao() {
-        return icObsMgrDao;
+    
+    private SorelDao sorelDao;
+    
+    public SorelDao getSorelDao() {
+        return sorelDao;
     }
-
-    public void setObsMgrDao( IcObsMgrDao dao ) {
-        icObsMgrDao = dao;
+    
+    public void setSorelDao( SorelDao dao ) {
+        sorelDao = dao;
     }
 
 

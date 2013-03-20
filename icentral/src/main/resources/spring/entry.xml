@@ -24,7 +24,7 @@
     <property name="adiDao" ref="adiDao"/>
     <property name="workflowDao" ref="workflowDao"/>
 
-    <property name="obsMgrDao" ref="obsMgrDao"/>
+    <property name="sorelDao" ref="sorelDao"/>
     
     <property name="ncbiProxyClient" ref="ncbiProxyClient" />
 
@@ -37,7 +37,7 @@
   <bean id="icStatsDao" class="edu.ucla.mbi.imex.central.dao.IcStatsDao"/>
   <bean id="adiDao" class="edu.ucla.mbi.imex.central.dao.IcAdiDao"/>
 
-  <bean id="obsMgrDao" class="edu.ucla.mbi.imex.central.dao.IcObsMgrDao"/>
+  <bean id="sorelDao" class="edu.ucla.mbi.imex.central.dao.SorelDao"/>
 
  <!-- actions -->
 

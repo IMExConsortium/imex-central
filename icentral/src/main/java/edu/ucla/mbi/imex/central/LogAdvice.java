@@ -216,7 +216,7 @@ public class LogAdvice {
 
                 // get observers forf <pub> publication
                 //------------------------------------
-                ObsMgrDao sorelManager = getAttachmentManager().getTracContext().getObsMgrDao();
+                SorelDao sorelManager = getAttachmentManager().getTracContext().getSorelDao();
                 List usersWatchList = sorelManager.getObserverList( pub );
                 
                 log.info("usersWatchList = " + usersWatchList);

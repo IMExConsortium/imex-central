@@ -38,7 +38,7 @@ public class SorelDao extends AbstractDAO implements ObsMgrDao {
         // NOTE: MUST check if old record present as neither observer nor
         //       subject are primary record ID 
         
-        SORel oldRelationship = getWatchStatus( observer, subject );
+        SORel oldRelationship = getSORel( observer, subject );
         if( oldRelationship == null ){
             SORel newRelationship = new SORel( subject, observer );
             log.debug( newRelationship );
