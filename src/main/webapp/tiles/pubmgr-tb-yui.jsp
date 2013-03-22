@@ -13,7 +13,7 @@
   <s:elseif test="opp.au.length() > 0 ">
    <h2 class="pubmgr">Records curated by: <i><s:property value="opp.au"/></i></h2>
   </s:elseif>
-  <s:elseif test="opp.encf.length() > 0 ">
+  <s:elseif test="opp.encf.length() > 0 && opp.encf != '-1'">
    <h2 class="pubmgr">Records Flagged as: <i><s:property value="opp.encf"/></i></h2>
   </s:elseif>
   <s:elseif test="opp.wfl.length() > 0 && #session['USER_ID'] > 0" >
@@ -42,7 +42,7 @@
   </center>    
   <div id="pubtab" width="100%" class="pubtab"></div>
   <table width="100%" cellpadding="5">
-   <s:form theme="simple" action="pubmgr">
+   <s:form theme="simple" action="pubsrc">
     <tr>
      <td align="center" width="5%">
       <%-- <s:submit theme="simple" name="op.ldel" value="DROP" /> --%>

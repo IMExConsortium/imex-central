@@ -66,7 +66,7 @@ YAHOO.imex.pubmgr = {
 
     requestBuilder: function( oState, oSelf ) {
         
-        alert("requestBuilder->oState=" + YAHOO.lang.JSON.stringify(oState) );
+        //alert("requestBuilder->oState=" + YAHOO.lang.JSON.stringify(oState) );
 
         // get state (or use defaults)
         //----------------------------
@@ -83,9 +83,7 @@ YAHOO.imex.pubmgr = {
             ? oState.pagination.rowsPerPage : 10;
 
         // LS: also get watch flag here ?
-
-
-        
+        // <        
         // filters
         //--------
 
@@ -238,16 +236,18 @@ YAHOO.imex.pubmgr = {
     },
 
     historyInit: function( init ){
+
+        var PMGR = YAHOO.imex.pubmgr;
         
         var defstate = {
             startIndex: 0,
             pageSize: 25,
             filter:{ status: "",
                      partner:"",
-                     editor:"",
-                     owner:"",
-                     cflag:""},
-            watch: "",
+                     editor:PMGR.admus,
+                     owner: PMGR.owner,
+                     cflag: PMGR.cflag},
+            watch: PMGR.watch,
             scol: "id",
             sdir: "asc" };
                  
@@ -589,7 +589,13 @@ YAHOO.imex.pubmgr = {
             cflagFlt: PMGR.cflag,
             requestBuilder: PMGR.requestBuilder
         };
-        
+
+        PMGR.myDataTable.my.filter = {
+            owner: PMGR.owner, 
+            editor: PMGR.admus,
+            cflag: PMGR.cflag  
+        };
+
         PMGR.stateBtn.my.table = PMGR.myDataTable;
         PMGR.partnerBtn.my.table = PMGR.myDataTable;
         

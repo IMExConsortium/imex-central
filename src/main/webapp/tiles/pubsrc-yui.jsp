@@ -47,19 +47,20 @@
 
   <td>
    <center>
-    <s:form theme="simple" action="pubmgr">
+    <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
       <legend class="qlegend">By Comment Flag</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Flag:</b>
-         <div class="acom"> 
-          <s:hidden name="op.init" />           
+         <div class="acom">
+          <s:hidden name="mst" value="1:1:1"/> 
           <s:select name="opp.encf" headerKey="-1" headerValue="-- select --"
-                    list="#{'QControl':'QControl','Curation Request':'Curation Request'}" value="-1" cssClass="pubsrc-flag"/>
+                    list="#{'QControl':'QControl','Curation Request':'Curation Request'}" 
+                    value="-1" cssClass="pubsrc-flag"/>
           
-          <s:submit theme="simple" name="opp.sub" value="SEARCH" onclick=""/>
+          <s:submit theme="simple" name="op.eflt" value="SEARCH" onclick=""/>
          </div>
         </td>
        </tr>
@@ -73,7 +74,7 @@
  <tr>
   <td colspan="2">
    <center>
-    <s:form theme="simple" action="pubmgr">
+    <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
       <legend class="qlegend">By Record Submitter</legend>
       <table width="100%" class="qtable">
@@ -81,9 +82,9 @@
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Submitter:</b>
           <div class="acom">
-           <s:hidden name="op.init" />  
+           <s:hidden name="mst" value="1:1:1"/> 
            <s:textfield name="opp.ou"/>
-           <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
+           <s:submit theme="simple" name="op.eflt" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
            <div id="poo_cnt"></div>
          </div>
         </td>
@@ -98,7 +99,7 @@
  <tr>
   <td colspan="2">
    <center>
-    <s:form theme="simple" action="pubmgr">
+    <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
       <legend class="qlegend">By Record Curator</legend>
       <table width="100%" class="qtable">
@@ -106,9 +107,9 @@
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Curator:</b>
          <div class="acom"> 
-          <s:hidden name="op.init" />          
+          <s:hidden name="mst" value="1:1:1"/>          
           <s:textfield name="opp.au" />          
-          <s:submit theme="simple" name="opp.sub" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
+          <s:submit theme="simple" name="op.eflt" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
           <div id="poc_cnt">
          </div>
         </td>
@@ -131,12 +132,12 @@
 <script type="text/javascript">
    YAHOO.util.Event.addListener(
          window, "load", YAHOO.imex.autocom.init,
-         { inp:"pubmgr_opp_au", cnt:"poc_cnt",opt:"curac" }
+         { inp:"pubsrc_opp_au", cnt:"poc_cnt",opt:"curac" }
       );
 
    YAHOO.util.Event.addListener(
          window, "load", YAHOO.imex.autocom.init,
-         { inp:"pubmgr_opp_ou", cnt:"poo_cnt",opt:"ownac" }
+         { inp:"pubsrc_opp_ou", cnt:"poo_cnt",opt:"ownac" }
       );
 
 
