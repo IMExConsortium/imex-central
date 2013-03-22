@@ -2,6 +2,8 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <script src="js/util-yui.js" type="text/javascript"></script>
 
+
+<%-- LS
 <s:if test="id > 0">
  <script src="js/calendar-yui.js" type="text/javascript"></script>
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
@@ -60,7 +62,10 @@
     YAHOO.util.Event.addListener( window, "load", attclear );
  </script>
 </s:if>
+
 <s:else>
+--%>
+
   <script src="js/pubmgr-yui.js" type="text/javascript"></script>
 
   <!--    history   -->
@@ -118,7 +123,7 @@
    </s:form>
   </table>
  </div>
- 
+
  <script type="text/javascript">
   YAHOO.util.Event.addListener( window, "load", 
                                 YAHOO.imex.pubmgr.init(
@@ -129,4 +134,6 @@
 
  </script>
 
+<%-- 
 </s:else>
+--%>

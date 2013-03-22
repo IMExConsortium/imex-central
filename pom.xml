@@ -256,6 +256,13 @@
               </includes>
             </resource>
 
+            <resource>
+              <directory>${basedir}/..</directory>
+              <targetPath>.</targetPath>
+              <filtering>true</filtering>
+              <include>RELEASE-NOTES.txt</include>
+            </resource>
+
           </webResources>
         </configuration>
       </plugin>

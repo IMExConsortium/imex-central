@@ -23,7 +23,6 @@
     <property name="icStatsDao" ref="icStatsDao"/>
     <property name="adiDao" ref="adiDao"/>
     <property name="workflowDao" ref="workflowDao"/>
-
     <property name="sorelDao" ref="sorelDao"/>
     
     <property name="ncbiProxyClient" ref="ncbiProxyClient" />
@@ -41,6 +40,35 @@
 
  <!-- actions -->
 
+  <bean id="pubViewAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.EntryViewerAction">
+
+    <property name="entryManager" ref="entryManager"/>
+    <property name="watchManager" ref="watchManager"/>
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
+
+    <property name="mst" value="1:1:1"/>
+  </bean>
+
+
+  <bean id="pubEditAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.EntryEditorAction">
+
+    <property name="entryManager" ref="entryManager"/>
+    <property name="watchManager" ref="watchManager"/>
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
+
+    <property name="mst" value="1:1:1"/>
+  </bean>
+
   <bean id="pubAction" scope="prototype"
       class="edu.ucla.mbi.imex.central.struts.action.EntryMgrAction">
 
@@ -56,7 +84,7 @@
   </bean>
 
   <bean id="pubSrcAction" scope="prototype"
-      class="edu.ucla.mbi.imex.central.struts.action.EntryMgrAction">
+      class="edu.ucla.mbi.imex.central.struts.action.EntryViewerAction">
 
     <property name="entryManager" ref="entryManager"/>
 
@@ -69,7 +97,7 @@
   </bean>
 
   <bean id="pubNewAction" scope="prototype"
-      class="edu.ucla.mbi.imex.central.struts.action.EntryMgrAction">
+      class="edu.ucla.mbi.imex.central.struts.action.EntryViewerAction">
 
     <property name="entryManager" ref="entryManager"/>
     <property name="watchManager" ref="watchManager"/>

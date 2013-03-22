@@ -5,42 +5,44 @@
 
 <div width="100%">
 <h1>Add a Publication</h1>
-   <div>
-    <s:if test="hasActionErrors()">    
-      <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
+ <s:if test="hasActionErrors()">    
+   <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
        <span class="error">
         <s:iterator value="actionErrors">
          <span class="errorMessage"><s:property escape="false" /></span>
         </s:iterator>
        </span>
-      </div>
-     
-    </s:if>
-   </div>  
+   </div>     
+ </s:if>
  <s:if test="pub == null or pub.pmid == null or pub.pmid.length() == 0" >  
-
-    <s:form theme="simple" action="pubedit" cssClass="stylized">
-    
-    <s:hidden name="id" value="%{id}"/>
-    <s:hidden name="pub.id" value="%{id}"/>
-    
-    <label>Author(s):</label>
-      <s:textfield theme="simple" name="pub.author" size="90" maxLength="256"/>                         
-    <label>Title:</label>
-      <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>                 
-      <button name="op.eadd" value="ADD">Add</button>
-
-
+   <div style="display: block;">
+    <s:form theme="simple" action="pubsrc" cssClass="stylized" style="display:inline-block">
+     <label>PMID:</label>
+     <s:textfield theme="simple" name="pub.pmid" size="16" maxLength="16"/>                         
+     <button name="op.esrc" value="ADD">Add</button>
     </s:form>
-
-  
- 
-</s:if>
-<s:else>
-    <s:form theme="simple" cssClass="stylized" action="pubedit"> 
-
+   </div>
+   <br/>
+   <div style="display: inline-block;">
+    <h2>OR</h2>
+   </div>
+   <br/>
+   <div style="display: block;">
+    <s:form theme="simple" action="pubedit" cssClass="stylized" style="display:inline-block">
      <s:hidden name="id" value="%{id}"/>
      <s:hidden name="pub.id" value="%{id}"/>
+     <label>Author(s):</label>
+     <s:textfield theme="simple" name="pub.author" size="90" maxLength="256"/>                         
+     <label>Title:</label>
+     <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>                 
+     <button name="op.eadd" value="ADD">Add</button>
+   </s:form>
+  </div>
+</s:if>
+<s:else>
+  <div>
+    <s:form theme="simple" cssClass="stylized" action="pubedit"> 
+     <s:hidden name="pub.pmid" value="%{pub.pmid}"/>
      <label>PMID:</label>
      <div><s:property  value="pub.pmid" /> </div>
      <label>Journal:</label>
@@ -56,5 +58,6 @@
      <div><s:property value="%{pub.abstract}"/></div>
      <button name="op.eadd" value="ADD">Add</button>
     </s:form>
+  </div>
 </s:else>
 </div>
