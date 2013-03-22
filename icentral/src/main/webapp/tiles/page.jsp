@@ -67,11 +67,17 @@
      </tr>
      <tr>
       <td colspan="3" class="page-content">
-       <s:property value="source" escape="false" />
-       <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+       <s:if test="id == 'relnotes'">
+         <t:insertTemplate template="/tiles/relnotes.jsp" ignore="true"/>
+       </s:if>
+       <s:else>
+        <s:property value="source" escape="false" />
+       </s:else>         
+       <br/><br/><br/><br/><br/>
       </td>
      </tr> 
    </s:if>
+
   </table>
   <s:if test="big">
    <t:insertTemplate template="/tiles/footer.jsp" flush="true">

@@ -833,7 +833,7 @@ YAHOO.imex.pubmgr = {
     
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-        elLiner.innerHTML = '<a href="pubmgr?id=' + 
+        elLiner.innerHTML = '<a href="pubedit?id=' + 
             oRecord.getData( "id" ) + 
             '">details</a>';
     },

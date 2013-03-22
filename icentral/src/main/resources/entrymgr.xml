@@ -88,10 +88,16 @@
     <action name="pubsrc" class="pubSrcAction">
       <interceptor-ref name="mgrStack"/>
       <interceptor-ref name="timer"/>
-      <result name="success" type="tiles">pubmgr</result>
+      <result name="success" type="tiles">pubmgr-ed</result>
       <result name="notfound" type="tiles">pubsrc</result>
       <result name="input" type="tiles">pubsrc</result>
-      <result name="pubedit" type="tiles">pubmgr</result>  
+
+<!--  <result name="pubedit" type="tiles">pubmgr</result>   -->
+      <result name="pubedit" type="redirectAction">
+        <param name="actionName">pubedit</param>
+        <param name="id">%{id}</param>
+      </result>
+      
       <result name="pubnew" type="redirectAction">
         <param name="actionName">pubnew</param>
         <param name="pmid">%{pmid}</param>
@@ -102,16 +108,24 @@
 
     </action>
 
-    <action name="pubmgr" class="pubAction">
+<!--<action name="pubmgr" class="pubAction"> -->
+    <action name="pubmgr" class="pubViewAction">
       
       <interceptor-ref name="mgrStack"/>
       <interceptor-ref name="timer"/>
       
-      <result name="success" type="tiles">pubmgr</result>     
+      <result name="success" type="tiles">pubmgr-tb</result>     
       <result name="acl_page" type="tiles">aclpageerror</result>
       <result name="acl_oper" type="tiles">acloperror</result>
-      <result name="input" type="tiles">pubmgr</result>     
-      <result name="pubedit" type="tiles">pubmgr</result>
+<!--      <result name="input" type="tiles">pubmgr</result> -->     
+      <result name="input" type="tiles">pubsrc</result>     
+
+<!--  <result name="pubedit" type="tiles">pubmgr</result> -->
+      <result name="pubedit" type="redirectAction">
+        <param name="actionName">pubedit</param>
+        <param name="id">%{id}</param>
+      </result>
+      
       <result name="pubnew" type="redirectAction">
         <param name="actionName">pubnew</param>
         <param name="pmid">%{pmid}</param>
@@ -128,17 +142,20 @@
       </result>
     </action>
     
-    <action name="pubedit" class="pubAction">
+    <action name="pubedit" class="pubEditAction">
      
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">pubmgr</result>
+     <result name="success" type="tiles">pubedit</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="acl_tget" type="tiles">acltargeterror</result>
-     <result name="input" type="tiles">pubmgr</result>
-     <result name="pubedit" type="tiles">pubmgr</result>  
+
+<!-- <result name="input" type="tiles">pubedit</result>  NOTE: never returned -->
+
+<!-- <result name="pubedit" type="tiles">pubmgr</result> -->
+     <result name="pubedit" type="tiles">pubedit</result>
      <result name="pubnew" type="redirectAction">
        <param name="actionName">pubnew</param>
        <param name="pmid">%{pmid}</param>
@@ -205,8 +222,12 @@
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="acl_tget" type="tiles">acltargeterror</result>
+<!--
      <result name="input" type="tiles">pubmgr</result>     
      <result name="pubedit" type="tiles">pubmgr</result>
+-->
+     <result name="input" type="tiles">pubedit</result>     
+     <result name="pubedit" type="tiles">pubedit</result>
 <!--
      <result name="pubnew" type="tiles">pubnew</result>
 -->

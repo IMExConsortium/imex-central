@@ -30,7 +30,7 @@
             }]
          },
          {label:"Search",
-          link:"page?id=search",
+          link:"pubsrc.jsp",
           "disabled":"false",
           menu:[
             {label:"Publications",
@@ -40,7 +40,7 @@
             }]
          },
          {label:"Add",
-          link:"page?id=pubadd",
+          link:"pubnew",
           "disabled":"false",
           menu:[{label:"Publication",
              link:"pubnew",
@@ -55,16 +55,16 @@
          }]
       },       
       {label:"Tools",
-       link:"page?id=tools",
+       link:"page?id=webservices",
        "disabled":"false",
        menu:[                   
-         {label:"MIF Tools",
-          link:"page?id=miftools",
-          "disabled":"false",
-          menu:[]
-         },
          {label:"Web Services",
           link:"page?id=webservices",
+          "disabled":"false",
+          menu:[]
+         },         
+         {label:"Submission Tools",
+          link:"page?id=miftools",
           "disabled":"false",
           menu:[]
          }]
@@ -179,6 +179,11 @@
              link:"page?id=help-attach",
              "disabled":"false",
              menu:[]
+            },
+            {label:"Watch List",
+             link:"page?id=help-watchlist",
+             "disabled":"false",
+             menu:[]
             }]
          },
          {label:"FAQ",
@@ -188,6 +193,11 @@
          },
          {label:"News",
           link:"news",
+          "disabled":"false",
+          menu:[]
+         },
+         {label:"Release Notes",
+          link:"page?id=relnotes",
           "disabled":"false",
           menu:[]
          }]

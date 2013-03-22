@@ -5,14 +5,14 @@
     pages:{
       cover:{
         active:true,
-        title:"Icentral",
+        title:"ImexCentral",
         menusel:"1:0:0",
         viewtype:"file-html",
         viewpath:"/pages/cover.html"
       },
       test:{
         active:true,
-        title:"Icentral: Test Page",
+        title:"ImexCentral: Test Page",
         menusel:"1:1",
         urlindex:"pages/test-index.html",
         showindex:"true",
@@ -22,7 +22,7 @@
 
       browse:{
         active:true,
-        title:"Icentral: Browse",
+        title:"ImexCentral: Browse",
         menusel:"1:1",
         urlindex:"pages/test-index.html",
         showindex:"false",
@@ -31,7 +31,7 @@
       },
       index:{
         active:true,
-        title:"Icentral: Index",
+        title:"ImexCentral: Index",
         menusel:"1:1",
         urlindex:"",
         showindex:"false",
@@ -40,14 +40,14 @@
       },
       search:{
         active:true,
-        title:"Icentral: Search",
+        title:"ImexCentral: Search",
         menusel:"1:2",
         viewtype:"file-html",
         viewpath:"/pages/search.html"
       },
       pubadd:{
         active:true,
-        title:"Icentral: Add",
+        title:"ImexCentral: Add",
         menusel:"1:3",
         viewtype:"file-html",
         viewpath:"/pages/pubadd.html"
@@ -62,7 +62,7 @@
       },
       admin:{
         active:true,
-        title:"Icentral Site Administration",
+        title:"ImexCentral: Site Administration",
         menudef:"0:2",
         menusel:"3",
         viewtype:"file-html",
@@ -70,7 +70,7 @@
       },
       usermgr:{
         active:true,
-        title:"Icentral: User Manager",
+        title:"ImexCentral: User Manager",
         menudef:"0:2:0",
         menusel:"3:1",
         viewtype:"file-html",
@@ -78,7 +78,7 @@
       },
       workflowmgr:{
         active:true,
-        title:"Icentral: Workflow Manager",
+        title:"ImexCentral: Workflow Manager",
         menudef:"0:2:1",
         menusel:"3:2",
         viewtype:"file-html",
@@ -86,7 +86,7 @@
       },
       databasemgr:{
         active:true,
-        title:"Icentral: Database Manager",
+        title:"ImexCentral: Database Manager",
         menudef:"0:2:2",
         menusel:"3:3",
         viewtype:"file-html",
@@ -94,7 +94,7 @@
       },
       accessmgr:{
         active:true,
-        title:"Icentral: Access Manager",
+        title:"ImexCentral: Access Manager",
         menusel:"3:4",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
@@ -109,30 +109,22 @@
       },
       preferences:{
         active:true,
-        title:"Icentral: Preferences",
+        title:"ImexCentral: Preferences",
         menusel:"4",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
       },
       dbsettings:{
         active:true,
-        title:"Icentral: Database Settings",
+        title:"ImexCentral: Database Settings",
         menusel:"4",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
       },
 
-      data:{
-        active:true,
-        title:"DIP Data",
-        menudef:"0:0",
-        menusel:"1:0",
-        viewtype:"file-html",
-        viewpath:"/pages/data.html"
-      },
       news:{
         active:true,
-        title:"DIP Data",
+        title:"ICentral: News",
         menudef:"0:2:0",
         menusel:"1:1",
         viewtype:"file-html",
@@ -140,66 +132,34 @@
       },
       guide:{
         active:true,
-        title:"DIP Data",
+        title:"ICentral: Guide",
         menusel:"3:4:0",
         viewtype:"file-html",
         viewpath:"/pages/guide/contents.html"
       },
       tools:{
         active:true,
-        title:"DIP Tools",
+        title:"ICentral: Tools",
        
         menusel:"2:0",
         viewtype:"file-html",
         viewpath:"/pages/tools.html"
       },
-      evltools:{
-        active:true,
-        title:"Data Evaluation Tools",
-        menudef:"0:1:1",
-        menusel:"2:2:0",
-        viewtype:"file-html",
-        viewpath:"/pages/evltools.html"
-      },
       miftools:{
         active:true,
-        title:"MIF Tools",
+        title:"ICentral: Submission Tools",
         menudef:"0:1",
-        menusel:"2:3",
+        menusel:"2:2",
         viewtype:"file-html",
         viewpath:"/pages/miftools.html"
       },
-      links:{
-        active:true,
-        title:"DIP Links",
-        viewtype:"file-html",
-        menudef:"0:3",
-        menusel:"4:0",
-        viewpath:"/pages/links.html"
-      },
       submit:{
         active:true,
-        title:"DIP Submit",
+        title:"ICentral: Data Submission",
         menudef:"0:0",
         menusel:"1:3:0",
         viewtype:"file-html",
         viewpath:"/pages/submit.html"
-      },
-      software:{
-        active:true,
-        title:"DIP Submit",
-        menudef:"0:1:0",
-        menusel:"2:1:0",
-        viewtype:"file-html",
-        viewpath:"/pages/software.html"
-      },
-      download:{
-        active:true,
-        title:"DIP Download",
-        menudef:"0:0:1",
-        menusel:"1:2:0",
-        viewtype:"file-html",
-        viewpath:"/pages/download.html"
       },
       articles:{
         active:true,
@@ -211,7 +171,7 @@
       },
       feedback:{
         active:true,
-        title:"DIP Search",
+        title:"ICentral: Feedback",
         menudef:"0:0:0",
         menusel:"0:0:0",
         viewtype:"file-html",
@@ -219,15 +179,15 @@
       },
       webservices:{
         active:true,
-        title:"DIP Web Services",
+        title:"ImexCentral: Web Services",
         menudef:"0:1",
-        menusel:"2:4",
+        menusel:"2:1",
         viewtype:"file-html",
         viewpath:"/pages/webservices.html"
       },
       template:{
         active:true,
-        title:"DIP Search",
+        title:"ICentral: ",
         menudef:"0:0:0",
         menusel:"0:0:0",
         viewtype:"file-html",
@@ -235,7 +195,7 @@
       },
       "help":{
         active:true,
-        title:"Icentral Help",
+        title:"ICentral: Help",
         menudef:"0:2",
         menusel:"5:1",
         viewtype:"file-html",
@@ -274,14 +234,29 @@
         viewtype:"file-html",
         viewpath:"/pages/help-attach.html"
       },
-      
+      "help-watchlist":{
+        active:true,
+        title:"Icentral Help: Watch List",
+        menudef:"0:2:0",
+        menusel:"5:1:5",
+        viewtype:"file-html",
+        viewpath:"/pages/help-watchlist.html"
+      },      
       faq:{
         active:true,
-        title:"Icentral FAQ",
+        title:"ImexCentral: FAQ",
         menudef:"0:2",
         menusel:"5:2",
         viewtype:"file-html",
         viewpath:"/pages/faq.html"
+      },      
+      relnotes:{
+        active:true,
+        title:"ImexCentral: Release Notes",
+        menudef:"0:2",
+        menusel:"5:4",
+        viewtype:"file-html",
+        viewpath:"/RELEASE-NOTES.txt"
       }
     }
   }

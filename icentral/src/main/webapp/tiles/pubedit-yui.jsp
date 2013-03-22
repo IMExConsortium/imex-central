@@ -1,5 +1,16 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+
+<%-- FROM: pubmgr-yui.js --%>
+
+ <script src="js/util-yui.js" type="text/javascript"></script>
+
+ <script src="js/calendar-yui.js" type="text/javascript"></script>
+ <script src="js/pubedit-yui.js" type="text/javascript"></script>
+ <script src="js/attach-yui.js" type="text/javascript"></script>
+<%-- END --%>
+ <h1>Publication Editor</h1>
+
 <div width="100%" class="yui-skin-sam">
    <div class="pub-edit-head">
    <h2>IC-<s:property value="pub.id"/>-PUB</h2>
@@ -151,7 +162,7 @@
                   </s:form>
                   <s:if test="#session['USER_ID'] > 0">
                      <h3 class="pub-edit-sect">Comments</h3>
-                     <div id="com-tbview"></div>
+                     <div id="com-tbview" class="tbview"></div>
                   </s:if>
                   <s:else>
                      <h3 class="pub-edit-sect">Add a Comment</h3>               
@@ -180,7 +191,7 @@
                </s:if> 
                <s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
                      <h3 class="pub-edit-sect">Attachments</h3>
-                     <div id="adata-tbview"></div>
+                     <div id="adata-tbview" class="tbview"></div>
                </s:if>   
                <s:else>
                <h3 class="pub-edit-sect">Add a File</h3>               
@@ -209,14 +220,66 @@
                  <h3 class="pub-edit-sect">Publication Watch</h3>
                  <p>Please <a href="user">Log in</a> to set/remove a record watch.</p>
               </s:else>
+            </div>
             <!-- log pane -->
-            <div id="log-pane" class="yui-hidden">
+            <div id="log-pane" class="yui-hidden ">
                <s:form id="cmtmgr" theme="simple" action="attachmgr">
                   <h3 class="pub-edit-sect">Record History</h3>                  
                      <s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
-                     <div id="history-tbview"></div>
+                     <div id="history-tbview" class="tbview"></div>
                </s:form></div>
          </div>
       </div>
    </div>
 </div>
+
+<script type="text/javascript">
+    YAHOO.util.Event.addListener( 
+         window, "load", YAHOO.imex.pubedit.init, 
+         {id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"} 
+      );
+
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
+
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+         {aclass:"comment",
+          apane:"com-tbview",tabno:3,
+          url:"attachmgr?op.calg=calg&id=",
+          cname:{"author":"Author","subject":"Subject","date":"Date", "flagName":"Flag"},
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"}  
+      );
+
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+         {aclass:"adata",apane:"adata-tbview",tabno:4,
+          url:"attachmgr?op.dalg=dalg&id=",
+          cname:{"author":"Author", "subject":"Name", "date":"Date", 
+                 "bodyType":"Format", "flagName":"Flag", "aid":""},
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />",
+          loginid:"<s:property value="#session['USER_ID']" />",
+          curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
+          owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
+      );
+
+      YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+         {aclass:"history",apane:"history-tbview",tabno:6,
+          url:"attachmgr?op.halg=halg&id=",
+          cname:{"author":"User","subject":"Operation","date":"Date"},
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />"}  
+      );
+
+    function attclear(){
+      try{   
+        YAHOO.util.Dom.get('attmgr_opp_edan').value='';
+        YAHOO.util.Dom.get('attmgr_opp_edafile').value='';
+      }catch(x){};
+    };
+    YAHOO.util.Event.addListener( window, "load", attclear );
+ </script>

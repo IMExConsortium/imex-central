@@ -611,7 +611,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             }
             
             List foo = crit.setProjection( Projections.rowCount()).list();
-            count  = ((Integer) foo.get(0) ).longValue() ;
+            count  = ((Long) foo.get(0) ).longValue() ;
 
             Log log = LogFactory.getLog( this.getClass() );
             log.debug( "count=" + count );

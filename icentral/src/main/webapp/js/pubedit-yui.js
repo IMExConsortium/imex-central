@@ -315,7 +315,7 @@ YAHOO.imex.pubedit = {
             if( op === 'set' ) {
                 YAHOO.util.Connect
                     .asyncRequest( "GET", 
-                                   "pubmgr?format=json"  
+                                   "pubedit?format=json"  
                                    + "&id=" + YAHOO.imex.pubedit.pubId, 
                                    setStateCallback );  
             } 
