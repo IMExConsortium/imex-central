@@ -16,8 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
+import org.json.*;
+
 import java.io.*;
 import java.util.*;
+
 
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
@@ -80,17 +83,19 @@ public class UserPrefMgrAction extends ManagerSupport {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "|id=" + getId() + " op=" + getOp() );
+
+        Integer iusr = (Integer) getSession().get( "USER_ID" );
+        log.debug( " login id=" + iusr );
+        
+        User luser = null;
+        if( iusr != null) {
+            luser = getUserContext().getUserDao().getUser( iusr.intValue() );
+            log.debug( " user set to: " + luser );
+        } else  {
+            return SUCCESS;
+        }
         
         if( getOp() == null ) return SUCCESS;
-        
-
-        //IcPub icpub = null;
-
-        //if(  getId() > 0 ) {           
-        //    icpub = entryManager.getIcPub( getId() );
-        //}
-        
-        //if( icpub == null ) return JSON;
         
         for ( Iterator<String> i = getOp().keySet().iterator();
               i.hasNext(); ) {
@@ -101,11 +106,16 @@ public class UserPrefMgrAction extends ManagerSupport {
             if ( val != null && val.length() > 0 ) {
                 
                 if ( key.equalsIgnoreCase( "view" ) ) {
-                    return execView();
+                    return execView( luser );
                 }
 
                 if ( key.equalsIgnoreCase( "update" ) ) {
-                    return execUpdate();
+                    return execUpdate( luser );
+                }
+                
+
+                if ( key.equalsIgnoreCase( "defset" ) ) {
+                    return execDefset( luser );
                 }
                 
                 if ( key.equalsIgnoreCase( "opcode3" ) ) {
@@ -125,28 +135,32 @@ public class UserPrefMgrAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     
-    private String execView(){
+    private String execView( User user ){
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "|id=" + getId() + " op=" + getOp() );
+
+        //log.debug( "|id=" + getId() + " op=" + getOp() );
         
-        User user = new User();
-        UserDao userDao = getUserContext().getUserDao();
-        if( getId() > 0 ){
-            try {
-                user = userDao.getUser(getId());
-                this.preferences = user.getPrefs();
-            }catch( Exception ex ) {
-                log.debug(ex);
-            }
-        }
-        log.debug( "before if length = : " + this.preferences.length());
-        if(this.preferences == null || this.preferences.length() <= 0)
-        {
+        //User user = new User();
+        //UserDao userDao = getUserContext().getUserDao();
+        //if( getId() > 0 ){
+        //    try {
+        //        user = userDao.getUser(getId());
+          
+        this.preferences = user.getPrefs();
+        
+        //    }catch( Exception ex ) {
+        //          log.debug(ex);
+        //    }
+        //}
+        
+        log.debug( "before if length = : " + this.preferences.length() );
+        
+        if( this.preferences == null || this.preferences.length() <= 0){
             log.debug( "No prefs found, updating with Defaults" );
             this.preferences = getUserPrefManager().getDefUserPrefs();
             user.setPrefs(this.preferences);
-            userDao.updateUser(user);
+            getUserContext().getUserDao().updateUser( user );
         }
 
         return JSON;
@@ -154,14 +168,79 @@ public class UserPrefMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
-    private String execUpdate(){
+    private String execUpdate( User user ){
 
         Log log = LogFactory.getLog( this.getClass() );
-        //watchManager.doSomethingElse();
+        
         log.debug( "|update called" );
-        log.debug( "|update called" );
-        log.debug( "|update called" );
+        log.debug( " opp=" + getOpp() );
 
+        String upref = user.getPrefs();
+
+        try{
+            JSONObject jUpref = new JSONObject( upref );
+
+            process( jUpref, getOpp() );
+            String nUpref = jUpref.toString(); 
+            
+            user.setPrefs( nUpref );
+            getUserContext().getUserDao().updateUser( user );
+            
+        } catch( JSONException jex ){
+        }
+        return JSON;
+    }
+
+    //--------------------------------------------------------------------------
+    
+    private void process( JSONObject jo, Map<String,String> opp ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        try{       
+            try{ 
+                String nval = opp.get( jo.getString( "opp" ) );
+                if( nval != null ){
+                    jo.put( "value", nval );
+                    log.debug( "opp=" + jo.getString( "opp" ) 
+                               + " value=" + nval );
+                }
+            } catch( JSONException jex ){
+                log.debug("no value" );
+            }
+
+            try{ 
+                JSONObject jod = jo.getJSONObject( "option-def" );
+                for( Iterator i = jod.keys(); i.hasNext(); ){
+                    
+                    String k = (String) i.next();
+                    log.debug("|START key=" + k );
+                    
+                    try{
+                        process( jod.getJSONObject( k ), opp );
+                    } catch( JSONException jex ){
+                        log.debug("key jex=" + jex );
+                    }
+                    log.debug("|DONE key=" + k );
+                }
+            } catch( JSONException jex ){
+                log.debug( "| no option-def" );
+            }
+        } catch( Exception ex ){
+            ex.printStackTrace();
+        }
+    }
+
+    //--------------------------------------------------------------------------
+
+    private String execDefset( User user ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " execDefset called" );
+        
+        this.preferences = getUserPrefManager().getDefUserPrefs();
+        
+        user.setPrefs( this.preferences );
+        getUserContext().getUserDao().updateUser( user );
         return JSON;
     }
 
@@ -172,5 +251,4 @@ public class UserPrefMgrAction extends ManagerSupport {
         //watchManager.doSomethingElse( param );
         return JSON;  // ACL_PAGE/ACL_ERROR
     }
-
 }
