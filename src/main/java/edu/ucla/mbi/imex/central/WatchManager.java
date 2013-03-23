@@ -170,6 +170,43 @@ public class WatchManager {
             return false;
         }
     }
+
+   
+    //---------------------------------------------------------------------
+    // Event observers
+    //----------------
+    
+    public void addNewsObserver( User usr ){
+        getTracContext().getEorelDao().addEORel( "news", usr );
+    }
+
+    public void dropNewsObserver( User usr ){
+        getTracContext().getEorelDao().dropEORel( "news", usr );
+    }
+
+    public void addNewRecordObserver( User usr ){
+        getTracContext().getEorelDao().addEORel( "new-record", usr );
+    }
+
+    public void dropNewRecordObserver( User usr ){
+        getTracContext().getEorelDao().dropEORel( "new-record", usr );
+        
+    }
+                                                                        
+    //---------------------------------------------------------------------
+    // List queries
+    //-------------
+
+    public List<User> getNewsObserverList(){
+        return getTracContext().getEorelDao().getEORel( "news" );
+    }
+    
+    //---------------------------------------------------------------------
+
+    public List<User> getNewRecordObserverList(){
+        return getTracContext().getEorelDao().getEORel( "new-record" );        
+    }
+    
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     // private methods 

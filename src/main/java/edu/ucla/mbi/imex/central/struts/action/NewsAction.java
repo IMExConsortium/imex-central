@@ -218,8 +218,13 @@ public class NewsAction extends ManagerSupport {
                               " ID: " + uid + " EMAIL: " + email +
                               "\n TTL: " + header + "\n INT: "+ aini + 
                               "\n MSG: " + body );
-
                     //----------------------------------------------------------
+
+                    String mailNewsAnno 
+                        = buildMailAnno( date, time, header, body, email );
+                    
+                    //----------------------------------------------------------
+
                     
                     List  newsTab = getNewsTab( year );
                     Map item = getNewsItem( newsTab, date, time );
@@ -384,4 +389,21 @@ public class NewsAction extends ManagerSupport {
 	
         */
     }
+
+    //--------------------------------------------------------------------------
+
+    public String buildMailAnno( String date, String time, 
+                                 String header, String body,
+                                 String email ){
+
+        StringBuffer anno = new StringBuffer();
+                        
+        anno.append( "RE: " + header + "\n");
+        anno.append( "--------------------------------------------------\n");
+        anno.append( body + "\n");
+        anno.append( "--------------------------------------------------\n");
+        anno.append( "Contact: " + email + "\n");
+        
+        return anno.toString();  
+    }    
 }
