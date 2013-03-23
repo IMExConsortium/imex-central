@@ -101,6 +101,19 @@ public class TracContext extends JsonContext {
 
 
     //--------------------------------------------------------------------------
+    
+    private EorelDao eorelDao;
+    
+    public EorelDao getEorelDao() {
+        return eorelDao;
+    }
+    
+    public void setEorelDao( EorelDao dao ) {
+        eorelDao = dao;
+    }
+
+
+    //--------------------------------------------------------------------------
     //  NCBI Proxy Access
     //-------------------
     

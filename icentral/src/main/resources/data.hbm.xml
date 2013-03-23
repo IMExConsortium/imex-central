@@ -226,7 +226,7 @@
 
   </class>
 
-<!--
+
   <class name="edu.ucla.mbi.imex.central.dao.EORel" table="eorel" lazy="false">
     <id name="id" column="id" >
       <generator class="sequence">
@@ -240,9 +240,5 @@
                class="edu.ucla.mbi.imex.central.IcUser" />
 
   </class>
--->
-
-
-
 
 </hibernate-mapping> 

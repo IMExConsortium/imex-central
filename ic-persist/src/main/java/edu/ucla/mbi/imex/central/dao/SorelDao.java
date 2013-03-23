@@ -27,7 +27,7 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
 
-public class SorelDao extends AbstractDAO implements ObsMgrDao {
+public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
     
     public void addSORel( DataItem subject, User observer ){
 

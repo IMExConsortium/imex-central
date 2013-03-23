@@ -40,6 +40,20 @@ public class LogAdvice {
         return this.attManager;
     }
 
+    ////------------------------------------------------------------------------
+    /// Watch Manager
+    //---------------
+
+    private WatchManager watchManager;
+
+    public void setWatchManager( WatchManager manager ) {
+        this.watchManager = manager;
+    }
+
+    public WatchManager getWatchManager() {
+        return this.watchManager;
+    }
+
     //--------------------------------------------------------------------------    
     //--------------------------------------------------------------------------    
 
@@ -54,7 +68,7 @@ public class LogAdvice {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "LogManager: monitor called");
     }
-
+    
     //--------------------------------------------------------------------------
     
     public void addPubMonitor( Object pub,  Object owner, 
@@ -81,6 +95,22 @@ public class LogAdvice {
 
             getAttachmentManager().getTracContext()
                 .getAdiDao().saveAdi( ile );
+
+            //------------------------------------------------------------------
+            // NOTE(LS): check if owner has the global auto watch option
+            //           and watch all/my records options set; if yes
+            //           add SORel record
+
+
+            //------------------------------------------------------------------
+            // NOTE(LS): get a list of users interested in record creation
+                         
+            //List<User> usrAddObsList = watchManager.getNewRecordObserverList();
+            
+            //           send messages to each user on the list provided global
+            //           send mail user pref is set.
+                      
+
         } else {
             log.warn( "LogManager: add publication monitor warning:"
                       + " pub=" + rpub
@@ -101,6 +131,18 @@ public class LogAdvice {
                               "Publication record updated.", "" );
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
+        
+        //----------------------------------------------------------------------   
+        // NOTE(LS): get a list of observers
+        
+        //SorelDao sorelManager
+        //    = getAttachmentManager().getTracContext().getSorelDao();
+        // List usersWatchList = sorelManager.getObserverList( pub );
+
+        //           send messages only if corresponding user pref 
+        //           options (send mail and send watched rec info) 
+        //           options  are set
+                                       
     }
     
     public void updatePubAdminUserMonitor( Object pub, Object luser, 
@@ -115,6 +157,19 @@ public class LogAdvice {
                               "Admin user information updated.", "" );
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
+
+    
+        //----------------------------------------------------------------------   
+        // NOTE(LS): get a list of observers
+        
+        //SorelDao sorelManager
+        //    = getAttachmentManager().getTracContext().getSorelDao();
+        // List usersWatchList = sorelManager.getObserverList( pub );
+
+        //           send messages only if corresponding user pref 
+        //           options (send mail and send watched rec info) 
+        //           options  are set
+
     }
 
     public void updatePubAdminGroupMonitor( Object pub, Object luser, 
@@ -129,6 +184,18 @@ public class LogAdvice {
                               "Admin group information updated.", "" );
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
+
+        //----------------------------------------------------------------------
+        // NOTE(LS): get a list of observers
+
+        //SorelDao sorelManager
+        //    = getAttachmentManager().getTracContext().getSorelDao();
+        // List usersWatchList = sorelManager.getObserverList( pub );
+
+        //           send messages only if corresponding user pref
+        //           options (send mail and send watched rec info)
+        //           options  are set
+        
     }
 
     public void genImexMonitor( Object pub, Object luser, 
@@ -145,6 +212,18 @@ public class LogAdvice {
                               + ((IcPub)rpub).getImexId(), "" );
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
+
+        //----------------------------------------------------------------------   
+        // NOTE(LS): get a list of observers
+        
+        //SorelDao sorelManager
+        //    = getAttachmentManager().getTracContext().getSorelDao();
+        // List usersWatchList = sorelManager.getObserverList( pub );
+
+        //           send messages only if corresponding user pref 
+        //           options (send mail and send watched rec info) 
+        //           options  are set
+        
     }
 
     public void statePubMonitor( Object pub,  Object luser, 
@@ -175,6 +254,18 @@ public class LogAdvice {
             getAttachmentManager().getTracContext()
                 .getAdiDao().saveAdi( ile );
         }
+
+        //----------------------------------------------------------------------   
+        // NOTE(LS): get a list of observers
+        
+        //SorelDao sorelManager
+        //    = getAttachmentManager().getTracContext().getSorelDao();
+        // List usersWatchList = sorelManager.getObserverList( pub );
+
+        //           send messages only if corresponding user pref 
+        //           options (send mail and send watched rec info) 
+        //           options  are set
+
     }
     
     public void addAttMonitor( Object att,  Object luser, Object ratt ){
@@ -209,28 +300,34 @@ public class LogAdvice {
             }
             if( ile != null ){
                 // log comments & attachments
-
+                
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );
                 
-
                 // get observers forf <pub> publication
                 //------------------------------------
-                SorelDao sorelManager = getAttachmentManager().getTracContext().getSorelDao();
+                
+                SorelDao sorelManager 
+                    = getAttachmentManager().getTracContext().getSorelDao();
                 List usersWatchList = sorelManager.getObserverList( pub );
                 
                 log.info("usersWatchList = " + usersWatchList);
-                if(usersWatchList.contains( (User) luser ) == false)
-                {
+
+                // NOTE(LS): add SORel only if the corresponding user prefer
+                //            is set
+                
+                if( usersWatchList.contains( (User) luser ) == false ){
                     log.info("%%% adding User " + luser + " %%%");
+              
                     sorelManager.addSORel(pub, (User) luser);
                     //add user to UserWatchList
                     usersWatchList.add((User) luser);
                 }
+                
                 // trigger mail agent process
                 //---------------------------
                 //Get message Information
-                
+
                 String pubAuthor, pubTitle, pubId, pubPmid, alert, message;
                 log.info("pub.getId()  = " + (pubId = pub.getId() + "") );
                 log.info("pub.getAuthor() = " + ( pubAuthor = pub.getAuthor()));
@@ -245,8 +342,12 @@ public class LogAdvice {
                 Iterator userWatchIterator = usersWatchList.iterator();
                 //turn list of email addresses into csv
                 String recipients = "";
-                while(userWatchIterator.hasNext())
-                {
+
+                // NOTE(LS): send only if corresponding user pref options
+                //           (send mail and send watched rec info) options
+                //           are set
+                
+                while( userWatchIterator.hasNext() ){
                     String userEmail = ((User) luser).getEmail();
                     recipients += userEmail + " ";
                     log.info("userEmail = " + userEmail);
@@ -259,13 +360,22 @@ public class LogAdvice {
                     "PMID=\"" + pubPmid + "\"\n" +
                     "ALERT=\"" + alert + "\"\n" ;
                 //Write message information to queue file
+                
                 try {
-                    File file = new File("/tmp/var/icentral/queue/" + String.valueOf(System.currentTimeMillis()) + ".queue");
+                    
+                    // NOTE(LS): define get/setMailQueueDir(String path) method
+                    //       and set the location through Spring
+                    
+                    String fileName = "/tmp/var/icentral/queue/"
+                        + String.valueOf(System.currentTimeMillis()) 
+                        + ".queue";
+                    
+                    File file = new File( fileName );
                     file.createNewFile();
                     FileOutputStream fout = new FileOutputStream(file);
                     fout.write( ( message ).getBytes());
                     fout.close();
-                        
+                    
                 }catch ( IOException ex ) { 
                     System.out.println(ex);
                 }
@@ -274,6 +384,35 @@ public class LogAdvice {
         }
     }
 
+    //--------------------------------------------------------------------------
+    // NOTE(LS): create a pointcut in
+    //
+    //               icentral/src/main/resources/spring/aop-logger.xml
+    //
+    //            that will result in newsMonitor called every time a new 
+    //            news item is created - convenient place is a call to
+    //
+    //               buildMailAnno( date, time, header, body, email );
+    // 
+    //            method within NewsAction class (the arguments of the
+    //            newsMonitor method will likely have to be changed 
+    //             
+
+    public void newsMonitor( Object att,  Object luser, Object newsItem ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "LogManager: news monitor called:"
+                   + " att=" + att + " luser=" + luser );
+
+        //----------------------------------------------------------------------
+        // NOTE(LS): get a list of users interested in record creation
+
+        //List<User> usrNewsObsList = watchManager.getNewsObserverList();
+        
+        //           send newsItem  to each user on the list provided global
+        //           send mail user pref is set. 
+        
+    }
+    
     public void delAttMonitor( int aid,  Object luser, Object ratt ){
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "LogManager: attachment monitor called:"
