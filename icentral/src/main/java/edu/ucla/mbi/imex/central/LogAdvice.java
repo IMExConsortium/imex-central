@@ -390,13 +390,14 @@ public class LogAdvice {
     //               icentral/src/main/resources/spring/aop-logger.xml
     //
     //            that will result in newsMonitor called every time a new 
-    //            news item is created - convenient place is a call to
+    //            news item is created - convenient place might be a call to
     //
     //               buildMailAnno( date, time, header, body, email );
     // 
     //            method within NewsAction class (the arguments of the
-    //            newsMonitor method will likely have to be changed 
-    //             
+    //            newsMonitor method will likely have to be changed. The call 
+    //            is, though, internal to NewsAction so it might not work... 
+    
 
     public void newsMonitor( Object att,  Object luser, Object newsItem ){
         Log log = LogFactory.getLog( this.getClass() );
@@ -408,11 +409,42 @@ public class LogAdvice {
 
         //List<User> usrNewsObsList = watchManager.getNewsObserverList();
         
-        //           send newsItem  to each user on the list provided global
+        //           send newsItem to each interested user provided global
         //           send mail user pref is set. 
         
     }
+
+    //--------------------------------------------------------------------------
+    // NOTE(LS): create a pointcut in
+    //
+    //               icentral/src/main/resources/spring/aop-logger.xml
+    //
+    //            that will result in newAccountMonitor called every time a new
+    //            account is created - convenient place might be a call to
+    //              
+    //               UserMgrSupport.addUser (User)
+    //
+    //            method (the arguments of the newAcountMonitor method will 
+    //            likely have to be changed). The call is, though internal 
+    //            to UserMgrSupport so it might not work...
     
+    
+    public void newAccountMonitor( Object att,  Object luser, Object newsItem ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "LogManager: new account monitor called:");
+
+        //----------------------------------------------------------------------
+        // NOTE(LS): get a list of users interested in account creation
+        
+        //List<User> usrNewsObsList = watchManager.getNewAccountObserverList();
+        
+        //           send info on new account to each interested user provided 
+        //           global send mail user pref is set.
+
+                     
+    }
+     
     public void delAttMonitor( int aid,  Object luser, Object ratt ){
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "LogManager: attachment monitor called:"
