@@ -98,7 +98,57 @@
       }
     } 
   },
-
+  newsedit:{
+      order:["allow"],
+      allow:{
+        user:["lukasz"],
+        role:["administrator","editor"],
+        group:["ADMIN"]
+      },
+      operation:{
+        order:["allow"],
+        add:{
+          order:["allow"],
+          allow:{
+            user:["lukasz"],
+            role:["editor"],
+            group:["ADMIN"]
+          },
+          ousr:["MATCH"],
+          ogrp:["MATCH","IMEX_ADMIN"]
+        },
+        drop:{
+          order:["allow"],
+          allow:{
+            user:["lukasz"],
+            role:["editor"],
+            group:["ADMIN"]
+          },
+          ousr:["MATCH"],
+          ogrp:["MATCH","IMEX_ADMIN"]
+        },
+        edit:{
+          order:["allow"],
+          allow:{
+            user:["lukasz"],
+            role:["editor"],
+            group:["ADMIN"]
+          },
+          ousr:["MATCH"],
+          ogrp:["MATCH","IMEX_ADMIN"]
+        },
+        reset:{
+          order:["allow"],
+          allow:{
+            user:["lukasz"],
+            role:["editor"],
+            group:["ADMIN"]
+          },
+          ousr:["MATCH"],
+          ogrp:["MATCH","IMEX_ADMIN"]
+        }
+      }
+  },
   pubmgr:{
     order:["operation"],
     operation:{

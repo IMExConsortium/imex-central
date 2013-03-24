@@ -62,6 +62,11 @@
    <property name="userContext" ref="userContext"/>
    
  </bean>
+<!-- ========================================================== NEWS MANAGER -->
+
+ <bean id="newsManager" class="edu.ucla.mbi.imex.central.NewsManager">
+         
+ </bean>
 
 <!-- ========================================================= WATCH MANAGER -->
 

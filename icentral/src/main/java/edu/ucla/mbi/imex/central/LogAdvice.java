@@ -54,6 +54,20 @@ public class LogAdvice {
         return this.watchManager;
     }
 
+    ////------------------------------------------------------------------------
+    /// Notification Manager
+    //----------------------
+
+    private NotificationManager notificationManager;
+
+    public void setNotificationManager( NotificationManager manager ) {
+        this.notificationManager = manager;
+    }
+
+    public NotificationManager getNotificationManager() {
+        return this.notificationManager;
+    }
+
     //--------------------------------------------------------------------------    
     //--------------------------------------------------------------------------    
 
@@ -100,8 +114,9 @@ public class LogAdvice {
             // NOTE(LS): check if owner has the global auto watch option
             //           and watch all/my records options set; if yes
             //           add SORel record
-
-
+            //           The code should be placed in UserPrefManager so
+            //           that it can be reused if needed 
+            
             //------------------------------------------------------------------
             // NOTE(LS): get a list of users interested in record creation
                          
@@ -138,11 +153,15 @@ public class LogAdvice {
         //SorelDao sorelManager
         //    = getAttachmentManager().getTracContext().getSorelDao();
         // List usersWatchList = sorelManager.getObserverList( pub );
-
+        
         //           send messages only if corresponding user pref 
         //           options (send mail and send watched rec info) 
         //           options  are set
-                                       
+
+        //           The code performing the test should be placed in 
+        //           UserPrefManager so that it can be reused if needed 
+
+                           
     }
     
     public void updatePubAdminUserMonitor( Object pub, Object luser, 
@@ -165,11 +184,14 @@ public class LogAdvice {
         //SorelDao sorelManager
         //    = getAttachmentManager().getTracContext().getSorelDao();
         // List usersWatchList = sorelManager.getObserverList( pub );
-
+        
         //           send messages only if corresponding user pref 
         //           options (send mail and send watched rec info) 
         //           options  are set
 
+        //           The code performing the test should be placed in
+        //           UserPrefManager so that it can be reused if needed
+        
     }
 
     public void updatePubAdminGroupMonitor( Object pub, Object luser, 
@@ -195,6 +217,9 @@ public class LogAdvice {
         //           send messages only if corresponding user pref
         //           options (send mail and send watched rec info)
         //           options  are set
+        
+        //           The code performing the test should be placed in
+        //           UserPrefManager so that it can be reused if needed
         
     }
 
@@ -223,9 +248,12 @@ public class LogAdvice {
         //           send messages only if corresponding user pref 
         //           options (send mail and send watched rec info) 
         //           options  are set
+  
+        //           The code performing the test should be placed in
+        //           UserPrefManager so that it can be reused if needed
         
     }
-
+    
     public void statePubMonitor( Object pub,  Object luser, 
                                  Object state, Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );
@@ -233,7 +261,10 @@ public class LogAdvice {
                    + " pub=" + pub + " luser=" + luser
                    + " state=" + state );
         
-        if( 1 == 1 ){  // from LogContext configureation file
+        if( 1 == 1 ){  
+
+            // NOTE: Ultimately, LogContext configuration file will be
+            //       used to specify what events are to be logged  
 
             String stateName = "";
             if( state instanceof java.lang.String){
@@ -266,14 +297,21 @@ public class LogAdvice {
         //           options (send mail and send watched rec info) 
         //           options  are set
 
+        //           The code performing the test should be placed in
+        //           UserPrefManager so that it can be reused if needed
+        
+
     }
     
     public void addAttMonitor( Object att,  Object luser, Object ratt ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "LogManager: attachment monitor called:"
+        log.debug( "LogManager: attachment monitor called (add):"
                    + " att=" + att + " luser=" + luser );
         
-        if( 1 == 1 ){  // from LogContext configureation file
+        if( 1 == 1 ){
+
+            // NOTE: Ultimately, LogContext configuration file will be
+            //       used to specify what events are to be logged  
             
             if( att == null || ! (att instanceof AttachedDataItem) ) return;
 
@@ -313,8 +351,11 @@ public class LogAdvice {
                 
                 log.info("usersWatchList = " + usersWatchList);
 
+                //--------------------------------------------------------------
                 // NOTE(LS): add SORel only if the corresponding user prefer
-                //            is set
+                //           is set.
+                //           The code performing the test should be placed in 
+                //           UserPrefManager so that it can be reused if needed 
                 
                 if( usersWatchList.contains( (User) luser ) == false ){
                     log.info("%%% adding User " + luser + " %%%");
@@ -323,7 +364,12 @@ public class LogAdvice {
                     //add user to UserWatchList
                     usersWatchList.add((User) luser);
                 }
-                
+
+                //--------------------------------------------------------------                
+                // NOTE(LS):  Move the mail-related code into 
+                //            NotifiactionManager and call it as
+                //            getNotificationManager().notify( ... )
+
                 // trigger mail agent process
                 //---------------------------
                 //Get message Information
@@ -347,6 +393,9 @@ public class LogAdvice {
                 //           (send mail and send watched rec info) options
                 //           are set
                 
+                //           The code performing the test should be placed in
+                //           UserPrefManager so that it can be reused if needed
+                
                 while( userWatchIterator.hasNext() ){
                     String userEmail = ((User) luser).getEmail();
                     recipients += userEmail + " ";
@@ -364,7 +413,8 @@ public class LogAdvice {
                 try {
                     
                     // NOTE(LS): define get/setMailQueueDir(String path) method
-                    //       and set the location through Spring
+                    //       within NotificationManager and use it to set 
+                    //       fileName through spring bean parameter
                     
                     String fileName = "/tmp/var/icentral/queue/"
                         + String.valueOf(System.currentTimeMillis()) 
@@ -384,78 +434,19 @@ public class LogAdvice {
         }
     }
 
-    //--------------------------------------------------------------------------
-    // NOTE(LS): create a pointcut in
-    //
-    //               icentral/src/main/resources/spring/aop-logger.xml
-    //
-    //            that will result in newsMonitor called every time a new 
-    //            news item is created - convenient place might be a call to
-    //
-    //               buildMailAnno( date, time, header, body, email );
-    // 
-    //            method within NewsAction class (the arguments of the
-    //            newsMonitor method will likely have to be changed. The call 
-    //            is, though, internal to NewsAction so it might not work... 
-    
-
-    public void newsMonitor( Object att,  Object luser, Object newsItem ){
-        Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "LogManager: news monitor called:"
-                   + " att=" + att + " luser=" + luser );
-
-        //----------------------------------------------------------------------
-        // NOTE(LS): get a list of users interested in record creation
-
-        //List<User> usrNewsObsList = watchManager.getNewsObserverList();
-        
-        //           send newsItem to each interested user provided global
-        //           send mail user pref is set. 
-        
-    }
-
-    //--------------------------------------------------------------------------
-    // NOTE(LS): create a pointcut in
-    //
-    //               icentral/src/main/resources/spring/aop-logger.xml
-    //
-    //            that will result in newAccountMonitor called every time a new
-    //            account is created - convenient place might be a call to
-    //              
-    //               UserMgrSupport.addUser (User)
-    //
-    //            method (the arguments of the newAcountMonitor method will 
-    //            likely have to be changed). The call is, though internal 
-    //            to UserMgrSupport so it might not work...
-    
-    
-    public void newAccountMonitor( Object att,  Object luser, Object newsItem ){
-
-        Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "LogManager: new account monitor called:");
-
-        //----------------------------------------------------------------------
-        // NOTE(LS): get a list of users interested in account creation
-        
-        //List<User> usrNewsObsList = watchManager.getNewAccountObserverList();
-        
-        //           send info on new account to each interested user provided 
-        //           global send mail user pref is set.
-
-                     
-    }
-     
     public void delAttMonitor( int aid,  Object luser, Object ratt ){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "LogManager: attachment monitor called:"
+        log.info( "LogManager: attachment monitor called (delete):"
                    + " ratt=" + ratt + " luser=" + luser );
         
-        /*
-        if( 1 == 1 ){  // from LogContext configureation file
+        if( 1 == 1 ){
             
-            if( att == null || ! (att instanceof AttachedDataItem) ) return;
-
-            AttachedDataItem adi = (AttachedDataItem) att;
+            // NOTE: Ultimately, LogContext configuration file will be
+            //       used to specify what events are to be logged  
+            
+            if( ratt == null || ! (ratt instanceof AttachedDataItem) ) return;
+            
+            AttachedDataItem adi = (AttachedDataItem) ratt;
             IcPub pub = (IcPub) adi.getRoot();
             
             String attName="";
@@ -464,40 +455,74 @@ public class LogAdvice {
 
             if( adi instanceof IcAttachment){
                 ile = new IcLogEntry( (User) luser, pub,
-                                      "Attachment added(ID#" + adi.getId() + 
+                                      "Attachment dropped(ID#" + adi.getId() + 
                                       ": " + 
                                       ((IcAttachment)adi).getSubject() + ")", 
                                       "" );                
             } 
             if( adi instanceof IcComment ){
                 ile = new IcLogEntry( (User) luser, pub,
-                                      "Comment added(ID#" + adi.getId() +
+                                      "Comment dropped(ID#" + adi.getId() +
                                       ": " +
                                       ((IcComment)adi).getSubject() + ")",
                                       "" );                
             }
-                            
+            
             if( ile != null ){
-
+                
                 // log comments & attachments
-
+                
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );
                 
-
+                
                 // get observers for <pub> publication
                 //------------------------------------
                 
-              
+                
                 // trigger mail agent process
                 //---------------------------
-
                 
-                
-
-  
-            }
-        */
+            }        
+        }
     }
+        
+    //--------------------------------------------------------------------------
+    // NOTE(LS): pointcut already present in
+    //
+    //               icentral/src/main/resources/spring/aop-logger.xml
     
+    public void newsMonitor( Object rnewsItem ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "LogManager: news monitor called:" );
+        log.debug( rnewsItem );
+
+        //----------------------------------------------------------------------
+        // NOTE(LS): get a list of users interested in record creation
+
+        //List<User> usrNewsObsList = watchManager.getNewsObserverList();
+        
+        //           send newsItem to each interested user provided global
+        //           send mail user pref is set. 
+    }
+
+    //--------------------------------------------------------------------------
+    // NOTE(LS): pointcut already present in
+    //
+    //               icentral/src/main/resources/spring/aop-logger.xml
+    
+    public void newAccountMonitor( Object user ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "LogManager: new account monitor called:");
+
+        //----------------------------------------------------------------------
+        // NOTE(LS): get a list of users interested in account creation
+        
+        // List<User> usrNewsObsList = watchManager.getNewAccountObserverList();
+        //           send info on new account to each interested user provided 
+        //           global send mail user pref is set.
+        
+    }
+
 }
