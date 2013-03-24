@@ -27,7 +27,7 @@
      </td>
     </tr>
    </table>
-   <t:insertDefinition name="footer" />
+   <t:insertAttribute name="footer" />
   </page>
  <body>
 </html>

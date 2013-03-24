@@ -3,8 +3,8 @@
 <script src="js/accordion-yui.js" type="text/javascript"></script>
 <tr>
  <td colspan="2">
-  <s:form theme="simple" action="%{site}newsedit">
-   <s:hidden name="site" value="%{site}"/>
+  <s:form theme="simple" action="newsedit">
+   <s:hidden name="site" value=""/>
    <s:hidden name="opp.date" value="%{opp.date}"/>
    <s:hidden name="opp.time" value="%{opp.time}"/>
    <dl id="acc-top" class="accordion">

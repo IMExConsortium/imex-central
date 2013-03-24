@@ -3,15 +3,16 @@
  
 <script src="js/news-yui.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" media="screen" href = "css/tabs-no-images.css"/>
-
+<%--
 <s:if test="#session['USER_ROLE'].administrator != null" >
-   <script type="text/javascript">
+   <script type="text/javascript">    
     $(document).ready( function(){
       var edtnews = jqnewsedit( {edt:"<s:text name='#session.EDT'/>"} );
       edtnews.start();
     });
    </script>
 </s:if>
+--%>
 <s:if test="hasActionErrors()">
  <table width="95%" cellspacing="0" cellpadding="0">
   <tr><td>

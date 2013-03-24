@@ -34,6 +34,20 @@ import edu.ucla.mbi.imex.central.dao.*;
 
 public class UserAction extends UserSupport {
 
+    //--------------------------------------------------------------------------
+    // configuration
+    //---------------
+
+    UserManager userManager;
+
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
+    public void setUserManager( UserManager manager ) {
+        this.userManager = manager;
+    }
+
     //---------------------------------------------------------------------
     // new user registration
     //---------------------
@@ -49,6 +63,9 @@ public class UserAction extends UserSupport {
     public void setNotifyServer( String server ) {
         this.notifyServer = server;
     }
+    
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
 
     public String register( User user ) {
 
@@ -75,7 +92,10 @@ public class UserAction extends UserSupport {
 	// sent notification
 	//------------------
 
-	icUser.notifyByMail( notifyFrom, notifyServer );
+        getUserManager()
+            .notifyRegistrationByMail( icUser, notifyFrom, notifyServer );
+
+	//icUser.notifyByMail( notifyFrom, notifyServer );
 	
 	// create new account 
 	//-------------------

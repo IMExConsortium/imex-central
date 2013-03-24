@@ -96,12 +96,15 @@
                   and args( aid, luser)"
         method="delAttMonitor" />    
       
-      <aop:after-returning
-        pointcut="execution(* edu.ucla.mbi.imex.central.dao.IcUserDao.saveUser(..))"
-        method="simpleMonitor" />
-
+      <aop:after-returning returning="rnewsItem"
+        pointcut="execution(* edu.ucla.mbi.imex.central.NewsManager.buildMailMessage(..))"
+        method="newsMonitor" />
+      
+      <aop:after-returning 
+         pointcut="execution(* edu.ucla.mbi.imex.central.UserManager.notifyRegistrationByMail(..))
+                   and args( user, ..)"
+         method="newAccountMonitor" />      
     </aop:aspect>
   </aop:config>
-
 
 </beans>

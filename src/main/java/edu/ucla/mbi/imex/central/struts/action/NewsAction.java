@@ -36,6 +36,8 @@ import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.struts.action.*;
 import edu.ucla.mbi.util.struts.interceptor.*;
 
+import edu.ucla.mbi.imex.central.NewsManager;
+
 public class NewsAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
@@ -52,6 +54,18 @@ public class NewsAction extends ManagerSupport {
 	this.newsContext = context;
     }
 
+    //--------------------------------------------------------------------------
+
+    NewsManager newsManager;
+    
+    public NewsManager getNewsManager() {
+	return newsManager;
+    }
+    
+    public void setNewsManager( NewsManager manager ) {
+	this.newsManager = manager;
+    }
+    
     //--------------------------------------------------------------------------
     // action parameters
     //------------------
@@ -161,6 +175,8 @@ public class NewsAction extends ManagerSupport {
     //--------------------------------------------------------------------------
 
     public String execute() throws Exception {
+
+        log.info( "ret=" + ret );
 	
 	initialize();
 
@@ -214,15 +230,17 @@ public class NewsAction extends ManagerSupport {
                     } catch( Exception nfe ) {
                         // Ignore: should not happen
                     }
-                    log.info( "\n DATE: " + date + " TIME: " + time + 
+                    log.debug( "\n DATE: " + date + " TIME: " + time + 
                               " ID: " + uid + " EMAIL: " + email +
                               "\n TTL: " + header + "\n INT: "+ aini + 
                               "\n MSG: " + body );
                     //----------------------------------------------------------
 
-                    String mailNewsAnno 
-                        = buildMailAnno( date, time, header, body, email );
+                    String mailNewsMessage = getNewsManager()
+                        .buildMailMessage( date, time, header, body, email );
                     
+                    log.debug( "News Mail Message" );
+
                     //----------------------------------------------------------
 
                     
@@ -392,9 +410,9 @@ public class NewsAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
-    public String buildMailAnno( String date, String time, 
-                                 String header, String body,
-                                 String email ){
+    public String buildMailMessage( String date, String time, 
+                                    String header, String body,
+                                    String email ){
 
         StringBuffer anno = new StringBuffer();
                         
