@@ -186,6 +186,14 @@ public class UserPrefMgrAction extends ManagerSupport {
             user.setPrefs( nUpref );
             getUserContext().getUserDao().updateUser( user );
             
+            //------------------------------------------------------------------
+            // NOTE(LS): opp.mmna & opp.mmrec values should be
+            //           used to call appropriate
+
+            //            watchManager.[add|drop][News|NewRecord]Observer( usr )
+
+            //           method
+
         } catch( JSONException jex ){
         }
         return JSON;

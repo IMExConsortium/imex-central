@@ -193,6 +193,15 @@ public class WatchManager {
         
     }
                                                                         
+    public void addNewAccountObserver( User usr ){
+        getTracContext().getEorelDao().addEORel( "new-account", usr );
+    }
+
+    public void dropNewAccountObserver( User usr ){
+        getTracContext().getEorelDao().dropEORel( "new-account", usr );
+        
+    }
+                                                                        
     //---------------------------------------------------------------------
     // List queries
     //-------------
@@ -205,6 +214,12 @@ public class WatchManager {
 
     public List<User> getNewRecordObserverList(){
         return getTracContext().getEorelDao().getEORel( "new-record" );        
+    }
+
+    //---------------------------------------------------------------------
+
+    public List<User> getNewAccountObserverList(){
+        return getTracContext().getEorelDao().getEORel( "new-account" );        
     }
     
     //---------------------------------------------------------------------
