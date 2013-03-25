@@ -187,10 +187,10 @@ public class UserPrefMgrAction extends ManagerSupport {
             getUserContext().getUserDao().updateUser( user );
             
             //------------------------------------------------------------------
-            // NOTE(LS): opp.mmna & opp.mmrec values should be
+            // NOTE(LS): opp.mmacc, opp.mmna, opp.mmrec values should be
             //           used to call appropriate
 
-            //            watchManager.[add|drop][News|NewRecord]Observer( usr )
+            //            watchManager.[add|drop][News|NewRecord|NewAccount]Observer( usr )
 
             //           method
 
