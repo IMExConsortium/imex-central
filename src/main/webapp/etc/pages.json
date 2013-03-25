@@ -242,6 +242,14 @@
         viewtype:"file-html",
         viewpath:"/pages/help-watchlist.html"
       },      
+      "help-user-prefs":{
+        active:true,
+        title:"Icentral Help: Account Settings",
+        menudef:"0:2:0",
+        menusel:"5:1:0",
+        viewtype:"file-html",
+        viewpath:"/pages/help-preferences.html"
+      },
       faq:{
         active:true,
         title:"ImexCentral: FAQ",

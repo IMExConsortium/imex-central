@@ -142,7 +142,7 @@
         },
         "mail-account": {
           "acl-role":["admin"],
-          "label": "New account creation",
+          "label": "New account creation (administrators only)",
           "value": "false",
           "opp": "mmacc", 
           "opcode": "accountMail"
