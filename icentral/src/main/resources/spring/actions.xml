@@ -144,6 +144,7 @@
 
    <property name="menuContext" ref="menuContext"/>
    <property name="userContext" ref="userContext"/>
+   <property name="watchManager" ref="watchManager"/>
    <property name="mst" value="4:1:0"/>
 
  </bean>

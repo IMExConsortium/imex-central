@@ -39,7 +39,7 @@ public class UserPrefMgrAction extends ManagerSupport {
     private static final String ACL_OPER = "acl_oper";
     
     ////------------------------------------------------------------------------
-    /// Watch Manager
+    /// User Preferences Manager
     //---------------
     
     private UserPrefManager uprefManager;
@@ -50,6 +50,20 @@ public class UserPrefMgrAction extends ManagerSupport {
 
     public UserPrefManager getUserPrefManager() {
         return this.uprefManager;
+    }
+    
+    ////------------------------------------------------------------------------
+    /// Watch Manager
+    //---------------
+    
+    private WatchManager watchManager;
+
+    public void setWatchManager( WatchManager manager ){
+        this.watchManager = manager;
+    }
+
+    public WatchManager getWatchManager() {
+        return this.watchManager;
     }
     
     //--------------------------------------------------------------------------
@@ -186,6 +200,20 @@ public class UserPrefMgrAction extends ManagerSupport {
             user.setPrefs( nUpref );
             getUserContext().getUserDao().updateUser( user );
             
+            if ( isOppSet( "mmacc" ) ) 
+                watchManager.addNewAccountObserver(user);
+            else
+                watchManager.dropNewAccountObserver(user);
+                
+            if ( isOppSet(  "mmna" ) ) 
+                watchManager.addNewsObserver(user);
+            else
+                watchManager.dropNewsObserver(user);
+                
+            if ( isOppSet( "mmrec" ) ) 
+                watchManager.addNewRecordObserver(user);
+            else
+                watchManager.dropNewRecordObserver(user);
             //------------------------------------------------------------------
             // NOTE(LS): opp.mmacc, opp.mmna, opp.mmrec values should be
             //           used to call appropriate
@@ -198,6 +226,10 @@ public class UserPrefMgrAction extends ManagerSupport {
         }
         return JSON;
     }
+    
+    private boolean isOppSet( String prop ){
+        return Boolean.parseBoolean( getOpp().get( prop ) );
+    } 
 
     //--------------------------------------------------------------------------
     

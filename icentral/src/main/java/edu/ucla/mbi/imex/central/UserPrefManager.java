@@ -70,7 +70,7 @@ public class UserPrefManager {
 
     public void initialize(){
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "WatchManager: initializing" );
+        log.info( "UserPrefManager: initializing" );
     }
 
 
