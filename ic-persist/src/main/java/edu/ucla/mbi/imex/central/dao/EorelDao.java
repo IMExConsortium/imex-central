@@ -39,11 +39,16 @@ public class EorelDao extends AbstractDAO{ //  implements ObsMgrDao {
         //       subject are primary record ID 
         
         EORel oldRelationship = getEORel( event, observer );
+        log.debug( "addEORel: oldRelationship=" + oldRelationship );
+        
         if( oldRelationship == null ){
+            
+            
             EORel newRelationship = new EORel( event, observer );
             log.debug( newRelationship );
             super.saveOrUpdate( newRelationship );
         }
+        log.debug( "addEORel: DONE" );
     }
 
     public void dropEORel( String event, User observer ){
@@ -91,12 +96,15 @@ public class EorelDao extends AbstractDAO{ //  implements ObsMgrDao {
             handleException( e );
             // log exception ?
             e.printStackTrace();
-            
+        } catch ( Exception ex ){
+            ex.printStackTrace();
+
         } finally {
+            
             session.close();
         }
 
-        log.debug( "watchStatus=" + watchStatus );
+        log.debug( "(getEORel)watchStatus=" + watchStatus );
         return watchStatus;
     }
 
