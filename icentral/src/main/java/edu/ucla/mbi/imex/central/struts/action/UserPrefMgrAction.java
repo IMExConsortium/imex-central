@@ -200,20 +200,43 @@ public class UserPrefMgrAction extends ManagerSupport {
             user.setPrefs( nUpref );
             getUserContext().getUserDao().updateUser( user );
             
+            log.debug( "-------------starting to do database things-------------" );
+            
             if ( isOppSet( "mmacc" ) ) 
+            {
+                log.debug( "Adding mmacc" );
                 watchManager.addNewAccountObserver(user);
+                log.debug( "Adding mmacc" );
+            }
             else
+            {
+                log.debug( "Removing mmacc" );
                 watchManager.dropNewAccountObserver(user);
-                
+                log.debug( "Removing mmacc" );
+            }
+            
+            log.debug( "-------------more database things-------------" );
             if ( isOppSet(  "mmna" ) ) 
+            {
                 watchManager.addNewsObserver(user);
+                log.debug( "Adding mmna" );
+            }
             else
+            {
                 watchManager.dropNewsObserver(user);
+                 log.debug( "Removing mmna" );
+            }
                 
             if ( isOppSet( "mmrec" ) ) 
+            {
                 watchManager.addNewRecordObserver(user);
+                log.debug( "Adding mmrec" );
+            }
             else
+            {
                 watchManager.dropNewRecordObserver(user);
+                 log.debug( "Removing mmrec" );
+            }
             //------------------------------------------------------------------
             // NOTE(LS): opp.mmacc, opp.mmna, opp.mmrec values should be
             //           used to call appropriate
@@ -223,6 +246,8 @@ public class UserPrefMgrAction extends ManagerSupport {
             //           method
 
         } catch( JSONException jex ){
+            log.debug( "hiiiiiiiiii" );
+            log.debug( jex );
         }
         return JSON;
     }

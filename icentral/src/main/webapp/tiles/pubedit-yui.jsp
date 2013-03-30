@@ -95,7 +95,7 @@
                            <h3>Authors/Title</h3>
                         </legend>
                         <p>Author(s) <s:textfield theme="simple" name="pub.author" size="90" maxLength="512"/></p>
-                        <p>Title <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/></p>
+                        <p>Title <s:textfield theme="simple" name="pub.title" size="90" maxLength="512"/></p>
                         <p><s:submit theme="simple" name="op.eatu" value="UPDATE" disabled="false" onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/></p>
                      </fieldset>
                   </div>
