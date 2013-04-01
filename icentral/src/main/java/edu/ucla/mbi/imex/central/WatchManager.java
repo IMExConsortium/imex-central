@@ -18,6 +18,8 @@ import java.util.regex.PatternSyntaxException;
 
 import java.util.GregorianCalendar;
 import java.util.Calendar;
+
+import org.json.*;
        
 import edu.ucla.mbi.util.context.*;
 import edu.ucla.mbi.util.data.*;
@@ -171,7 +173,59 @@ public class WatchManager {
         }
     }
 
-   
+    //---------------------------------------------------------------------
+
+    public List<User> getObserverList( Publication pub ){
+        return getTracContext().getSorelDao().getObserverList( pub );
+    }
+    
+    //---------------------------------------------------------------------
+
+    public void addWatchByAttachmentPref( User user, Publication pub,
+                                          boolean force ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("addWatchByAttachmentPref");
+
+        if( force ){
+            this.setWatchStatus( user, pub, true );
+        } else {
+
+            String byAttFlag = 
+                PrefUtil.getPrefOption( user.getPrefs(), 
+                                        "attachment-owner" );            
+            if( byAttFlag != null 
+                && byAttFlag.equalsIgnoreCase( "true" ) ){
+                this.setWatchStatus( user, pub, true );
+            }
+        }
+        log.debug("addWatchByAttachmentPref: DONE");
+    }
+    
+    //---------------------------------------------------------------------
+
+    public void addWatchByCommentPref( User user, Publication pub,
+                                       boolean force ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        log.debug("addWatchByCommentPref");
+
+        if( force ){
+            this.setWatchStatus( user, pub, true );
+        } else {
+
+            String byCommentFlag = 
+                PrefUtil.getPrefOption( user.getPrefs(),
+                                        "comment-owner" );            
+            if( byCommentFlag != null 
+                && byCommentFlag.equalsIgnoreCase( "true" ) ){
+                this.setWatchStatus( user, pub, true );
+            }
+        }
+        log.debug("addWatchByCommentPref: DONE");
+    }
+    
     //---------------------------------------------------------------------
     // Event observers
     //----------------
@@ -262,5 +316,5 @@ public class WatchManager {
     //---------------------------------------------------------------------
     // private methods 
 
-
+   
 }

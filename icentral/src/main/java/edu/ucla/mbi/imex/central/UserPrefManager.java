@@ -78,23 +78,7 @@ public class UserPrefManager {
     // Operations
     //---------------------------------------------------------------------
     
-    public void op1( int id ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " op1 -> id=" + id );
-        
-        return;
-    }
 
-    //---------------------------------------------------------------------
-    
-    public void op2( int id, String par1 ) {
-        
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " op1 -> id=" + id + " par1->" + par1);
-
-        return;
-    }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------

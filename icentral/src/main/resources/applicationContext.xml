@@ -77,6 +77,15 @@
    
  </bean>
 
+<!-- ================================================= NOTIFIACATION MANAGER -->
+
+ <bean id="notificationManager" init-method="initialize" 
+       class="edu.ucla.mbi.imex.central.NotificationManager">
+
+   <property name="queueDir" value="/var/icentral/queue" />
+   
+ </bean>
+
 <!-- ====================================================== USERPREF MANAGER -->
 
  <bean id="uprefManager" init-method="initialize" destroy-method="cleanup"
@@ -100,14 +109,14 @@
           "record-add": {
             "label": "Add all newly created records",
             "type": "boolean",
-            "value": "true",
+            "value": "false",
             "opp":"awra", 
             "opcode": "watchlistAllRecords"
           },
           "record-owner": {
             "label": "Add the records that I create",
             "type": "boolean",
-            "value": "true",
+            "value": "false",
             "opp":"awro",
             "opcode": "watchlistRecordOwner"   
           },
@@ -132,16 +141,16 @@
       "label": "Send out mail notifications",
       "value": "false",
       "opp": "mm",
-      "options": ["mail-news","mail-record-watched","mail-account","mail-record-new"],
+      "options": ["mail-record-watched", "mail-record-new",  "mail-news", "mail-account-new"],
       "option-def":{
         "mail-news": {
-          "label": "Imex Cental news announcements",
+          "label": "News announcements",
           "value": "false",
           "opp": "mmna", 
           "opcode": "newsMail"
         },
-        "mail-account": {
-          "acl-role":["admin"],
+        "mail-account-new": {
+          "acl-role":["administrator"],
           "label": "New account creation (administrators only)",
           "value": "false",
           "opp": "mmacc", 
