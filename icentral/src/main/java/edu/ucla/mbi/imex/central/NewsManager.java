@@ -39,10 +39,10 @@ public class NewsManager {
 
         StringBuffer anno = new StringBuffer();
         
-        anno.append( "RE: " + header + "\n");
-        anno.append( "--------------------------------------------------\n");
+        anno.append( "Subject: " + header + "\n");
+        anno.append( "--------\n\n");
         anno.append( body + "\n");
-        anno.append( "--------------------------------------------------\n");
+        anno.append( "\n");
         anno.append( "Contact: " + email + "\n");
         
         return anno.toString();

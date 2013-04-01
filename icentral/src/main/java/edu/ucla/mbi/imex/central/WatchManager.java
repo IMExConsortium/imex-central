@@ -18,6 +18,8 @@ import java.util.regex.PatternSyntaxException;
 
 import java.util.GregorianCalendar;
 import java.util.Calendar;
+
+import org.json.*;
        
 import edu.ucla.mbi.util.context.*;
 import edu.ucla.mbi.util.data.*;
@@ -171,33 +173,121 @@ public class WatchManager {
         }
     }
 
-   
+    //---------------------------------------------------------------------
+
+    public List<User> getObserverList( Publication pub ){
+        return getTracContext().getSorelDao().getObserverList( pub );
+    }
+    
+    //---------------------------------------------------------------------
+
+    public void addWatchByAttachmentPref( User user, Publication pub,
+                                          boolean force ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("addWatchByAttachmentPref");
+
+        if( force ){
+            this.setWatchStatus( user, pub, true );
+        } else {
+
+            String byAttFlag = 
+                PrefUtil.getPrefOption( user.getPrefs(), 
+                                        "attachment-owner" );            
+            if( byAttFlag != null 
+                && byAttFlag.equalsIgnoreCase( "true" ) ){
+                this.setWatchStatus( user, pub, true );
+            }
+        }
+        log.debug("addWatchByAttachmentPref: DONE");
+    }
+    
+    //---------------------------------------------------------------------
+
+    public void addWatchByCommentPref( User user, Publication pub,
+                                       boolean force ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        log.debug("addWatchByCommentPref");
+
+        if( force ){
+            this.setWatchStatus( user, pub, true );
+        } else {
+
+            String byCommentFlag = 
+                PrefUtil.getPrefOption( user.getPrefs(),
+                                        "comment-owner" );            
+            if( byCommentFlag != null 
+                && byCommentFlag.equalsIgnoreCase( "true" ) ){
+                this.setWatchStatus( user, pub, true );
+            }
+        }
+        log.debug("addWatchByCommentPref: DONE");
+    }
+    
     //---------------------------------------------------------------------
     // Event observers
     //----------------
     
     public void addNewsObserver( User usr ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addNewsObserver; user =" +  usr);
+
+        log.debug( "ddNewsObserver; getTracContext=" + getTracContext() );
+        log.debug( "ddNewsObserver; eorel =" + getTracContext().getEorelDao() );
+
         getTracContext().getEorelDao().addEORel( "news", usr );
     }
 
     public void dropNewsObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropNewsObserver; user =" +  usr);
+
+        log.debug( "dropNewsObserver; getTracContext=" + getTracContext() );
+        log.debug( "dropNewsObserver; eorel =" + getTracContext().getEorelDao() );
+
         getTracContext().getEorelDao().dropEORel( "news", usr );
     }
 
     public void addNewRecordObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addNewRecordObserver; user =" +  usr);
+
+        log.debug( "addNewRecordObserver; getTracContext=" + getTracContext() );
+        log.debug( "addNewRecordObserver; eorel =" + getTracContext().getEorelDao() );
+
         getTracContext().getEorelDao().addEORel( "new-record", usr );
     }
 
     public void dropNewRecordObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropNewRecordObserver; user =" +  usr);
+
+        log.debug( "dropNewRecordObserver; getTracContext=" + getTracContext() );
+        log.debug( "dropNewRecordObserver; eorel =" + getTracContext().getEorelDao() );
+
         getTracContext().getEorelDao().dropEORel( "new-record", usr );
         
     }
                                                                         
     public void addNewAccountObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addNewAccountObserver; user =" +  usr);
+
+        log.debug( "addNewAccountObserver; getTracContext=" + getTracContext() );
+        log.debug( "addNewAccountObserver; eorel =" + getTracContext().getEorelDao() );
+
         getTracContext().getEorelDao().addEORel( "new-account", usr );
     }
 
     public void dropNewAccountObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropNewAccountObserver; user =" +  usr);
+
+        log.debug( "dropNewAccountObserver; getTracContext=" + getTracContext() );
+        log.debug( "dropNewAccountObserver; eorel =" + getTracContext().getEorelDao() );
         getTracContext().getEorelDao().dropEORel( "new-account", usr );
         
     }
@@ -226,5 +316,5 @@ public class WatchManager {
     //---------------------------------------------------------------------
     // private methods 
 
-
+   
 }

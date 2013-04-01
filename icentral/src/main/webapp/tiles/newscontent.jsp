@@ -20,8 +20,7 @@
            (Added by <i><A HREF="mailto:<s:property value='amail'/>"><s:property value='aini'/></A></i> )
           </td>
           <s:if test="#session['USER_ROLE'].administrator != null or  
-                      #session['USER_ROLE'].editor != null or  
-                      #session['USER_ROLE'].test != null" >
+                      #session['USER_ROLE'].editor != null" >
            <td width="1%" nowrap>
             <s:hidden name="opp.date" value="%{#item.date}"/> 
             <s:hidden name="opp.time" value="%{#item.time}"/> 

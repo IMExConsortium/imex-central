@@ -123,3 +123,20 @@ $Id$
      - CSS cleanup
 
   - help pages added
+
+
+2013/nn/nn BETA-0.90
+
+  - user account customization:
+     - publication watch list
+     - automatic watch list generation
+     - mail notifications
+
+  - GUI updates:
+     - user preferences and watch list pages added
+     - record editor:
+         - watch status tab added
+
+  - help pages updates 
+    
+  
