@@ -2,11 +2,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <h1>Account Settings</h1>
 <s:if test="#session['USER_ID'] > 0">
-<%--
-</s:if>
-<s:if test="id == 30  || id==4">
---%>
-    <script type="text/javascript">
+  <script type="text/javascript">
       YAHOO.util.Event.addListener( window, "load",
                                     YAHOO.imex.userprefmgr.init(
                                        { formid: "userpref-form",
@@ -16,14 +12,19 @@
                                          login:"<s:property value="#session['LOGIN']" />",
                                          loginid:"<s:property value="#session['USER_ID']" />"}));
 
-    </script>
-    <s:form id="userpref-form" action="userprefmgr" theme="simple" onsubmit="return false;">
+  </script>
+  <s:form id="userpref-form" action="userprefmgr" theme="simple" onsubmit="return false;">
+    <div>
+      <div style="display:inline-block; padding: 0 0 0 2em;" >
         <s:submit name="op.update" value="Save" theme="simple" 
            onclick="YAHOO.imex.userprefmgr.submit('userpref-form')"/>
-        <s:submit name="op.defset" value="Default" theme="simple" 
+      </div>
+      <div style="display:inline-block; padding: 0 0 0 2em;" >
+        <s:submit name="op.defset" value="Restore Defaults" theme="simple" 
            onclick="YAHOO.imex.userprefmgr.defset()"/>
-    </s:form>
-
+      </div>
+    </div>
+  </s:form>
  <div class="yui-skin-sam" width="100%">
  </div>
 </s:if>

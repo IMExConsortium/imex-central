@@ -1,31 +1,31 @@
-
 YAHOO.namespace("imex");
 
 YAHOO.imex.userprefmgr = {
     
     preferences : '',
+
     /*************************************************************************
      * Takes an object and recursively travels down all the nodes.
      * function is applied when it reaches an object with a option-def property
      *************************************************************************/
     traverse:  function( object, func ){
-        
+
         var html = '';
            
         for (var i in object) {                   
             if(i =="option-def"){
-                html += "\n<dev class='cfg-block-list'>\n";
+                html += "\n<div class='cfg-block-list'>\n";
                 for( var j = 0; j < object.options.length; j++ ){
                     
                     var strong = false;
                     
                     if( object["option-def"][object.options[j]]["legend"] !== undefined){
-                        html += "<dev class='cfg-block-legend'>";    
+                        html += "<div class='cfg-block-legend'>";    
                         html += "\n<fieldset>\n";
                         html += "<legend>" + object["option-def"][object.options[j]]["legend"] +"</legend>";
                         strong = true;
                     }else{
-                        html += "<dev class='cfg-block-no-legend'>";   
+                        html += "<div class='cfg-block-no-legend'>";   
                     }
                     
                     html += func
@@ -45,11 +45,11 @@ YAHOO.imex.userprefmgr = {
                     if( object["option-def"][object.options[j]]["legend"] !== undefined){
                         html += "\n</fieldset>\n";
                     }
-                    html += "</dev>\n";
+                    html += "</div>\n";
                     
                 }
                 
-                html+="</dev>\n";                    
+                html+="</div>\n";                    
             }
         }
         return html;
@@ -64,33 +64,20 @@ YAHOO.imex.userprefmgr = {
 
             var process = function( key, value, options, opp, strong ){
                 
+                var upm = YAHOO.imex.userprefmgr;
+                
                 if( typeof value.value != "undefined"){
-
+                    
                     var keyClass = "cfg-key"; 
                     
                     if( strong ){
                         keyClass = "cfg-key-strong";
                     }
-                    
-                    if( value.value ==='true'){
-                        var checkboxT = '<input type="radio" id="' 
-                            + options[key] +'True" name="opp.' + opp + '"' 
-                            +' value="true" checked="checked" ><strong>True</strong></input>';
-                        var checkboxF = '<input type="radio" id="' 
-                            + options[key] +'False" name="opp.' + opp + '"' 
-                            +' value="false">False</input>';
-                    }else{
-                        var checkboxT = '<input type="radio" id="' 
-                            + options[key] +'True" name="opp.' + opp + '"' 
-                            + ' value="true">True</input>';
-                        var checkboxF = '<input type="radio" id="' 
-                            + options[key] +'False" name="opp.' + opp +'"' 
-                            +' value="false" checked="checked" ><strong>False</strong></input>';
-                    }
-                    
-                    return  "<div class='cfg-key-val'>" 
+                    return "<div class='cfg-key-val'>" 
                         + "<div class='" + keyClass + "'>" + value.label + "</div>" 
-                        + "<div class='cfg-val'>" + checkboxT + " " +  checkboxF +"</div>"
+                        + "<div class='cfg-val' id='opp." + opp + "'>" 
+                        + upm.htmlBoolRadio( options[key], opp, value.value )
+                        + "</div>"
                         + "</div>";
                 }
                 return "";
@@ -106,16 +93,11 @@ YAHOO.imex.userprefmgr = {
             
             var form = document.getElementById(init["formid"]);
             var html = '';
-            //var html = '<form id="userprefmgrForm" name="userprefmgrForm" action="/icentral/userprefmgr" method="post">';
-            //html += '<input type="hidden" name="op.update" value="update" id="userprefmgr_op" />'; 
 
-            
             html += userprefmgr.traverse( userprefmgr.preferences, process );
-            console.log (html);
-            form.innerHTML = html + form.innerHTML ;
-             
-                             
-         };
+            console.log ( html );
+            form.innerHTML = html + form.innerHTML ;                             
+        };
         var Fail = function ( o ) {
             console.log( "AJAX Error update failed: id=" + o.argument.id ); 
         };
@@ -123,7 +105,7 @@ YAHOO.imex.userprefmgr = {
                          success: Success,
                          failure: Fail
                          }; 
-                         
+        
         try{
             YAHOO.util.Connect
             .asyncRequest( 'GET', 
@@ -134,26 +116,47 @@ YAHOO.imex.userprefmgr = {
             console.log("AJAX Error:"+x);
         }
     },
-
-
-    update: function(  ){
-        var userprefmgr = YAHOO.imex.userprefmgr;
+    
+    updateForm: function(){
+        var upm = YAHOO.imex.userprefmgr;
         console.log("In function update");
+        
         var html='';
-        var process = function (key,value, options) {
-            if(typeof value.value != "undefined")
-            {
-                var checked = YAHOO.util.Dom.get(options[key] +'True').checked
-                if(eval(value.value) !== checked)
-                    value.value = !value.value;
-                return  value.label ;
+        var process = function (key, value, options, opp, strong  ){   
+            if( typeof value.value != "undefined" ){                
+                var valDiv = YAHOO.util.Dom.get( "opp." + opp );
+                if( valDiv !== undefined ){
+                    valDiv.innerHTML 
+                        = upm.htmlBoolRadio( key, opp, value.value );
+                }
             }
-            return "";
         };
-        var checkPrefs = YAHOO.lang.JSON.parse( YAHOO.lang.JSON.stringify( userprefmgr.preferences) );
-        html += userprefmgr.traverse(checkPrefs,process);
-        if(!(YAHOO.lang.JSON.stringify( userprefmgr.preferences) === YAHOO.lang.JSON.stringify( checkPrefs )))
-           userprefmgr.sendUpdatedPrefs();
+        try{
+            upm.traverse( upm.preferences, process );            
+        } catch (x) {
+            console.log("updateForm: Traverse Error:" + x );
+        }
+    },
+    
+    htmlBoolRadio: function( optName, optOpp, optValue ){
+        
+        if( optValue ==='true'){
+            var checkboxT = '<input type="radio" id="' 
+                + optName +'True" name="opp.' + optOpp + '"' 
+                +' value="true" checked="checked" ><strong>True</strong></input>';
+            var checkboxF = '<input type="radio" id="' 
+                + optName +'False" name="opp.' + optOpp + '"' 
+                +' value="false">False</input>';
+        }else{
+            var checkboxT = '<input type="radio" id="' 
+                + optName +'True" name="opp.' + optOpp + '"' 
+                + ' value="true">True</input>';
+            var checkboxF = '<input type="radio" id="' 
+                + optName +'False" name="opp.' + optOpp +'"' 
+                +' value="false" checked="checked" ><strong>False</strong></input>';
+        }
+        var html = "<div class='cfg-val'>" + checkboxT + " " +  checkboxF +"</div>";
+        return html;
     },
 
     sendUpdatedPrefs: function( o  ){
@@ -167,25 +170,34 @@ YAHOO.imex.userprefmgr = {
                          success: Success,
                          failure: Fail
                          };    
-        try{
-
-            
+        try{    
             YAHOO.util.Connect
-            .asyncRequest( 'POST', 
-                           'userprefmgr?op.update=true', 
-                           callback,  
-                           YAHOO.lang.JSON.stringify( userprefmgr.preferences));        
+                .asyncRequest( 'POST', 
+                               'userprefmgr?op.update=true', 
+                               callback,  
+                               YAHOO.lang.JSON.stringify( userprefmgr.preferences));        
         } catch (x) {
             console.log("AJAX Error:"+x);
         }
-        
     },
 
     submit: function ( formid ){
 
         var Success = function ( o ) {
-            console.log( 'updated' ); 
+            console.log( 'updated' );
+            // update preferences fields
+            
+            var upm = YAHOO.imex.userprefmgr;
+   
+            upm.preferences 
+                = YAHOO.lang.JSON.parse( o.responseText );
+            upm.preferences 
+                = YAHOO.lang.JSON.parse( upm.preferences.preferences );
+
+            upm.updateForm();   
+            
         };
+        
         var Fail = function ( o ) {
             console.log( "AJAX Error update failed: id=" + o.argument.id ); 
         };
@@ -197,9 +209,10 @@ YAHOO.imex.userprefmgr = {
             var formObj = document.getElementById( formid );
             YAHOO.util.Connect.setForm(formObj);
             
-            var cObj = YAHOO.util.Connect.asyncRequest('POST', 
-                                                       'userprefmgr?op.update=true', 
-                                                       callback);            
+            var cObj = YAHOO.util.Connect
+                .asyncRequest( 'POST', 
+                               'userprefmgr?op.update=true', 
+                               callback );            
         } catch (x) {
             console.log("AJAX Error:"+x);
         }   
@@ -213,6 +226,15 @@ YAHOO.imex.userprefmgr = {
 
         var Success = function ( o ) {
             console.log( 'defset' ); 
+
+            var upm = YAHOO.imex.userprefmgr;
+   
+            upm.preferences 
+                = YAHOO.lang.JSON.parse( o.responseText );
+            upm.preferences 
+                = YAHOO.lang.JSON.parse( upm.preferences.preferences );
+            
+            upm.updateForm();   
         };
         
         var Fail = function ( o ) {
@@ -227,5 +249,4 @@ YAHOO.imex.userprefmgr = {
             console.log("AJAX Error:"+x);
         }
     }
-
 };

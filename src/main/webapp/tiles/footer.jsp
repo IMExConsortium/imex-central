@@ -5,7 +5,8 @@
   <tr>
    <td>
     <table width="100%" class="footer" cellpadding="0" cellspacing="0">
-     <s:if test="#session['USER_ROLE'].administrator != null" >
+     <s:if test="#session['USER_ROLE'].administrator != null or
+                 #session['USER_ROLE'].editor != null" >
       <t:insertAttribute name="edit" ignore="true"/>
      </s:if>
      <tr>

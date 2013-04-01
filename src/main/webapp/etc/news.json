@@ -1,5 +1,13 @@
 {news:{
    "2013":[
+      {"date":"2013-03-31",
+       "time":"20-00-00",
+       "auid":"1",
+       "amail":"lukasz@mbi.ucla.edu",
+       "aini":"LS",
+       "header":"PRE-BETA-0.90 Deployed on the Test Site",
+       "body":"New features include:<ul><li>User Account Settings Page (see Account Settings <a href='page?id=help-user-prefs'>help page</a>)</li><li>Watch List (see Watch List<a href='page?id=help-watchlist'>help page</a>)</li><li>News Panel (as seen on this page)</li><li>Mail Notification module (see Account Settings <a href='page?id=help-user-prefs'>help page</a>)</li></ul> "
+      },
       {"date":"2013-02-15",
        "time":"10-15-00",
        "auid":"1",

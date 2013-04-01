@@ -39,7 +39,7 @@ public class UserPrefMgrAction extends ManagerSupport {
     private static final String ACL_OPER = "acl_oper";
     
     ////------------------------------------------------------------------------
-    /// Watch Manager
+    /// User Preferences Manager
     //---------------
     
     private UserPrefManager uprefManager;
@@ -50,6 +50,20 @@ public class UserPrefMgrAction extends ManagerSupport {
 
     public UserPrefManager getUserPrefManager() {
         return this.uprefManager;
+    }
+    
+    ////------------------------------------------------------------------------
+    /// Watch Manager
+    //---------------
+    
+    private WatchManager watchManager;
+
+    public void setWatchManager( WatchManager manager ){
+        this.watchManager = manager;
+    }
+
+    public WatchManager getWatchManager() {
+        return this.watchManager;
     }
     
     //--------------------------------------------------------------------------
@@ -117,16 +131,6 @@ public class UserPrefMgrAction extends ManagerSupport {
                 if ( key.equalsIgnoreCase( "defset" ) ) {
                     return execDefset( luser );
                 }
-                
-                if ( key.equalsIgnoreCase( "opcode3" ) ) {
-                    
-                    // get comment by id
-                    //------------------
-                    
-                    if ( getOpp() == null ) return JSON;
-                    String prop1 = getOpp().get( "prop1" );
-                    return execOp3( prop1 );
-                }                            
             }
         }
         return SUCCESS;
@@ -138,31 +142,18 @@ public class UserPrefMgrAction extends ManagerSupport {
     private String execView( User user ){
         
         Log log = LogFactory.getLog( this.getClass() );
-
-        //log.debug( "|id=" + getId() + " op=" + getOp() );
         
-        //User user = new User();
-        //UserDao userDao = getUserContext().getUserDao();
-        //if( getId() > 0 ){
-        //    try {
-        //        user = userDao.getUser(getId());
-          
         this.preferences = user.getPrefs();
         
-        //    }catch( Exception ex ) {
-        //          log.debug(ex);
-        //    }
-        //}
+        log.debug( "execView: pref length = : " + this.preferences.length() );
         
-        log.debug( "before if length = : " + this.preferences.length() );
-        
-        if( this.preferences == null || this.preferences.length() <= 0){
+        if( this.preferences == null || this.preferences.length() <= 0 ){
             log.debug( "No prefs found, updating with Defaults" );
             this.preferences = getUserPrefManager().getDefUserPrefs();
             user.setPrefs(this.preferences);
             getUserContext().getUserDao().updateUser( user );
         }
-
+        
         return JSON;
     }
 
@@ -186,18 +177,34 @@ public class UserPrefMgrAction extends ManagerSupport {
             user.setPrefs( nUpref );
             getUserContext().getUserDao().updateUser( user );
             
-            //------------------------------------------------------------------
-            // NOTE(LS): opp.mmacc, opp.mmna, opp.mmrec values should be
-            //           used to call appropriate
-
-            //            watchManager.[add|drop][News|NewRecord|NewAccount]Observer( usr )
-
-            //           method
-
+            if ( isOppSet( "mmacc" ) ) 
+                watchManager.addNewAccountObserver( user );
+            else
+                watchManager.dropNewAccountObserver( user );
+            
+            if ( isOppSet(  "mmna" ) ) 
+                watchManager.addNewsObserver( user );
+            else
+                watchManager.dropNewsObserver( user );
+                
+            if ( isOppSet( "mmrec" ) ) 
+                watchManager.addNewRecordObserver( user );
+            else
+                watchManager.dropNewRecordObserver( user );
+            
         } catch( JSONException jex ){
         }
+        
+        user = getUserContext().getUserDao()
+            .getUser( user.getId() );
+
+        this.preferences = user.getPrefs();
         return JSON;
     }
+    
+    private boolean isOppSet( String prop ){
+        return Boolean.parseBoolean( getOpp().get( prop ) );
+    } 
 
     //--------------------------------------------------------------------------
     
@@ -249,14 +256,9 @@ public class UserPrefMgrAction extends ManagerSupport {
         
         user.setPrefs( this.preferences );
         getUserContext().getUserDao().updateUser( user );
+        this.preferences = user.getPrefs();
+        
         return JSON;
     }
-
-    //--------------------------------------------------------------------------
-
-    private String execOp3(String param){
-
-        //watchManager.doSomethingElse( param );
-        return JSON;  // ACL_PAGE/ACL_ERROR
-    }
+    
 }
