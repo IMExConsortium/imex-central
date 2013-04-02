@@ -127,9 +127,12 @@ public class UserPrefMgrAction extends ManagerSupport {
                     return execUpdate( luser );
                 }
                 
-
                 if ( key.equalsIgnoreCase( "defset" ) ) {
                     return execDefset( luser );
+                }
+                
+                if ( key.equalsIgnoreCase( "updateTable" ) ) {
+                    return execUpdateTable( luser );
                 }
             }
         }
@@ -261,4 +264,17 @@ public class UserPrefMgrAction extends ManagerSupport {
         return JSON;
     }
     
+     private String execDefset( User user ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " execDefset called" );
+        
+        this.preferences = getUserPrefManager().getDefUserPrefs();
+        
+        user.setPrefs( this.preferences );
+        getUserContext().getUserDao().updateUser( user );
+        this.preferences = user.getPrefs();
+        
+        return JSON;
+    }
 }

@@ -184,8 +184,44 @@ YAHOO.imex.pubmgr = {
         } catch (x) {
             console.log("INIT: ex="+ x);
         }
+        this.userTableLayoutInit( init );
         this.initView( init );
         this.historyInit( init );
+    },
+    userTableLayoutInit: function( init ){
+        if(typeof init.loginid  != "undefined" && init.loginid != "")
+        {
+            var Success = function( response ){                           
+                var cookie = YAHOO.util.Cookie.get("pubmgr");
+                var responseText = YAHOO.lang.JSON.parse(response.responseText);
+                var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
+                if(preferences.tableLayout == "null")
+                {
+                    preferences.tableLayout = cookie;
+                }
+                else
+                {
+                    YAHOO.util.Cookie.set( "pubmgr", cookie );
+                }
+            };
+            var Fail = function ( o ) {
+                console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+            };
+            var callback = { cache:false, timeout: 5000, 
+                             success: Success,
+                             failure: Fail
+                             }; 
+            
+            try{
+                YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               'userprefmgr?id=' + init.loginid +'&op.view=true', 
+                               //'userprefmgr?id=30' +'&op.view=true', 
+                               callback );        
+            } catch (x) {
+                console.log("AJAX Error:"+x);
+            }
+        }
     },
 
     buildCDefs: function( cookie ){
@@ -656,8 +692,8 @@ YAHOO.imex.pubmgr = {
                              
         //tossing in some css to add a black separator between the rows
         var sheet = document.createElement('style');
-		sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
-		document.body.appendChild(sheet); 
+        sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
+        document.body.appendChild(sheet); 
         
         return { 
             ds: PMGR.myDataSource, 

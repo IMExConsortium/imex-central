@@ -96,6 +96,7 @@
     <value>
 {
     "legend":"User Preferences", 
+    "tableLayout":"null",
     "options":["auto-watch","message-mail"], 
     "option-def":{
       "auto-watch": {
