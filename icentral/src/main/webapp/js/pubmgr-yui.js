@@ -189,7 +189,9 @@ YAHOO.imex.pubmgr = {
         this.historyInit( init );
     },
     userTableLayoutInit: function( init ){
-        if(typeof init.loginid  != "undefined" && init.loginid != "")
+        var loginId = init.loginid;
+        
+        if(typeof loginId  != "undefined" && loginId != "")
         {
             var Success = function( response ){                           
                 var cookie = YAHOO.util.Cookie.get("pubmgr");
@@ -198,6 +200,14 @@ YAHOO.imex.pubmgr = {
                 if(preferences.tableLayout == "null")
                 {
                     preferences.tableLayout = cookie;
+                    try{
+                        YAHOO.util.Connect
+                        .asyncRequest( 'POST', 
+                                       'userprefmgr?id=' + loginId + '&op.updateTable=true',
+                                       null, "opp.tableLayout=" + preferences.tableLayout );        
+                    } catch (x) {
+                        console.log("AJAX Error:"+x);
+                    }
                 }
                 else
                 {
@@ -215,8 +225,7 @@ YAHOO.imex.pubmgr = {
             try{
                 YAHOO.util.Connect
                 .asyncRequest( 'GET', 
-                               'userprefmgr?id=' + init.loginid +'&op.view=true', 
-                               //'userprefmgr?id=30' +'&op.view=true', 
+                               'userprefmgr?id=' + loginId +'&op.view=true',
                                callback );        
             } catch (x) {
                 console.log("AJAX Error:"+x);

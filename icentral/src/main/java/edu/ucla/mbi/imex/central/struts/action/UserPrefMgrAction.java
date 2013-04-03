@@ -264,17 +264,35 @@ public class UserPrefMgrAction extends ManagerSupport {
         return JSON;
     }
     
-     private String execDefset( User user ){
+     private String execUpdateTable( User user ){
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( " execDefset called" );
+        log.debug( " execUpdateTable called" );
         
+        String upref = user.getPrefs();
+        
+         try{
+            JSONObject jUpref = new JSONObject( upref );
+            //log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
+            log.debug( "getopp()" +getOpp());
+            log.debug( "getOpp().get( tableLayout )()" +getOpp().get( "tableLayout" ));
+            
+            String tableLayoutPref = getOpp().get( "tableLayout" );
+            jUpref.put( "tableLayout",  tableLayoutPref);
+            log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
+            String nUpref = jUpref.toString(); 
+            
+            user.setPrefs( nUpref );
+        } catch( JSONException jex ){
+        
+        }
+        /*
         this.preferences = getUserPrefManager().getDefUserPrefs();
         
         user.setPrefs( this.preferences );
         getUserContext().getUserDao().updateUser( user );
         this.preferences = user.getPrefs();
-        
+        */
         return JSON;
     }
 }
