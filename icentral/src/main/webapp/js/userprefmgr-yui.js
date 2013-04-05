@@ -64,7 +64,7 @@ YAHOO.imex.userprefmgr = {
 
             var process = function( key, value, options, opp, strong ){
                 
-                var upm = YAHOO.imex.userprefmgr;
+                var userPrefManager = YAHOO.imex.userprefmgr;
                 
                 if( typeof value.value != "undefined"){
                     
@@ -76,7 +76,7 @@ YAHOO.imex.userprefmgr = {
                     return "<div class='cfg-key-val'>" 
                         + "<div class='" + keyClass + "'>" + value.label + "</div>" 
                         + "<div class='cfg-val' id='opp." + opp + "'>" 
-                        + upm.htmlBoolRadio( options[key], opp, value.value )
+                        + userPrefManager.htmlBoolRadio( options[key], opp, value.value )
                         + "</div>"
                         + "</div>";
                 }
@@ -118,7 +118,7 @@ YAHOO.imex.userprefmgr = {
     },
     
     updateForm: function(){
-        var upm = YAHOO.imex.userprefmgr;
+        var userPrefManager = YAHOO.imex.userprefmgr;
         console.log("In function update");
         
         var html='';
@@ -127,12 +127,12 @@ YAHOO.imex.userprefmgr = {
                 var valDiv = YAHOO.util.Dom.get( "opp." + opp );
                 if( valDiv !== undefined ){
                     valDiv.innerHTML 
-                        = upm.htmlBoolRadio( key, opp, value.value );
+                        = userPrefManager.htmlBoolRadio( key, opp, value.value );
                 }
             }
         };
         try{
-            upm.traverse( upm.preferences, process );            
+            userPrefManager.traverse( userPrefManager.preferences, process );            
         } catch (x) {
             console.log("updateForm: Traverse Error:" + x );
         }
@@ -187,14 +187,14 @@ YAHOO.imex.userprefmgr = {
             console.log( 'updated' );
             // update preferences fields
             
-            var upm = YAHOO.imex.userprefmgr;
+            var userPrefManager = YAHOO.imex.userprefmgr;
    
-            upm.preferences 
+            userPrefManager.preferences 
                 = YAHOO.lang.JSON.parse( o.responseText );
-            upm.preferences 
-                = YAHOO.lang.JSON.parse( upm.preferences.preferences );
+            userPrefManager.preferences 
+                = YAHOO.lang.JSON.parse( userPrefManager.preferences.preferences );
 
-            upm.updateForm();   
+            userPrefManager.updateForm();   
             
         };
         
@@ -227,14 +227,14 @@ YAHOO.imex.userprefmgr = {
         var Success = function ( o ) {
             console.log( 'defset' ); 
 
-            var upm = YAHOO.imex.userprefmgr;
+            var userPrefManager = YAHOO.imex.userprefmgr;
    
-            upm.preferences 
+            userPrefManager.preferences 
                 = YAHOO.lang.JSON.parse( o.responseText );
-            upm.preferences 
-                = YAHOO.lang.JSON.parse( upm.preferences.preferences );
+            userPrefManager.preferences 
+                = YAHOO.lang.JSON.parse( userPrefManager.preferences.preferences );
             
-            upm.updateForm();   
+            userPrefManager.updateForm();   
         };
         
         var Fail = function ( o ) {

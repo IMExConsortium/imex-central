@@ -6,6 +6,7 @@ YAHOO.imex.pubmgr = {
     owner: "",
     cflag: "",
     watch: "",
+    loginId: "",
     
     stateBtn: { my:{value:"",foo:"state"} },    
     stateSel: [ { text: "---ANY---", value: "" } ],
@@ -162,21 +163,22 @@ YAHOO.imex.pubmgr = {
 
     init: function( init ){
         
+        YAHOO.imex.pubmgr.loginId = init.loginid;
+        
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
             if( cookie == null ){
-                var nc = "";
                 for(var i = 0; i < this.myCL.length; i++ ){
 
                     var hidden= false;
                     if(  this.myCD[this.myCL[i]].hidden === true ){
                         hidden= true;
                     }
-                    nc += this.myCD[this.myCL[i]].key + ":" + hidden +"|";
+                    cookie += this.myCD[this.myCL[i]].key + ":" + hidden +"|";
                 }
-                YAHOO.util.Cookie.set( "pubmgr", nc );
-                cookie = nc;
+                YAHOO.util.Cookie.set( "pubmgr", cookie );
             }
+            this.userTableLayoutInit( init );
             
             if( cookie !== null ){
                 this.buildCDefs( cookie );                
@@ -184,12 +186,13 @@ YAHOO.imex.pubmgr = {
         } catch (x) {
             console.log("INIT: ex="+ x);
         }
-        this.userTableLayoutInit( init );
         this.initView( init );
         this.historyInit( init );
     },
+    //----------------------------------------------------------------
+    //if a user is logged in this sets the cookie to their preferences
+    //----------------------------------------------------------------
     userTableLayoutInit: function( init ){
-        var loginId = init.loginid;
         
         if(typeof loginId  != "undefined" && loginId != "")
         {
@@ -199,18 +202,11 @@ YAHOO.imex.pubmgr = {
                 var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
                 if(preferences.tableLayout == "null")
                 {
-                    preferences.tableLayout = cookie;
-                    try{
-                        YAHOO.util.Connect
-                        .asyncRequest( 'POST', 
-                                       'userprefmgr?id=' + loginId + '&op.updateTable=true',
-                                       null, "opp.tableLayout=" + preferences.tableLayout );        
-                    } catch (x) {
-                        console.log("AJAX Error:"+x);
-                    }
+                    this.updateUserTablePref(cookie);
                 }
                 else
                 {
+                    cookie = preferences.tableLayout;
                     YAHOO.util.Cookie.set( "pubmgr", cookie );
                 }
             };
@@ -232,7 +228,24 @@ YAHOO.imex.pubmgr = {
             }
         }
     },
-
+    
+    updateUserTablePref: function( cookie ){
+        var pubmgr = YAHOO.imex.pubmgr;
+        var loginId = pubmgr.loginId;
+        
+        if(typeof loginId  != "undefined" && loginId != "")
+        {
+            try{
+                YAHOO.util.Connect
+                .asyncRequest( 'POST', 
+                               'userprefmgr?id=' + loginId + '&op.updateTable=true',
+                               null, "opp.tableLayout=" + cookie );        
+            } catch (x) {
+                console.log("AJAX Error:"+x);
+            }
+        }
+    },
+    
     buildCDefs: function( cookie ){
         var PMGR = YAHOO.imex.pubmgr;
        
@@ -428,7 +441,7 @@ YAHOO.imex.pubmgr = {
                                  ("<em class=\"yui-button-label\">" + 
                                   partnerLabel + "</em>"));
         }else{
-	    PMGR.partnerSel[0].text = partnerLabel;
+            PMGR.partnerSel[0].text = partnerLabel;
         }
         
         // reload data
@@ -691,6 +704,7 @@ YAHOO.imex.pubmgr = {
                     PMGR.contextMenuInit( PMGR );
                     
                     var nCookie = YAHOO.imex.pubmgr.buildCookie();
+                    YAHOO.imex.pubmgr.updateUserTablePref(nCookie);
                     YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
                 } catch (x) {}
             };
@@ -787,6 +801,7 @@ YAHOO.imex.pubmgr = {
             var oConfMenu = [[{text:"Preferences", disabled: true }],
                              [{text: "Show Columns", 
                                submenu: o.myDataTable.my.colmenu }],
+                             [{text:"Restore Default Layout" }],
                              [{text:"Save...", disabled: true}]
                             ];        
             
@@ -826,6 +841,10 @@ YAHOO.imex.pubmgr = {
             console.log(x);
         }
     },
+    //-----------------------------------
+    // Hides deselected column attributes 
+    //-----------------------------------
+     
 
     hiddenColToggle: function( tp, ev, o ){
 
@@ -847,7 +866,10 @@ YAHOO.imex.pubmgr = {
         var nCookie = YAHOO.imex.pubmgr.buildCookie();
         YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
     },
-
+    //-----------------------------
+    // Create the custom formatters 
+    //-----------------------------
+     
     myIcidFormatter: function( elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = "IC-" + oRecord.getData("id") + "-PUB"; 
@@ -864,24 +886,24 @@ YAHOO.imex.pubmgr = {
             '<td class="yui-table-inner-bottom">' + 
             oRecord.getData("title") + '</td></tr></table>';        
     }, 
-    
+
     myPmidFormatter: function(elLiner, oRecord, oColumn, oData) {
-	var pmid = oRecord.getData("pmid");
-	YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-	
-	if( pmid.length > 0 ){
-	    if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
-		elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
-		    oRecord.getData( "pmid" ) + 
-		    '">'+ oRecord.getData( "pmid" ) +'</a>';
-	    }
-	    else
-		elLiner.innerHTML = pmid;
-	}
-	else
-	    elLiner.innerHTML = 'N/A';
+        var pmid = oRecord.getData("pmid");
+        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+
+        if( pmid.length > 0 ){
+            if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
+            elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
+                oRecord.getData( "pmid" ) + 
+                '">'+ oRecord.getData( "pmid" ) +'</a>';
+            }
+            else
+            elLiner.innerHTML = pmid;
+        }
+        else
+            elLiner.innerHTML = 'N/A';
     },
-    
+
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = '<a href="pubedit?id=' + 
@@ -917,12 +939,12 @@ YAHOO.imex.pubmgr = {
             elLiner.innerHTML = '<i>N/A</i>';
         } 
     },
-
+    
+    //--------------------------
+    // Add the custom formatters 
+    //--------------------------
     formatterInit: function(){
         
-        // Add the custom formatters 
-        //--------------------------
- 
         var YDTF = YAHOO.widget.DataTable.Formatter;
         YDTF.icid = this.myIcidFormatter;; 
         YDTF.publication = this.myPubFormatter; 
