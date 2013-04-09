@@ -281,10 +281,10 @@ public class UserPrefMgrAction extends ManagerSupport {
             jUpref.put( "tableLayout",  tableLayoutPref);
             log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
             String nUpref = jUpref.toString(); 
-            
+            log.debug( "nUpref: " +  nUpref);
             user.setPrefs( nUpref );
         } catch( JSONException jex ){
-        
+        log.debug( "exception " + jex);
         }
         /*
         this.preferences = getUserPrefManager().getDefUserPrefs();

@@ -168,6 +168,7 @@ YAHOO.imex.pubmgr = {
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
             if( cookie == null ){
+                cookie = "";
                 for(var i = 0; i < this.myCL.length; i++ ){
 
                     var hidden= false;
@@ -208,6 +209,7 @@ YAHOO.imex.pubmgr = {
                 {
                     cookie = preferences.tableLayout;
                     YAHOO.util.Cookie.set( "pubmgr", cookie );
+                    this.buildCDefs( cookie );
                 }
             };
             var Fail = function ( o ) {
@@ -927,7 +929,7 @@ YAHOO.imex.pubmgr = {
         if( oRecord !== undefined  &&  oRecord.getData("imexDb") !== undefined ) {            
             elLiner.innerHTML = oRecord.getData( "imexDb" );
         } else {
-            elLiner.innerHTML = '<i>N/A</i>';
+            elLiner.innerHTML = '<em>N/A</em>';
         } 
     },
 
@@ -936,7 +938,7 @@ YAHOO.imex.pubmgr = {
         if( oRecord !== undefined  &&  oRecord.getData("editor") !== undefined ) {            
             elLiner.innerHTML = oRecord.getData("editor");
         } else {
-            elLiner.innerHTML = '<i>N/A</i>';
+            elLiner.innerHTML = '<em>N/A</em>';
         } 
     },
     
