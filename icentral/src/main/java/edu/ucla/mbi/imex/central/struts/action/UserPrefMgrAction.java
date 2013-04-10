@@ -271,6 +271,8 @@ public class UserPrefMgrAction extends ManagerSupport {
         
         String upref = user.getPrefs();
         
+            log.debug( "upref: " +  upref);
+            log.debug( "" );
          try{
             JSONObject jUpref = new JSONObject( upref );
             //log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
@@ -282,7 +284,12 @@ public class UserPrefMgrAction extends ManagerSupport {
             log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
             String nUpref = jUpref.toString(); 
             log.debug( "nUpref: " +  nUpref);
+            log.debug( "" );
             user.setPrefs( nUpref );
+            getUserContext().getUserDao().updateUser( user );
+            upref = user.getPrefs();
+            log.debug( "nUpref: " +  nUpref);
+            log.debug( "" );
         } catch( JSONException jex ){
         log.debug( "exception " + jex);
         }

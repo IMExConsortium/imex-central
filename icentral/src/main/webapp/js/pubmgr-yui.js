@@ -194,8 +194,8 @@ YAHOO.imex.pubmgr = {
     //if a user is logged in this sets the cookie to their preferences
     //----------------------------------------------------------------
     userTableLayoutInit: function( init ){
-        
-        if(typeof loginId  != "undefined" && loginId != "")
+        var pubmgr = YAHOO.imex.pubmgr;
+        if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
         {
             var Success = function( response ){                           
                 var cookie = YAHOO.util.Cookie.get("pubmgr");
@@ -203,13 +203,13 @@ YAHOO.imex.pubmgr = {
                 var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
                 if(preferences.tableLayout == "null")
                 {
-                    this.updateUserTablePref(cookie);
+                    pubmgr.updateUserTablePref(cookie);
                 }
                 else
                 {
                     cookie = preferences.tableLayout;
                     YAHOO.util.Cookie.set( "pubmgr", cookie );
-                    this.buildCDefs( cookie );
+                    pubmgr.buildCDefs( cookie );
                 }
             };
             var Fail = function ( o ) {
@@ -223,7 +223,7 @@ YAHOO.imex.pubmgr = {
             try{
                 YAHOO.util.Connect
                 .asyncRequest( 'GET', 
-                               'userprefmgr?id=' + loginId +'&op.view=true',
+                               'userprefmgr?id=' + pubmgr.loginId +'&op.view=true',
                                callback );        
             } catch (x) {
                 console.log("AJAX Error:"+x);
