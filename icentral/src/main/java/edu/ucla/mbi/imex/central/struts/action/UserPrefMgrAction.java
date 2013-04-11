@@ -134,6 +134,9 @@ public class UserPrefMgrAction extends ManagerSupport {
                 if ( key.equalsIgnoreCase( "updateTable" ) ) {
                     return execUpdateTable( luser );
                 }
+                if ( key.equalsIgnoreCase( "defaultTableLayout" ) ) {
+                    return execDefaultTable( luser );
+                }
             }
         }
         return SUCCESS;
@@ -255,9 +258,25 @@ public class UserPrefMgrAction extends ManagerSupport {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( " execDefset called" );
         
+        String userPrefs = user.getPrefs();
         this.preferences = getUserPrefManager().getDefUserPrefs();
+        String newUserPrefs = "";
+        try{
+            JSONObject jsonUserPrefs = new JSONObject( userPrefs );
+            JSONObject defaultUserPrefs = new JSONObject( userPrefs );
+            
+            String tableLayoutPref = jsonUserPrefs.getString( "tableLayout");
+            defaultUserPrefs.put( "tableLayout",  tableLayoutPref);
+            
+            newUserPrefs = defaultUserPrefs.toString(); 
+            
+            //user.setPrefs( newUserPrefs );
+            //getUserContext().getUserDao().updateUser( user );
+        } catch( JSONException jex ){
+        log.debug( "exception " + jex);
+        }
         
-        user.setPrefs( this.preferences );
+        user.setPrefs( newUserPrefs );
         getUserContext().getUserDao().updateUser( user );
         this.preferences = user.getPrefs();
         
@@ -269,37 +288,42 @@ public class UserPrefMgrAction extends ManagerSupport {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( " execUpdateTable called" );
         
-        String upref = user.getPrefs();
+        String userPrefs = user.getPrefs();
+        String newUserPrefs = "";
         
-            log.debug( "upref: " +  upref);
-            log.debug( "" );
          try{
-            JSONObject jUpref = new JSONObject( upref );
+            JSONObject jsonUserPrefs = new JSONObject( userPrefs );
             //log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
-            log.debug( "getopp()" +getOpp());
-            log.debug( "getOpp().get( tableLayout )()" +getOpp().get( "tableLayout" ));
             
             String tableLayoutPref = getOpp().get( "tableLayout" );
-            jUpref.put( "tableLayout",  tableLayoutPref);
-            log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
-            String nUpref = jUpref.toString(); 
-            log.debug( "nUpref: " +  nUpref);
-            log.debug( "" );
-            user.setPrefs( nUpref );
-            getUserContext().getUserDao().updateUser( user );
-            upref = user.getPrefs();
-            log.debug( "nUpref: " +  nUpref);
-            log.debug( "" );
+            jsonUserPrefs.put( "tableLayout",  tableLayoutPref);
+            newUserPrefs = jsonUserPrefs.toString(); 
         } catch( JSONException jex ){
         log.debug( "exception " + jex);
         }
-        /*
-        this.preferences = getUserPrefManager().getDefUserPrefs();
-        
-        user.setPrefs( this.preferences );
+        user.setPrefs( newUserPrefs );
         getUserContext().getUserDao().updateUser( user );
-        this.preferences = user.getPrefs();
-        */
+       
         return JSON;
     }
+     private String execDefaultTable( User user ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " execDefaultTable called" );
+        
+        String userPrefs = user.getPrefs();
+        String newUserPrefs = "";
+        
+         try{
+            JSONObject jsonUserPrefs = new JSONObject( userPrefs );
+            jsonUserPrefs.put( "tableLayout",  "null" );
+            newUserPrefs = jsonUserPrefs.toString(); 
+        } catch( JSONException jex ){
+        log.debug( "exception " + jex);
+        }
+        user.setPrefs( newUserPrefs );
+        getUserContext().getUserDao().updateUser( user );
+       
+        return JSON;
+    }    
 }

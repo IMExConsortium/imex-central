@@ -800,10 +800,38 @@ YAHOO.imex.pubmgr = {
             
             o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
             
+            var defaultTableLayout = function(o)
+            {
+                var pubmgr = YAHOO.imex.pubmgr;
+                if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
+                {
+                    var Success = function( response ){ 
+                        alert("set tables to default");
+                    };
+                    var Fail = function ( o ) {
+                        console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+                    };
+                    var callback = { cache:false, timeout: 5000, 
+                                     success: Success,
+                                     failure: Fail
+                                     }; 
+                    
+                    try{
+                        YAHOO.util.Connect
+                        .asyncRequest( 'GET', 
+                                       'userprefmgr?id=' + pubmgr.loginId +'&op.defaultTableLayout=true',
+                                       callback );        
+                    } catch (x) {
+                        console.log("AJAX Error:"+x);
+                    }
+                }
+            };
+            
             var oConfMenu = [[{text:"Preferences", disabled: true }],
                              [{text: "Show Columns", 
                                submenu: o.myDataTable.my.colmenu }],
-                             [{text:"Restore Default Layout" }],
+                             [{text:"Restore Default Layout",onclick: {fn: defaultTableLayout } }
+                               ],
                              [{text:"Save...", disabled: true}]
                             ];        
             
