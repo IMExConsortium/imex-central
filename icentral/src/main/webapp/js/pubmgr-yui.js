@@ -160,23 +160,29 @@ YAHOO.imex.pubmgr = {
             console.log(x);
         }
     },
+    getDefaultCookie: function(){
+        var cookie = "";
+        var pubmgr = YAHOO.imex.pubmgr;
+        for(var i = 0; i < pubmgr.myCL.length; i++ ){
 
+            var hidden= false;
+            if(  pubmgr.myCD[pubmgr.myCL[i]].hidden === true ){
+                hidden= true;
+            }
+            cookie += pubmgr.myCD[pubmgr.myCL[i]].key + ":" + hidden +"|";
+        }
+        return cookie;
+    },
     init: function( init ){
         
-        YAHOO.imex.pubmgr.loginId = init.loginid;
+        var pubmgr = YAHOO.imex.pubmgr;
+        pubmgr.loginId = init.loginid;
         
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
             if( cookie == null ){
-                cookie = "";
-                for(var i = 0; i < this.myCL.length; i++ ){
-
-                    var hidden= false;
-                    if(  this.myCD[this.myCL[i]].hidden === true ){
-                        hidden= true;
-                    }
-                    cookie += this.myCD[this.myCL[i]].key + ":" + hidden +"|";
-                }
+                cookie = pubmgr.getDefaultCookie();
+        
                 YAHOO.util.Cookie.set( "pubmgr", cookie );
             }
             this.userTableLayoutInit( init );
@@ -806,7 +812,7 @@ YAHOO.imex.pubmgr = {
                 if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
                 {
                     var Success = function( response ){ 
-                        alert("set tables to default");
+
                     };
                     var Fail = function ( o ) {
                         console.log( "AJAX Error update failed: id=" + o.argument.id ); 
@@ -825,6 +831,20 @@ YAHOO.imex.pubmgr = {
                         console.log("AJAX Error:"+x);
                     }
                 }
+                var cookie = pubmgr.getDefaultCookie();
+                pubmgr.buildCDefs(cookie);
+                
+                YAHOO.util.Cookie.set( "pubmgr", cookie );
+                var mdt = pubmgr.myDataTable;
+        /*
+                pubmgr.myDataSource
+                    .sendRequest( request, {
+                      success: mdt.onDataReturnSetRows,
+                      failure: mdt.onDataReturnSetRows,
+                      scope: mdt,
+                      argument: {}
+                  });  */
+                alert("set tables to default");
             };
             
             var oConfMenu = [[{text:"Preferences", disabled: true }],
