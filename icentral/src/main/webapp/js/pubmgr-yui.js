@@ -177,7 +177,12 @@ YAHOO.imex.pubmgr = {
         
         var pubmgr = YAHOO.imex.pubmgr;
         pubmgr.loginId = init.loginid;
-        
+        if(typeof pubmgr.myDataTable != "undefined")
+        {
+            pubmgr.myDataTable.destroy();
+            pubmgr.myColumnDefs = [];
+            
+        }
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
             if( cookie == null ){
@@ -562,19 +567,21 @@ YAHOO.imex.pubmgr = {
                               success: stateSuccess,
                               failure: stateSuccess,
                               argument:{}}; // id:obj.id, btn:imexButton } };                  
-        try{
-            YAHOO.util.Connect
-                .asyncRequest( 'GET', 
-                               "acom?op.pstac=ac" , 
-                               stateCallback );        
-            YAHOO.util.Connect
-                .asyncRequest( 'GET', 
-                               "acom?op.pagac=ac", 
-                               partnerCallback );        
-        } catch (x) {
-            console.log("AJAX Error:"+x);
+        if(typeof PMGR.myDataTable == "undefined" )
+        {
+            try{
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   "acom?op.pstac=ac" , 
+                                   stateCallback );        
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   "acom?op.pagac=ac", 
+                                   partnerCallback );        
+            } catch (x) {
+                console.log("AJAX Error:"+x);
+            }
         }
-
         // create datasource
         //------------------
 
@@ -835,15 +842,45 @@ YAHOO.imex.pubmgr = {
                 pubmgr.buildCDefs(cookie);
                 
                 YAHOO.util.Cookie.set( "pubmgr", cookie );
-                var mdt = pubmgr.myDataTable;
-        /*
+                var myDataTable = pubmgr.myDataTable;
+                /*
+                 * 
+                sortState = myDataTable.getState().sortedBy
+                 
+                var sort = sortState ? sortState.key : "id";
+                var dir = sortState ? sortState.dir : "yui-dt-desc";
+                myDataTable.sortColumn(myDataTable.getColumn(sort),dir);
+                
+               
+                var reloadCallback = {
+                    success: myDataTable.onDataReturnSetRows,
+                    failure: myDataTable.onDataReturnSetRows,
+                    scope: myDataTable,
+                    argument: myDataTable.getState()
+                };
+                var reloadRequest = 
+                myDataTable.my.requestBuilder( myDataTable.getState(), myDataTable );
+                myDataTable.showTableMessage("Loading...");
+                myDataTable.getDataSource().sendRequest( reloadRequest, 
+                                            reloadCallback );
+                                            
+                                            
+        
                 pubmgr.myDataSource
                     .sendRequest( request, {
                       success: mdt.onDataReturnSetRows,
                       failure: mdt.onDataReturnSetRows,
                       scope: mdt,
                       argument: {}
-                  });  */
+                  });  
+                  * 
+                  * */
+                  pubmgr.init(
+                                   { owner:"", 
+                                     admus:"",
+                                     cflag:"",
+                                     watch:"",
+                                     loginid:"30" });
                 alert("set tables to default");
             };
             
