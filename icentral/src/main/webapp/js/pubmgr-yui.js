@@ -184,6 +184,8 @@ YAHOO.imex.pubmgr = {
             pubmgr.myColumnDefs = [];
             
         }
+        else
+            this.userTableLayoutInit( init );
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
             if( cookie == null ){
@@ -191,7 +193,6 @@ YAHOO.imex.pubmgr = {
         
                 YAHOO.util.Cookie.set( "pubmgr", cookie );
             }
-            this.userTableLayoutInit( init );
             
             if( cookie !== null ){
                 this.buildCDefs( cookie );                
@@ -223,6 +224,13 @@ YAHOO.imex.pubmgr = {
                     YAHOO.util.Cookie.set( "pubmgr", cookie );
                     pubmgr.buildCDefs( cookie );
                 }
+                
+                  pubmgr.init(
+                                   {admus: pubmgr.admus,
+                                    owner: pubmgr.owner,
+                                    cflag: pubmgr.cflag,
+                                    watch: pubmgr.watch,
+                                    loginid:pubmgr.loginId });
             };
             var Fail = function ( o ) {
                 console.log( "AJAX Error update failed: id=" + o.argument.id ); 
