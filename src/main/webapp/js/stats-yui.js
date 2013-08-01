@@ -87,7 +87,7 @@ YAHOO.imex.stats = function() {
     
     var myColumnDefs = [
         { key:"label", label:"Partners", formatter:"stat", sortable:false, resizeable:true, 
-          width: 600, maxAutoWidth: 1000, menuLabel:"Publication" },
+          width: 400, maxAutoWidth: 800, menuLabel:"Publication" },
         { label:"Record Status", menuLabel:"Status",key:"submission",
           children:[
              { key:"states['1'].cnt",  label:"New",sortable:false, resizeable:false, 
