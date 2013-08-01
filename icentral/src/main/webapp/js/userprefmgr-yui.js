@@ -60,6 +60,11 @@ YAHOO.imex.userprefmgr = {
      *************************************************************************/ 
     init: function( init ){
         var userprefmgr = YAHOO.imex.userprefmgr;
+
+        userprefmgr.viewUrl = init.viewUrl;
+        userprefmgr.updateUrl = init.updateUrl;
+        userprefmgr.defaultUrl = init.defaultUrl;
+
         var Success = function( response ){
 
             var process = function( key, value, options, opp, strong ){
@@ -98,6 +103,7 @@ YAHOO.imex.userprefmgr = {
             console.log ( html );
             form.innerHTML = html + form.innerHTML ;                             
         };
+
         var Fail = function ( o ) {
             console.log( "AJAX Error update failed: id=" + o.argument.id ); 
         };
@@ -156,6 +162,16 @@ YAHOO.imex.userprefmgr = {
                 +' value="false" checked="checked" ><strong>False</strong></input>';
         }
         var html = "<div class='cfg-val'>" + checkboxT + " " +  checkboxF +"</div>";
+        return html;
+    },
+
+    htmlStringText: function( optName, optOpp, optValue ){
+        
+        var textBox = '<input type="text" id="' + optName 
+            + '" name="opp.' + optOpp + '"' 
+            +' value="true" checked="checked" />';
+
+        var html = "<div class='cfg-val'>" + textBox +"</div>";
         return html;
     },
 

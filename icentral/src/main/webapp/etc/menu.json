@@ -22,11 +22,6 @@
              link:"journalmgr",
              "disabled":"false",
              menu:[]
-            },
-            {label:"Statistics",
-             link:"stats",
-             "disabled":"false",
-             menu:[]
             }]
          },
          {label:"Search",
@@ -52,6 +47,16 @@
              "disabled":"true",
              menu:[]
             }]
+         },
+         {"label":"Statistics",
+          "link":"stats",
+          "disabled":"false",
+          "menu":[
+             {"label":"Curation Progress",
+              "link":"stats",
+              "disabled":"false",
+              "menu":[]              
+             }]
          }]
       },       
       {label:"Tools",

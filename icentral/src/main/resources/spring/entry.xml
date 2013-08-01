@@ -154,7 +154,7 @@
     <property name="tracContext" ref="tracContext"/>
 <!--    <property name="workflowContext" ref="workflowContext"/> -->
 
-    <property name="mst" value="1:1:3"/>
+    <property name="mst" value="1:4:1"/>
   </bean>
 
 

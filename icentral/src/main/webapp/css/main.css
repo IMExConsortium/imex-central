@@ -1584,9 +1584,10 @@ form.stylized button {
 
 .statstab{
   border: 1px solid #888888;
+  width: 100em;
 }
 
-.joustab{
+.joutab{
   border: 1px solid #888888;
 }
 
