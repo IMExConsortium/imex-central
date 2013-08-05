@@ -54,6 +54,119 @@ public class NotificationManager {
                                  List<User> rcpLst ){    
         recordNotify( pub, logEntry, rcpLst, "mail-record-new" );
     }
+
+    public void attachmentNotify( Publication pub, IcLogEntry logEntry,
+                                  List<User> rcpLst){  
+        //recordNotify( pub, logEntry, rcpLst, "mail-attachment-new" );
+
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "attachmentNotify called: pub=" + pub + " logEntry=" + logEntry);
+        log.info( "attachmentNotify called: rcpLst=" + rcpLst);
+
+        if( pub == null || logEntry == null 
+            || rcpLst == null || rcpLst.size() == 0 ){
+            
+            log.info( "attachmentNotify: DONE" );
+            return;
+        }
+        
+        String pubId = Integer.toString( pub.getId() );
+        String pubAuthor = pub.getAuthor();
+        String pubTitle = pub.getTitle();
+        String pubPmid = pub.getPmid();
+        
+        String alert = logEntry.getLabel();
+        String message;
+                
+        log.debug( "pub.getId()  = " + pubId );
+        log.debug( "pub.getAuthor() = " + pubAuthor );
+        log.debug( "pub.getTitle()  = " + pubTitle );
+        log.debug( "pub.getPmid()  = " + pubPmid );
+        log.debug( "ile.getLabel()  = " + alert );
+        
+        if( pubAuthor.length() > 70 )
+            pubAuthor = pubAuthor.substring( 0, 70 );
+        if( pubTitle.length() > 70 )
+            pubTitle = pubTitle.substring( 0, 70 );
+
+
+        String recipients = "";
+        boolean send = false;
+        
+        Iterator<User> rcpi = rcpLst.iterator();
+        
+        while( rcpi.hasNext() ){
+            User recipient = rcpi.next();
+
+            //------------------------------------------------------------------
+            // NOTE: restricted only to current administrators, curators
+            //       and the record owner
+
+            log.debug( "recipient.getAllRoleNames="  
+                       + recipient.getAllRoleNames() );
+            log.debug( "pub.getOwner=" +  pub.getOwner() );
+            
+            if( recipient.getAllRoleNames().contains( "administrator" ) ||
+                recipient.getAllRoleNames().contains( "curator" ) ||
+                pub.getOwner() == recipient ){
+
+                log.debug( "recipient: OK" );
+                
+                String globalMailFlag = PrefUtil
+                    .getPrefOption( recipient.getPrefs(), "message-mail" );
+                
+                String mailFlag = PrefUtil
+                    .getPrefOption( recipient.getPrefs(), 
+                                    "mail-attachment-new" );
+                
+                log.debug( "recipient: globalMailFlag=" + globalMailFlag
+                           + " mailFlag=" + mailFlag );
+                if( globalMailFlag != null && mailFlag != null
+                    && globalMailFlag.equalsIgnoreCase( "true" ) 
+                    && mailFlag.equalsIgnoreCase( "true" ) 
+                    ){
+                    String rcptMail = recipient.getEmail();
+                
+                    recipients += " " + rcptMail + ",";
+                    send = true;
+                } 
+            }
+        }
+
+        if( !send ) return;  // no mail notifiactions requested
+        
+        recipients  = recipients.substring(0, recipients.length() - 1);
+                                           
+        message = "EMAIL=\"" + recipients + "\"\n" 
+            + "MODE=\"RECORD_UPDATE\"\n" 
+            + "ID=\"" + pubId + "\"\n" 
+            + "AUTHOR=\"" + pubAuthor.replace("\"","\\\"") + "\"\n" 
+            + "TITLE=\"" + pubTitle.replace("\"","\\\"") + "\"\n" 
+            + "PMID=\"" + pubPmid.replace("\"","\\\"") + "\"\n" 
+            + "ALERT=\"" + alert.replace("\"","\\\"") + "\"\n" ;
+        
+        //Write message information to a queue file
+        
+
+
+        try {
+            String fileName = queueDir + File.separator 
+                + String.valueOf( System.currentTimeMillis() ) 
+                + ".queue";
+
+            log.debug( "fileName=" + fileName );
+
+            File file = new File( fileName );
+            file.createNewFile();
+            FileOutputStream fout = new FileOutputStream( file );
+            fout.write( ( message ).getBytes());
+            fout.close();
+            
+        }catch ( IOException ex ) { 
+            System.out.println( ex );
+        }
+    }
     
     //--------------------------------------------------------------------------
     

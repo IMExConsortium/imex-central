@@ -98,6 +98,7 @@
       }
     } 
   },
+
   newsedit:{
       order:["allow"],
       allow:{
@@ -149,6 +150,7 @@
         }
       }
   },
+
   pubmgr:{
     order:["operation"],
     operation:{
@@ -488,6 +490,7 @@
         }
       }  
   },
+
   rolemgr:{
       order:["allow","operation"],
       allow:{
@@ -531,6 +534,7 @@
         }
       }
     },
+
     groupmgr:{
       order:["allow","operation"],
       allow:{
@@ -589,6 +593,7 @@
         }
       }
     },
+
     usermgr:{
       order:["allow","operation"],
       allow:{

@@ -1,5 +1,13 @@
 {news:{
    "2013":[
+      {"date":"2013-08-03",
+       "time":"20-00-00",
+       "auid":"1",
+       "amail":"lukasz@mbi.ucla.edu",
+       "aini":"LS",
+       "header":"BETA-0.91 Has Been Deployed",
+       "body":"This is mostly maintanance release that includes minor updates to the page layout and user account preferences."
+      },
       {"date":"2013-03-31",
        "time":"20-00-00",
        "auid":"1",

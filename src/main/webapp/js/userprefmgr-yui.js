@@ -125,8 +125,7 @@ YAHOO.imex.userprefmgr = {
     
     updateForm: function(){
         var upm = YAHOO.imex.userprefmgr;
-        console.log("In function update");
-        
+        console.log("In function update");        
         var html='';
         var process = function (key, value, options, opp, strong  ){   
             if( typeof value.value != "undefined" ){                
@@ -200,7 +199,7 @@ YAHOO.imex.userprefmgr = {
     submit: function ( formid ){
 
         var Success = function ( o ) {
-            console.log( 'updated' );
+
             // update preferences fields
             
             var upm = YAHOO.imex.userprefmgr;
@@ -217,6 +216,7 @@ YAHOO.imex.userprefmgr = {
         var Fail = function ( o ) {
             console.log( "AJAX Error update failed: id=" + o.argument.id ); 
         };
+
         var callback = { cache:false, timeout: 5000, 
                          success: Success,
                          failure: Fail
@@ -235,14 +235,9 @@ YAHOO.imex.userprefmgr = {
     },
     
     defset: function( o ){
-        var callback = { cache:false, timeout: 5000, 
-                         success: Success,
-                         failure: Fail
-                         }; 
-
+        
         var Success = function ( o ) {
             console.log( 'defset' ); 
-
             var upm = YAHOO.imex.userprefmgr;
    
             upm.preferences 
@@ -255,12 +250,18 @@ YAHOO.imex.userprefmgr = {
         
         var Fail = function ( o ) {
             console.log( "AJAX Error defset failed: id=" + o.argument.id ); 
+            
         };
         
+        var callback = { cache:false, timeout: 5000, 
+                         success: Success,
+                         failure: Fail
+                       }; 
+
         try{
-            YAHOO.util
-                .Connect.asyncRequest( 'GET', 'userprefmgr?op.defset=true', 
-                                       callback );        
+            YAHOO.util.Connect.asyncRequest( 'GET', 'userprefmgr?op.defset=true', 
+                                             callback );
+            
         } catch (x) {
             console.log("AJAX Error:"+x);
         }
