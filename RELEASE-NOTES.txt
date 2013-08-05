@@ -125,7 +125,7 @@ $Id$
   - help pages added
 
 
-2013/nn/nn BETA-0.90
+2013/04/07 BETA-0.90
 
   - user account customization:
      - publication watch list
@@ -140,3 +140,10 @@ $Id$
   - help pages updates 
     
   
+2013/08/05 BETA-0.91
+
+  - user account customization:
+      - attachment mail notifications
+
+  - GUI updates:
+      - minor page reorganization

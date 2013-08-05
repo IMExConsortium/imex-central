@@ -235,8 +235,10 @@ public class WatchManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "addNewsObserver; user =" +  usr);
 
-        log.debug( "ddNewsObserver; getTracContext=" + getTracContext() );
-        log.debug( "ddNewsObserver; eorel =" + getTracContext().getEorelDao() );
+        log.debug( "ddNewsObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "ddNewsObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
 
         getTracContext().getEorelDao().addEORel( "news", usr );
     }
@@ -245,18 +247,51 @@ public class WatchManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "dropNewsObserver; user =" +  usr);
 
-        log.debug( "dropNewsObserver; getTracContext=" + getTracContext() );
-        log.debug( "dropNewsObserver; eorel =" + getTracContext().getEorelDao() );
+        log.debug( "dropNewsObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropNewsObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
 
         getTracContext().getEorelDao().dropEORel( "news", usr );
     }
+
+    //--------------------------------------------------------------------------
+
+    public void addAttachmentObserver( User usr ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addAttachmentObserver; user =" +  usr);
+
+        log.debug( "addAttachmentObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "addAttachmentObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao().addEORel( "new-attachment", usr );
+    }
+
+    public void dropAttachmentObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropAttachementObserver; user =" +  usr);
+
+        log.debug( "dropAttachementObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropAttachementObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao().dropEORel( "new-attachment", usr );
+    }
+
+    //--------------------------------------------------------------------------
 
     public void addNewRecordObserver( User usr ){
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "addNewRecordObserver; user =" +  usr);
 
-        log.debug( "addNewRecordObserver; getTracContext=" + getTracContext() );
-        log.debug( "addNewRecordObserver; eorel =" + getTracContext().getEorelDao() );
+        log.debug( "addNewRecordObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "addNewRecordObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
 
         getTracContext().getEorelDao().addEORel( "new-record", usr );
     }
@@ -265,19 +300,25 @@ public class WatchManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "dropNewRecordObserver; user =" +  usr);
 
-        log.debug( "dropNewRecordObserver; getTracContext=" + getTracContext() );
-        log.debug( "dropNewRecordObserver; eorel =" + getTracContext().getEorelDao() );
+        log.debug( "dropNewRecordObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropNewRecordObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
 
         getTracContext().getEorelDao().dropEORel( "new-record", usr );
         
     }
+
+    //--------------------------------------------------------------------------
                                                                         
     public void addNewAccountObserver( User usr ){
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "addNewAccountObserver; user =" +  usr);
 
-        log.debug( "addNewAccountObserver; getTracContext=" + getTracContext() );
-        log.debug( "addNewAccountObserver; eorel =" + getTracContext().getEorelDao() );
+        log.debug( "addNewAccountObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "addNewAccountObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
 
         getTracContext().getEorelDao().addEORel( "new-account", usr );
     }
@@ -286,13 +327,15 @@ public class WatchManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "dropNewAccountObserver; user =" +  usr);
 
-        log.debug( "dropNewAccountObserver; getTracContext=" + getTracContext() );
-        log.debug( "dropNewAccountObserver; eorel =" + getTracContext().getEorelDao() );
+        log.debug( "dropNewAccountObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropNewAccountObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
         getTracContext().getEorelDao().dropEORel( "new-account", usr );
         
     }
-                                                                        
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // List queries
     //-------------
 
@@ -300,20 +343,27 @@ public class WatchManager {
         return getTracContext().getEorelDao().getEORel( "news" );
     }
     
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<User> getNewRecordObserverList(){
         return getTracContext().getEorelDao().getEORel( "new-record" );        
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     public List<User> getNewAccountObserverList(){
         return getTracContext().getEorelDao().getEORel( "new-account" );        
     }
-    
-    //---------------------------------------------------------------------
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+
+    public List<User> getAttachmentObserverList(){
+        return getTracContext().getEorelDao().getEORel( "new-attachment" );        
+    }
+
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // private methods 
 
    

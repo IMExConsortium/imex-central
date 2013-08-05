@@ -290,12 +290,46 @@ public class LogAdvice {
             
             getAttachmentManager().getTracContext().getAdiDao().saveAdi( ile );
             
-            // get a list of observers and send out notifications
-            //---------------------------------------------------
+            // get a list of publication observers and send out notifications
+            //---------------------------------------------------------------
 
             List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
             if( pub!= null && obsLst != null && obsLst.size() > 0 ){
                 notificationManager.updateNotify( (IcPub) pub, ile, obsLst );
+            }
+
+            if( adi instanceof IcAttachment){
+
+                // get a list of attachment observers, send out notifications
+                //-----------------------------------------------------------
+
+                List<User> aobsLst = watchManager.getAttachmentObserverList();
+            
+                if( aobsLst != null ){
+                    log.debug( "LogManager: aobsLst.size=" 
+                               + aobsLst.size() );
+                
+                    List<User> uobsLst = null;
+                    
+                    if( obsLst == null ){
+                        uobsLst = aobsLst;
+                    } else {
+                        uobsLst = new ArrayList<User>();
+                        
+                        for( Iterator<User> ia = aobsLst.iterator(); 
+                             ia.hasNext(); ){
+                            User cu = ia.next();
+                            if( !obsLst.contains( cu ) ){
+                                uobsLst.add( cu );
+                            }
+                        }
+                    }
+
+                    notificationManager.attachmentNotify( (IcPub) pub, 
+                                                          ile, uobsLst );
+                } else {
+                    log.debug( "LogManager: aobsLst= null"  );
+                }
             }
         }
     }

@@ -192,6 +192,13 @@ public class UserPrefMgrAction extends ManagerSupport {
             else
                 watchManager.dropNewRecordObserver( user );
             
+            if ( isOppSet( "mmatt" ) ) 
+                watchManager.addAttachmentObserver( user );
+            else
+                watchManager.dropAttachmentObserver( user );
+            
+
+
         } catch( JSONException jex ){
         }
         
