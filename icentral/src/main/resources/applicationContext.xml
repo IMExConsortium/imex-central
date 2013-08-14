@@ -141,7 +141,7 @@
       "label": "Send out mail notifications",
       "value": "false",
       "opp": "mm",
-      "options": ["mail-record-watched", "mail-record-new",  "mail-news", "mail-account-new","mail-attachment-new"],
+      "options": ["mail-record-watched", "mail-comment-new", "mail-attachment-new", "mail-news", "mail-record-new", "mail-account-new" ],
       "option-def":{
         "mail-news": {
           "label": "News announcements",
@@ -163,13 +163,35 @@
           "opcode": "recordMail"
         },
         "mail-record-watched": {
+          "legend":"Watched Records",
           "label": "Watched record updates",
           "value": "false",
           "opp": "mmreu", 
-          "opcode": "watchMail"
+          "opcode": "watchMail",
+          "options": ["mail-comment-watched","mail-attachment-watched"],
+          "option-def":{
+            "mail-comment-watched": {          
+            "label": "Include comments",
+            "value": "false",
+            "opp": "mmcomw", 
+            "opcode": "attachMail"
+          },
+          "mail-attachment-watched": {          
+            "label": "Include attachments (curators/owners only)",
+            "value": "false",
+            "opp": "mmattw", 
+            "opcode": "attachMail"
+          }
+         }
+       },
+        "mail-comment-new": {          
+          "label": "All comments",
+          "value": "false",
+          "opp": "mmcom", 
+          "opcode": "attachMail"
         },
         "mail-attachment-new": {          
-          "label": "New attachments (curators, record owners only)",
+          "label": "All attachments (curators/owners only)",
           "value": "false",
           "opp": "mmatt", 
           "opcode": "attachMail"

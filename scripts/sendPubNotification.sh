@@ -11,7 +11,57 @@ do
 	for ADDRESS in $EMAIL
 	do
             case $MODE in
-                "RECORD-UPDATE" )                                    
+                "RECORD_UPDATE" )                                    
+	            /usr/sbin/sendmail -t <<END1
+To: $ADDRESS
+From: dip@mbi.ucla.edu
+Subject: Imex Central Notification
+
+Hello:
+
+$ALERT 
+
+Notification alert for the following publication:
+
+Title: $TITLE
+Authors: $AUTHOR
+
+IMEx Entry:
+http://dip.doe-mbi.ucla.edu:55602/icentral/pubmgr?id=$ID
+
+PubMed:
+http://www.ncbi.nlm.nih.gov/pubmed?term=$PMID
+
+Thank you for using Imex Central
+END1
+                    ;;
+                
+                "RECORD_ATTACHMENT" )
+	            /usr/sbin/sendmail -t <<END1
+To: $ADDRESS
+From: dip@mbi.ucla.edu
+Subject: Imex Central Notification
+
+Hello:
+
+$ALERT 
+
+Notification alert for the following publication:
+
+Title: $TITLE
+Authors: $AUTHOR
+
+IMEx Entry:
+http://dip.doe-mbi.ucla.edu:55602/icentral/pubmgr?id=$ID
+
+PubMed:
+http://www.ncbi.nlm.nih.gov/pubmed?term=$PMID
+
+Thank you for using Imex Central
+END1
+                    ;;
+                
+                "RECORD_COMMENT" )                                    
 	            /usr/sbin/sendmail -t <<END1
 To: $ADDRESS
 From: dip@mbi.ucla.edu

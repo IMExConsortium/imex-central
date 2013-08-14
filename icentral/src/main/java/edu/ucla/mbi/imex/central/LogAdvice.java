@@ -242,6 +242,10 @@ public class LogAdvice {
         List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
         notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
     }
+
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     
     public void addAttMonitor( Object att,  Object luser, Object ratt ){
         Log log = LogFactory.getLog( this.getClass() );
@@ -279,7 +283,7 @@ public class LogAdvice {
 
             // update watch list if needed 
             //----------------------------
-
+            
             watchManager.addWatchByCommentPref( (User) luser, pub, false );
         }
         
@@ -290,50 +294,110 @@ public class LogAdvice {
             
             getAttachmentManager().getTracContext().getAdiDao().saveAdi( ile );
             
-            // get a list of publication observers and send out notifications
-            //---------------------------------------------------------------
+            // get a list of publication observers
+            //------------------------------------
 
             List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
-            if( pub!= null && obsLst != null && obsLst.size() > 0 ){
-                notificationManager.updateNotify( (IcPub) pub, ile, obsLst );
-            }
+            
+            // attachments
+            //------------
 
             if( adi instanceof IcAttachment){
-
+                
+                List<User> uobsLst = new ArrayList<User>();
+                
+                for( Iterator<User> io = obsLst.iterator(); io.hasNext(); ){
+                    
+                    User co = io.next();
+                    String mailFlag = PrefUtil
+                        .getPrefOption( co.getPrefs(), "mail-record-watched" );
+                    
+                    if( watchManager.getWatchedAttachmentStatus( co ) ){                        
+                        if( mailFlag != null
+                            && mailFlag.equalsIgnoreCase( "true" ) ){
+                            uobsLst.add( co );
+                        }
+                    }
+                }
+                
                 // get a list of attachment observers, send out notifications
                 //-----------------------------------------------------------
-
+                
                 List<User> aobsLst = watchManager.getAttachmentObserverList();
-            
+                
                 if( aobsLst != null ){
                     log.debug( "LogManager: aobsLst.size=" 
                                + aobsLst.size() );
-                
-                    List<User> uobsLst = null;
                     
-                    if( obsLst == null ){
-                        uobsLst = aobsLst;
-                    } else {
-                        uobsLst = new ArrayList<User>();
+                    for( Iterator<User> ia = aobsLst.iterator(); 
+                         ia.hasNext(); ){
+                        User cu = ia.next();
                         
-                        for( Iterator<User> ia = aobsLst.iterator(); 
-                             ia.hasNext(); ){
-                            User cu = ia.next();
-                            if( !obsLst.contains( cu ) ){
-                                uobsLst.add( cu );
-                            }
+                        if( !uobsLst.contains( cu ) ){
+                            uobsLst.add( cu );
                         }
                     }
-
-                    notificationManager.attachmentNotify( (IcPub) pub, 
-                                                          ile, uobsLst );
-                } else {
-                    log.debug( "LogManager: aobsLst= null"  );
                 }
+                
+                log.debug( "LogManager: uobsLst(attachment).size="
+                           + uobsLst.size() );
+                
+                notificationManager.attachmentNotify( (IcPub) pub, 
+                                                          ile, uobsLst );
+            }
+            
+            // comments
+            //---------
+            
+            if( adi instanceof IcComment){
+                
+                List<User> uobsLst = new ArrayList<User>();
+
+                
+                for( Iterator<User> io = obsLst.iterator(); io.hasNext(); ){
+                    User co = io.next();
+
+                    String mailFlag = PrefUtil
+                        .getPrefOption( co.getPrefs(), "mail-record-watched" );
+                    
+                    if( watchManager.getWatchedCommentStatus( co ) ){
+                        
+                        if( mailFlag != null
+                            && mailFlag.equalsIgnoreCase( "true" ) ){
+                            uobsLst.add( co );
+                        }
+                    }
+                }    
+                
+                // get a list of comment observers, send out notifications
+                //--------------------------------------------------------
+                
+                List<User> cobsLst = watchManager.getCommentObserverList();
+                
+                if( cobsLst != null ){
+                    log.debug( "LogManager: cobsLst.size=" 
+                               + cobsLst.size() );
+                    
+                    for( Iterator<User> ic = cobsLst.iterator(); 
+                         ic.hasNext(); ){
+                        User cu = ic.next();
+                        if( !uobsLst.contains( cu ) ){
+                            uobsLst.add( cu );
+                        }
+                    }
+                }
+                
+                log.debug( "LogManager: uobsLst(comments).size=" 
+                           + uobsLst.size() );
+                
+                notificationManager.commentNotify( (IcPub) pub, 
+                                                   ile, uobsLst );         
             }
         }
     }
-    
+
+    //--------------------------------------------------------------------------    
+
     public void delAttMonitor( int aid,  Object luser, Object ratt ){
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "LogManager: attachment monitor called (delete):"

@@ -255,7 +255,10 @@ public class WatchManager {
         getTracContext().getEorelDao().dropEORel( "news", usr );
     }
 
+    
     //--------------------------------------------------------------------------
+    // Attachments
+    //------------
 
     public void addAttachmentObserver( User usr ){
 
@@ -267,7 +270,8 @@ public class WatchManager {
         log.debug( "addAttachmentObserver; eorel =" 
                    + getTracContext().getEorelDao() );
 
-        getTracContext().getEorelDao().addEORel( "new-attachment", usr );
+        getTracContext().getEorelDao()
+            .addEORel( "new-attachment", usr );
     }
 
     public void dropAttachmentObserver( User usr ){
@@ -279,8 +283,101 @@ public class WatchManager {
         log.debug( "dropAttachementObserver; eorel =" 
                    + getTracContext().getEorelDao() );
 
-        getTracContext().getEorelDao().dropEORel( "new-attachment", usr );
+        getTracContext().getEorelDao()
+            .dropEORel( "new-attachment", usr );
     }
+
+    //--------------------------------------------------------------------------
+
+    public void addWatchedAttachmentObserver( User usr ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addAttachmentObserver; user =" +  usr);
+
+        log.debug( "addWatchedAttachmentObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "addWatchedAttachmentObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao()
+            .addEORel( "new-watched-attachment", usr );
+    }
+
+    public void dropWatchedAttachmentObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropWatchedAttachementObserver; user =" +  usr);
+
+        log.debug( "dropWatchedAttachementObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropWatchedAttachementObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao()
+            .dropEORel( "new-watched-attachment", usr );
+    }
+
+    //--------------------------------------------------------------------------
+    // Comments
+    //---------
+
+    public void addCommentObserver( User usr ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addCommentObserver; user =" +  usr);
+
+        log.debug( "addCommentObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "addCommentObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao()
+            .addEORel( "new-comment", usr );
+    }
+
+
+    public void dropCommentObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropCommentObserver; user =" +  usr);
+
+        log.debug( "dropCommentObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropCommentObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao()
+            .dropEORel( "new-comment", usr );
+    }
+
+    //--------------------------------------------------------------------------
+
+    public void addWatchedCommentObserver( User usr ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "addWatchedCommentObserver; user =" +  usr);
+
+        log.debug( "addWatchedCommentObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "addWatchedCommentObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao()
+            .addEORel( "new-watched-comment", usr );
+    }
+
+
+    public void dropWatchedCommentObserver( User usr ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "dropWatchedCommentObserver; user =" +  usr);
+
+        log.debug( "dropWatchedCommentObserver; getTracContext=" 
+                   + getTracContext() );
+        log.debug( "dropWatchedCommentObserver; eorel =" 
+                   + getTracContext().getEorelDao() );
+
+        getTracContext().getEorelDao()
+            .dropEORel( "new-watched-comment", usr );
+    }
+
 
     //--------------------------------------------------------------------------
 
@@ -354,13 +451,54 @@ public class WatchManager {
     public List<User> getNewAccountObserverList(){
         return getTracContext().getEorelDao().getEORel( "new-account" );        
     }
-
+    
+    //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 
     public List<User> getAttachmentObserverList(){
         return getTracContext().getEorelDao().getEORel( "new-attachment" );        
     }
 
+    //--------------------------------------------------------------------------
+    
+    public List<User> getWatchedAttachmentObserverList(){
+        return getTracContext().getEorelDao()
+            .getEORel( "new-watched-attachment" );        
+    }
+
+    //--------------------------------------------------------------------------
+    
+    public boolean getWatchedAttachmentStatus( User usr ){
+
+        if( getTracContext().getEorelDao()
+            .getEORel( "new-watched-attachment", usr )  != null ){
+            return true;
+        }             
+        return false;   
+    }
+    
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+    public List<User> getCommentObserverList(){
+        return getTracContext().getEorelDao().getEORel( "new-comment" );        
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<User> getWatchedCommentObserverList(){
+        return getTracContext().getEorelDao()
+            .getEORel( "new-watched-comment" );        
+    }
+
+    public boolean getWatchedCommentStatus( User usr ){
+        
+        if( getTracContext().getEorelDao()
+            .getEORel( "new-watched-comment", usr )  != null ){
+            return true;
+        }             
+        return false;
+    }
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------

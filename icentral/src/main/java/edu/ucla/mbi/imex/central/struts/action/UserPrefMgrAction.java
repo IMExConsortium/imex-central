@@ -192,10 +192,33 @@ public class UserPrefMgrAction extends ManagerSupport {
             else
                 watchManager.dropNewRecordObserver( user );
             
+            // mail attachments
+            //------------------
+
             if ( isOppSet( "mmatt" ) ) 
                 watchManager.addAttachmentObserver( user );
             else
                 watchManager.dropAttachmentObserver( user );
+            
+
+            if ( isOppSet( "mmattw" ) ) 
+                watchManager.addWatchedAttachmentObserver( user );
+            else
+                watchManager.dropWatchedAttachmentObserver( user );
+            
+            // mail comments
+            //--------------
+
+            if ( isOppSet( "mmcom" ) ) 
+                watchManager.addCommentObserver( user );
+            else
+                watchManager.dropCommentObserver( user );
+            
+
+            if ( isOppSet( "mmcomw" ) ) 
+                watchManager.addWatchedCommentObserver( user );
+            else
+                watchManager.dropWatchedCommentObserver( user );
             
 
 

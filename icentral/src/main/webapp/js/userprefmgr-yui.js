@@ -8,7 +8,7 @@ YAHOO.imex.userprefmgr = {
      * Takes an object and recursively travels down all the nodes.
      * function is applied when it reaches an object with a option-def property
      *************************************************************************/
-    traverse:  function( object, func ){
+    traverse:  function( object, func, level ){
 
         var html = '';
            
@@ -20,7 +20,12 @@ YAHOO.imex.userprefmgr = {
                     var strong = false;
                     
                     if( object["option-def"][object.options[j]]["legend"] !== undefined){
-                        html += "<div class='cfg-block-legend'>";    
+
+                        if( level > 0 ){
+                            html += "<div class='cfg-block-legend-inner'>";
+                        } else {
+                            html += "<div class='cfg-block-legend'>";                            
+                        }
                         html += "\n<fieldset>\n";
                         html += "<legend>" + object["option-def"][object.options[j]]["legend"] +"</legend>";
                         strong = true;
@@ -40,7 +45,7 @@ YAHOO.imex.userprefmgr = {
                     
                     html += this
                         .traverse( object[ "option-def"][ object.options[j] ], 
-                                   func );
+                                   func, level+1 );
                     
                     if( object["option-def"][object.options[j]]["legend"] !== undefined){
                         html += "\n</fieldset>\n";
@@ -99,7 +104,7 @@ YAHOO.imex.userprefmgr = {
             var form = document.getElementById(init["formid"]);
             var html = '';
 
-            html += userprefmgr.traverse( userprefmgr.preferences, process );
+            html += userprefmgr.traverse( userprefmgr.preferences, process, 0 );
             console.log ( html );
             form.innerHTML = html + form.innerHTML ;                             
         };
@@ -125,7 +130,8 @@ YAHOO.imex.userprefmgr = {
     
     updateForm: function(){
         var upm = YAHOO.imex.userprefmgr;
-        console.log("In function update");        
+        console.log("In function update");
+                
         var html='';
         var process = function (key, value, options, opp, strong  ){   
             if( typeof value.value != "undefined" ){                
