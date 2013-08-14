@@ -742,38 +742,39 @@ public class EntryManager {
         
         Log log = LogFactory.getLog( this.getClass() );
         
-        List uniqueRoles = (List) wflowContext.getJsonConfig().get( "admin-role-unique" ); 
-     
-        IcPub oldPub = (IcPub) tracContext.getPubDao()
-            .getPublication( pub.getId() );
-        if ( oldPub != null ) 
-        {
+        List uniqueRoles = 
+            (List) wflowContext.getJsonConfig().get( "admin-role-unique" ); 
+        
+        IcPub oldPub = 
+            (IcPub) tracContext.getPubDao().getPublication( pub.getId() );
+        
+        if( oldPub != null ){
             Set<Group> adminGroups =  pub.getAdminGroups();
+
+            if( adminGroups.contains( agroup ) ){
+                return oldPub;  // NO-OP: admin group already present
+            }
             boolean doAdd = true;
             Iterator uniqueRoleIterator = uniqueRoles.iterator();
-            while(uniqueRoleIterator.hasNext())
-            {
-                Role role = userContext.getRoleDao().getRole( uniqueRoleIterator.next().toString() );     
-                if( agroup.getRoles().contains(role) )
-                {
+            while( uniqueRoleIterator.hasNext() ){
+                Role role = userContext.getRoleDao()
+                    .getRole( uniqueRoleIterator.next().toString() );     
+                if( agroup.getRoles().contains( role ) ){
                     Iterator groupIterator = adminGroups.iterator();    
-                    while(groupIterator.hasNext())
-                    {
-                        if(((Group) groupIterator.next()).getRoles().contains(role))
-                        {
+                    while( groupIterator.hasNext() ){
+                        Group g = (Group) groupIterator.next();
+                        
+                        if( g.getRoles().contains( role ) ){
                             doAdd = false;
                             break;
                         }
                     }
                 }
             }
-            if(doAdd)
-            {
+            if( doAdd ){
                 oldPub.getAdminGroups().add( agroup );
                 tracContext.getPubDao().updatePublication( oldPub );
-            }
-            else
-            {
+            }else{
                 return null;
             }
         }

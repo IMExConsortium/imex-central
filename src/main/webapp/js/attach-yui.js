@@ -364,7 +364,7 @@ YAHOO.imex.attedit = {
         }
     },
     
-    attachUpdateFail: function() {
+    attachUpdateFail: function(o) {
         YAHOO.imex.attedit.conf[o.argument.aclass].comTable.onShow();
     },
 

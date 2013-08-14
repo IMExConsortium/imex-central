@@ -1601,6 +1601,12 @@ form.stylized button {
   width: 80em;
 }
 
+.cfg-block-legend-inner{
+  display: block;
+  margin: 0 0 1em 0;
+  width: 100%;
+}
+
 .cfg-key-val{
   display: block;
   margin: 0.15em 0 0.15em 0;
@@ -1609,12 +1615,12 @@ form.stylized button {
 
 .cfg-key{
   display: inline-block;
-  width: 30em;
+  width: 40em;
 
 }
 .cfg-key-strong{
   display: inline-block;
-  width: 30em;
+  width: 40em;
   font-weight:bold;
 
 }
