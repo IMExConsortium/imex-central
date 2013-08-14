@@ -1,5 +1,13 @@
 {news:{
    "2013":[
+      {"date":"2013-08-13",
+       "time":"20-00-00",
+       "auid":"1",
+       "amail":"lukasz@mbi.ucla.edu",
+       "aini":"LS",
+       "header":"BETA-0.92 Has Been Deployed",
+       "body":"Even less changes than in BETA-0.91; just minor user account preferences reorganisation and page formatting fixes."
+      },
       {"date":"2013-08-03",
        "time":"20-00-00",
        "auid":"1",
