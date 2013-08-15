@@ -69,43 +69,43 @@ public class UserAction extends UserSupport {
 
     public String register( User user ) {
 
-	Log log = LogFactory.getLog( this.getClass() );
+        Log log = LogFactory.getLog( this.getClass() );
         log.info( " register:" + user );
         
         UserDao dao = getUserContext().getUserDao();
         IcUser icUser = new IcUser( user );
-	
-	// set password
-	//-------------
+        
+        // set password
+        //-------------
 
-	icUser.encryptPassword( pass0 );
-	
-	// generate activation key
-	//------------------------
-	
-	icUser.setActivationKey();
-	log.info( " activationKey: " + icUser.getActivationKey() );
+        icUser.encryptPassword( pass0 );
+        
+        // generate activation key
+        //------------------------
+        
+        icUser.setActivationKey();
+        log.info( " activationKey: " + icUser.getActivationKey() );
 
-	icUser.setActivated( false );
-	icUser.setEnabled( true );
-	
-	// sent notification
-	//------------------
+        icUser.setActivated( false );
+        icUser.setEnabled( true );
+        
+        // sent notification
+        //------------------
 
         getUserManager()
             .notifyRegistrationByMail( icUser, notifyFrom, notifyServer );
 
-	//icUser.notifyByMail( notifyFrom, notifyServer );
-	
-	// create new account 
-	//-------------------
-	
-	dao.saveUser( icUser );
-	
-	log.info( " Account created: " + user.getLogin() +
-		  " (" + user.getId() + ")" );
-	
-	return ACTIVATE;
+        //icUser.notifyByMail( notifyFrom, notifyServer );
+        
+        // create new account 
+        //-------------------
+        
+        dao.saveUser( icUser );
+        
+        log.info( " Account created: " + user.getLogin() +
+              " (" + user.getId() + ")" );
+        
+        return ACTIVATE;
     }
 
 
@@ -115,7 +115,7 @@ public class UserAction extends UserSupport {
 
     public String activate( User user ) {
 
-	Log log = LogFactory.getLog( this.getClass() );
+        Log log = LogFactory.getLog( this.getClass() );
         log.info( " activate:" + user );
 
         if ( user != null ){
@@ -124,30 +124,30 @@ public class UserAction extends UserSupport {
 
             UserDao dao =  getUserContext().getUserDao();
             IcUser icUser = (IcUser) dao.getUser( getUser().getLogin() );
-	    
+        
             if ( icUser != null &&
                  icUser.testPassword( getPass0() ) ) {
 
-		if ( !icUser.testActivationKey( getUser().getActivationKey() ) 
-		     ) {
-		    addFieldError( "user.activationKey", 
-				   "Activation key does not match." );
-		    return ACTIVATE;
-		} 
-		
-		icUser.setActivated( true );
-		dao.updateUser( icUser );
-		
+            if ( !icUser.testActivationKey( getUser().getActivationKey() ) 
+                 ) {
+                addFieldError( "user.activationKey", 
+                       "Activation key does not match." );
+                return ACTIVATE;
+            } 
+            
+            icUser.setActivated( true );
+            dao.updateUser( icUser );
+            
                 // valid user
                 //-----------
-		
+    
                 getSession().put( "USER_ID", icUser.getId() );
                 getSession().put( "LOGIN", icUser.getLogin() );
 
                 Map<String,Integer> roles = new HashMap();
                 Map<String,Integer> groups = new HashMap();
                 
-		if ( icUser.getRoles()  != null ) {
+            if ( icUser.getRoles()  != null ) {
                     for ( Iterator ii = icUser.getRoles().iterator();
                           ii.hasNext(); ) {
                         IcRole r = (IcRole) ii.next();
@@ -177,13 +177,13 @@ public class UserAction extends UserSupport {
                 
                 getSession().put( "USER_ROLE", roles );
                 getSession().put( "USER_GROUP", groups );
-		log.info( " login: session set" );
+                log.info( " login: session set" );
 
                 return HOME;
             }
-	}
-	
-	return INPUT;
+        }
+
+        return INPUT;
     }
 
 
@@ -198,11 +198,11 @@ public class UserAction extends UserSupport {
     }
 
     public String edit() {
-	
-	Log log = LogFactory.getLog( this.getClass() );
+    
+        Log log = LogFactory.getLog( this.getClass() );
         log.debug( " edit: uid=" + getSession().get( "USER_ID" ) );
         
-	int uid = (Integer) getSession().get( "USER_ID" );
+        int uid = (Integer) getSession().get( "USER_ID" );
         
         if( uid <= 0) return HOME;
 
@@ -260,7 +260,7 @@ public class UserAction extends UserSupport {
                 
                 // store new settings
                 //-------------------
-		
+    
                 dao.updateUser( icUser );				    		    
             }
                 
@@ -278,7 +278,7 @@ public class UserAction extends UserSupport {
             getUser().setEmail( icUser.getEmail() );
             
         }
-	    
+    
         setPass0("");
         setPass1("");
         setPass2("");
@@ -293,41 +293,41 @@ public class UserAction extends UserSupport {
 
     public String login( User user ) {
 
-	Log log = LogFactory.getLog( this.getClass() );
-	
-	if ( user != null ){
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        if ( user != null ){
 
-	    log.info( " login:" + user.getLogin() );
-	
+            log.info( " login:" + user.getLogin() );
+        
             UserDao dao = getUserContext().getUserDao();
             IcUser icUser = (IcUser) dao.getUser( getUser().getLogin() );
-	    
             
-	    if ( icUser !=null && 
-		 icUser.testPassword( getPass0() ) ) {
+                
+            if ( icUser !=null && 
+             icUser.testPassword( getPass0() ) ) {
 
-		// valid user
-		//-----------
-		
-                if ( !icUser.isActivated() ) return ACTIVATE;
+                // valid user
+                //-----------
+                
+                        if ( !icUser.isActivated() ) return ACTIVATE;
 
-		getSession().put( "USER_ID", icUser.getId() );
-		getSession().put( "LOGIN", icUser.getLogin() );
-		log.debug( " login: session set" );
+                getSession().put( "USER_ID", icUser.getId() );
+                getSession().put( "LOGIN", icUser.getLogin() );
+                log.debug( " login: session set" );
 
                 Map<String,Integer> roles = new HashMap();
                 Map<String,Integer> groups = new HashMap();
 
-		if ( icUser.getRoles()  != null ) {
+                if ( icUser.getRoles()  != null ) {
 
-		    for ( Iterator ii = icUser.getRoles().iterator(); 
-			  ii.hasNext(); ) {
-			IcRole r = (IcRole) ii.next();
-			log.debug( "  role=" + r.toString() );
-			roles.put( r.getName(),r.getId());
-		    }	    
+                    for ( Iterator ii = icUser.getRoles().iterator(); 
+                      ii.hasNext(); ) {
+                    IcRole r = (IcRole) ii.next();
+                    log.debug( "  role=" + r.toString() );
+                    roles.put( r.getName(),r.getId());
+                    }	    
                 }
-                
+                    
                 if ( icUser.getGroups() != null ) {
                     for ( Iterator ig = icUser.getGroups().iterator();
                           ig.hasNext(); ) {
@@ -346,31 +346,34 @@ public class UserAction extends UserSupport {
                     }
                 }
 
-                getSession().put( "USER_ROLE", roles );
-                getSession().put( "USER_GROUP", groups );
-                log.debug( " login: session set" );
-
-                if( rurl != null ) return REDIRECT;
+                    getSession().put( "USER_ROLE", roles );
+                    getSession().put( "USER_GROUP", groups );
+                    log.debug( " login: session set" );
                 
-                //this.setMst("1:1");
-		return HOME;
-	    }
+                    log.info( " referer:" + getReferer() );
+                    rurl = getReferer();
 
-	    if( icUser != null ){
-		log.debug( " login: id=" + icUser.getId() );
-		log.debug( " login: oldpass=" + icUser.getPassword() );
-	    }
+                    if( rurl != null ) return REDIRECT;
+                    
+                    //this.setMst("1:1");
+                return HOME;
+            }
+
+            if( icUser != null ){
+                log.debug( " login: id=" + icUser.getId() );
+                log.debug( " login: oldpass=" + icUser.getPassword() );
+            }
             if( getPass1() != null ){
                 log.debug( " login: newpass" + getPass1() );
                 log.debug( " login: " + Crypt.crypt( "ab", getPass1() ) );
             }
-	}
-	log.info( " login: unknown user" );
-	addActionError( "User/Password not recognized." );
+        }
+        log.info( " login: unknown user" );
+        addActionError( "User/Password not recognized." );
 
         if( rurl != null ) return REDIRECT;
         
-	return INPUT;
+        return INPUT;
     }
 
     //---------------------------------------------------------------------
@@ -379,17 +382,17 @@ public class UserAction extends UserSupport {
 
     public String logout() {
 
-	Log log = LogFactory.getLog( this.getClass() );
-	log.info( " logout: " + getSession().get( "LOGIN" ) );
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " logout: " + getSession().get( "LOGIN" ) );
 
-	getSession().put( "USER_ID", -1 );
-	getSession().put( "USER_ROLE", null );
-	getSession().put( "LOGIN", "" );
+        getSession().put( "USER_ID", -1 );
+        getSession().put( "USER_ROLE", null );
+        getSession().put( "LOGIN", "" );
 
         if( rurl != null ) return REDIRECT;
         
         //this.setMst("1:1"); // NOTE: should be set in struts action conf
-	return HOME;
+        return HOME;
     }
 
     
@@ -402,11 +405,11 @@ public class UserAction extends UserSupport {
 
     public void setAgree( boolean agree ) {
 
-	this.agree = agree;
+        this.agree = agree;
     }
 
     public boolean getAgree() {
-	return this.agree;
+        return this.agree;
     }
 
     //---------------------------------------------------------------------
@@ -417,19 +420,19 @@ public class UserAction extends UserSupport {
 
     public void setReCaptcha( ReCaptcha recaptcha ) {
 
-	this.recaptcha = recaptcha;
+        this.recaptcha = recaptcha;
     }
 
     private String rcf;
 
     public void setRecaptcha_challenge_field( String field ) {
-	this.rcf = field;
+        this.rcf = field;
     }
 
     private String rrf;
 
     public void setRecaptcha_response_field( String field ) {
-	this.rrf = field;
+        this.rrf = field;
     }
 
 
@@ -444,7 +447,7 @@ public class UserAction extends UserSupport {
     }
 
     public String getPass0() {
-	return this.pass0;
+        return this.pass0;
     }
 
     private String pass1;
@@ -454,7 +457,7 @@ public class UserAction extends UserSupport {
     }
 
     public String getPass1() {
-	return this.pass1;
+        return this.pass1;
     }
 
     private String pass2;
@@ -464,7 +467,16 @@ public class UserAction extends UserSupport {
     }
 
     public String getPass2() {
-	return this.pass2;
+        return this.pass2;
+    }
+    private String referer;
+
+    public void setReferer( String ref ) {
+        this.referer = ref;
+    }
+
+    public String getReferer() {
+        return this.referer;
     }
     
     
@@ -472,67 +484,67 @@ public class UserAction extends UserSupport {
 
     public void validate() {
 
-	Log log = LogFactory.getLog( this.getClass() );
-		    
-	// registration options
-	//---------------------
+        Log log = LogFactory.getLog( this.getClass() );
+                
+        // registration options
+        //---------------------
 
-	if( getOp() != null && getOp().equalsIgnoreCase( "reg" ) ) { 
+        if( getOp() != null && getOp().equalsIgnoreCase( "reg" ) ) { 
 
-	    // test login
-	    //-----------
+        // test login
+        //-----------
 
-	    if( getUser() != null ){
-		log.debug( " validate:" + getUser().getLogin() );
+            if( getUser() != null ){
+            log.debug( " validate:" + getUser().getLogin() );
                 
                 UserDao dao = getUserContext().getUserDao();
                 IcUser oldUser = 
-                    (IcUser) dao.getUser( getUser().getLogin() );
-		if( oldUser != null ){
-		    addFieldError( "user.login","User name already taken. " +
-				   "Please, select another one.");
-		    log.debug( " old login... id=" + oldUser.toString() );
-		} 
-	    }
+                        (IcUser) dao.getUser( getUser().getLogin() );
+                if( oldUser != null ){
+                    addFieldError( "user.login","User name already taken. " +
+                           "Please, select another one.");
+                    log.debug( " old login... id=" + oldUser.toString() );
+                } 
+            }
 
-	    // test recaptcha
-	    //---------------
+        // test recaptcha
+        //---------------
 
             log.debug( "UserAction->validate: recaptcha=" + recaptcha );
             log.debug( "UserAction->validate: rcf=" + rcf + " rrf=" + rrf );
             
-	    if( recaptcha != null ) {
+        if( recaptcha != null ) {
 
-		ReCaptchaResponse reCaptchaResponse = 
-		    recaptcha.checkAnswer( ServletActionContext.
-					   getRequest().getRemoteHost(),  
-					   rcf, rrf );  
-	    
-		if ( !reCaptchaResponse.isValid() ) {  
-		    addActionError("Not a good CAPTCHA");
-		} else {
-		
-		    log.info( "  recaptcha response=" + 
-			      reCaptchaResponse.getErrorMessage() );
-		}
-	    }
+            ReCaptchaResponse reCaptchaResponse = 
+                recaptcha.checkAnswer( ServletActionContext.
+                           getRequest().getRemoteHost(),  
+                           rcf, rrf );  
+            
+            if ( !reCaptchaResponse.isValid() ) {  
+                addActionError("Not a good CAPTCHA");
+            } else {
+            
+                log.info( "  recaptcha response=" + 
+                      reCaptchaResponse.getErrorMessage() );
+            }
+        }
 
-	    // test password typos
-	    //--------------------
-	    
-	    if( pass0 != null && pass1 != null && !pass0.equals( pass1 ) ) {
-		addFieldError( "pass1", "Passwords do not match." );
-	    }
-	    return;
-	}
+        // test password typos
+        //--------------------
+        
+        if( pass0 != null && pass1 != null && !pass0.equals( pass1 ) ) {
+            addFieldError( "pass1", "Passwords do not match." );
+        }
+        return;
+    }
 
 
-	// edit options
-	//-------------
+        // edit options
+        //-------------
 
-	if( getOp() != null && getOp().equalsIgnoreCase( "edit" ) ) { 
+    if( getOp() != null && getOp().equalsIgnoreCase( "edit" ) ) { 
 
-	    // test passoword typos
+            // test passoword typos
             //---------------------
 
             if( pass0 != null && pass0.length() > 0 ){
@@ -541,16 +553,16 @@ public class UserAction extends UserSupport {
                 IcUser oldUser = 
                     (IcUser) dao.getUser( getUser().getLogin() );
                 
-		if ( !oldUser.testPassword( pass0 ) ) {
-		    addFieldError( "pass0", "Wrong password." );
-		} else {
-		    if ( pass1 == null || !pass1.equals( pass0) ) {
-			addFieldError( "pass1", "Passwords do not match." );
-		    }
-		}	
-	    }	    
-	    return;
-	}
+        if ( !oldUser.testPassword( pass0 ) ) {
+            addFieldError( "pass0", "Wrong password." );
+        } else {
+            if ( pass1 == null || !pass1.equals( pass0) ) {
+            addFieldError( "pass1", "Passwords do not match." );
+            }
+        }	
+        }	    
+        return;
+    }
 
 	// activate options
 	//-----------------
