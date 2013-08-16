@@ -6,6 +6,7 @@ YAHOO.imex.pubmgr = {
     owner: "",
     cflag: "",
     watch: "",
+    loginId: "",
     
     stateBtn: { my:{value:"",foo:"state"} },    
     stateSel: [ { text: "---ANY---", value: "" } ],
@@ -159,23 +160,38 @@ YAHOO.imex.pubmgr = {
             console.log(x);
         }
     },
+    getDefaultCookie: function(){
+        var cookie = "";
+        var pubmgr = YAHOO.imex.pubmgr;
+        for(var i = 0; i < pubmgr.myCL.length; i++ ){
 
+            var hidden= false;
+            if(  pubmgr.myCD[pubmgr.myCL[i]].hidden === true ){
+                hidden= true;
+            }
+            cookie += pubmgr.myCD[pubmgr.myCL[i]].key + ":" + hidden +"|";
+        }
+        return cookie;
+    },
     init: function( init ){
         
+        var pubmgr = YAHOO.imex.pubmgr;
+        pubmgr.loginId = init.loginid;
+        if(typeof pubmgr.myDataTable != "undefined")
+        {
+            pubmgr.myDataTable.my.configmenu.destroy();
+            pubmgr.myDataTable.destroy();
+            pubmgr.myColumnDefs = [];
+            
+        }
+        else
+            this.userTableLayoutInit( init );
         try{
             var cookie = YAHOO.util.Cookie.get("pubmgr");
             if( cookie == null ){
-                var nc = "";
-                for(var i = 0; i < this.myCL.length; i++ ){
-
-                    var hidden= false;
-                    if(  this.myCD[this.myCL[i]].hidden === true ){
-                        hidden= true;
-                    }
-                    nc += this.myCD[this.myCL[i]].key + ":" + hidden +"|";
-                }
-                YAHOO.util.Cookie.set( "pubmgr", nc );
-                cookie = nc;
+                cookie = pubmgr.getDefaultCookie();
+        
+                YAHOO.util.Cookie.set( "pubmgr", cookie );
             }
             
             if( cookie !== null ){
@@ -187,7 +203,71 @@ YAHOO.imex.pubmgr = {
         this.initView( init );
         this.historyInit( init );
     },
-
+    //----------------------------------------------------------------
+    //if a user is logged in this sets the cookie to their preferences
+    //----------------------------------------------------------------
+    userTableLayoutInit: function( init ){
+        var pubmgr = YAHOO.imex.pubmgr;
+        if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
+        {
+            var Success = function( response ){                           
+                var cookie = YAHOO.util.Cookie.get("pubmgr");
+                var responseText = YAHOO.lang.JSON.parse(response.responseText);
+                var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
+                if(preferences.tableLayout == "null")
+                {
+                    pubmgr.updateUserTablePref(cookie);
+                }
+                else
+                {
+                    cookie = preferences.tableLayout;
+                    YAHOO.util.Cookie.set( "pubmgr", cookie );
+                    pubmgr.buildCDefs( cookie );
+                }
+                
+                  pubmgr.init(
+                                   {admus: pubmgr.admus,
+                                    owner: pubmgr.owner,
+                                    cflag: pubmgr.cflag,
+                                    watch: pubmgr.watch,
+                                    loginid:pubmgr.loginId });
+            };
+            var Fail = function ( o ) {
+                console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+            };
+            var callback = { cache:false, timeout: 5000, 
+                             success: Success,
+                             failure: Fail
+                             }; 
+            
+            try{
+                YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               'userprefmgr?id=' + pubmgr.loginId +'&op.view=true',
+                               callback );        
+            } catch (x) {
+                console.log("AJAX Error:"+x);
+            }
+        }
+    },
+    
+    updateUserTablePref: function( cookie ){
+        var pubmgr = YAHOO.imex.pubmgr;
+        var loginId = pubmgr.loginId;
+        
+        if(typeof loginId  != "undefined" && loginId != "")
+        {
+            try{
+                YAHOO.util.Connect
+                .asyncRequest( 'POST', 
+                               'userprefmgr?id=' + loginId + '&op.updateTable=true',
+                               null, "opp.tableLayout=" + cookie );        
+            } catch (x) {
+                console.log("AJAX Error:"+x);
+            }
+        }
+    },
+    
     buildCDefs: function( cookie ){
         var PMGR = YAHOO.imex.pubmgr;
        
@@ -383,7 +463,7 @@ YAHOO.imex.pubmgr = {
                                  ("<em class=\"yui-button-label\">" + 
                                   partnerLabel + "</em>"));
         }else{
-	    PMGR.partnerSel[0].text = partnerLabel;
+            PMGR.partnerSel[0].text = partnerLabel;
         }
         
         // reload data
@@ -496,19 +576,21 @@ YAHOO.imex.pubmgr = {
                               success: stateSuccess,
                               failure: stateSuccess,
                               argument:{}}; // id:obj.id, btn:imexButton } };                  
-        try{
-            YAHOO.util.Connect
-                .asyncRequest( 'GET', 
-                               "acom?op.pstac=ac" , 
-                               stateCallback );        
-            YAHOO.util.Connect
-                .asyncRequest( 'GET', 
-                               "acom?op.pagac=ac", 
-                               partnerCallback );        
-        } catch (x) {
-            console.log("AJAX Error:"+x);
+        if(typeof PMGR.myDataTable == "undefined" )
+        {
+            try{
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   "acom?op.pstac=ac" , 
+                                   stateCallback );        
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   "acom?op.pagac=ac", 
+                                   partnerCallback );        
+            } catch (x) {
+                console.log("AJAX Error:"+x);
+            }
         }
-
         // create datasource
         //------------------
 
@@ -646,6 +728,7 @@ YAHOO.imex.pubmgr = {
                     PMGR.contextMenuInit( PMGR );
                     
                     var nCookie = YAHOO.imex.pubmgr.buildCookie();
+                    YAHOO.imex.pubmgr.updateUserTablePref(nCookie);
                     YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
                 } catch (x) {}
             };
@@ -656,8 +739,8 @@ YAHOO.imex.pubmgr = {
                              
         //tossing in some css to add a black separator between the rows
         var sheet = document.createElement('style');
-		sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
-		document.body.appendChild(sheet); 
+        sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
+        document.body.appendChild(sheet); 
         
         return { 
             ds: PMGR.myDataSource, 
@@ -739,9 +822,50 @@ YAHOO.imex.pubmgr = {
             
             o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
             
+            var defaultTableLayout = function(o)
+            {
+                var pubmgr = YAHOO.imex.pubmgr;
+                if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
+                {
+                    var Success = function( response ){ 
+
+                    };
+                    var Fail = function ( o ) {
+                        console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+                    };
+                    var callback = { cache:false, timeout: 5000, 
+                                     success: Success,
+                                     failure: Fail
+                                     }; 
+                    
+                    try{
+                        YAHOO.util.Connect
+                        .asyncRequest( 'GET', 
+                                       'userprefmgr?id=' + pubmgr.loginId +'&op.defaultTableLayout=true',
+                                       callback );        
+                    } catch (x) {
+                        console.log("AJAX Error:"+x);
+                    }
+                }
+                var cookie = pubmgr.getDefaultCookie();
+                pubmgr.buildCDefs(cookie);
+                
+                YAHOO.util.Cookie.set( "pubmgr", cookie );
+                var myDataTable = pubmgr.myDataTable;
+                
+                  pubmgr.init(
+                                   {admus: pubmgr.admus,
+                                    owner: pubmgr.owner,
+                                    cflag: pubmgr.cflag,
+                                    watch: pubmgr.watch,
+                                    loginid:pubmgr.loginId });
+            };
+            
             var oConfMenu = [[{text:"Preferences", disabled: true }],
                              [{text: "Show Columns", 
                                submenu: o.myDataTable.my.colmenu }],
+                             [{text:"Restore Default Layout",onclick: {fn: defaultTableLayout } }
+                               ],
                              [{text:"Save...", disabled: true}]
                             ];        
             
@@ -781,6 +905,10 @@ YAHOO.imex.pubmgr = {
             console.log(x);
         }
     },
+    //-----------------------------------
+    // Hides deselected column attributes 
+    //-----------------------------------
+     
 
     hiddenColToggle: function( tp, ev, o ){
 
@@ -802,7 +930,10 @@ YAHOO.imex.pubmgr = {
         var nCookie = YAHOO.imex.pubmgr.buildCookie();
         YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
     },
-
+    //-----------------------------
+    // Create the custom formatters 
+    //-----------------------------
+     
     myIcidFormatter: function( elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = "IC-" + oRecord.getData("id") + "-PUB"; 
@@ -819,24 +950,24 @@ YAHOO.imex.pubmgr = {
             '<td class="yui-table-inner-bottom">' + 
             oRecord.getData("title") + '</td></tr></table>';        
     }, 
-    
+
     myPmidFormatter: function(elLiner, oRecord, oColumn, oData) {
-	var pmid = oRecord.getData("pmid");
-	YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-	
-	if( pmid.length > 0 ){
-	    if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
-		elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
-		    oRecord.getData( "pmid" ) + 
-		    '">'+ oRecord.getData( "pmid" ) +'</a>';
-	    }
-	    else
-		elLiner.innerHTML = pmid;
-	}
-	else
-	    elLiner.innerHTML = 'N/A';
+        var pmid = oRecord.getData("pmid");
+        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+
+        if( pmid.length > 0 ){
+            if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
+            elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
+                oRecord.getData( "pmid" ) + 
+                '">'+ oRecord.getData( "pmid" ) +'</a>';
+            }
+            else
+            elLiner.innerHTML = pmid;
+        }
+        else
+            elLiner.innerHTML = 'N/A';
     },
-    
+
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = '<a href="pubedit?id=' + 
@@ -860,7 +991,7 @@ YAHOO.imex.pubmgr = {
         if( oRecord !== undefined  &&  oRecord.getData("imexDb") !== undefined ) {            
             elLiner.innerHTML = oRecord.getData( "imexDb" );
         } else {
-            elLiner.innerHTML = '<i>N/A</i>';
+            elLiner.innerHTML = '<em>N/A</em>';
         } 
     },
 
@@ -869,15 +1000,15 @@ YAHOO.imex.pubmgr = {
         if( oRecord !== undefined  &&  oRecord.getData("editor") !== undefined ) {            
             elLiner.innerHTML = oRecord.getData("editor");
         } else {
-            elLiner.innerHTML = '<i>N/A</i>';
+            elLiner.innerHTML = '<em>N/A</em>';
         } 
     },
-
+    
+    //--------------------------
+    // Add the custom formatters 
+    //--------------------------
     formatterInit: function(){
         
-        // Add the custom formatters 
-        //--------------------------
- 
         var YDTF = YAHOO.widget.DataTable.Formatter;
         YDTF.icid = this.myIcidFormatter;; 
         YDTF.publication = this.myPubFormatter; 

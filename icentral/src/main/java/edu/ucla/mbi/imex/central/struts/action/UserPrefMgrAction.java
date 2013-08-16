@@ -127,9 +127,15 @@ public class UserPrefMgrAction extends ManagerSupport {
                     return execUpdate( luser );
                 }
                 
-
                 if ( key.equalsIgnoreCase( "defset" ) ) {
                     return execDefset( luser );
+                }
+                
+                if ( key.equalsIgnoreCase( "updateTable" ) ) {
+                    return execUpdateTable( luser );
+                }
+                if ( key.equalsIgnoreCase( "defaultTableLayout" ) ) {
+                    return execDefaultTable( luser );
                 }
             }
         }
@@ -282,13 +288,72 @@ public class UserPrefMgrAction extends ManagerSupport {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( " execDefset called" );
         
+        String userPrefs = user.getPrefs();
         this.preferences = getUserPrefManager().getDefUserPrefs();
+        String newUserPrefs = "";
+        try{
+            log.debug( " userPrefs =  "+ userPrefs );
+            JSONObject jsonUserPrefs = new JSONObject( userPrefs );
+            JSONObject defaultUserPrefs = new JSONObject( this.preferences );
+            String tableLayoutPref = jsonUserPrefs.getString( "tableLayout");
+            defaultUserPrefs.put( "tableLayout",  tableLayoutPref);
+            
+            newUserPrefs = defaultUserPrefs.toString(); 
+            
+            //user.setPrefs( newUserPrefs );
+            //getUserContext().getUserDao().updateUser( user );
+        } catch( JSONException jex ){
+        log.debug( "exception " + jex);
+        }
         
-        user.setPrefs( this.preferences );
+        user.setPrefs( newUserPrefs );
         getUserContext().getUserDao().updateUser( user );
         this.preferences = user.getPrefs();
         
         return JSON;
     }
     
+     private String execUpdateTable( User user ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " execUpdateTable called" );
+        
+        String userPrefs = user.getPrefs();
+        String newUserPrefs = "";
+        
+         try{
+            JSONObject jsonUserPrefs = new JSONObject( userPrefs );
+            //log.debug( "jUpref.getString( 'tableLayout' ) called: " +  jUpref.getString( "tableLayout"));
+            
+            String tableLayoutPref = getOpp().get( "tableLayout" );
+            jsonUserPrefs.put( "tableLayout",  tableLayoutPref);
+            newUserPrefs = jsonUserPrefs.toString(); 
+        } catch( JSONException jex ){
+        log.debug( "exception " + jex);
+        }
+        user.setPrefs( newUserPrefs );
+        getUserContext().getUserDao().updateUser( user );
+       
+        return JSON;
+    }
+     private String execDefaultTable( User user ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( " execDefaultTable called" );
+        
+        String userPrefs = user.getPrefs();
+        String newUserPrefs = "";
+        
+         try{
+            JSONObject jsonUserPrefs = new JSONObject( userPrefs );
+            jsonUserPrefs.put( "tableLayout",  "null" );
+            newUserPrefs = jsonUserPrefs.toString(); 
+        } catch( JSONException jex ){
+        log.debug( "exception " + jex);
+        }
+        user.setPrefs( newUserPrefs );
+        getUserContext().getUserDao().updateUser( user );
+       
+        return JSON;
+    }    
 }

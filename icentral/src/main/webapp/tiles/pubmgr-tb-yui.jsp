@@ -66,6 +66,7 @@
                                    { owner:"<s:property value="opp.ou"/>", 
                                      admus:"<s:property value="opp.au"/>",
                                      cflag:"<s:property value="opp.encf"/>",
-                                     watch:"<s:property value="opp.wfl"/>" }));
+                                     watch:"<s:property value="opp.wfl"/>",
+                                     loginid:"<s:property value="#session['USER_ID']" />" }));
 
  </script>
