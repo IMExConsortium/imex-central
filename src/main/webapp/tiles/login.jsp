@@ -28,6 +28,7 @@
 
     <s:form theme="simple" action="user"> 
     <s:hidden theme="simple" name="op" value="login" />
+    <%String referer = request.getHeader("Referer"); out.print("<input type=\"hidden\" name=\"referer\" value=\"" + referer + "\">");%>
     <tr>
      <td align="right" class="tcell">User Name</td>
      <td align="left" class="tcell">
@@ -48,12 +49,6 @@
     </tr>
     </s:form>
    </table>
-   <br/><br/><br/><br/><br/>
-   <br/><br/><br/><br/><br/>
-   <br/><br/><br/><br/><br/>
-   <br/><br/><br/><br/><br/>
-   <br/><br/><br/><br/><br/>
-   <br/><br/><br/><br/><br/>
   </td>
  </tr>
 </table>

@@ -1495,7 +1495,7 @@ a.disabled {
 
     background-color: #efefef;
     border: 1px solid #888888;
-    max-width: 800px;
+    max-width: 850px;
     margin: 1em 0;
     padding: 0;
 }
@@ -1523,7 +1523,7 @@ a.disabled {
     padding-top: 10px;
 }
 #pubTab{
-    max-width: 800px;
+    max-width: 850px;
 }
 #pubTab input[type="submit"] {
     margin:	0 35px 0 0;
