@@ -1,6 +1,30 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
    
+<script>
+    
+        YAHOO.mbi.login = {
+            sendUrlFragment: function() {
+                if(document.location.hash != "")
+                {
+                    console.log("fragment = " + document.location.hash);
+                    window.location.href = "/icentral/user?fragment=" + encodeURIComponent(document.location.hash); 
+                }
+                else
+                {
+                    console.log("clicked but no fragment");
+                    window.location.href = "/icentral/user";
+                }
+            },
+            init: function(){
+                console.log("YAHOO.mbi.login.init Start");
+                var login = document.getElementById("login");
+                login.onclick = YAHOO.mbi.login.sendUrlFragment;
+                console.log("YAHOO.mb.login.init End");
+            }
+        }
+        YAHOO.util.Event.onAvailable("login", YAHOO.mbi.login.init);
+</script>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
  <tr>
   <td class="menulogo" rowspan="3" width="1%">
@@ -63,8 +87,9 @@
            <s:else>
               User: | <a onMouseOver="this.className='acMON'" onMouseOut="this.className='acMOFF'" 
                         href="user?op=regf" class="acMOFF">Sign up</a>
-                   | <a onMouseOver="this.className='acMON';" onMouseOut="this.className='acMOFF';" 
-                        href="user" class="acMOFF">Log in</a>
+                    | <a onMouseOver="this.className='acMON';" onMouseOut="this.className='acMOFF';" 
+                        href="javascript:void(0)" class="acMOFF"
+                        id="login">Log in</a>
            </s:else>
           <%-- </s:if> --%>
          </td>
