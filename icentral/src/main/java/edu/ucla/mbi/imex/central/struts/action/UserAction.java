@@ -351,7 +351,10 @@ public class UserAction extends UserSupport {
                     log.debug( " login: session set" );
                 
                     log.info( " referer:" + getReferer() );
+                    log.info( " fragment:" + getFragment() );
                     rurl = getReferer();
+                    if(getFragment() != null)
+                        rurl += getFragment();
 
                     if( rurl != null ) return REDIRECT;
                     
@@ -479,6 +482,15 @@ public class UserAction extends UserSupport {
         return this.referer;
     }
     
+    private String fragment;
+
+    public void setFragment( String frag ) {
+        this.fragment = frag;
+    }
+
+    public String getFragment() {
+        return this.fragment;
+    }
     
     //---------------------------------------------------------------------
 

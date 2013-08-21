@@ -1,6 +1,6 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-
+<% out.print(request.getParameter("fragment"));%>
 <h1>Login into ImexCentral Account</h1>
 <table width="98%">
  <tr>
@@ -28,7 +28,14 @@
 
     <s:form theme="simple" action="user"> 
     <s:hidden theme="simple" name="op" value="login" />
-    <%String referer = request.getHeader("Referer"); out.print("<input type=\"hidden\" name=\"referer\" value=\"" + referer + "\">");%>
+    <%String 
+        referer = request.getHeader("Referer"); 
+        out.print("<input type=\"hidden\" name=\"referer\" value=\"" + referer + "\">");
+    %>
+    <%String 
+        fragment = request.getParameter("fragment"); 
+        out.print("<input type=\"hidden\" name=\"fragment\" value=\"" + fragment + "\">");
+    %>
     <tr>
      <td align="right" class="tcell">User Name</td>
      <td align="left" class="tcell">
