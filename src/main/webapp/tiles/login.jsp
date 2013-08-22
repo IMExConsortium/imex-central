@@ -28,14 +28,16 @@
 
     <s:form theme="simple" action="user"> 
     <s:hidden theme="simple" name="op" value="login" />
-    <%String 
-        referer = request.getHeader("Referer"); 
+    <%
+        String referer = request.getHeader("Referer"); 
         out.print("<input type=\"hidden\" name=\"referer\" value=\"" + referer + "\">");
     %>
-    <%String 
-        fragment = request.getParameter("fragment"); 
-        out.print("<input type=\"hidden\" name=\"fragment\" value=\"" + fragment + "\">");
-    %>
+    <s:if test="request.getParameter(\"fragment\") != null">
+        <%
+            String fragment = request.getParameter("fragment"); 
+            out.print("<input type=\"hidden\" name=\"fragment\" value=\"" + fragment + "\">");
+        %>
+    </s:if>
     <tr>
      <td align="right" class="tcell">User Name</td>
      <td align="left" class="tcell">

@@ -167,6 +167,9 @@
                   <s:else>
                      <h3 class="pub-edit-sect">Add a Comment</h3>               
                      <p>Please <a href="user">Log in</a> to add a comment.</p>
+                     
+                     <h3 class="pub-edit-sect">Comments</h3>
+                     <div id="com-tbview" class="tbview"></div>
                   </s:else>
 
                </div>
