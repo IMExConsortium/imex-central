@@ -181,6 +181,7 @@ public class UserPrefMgrAction extends ManagerSupport {
             String nUpref = jUpref.toString(); 
             
             user.setPrefs( nUpref );
+
             getUserContext().getUserDao().updateUser( user );
             
             if ( isOppSet( "mmacc" ) ) 

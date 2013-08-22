@@ -149,7 +149,7 @@ $Id$
       - minor page reorganization
 
 
-2013/08/05 BETA-0.92
+2013/08/13 BETA-0.92
 
   - user account customization:
       - more configuration options added

@@ -81,6 +81,21 @@ public class IcentralPortImpl implements IcentralPort {
             // should not happen
         }
     }
+
+    ////------------------------------------------------------------------------
+    /// Attachment Manager
+    //--------------------
+
+    private AttachmentManager attachmentManager;
+
+    public void setAttachmentManager( AttachmentManager manager ) {
+        this.attachmentManager = manager;
+    }
+
+    public AttachmentManager getAttachmentManager() {
+        return this.attachmentManager;
+    }
+
     
     //--------------------------------------------------------------------------
     // ACL Validator
@@ -853,9 +868,11 @@ public class IcentralPortImpl implements IcentralPort {
             icCom.setBody( attBody );
 
             
-            IcAdiDao adiDao = (IcAdiDao) 
-                entryManager.getTracContext().getAdiDao();
-            adiDao.saveAdi( icCom );
+            //IcAdiDao adiDao = (IcAdiDao) 
+            //    entryManager.getTracContext().getAdiDao();
+            //adiDao.saveAdi( icCom );
+            
+            attachmentManager.addIcAdi( icCom, owner );
 
             Attachment nAtt = 
                 buildAttachment( icCom.getId(), icParent, null, attType, 
@@ -875,11 +892,12 @@ public class IcentralPortImpl implements IcentralPort {
             
             icAtt.setLabel( attLabel );
             icAtt.setBody( attBody );
-
             
-            IcAdiDao adiDao = (IcAdiDao) 
-                entryManager.getTracContext().getAdiDao();
-            adiDao.saveAdi( icAtt );
+            //IcAdiDao adiDao = (IcAdiDao) 
+            //    entryManager.getTracContext().getAdiDao();
+            //adiDao.saveAdi( icAtt );
+
+            attachmentManager.addIcAdi( icAtt, owner );
 
             Attachment nAtt = 
                 buildAttachment( icAtt.getId(), icParent, null, attType, 
