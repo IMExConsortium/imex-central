@@ -1495,7 +1495,7 @@ a.disabled {
 
     background-color: #efefef;
     border: 1px solid #888888;
-    max-width: 850px;
+    max-width: 65em;
     margin: 1em 0;
     padding: 0;
 }
@@ -1523,7 +1523,7 @@ a.disabled {
     padding-top: 10px;
 }
 #pubTab{
-    max-width: 850px;
+    max-width: 65em;
 }
 #pubTab input[type="submit"] {
     margin:	0 35px 0 0;
@@ -1570,6 +1570,12 @@ form.stylized button {
   padding: 0px 0px 0px 2em ;
   font-size: 0.85em;
   background-color: white;
+}
+.main-width {
+  width:65em;
+}
+.captcha-width {
+  width: 325px;
 }
 
 /* added by LS */
