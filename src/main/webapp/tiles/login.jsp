@@ -1,6 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<% out.print(request.getParameter("fragment"));%>
 <h1>Login into ImexCentral Account</h1>
 <table width="98%">
  <tr>
