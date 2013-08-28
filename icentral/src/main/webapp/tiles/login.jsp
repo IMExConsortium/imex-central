@@ -31,12 +31,11 @@
         String referer = request.getHeader("Referer"); 
         out.print("<input type=\"hidden\" name=\"referer\" value=\"" + referer + "\">");
     %>
-    <s:if test="request.getParameter(\"fragment\") != null">
-        <%
-            String fragment = request.getParameter("fragment"); 
+    <%
+        String fragment = request.getParameter("fragment"); 
+        if(fragment != null)
             out.print("<input type=\"hidden\" name=\"fragment\" value=\"" + fragment + "\">");
-        %>
-    </s:if>
+    %>
     <tr>
      <td align="right" class="tcell">User Name</td>
      <td align="left" class="tcell">
