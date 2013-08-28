@@ -3,7 +3,7 @@
  <div class="main-width">
  <h1>Sign up for ImexCentral Account</h1>  
 
- <p>Already have an account? <a href="user">Log in</a></p>
+ <p>Already have an account? <a href="javascript:YAHOO.mbi.login.sendUrlFragment();">Log in</a></p>
  <!-- <p>Forgotten your password? <a href="mailto:dip@mbi.ucla.edu">Contact Us</a></p> -->
  <p>In order to gain full access to ImexCentral you must register.</p>
  <s:form action="register">
