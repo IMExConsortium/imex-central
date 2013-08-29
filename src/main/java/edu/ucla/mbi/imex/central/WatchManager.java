@@ -181,6 +181,29 @@ public class WatchManager {
     
     //---------------------------------------------------------------------
 
+    public void addWatchByRecordOwnerPref( User user, Publication pub,
+                                           boolean force ){
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("addWatchByRecordOwnerPref");
+
+        if( force ){
+            this.setWatchStatus( user, pub, true );
+        } else {
+
+            String byAttFlag = 
+                PrefUtil.getPrefOption( user.getPrefs(), 
+                                        "record-owner" );            
+            if( byAttFlag != null 
+                && byAttFlag.equalsIgnoreCase( "true" ) ){
+                this.setWatchStatus( user, pub, true );
+            }
+        }
+        log.debug("addWatchByRecordOwnerPref: DONE");
+    }
+    
+    //---------------------------------------------------------------------
+
     public void addWatchByAttachmentPref( User user, Publication pub,
                                           boolean force ){
         

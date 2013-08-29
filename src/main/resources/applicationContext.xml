@@ -249,6 +249,7 @@
  <bean id="ws-v20" init-method="initialize"
        class="edu.ucla.mbi.imex.central.ws.v20.server.IcentralPortImpl" >
    <property name="entryManager" ref="entryManager"/>
+   <property name="attachmentManager" ref="attachmentManager"/>  
    <property name="aclValidator" ref="aclVal"/>
    <property name="delay" value="5"/>       
  </bean>

@@ -602,6 +602,14 @@
         group:["ADMIN"]
       },
       operation:{
+        view:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
         add:{
           order:["allow"],
           allow:{

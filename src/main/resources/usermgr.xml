@@ -131,6 +131,20 @@
      <result name="acl_page" type="tiles">aclpageerror</result>  
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">usermgr</result>
+
+     <result name="json" type="json">
+        <param name="ignoreHierarchy">false</param>
+        <param name="noCache">true</param>
+       <param name="includeProperties">
+         ^userList\[\d+\]\.id,
+         ^userList\[\d+\]\.login,
+         ^userList\[\d+\]\.firstName,
+         ^userList\[\d+\]\.lastName,
+         ^userList\[\d+\]\.affiliation,
+         ^userList\[\d+\]\.email
+       </param>
+     </result>
+
    </action>
 
    <action name="useredit" class="userMgrAction">

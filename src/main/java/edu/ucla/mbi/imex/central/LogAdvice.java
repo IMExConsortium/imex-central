@@ -111,12 +111,18 @@ public class LogAdvice {
             getAttachmentManager().getTracContext()
                 .getAdiDao().saveAdi( ile );
 
+            // update watch list if needed
+            //----------------------------
+           
+            watchManager
+                .addWatchByRecordOwnerPref( (User) owner, (IcPub) rpub, false );
+            
             // get a list of observers and send out notifications
             //---------------------------------------------------
 
             List<User> newRecObsLst = watchManager.getNewRecordObserverList();
-            notificationManager.newRecordNotify( (IcPub) rpub, ile, 
-                                                 newRecObsLst );
+            notificationManager
+                .newRecordNotify( (IcPub) rpub, ile, newRecObsLst );
             
         } else {
             log.warn( "LogManager: add publication monitor warning:"
