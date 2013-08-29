@@ -277,7 +277,7 @@ CREATE INDEX sorel_2 on sorel (user_id);
 
 CREATE TABLE eorel (
     id serial NOT NULL,
-    event character varying(32) UNIQUE not null default '',
+    event character varying(32) not null default '',
     user_id integer not null default 0
 );
 

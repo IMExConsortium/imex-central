@@ -4,10 +4,10 @@ use SOAP::Lite;
 use XML::XPath;
 use XML::XPath::XMLParser;
 
-my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws";
-my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws";
+my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
+my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
 my $URL = $URLTEST;
-my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/icentral/ws";
+my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/icentral/ws-v20";
 
 my $ip="";
 my $pmid="";
@@ -297,6 +297,10 @@ if($op ne "" ) {
                                            SOAP::Data->name("group" => $agrp) );
     }
 
+#    my $client = SOAP::Lite->new(proxy => $url);
+#    $client->on_action(sub { "" });
+#
+#        $som=$client->uri($url)
 
     if( $op eq "addAtt" ) {
         if( $pmid ne "" ){
@@ -313,7 +317,7 @@ if($op ne "" ) {
                                                "<parent ns='$ns' ac='$ac' />" ),
                              SOAP::Data->type( 'xml' => 
                                                "<attachment type='txt/comment'> 
-                                                  <label>foo</label>
+                                                  <subject>foo</subject>
                                                   <body>bar</body> 
                                                  </attachment>")
                              );
