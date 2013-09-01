@@ -166,7 +166,10 @@
                   </s:if>
                   <s:else>
                      <h3 class="pub-edit-sect">Add a Comment</h3>               
-                     <p>Please <a href="user">Log in</a> to add a comment.</p>
+                     <p>Please <a href="javascript:YAHOO.mbi.login.sendUrlFragment();">Log in</a> to add a comment.</p>
+                     
+                     <h3 class="pub-edit-sect">Comments</h3>
+                     <div id="com-tbview" class="tbview"></div>
                   </s:else>
 
                </div>
@@ -195,7 +198,7 @@
                </s:if>   
                <s:else>
                <h3 class="pub-edit-sect">Add a File</h3>               
-                  <p>If you are a curator or are the owner of this publication, please <a href="user">Log in</a> to add and view attachments. Attachments are not public.</p>
+                  <p>If you are a curator or are the owner of this publication, please <a href="javascript:YAHOO.mbi.login.sendUrlFragment();">Log in</a> to add and view attachments. Attachments are not public.</p>
                </s:else>
             </div>
             <!-- watch pane -->
@@ -218,7 +221,7 @@
               </s:if>
               <s:else>
                  <h3 class="pub-edit-sect">Publication Watch</h3>
-                 <p>Please <a href="user">Log in</a> to set/remove a record watch.</p>
+                 <p>Please <a href="javascript:YAHOO.mbi.login.sendUrlFragment();">Log in</a> to set/remove a record watch.</p>
               </s:else>
             </div>
             <!-- log pane -->

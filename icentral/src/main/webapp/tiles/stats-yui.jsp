@@ -8,6 +8,13 @@
  <div class="yui-skin-sam" width="100%">   
   <br/>
   <div id="statstab"  class="statstab"></div>
+  <br/>
+  <div>
+  NOTE:<br/>
+  <div style="margin:0 0 0 1.5em">
+    * - number records with IMEx accession assigned
+  </div>
+ </div>
   <br/><br/><br/><br/><br/>
  </div>
  

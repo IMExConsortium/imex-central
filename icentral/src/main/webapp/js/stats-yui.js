@@ -124,6 +124,7 @@ YAHOO.imex.stats = function() {
         }
         
         var dtaString = "";
+        var accString = "";
 
         if( oData == undefined ){
             oData = "0";
@@ -133,11 +134,11 @@ YAHOO.imex.stats = function() {
         else if(typeof oData.cnt === "number" ){
             
             dtaString = oData.cnt;
-
+            
             if(typeof oData.acc === "number"){
-                dtaString += "/" + oData.acc;
+                accString = "/" + oData.acc + "<sup>*</sup>";
             } else {
-                dtaString += "/0";
+                //accString += "/0<sup>*</sup>";
             }
 
             //alert(JSON.stringify(oData));
@@ -154,7 +155,10 @@ YAHOO.imex.stats = function() {
 
             var url = "pubmgr#pubmgr=" + encodeURI( YAHOO.imex.pubmgr.generateLinkState( currentStatus, currentDB));
 
-            oData = '<a href="' + url + '">' + dtaString + '</a>';             
+            oData = '<a href="' + url + '">' + dtaString + '</a>' + accString;
+            //if( dtaString  !== "0" ){
+            //    oData += "<sup>*</sup>";
+            //}
         }     
             
         elLiner.innerHTML = oData; 
@@ -197,19 +201,19 @@ YAHOO.imex.stats = function() {
           width: 400, maxAutoWidth: 800, menuLabel:"Publication" },
         { label:"Record Status", menuLabel:"Status",key:"submission",
           children:[
-             { key:"states['1']",  label:"New/IMEx",sortable:false, resizeable:false, 
+             { key:"states['1']",  label:"New",sortable:false, resizeable:false, 
                formatter:"accstat", className:"dt-right" },
-             { key:"states['2']", label:"Reserved/IMEx",sortable:false, resizeable:false, 
+             { key:"states['2']", label:"Reserved",sortable:false, resizeable:false, 
                formatter:"accstat", className:"dt-right"},
-             { key:"states['3']", label:"Processing/IMEx",sortable:false, resizeable:false, 
+             { key:"states['3']", label:"Processing",sortable:false, resizeable:false, 
                formatter:"accstat", className:"dt-right" },
-             { key:"states['10']", label:"Processed/IMEx",sortable:false, resizeable:false, 
+             { key:"states['10']", label:"Processed",sortable:false, resizeable:false, 
                formatter:"accstat", className:"dt-right" },
-             { key:"states['4']", label:"Released/IMEx",sortable:false, resizeable:false, 
+             { key:"states['4']", label:"Released",sortable:false, resizeable:false, 
                formatter:"accstat", className:"dt-right" }
           ]
         },
-        { key:"states.total", label:"Total/IMEx", sortable:true, resizeable:true, 
+        { key:"states.total", label:"Total", sortable:true, resizeable:true, 
           formatter:"accstat", className: "dt-right dt-bold", menuLabel:"Total" }
     ];
     

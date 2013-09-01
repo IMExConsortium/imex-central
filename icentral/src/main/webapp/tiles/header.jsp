@@ -63,8 +63,9 @@
            <s:else>
               User: | <a onMouseOver="this.className='acMON'" onMouseOut="this.className='acMOFF'" 
                         href="user?op=regf" class="acMOFF">Sign up</a>
-                   | <a onMouseOver="this.className='acMON';" onMouseOut="this.className='acMOFF';" 
-                        href="user" class="acMOFF">Log in</a>
+                    | <a onMouseOver="this.className='acMON';" onMouseOut="this.className='acMOFF';" 
+                        href="javascript:YAHOO.mbi.login.sendUrlFragment();" class="acMOFF"
+                        id="login">Log in</a>
            </s:else>
           <%-- </s:if> --%>
          </td>
