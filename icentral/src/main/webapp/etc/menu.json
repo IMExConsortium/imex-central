@@ -72,14 +72,19 @@
           link:"page?id=miftools",
           "disabled":"false",
           menu:[]
+         },         
+         {label:"ImexView",
+          link:"page?id=imexview",
+          "disabled":"false",
+          menu:[]
          }]
       },
       {label:"Admin",
-       link:"page?id=admin",
+       link:"usermgr",
        "disabled":"false",
        menu:[                   
          {label:"Accounts",
-          link:"page?id=usermgr",
+          link:"usermgr",
           "disabled":"false",
           menu:[
            {label:"Users",

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<h1>IMEx Curation Progress</h1>
+<h1>Curation Progress: IMEx Pipeline</h1>
 
  <script src="js/stats-yui.js" type="text/javascript"></script>
  <script src="js/pubmgr-yui.js" type="text/javascript"></script> 

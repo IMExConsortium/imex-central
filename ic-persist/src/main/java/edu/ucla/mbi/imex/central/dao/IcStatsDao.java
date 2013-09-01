@@ -75,6 +75,135 @@ public class IcStatsDao extends AbstractDAO {
     }
 
     //--------------------------------------------------------------------------
+
+    public Map<DataState,Long> getAccCountAll() { 
+        
+        String qStr = "select p.state.id, count( distinct p ) " + 
+            " from IcPub p where not(p.icKey is null) group by p.state.id";
+        
+        Map<DataState,Long> resmap = new HashMap<DataState,Long>();
+
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        
+        try {
+            //startOperation();
+            
+            Query query = session.createQuery( qStr );
+            List  res = query.list();
+            
+            if( res.size()>0 ) {
+                for( Iterator i = res.iterator(); i.hasNext(); ) {
+                    Object[] ir = (Object[])i.next();
+                    
+                    Integer stateId = (Integer) ir[0];
+                    Long cnt = (Long) ir[1]; 
+                    
+                    DataState state = (DataState) 
+                        super.find( IcDataState.class, stateId );
+                    
+                    resmap.put( state, cnt );
+                }
+            } else {
+                Log log = LogFactory.getLog( this.getClass() );
+                log.info( "IcStatsDao(getCountAll): no counts"  );
+            }
+            
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        return resmap;
+    }
+
+    //--------------------------------------------------------------------------
+    
+    public Map<Group,Map<DataState,Long>> 
+        getCountByPartner( String pipeline ){
+        
+        return null;
+    }
+
+    public Map<Group,Map<DataState,Long>> 
+        getAccCountByPartner( String pipeline ){
+
+        
+        return null;
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public Map<Group,Map<DataState,Long>> getAccCountByPartner() { 
+        
+        String qStr = "select grp.id, p.state.id, count( distinct p ) " + 
+            " from IcPub p join p.adminGroups grp join grp.roles role " +
+            "  where not(p.icKey is null) and role.id= :pid " +
+            "  group by grp.id, p.state.id";
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        Map<Group,Map<DataState,Long>> 
+            resmap = new HashMap<Group,Map<DataState,Long>>();
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            //startOperation();
+            
+            Query query = session.createQuery( qStr );
+
+            log.info( "pid" + IcStatsDao.PARTNERID);
+            
+            query.setParameter( "pid", IcStatsDao.PARTNERID );
+            List  res = query.list();
+            log.info( "res=" + res);
+            if( res.size()>0 ){
+                
+                for( Iterator i = res.iterator(); i.hasNext(); ) {
+                    Object[] ir = (Object[])i.next();
+                    
+                    Integer partnerId = (Integer) ir[0]; 
+                    Integer stateId = (Integer) ir[1];
+                    Long cnt = (Long) ir[2]; 
+                    
+                    Group partner = (IcGroup) 
+                        super.find( IcGroup.class, partnerId );
+                    DataState state = (DataState) 
+                        super.find( IcDataState.class, stateId );
+                    
+                    if( partner != null ) {
+
+                        if( resmap.get(partner) == null ) {
+                            Map<DataState,Long> 
+                                pst = new HashMap<DataState,Long>();
+                            resmap.put( partner, pst );
+                        }
+                        resmap.get(partner).put(state,cnt);
+                    }
+                }
+            } else {
+                
+                log.info( "IcStatsDao(getCountByPartner): no counts" );
+            }
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //System.out.println("Session closed (exeption)");
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+
+        return resmap;
+    }
+    
+   //--------------------------------------------------------------------------
     
     public Map<Group,Map<DataState,Long>> getCountByPartner() { 
         
@@ -142,6 +271,54 @@ public class IcStatsDao extends AbstractDAO {
 
         String qStr = "select p.state.id, count(distinct p) " +
             " from IcPub p where p.adminGroups.size = 0 " +
+            " group by p.state.id";
+        
+        Map<DataState,Long> resmap = new HashMap<DataState,Long>();
+        
+        Session session =
+            HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            //startOperation();
+            
+            Query query = session.createQuery( qStr );
+            List  res = query.list();
+
+            if(res.size()>0) {
+                
+                for( Iterator i = res.iterator(); i.hasNext(); ) {
+                    Object[] ir = (Object[])i.next();
+                    
+                    Integer stateId = (Integer) ir[0];
+                    Long cnt = (Long) ir[1]; 
+                    
+                    DataState state = (DataState) 
+                        super.find( IcDataState.class, stateId );
+                    
+                    resmap.put(state,cnt);
+                }
+            } else {
+                Log log = LogFactory.getLog( this.getClass() );
+                log.info( "IcStatsDao(getCountNoPartner): no counts" );
+            }
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //System.out.println("Session closed (exeption)");
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        return resmap;
+    }
+    
+    //--------------------------------------------------------------------------
+    
+    public Map<DataState,Long> getAccCountNoPartner() { 
+
+        String qStr = "select p.state.id, count(distinct p) from IcPub p " +
+            " where not(p.icKey is null) and p.adminGroups.size = 0 " +
             " group by p.state.id";
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
