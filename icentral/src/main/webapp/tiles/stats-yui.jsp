@@ -12,7 +12,7 @@
   <div>
   NOTE:<br/>
   <div style="margin:0 0 0 1.5em">
-    * - number records with IMEx accession assigned
+    * - number records with assigned IMEx accession.
   </div>
  </div>
   <br/><br/><br/><br/><br/>
