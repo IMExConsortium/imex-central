@@ -2,6 +2,8 @@ YAHOO.namespace("imex");
 
 YAHOO.imex.stats = function() {
         
+    this.counts = null;
+
     // custom formatters
     //------------------
     
@@ -30,13 +32,26 @@ YAHOO.imex.stats = function() {
         if( oRecord.getData("label") === "Unassigned") {
             YAHOO.util.Dom.addClass( elLiner, "dt-italic");
         }
+        
+        var dtaString = "";
+
         if( oData == undefined ){
             oData = "0";
-        }
+        } 
         //some of this is hard coded and I think that makes it fragile
         //but I dont know how to make it more robust. TODO
-        else if(typeof oData === "number" ){
-             
+        else if(typeof oData.cnt === "number" ){
+            
+            dtaString = oData.cnt;
+
+            if(typeof oData.cnt === "number"){
+                dtaString = oData.cnt;
+            } else {
+                dtaString = "0";
+            }
+
+            //alert(JSON.stringify(oData));
+            
             var currentStatus = oColumn.label.toUpperCase();
             if( currentStatus == 'PROCESSING')
                 currentStatus = 'INPROGRESS';
@@ -49,7 +64,101 @@ YAHOO.imex.stats = function() {
 
             var url = "pubmgr#pubmgr=" + encodeURI( YAHOO.imex.pubmgr.generateLinkState( currentStatus, currentDB));
 
-            oData = '<a href="' + url + '">' + oData + '</a>';             
+            oData = '<a href="' + url + '">' + dtaString + '</a>';             
+        }     
+            
+        elLiner.innerHTML = oData; 
+    };
+
+    this.myAccFormatter = function(elLiner, oRecord, oColumn, oData) {
+        if( oRecord.getData("label") === "Total") {
+            YAHOO.util.Dom.addClass( elLiner, "dt-bold");
+        }
+        if( oRecord.getData("label") === "Unassigned") {
+            YAHOO.util.Dom.addClass( elLiner, "dt-italic");
+        }
+        
+        var dtaString = "";
+
+        if( oData == undefined ){
+            oData = "(0)";
+        } 
+        //some of this is hard coded and I think that makes it fragile
+        //but I dont know how to make it more robust. TODO
+        else if(typeof oData.cnt === "number" ){
+            
+            dtaString = oData.cnt;
+
+            if(typeof oData.acc === "number"){
+                dtaString = "(" + oData.acc + ")";
+            } else {
+                dtaString = "(0)";
+            }
+
+            //alert(JSON.stringify(oData));
+            
+            var currentStatus = oColumn.label.toUpperCase();
+            if( currentStatus == 'PROCESSING')
+                currentStatus = 'INPROGRESS';
+            if( currentStatus == 'TOTAL')
+                currentStatus = '';
+
+            var currentDB = oRecord.getData("label");
+            if( currentDB.toUpperCase() == 'TOTAL')
+                currentDB = '';
+
+            var url = "pubmgr#pubmgr=" + encodeURI( YAHOO.imex.pubmgr.generateLinkState( currentStatus, currentDB));
+
+            oData = '<a href="' + url + '">' + dtaString + '</a>';             
+        }     
+            
+        elLiner.innerHTML = oData; 
+    };
+
+    this.myAccStatFormatter = function(elLiner, oRecord, oColumn, oData) {
+        if( oRecord.getData("label") === "Total") {
+            YAHOO.util.Dom.addClass( elLiner, "dt-bold");
+        }
+        if( oRecord.getData("label") === "Unassigned") {
+            YAHOO.util.Dom.addClass( elLiner, "dt-italic");
+        }
+        
+        var dtaString = "";
+        var accString = "";
+
+        if( oData == undefined ){
+            oData = "0";
+        } 
+        //some of this is hard coded and I think that makes it fragile
+        //but I dont know how to make it more robust. TODO
+        else if(typeof oData.cnt === "number" ){
+            
+            dtaString = oData.cnt;
+            
+            if(typeof oData.acc === "number"){
+                accString = "/" + oData.acc + "<sup>*</sup>";
+            } else {
+                //accString += "/0<sup>*</sup>";
+            }
+
+            //alert(JSON.stringify(oData));
+            
+            var currentStatus = oColumn.label.toUpperCase();
+            if( currentStatus == 'PROCESSING')
+                currentStatus = 'INPROGRESS';
+            if( currentStatus == 'TOTAL')
+                currentStatus = '';
+
+            var currentDB = oRecord.getData("label");
+            if( currentDB.toUpperCase() == 'TOTAL')
+                currentDB = '';
+
+            var url = "pubmgr#pubmgr=" + encodeURI( YAHOO.imex.pubmgr.generateLinkState( currentStatus, currentDB));
+
+            oData = '<a href="' + url + '">' + dtaString + '</a>' + accString;
+            //if( dtaString  !== "0" ){
+            //    oData += "<sup>*</sup>";
+            //}
         }     
             
         elLiner.innerHTML = oData; 
@@ -59,6 +168,8 @@ YAHOO.imex.stats = function() {
     YAHOO.widget.DataTable.Formatter.crt = this.myDateFormatter; 
     YAHOO.widget.DataTable.Formatter.center = this.myCenterFormatter; 
     YAHOO.widget.DataTable.Formatter.stat = this.myStatFormatter; 
+    YAHOO.widget.DataTable.Formatter.accstat = this.myAccStatFormatter; 
+    YAHOO.widget.DataTable.Formatter.acc = this.myAccFormatter; 
 
     
     // create datasource 
@@ -70,12 +181,12 @@ YAHOO.imex.stats = function() {
     myDataSource.responseSchema = { 
         resultsList: "counts.rows", 
         fields: [{key: "label"},
-                 {key: "states['1'].cnt"},
-                 {key: "states['2'].cnt"},
-                 {key: "states['3'].cnt"},
-                 {key: "states['10'].cnt"},
-                 {key: "states['4'].cnt"},
-                 {key: "states.total.cnt"}], 
+                 {key: "states['1']"},
+                 {key: "states['2']"},
+                 {key: "states['3']"},
+                 {key: "states['10']"},
+                 {key: "states['4']"},
+                 {key: "states.total"}], 
         metaFields: { 
             //totalRecords: "records.totalRecords", 
             //paginationRecordOffset : "records.startIndex", 
@@ -90,20 +201,20 @@ YAHOO.imex.stats = function() {
           width: 400, maxAutoWidth: 800, menuLabel:"Publication" },
         { label:"Record Status", menuLabel:"Status",key:"submission",
           children:[
-             { key:"states['1'].cnt",  label:"New",sortable:false, resizeable:false, 
-               formatter:"stat", className:"dt-right" },
-             { key:"states['2'].cnt", label:"Reserved",sortable:false, resizeable:false, 
-               formatter:"stat", className:"dt-right"},
-             { key:"states['3'].cnt", label:"Processing",sortable:false, resizeable:false, 
-               formatter:"stat", className:"dt-right" },
-             { key:"states['10'].cnt", label:"Processed",sortable:false, resizeable:false, 
-               formatter:"stat", className:"dt-right" },
-             { key:"states['4'].cnt", label:"Released",sortable:false, resizeable:false, 
-               formatter:"stat", className:"dt-right" }
+             { key:"states['1']",  label:"New",sortable:false, resizeable:false, 
+               formatter:"accstat", className:"dt-right" },
+             { key:"states['2']", label:"Reserved",sortable:false, resizeable:false, 
+               formatter:"accstat", className:"dt-right"},
+             { key:"states['3']", label:"Processing",sortable:false, resizeable:false, 
+               formatter:"accstat", className:"dt-right" },
+             { key:"states['10']", label:"Processed",sortable:false, resizeable:false, 
+               formatter:"accstat", className:"dt-right" },
+             { key:"states['4']", label:"Released",sortable:false, resizeable:false, 
+               formatter:"accstat", className:"dt-right" }
           ]
         },
-        { key:"states.total.cnt", label:"Total", sortable:true, resizeable:true, 
-          formatter:"stat", className: "dt-right dt-bold", menuLabel:"Total" }
+        { key:"states.total", label:"Total", sortable:true, resizeable:true, 
+          formatter:"accstat", className: "dt-right dt-bold", menuLabel:"Total" }
     ];
     
     
@@ -157,6 +268,7 @@ YAHOO.imex.stats = function() {
     myDataTable.handleDataReturnPayload = 
         function(oRequest, oResponse, oPayload) { 
             oPayload.totalRecords = oResponse.meta.totalRecords;
+            YAHOO.imex.stats.counts = oResponse.counts;
             return oPayload; 
         }; 
   

@@ -71,6 +71,10 @@ public class UserAction extends UserSupport {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " register:" + user );
+        log.debug( " register:login=" + user.getLogin() );
+        log.debug( " register:login=" + user.getFirstName() );
+        log.debug( " register:login=" + user.getLastName() );
+        
         
         UserDao dao = getUserContext().getUserDao();
         IcUser icUser = new IcUser( user );
@@ -89,14 +93,6 @@ public class UserAction extends UserSupport {
         icUser.setActivated( false );
         icUser.setEnabled( true );
         
-        // sent notification
-        //------------------
-
-        getUserManager()
-            .notifyRegistrationByMail( icUser, notifyFrom, notifyServer );
-
-        //icUser.notifyByMail( notifyFrom, notifyServer );
-        
         // create new account 
         //-------------------
         
@@ -104,6 +100,14 @@ public class UserAction extends UserSupport {
         
         log.info( " Account created: " + user.getLogin() +
               " (" + user.getId() + ")" );
+
+        // sent notification
+        //------------------
+        
+        getUserManager()
+            .notifyRegistrationByMail( icUser, notifyFrom, notifyServer );
+        
+        //icUser.notifyByMail( notifyFrom, notifyServer );
         
         return ACTIVATE;
     }
@@ -544,6 +548,8 @@ public class UserAction extends UserSupport {
         // test password typos
         //--------------------
         
+        log.debug( "UserAction->validate: pass0=" + pass0 + " pass1=" + pass1 );
+
         if( pass0 != null && pass1 != null && !pass0.equals( pass1 ) ) {
             addFieldError( "pass1", "Passwords do not match." );
         }

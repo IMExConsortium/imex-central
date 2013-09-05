@@ -1,5 +1,13 @@
 {news:{
    "2013":[
+      {"date":"2013-09-01",
+       "time":"11-15-00",
+       "auid":"1",
+       "amail":"lukasz@mbi.ucla.edu",
+       "aini":"LS",
+       "header":"BETA-0.93 Has Been Deployed",
+       "body":"This is a bug-fixing release that corrects micsonfigured user registration page. In addition, the log in page should now retain the browser status by returning to the page immediately preceding loging in. Last but not least, the curation progress page got updated to report the number of publications with assigned IMEx accessions."
+      },
       {"date":"2013-08-13",
        "time":"20-00-00",
        "auid":"1",

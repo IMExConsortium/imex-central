@@ -108,10 +108,14 @@ public class StatsAction extends PortalSupport {
                 Map<Group,Map<DataState,Long>> 
                     res = dao.getCountByPartner();
 
+                Map<Group,Map<DataState,Long>>
+                    accRes = dao.getAccCountByPartner();
+
                 List rows = new ArrayList();
                 counts.put("rows",rows);
 
                 Map<DataState,Long> totals = new HashMap<DataState,Long>();
+                Map<DataState,Long> accTotals = new HashMap<DataState,Long>();
 
 
                 for( Iterator<Map.Entry<Group,Map<DataState,Long>>>
@@ -123,10 +127,17 @@ public class StatsAction extends PortalSupport {
                     
                     rowMap.put( "label", me.getKey().getLabel() );                   
                     rowMap.put( "name", me.getKey().getName() );                   
-                    rowMap.put( "states", statesToRow( me.getValue(), totals ) );
+                    
+                    Map<DataState,Long> accCnt = null; 
+                    if( accRes.get(me.getKey()) != null ){
+                        accCnt = accRes.get(me.getKey());
+                    }
+
+                    rowMap.put( "states", 
+                                statesToRow( me.getValue(), accCnt, totals,accTotals ) );
                     rows.add( rowMap );
                 }
-
+                
                 // unreserved
                 //-----------
 
@@ -134,7 +145,8 @@ public class StatsAction extends PortalSupport {
                 rowMap.put( "label", "Unassigned" );
                 rowMap.put( "name", "Unreserved" );
                 rowMap.put( "states",
-                            statesToRow( dao.getCountNoPartner(), totals ) );
+                            statesToRow( dao.getCountNoPartner(), 
+                                         dao.getAccCountNoPartner(), totals, accTotals ) );
                 rows.add( rowMap );
 
 
@@ -145,7 +157,7 @@ public class StatsAction extends PortalSupport {
                 trowMap.put( "label", "Total" );
                 trowMap.put( "name", "total counts" );
                 trowMap.put( "states",
-                            statesToRow( totals, null ) );
+                             statesToRow( totals, accTotals, null, null ) );
                 rows.add( trowMap );
 
             }
@@ -156,7 +168,8 @@ public class StatsAction extends PortalSupport {
                 counts.put( "0",  rowMap);
                 rowMap.put( "name", "ALL" );
                 rowMap.put( "states",                            
-                            statesToRow( dao.getCountAll(), null ) );
+                            statesToRow( dao.getCountAll(), 
+                                         dao.getAccCountAll(), null, null ) );
             }
             
             if(query.toLowerCase().equals("nopartner") ) {
@@ -165,7 +178,9 @@ public class StatsAction extends PortalSupport {
                 counts.put( "0", rowMap);
                 rowMap.put( "name", "NONE" );
                 rowMap.put( "states", 
-                            statesToRow( dao.getCountNoPartner(), null ) );                
+                            statesToRow( dao.getCountNoPartner(), 
+                                         dao.getAccCountNoPartner(), 
+                                         null, null ) );                
             }            
         }
         
@@ -179,11 +194,14 @@ public class StatsAction extends PortalSupport {
     //--------------------------------------------------------------------------
 
     private Map statesToRow( Map<DataState,Long> stc, 
-                             Map<DataState,Long> totals ) {
-
+                             Map<DataState,Long> acc,
+                             Map<DataState,Long> totals,
+                             Map<DataState,Long> accTotals ) {
+        
         Map res = new HashMap();
 
         long total = 0;
+        long accTotal = 0;
 
         for( Iterator<Map.Entry<DataState,Long>> 
                  i = stc.entrySet().iterator();  i.hasNext(); ) {
@@ -194,8 +212,13 @@ public class StatsAction extends PortalSupport {
             col.put("name",me.getKey().getName() );
             col.put("cnt",me.getValue() );
             
-            total += me.getValue().longValue();
+            if( acc != null && acc.get(me.getKey()) != null ){
+                col.put("acc", acc.get(me.getKey()) );
+                accTotal += acc.get( me.getKey() );
+            }
 
+            total += me.getValue().longValue();
+            
             res.put( me.getKey().getId(), col );
 
 
@@ -209,11 +232,23 @@ public class StatsAction extends PortalSupport {
                             + me.getValue().longValue() );                
             }
             
+            if( accTotals != null ) {
+                if( accTotals.get( me.getKey() ) == null ) {
+                    accTotals.put( me.getKey(), 0L);
+                }
+                
+                if( acc != null && acc.get(me.getKey()) != null ){
+                    accTotals.put( me.getKey(), 
+                                   accTotals.get( me.getKey() ).longValue() 
+                                   + acc.get(me.getKey()).longValue() );                
+                }
+            }            
         }
 
         Map tcol = new HashMap();
         tcol.put( "name", "total" );
         tcol.put( "cnt", total );
+        tcol.put( "acc", accTotal );
         res.put( "total",tcol );
         return res;
     }

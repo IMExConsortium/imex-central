@@ -15,9 +15,7 @@
   <div class="top-padding">
    <fieldset>
     <legend><h3>Login</h3></legend>
-    <div>
-   
-  
+    <div class="field-padding">
     <strong>User Name</strong>
     <s:if test="hasFieldErrors()">
      <s:if test="fieldErrors['user.login']!=null">  
@@ -45,11 +43,11 @@
     </s:if>
    </div>
      
-   <div><strong>Password</strong>
+   <div class="field-padding"><strong>Password</strong>
      <s:password theme="simple"
           name="pass0" size="24" maxlength="24" />
    </div>
-   <div><strong>Password</strong> (retype) 
+   <div class="field-padding"><strong>Password</strong> (retype) 
      <s:password theme="simple"
          name="pass1" size="24" maxlength="24" />
    </div>
@@ -60,19 +58,19 @@
    <fieldset>
    <legend><h3>Contact</h3></legend>
      
-   <div><strong>First Name</strong>
+   <div class="field-padding"><strong>First Name</strong>
     <s:textfield labelSeparator="" theme="simple"
       name="user.firstName" size="32" maxlength="64" />
    </div>
-    <div><strong>Last Name<strong>            
+    <div class="field-padding"><strong>Last Name<strong>            
      <s:textfield labelSeparator="" theme="simple"
        name="user.lastName" size="32" maxlength="64" />
     </div>
-    <div><strong>Organization</strong>
+    <div class="field-padding"><strong>Organization</strong>
      <s:textfield labelSeparator="" theme="simple"
        name="user.affiliation" size="32" maxlength="64" />
     </div>
-    <div><strong>E-Mail</strong>
+    <div class="field-padding"><strong>E-Mail</strong>
      <s:textfield labelSeparator="" theme="simple"
        name="user.email" size="32" maxlength="64" />
     </div>

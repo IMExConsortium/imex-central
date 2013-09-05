@@ -183,7 +183,7 @@
                         </legend>
                         <s:hidden name="id" value="%{id}"/><s:hidden name="opp.pubid" value="%{id}"/>
                         
-                        <p><strong>File:</strong> <s:file theme="simple" name="opp.edafile" accept="text/*" size="80"/></p>
+                        <p><strong>File:</strong> <s:file theme="simple" name="opp.edafile" accept="text/*" size="65"/></p>
                         <p><strong>Name:</strong> <s:textfield theme="simple" name="opp.edan" size="50" value=""/></p>
                         <p><strong>Format:</strong> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></p>
                         <strong>Flag:</strong> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/>

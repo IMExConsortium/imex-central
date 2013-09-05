@@ -66,6 +66,9 @@ public class IcUser extends User {
 
     public void notifyByMail( String from, String server ) {
 
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("from: " + from + " server: " + server);
+
 	Properties props = new Properties();
 	props.put("mail.from", from);
 	props.put("mail.smtp.host", server);
@@ -84,6 +87,8 @@ public class IcUser extends User {
 	    "the account might be terminated shortly.\n\n\n"+
 	    "Regards,\nThe ImexCentral Deamon\n\n";
 	
+        log.debug("message:  "+ message);
+
 	//-----------------------------------------------------------------
 
 	try {
