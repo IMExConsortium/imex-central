@@ -258,6 +258,22 @@
         viewtype:"file-html",
         viewpath:"/pages/faq.html"
       },      
+      imexview:{
+        active:true,
+        title:"ImexCentral: ImexView",
+        menudef:"2:3",
+        menusel:"2:3",
+        viewtype:"file-html",
+        viewpath:"/pages/imexview.html"
+      },      
+      "imexview-test":{
+        active:true,
+        title:"ImexCentral: ImexView",
+        menudef:"2:3",
+        menusel:"2:3",
+        viewtype:"file-html",
+        viewpath:"/pages/imexview-test.html"
+      },      
       relnotes:{
         active:true,
         title:"ImexCentral: Release Notes",

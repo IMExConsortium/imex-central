@@ -43,6 +43,7 @@
     
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
+    <property name="userManager" ref="userManager"/>
     <property name="mst" value="4:1"/>
     
     <property name="notifyFrom" value="dip@mbi.ucla.edu" />
@@ -51,6 +52,12 @@
     <property name="reCaptcha" ref="reCaptcha"/>
   </bean>
   
+
+  <bean id="userManager" scope="prototype"
+       class="edu.ucla.mbi.imex.central.UserManager">
+
+  </bean>
+
   <bean id="feedbackAction" scope="prototype"
       class="edu.ucla.mbi.imex.central.struts.action.FeedbackAction">
     
