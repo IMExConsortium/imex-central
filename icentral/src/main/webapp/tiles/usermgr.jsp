@@ -80,9 +80,26 @@
       </fieldset>
       </ul>
      </s:form>
-     <div id="usermgr-paginator" class="yui-pg-container"></div>
      <div id="usermgr-table"></div>
- <script type="text/javascript">
-  YAHOO.imex.usermgr.init();
- </script>
+    <script type="text/javascript">
+ 
+        var columnDefinitions = [{key:"id", label:"Id",  sortable:true, resizeable:true},
+            {key:"login",label:"Login", sortable:true, resizeable:true},
+            {key:"firstName",label:"First Name", sortable:true, resizeable:true},
+            {key:"lastName",label:"Last Name", sortable:true, resizeable:true},
+            {key:"email",label:"Email", sortable:true, resizeable:true},
+            {key:"affiliation",label:"Affiliation", sortable:true, resizeable:true},
+            {key:"Details", sortable:true, resizeable:true, formatter:"details"}];
+        
+        var dataSourceLink = "usermgr?op.view=json";
+  
+        var datasourceSchema = { 
+            resultsList: "userList", 
+            fields: ["id", "login", "firstName", "lastName", "email", 
+                     "affiliation", "details"]
+        }; 
+        var container = "usermgr-table";
+        YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
+  
+    </script>
 </s:else>
