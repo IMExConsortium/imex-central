@@ -1,30 +1,16 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.usermgr = {
-    myColumnDefs: [
-        {key:"id", label:"Id",  sortable:true, resizeable:true},
-        {key:"login",label:"Login", sortable:true, resizeable:true},
-        {key:"firstName",label:"First Name", sortable:true, resizeable:true},
-        {key:"lastName",label:"Last Name", sortable:true, resizeable:true},
-        {key:"email",label:"Email", sortable:true, resizeable:true},
-        {key:"affiliation",label:"Affiliation", sortable:true, resizeable:true},
-        {key:"Details", sortable:true, resizeable:true, formatter:"details"},
-    ],
-    init: function(){
+    init: function(columnDefinitions, dataSourceLink, datasourceSchema, container){
         var usermgr  = YAHOO.imex.usermgr;
         usermgr.formatterInit();
         
-        usermgr.myDataSource = new YAHOO.util.DataSource("usermgr?op.view=json"); 
+        usermgr.myColumnDefs = columnDefinitions
+        usermgr.myDataSource = new YAHOO.util.DataSource(dataSourceLink); 
         
         usermgr.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
         
-        
-        
-        usermgr.myDataSource.responseSchema = { 
-            resultsList: "userList", 
-            fields: ["id", "login", "firstName", "lastName", "email", 
-                     "affiliation", "details"]
-        }; 
+        usermgr.myDataSource.responseSchema = datasourceSchema;
         //Tossing in some css to remove bottom paginator.
         var sheet = document.createElement('style');
         sheet.innerHTML = "#yui-dt0-paginator1 {display: none;} " +
@@ -71,7 +57,7 @@ YAHOO.imex.usermgr = {
         //----------------------
     
         usermgr.myDataTable = new YAHOO.widget.DataTable(
-            "usermgr-table", usermgr.myColumnDefs, 
+            container, usermgr.myColumnDefs, 
             usermgr.myDataSource, usermgr.myConfig
         );
         /*
