@@ -3,84 +3,68 @@
 <h1>Role Manager</h1>
 <s:if test="id > 0">
  <t:insertDefinition name="roleedit"/>
- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
- <br/><br/><br/><br/><br/><br/><br/><br/>
 </s:if>
 <s:else>
- <table width="100%">
-  <tr>
-   <td align="left">
-    <br/>
-    <table width="66%" cellspacing="1" cellpadding="3">
-     <s:if test="hasActionErrors()">
-      <tr><td>  
-       <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
-        <span class="error">
-         <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
-         </s:iterator>
-        </span>
-       </div>
-      </td></tr>
-     </s:if>
-    </table>  
-   </td>
-  </tr>
-  <tr>
-   <td>
-    <table width="100%" border="1">
-     <s:form theme="simple" action="rolemgr"> 
-      <tr>
-       <th colspan="2">RID</th>
-       <th>Name</th>
-       <th>&nbsp</th>
-      </tr>
-      <s:if test="roleList!=null">
-       <s:iterator value="roleList" id="role" status="rpos">
-        <tr>
-         <td align="center">
-          <s:checkbox name="opp.del" fieldValue="%{#role.id}"/>
-         </td>
-         <td align="center">
-           <s:property value="#role.id" />
-         </td>
-         <td>
-           <s:property value="#role.name" />
-         </td>
-         <td align="center">
-          <a href='rolemgr?id=<s:property value="#role.id"/>'>detail</a>
-         </td>
-        </s:iterator>
-       </tr>
-      </s:if>
-      <tr>
-       <td colspan="2" align="center">
-        <s:submit theme="simple" name="op.ldel" value="DROP" />
-       </td>
-       <td>
+ <s:if test="hasActionErrors()">
+  <p id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">  
+   <span class="error">
+    <s:iterator value="actionErrors">
+    <span class="errorMessage"><s:property escape="false" /></span>
+    </s:iterator>
+   </span>
+  </p>
+ </s:if>
+     
+ <div id="mgr-tabs">
+ <ul class="yui-nav"> 
+       <li class="selected"><a href="#tab1"><em>Add Role</em></a></li> 
+       <li><a href="#tab2"><em>Roles</em></a></li> 
+ </ul>   
+ <div class="yui-content">
+  <div id="tab1">
+   <h3>Add Role</h3>
+     <s:form theme="simple" action="rolemgr" id="mgr-form"> 
+     <ul>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['role.name']!=null">
-          <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
+          <p id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
            <span class="error">
             <span class="errorMessage">
              <s:property value="fieldErrors['role.name'][0]" />
             </span>
            </span>
-          </div>
+          </p>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
-       </td>
-       <td align="center">
-        <s:submit theme="simple" name="op.add" value="ADD" />
-       </td>
-      </tr>
+        <li>
+        Role Name: <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
+       </li>
+       <li>
+        <s:submit theme="simple" name="op.add" value="Add" />
+       </li>
+       </ul>
      </s:form>
-    </table>
-   </td>
-  </tr>
- </table>
- <br/>
- <br/>
+     </div>
+    <div id="tab2"><div id="rolemgr-table"></div></div>
+    <script type="text/javascript">
+ 
+        var columnDefinitions = [
+            {key:"id", label:"Id",  sortable:true, resizeable:true},
+            {key:"name",label:"Name", sortable:true, resizeable:true},
+            {key:"Details", sortable:true, resizeable:true, formatter:"roleDetails"}
+           ];
+        
+        var dataSourceLink = "rolemgr?op.view=json";
+  
+        var datasourceSchema = { 
+            resultsList: "roleList", 
+            fields: ["id", "name", "details"]
+        }; 
+        var container = "rolemgr-table";
+        
+        YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
+
+        var tabView = new YAHOO.widget.TabView("mgr-tabs");
+    </script>
+    </div>
 </s:else>
