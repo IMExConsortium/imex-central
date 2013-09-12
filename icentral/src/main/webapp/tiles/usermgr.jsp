@@ -5,16 +5,19 @@
  <t:insertDefinition name="useredit"/>
 </s:if>
 <s:else>
-
- 
-
-     <s:form theme="simple" action="usermgr"> 
-     <ul>
-      <fieldset>
-       <legend><h3>Add User</h3></legend>
+ <div id="mgr-tabs">
+ <ul class="yui-nav"> 
+       <li class="selected"><a href="#tab1"><em>Add User</em></a></li> 
+       <li><a href="#tab2"><em>Users</em></a></li> 
+ </ul>   
+ <div class="yui-content">
+  <div id="tab1">
+   <h3>Add User</h3>
+   <s:form theme="simple" action="usermgr" id="mgr-form"> 
+    <ul>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.login']!=null">
-          <li> id="errorDiv" >
+          <li id="errorDiv" >
            <span class="error">
             <span class="errorMessage">
              <s:property value="fieldErrors['user.login'][0]" />
@@ -77,29 +80,35 @@
        <li>
         <s:submit theme="simple" name="op.add" value="ADD" />
        </li>
-      </fieldset>
-      </ul>
+     </ul>
      </s:form>
-     <div id="usermgr-table"></div>
+     </div>
+     <div id="tab2">
+      <div id="usermgr-table"></div>
+     </div>
     <script type="text/javascript">
  
-        var columnDefinitions = [{key:"id", label:"Id",  sortable:true, resizeable:true},
+        var columnDefinitions = [
+            {key:"id", label:"Id",  sortable:true, resizeable:true},
             {key:"login",label:"Login", sortable:true, resizeable:true},
             {key:"firstName",label:"First Name", sortable:true, resizeable:true},
             {key:"lastName",label:"Last Name", sortable:true, resizeable:true},
             {key:"email",label:"Email", sortable:true, resizeable:true},
             {key:"affiliation",label:"Affiliation", sortable:true, resizeable:true},
-            {key:"Details", sortable:true, resizeable:true, formatter:"details"}];
+            {key:"Details", sortable:true, resizeable:true, formatter:"userDetails"}];
         
         var dataSourceLink = "usermgr?op.view=json";
   
         var datasourceSchema = { 
             resultsList: "userList", 
             fields: ["id", "login", "firstName", "lastName", "email", 
-                     "affiliation", "details"]
+                     "affiliation"]
         }; 
         var container = "usermgr-table";
         YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
+        var tabView = new YAHOO.widget.TabView("mgr-tabs");
   
     </script>
+   </div>
+  </div>
 </s:else>

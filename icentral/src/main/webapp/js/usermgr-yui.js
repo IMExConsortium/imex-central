@@ -14,15 +14,11 @@ YAHOO.imex.usermgr = {
         //Tossing in some css to remove bottom paginator.
         var sheet = document.createElement('style');
         sheet.innerHTML = "#yui-dt0-paginator1 {display: none;} " +
-                          "#usermgr-table table {border: 1px solid #888888;} " + 
-                          "form#usermgr li {list-style-type: none;} "+ 
-                          "form#usermgr {max-width: 60em;}";
+                          "#" + container + " table {border: 1px solid #888888;} " + 
+                          "form#mgr-form li {list-style-type: none;} "+ 
+                          "#mgr-tabs{max-width: 60em;}";
         document.body.appendChild(sheet); 
         
-        
-
-        
-        //usermgr.myDataSource.my = { myState: null };
         
         // create paginator
         //-----------------
@@ -38,18 +34,9 @@ YAHOO.imex.usermgr = {
         
         // datatable configuration
         //------------------------
-        /*
-        var initReq = "opp.off=0&opp.max=25"
-            + "&opp.wfl=" + YAHOO.imex.pubmgr.watch 
-            + "&opp.ofv=" + YAHOO.imex.pubmgr.owner 
-            + "&opp.efv=" + YAHOO.imex.pubmgr.admus 
-            + "&opp.ffv=" + YAHOO.imex.pubmgr.cflag;
-         */
+       
         usermgr.myConfig = {
             paginator : usermgr.myPaginator,
-            //initialLoad: false,
-            //dynamicData : true,
-            //draggableColumns: true
         };
        
         
@@ -165,11 +152,19 @@ YAHOO.imex.usermgr = {
    //-----------------------------
     // Create the custom formatters 
     //-----------------------------
-     
-   
 
-    myDetailsFormatter: function(elLiner, oRecord, oColumn, oData) {
+    UserDetailsFormatter: function(elLiner, oRecord, oColumn, oData) {
         elLiner.innerHTML = '<a href="usermgr?id=' + 
+            oRecord.getData( "id" ) + 
+            '">Edit</a>';
+    },
+    groupDetailsFormatter: function(elLiner, oRecord, oColumn, oData) {
+        elLiner.innerHTML = '<a href="groupmgr?id=' + 
+            oRecord.getData( "id" ) + 
+            '">Edit</a>';
+    },
+    roleDetailsFormatter: function(elLiner, oRecord, oColumn, oData) {
+        elLiner.innerHTML = '<a href="rolemgr?id=' + 
             oRecord.getData( "id" ) + 
             '">Edit</a>';
     },
@@ -181,7 +176,9 @@ YAHOO.imex.usermgr = {
         
         var YDTF = YAHOO.widget.DataTable.Formatter;
 
-        YDTF.details = this.myDetailsFormatter; 
+        YDTF.userDetails = this.UserDetailsFormatter; 
+        YDTF.groupDetails = this.groupDetailsFormatter; 
+        YDTF.roleDetails = this.roleDetailsFormatter; 
        
     }
 };
