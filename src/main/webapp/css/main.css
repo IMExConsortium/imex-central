@@ -1577,7 +1577,7 @@ form.stylized button {
   background-color: white;
 }
 .main-width {
-  width:65em;
+  width:80em;
 }
 .captcha-width {
   width: 325px;
@@ -1609,7 +1609,6 @@ form.stylized button {
 .cfg-block-legend{
   display: block;
   margin: 0 0 1em 0;
-  width: 80em;
 }
 
 .cfg-block-legend-inner{
