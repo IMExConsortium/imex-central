@@ -15,7 +15,7 @@
    </p>
  </s:if>
  
-  <div id="mgr-tabs">
+  <div id="mgr-tabs" class="main-width">
  <ul class="yui-nav"> 
        <li class="selected"><a href="#tab1"><em>Add Group</em></a></li> 
        <li><a href="#tab2"><em>Groups</em></a></li> 
@@ -82,7 +82,7 @@
     var container = "groupmgr-table";
     
     YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
-    var tabView = new YAHOO.widget.TabView("mgr-tabs");
+    YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
 
  </script>
 </s:else>

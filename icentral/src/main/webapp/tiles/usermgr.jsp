@@ -5,7 +5,7 @@
  <t:insertDefinition name="useredit"/>
 </s:if>
 <s:else>
- <div id="mgr-tabs">
+ <div id="mgr-tabs" class="main-width">
  <ul class="yui-nav"> 
        <li class="selected"><a href="#tab1"><em>Add User</em></a></li> 
        <li><a href="#tab2"><em>Users</em></a></li> 
@@ -106,7 +106,7 @@
         }; 
         var container = "usermgr-table";
         YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
-        var tabView = new YAHOO.widget.TabView("mgr-tabs");
+        YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
   
     </script>
    </div>

@@ -13,7 +13,7 @@
                                          loginid:"<s:property value="#session['USER_ID']" />"}));
 
   </script>
-  <s:form id="userpref-form" action="userprefmgr" theme="simple" onsubmit="return false;">
+  <s:form id="userpref-form" class="main-width" action="userprefmgr" theme="simple" onsubmit="return false;">
     <div>
       <div style="display:inline-block; padding: 0 0 0 2em;" >
         <s:submit name="op.update" value="Save" theme="simple" 
