@@ -18,21 +18,29 @@
  </ul>   
 <div class="yui-content">
 
- <s:form theme="simple" action="roleedit">
+ <s:form theme="simple" action="roleedit" cssClass="align-label">
   <div id="tab1">
    <s:hidden name="id" value="%{id}"/>
    <s:hidden name="role.id" value="%{id}"/>
    <s:hidden name="role.name" value="%{role.name}"/>
-   <h3>Login</h3>
+   <h3 class="header-grey-highlight">Login</h3>
    <ul>
-    <li><strong>RID:</strong> <s:property value="role.id"/></li>
-    <li><strong>Name:</strong> <s:property value="role.name"/></li>
+    <li>
+     <label for="roleedit_role_id"><strong>RID:</strong></label>
+     <s:property value="role.id"/>
+    </li>
+    <li>
+     <label for="roleedit_role_name"><strong>Name:</strong></label>
+     <s:property value="role.name"/>
+    </li>
    </ul>
-   <h3>Comments</h3>
+   <h3 class="header-grey-highlight">Comments</h3>
    <ul>
-    <li><strong>Comments</strong><br />
-    <s:textarea name="role.comments" value="%{role.comments}" cols="64" rows="4"/> </li>
-    <li><s:submit theme="simple" name="op.pup" value="Save"/></li>
+    <li>
+     <label for="roleedit_role_comments"><strong>Comments</strong></label><br />
+     <s:textarea name="role.comments" value="%{role.comments}" cols="64" rows="4"/> 
+    </li>
+    <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
    </ul>
   </s:form>
  </div>

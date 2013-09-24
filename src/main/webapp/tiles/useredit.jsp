@@ -19,54 +19,78 @@
  </ul>   
  <div class="yui-content">
  
- <s:form theme="simple" action="usermgr">
+ <s:form theme="simple" action="usermgr" cssClass="align-label">
  <div id="tab1">
   <s:hidden name="id" value="%{id}"/> 
   <s:hidden name="user.id" value="%{id}"/> 
   <s:hidden name="user.login" value="%{user.login}"/> 
-  <h3>Login</h3>
+  <h3 class="header-grey-highlight">User</h3>
   <ul>
-   <li>UID: <s:property value="user.id"/></li>
-   <li>Login: <s:property value="user.login"/></li>
+   <li>
+    <label for="usermgr_user_id"><strong>UID:</strong></label>
+    <s:property value="user.id"/>
+   </li>
+   <li>
+    <label for="usermgr_user_login"><strong>Login:</strong></label>
+    <s:property value="user.login"/>
+   </li>
   </ul>
-  <h3>User Details</h3>
+  <h3 class="header-grey-highlight">Details</h3>
   <ul>
-   <li><strong>First Name: </strong>
-       <s:textfield theme="simple" name="user.firstName" size="32" maxLength="64"/></li>
-   <li><strong>Last Name: </strong>
-       <s:textfield theme="simple" name="user.lastName" size="32" maxLength="64"/></li>
-   <li><strong>Affilation: </strong>
-       <s:textfield theme="simple" name="user.affiliation" size="32" maxLength="64"/></li>
-   <li><strong>E-mail: </strong>
-       <s:textfield theme="simple" name="user.email" size="32" maxLength="64"/></li>
+   <li>
+    <label for="usermgr_user_firstName"><strong>First Name:</strong></label>
+    <s:textfield theme="simple" name="user.firstName" size="32" maxLength="64"/>
+   </li>
+   <li>
+    <label for="usermgr_user_lastName"><strong>Last Name:</strong></label>
+    <s:textfield theme="simple" name="user.lastName" size="32" maxLength="64"/>
+   </li>
+   <li>
+    <label for="usermgr_"><strong>Affilation:</strong></label>
+    <s:textfield theme="simple" name="user.affiliation" size="32" maxLength="64"/>
+    </li>
+   <li>
+    <label for="usermgr_user_email"><strong>E-mail:</strong></label>
+    <s:textfield theme="simple" name="user.email" size="32" maxLength="64"/>
+   </li>
   </ul>
-  <h3>Account Status</h3>
+  <h3 class="header-grey-highlight">Account Status</h3>
   <ul> 
-   <li><s:checkbox name="user.activated" value="%{user.activated}"/> activated</li>
-   <li><s:checkbox name="user.enabled" value="%{user.enabled}"/> enabled</li>
-   <li><s:submit theme="simple" name="op.pup" value="Save"/></li>
+   <li>
+    <s:checkbox name="user.activated" value="%{user.activated}"/> 
+    <label for="usermgr_user_activated">activated</label>
+   </li>
+   <li>
+    <s:checkbox name="user.enabled" value="%{user.enabled}"/> 
+    <label for="usermgr_user_enabled">enabled</label>
+   </li>
+   <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
   </ul>
   </s:form>
   </div>
   
     <div id="tab2">
-     <s:form theme="simple" action="usermgr">
+     <s:form theme="simple" action="usermgr" cssClass="align-label">
     
-    <h3>Change Password</h3>
+    <h3 class="header-grey-highlight">Change Password</h3>
     <ul>
-     <li><strong>New Password: </strong>
-         <s:password theme="simple" name="opp.pass1" value="" size="16" maxLength="64"/></li>
-     <li><strong>Confirm Password: </strong>
-            <s:password theme="simple" name="opp.pass2" value="" size="16" maxLength="64"/></li>
      <li>
-      <s:submit theme="simple" name="op.prs" value="Reset"/>
+      <label for="usermgr_opp_pass1"><strong>New Password:</strong></label>
+      <s:password theme="simple" name="opp.pass1" value="" size="16" maxLength="64"/>
+     </li>
+     <li>
+      <label for="usermgr_opp_pass2"><strong>Confirm Password:</strong></label>
+      <s:password theme="simple" name="opp.pass2" value="" size="16" maxLength="64"/>
+     </li>
+     <li>
+      <s:submit theme="simple" name="op.prs" value="Update"/>
      </li> 
     </ul>
    </s:form>
   </div>
   <div id="tab3">
-   <s:form theme="simple" action="usermgr">
-    <h3>Roles</h3>
+   <s:form theme="simple" action="usermgr" cssClass="align-label">
+    <h3 class="header-grey-highlight">Roles</h3>
     <ul>
      <li>
       <fieldset>
@@ -98,7 +122,7 @@
       </fieldset>
       
      </ul>
-     <h3>Groups<h3>
+     <h3 class="header-grey-highlight">Groups</h3>
      <ul>
       <li>
       <fieldset>
