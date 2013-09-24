@@ -19,17 +19,23 @@
  </ul>   
  <div class="yui-content">
  
- <s:form theme="simple" action="groupedit">
+ <s:form theme="simple" action="groupedit" cssClass="align-label">
  <div id="tab1">
  <s:hidden name="id" value="%{id}"/>
  <s:hidden name="group.id" value="%{id}"/>
  <s:hidden name="group.label" value="%{group.label}"/>
-  <h3>Login</h3>
+  <h3 class="header-grey-highlight">Group</h3>
   <ul>
-      <li><strong>GID:</strong> <s:property value="group.id"/></li>
-      <li><strong>Label:</strong> <s:property value="group.label"/></li>
+      <li>
+       <label for="groupedit_group_id"><strong>GID:</strong></label>
+       <s:property value="group.id"/>
+      </li>
+      <li>
+       <label for="groupedit_group_label"><strong>Label:</strong></label>
+       <s:property value="group.label"/>
+      </li>
   </ul>
-  <h3>User Details</h3>
+  <h3 class="header-grey-highlight">Group Details</h3>
   <ul>
   
    <s:if test="hasFieldErrors()">
@@ -46,8 +52,10 @@
     </s:if>
    </s:if>
   
-   <li><strong>Group Name: </strong>
-       <s:textfield theme="simple" name="group.name" size="30" maxLength="64"/> </li>
+   <li>
+    <label for="groupedit_group_name"><strong>Group Name: </strong></label>
+    <s:textfield theme="simple" name="group.name" size="30" maxLength="64"/>
+   </li>
   
    <s:if test="hasFieldErrors()">
     <s:if test="fieldErrors['opp.alogin']!=null">
@@ -63,10 +71,11 @@
     </s:if>
    </s:if>
    
-   <li><strong>Admin User: </strong>
-       <s:textfield theme="simple" name="opp.alogin" 
+   <li>
+    <label for="groupedit_opp_alogin"><strong>Admin User: </strong></label>
+    <s:textfield theme="simple" name="opp.alogin" 
                        value="%{group.adminUser.login}" size="30" maxLength="64"/>
-    </li>
+   </li>
       <s:if test="hasFieldErrors()">
        <s:if test="fieldErrors['opp.clogin']!=null">
         <li>
@@ -81,21 +90,25 @@
        </s:if>
       </s:if>
       
-   <li><strong>Contact User: </strong>
-       <s:textfield theme="simple" name="opp.clogin" 
-                       value="%{group.contactUser.login}" size="30" maxLength="64"/></li>
-   <li><strong>Comments: </strong><br />
-       <s:textarea name="group.comments" value="%{group.comments}" cols="64" rows="4"/></li>
+   <li>
+    <label for="groupedit_opp_clogin"><strong>Contact User: </strong></label>
+    <s:textfield theme="simple" name="opp.clogin" 
+                       value="%{group.contactUser.login}" size="30" maxLength="64"/>
+   </li>
+   <li>
+    <label for="groupedit_group_comments"><strong>Comments: </strong></label><br />
+    <s:textarea name="group.comments" value="%{group.comments}" cols="64" rows="4"/>
+   </li>
        
-   <li><s:submit theme="simple" name="op.pup" value="Save"/></li>
+   <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
   </ul>
   
     </s:form>
     </div>
     <div id="tab2">
-     <s:form theme="simple" action="groupedit">
+     <s:form theme="simple" action="groupedit"  cssClass="align-label">
     <ul>
-     <li><h3>Roles</h3></li>
+     <li><h3 class="header-grey-highlight">Roles</h3></li>
      <li>
      <fieldset>
       <legend>Current Roles</legend>

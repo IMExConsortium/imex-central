@@ -12,8 +12,8 @@
  </ul>   
  <div class="yui-content">
   <div id="tab1">
-   <h3>Add User</h3>
-   <s:form theme="simple" action="usermgr" id="mgr-form"> 
+   <h3 class="header-grey-highlight">Add User</h3>
+   <s:form theme="simple" action="usermgr" id="mgr-form" cssClass="align-label"> 
     <ul>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.login']!=null">
@@ -27,7 +27,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="login">Login Name: </label> 
+         <label for="mgr-form_user_login"><strong>Login Name:</strong> </label> 
         <s:hidden theme="simple" name="op" value="" />
         <s:textfield theme="simple" name="user.login" size="18" maxLength="32"/> 
        </li>
@@ -44,7 +44,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="firstName">First Name: </label>  
+         <label for="mgr-form_user_firstName"><strong>First Name:</strong> </label>  
          <s:textfield theme="simple" name="user.firstName" size="19" maxLength="64"/>
         </li>
         <s:if test="hasFieldErrors()">
@@ -59,7 +59,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="lastName">Last Name: </label> 
+         <label for="mgr-form_user_lastName"><strong>Last Name:</strong> </label> 
          <s:textfield theme="simple" name="user.lastName" size="19" maxLength="64"/>
        </li>
         <s:if test="hasFieldErrors()">
@@ -74,11 +74,11 @@
          </s:if>
         </s:if>
         <li>
-         <label for="email">Email: </label>
+         <label for="mgr-form_user_email"><strong>Email:</strong> </label>
          <s:textfield theme="simple" name="user.email" size="25" maxLength="64"/>
         </li>
        <li>
-        <s:submit theme="simple" name="op.add" value="ADD" />
+        <s:submit theme="simple" name="op.add" value="Add" />
        </li>
      </ul>
      </s:form>

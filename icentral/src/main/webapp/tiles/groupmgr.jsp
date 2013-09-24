@@ -22,9 +22,9 @@
  </ul>   
  <div class="yui-content">
   <div id="tab1">
-   <h3>Add Group</h3>
+   <h3 class="header-grey-highlight">Add Group</h3>
      
- <s:form theme="simple" action="groupmgr" id="mgr-form">
+ <s:form theme="simple" action="groupmgr" id="mgr-form" cssClass="align-label">
  <ul>
   <s:hidden theme="simple" name="op" value="" />
     <s:if test="hasFieldErrors()">
@@ -39,7 +39,8 @@
      </s:if>
     </s:if>
     <li>
-    Group Label: <s:textfield theme="simple" name="group.label" size="16" maxLength="32"/> 
+     <label for="mgr-form_group_label" ><strong>Group Label:</strong></label>
+     <s:textfield theme="simple" name="group.label" size="16" maxLength="32"/> 
    </li>
     <s:if test="hasFieldErrors()">
      <s:if test="fieldErrors['group.name']!=null">
@@ -52,8 +53,9 @@
       </li>
      </s:if>
     </s:if>
-    <li>
-    Group Name: <s:textfield theme="simple" name="group.name" size="48" maxLength="64"/>
+   <li>
+    <label for="mgr-form_group_name" ><strong>Group Name:</strong></label>
+    <s:textfield theme="simple" name="group.name" size="48" maxLength="64"/>
    </li>
    <li>
     <s:submit theme="simple" name="op.add" value="Add" />
