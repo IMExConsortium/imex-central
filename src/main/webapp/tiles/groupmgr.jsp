@@ -21,10 +21,13 @@
        <li><a href="#tab2"><em>Groups</em></a></li> 
  </ul>   
  <div class="yui-content">
+
+<!--  First Tab  -->
   <div id="tab1">
-   <h3 class="header-grey-highlight">Add Group</h3>
      
- <s:form theme="simple" action="groupmgr" id="mgr-form" cssClass="align-label">
+   <s:form theme="simple" action="groupmgr" id="mgr-form" cssClass="align-label">
+   <fieldset>
+   <legend><h2>Add Group</h2></legend>
  <ul>
   <s:hidden theme="simple" name="op" value="" />
     <s:if test="hasFieldErrors()">
@@ -61,8 +64,11 @@
     <s:submit theme="simple" name="op.add" value="Add" />
    </li>
    </ul>
+   </fieldset>
  </s:form>
  </div>
+ 
+<!--  Second Tab  -->
   <div id="tab2">
    <div id="groupmgr-table"></div>
   </div>

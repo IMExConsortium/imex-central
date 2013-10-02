@@ -19,73 +19,93 @@
  </ul>   
  <div class="yui-content">
  
- <s:form theme="simple" action="usermgr" cssClass="align-label">
  <div id="tab1">
+ 
+ <s:form theme="simple" action="usermgr" cssClass="align-label">
   <s:hidden name="id" value="%{id}"/> 
   <s:hidden name="user.id" value="%{id}"/> 
   <s:hidden name="user.login" value="%{user.login}"/> 
-  <h3 class="header-grey-highlight">User</h3>
+  <fieldset>
+  <legend><h2>User</h2></legend>
   <ul>
    <li>
-    <label for="usermgr_user_id"><strong>UID:</strong></label>
+    <label for="usermgr_user_id"><strong>UID</strong></label>
     <s:property value="user.id"/>
    </li>
    <li>
-    <label for="usermgr_user_login"><strong>Login:</strong></label>
+    <label for="usermgr_user_login"><strong>Login</strong></label>
     <s:property value="user.login"/>
    </li>
   </ul>
+  </fieldset>
+  <fieldset>
+  <legend><h2>Account</h2></legend>
   <h3 class="header-grey-highlight">Details</h3>
   <ul>
    <li>
-    <label for="usermgr_user_firstName"><strong>First Name:</strong></label>
+    <label for="usermgr_user_firstName"><strong>First Name</strong></label>
     <s:textfield theme="simple" name="user.firstName" size="32" maxLength="64"/>
    </li>
    <li>
-    <label for="usermgr_user_lastName"><strong>Last Name:</strong></label>
+    <label for="usermgr_user_lastName"><strong>Last Name</strong></label>
     <s:textfield theme="simple" name="user.lastName" size="32" maxLength="64"/>
    </li>
    <li>
-    <label for="usermgr_"><strong>Affilation:</strong></label>
+    <label for="usermgr_"><strong>Affilation</strong></label>
     <s:textfield theme="simple" name="user.affiliation" size="32" maxLength="64"/>
     </li>
    <li>
-    <label for="usermgr_user_email"><strong>E-mail:</strong></label>
+    <label for="usermgr_user_email"><strong>E-mail</strong></label>
     <s:textfield theme="simple" name="user.email" size="32" maxLength="64"/>
    </li>
   </ul>
-  <h3 class="header-grey-highlight">Account Status</h3>
+  <h3 class="header-grey-highlight">Status</h3>
   <ul> 
    <li>
-    <s:checkbox name="user.activated" value="%{user.activated}"/> 
-    <label for="usermgr_user_activated">activated</label>
+    <label for="usermgr_user_activated"><strong>Activated</strong></label>
+    <s:if test="%{user.activated}">
+     <strong><s:radio name="user.activated" label="True" value="%{user.activated}" list="#{'true':'True'}"/></strong>  
+     <s:radio name="user.activated" label="False" value="%{user.activated}" list="#{'false':'False'}"/> 
+    </s:if>
+    <s:else>
+     <s:radio name="user.activated" label="True" value="%{user.activated}" list="#{'true':'True'}"/> 
+     <strong><s:radio name="user.activated" label="False" value="%{user.activated}" list="#{'false':'False'}"/> </strong>
+    </s:else> 
    </li>
    <li>
-    <s:checkbox name="user.enabled" value="%{user.enabled}"/> 
-    <label for="usermgr_user_enabled">enabled</label>
+    <label for="usermgr_user_enabled"><strong>Enabled</strong></label>
+    <s:if test="%{user.enabled}">
+     <strong><s:radio name="user.enabled" label="True" value="%{user.enabled}" list="#{'true':'True'}"/></strong>  
+     <s:radio name="user.enabled" label="False" value="%{user.enabled}" list="#{'false':'False'}"/> 
+    </s:if>
+    <s:else>
+     <s:radio name="user.enabled" label="True" value="%{user.enabled}" list="#{'true':'True'}"/> 
+     <strong><s:radio name="user.enabled" label="False" value="%{user.enabled}" list="#{'false':'False'}"/> </strong>
+    </s:else> 
    </li>
    <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
   </ul>
   </s:form>
+  </fieldset>
   </div>
-  
     <div id="tab2">
-     <s:form theme="simple" action="usermgr" cssClass="align-label">
-    
-    <h3 class="header-grey-highlight">Change Password</h3>
+     <s:form theme="simple" action="usermgr" cssClass="align-label">    
+    <fieldset>
+    <legend><h2>Change Password</h2></legend>
     <ul>
      <li>
-      <label for="usermgr_opp_pass1"><strong>New Password:</strong></label>
+      <label for="usermgr_opp_pass1"><strong>New Password</strong></label>
       <s:password theme="simple" name="opp.pass1" value="" size="16" maxLength="64"/>
      </li>
      <li>
-      <label for="usermgr_opp_pass2"><strong>Confirm Password:</strong></label>
+      <label for="usermgr_opp_pass2"><strong>Confirm Password</strong></label>
       <s:password theme="simple" name="opp.pass2" value="" size="16" maxLength="64"/>
      </li>
      <li>
       <s:submit theme="simple" name="op.prs" value="Update"/>
      </li> 
     </ul>
+   </fieldset>
    </s:form>
   </div>
   <div id="tab3">

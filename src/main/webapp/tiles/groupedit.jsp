@@ -19,12 +19,15 @@
  </ul>   
  <div class="yui-content">
  
- <s:form theme="simple" action="groupedit" cssClass="align-label">
+<!--  First Tab  -->
  <div id="tab1">
+ <s:form theme="simple" action="groupedit" cssClass="align-label">
  <s:hidden name="id" value="%{id}"/>
  <s:hidden name="group.id" value="%{id}"/>
  <s:hidden name="group.label" value="%{group.label}"/>
-  <h3 class="header-grey-highlight">Group</h3>
+  
+   <fieldset>
+   <legend><h2>Group</h2></legend>
   <ul>
       <li>
        <label for="groupedit_group_id"><strong>GID:</strong></label>
@@ -35,7 +38,10 @@
        <s:property value="group.label"/>
       </li>
   </ul>
-  <h3 class="header-grey-highlight">Group Details</h3>
+  </fieldset>
+  
+  <fieldset>
+  <legend><h2>Group Details</h2></legend>
   <ul>
   
    <s:if test="hasFieldErrors()">
@@ -102,13 +108,14 @@
        
    <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
   </ul>
-  
+  </fieldset>
     </s:form>
     </div>
+<!--  Second Tab  -->
     <div id="tab2">
      <s:form theme="simple" action="groupedit"  cssClass="align-label">
+     <h3 class="header-grey-highlight">Roles</h3>
     <ul>
-     <li><h3 class="header-grey-highlight">Roles</h3></li>
      <li>
      <fieldset>
       <legend>Current Roles</legend>
