@@ -18,12 +18,13 @@
  </ul>   
 <div class="yui-content">
 
- <s:form theme="simple" action="roleedit" cssClass="align-label">
-  <div id="tab1">
+ <div id="tab1">
+  <s:form theme="simple" action="roleedit" cssClass="align-label">
    <s:hidden name="id" value="%{id}"/>
    <s:hidden name="role.id" value="%{id}"/>
    <s:hidden name="role.name" value="%{role.name}"/>
-   <h3 class="header-grey-highlight">Login</h3>
+   <fieldset>
+    <legend><h2>Role</h2></legend>
    <ul>
     <li>
      <label for="roleedit_role_id"><strong>RID:</strong></label>
@@ -34,7 +35,10 @@
      <s:property value="role.name"/>
     </li>
    </ul>
-   <h3 class="header-grey-highlight">Comments</h3>
+   
+  </fieldset>
+  <fieldset>
+   <legend><h2>Comments</h2></legend>
    <ul>
     <li>
      <label for="roleedit_role_comments"><strong>Comments</strong></label><br />
@@ -42,6 +46,7 @@
     </li>
     <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
    </ul>
+   </fieldset>
   </s:form>
  </div>
 </div>

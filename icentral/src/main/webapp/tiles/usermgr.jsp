@@ -5,15 +5,20 @@
  <t:insertDefinition name="useredit"/>
 </s:if>
 <s:else>
+    
+<!--  Navigation  -->
  <div id="mgr-tabs" class="main-width">
  <ul class="yui-nav"> 
        <li class="selected"><a href="#tab1"><em>Add User</em></a></li> 
        <li><a href="#tab2"><em>Users</em></a></li> 
  </ul>   
  <div class="yui-content">
+     
+<!--  First Tab  -->
   <div id="tab1">
-   <h3 class="header-grey-highlight">Add User</h3>
    <s:form theme="simple" action="usermgr" id="mgr-form" cssClass="align-label"> 
+   <fieldset>
+   <legend><h2>Add User</h2></legend>
     <ul>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.login']!=null">
@@ -27,7 +32,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="mgr-form_user_login"><strong>Login Name:</strong> </label> 
+         <label for="mgr-form_user_login"><strong>Login Name</strong> </label> 
         <s:hidden theme="simple" name="op" value="" />
         <s:textfield theme="simple" name="user.login" size="18" maxLength="32"/> 
        </li>
@@ -44,7 +49,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="mgr-form_user_firstName"><strong>First Name:</strong> </label>  
+         <label for="mgr-form_user_firstName"><strong>First Name</strong> </label>  
          <s:textfield theme="simple" name="user.firstName" size="19" maxLength="64"/>
         </li>
         <s:if test="hasFieldErrors()">
@@ -59,7 +64,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="mgr-form_user_lastName"><strong>Last Name:</strong> </label> 
+         <label for="mgr-form_user_lastName"><strong>Last Name</strong> </label> 
          <s:textfield theme="simple" name="user.lastName" size="19" maxLength="64"/>
        </li>
         <s:if test="hasFieldErrors()">
@@ -74,7 +79,7 @@
          </s:if>
         </s:if>
         <li>
-         <label for="mgr-form_user_email"><strong>Email:</strong> </label>
+         <label for="mgr-form_user_email"><strong>Email</strong> </label>
          <s:textfield theme="simple" name="user.email" size="25" maxLength="64"/>
         </li>
        <li>
@@ -82,10 +87,14 @@
        </li>
      </ul>
      </s:form>
-     </div>
-     <div id="tab2">
-      <div id="usermgr-table"></div>
-     </div>
+     </fieldset>
+    </div>
+    
+<!--  Second Tab  -->
+
+    <div id="tab2">
+     <div id="usermgr-table"></div>
+    </div>
     <script type="text/javascript">
  
         var columnDefinitions = [

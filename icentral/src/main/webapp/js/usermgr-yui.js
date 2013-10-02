@@ -15,8 +15,6 @@ YAHOO.imex.usermgr = {
         var sheet = document.createElement('style');
         sheet.innerHTML = "#yui-dt0-paginator1 {display: none;} " +
                           "#" + container + " table {border: 1px solid #888888; width: 100%;} " + 
-                          "form#mgr-form li {list-style-type: none;} "+ 
-                          "#mgr-tabs{max-width: 80em;}";
         document.body.appendChild(sheet); 
         
         

@@ -22,8 +22,10 @@
  </ul>   
  <div class="yui-content">
   <div id="tab1">
-   <h3 class="header-grey-highlight">Add Role</h3>
-     <s:form theme="simple" action="rolemgr" id="mgr-form" cssClass="align-label"> 
+   <s:form theme="simple" action="rolemgr" id="mgr-form" cssClass="align-label"> 
+     
+    <fieldset>
+    <legend><h2>Add Role</h2></legend>
      <ul>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['role.name']!=null">
@@ -44,6 +46,7 @@
         <s:submit theme="simple" name="op.add" value="Add" />
        </li>
        </ul>
+      </fieldset>
      </s:form>
      </div>
     <div id="tab2"><div id="rolemgr-table"></div></div>
