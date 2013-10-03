@@ -10,12 +10,12 @@
  <script src="js/attach-yui.js" type="text/javascript"></script>
 <%-- END --%>
  <h1>Publication Editor</h1>
- <div class="pub-edit-head">
+ <div class="pub-edit-head main-width">
    <h2>IC-<s:property value="pub.id"/>-PUB</h2>
    <p id="pub_ttl"><em><s:if test="pub.title.length()>78"><s:property value="pub.title.substring(0,75)"/>... </s:if><s:else><s:property value="pub.title"/></s:else></em></p>
  </div>
  <div class="yui-skin-sam">
-    <div id="pubTab" class="yui-navset">
+    <div id="pubTab" class="yui-navset main-width">
        <ul class="yui-nav">
           <li class="selected"><a href="#tab1"><em>Record Status</em></a></li>
           <li><a href="#tab2"><em>Publication Details</em></a></li>
