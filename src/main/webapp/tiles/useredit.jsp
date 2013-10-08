@@ -12,6 +12,20 @@
  </p>
 </s:if>
  <div id="mgr-tabs" class="main-width">
+ 
+
+ <div class="pub-edit-head">
+  <h2>User</h2>
+  <ul>
+   <p>
+    <label for="usermgr_user_id"><strong>UID:</strong></label>
+    <s:property value="user.id"/>
+   </p>
+   <p>
+    <label for="usermgr_user_login"><strong>Login:</strong></label>
+    <s:property value="user.login"/>
+    </p>
+  </div>
  <ul class="yui-nav"> 
        <li class="selected"><a href="#tab1"><em>User Information</em></a></li> 
        <li><a href="#tab2"><em>Change Password</em></a></li> 
@@ -25,21 +39,9 @@
   <s:hidden name="id" value="%{id}"/> 
   <s:hidden name="user.id" value="%{id}"/> 
   <s:hidden name="user.login" value="%{user.login}"/> 
+  
   <fieldset>
-  <legend><h2>User</h2></legend>
-  <ul>
-   <li>
-    <label for="usermgr_user_id"><strong>UID</strong></label>
-    <s:property value="user.id"/>
-   </li>
-   <li>
-    <label for="usermgr_user_login"><strong>Login</strong></label>
-    <s:property value="user.login"/>
-   </li>
-  </ul>
-  </fieldset>
-  <fieldset>
-  <legend><h2>Account</h2></legend>
+  <legend><h3>Account</h3></legend>
   <h3 class="header-grey-highlight">Details</h3>
   <ul>
    <li>
@@ -91,7 +93,7 @@
     <div id="tab2">
      <s:form theme="simple" action="usermgr" cssClass="align-label">    
     <fieldset>
-    <legend><h2>Change Password</h2></legend>
+    <legend><h3>Change Password</h3></legend>
     <ul>
      <li>
       <label for="usermgr_opp_pass1"><strong>New Password</strong></label>
