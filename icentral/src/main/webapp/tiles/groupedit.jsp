@@ -13,6 +13,17 @@
 </s:if>
 
  <div id="mgr-tabs" class="main-width">
+    <div  class="pub-edit-head"> 
+    <h2>Group</h2>
+      <p>
+       <label for="groupedit_group_id"><strong>GID:</strong></label>
+       <s:property value="group.id"/>
+      </p>
+      <p>
+       <label for="groupedit_group_label"><strong>Label:</strong></label>
+       <s:property value="group.label"/>
+      </p>
+    </div>
  <ul class="yui-nav"> 
        <li class="selected"><a href="#tab1"><em>Group Information</em></a></li> 
        <li><a href="#tab2"><em>Group's Roles</em></a></li> 
@@ -26,22 +37,10 @@
  <s:hidden name="group.id" value="%{id}"/>
  <s:hidden name="group.label" value="%{group.label}"/>
   
-   <fieldset>
-   <legend><h2>Group</h2></legend>
-  <ul>
-      <li>
-       <label for="groupedit_group_id"><strong>GID:</strong></label>
-       <s:property value="group.id"/>
-      </li>
-      <li>
-       <label for="groupedit_group_label"><strong>Label:</strong></label>
-       <s:property value="group.label"/>
-      </li>
-  </ul>
-  </fieldset>
+
   
   <fieldset>
-  <legend><h2>Group Details</h2></legend>
+  <legend><h3>Group Details</h3></legend>
   <ul>
   
    <s:if test="hasFieldErrors()">

@@ -1525,13 +1525,15 @@ a.disabled {
 .field-padding{     /* LS */
     padding: 3px 0 3px 0;
 }
-
+/*
 #pubTab{
 }
+
 #pubTab input[type="submit"] {
     margin:	0 35px 0 0;
     float: right;
 }
+* */
 
 .limit-width
 {

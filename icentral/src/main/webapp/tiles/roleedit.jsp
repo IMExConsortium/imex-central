@@ -13,6 +13,19 @@
 </s:if>
 
 <div id="mgr-tabs" class="main-width">
+
+   <div class="pub-edit-head">
+    <h2>Role</h2>
+   <p>
+     <label for="roleedit_role_id"><strong>RID:</strong></label>
+     <s:property value="role.id"/>
+    </p>
+    <p>
+     <label for="roleedit_role_name"><strong>Name:</strong></label>
+     <s:property value="role.name"/>
+    </p>
+  </div>
+  
  <ul class="yui-nav"> 
   <li class="selected"><a href="#tab1"><em>Role Information</em></a></li> 
  </ul>   
@@ -23,22 +36,8 @@
    <s:hidden name="id" value="%{id}"/>
    <s:hidden name="role.id" value="%{id}"/>
    <s:hidden name="role.name" value="%{role.name}"/>
-   <fieldset>
-    <legend><h2>Role</h2></legend>
-   <ul>
-    <li>
-     <label for="roleedit_role_id"><strong>RID:</strong></label>
-     <s:property value="role.id"/>
-    </li>
-    <li>
-     <label for="roleedit_role_name"><strong>Name:</strong></label>
-     <s:property value="role.name"/>
-    </li>
-   </ul>
-   
-  </fieldset>
   <fieldset>
-   <legend><h2>Comments</h2></legend>
+   <legend><h3>Comments</h3></legend>
    <ul>
     <li>
      <label for="roleedit_role_comments"><strong>Comments</strong></label><br />
