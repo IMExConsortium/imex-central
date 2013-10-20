@@ -61,7 +61,7 @@ h2 {
 }
 */
 .pagebody {
-  padding: 0px 25px 25px 0px ;
+  padding: 0px 0 25px 0px ;
   font-size: 0.85em;
   background-color: white;
 }
@@ -1572,7 +1572,7 @@ form.stylized button {
 }
 
 .page-content {
-    padding: 0px 0px 0px 2em ;
+    padding: 0px 0px 0px 0px ;
     font-size: 0.85em;
     background-color: white;
 }

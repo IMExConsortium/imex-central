@@ -163,7 +163,7 @@
          }]
       },
       {label:"About",
-       link:"page?id=about",
+       link:"page?id=relnotes",
        "disabled":"false",
        menu:[
          {label:"Help",
