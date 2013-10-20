@@ -67,12 +67,15 @@
      </tr>
      <tr>
       <td colspan="3" class="page-content">
-       <s:if test="id == 'relnotes'">
+       <div style="width: 95%; padding:0 0 0 4%;">
+        <s:if test="id == 'relnotes'">
+         <h1>ImexCentral Release Notes</h1> 
          <t:insertTemplate template="/tiles/relnotes.jsp" ignore="true"/>
-       </s:if>
-       <s:else>
-        <s:property value="source" escape="false" />
-       </s:else>         
+        </s:if>
+        <s:else>
+         <s:property value="source" escape="false" />
+        </s:else>
+       </div>         
        <br/><br/><br/><br/><br/>
       </td>
      </tr> 

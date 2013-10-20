@@ -31,6 +31,7 @@
 <table width="100%" cellspacing="0" cellpadding="0">
  <tr>
   <td class="page yui-skin-sam">
+   <h1>ImexCentral News </h1>  
    <div id="newscontainer" class="news-container"/> 
   </td>
  </tr>  
