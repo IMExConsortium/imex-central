@@ -1,0 +1,86 @@
+ <div style="width: 20em; float:left; padding: 0 1.5em 20em 0">
+  <table cellspacing="0" width="100%" class="ftmain" id="ftmain">
+   <tr>
+    <td class="fttitle">Imex Central News</td>
+   </tr>
+   <tr>
+    <td class="ftbody" valign="top">
+     Recent News:
+     <table class="fnews" id="newsbox"></table>
+    </td>
+   </tr>
+   <tr>
+    <td class="ftfoot" align="right" valign="bottom" nowrap>
+              <i>See more <a href="news">Imex Central News</a></i>
+    </td>
+   </tr>
+  </table>
+ </div>
+
+
+<h1>Welcome to ImexCentral</h1>
+
+<p>IMEx Central is designed to coordinate curation effort and the exchange 
+of completed records on molecular interaction data between the 
+<a href="http://www.imexconsortium.org/">IMEx Consortium</a> partners - 
+a group of interaction data providers that agreed to conform to common 
+curation and data exchange formats.  We hope that this way, besides improving
+curation efficiency we will be able to provide interaction data users with 
+a large, uniform set of biological interactions.  Such dataset set will be 
+easier to analyse than a mosaic of smaller, partially overlapping interaction 
+sets curated independently in incompatible ways. 
+<p>The databases actively participating in the coordinated data curation 
+currently include:
+<div style="width: 60em; padding: 0 1.5em 1em 5em; display: inline-block;">
+ <div style="width: 20em; padding: 0 0em 0em 0em; display: inline-block;  vertical-align: top;"> 
+  <ul>
+   <li><a href="http://dip.doe-mbi.ucla.edu">DIP</a></li>
+   <li><a href="www.innatedb.com">InnateDB</a></li>
+   <li><a href="http://www.ebi.ac.uk/intact">IntAct</a></li>
+   <li><a href="http://matrixdb.ibcp.fr/">MatrixDB</a></li>
+  </ul>
+ </div>
+ <div style="width: 20em; padding: 0 1.5em 0em 5em; display: inline-block; vertical-align: top;"> 
+  <ul>
+   <li><a href="http://mint.bio.uniroma2.it/mint">MINT</a></li>
+   <li><a href="http://www.molecularconnections.com">Molecular Connections</a></li>
+   <li><a href="http://web.expasy.org/groups/swissprot/">Swiss-Prot (SIB)</a></li>
+  </ul>
+ </div>
+</div>
+<p>Other members of the <a href="http://www.imexconsortium.org">IMEx Consortium</a> 
+such as <a href="http://www.thebiogrid.org">BioGRID</a> consider joining in after 
+adopting their curation procedures and database infrastructure to 
+<a href="http://www.imexconsortium.org/">IMEx</a> requrements.
+<p>To check if an already published paper has been curated by one of the 
+<a href="http://www.imexconsortium.org/">IMEx</a> databases, please, provide 
+<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed">NCBI</a> 
+PubMed identifier (<a href="http://en.wikipedia.org/wiki/PMID">PMID<a>):
+<br/><br/>
+   <br/><br/>
+   <center>
+    <form id="pubsrc" name="pubsrc" action="pubsrc" method="post">
+     <table width="50%">
+      <tr>
+       <th align="right" width="50%" nowrap>
+        PMID: <input type="text" name="pub.pmid" size="16" maxlength="128" value="" id="pubsrc_pub_pmid"/>
+       </th>
+       <td align="left">
+        <input type="submit" id="pubsrc_op_esrc" name="op.esrc" value="SEARCH" tabindex="3"/>
+       </td>
+      </tr>
+     </table>
+    </form>
+   </center>
+   <br/><br/>
+   <p>To recommend an already published paper for curation by one of the IMEx databases, please,
+   <a href="register.jsp">register</a> - you will be then able to add a paper you choose to
+   the IMEx curation queue. 
+
+<script>
+  YAHOO.util.Event.addListener( window, "load", YAHOO.mbi.news.newsbox.init( "news" ));
+</script>
+
+<br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/>
+
