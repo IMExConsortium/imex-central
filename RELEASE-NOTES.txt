@@ -1,0 +1,165 @@
+Imex Central: RELEASE-NOTES
+---------------------------
+
+$HeadURL$
+$Id$ 
+
+2009/12/13 BETA-0.6
+
+ - corrected number of pages/publications in the publication table pager
+ - added functional add/drop state and transition actions to workflow editors
+   
+
+2010/02/27 BETA-0.71
+
+ - key assigner and initial web services framework added
+ - ACL system updates
+ - GUI updates:
+     - publication editor actions added: 
+         - availability status, 
+         - contact email 
+         - curation status
+         - key assigner
+     - journal manager converted to YUI tables
+ - CSS modified in order to visually distinguish between test/beta/production 
+   sites 
+ - pom.xml modifications 
+
+
+2010/03/06 BETA-0.72
+
+  - NcbiProxyClient fixes
+  - GUI updates:
+      - on-line ACL reinitialization
+      - publication search page/action added
+      - conditional menu items added 
+
+
+2010/08/24  BETA-0.77
+  - GUI updates:
+      - AJAX version publication editor actions:
+          Availability Status    
+          Contact Email           
+          Curation Status
+          Add/Drop Admin User
+          Add/Drop Admin Group
+  - login security fix
+  - web service fault codes added (unknown user/group)
+  - partial switch to log4j logging
+
+
+2011/05/25 BETA-0.80
+  - GUI updates:
+     - added searches by submitter (owner) and by curator
+     - added create/view comment tab  
+     - added image upload
+     - added updates to record identifiers  
+  - login errors fixed
+  - web services version 2.0 added
+     - implemented record identifier updates
+
+
+2011/12/15 BETA-0.83 (not in repository ?)
+  - GUI updates:
+     - added comment flags and searching by flag
+     - added record history tab
+  - web services API ver 2.0  artifact deployed on public
+    maven repository 
+
+
+2012/03/09 BETA-0.84
+  - GUI updates:
+      - publication manager updates:
+         - implemented browsing history 
+         - implemented sorting by:
+             - publication (ie author)
+             - pmid
+             - IMEx accession
+             - date
+             - record owner
+      - updated location of the recaptcha server
+
+2012/04/11 BETA-0.85
+   - GUI updates:
+      - publication manager updates:
+          - show/hide columns
+      - publication search
+          - search by pmid/imex/doi/jint identifiers supported
+   - guard against dysfunctional NML service added
+
+  - initial implementation of PSICQUIC server added
+  
+  
+2012/05/09 BETA-0.86
+  - GUI updates:
+      - user editor action fix
+      - web services updates:
+          - ACL-based access control added (ws-v2.0)
+          - publication record returns all identifiers
+                                    
+      - PSICQUIC server updates
+
+
+2012/07/24 BETA-0.87
+  - GUI updates:
+      - implemented record tabs history
+
+
+2012/09/13 BETA-0.88
+  - GUI updates:
+      -added links from the statistics page
+
+  - PSICQUIC server code moved into separate project
+
+
+2013/02/05 BETA-0.89
+
+  - completed implementation of ACL control at the 'target' level
+
+  - GUI updates:
+     - overhaul of new record page and record editor layout
+     - record editor:
+          - implemented functionality of the data attachment tab
+     - CSS cleanup
+
+  - help pages added
+
+
+2013/04/07 BETA-0.90
+
+  - user account customization:
+     - publication watch list
+     - automatic watch list generation
+     - mail notifications
+
+  - GUI updates:
+     - user preferences and watch list pages added
+     - record editor:
+         - watch status tab added
+
+  - help pages updates 
+    
+  
+2013/08/05 BETA-0.91
+
+  - user account customization:
+      - attachment mail notifications
+
+  - GUI updates:
+      - minor page reorganization
+
+
+2013/08/13 BETA-0.92
+
+  - user account customization:
+      - more configuration options added
+
+
+2013/09/01 BETA-0.93
+
+  - GUI updates:
+     - restyled user registration page /by ZP/
+     - return to the most recent page after login /by ZP/
+     - fixed user registration bug
+     - added placehorder for the Imex Viewer 
+
