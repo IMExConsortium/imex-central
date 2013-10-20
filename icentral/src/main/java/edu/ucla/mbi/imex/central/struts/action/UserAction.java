@@ -350,19 +350,19 @@ public class UserAction extends UserSupport {
                     }
                 }
 
-                    getSession().put( "USER_ROLE", roles );
-                    getSession().put( "USER_GROUP", groups );
-                    log.debug( " login: session set" );
+                getSession().put( "USER_ROLE", roles );
+                getSession().put( "USER_GROUP", groups );
+                log.debug( " login: session set" );
                 
-                    log.info( " referer:" + getReferer() );
-                    log.info( " fragment:" + getFragment() );
-                    rurl = getReferer();
-                    if(getFragment() != null)
-                        rurl += getFragment();
-
-                    if( rurl != null ) return REDIRECT;
-                    
-                    //this.setMst("1:1");
+                log.info( " referer:" + getReferer() );
+                log.info( " fragment:" + getFragment() );
+                rurl = getReferer();
+                if(getFragment() != null)
+                    rurl += getFragment();
+                
+                if( rurl != null ) return REDIRECT;
+                
+                //this.setMst("1:1");
                 return HOME;
             }
 

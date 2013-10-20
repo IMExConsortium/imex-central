@@ -7,7 +7,11 @@
 
 <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/calendar/assets/skins/sam/calendar.css">
 <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/datatable/assets/skins/sam/datatable.css">
-<%-- <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/layout/assets/skins/sam/layout.css"> --%>
+
+ <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/layout/assets/skins/sam/layout.css">
+
 <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/paginator/assets/skins/sam/paginator.css">
 <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/tabview/assets/skins/sam/tabview.css">
+<%--
 <link rel="stylesheet" type="text/css" href="yui/2.9.0/build/tabview/assets/skins/sam/layout.css">
+--%>

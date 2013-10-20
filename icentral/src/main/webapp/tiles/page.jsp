@@ -15,7 +15,7 @@
   <title><s:property value="page.title"/></title>
   <t:insertDefinition name="htmlhead"/>
   <script src="js/modal-yui.js" type="text/javascript" language="JavaScript"></script>
-  <script src="js/help-yui.js" type="text/javascript" language="JavaScript"></script>
+  <%-- <script src="js/help-yui.js" type="text/javascript" language="JavaScript"></script> --%>
   <script src="js/side-panel-yui.js" type="text/javascript" language="JavaScript"></script>
  </head>
  <body class="yui-skin-sam" onLoad="var nos = document.getElementById('noscript'); if ( nos !== null ) { nos.innerHTML='';}">

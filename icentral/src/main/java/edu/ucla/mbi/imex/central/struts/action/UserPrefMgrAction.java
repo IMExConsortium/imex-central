@@ -102,7 +102,7 @@ public class UserPrefMgrAction extends ManagerSupport {
         log.debug( " login id=" + iusr );
         
         User luser = null;
-        if( iusr != null) {
+        if( iusr != null && iusr.intValue() > 0 ){
             luser = getUserContext().getUserDao().getUser( iusr.intValue() );
             log.debug( " user set to: " + luser );
         } else  {

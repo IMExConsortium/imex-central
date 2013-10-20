@@ -6,7 +6,7 @@
   <td align="left" colspan="2">
    To send us comments, please complete the form below<br/>
    or send them directly to:
-   <A HREF="mailto:dip@mbi.ucla.edu">dip@mbi.ucla.edu</A>
+   <A HREF="mailto:lukasz@mbi.ucla.edu">lukasz@mbi.ucla.edu</A>
    <br/>
   </td>
  </tr>

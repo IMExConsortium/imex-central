@@ -34,6 +34,7 @@
     <%
         String fragment = request.getParameter("fragment"); 
         if(fragment != null)
+            fragment = fragment.replace("\"", "&quot;"); 
             out.print("<input type=\"hidden\" name=\"fragment\" value=\"" + fragment + "\">");
     %>
     <tr>
