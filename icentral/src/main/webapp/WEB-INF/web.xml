@@ -64,8 +64,8 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-<!--
 
+<!--
   <filter-mapping>
     <filter-name>action2</filter-name>
     <url-pattern>*.do</url-pattern>
@@ -298,6 +298,16 @@
    </servlet-class>
   </servlet>
 
+
+  <servlet>
+    <servlet-name>cxf-service</servlet-name>
+    <display-name>cxf-service</display-name>
+    <description>Apache CXF Endpoint</description>
+    <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+    
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
 <!-- =================================================== =============== -->
 <!-- =================================================== Servlet mapping -->
 <!-- =================================================== =============== -->
@@ -311,6 +321,11 @@
    <servlet-name>imex-central</servlet-name>
    <url-pattern>/ws</url-pattern>
    <url-pattern>/ws-v10</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>cxf-service</servlet-name>
+    <url-pattern>/imex/*</url-pattern>
   </servlet-mapping>
 
   <mime-mapping>
