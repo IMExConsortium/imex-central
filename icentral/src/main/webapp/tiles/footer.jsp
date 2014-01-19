@@ -11,7 +11,7 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2013 IMEx Consortium
+       Copyright 2008-2014 IMEx Consortium
       </td>
       <td width="5%" class="copyright3" align="center" nowrap>
        <A HREF="http://www.imexconsortium.org">Imex Consortium</A>.
