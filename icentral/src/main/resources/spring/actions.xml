@@ -167,10 +167,4 @@
 
  </bean>
 
- <bean id="viewAction" scope="prototype"
-       class="edu.ucla.mbi.imex.central.struts.action.ViewAction">
-
- </bean>
-
-
 </beans>
