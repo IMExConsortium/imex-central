@@ -16,6 +16,8 @@ import javax.ws.rs.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.json.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.handler.MessageContext;
@@ -68,14 +70,18 @@ public class IcentralRestImpl implements IcentralRest{
         String imexUrl = null;
         
         String imx = (String) getImexAcc( ns, acc);
-        if( imx != null && !imx.equals( "N/A" ) ){
-
-            String[] f = imx.split("\t");
-
+        if( imx != null && !imx.equals( "{}" ) ){
+            try{
+                JSONObject jo = new JSONObject( imx ); 
+                JSONObject es = jo.getJSONArray( "entryset-list" )
+                    .getJSONObject(0); 
             
-            imexAc = f[0];
-            imexDB = f[1];
-
+                imexAc = es.getString( "acc" );
+                imexDB = es.getJSONArray( "curated-by" )
+                    .getJSONObject(0).getString("name");
+            }catch(JSONException jx ){
+                log.info( "IcentralRestImpl(getRecordByAcc): jx=" + jx );
+            }
             log.info( "IcentralRestImpl(getRecordByAcc):" +
                       " imexAc=" + imexAc + " imexDB=" + imexDB);
 
@@ -150,9 +156,12 @@ public class IcentralRestImpl implements IcentralRest{
                       " IMEX DB=" + imexDB );
             
             if( icp.getState().getName().equals("RELEASED") ){
-                return icp.getImexId()+ "\t" + imexDB;
+                return "{'entryset-list':["+
+                    "{'acc':'"+icp.getImexId()+"',"+
+                    "'curated-by':[{'name':'"+imexDB+"'}]"+
+                    "}]}";
             } 
         } 
-        return "N/A";
+        return "{}";
     }
 }
