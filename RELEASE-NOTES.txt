@@ -4,6 +4,12 @@ Imex Central: RELEASE-NOTES
 $HeadURL$
 $Id$ 
 
+
+2014/01/19 PROD-1.01 (ImexCentral v1.01)
+  - initial implementation of CXF-based REST server and
+    support of universal IMEX dataset URLs
+
+
 2013/10/21 PROD-1.00 (ImexCentral v1.00)
     
   - GUI updates:

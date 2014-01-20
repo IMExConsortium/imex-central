@@ -20,7 +20,7 @@ public interface IcentralRest {
         public Object getRecordByAcc( @DefaultValue("imex")
                                       @QueryParam("ns") String ns,
                                       @PathParam("acc") String acc,  
-                                      @DefaultValue("url")
+                                      @DefaultValue("redirect")
                                       @QueryParam("mode") String mode );
     
     @GET @Path("/map/{acc}")

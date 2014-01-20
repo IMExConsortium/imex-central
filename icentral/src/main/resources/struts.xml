@@ -300,13 +300,6 @@
      
    </action>
 
-   <action name="view" class="viewAction" >
-     <interceptor-ref name="defaultStack"/>
-     <result name="success"  type="redirect">
-       <param name="location">${location}</param>
-     </result>
-   </action>
-
  </package>
 
 </struts>

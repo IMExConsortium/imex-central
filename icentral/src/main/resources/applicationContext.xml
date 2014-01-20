@@ -247,17 +247,13 @@
       <entry key="MPIDB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
       <entry key="MatrixDB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
       <entry key="Molecular Connections Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="UniprotKB Database Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      <entry key="UniprotKB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
 
      </map>
    </property>
  </bean>
 
  <import resource="spring/cxf.xml" />
-
-
-
-
 
 <!-- ========================================================== WEB SERVICES -->
 <!-- ver 1.x -->
