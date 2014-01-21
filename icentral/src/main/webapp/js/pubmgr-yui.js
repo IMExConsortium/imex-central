@@ -32,7 +32,7 @@ YAHOO.imex.pubmgr = {
 
         "imexId":{ key:"imexId", label:"<center>Imex<br/>Accession</center>", 
                    sortable:true, resizeable:true, hideable: true,
-                   formatter:"center",menuLabel:"Imex Accession" },
+                   formatter:"imex",menuLabel:"Imex Accession" },
 
         "imexDb":{ key:"imexDb", label:"<center>Imex<br/>Partner</center>", 
                    sortable:false, resizeable:true, hideable: true,
@@ -968,6 +968,19 @@ YAHOO.imex.pubmgr = {
             elLiner.innerHTML = 'N/A';
     },
 
+    myImexFormatter: function(elLiner, oRecord, oColumn, oData) {
+        var imex = oRecord.getData("imexId");
+        var state = oRecord.getData("state");
+        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+
+        if( imex.length > 0 && imex !== "N/A" && state == "RELEASED" ){
+            elLiner.innerHTML = '<a href="imex/rec/' + 
+               imex + '">'+ imex +'</a>';
+        } else {
+            elLiner.innerHTML = 'N/A';
+        }
+    },
+
     myElinkFormatter: function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = '<a href="pubedit?id=' + 
@@ -1013,6 +1026,7 @@ YAHOO.imex.pubmgr = {
         YDTF.icid = this.myIcidFormatter;; 
         YDTF.publication = this.myPubFormatter; 
         YDTF.pmid = this.myPmidFormatter;
+        YDTF.imex = this.myImexFormatter;
         YDTF.elink = this.myElinkFormatter; 
         YDTF.crt = this.myDateFormatter; 
         YDTF.center = this.myCenterFormatter; 
