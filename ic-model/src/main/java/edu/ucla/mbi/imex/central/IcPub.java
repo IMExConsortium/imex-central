@@ -24,6 +24,8 @@ public class IcPub extends Publication {
     public IcPub( Publication pub ) {
 
         this.setPmid( pub.getPmid() );
+        this.setDoi( pub.getDoi() );
+        this.setJournalSpecific( pub.getJournalSpecific() );
         
         this.setTitle( pub.getTitle() );
         this.setAuthor( pub.getAuthor() );

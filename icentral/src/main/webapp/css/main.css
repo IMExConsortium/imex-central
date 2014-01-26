@@ -970,6 +970,17 @@ img.main {
   vertical-align: middle; 
 }
 
+.cite {
+  border-bottom: 1px dotted #444444;
+  border-left: 1px dotted #444444;
+  border-right: 1px dotted #444444;
+  font-size: 0.60em;
+  color: #777777;
+  padding: 5px 10px;
+  text-align: left; 
+  vertical-align: middle; 
+}
+
 .copyright3 {
   border-bottom: 1px dotted #444444;
   font-size: 0.60em;

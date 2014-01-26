@@ -11,7 +11,14 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2014 IMEx Consortium
+       Copyright 2008-2014<br/>IMEx Consortium
+      </td>
+      <td class="cite">
+        <b>Cite IMEx:</b> Orchard S, Kerrien S, Abbani S, <it>et al</i>.
+        Protein interaction data curation: the International Molecular Exchange (IMEx) consortium.;
+        <i>Nat Methods.</i> <b>9</b>:626 (2012).
+        [<a href="http://www.ncbi.nlm.nih.gov/pubmed/22453911">Pubmed</a>]
+        [<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3703241/">Article</a>]
       </td>
       <td width="5%" class="copyright3" align="center" nowrap>
        <A HREF="http://www.imexconsortium.org">Imex Consortium</A>.
@@ -25,7 +32,7 @@
     <table width="98%" cellspacing="0">
      <tr>
       <td align="left" nowrap>
-       <font size="-5">Ver: ${icentral.version} (${icentral.bld})</font>
+       <font size="-5">Ver: 1.01 ($Rev$)</font>
       </td>
       <td align="right" nowrap>
        <font size="-5">
