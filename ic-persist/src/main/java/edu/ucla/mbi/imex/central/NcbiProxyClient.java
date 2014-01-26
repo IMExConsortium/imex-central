@@ -221,7 +221,7 @@ public class NcbiProxyClient {
                         
                         XrefType ix = ii.next();
                         
-                        if ( ix.getNs().equals("nlmid") ){
+                        if( ix.getNs().equals("nlmid") ){
                             String nlmid = ix.getAc();
 
                             if ( newPub.getSource() == null ) {
@@ -232,9 +232,21 @@ public class NcbiProxyClient {
                             }
                         }
                         
-                        if (ix.getNs().equals("issn") ){
+                        if( ix.getNs().equals( "issn" ) ){
                             String issn = ix.getAc();
                             // nothing (for now)
+                        }
+
+                        if( ix.getNs().equals( "doi" ) ){
+                            String doi = ix.getAc();
+                            // nothing (for now)
+                            newPub.setDoi( doi );
+                        }
+
+                        if( ix.getNs().equals( "pii" ) ){
+                            String pii = ix.getAc();
+                            // nothing (for now)
+                            //newPub.setJournalSpecific( pii );
                         }
                     }
                 }
