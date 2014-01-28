@@ -168,11 +168,17 @@ public class IcentralRestImpl implements IcentralRest{
                       " IMEX DB=" + imexDB );
             
             if( icp.getState().getName().equals("RELEASED") ){
-                return "{'entryset-list':["+
+                String retStr = "{'entryset-list':["+
                     "{'acc':'"+icp.getImexId()+"',"+
                     "'curated-by':[{'name':'"+imexDB+"'}]"+
                     "}]}";
-            } 
+
+                try{
+                    return retStr.replaceAll( "'", "\"" );
+                } catch(Exception ex){
+                    return retStr;                    
+                }
+            }
         } 
         return "{}";
     }
