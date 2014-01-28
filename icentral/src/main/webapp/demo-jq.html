@@ -8,11 +8,11 @@
 
 <script type="text/javascript" src="jq/jquery-2.1.0.min.js"></script>
 <script>
-  
+
   $( window ).load(function() {
 
     var toLink = function(data){
-  
+
       if(data["entryset-list"] !== undefined ){
         var id = data["entryset-list"][0].acc;
         var cur =" (curated by "+ data["entryset-list"][0]["curated-by"][0].name +")";
@@ -30,3 +30,28 @@
     });
   });
 </script>
+
+<div style=" width: 80em; margin: 2em; border: 1px solid #aaaaaa; padding: 1em; background-color: #eeeeee;">
+<pre>
+  $( window ).load(function() {
+
+    var toLink = function(data){
+
+      if(data["entryset-list"] !== undefined ){
+        var id = data["entryset-list"][0].acc;
+        var cur =" (curated by "+ data["entryset-list"][0]["curated-by"][0].name +")";
+        return "<a href='imex/rec/"+id+"'>"+id+"</a>" + cur;
+      }
+      return "not curated";
+    };
+
+    $.getJSON('imex/map/17227144', function( data ){
+       $('#imex1').html(toLink(data));
+    });
+
+    $.getJSON('imex/map/17227145', function( data ){
+       $('#imex2').html(toLink(data));
+    });
+  });
+</pre>
+</div>

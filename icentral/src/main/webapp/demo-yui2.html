@@ -47,3 +47,42 @@
   }
   YAHOO.util.Event.addListener( window, "load", linkLoad);
 </script>
+
+<div style=" width: 80em; margin: 2em; border: 1px solid #aaaaaa; padding: 1em; background-color: #eeeeee;">
+<pre>
+  var linkLoad = function(){
+    var handleSuccess = function(o){
+      var tgt = o.argument.tgt;
+      var responseText = o.responseText;
+      var response = YAHOO.lang.JSON.parse( responseText );
+      if(response["entryset-list"] !== undefined ){
+        var imexid = response["entryset-list"][0].acc;
+        var cur =" (curated by "+ response["entryset-list"][0]["curated-by"][0].name +")";
+        var element = YAHOO.util.Dom.get(tgt);
+        element.innerHTML="<a href='imex/rec/"+imexid+"'>"+imexid+"</a>" + cur;
+      } else {
+        var element = YAHOO.util.Dom.get(tgt);
+        element.innerHTML=" not curated";
+      }
+    };
+
+    var handleFailure = function(o){};
+
+    var callback1 = {
+      success:handleSuccess,
+      failure:handleFailure,
+      argument: { tgt: "imex1" }
+    };
+
+    var callback2 = {
+      success:handleSuccess,
+      failure:handleFailure,
+      argument: { tgt: "imex2" }
+    };
+
+    YAHOO.util.Connect.asyncRequest('GET', "imex/map/17227144", callback1 );
+    YAHOO.util.Connect.asyncRequest('GET', "imex/map/17227145", callback2 );
+  }
+  YAHOO.util.Event.addListener( window, "load", linkLoad);
+</pre>
+</div>
