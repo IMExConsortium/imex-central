@@ -23,9 +23,10 @@ public interface IcentralRest {
                                       @DefaultValue("redirect")
                                       @QueryParam("mode") String mode );
     
-    @GET @Path("/map/{acc}")
-        public Object getImexAcc( @DefaultValue("pmid") 
-                                  @QueryParam("ns") String ns,
-                                  @PathParam("acc") String acc );
+    @GET @Path("/map")
+        public Object getImexAcc( @DefaultValue( "pmid" )
+                                  @QueryParam( "ns" ) String ns,
+                                  @DefaultValue( "" ) 
+                                  @QueryParam( "acc" ) String acc );
 
 }

@@ -234,6 +234,7 @@ public class NcbiProxyClient {
                         
                         if( ix.getNs().equals( "issn" ) ){
                             String issn = ix.getAc();
+                            log.debug( "issn=" + issn);
                             // nothing (for now)
                         }
 
@@ -241,10 +242,13 @@ public class NcbiProxyClient {
                             String doi = ix.getAc();
                             // nothing (for now)
                             newPub.setDoi( doi );
+                            log.debug( "doi=" + doi );
+                            
                         }
 
                         if( ix.getNs().equals( "pii" ) ){
                             String pii = ix.getAc();
+                            log.debug( "pii=" + pii );
                             // nothing (for now)
                             //newPub.setJournalSpecific( pii );
                         }

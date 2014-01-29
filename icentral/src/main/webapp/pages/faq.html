@@ -34,15 +34,16 @@
 
    <pre>   https://imexcentral.org/icentral/imex/rec/&lt;<i>imex-accession</i>&gt;?mode=url</pre>
 
-   Accessions of IMEx datasets that describe interactions extracted from a particular publication
-   can be obtained from a mapping service located at:
+   Accessions of the publicly IMEx datasets that describe interactions extracted from a particular 
+   publication can be obtained through a mapping service located at:
 
-   <pre>   https://imexcentral.org/icentral/imex/map/&lt;<i>pmid</i>&gt;</pre>
+   <pre>   https://imexcentral.org/icentral/imex/map?acc=&lt;<i>accession</i>&gt;</pre>
 
-   where  &lt;<i>pmid</i>&gt; is the Pubmed identifier of the article of interest. Provided such
-   accession exists, the service will return a JSON-formatted string with IMEx dataset accession 
-   (<i>IM-nnnnn</i>) and information abouth the database that originally curated the interaction 
-   dataset.
+   where  &lt;<i>accession</i>&gt; is either Pubmed identifier (default) or 
+   <a href="http://en.wikipedia.org/wiki/Digital_object_identifier">DOI</a> of the article 
+   of interest (when optional <i>ns=doi</i> is also used). Provided such accession exists, the service 
+   will return a JSON-formatted string with IMEx dataset accession (<i>IM-nnnnn</i>) and information 
+   abouth the database that originally curated the interaction dataset.
    </p>
  </li>
 </ol> 

@@ -321,7 +321,7 @@ public class EntryManager {
         if ( cli != null ) {
             Publication newPub =
                 cli.getPublicationByPmid( pmid );
-            
+            log.info( " doi" + newPub.getDoi() );
             return newPub;
         } 
         return null;
@@ -624,6 +624,7 @@ public class EntryManager {
             pub.setAuthor( pmPub.getAuthor() );
             pub.setTitle( pmPub.getTitle() );
             pub.setAbstract( pmPub.getAbstract() );
+            pub.setDoi( pmPub.getDoi() );
       
             IcJournal journal = 
                 this.addIcJournal( ((Journal) pmPub.getSource()).getNlmid(),
