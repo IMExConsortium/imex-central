@@ -4,6 +4,8 @@
   pmid:17227144: <div style="display: inline" id="imex1"/></div>
   <br/>
   pmid:17227145: <div style="display: inline" id="imex2"/></div>
+  <br/>
+  doi:10.1371/journal.pbio.0050020: <div style="display: inline" id="imex3"/></div>
 </div>
 
 <script type="text/javascript" src="jq/jquery-2.1.0.min.js"></script>
@@ -21,12 +23,15 @@
       return "not curated";
     };
 
-    $.getJSON('imex/map/17227144', function( data ){
+    $.getJSON('imex/map?acc=17227144', function( data ){
        $('#imex1').html(toLink(data));
     });
 
-    $.getJSON('imex/map/17227145', function( data ){
+    $.getJSON('imex/map?acc=17227145', function( data ){
        $('#imex2').html(toLink(data));
+    });
+    $.getJSON('imex/map?ns=doi&acc=10.1371/journal.pbio.0050020', function( data ){
+       $('#imex3').html(toLink(data));
     });
   });
 </script>
@@ -40,17 +45,20 @@
       if(data["entryset-list"] !== undefined ){
         var id = data["entryset-list"][0].acc;
         var cur =" (curated by "+ data["entryset-list"][0]["curated-by"][0].name +")";
-        return "<a href='imex/rec/"+id+"'>"+id+"</a>" + cur;
+        return "&lt;a href='imex/rec/"+id+"'&gt;"+id+"</a>" + cur;
       }
       return "not curated";
     };
 
-    $.getJSON('imex/map/17227144', function( data ){
+    $.getJSON('imex/map?acc=17227144', function( data ){
        $('#imex1').html(toLink(data));
     });
 
-    $.getJSON('imex/map/17227145', function( data ){
+    $.getJSON('imex/map?acc=17227145', function( data ){
        $('#imex2').html(toLink(data));
+    });
+    $.getJSON('imex/map?ns=doi&acc=10.1371/journal.pbio.0050020', function( data ){
+       $('#imex3').html(toLink(data));
     });
   });
 </pre>
