@@ -127,7 +127,14 @@ CREATE TABLE entry (
     abstract text default '',
     pub_date timestamp ,
     epub_date timestamp,
-    rel_date timestamp
+    rel_date timestamp,
+        
+    act_uid integer not null default 0,
+    act_timestamp timestamp not null default now(),
+    
+    mod_uid integer not null default 0,
+    mod_timestamp timestamp not null default now()
+
 );
 
 CREATE INDEX e_1 on entry (owner_uid);

@@ -652,11 +652,28 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
     }
     
     //---------------------------------------------------------------------
-    
+
     public Publication updatePublication( Publication publication ) { 
         
         super.saveOrUpdate( publication );
         return publication;
+    }
+
+    public Publication updatePublication( Publication publication, 
+                                          User luser ) { 
+        
+        if ( publication  instanceof IcPub ) {
+
+            IcPub pub = (IcPub) publication;
+            pub.setActUser( luser ) ;
+            pub.setActDate();
+            pub.setModUser( luser ) ;
+            pub.setModDate();
+
+            super.saveOrUpdate( pub );
+            return pub;
+        }
+        return null;
     }
     
     //---------------------------------------------------------------------

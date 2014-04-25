@@ -372,6 +372,9 @@ public class EntryManager {
                     icp.setOwner( owner ) ;
                     icp.setState( state );
                     
+                    icp.setActUser( owner ) ;
+                    icp.setModUser( owner ) ;
+
                     // set admin user/group sets
                     //--------------------------
                     
@@ -460,7 +463,11 @@ public class EntryManager {
                 
                 icp.setOwner( owner ) ;
                 icp.setState( state );
-                 
+
+                icp.setActUser( owner ) ;
+                icp.setModUser( owner ) ;
+
+                
                 // set admin user/group sets
                 //--------------------------
                 
@@ -491,8 +498,8 @@ public class EntryManager {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "EntryManager.updateIcPubProps: pub id=" + pub.getId()) ;
-
-        tracContext.getPubDao().updatePublication( pub );
+        
+        ((IcPubDao)tracContext.getPubDao()).updatePublication( pub, luser );
 
         return pub;
     }
@@ -544,7 +551,8 @@ public class EntryManager {
             IcKey key = 
                 (IcKey) keyspaceContext.getKeyspaceDao().nextKey( "imex" );
             pub.setIcKey( key );
-            tracContext.getPubDao().updatePublication( pub );
+
+            ((IcPubDao)tracContext.getPubDao()).updatePublication( pub, luser );
         }
 
         return pub;
@@ -584,8 +592,6 @@ public class EntryManager {
 
 
             // test if pmid already there !!!!
-
-
 
 
             pub.setPmid( npub.getPmid() );
@@ -673,7 +679,8 @@ public class EntryManager {
              */
             
             pub.setState( state );
-            tracContext.getPubDao().savePublication( pub );
+            //tracContext.getPubDao().savePublication( pub );
+            ((IcPubDao)tracContext.getPubDao()).updatePublication( pub, luser );
         
             return pub;
         }
@@ -729,7 +736,7 @@ public class EntryManager {
 
         if ( oldPub != null ) {
             oldPub.getAdminUsers().add( auser );
-            tracContext.getPubDao().updatePublication( oldPub );
+            ((IcPubDao)tracContext.getPubDao()).updatePublication( oldPub, luser );
         }
         
         return oldPub;        
@@ -774,7 +781,7 @@ public class EntryManager {
             }
             if( doAdd ){
                 oldPub.getAdminGroups().add( agroup );
-                tracContext.getPubDao().updatePublication( oldPub );
+                ((IcPubDao)tracContext.getPubDao()).updatePublication( oldPub, luser );
             }else{
                 return null;
             }
@@ -811,7 +818,7 @@ public class EntryManager {
                         break;
                     }
                 }
-                tracContext.getPubDao().updatePublication( oldPub );
+                ((IcPubDao)tracContext.getPubDao()).updatePublication( oldPub, luser );
                 log.info( "users=" + oldPub.getAdminUsers() );
             }
         }
@@ -850,7 +857,7 @@ public class EntryManager {
                         break;
                     }
                 }
-                tracContext.getPubDao().updatePublication( oldPub );
+                ((IcPubDao)tracContext.getPubDao()).updatePublication( oldPub, luser );
                 log.info( "groups=" + oldPub.getAdminGroups() );
             }
         }

@@ -158,6 +158,12 @@ public class AttachmentManager {
 
         IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
         adiDao.saveAdi( adi );
+
+        IcPub pub = (IcPub) adi.getRoot();
+        pub.setActUser( owner ) ;
+        pub.setActDate();
+
+        tracContext.getPubDao().updatePublication( pub );
         
         return adi;
     }
@@ -180,6 +186,12 @@ public class AttachmentManager {
 
         if( adi != null ){
             adiDao.deleteAdi( aid );
+            
+            IcPub pub = (IcPub) adi.getRoot();
+            pub.setActUser( owner ) ;
+            pub.setActDate();
+            
+            tracContext.getPubDao().updatePublication( pub );
         }
         return adi;
     }

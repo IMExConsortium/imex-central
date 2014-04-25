@@ -1307,6 +1307,19 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             if( skey.equals( "imexId" ) ){
                 sortKey ="imex";
             }
+            
+            if( skey.equals( "actUser" ) ){
+                sortKey ="actUser";
+            }
+            if( skey.equals( "actTStamp" ) ){
+                sortKey ="actDate";
+            }
+            if( skey.equals( "modUser" ) ){
+                sortKey ="modUser";
+            }
+            if( skey.equals( "modTStamp" ) ){
+                sortKey ="modDate";
+            }
         } else {
             skey = "id";
             sortKey = "id";
