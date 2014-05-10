@@ -244,12 +244,14 @@ YAHOO.imex.pubedit = {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
                 var pmid = messages.pub.pmid;
+                var doi = messages.pub.doi;
                 var author = messages.pub.author;
                 var title = messages.pub.title;
                 var abst = messages.pub.abstract;
                 var sid = messages.pub.source.id;
 
                 YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value = pmid;
+                YAHOO.util.Dom.get("pub-det-edit_pub_doi").value = doi;
                 YAHOO.util.Dom.get("pub-det-edit_pub_author").value = author;
                 YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;
                 YAHOO.util.Dom.get("pub-det-edit_pub_abstract").value = abst;

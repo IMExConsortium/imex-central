@@ -556,6 +556,22 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             if( skey.equals( "imexId" ) ){
                 sortKey ="imex";
             }
+
+            if( skey.equals( "actUser" ) ){
+                sortKey ="actUser";
+            }
+
+            if( skey.equals( "actTStamp" ) ){
+                sortKey ="actDate";
+            }
+            
+            if( skey.equals( "modUser" ) ){
+                sortKey ="modUser";
+            }
+            if( skey.equals( "modTStamp" ) ){
+                sortKey ="modDate";
+            }
+            
         } else {
             skey = "id";
             sortKey = "id";
@@ -647,6 +663,15 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             r.put( "time", ip.getCreateTimeString() );
             r.put( "editor", "N/A" );
             r.put( "imexDb", "N/A" );
+
+
+            r.put( "actUser", ip.getActUser().getLogin() );
+            r.put( "actTStamp", ip.getActDateStr() );
+
+            r.put( "modUser", ip.getModUser().getLogin() );
+            r.put( "modTStamp", ip.getModDateStr() );
+
+
 
             // set partner
             //------------

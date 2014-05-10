@@ -1,6 +1,6 @@
 
 <h1>Imex Central Frequently Asked Questions</h1>
-<div style="width:90%">
+<div style="width:80em">
 <ol>
  <li>
    <b>Do I have to register to check the status of a publication I am interested in ?</b>  
@@ -17,27 +17,33 @@
  </li>
  <li>
    <b>How do I provide cross-references to the IMEx records on my own Web page ? </b>
-   <p>Cross-references to IMEx datasets that describe interactions reported in individual
-   publications can be created through hyperlinks referring to
+   <p>Cross-references to IMEx datasets and individual IMEx records that describe interactions 
+   reported in individual publications curated by one of the 
+      <a href ="http://www.imexconsortium.org/">IMEx partners</a>
+   can be created through hyperlinks referring to
 
    <pre>   https://imexcentral.org/icentral/imex/rec/&lt;<i>imex-accession</i>&gt;</pre>
 
-   where &lt;<i>imex-accession</i>&gt; is the accession of IMEx interaction dataset. Clicking on
-   such hyperlink will automatically redirect the browser to a page located on the server of the
-   IMEx partner database that curated and/or currently distibutes the dataset of interest. The
-   address of such page can be also retrieved without automatic redirection by using
+   where &lt;<i>imex-accession</i>&gt; is the accession of IMEx interaction dataset (of the form
+   <i>IM-nnnnn</i>) or IMEx record (of the form <i>IM-nnnnn-nn</i>). Clicking on such hyperlink 
+   will automatically redirect the browser to a page located on the server of the IMEx partner 
+   database that curated and/or currently distibutes the dataset of interest. The address of such
+    page can
+   be also retrieved without automatic redirection by using
    <i>mode=url</i> parameter:
 
    <pre>   https://imexcentral.org/icentral/imex/rec/&lt;<i>imex-accession</i>&gt;?mode=url</pre>
 
-   Accessions of IMEx datasets that describe interactions extracted from a particular publication
-   can be obtained from a mapping service located at:
+   Accessions of the publicly IMEx datasets that describe interactions extracted from a particular 
+   publication can be obtained through a mapping service located at:
 
-   <pre>   https://imexcentral.org/icentral/imex/map/&lt;<i>pmid</i>&gt;</pre>
+   <pre>   https://imexcentral.org/icentral/imex/map?acc=&lt;<i>accession</i>&gt;</pre>
 
-   where  &lt;<i>pmid</i>&gt; is the Pubmed identifier of the article of interest. The service
-   will return a JSON-formatted string with IMEx accession and information abouth the database that
-   originally curated the interaction dataset.
+   where  &lt;<i>accession</i>&gt; is either Pubmed identifier (default) or 
+   <a href="http://en.wikipedia.org/wiki/Digital_object_identifier">DOI</a> of the article 
+   of interest (when optional <i>ns=doi</i> is also used). Provided such accession exists, the service 
+   will return a JSON-formatted string with IMEx dataset accession (<i>IM-nnnnn</i>) and information 
+   abouth the database that originally curated the interaction dataset.
    </p>
  </li>
 </ol> 

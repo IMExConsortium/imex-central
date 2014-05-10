@@ -101,6 +101,14 @@
     <many-to-many column="grp_id" class="edu.ucla.mbi.imex.central.IcGroup"/>
   </set>
 
+  <property name="actDate" column="act_timestamp"/>
+  <many-to-one name="actUser" column="act_uid"
+               class="edu.ucla.mbi.imex.central.IcUser" />
+
+  <property name="modDate" column="mod_timestamp"/>
+  <many-to-one name="modUser" column="mod_uid"
+               class="edu.ucla.mbi.imex.central.IcUser" />
+
  </class>
 
  <!-- DataSource: journal -->

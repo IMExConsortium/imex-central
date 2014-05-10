@@ -12,6 +12,7 @@ package edu.ucla.mbi.imex.central.cxf;
 
 import java.util.*;
 import javax.ws.rs.*;
+import java.util.regex.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,6 +70,15 @@ public class IcentralRestImpl implements IcentralRest{
         String imexDB = null;
         String imexUrl = null;
         
+        if( ns != null && ns.equalsIgnoreCase("imex") ){
+            imexAc = acc;                                               
+            Pattern p = Pattern.compile( "(IM-\\d+)(-\\d+)?" );
+            Matcher m = p.matcher( acc );
+            if( m.matches() ){
+                acc = m.group( 1 );
+            }
+        }
+
         String imx = (String) getImexAcc( ns, acc);
         if( imx != null && !imx.equals( "{}" ) ){
             try{
@@ -76,7 +86,9 @@ public class IcentralRestImpl implements IcentralRest{
                 JSONObject es = jo.getJSONArray( "entryset-list" )
                     .getJSONObject(0); 
             
-                imexAc = es.getString( "acc" );
+                if( imexAc == null ){
+                    imexAc = es.getString( "acc" );
+                }
                 imexDB = es.getJSONArray( "curated-by" )
                     .getJSONObject(0).getString("name");
             }catch(JSONException jx ){
@@ -156,11 +168,17 @@ public class IcentralRestImpl implements IcentralRest{
                       " IMEX DB=" + imexDB );
             
             if( icp.getState().getName().equals("RELEASED") ){
-                return "{'entryset-list':["+
+                String retStr = "{'entryset-list':["+
                     "{'acc':'"+icp.getImexId()+"',"+
                     "'curated-by':[{'name':'"+imexDB+"'}]"+
                     "}]}";
-            } 
+
+                try{
+                    return retStr.replaceAll( "'", "\"" );
+                } catch(Exception ex){
+                    return retStr;                    
+                }
+            }
         } 
         return "{}";
     }
