@@ -4,6 +4,9 @@ Imex Central: RELEASE-NOTES
 $HeadURL$
 $Id$ 
 
+2014/05/10 PROD-1.02 (ImexCentral v1.02)
+  - activity tracker mods added (see ticket #119 from details)  
+
 
 2014/01/19 PROD-1.01 (ImexCentral v1.01)
   - initial implementation of CXF-based REST server and
