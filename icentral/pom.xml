@@ -6,7 +6,6 @@
   <artifactId>icentral</artifactId>
   <packaging>war</packaging>
   <version>1.02</version>
-  <rev>$Rev$</rev>
   <name>Web Application module</name>
 
   <properties>
