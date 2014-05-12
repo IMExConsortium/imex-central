@@ -82,4 +82,19 @@ Maven Profiles
   to appropriately set database/recaptcha login information
 
 
+Migration to v1.02 tables
+-------------------------
 
+ alter table entry add column act_uid integer not null default 0;
+ alter table entry add column act_timestamp timestamp not null default now();
+
+ alter table entry add column mod_uid integer not null default 0;
+ alter table entry add column mod_timestamp timestamp not null default now();
+ 
+ update entry set act_uid=owner_uid where act_uid=0;
+ update entry set mod_uid=owner_uid where act_uid=0;
+
+ CREATE INDEX e_10 on entry (act_uid);
+ CREATE INDEX e_11 on entry (act_timestamp);
+ CREATE INDEX e_12 on entry (mod_uid);
+ CREATE INDEX e_13 on entry (mod_timestamp);

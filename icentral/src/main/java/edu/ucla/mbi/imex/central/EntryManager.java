@@ -361,7 +361,7 @@ public class EntryManager {
                 if ( pub.getAuthor().length() > 0 
                      && pub.getTitle().length() > 0 ) {
                     
-                    IcPub icp = new IcPub( pub );
+                     IcPub icp = new IcPub( pub );
                     log.info( " IcPub=" + icp );
                     
                     
@@ -372,8 +372,11 @@ public class EntryManager {
                     icp.setOwner( owner ) ;
                     icp.setState( state );
                     
-                    icp.setActUser( owner ) ;
+                    icp.setActUser( owner );
+                    icp.setActDate();
+
                     icp.setModUser( owner ) ;
+                    icp.setModDate() ;
 
                     // set admin user/group sets
                     //--------------------------
@@ -461,12 +464,13 @@ public class EntryManager {
                     icp.setSource( icj );
                 }
                 
-                icp.setOwner( owner ) ;
+                icp.setOwner( owner );
                 icp.setState( state );
 
-                icp.setActUser( owner ) ;
-                icp.setModUser( owner ) ;
-
+                icp.setActUser( owner );
+                icp.setActDate();
+                icp.setModUser( owner );
+                icp.setModDate();
                 
                 // set admin user/group sets
                 //--------------------------

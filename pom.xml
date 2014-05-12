@@ -5,7 +5,7 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral-project</artifactId>
   <packaging>pom</packaging>
-  <version>1.01</version>
+  <version>1.02</version>
   <name>IMEx Central</name>
   <url>https://imex.mbi.ucla.edu/trac/imexcentral</url>
 

@@ -32,7 +32,7 @@
     <table width="98%" cellspacing="0">
      <tr>
       <td align="left" nowrap>
-       <font size="-5">Ver: 1.01 ($Rev$)</font>
+       <font size="-5">Ver: ${project.version} (${icentral.bld})</font>
       </td>
       <td align="right" nowrap>
        <font size="-5">

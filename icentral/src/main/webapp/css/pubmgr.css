@@ -119,6 +119,15 @@
     border-color: #A8A8A8;
 }
 
+
+.yui-skin-sam th.yui-dt-col-modified {
+    border-bottom: thin solid  #C8C8C8;
+}
+
+.yui-skin-sam th.yui-dt-col-activity {
+    border-bottom: thin solid  #C8C8C8;
+}
+
 .yui-skin-sam .yui-dt-center {
   text-align: center;
 }
