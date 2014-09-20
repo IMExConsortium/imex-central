@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central;
 
 /* =============================================================================
- # $Id:: UserContext.java 465 2009-08-21 02:36:27Z lukasz                      $
- # Version: $Rev:: 465                                                         $
+ # $Id::                                                                       $
+ # Version: $Rev::                                                             $
  #==============================================================================
  #                                                                             $
  # TracContext: JSON-based tracker configuration                               $

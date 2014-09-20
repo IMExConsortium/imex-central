@@ -1,8 +1,8 @@
 package edu.ucla.mbi.imex.central;
 
 /* ========================================================================
- # $Id:: NcbiDbSoapService.java 317 2009-07-25 17:32:52Z lukasz           $
- # Version: $Rev:: 317                                                    $
+ # $Id::                                                                  $
+ # Version: $Rev::                                                        $
  #=========================================================================
  #
  # NcbiProxyClient - NCBI database accesed through DIP Proxy
@@ -107,7 +107,8 @@ public class NcbiProxyClient {
     // get publication by pmid
     //-------------------------
 
-    public Publication getPublicationByPmid( String pmid ) {
+    public Publication getPublicationByPmid( String pmid ) 
+        throws ClientException{
         
 	Log log = LogFactory.getLog( this.getClass() );
         log.info( "NcbiProxyClient: getPublicationByPmid: " + 
@@ -117,17 +118,25 @@ public class NcbiProxyClient {
         Holder<String> resNative = new  Holder<String>();
         Holder<XMLGregorianCalendar> timestamp =
             new Holder<XMLGregorianCalendar>();
-
-
+        
         try {        
             port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
                                    0, timestamp, resDataset, resNative );
         } catch ( ProxyFault f ){
             log.info( "NcbiSoap: getDxfRefList: " + f );
+            if( debug ){
+                f.printStackTrace();
+            }
+            throw ClientException.NCBI_PROXY_FAULT;
         } catch ( Exception ex ) {
             log.info( "NcbiSoap: getDxfRefList: " + ex );
+            if( debug ){
+                ex.printStackTrace();
+            }
+            
+            throw ClientException.CLIENT_EXCEPTION;
         }
-
+        
         DatasetType dataset = resDataset.value;
         NodeType nodeT = null;
         if( dataset != null && dataset.getNode() != null &&
@@ -261,7 +270,7 @@ public class NcbiProxyClient {
                     
                     DatasetType ddoc= dof.createDatasetType();
                     JAXBContext jc = DxfJAXBContext.getDxfContext();
- 
+                    
                     try{ 
 
                         Marshaller marshaller = jc.createMarshaller();
@@ -292,7 +301,8 @@ public class NcbiProxyClient {
     // get journal by nlmid
     //----------------------
     
-    public Journal getJournalByNlmid( String nlmid ) {
+    public Journal getJournalByNlmid( String nlmid ) 
+        throws ClientException{
         
 	Log log = LogFactory.getLog( this.getClass() );
         log.info( "NcbiProxyClient: getJournalByNlmid: nlmid= " + nlmid );
@@ -307,9 +317,17 @@ public class NcbiProxyClient {
                              0, jTime, jDT, jNative );
         } catch ( ProxyFault f ){
             log.info( "NcbiSoap: getDxfRefList: " + f );
-            f.printStackTrace();
+           if( debug ){
+                f.printStackTrace();
+            }
+           throw ClientException.NCBI_PROXY_FAULT;
         } catch ( Exception ex ) {
             log.info( "NcbiSoap: getDxfRefList: " + ex );
+           if( debug ){
+                ex.printStackTrace();
+            }
+           
+            throw ClientException.CLIENT_EXCEPTION;
         }
 
         Journal newJrnl = null;

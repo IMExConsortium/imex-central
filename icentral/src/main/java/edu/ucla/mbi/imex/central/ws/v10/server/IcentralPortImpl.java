@@ -236,10 +236,16 @@ public class IcentralPortImpl implements IcentralPort {
         if ( icPub == null ) {
 
             aclVerify( WS_ACTION, WS_UPD, usr );
-            edu.ucla.mbi.util.data.Publication
-                newPub = entryManager.getPubByPmid( ac );
-            if( newPub != null ) {
-                icPub = new IcPub( newPub );
+            
+            try{
+                edu.ucla.mbi.util.data.Publication
+                    newPub = entryManager.getPubByPmid( ac );
+                if( newPub != null ) {
+                    icPub = new IcPub( newPub );
+                }
+            } catch( ImexCentralException icx ){
+                // cannot connect to proxy ?
+                throw Fault.NO_REC_CR;
             }
         } else {
             aclVerify( WS_ACTION, WS_UPD, usr, icPub );
@@ -259,9 +265,15 @@ public class IcentralPortImpl implements IcentralPort {
                 log.debug( " state set to: " + state );
                 
                 if ( state != null ) {
-                    IcPub newPub = entryManager.addIcPub( icPub, owner, state );
-                    if ( newPub != null ) {
-                        icPub = newPub;
+
+                    try{
+                        IcPub newPub = entryManager.addIcPub( icPub, owner, state );
+                        if ( newPub != null ) {
+                            icPub = newPub;
+                        }
+                    } catch( ImexCentralException icx ){
+                        // cannot connect to proxy ?
+                        throw Fault.NO_REC_CR;
                     }
                 }
             }

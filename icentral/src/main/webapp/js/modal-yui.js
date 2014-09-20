@@ -44,6 +44,17 @@ YAHOO.mbi.modal = {
     },
 
 
+    exception: function( code, message ) {
+        
+        var title = code + ": "+message;
+        var url = "page?ret=body&id=exception"+ code;
+        YAHOO.mbi.modal.show({ mtitle: 'Exception', title: title, url: url } );
+    },
+
+
+
+
+
     adataView:function( arg ){
         var rid = arg.rid;
         var aid = arg.aid;
@@ -372,7 +383,8 @@ YAHOO.mbi.modal = {
         }
 
         YAHOO.mbi.modal.my.panel.setHeader( mtitle );       
-        YAHOO.mbi.modal.my.panel.show();        
+        YAHOO.mbi.modal.my.panel.show();
+        document.body.scrollTop = document.documentElement.scrollTop = 0;        
     },
     
     load: function( o ) {

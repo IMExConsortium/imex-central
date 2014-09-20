@@ -81,6 +81,22 @@ public class JournalMgrAction extends ManagerSupport {
 
 
     //--------------------------------------------------------------------------
+    // status
+    //------
+
+    private int statCode = 0;
+    private String statMessage = "OK";
+
+    public int getStatusCode(){
+        return this.statCode;
+    }
+
+    public String getStatusMessage(){
+        return this.statMessage;
+    }
+
+
+    //--------------------------------------------------------------------------
     // GroupAll list
     //--------------
 
@@ -440,12 +456,21 @@ public class JournalMgrAction extends ManagerSupport {
         if ( owner == null ) return ACL_OPER;
         log.debug( " owner set to: " + owner );
         
-        IcJournal newJnrl = entryManager.addIcJournal( nlmid, owner );
-        if ( newJnrl != null ) {
-            journal = newJnrl;
-            setId( newJnrl.getId() );
-            return JEDIT;
+        try{
+            IcJournal newJnrl = entryManager.addIcJournal( nlmid, owner );
+            // cannot connect to proxy ?
+        
+            if ( newJnrl != null ) {
+                journal = newJnrl;
+                setId( newJnrl.getId() );
+                return JEDIT;
+            }
+
+        } catch( ImexCentralException icx ){
+            statCode = icx.getStatusCode();
+            statMessage = icx.getStatusMessage();
         }
+        
         return SUCCESS;
     }
 

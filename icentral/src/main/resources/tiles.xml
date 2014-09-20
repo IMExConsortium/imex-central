@@ -46,6 +46,10 @@
  <definition name="main" template="/tiles/main.jsp"/>
 
  <definition name="page" template="/tiles/page.jsp"/>
+
+ <definition name="body" template="/tiles/body.jsp"/>
+
+
  <definition name="editpage" template="/tiles/editpage.jsp"/>
 
  <definition name="ipreview" template="/tiles/ipreview.jsp" />

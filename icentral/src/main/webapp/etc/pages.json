@@ -193,7 +193,27 @@
         viewtype:"file-html",
         viewpath:"/pages/template.html"
       },
-      "help":{
+
+       "exception202":{
+        active:true,
+        title:"Exception: 202",
+        menudef:"0:0:0",
+        menusel:"0:0:0",
+        viewtype:"file-html",
+        viewpath:"/pages/exception/202.html"
+      },
+
+       "exception203":{
+        active:true,
+        title:"Exception: 203",
+        menudef:"0:0:0",
+        menusel:"0:0:0",
+        viewtype:"file-html",
+        viewpath:"/pages/exception/203.html"
+      },
+
+
+       "help":{
         active:true,
         title:"ICentral: Help",
         menudef:"0:2",

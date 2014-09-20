@@ -191,15 +191,25 @@ YAHOO.imex.pubedit = {
     identUpdate: function ( o ) {
         try {
             if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
+                
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var pid = messages.id;
                 var pmid = messages.pub.pmid;
                 var doi = messages.pub.doi;
                 var jsp = messages.pub.journalSpecific;
 
+                var sCode = messages.statusCode;
+                var sMessage = messages.statusMessage;
+                
                 YAHOO.util.Dom.get("pub-det-edit_pub_pmid").value = pmid;
                 YAHOO.util.Dom.get("pub-det-edit_pub_doi").value = doi;
                 YAHOO.util.Dom.get("pub-det-edit_pub_journalSpecific").value = jsp;
+           
+                if( sCode > 0){                    
+                    // pop up error modal                    
+                    YAHOO.mbi.modal.exception( sCode, sMessage );                         
+                }
+                
             }
         } catch(x) {
             alert("AJAX Error: " + x );

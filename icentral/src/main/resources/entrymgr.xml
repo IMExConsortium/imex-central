@@ -136,7 +136,9 @@
       
       <result name="json" type="json">
         <param name="excludeProperties">
-         publicationList.*,.*roles.*,.*password.*,.*allRoles.*
+         publicationList.*,.*roles.*,.*password.*,.*allRoles.*,.*prefs,
+         .*activated,.*activationKey,.*affiliation,,.*allRoleNames,
+         .*groups,.*groupNames
         </param>
         <param name="includeProperties">
           records.*,pub.*,flags.*
@@ -164,10 +166,12 @@
      
      <result name="json" type="json">
        <param name="excludeProperties">
-         publicationList.*
+         publicationList.*,.*roles.*,.*password.*,.*allRoles.*,.*prefs,
+         .*activated,.*activationKey,.*affiliation,,.*allRoleNames,
+         .*groups,.*groupNames
        </param>
        <param name="includeProperties">
-         pub.*, targetStates.*
+         pub.*, targetStates.*,statusCode,statusMessage
        </param>
        <param name="noCache">true</param>
      </result>

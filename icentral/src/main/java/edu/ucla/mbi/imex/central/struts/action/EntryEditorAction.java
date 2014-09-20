@@ -123,6 +123,21 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
     }
 
     //--------------------------------------------------------------------------
+    // status
+    //------
+
+    private int statCode = 0;
+    private String statMessage = "OK";
+    
+    public int getStatusCode(){
+        return this.statCode;
+    }
+    
+    public String getStatusMessage(){
+        return this.statMessage;
+    }
+
+    //--------------------------------------------------------------------------
     
     public List<IcJournal> getJournalList(){
 
@@ -297,6 +312,8 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
 
                     // update identifiers
                     //-------------------
+
+                  
 
                     return updateIcPubIdentifiers( icpub, luser,
                                                    getOpp().get( "pmid" ),
@@ -651,11 +668,16 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
         log.debug( " state set to: " + state );
         
         if ( state != null ) {
-            IcPub newPub = entryManager.addIcPub( pub, owner, state );
-            if ( newPub != null ) {
-                icpub = newPub;
-                setId( newPub.getId() );
-                return PUBEDIT;
+            try{
+                IcPub newPub = entryManager.addIcPub( pub, owner, state );
+                if ( newPub != null ) {
+                    icpub = newPub;
+                    setId( newPub.getId() );
+                    return PUBEDIT;
+                }
+            } catch( ImexCentralException icx ){
+                statCode = icx.getStatusCode();
+                statMessage = icx.getStatusMessage();
             }
         }
         
@@ -687,8 +709,18 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
         pub.setDoi( sanitize( nDoi ) );
         pub.setJournalSpecific( sanitize( nJsp ) );
 
-        entryManager.updateIcPubIdentifiers( pub, user, pub );
-        
+        try{
+            pub = entryManager.updateIcPubIdentifiers( pub, user, pub );
+        } catch( EntryException ex ){
+            this.statCode = ex.getStatusCode();
+            this.statMessage = ex.getStatusMessage();
+            
+            // reset pub
+            
+            this.setPub( entryManager.getIcPub( pub.getId() ));
+            
+        }
+
         return JSON;
     }
 
@@ -721,12 +753,15 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
         log.info( "RESYNC: pmid=" + pmid );
         
         //pub.setPmid( sanitize( pmid ) );
-        
-        IcPub uPub = entryManager.resyncIcPubPubmed( pub, user, pub );
-        if( uPub != null ){
-            setPub( uPub );
+        try{
+            IcPub uPub = entryManager.resyncIcPubPubmed( pub, user, pub );
+            if( uPub != null ){
+                setPub( uPub );
+            }
+        } catch( ImexCentralException icx ){
+            statCode = icx.getStatusCode();
+            statMessage = icx.getStatusMessage();            
         }
-        
         return JSON;
     }
 

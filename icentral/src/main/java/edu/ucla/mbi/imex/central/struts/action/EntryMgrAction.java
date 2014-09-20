@@ -97,6 +97,21 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 
 
     //--------------------------------------------------------------------------
+    // status
+    //------
+
+    private int statCode = 0;
+    private String statMessage = "OK";
+    
+    public int getStatusCode(){
+        return this.statCode;
+    }
+
+    public String getStatusMessage(){
+        return this.statMessage;
+    }
+    
+    //--------------------------------------------------------------------------
     // GroupAll list
     //--------------
 
@@ -868,11 +883,18 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         log.debug( " state set to: " + state );
         
         if ( state != null ) {
-            IcPub newPub = entryManager.addIcPub( pub, owner, state );
-            if ( newPub != null ) {
-                icpub = newPub;
-                setId( newPub.getId() );
-                return PUBEDIT;
+
+            try{
+
+                IcPub newPub = entryManager.addIcPub( pub, owner, state );
+                if ( newPub != null ) {
+                    icpub = newPub;
+                    setId( newPub.getId() );
+                    return PUBEDIT;
+                }
+            } catch( ImexCentralException icx ){
+                statCode = icx.getStatusCode();
+                statMessage = icx.getStatusMessage();
             }
         }
         
@@ -924,7 +946,13 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         pub.setDoi( sanitize( nDoi ) );
         pub.setJournalSpecific( sanitize( nJsp ) );
 
-        entryManager.updateIcPubIdentifiers( pub, user, pub );
+
+        try{
+            entryManager.updateIcPubIdentifiers( pub, user, pub );
+        } catch( ImexCentralException icx ){
+            statCode = icx.getStatusCode();
+            statMessage = icx.getStatusMessage();
+        }
         
         return JSON;
     }
@@ -958,12 +986,18 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         log.info( "RESYNC: pmid=" + pmid );
         
         //pub.setPmid( sanitize( pmid ) );
+
+        try{
         
-        IcPub uPub = entryManager.resyncIcPubPubmed( pub, user, pub );
-        if( uPub != null ){
-            setPub( uPub );
+            IcPub uPub = entryManager.resyncIcPubPubmed( pub, user, pub );
+            
+            if( uPub != null ){
+                setPub( uPub );
+            }
+        } catch( ImexCentralException icx ){
+            statCode = icx.getStatusCode();
+            statMessage = icx.getStatusMessage();
         }
-        
         return JSON;
     }
 

@@ -152,6 +152,15 @@ public class LogAdvice {
         notificationManager.updateNotify( (IcPub) pub, ile, obsLst );                   
     }
     
+    public void updatePubExceptionMonitor( Object pub, Object luser, 
+                                  Object icx ){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "LogManager: exception monitor called:"  
+                  + " icx=" + ((ImexCentralException)icx).getStatusCode()  
+                  + " pubid=" + ((IcPub)pub).getId() 
+                  + " luser=" + ((User)luser).getLogin() );        
+    }
+
     public void updatePubAdminUserMonitor( Object pub, Object luser, 
                                            Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );

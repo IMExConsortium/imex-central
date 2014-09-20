@@ -311,25 +311,25 @@ public class EntryManager {
     // get through proxy
     //------------------
 
-    public Publication getPubByPmid( String pmid ) {
+    public Publication getPubByPmid( String pmid ) 
+        throws ImexCentralException{
 
         NcbiProxyClient cli = tracContext.getNcbiProxyClient();
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " NcbiProxyClient=" + cli );
-
+        Publication newPub = null;
         if ( cli != null ) {
-            Publication newPub =
-                cli.getPublicationByPmid( pmid );
+            newPub = cli.getPublicationByPmid( pmid );
             log.info( " doi" + newPub.getDoi() );
-            return newPub;
-        } 
-        return null;
+        }
+        return newPub;
     }
 
     //--------------------------------------------------------------------------
     
-    public IcPub addIcPub( Publication pub, User owner, DataState state ) {
+    public IcPub addIcPub( Publication pub, User owner, DataState state ) 
+        throws ImexCentralException {
         
         Log log = LogFactory.getLog( this.getClass() );
         
@@ -341,7 +341,7 @@ public class EntryManager {
         if( pub.getPmid() != null && ! pub.getPmid().equals( "" ) ) {
         
             log.info( " new pub -> pmid=" + pub.getPmid() );
-        
+            
             return addPmidIcPub( pub, owner, state );
             
         } else {
@@ -403,8 +403,9 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
-    public IcPub addPmidIcPub( Publication pub, User owner, DataState state ) {
-
+    public IcPub addPmidIcPub( Publication pub, User owner, DataState state ) 
+        throws ImexCentralException{
+        
         Log log = LogFactory.getLog( this.getClass() );
         
         // test if already in 
@@ -419,13 +420,22 @@ public class EntryManager {
         //------------------        
         
         NcbiProxyClient cli = tracContext.getNcbiProxyClient();
-        
-        log.info( " NcbiProxyClient=" + cli );
 
         if ( cli != null ) {
-            Publication newPub = 
-                cli.getPublicationByPmid( pub.getPmid() );
+        
+            log.info( " NcbiProxyClient=" + cli );
+
+            Publication newPub = null;
             
+            try{
+                
+                newPub = cli.getPublicationByPmid( pub.getPmid() );
+                
+            } catch( ClientException cx ){
+                
+            }
+                    
+
             if ( newPub != null ) {
                 IcPub icp = new IcPub( newPub );
                 log.info( " IcPub=" + icp );
@@ -589,14 +599,49 @@ public class EntryManager {
 
 
     public IcPub updateIcPubIdentifiers( IcPub pub, User luser, 
-                                         Publication npub ) {
+                                         Publication npub ) 
+        throws EntryException{
         
         if( pub != null && npub != null && luser != null) {
             pub.setDoi( npub.getDoi() );
 
+            String npmid = npub.getPmid();
+            String ndoi = npub.getDoi();
+
+            // sanitize new values
+            
+            if( npmid != null && !npmid.equals("") ){
+                try{
+                    npmid = npmid.replaceFirst("^\\s+","");
+                    npmid = npmid.replaceFirst("\\s+$","");
+                } catch(Exception ex){
+                    // should not happen
+                }
+            }
+
+            if( ndoi != null && !ndoi.equals("") ){
+                try{
+                    ndoi = ndoi.replaceFirst("^\\s+","");
+                    ndoi = ndoi.replaceFirst("\\s+$","");
+                } catch(Exception ex){
+                    // should not happen
+                }
+            }
 
             // test if pmid already there !!!!
+            
+            if ( getIcPubByNsAc( "pmid", npmid ) != null ){
 
+                // duplicated pmid                
+                throw EntryException.DUP_PMID;
+                
+            }
+
+            if ( getIcPubByNsAc( "doi", ndoi ) != null ){
+
+                // duplicated doi
+                throw EntryException.DUP_DOI;
+            }
 
             pub.setPmid( npub.getPmid() );
             pub.setJournalSpecific( npub.getJournalSpecific() );
@@ -625,7 +670,8 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
-    public IcPub resyncIcPubPubmed( IcPub pub, User luser, Publication npub ) {
+    public IcPub resyncIcPubPubmed( IcPub pub, User luser, Publication npub ) 
+        throws ImexCentralException{
         
         if( pub == null || luser == null || npub == null ) return null;
         
@@ -1011,7 +1057,8 @@ public class EntryManager {
 
     //---------------------------------------------------------------------
     
-    public IcJournal addIcJournal( String nlmid, User owner ) {
+    public IcJournal addIcJournal( String nlmid, User owner ) 
+        throws ImexCentralException{
 
         Journal newJrnl = new Journal();
         newJrnl.setNlmid( nlmid );
@@ -1019,7 +1066,8 @@ public class EntryManager {
         return addIcJournal( newJrnl, owner );
     }
     
-    public IcJournal addIcJournal( Journal jrnl, User owner ) {
+    public IcJournal addIcJournal( Journal jrnl, User owner ) 
+        throws ImexCentralException{
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " new jrnl -> nlmid= " + jrnl.getNlmid() );
