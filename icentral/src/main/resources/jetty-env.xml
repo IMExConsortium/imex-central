@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+<!--
+ <New class="org.mortbay.jetty.plus.naming.EnvEntry">
+  <Arg></Arg>
+  <Arg>solr/home</Arg>
+  <Arg type="java.lang.String">target/work/webapp/solr</Arg>
+  <Arg type="boolean">true</Arg>
+ </New>
+-->
+ <New class="org.mortbay.jetty.plus.naming.Resource">
+  <Arg>java:/comp/env/jdbc/icentral</Arg>
+  <Arg>
+   <New class="org.postgresql.ds.PGSimpleDataSource">
+    <Set name="User">dip</Set>
+    <Set name="Password">444dip444</Set>
+    <Set name="DatabaseName">icentral_test</Set>
+    <Set name="ServerName">10.1.2.212</Set>
+    <Set name="PortNumber">5432</Set>
+   </New>
+  </Arg>
+ </New>
+
+</Configure>
