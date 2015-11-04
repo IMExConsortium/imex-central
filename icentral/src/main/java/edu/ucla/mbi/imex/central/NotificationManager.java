@@ -42,6 +42,11 @@ public class NotificationManager {
 	log.info( "NotificationManager: initialized" );
     }
 
+    public void cleanup(){
+        Log log = LogFactory.getLog( this.getClass() );
+	log.info( "NotificationManager: cleanup" );
+    }
+
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     

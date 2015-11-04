@@ -61,7 +61,14 @@
 
 .yui-skin-sam .yui-dt th .yui-dt-label {
   text-align: center;
-  margin-left: 10px;
+  margin: auto;
+ 
+}
+
+#journaltab .yui-skin-sam .yui-dt th .yui-dt-liner {
+  text-align: center;
+  margin: 3px;
+ 
 }
 
 .yui-skin-sam  .yui-dt-even th.yui-table-inner-top {

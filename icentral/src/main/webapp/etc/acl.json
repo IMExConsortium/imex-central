@@ -199,6 +199,9 @@
       ppg:{
         order:["ANY"]
       },
+      "popup":{
+        order:["ANY"]
+      },
       esrc:{
         order:["ANY"]
       },
@@ -395,6 +398,12 @@
       }
     }
   },
+
+  
+  
+
+
+
 
   journalmgr:{
     order:[ "operation"],

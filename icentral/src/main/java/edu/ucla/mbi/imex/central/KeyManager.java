@@ -102,6 +102,11 @@ public class KeyManager {
         log.info( "KeyManager: initializing" );
     }
 
+    public void cleanup(){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "KeyManager: cleanup" );
+    }
+
 
     //---------------------------------------------------------------------
     // Operations

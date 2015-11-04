@@ -26,7 +26,14 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 
 public class IcRoleDao extends AbstractDAO implements RoleDao {
-    
+
+
+    //public IcRoleDao(){ super();}
+
+    //public IcRoleDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
     public Role getRole( int id ) { 
         
         Role grp = (IcRole) super.find( IcRole.class, id );
@@ -40,8 +47,9 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         Role role = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -72,8 +80,9 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         List<Role> rlst = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -127,8 +136,10 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         long cnt = 0;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+
         Transaction tx = session.beginTransaction();
 
         try {
@@ -160,8 +171,9 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
 
         List<User> ulst = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -195,8 +207,9 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         
         long cnt = 0;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -228,8 +241,9 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
 
         List<Group> ulst = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {

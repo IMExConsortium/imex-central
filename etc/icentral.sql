@@ -71,6 +71,13 @@ CREATE TABLE datastate (
 );
 CREATE INDEX datastate_1 on datastate (name);
 
+CREATE TABLE datastage (
+    id serial primary key, 
+    name character varying(32) UNIQUE not null default '',
+    comments character varying(256) not null default ''
+);
+CREATE INDEX datastage_1 on datastage (name);
+
 
 CREATE TABLE cflag (
     id serial primary key, 
@@ -115,6 +122,7 @@ CREATE TABLE entry (
 
     source_id integer not null default 0,
     state_id integer not null default 0,
+    stage_id integer not null default 0,
 
 --    imexId character varying(32) default '',
     imex_id integer, 
@@ -125,6 +133,12 @@ CREATE TABLE entry (
     title character varying(1024) default '',
     author text default '',
     abstract text default '',
+
+    year character varying(32) default '',
+    volume character varying(32) default '',
+    issue character varying(32) default '',
+    pages character varying(32) default '',
+
     pub_date timestamp ,
     epub_date timestamp,
     rel_date timestamp,
@@ -147,6 +161,9 @@ CREATE INDEX e_6 on entry (title);
 CREATE INDEX e_7 on entry (pub_date);
 CREATE INDEX e_8 on entry (epub_date);
 CREATE INDEX e_9 on entry (rel_date);
+
+CREATE INDEX e_10 on entry (state_id);
+CREATE INDEX e_11 on entry (stage_id);
 
 
 CREATE TABLE entry_ausr (

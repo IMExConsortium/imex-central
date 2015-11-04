@@ -52,9 +52,6 @@ YAHOO.mbi.modal = {
     },
 
 
-
-
-
     adataView:function( arg ){
         var rid = arg.rid;
         var aid = arg.aid;
@@ -283,6 +280,201 @@ YAHOO.mbi.modal = {
                                 title: "", 
                                 body: bodyHTML } );         
     },
+
+
+    dialog: function( arg ) {
+        
+        var title = arg.title;
+        var mtitle = arg.mtitle === undefined ? title : arg.mtitle; 
+        var id = arg.id;
+
+        var myself = YAHOO.mbi.modal;
+
+        if ( YAHOO.mbi.modal.my  == null  
+             || YAHOO.mbi.modal.my.panel == null ) {
+                 
+                 YAHOO.mbi.modal.my = {};
+        
+                 var hp = document.createElement('div');
+                 document.body.appendChild(hp);
+                 hp.id="modal-panel";
+        
+                 var hphd = document.createElement('div');
+                 hp.appendChild(hphd);
+                 YAHOO.util.Dom.addClass(hphd,'hd');
+                 
+                 var hpbd = document.createElement('div');
+                 hp.appendChild(hpbd);
+                 YAHOO.util.Dom.addClass(hpbd,'bd');
+                 
+                 var hpft = document.createElement('div');
+                 hp.appendChild(hpft);
+                 YAHOO.util.Dom.addClass(hpft,'ft');
+                 
+                 var bgr = document.createElement('div');
+                 hpft.appendChild(bgr);
+                 bgr.id="dqr-group";
+                 YAHOO.util.Dom.addClass(bgr,'yui-buttongroup');
+                 if( arg.table != null ){
+                     YAHOO.mbi.modal.my.table = arg.table;
+                 }
+                 if( arg.button != null ){
+                     
+                     YAHOO.mbi.modal.my.buttons = {};
+                     
+                     myself.onButtonClick = function(p_oEvent) {
+                         
+                         
+                         var mybuttons = YAHOO.mbi.modal.my.buttons;
+                         
+                         var id = this.get("id");
+                         console.log("button="+ id );
+                         console.log("url="+ mybuttons[ id ].url );
+                         
+                         // call url, wait til done
+                         
+                         var urlcallback = {
+                             success: function(o) {
+                                 var myself = YAHOO.mbi.modal.my;
+                                 
+                                 console.log("urlcallback");
+                                 
+
+                                 if( myself.table != null ){
+                                     // reload table
+                                     
+                                     try{
+                                         console.log("reloading...");
+                                         
+                                         YAHOO.imex.journalview
+                                             .tableReload( {}, myself.table );                                        
+                                     } catch (x) {
+                                         console.log(x);
+                                     }
+                                 }
+                                 
+                                 // close modal
+                                 YAHOO.mbi.modal.my.panel.destroy();
+                                 YAHOO.mbi.modal.my.panel = null;
+                             },
+                             failure: function(o) {
+                                 // close modal
+                                 YAHOO.mbi.modal.my.panel.destroy();
+                                 YAHOO.mbi.modal.my.panel = null;
+                             }
+                         };
+                         
+                         var cObj = YAHOO.util.Connect
+                             .asyncRequest( 'GET', mybuttons[ id ].url, 
+                                            urlcallback );
+                     };
+                     
+                     var i;
+                     for( i=0; i<arg.button.length; i++ ){
+                         var label = arg.button[i].label;
+                         var id = arg.button[i].id;
+                         var url = arg.button[i].url;
+                         var cButton = new YAHOO.widget
+                             .Button( {label:label,
+                                       container:"dqr-group",
+                                       id:id,
+                                       onclick: { fn: myself.onButtonClick }
+                                      });
+
+                         YAHOO.mbi.modal.my.buttons[ id ] ={url:url};       
+                     }
+                 }    
+                 
+/*
+                 var discardButton = new YAHOO.widget.Button({label:"Discard",  
+                                                              id:"discard-button",  
+                                                              container:"dqr-group" }); 
+
+                 var toqueueButton = new YAHOO.widget.Button({label:"ToQueue",  
+                                                              id:"toqueue-button",  
+                                                              container:"dqr-group" }); 
+                 var reserveButton = new YAHOO.widget.Button({label:"Reserve",  
+                                                              id:"reserve-button",  
+                                                              container:"dqr-group" }); 
+  */            
+                 YAHOO.mbi.modal.my.panel =       
+                     new YAHOO.widget.Panel("modal-panel",
+                                            { width: "650px",
+                                              height: "450px",
+                                              fixedcenter: true,
+                                              close: true,
+                                              draggable: true,
+                                              //zindex: 4,
+                                              modal: true,
+                                              constraintoviewport: false,
+                                              visible: true                                             
+                                            });
+                 
+                 YAHOO.mbi.modal.my.panel.render();
+ 
+                 YAHOO.mbi.modal.my.resize =
+                     new YAHOO.util.Resize( "modal-panel",
+                                            { handles: ["br"],
+                                              autoRatio: false,
+                                              minWidth: 350,
+                                              minHeight: 100,
+                                              status: false
+                                            });
+                 
+                 YAHOO.mbi.modal.my.resize.on( 
+                     'resize',
+                     function( args ) {
+                         var panelHeight = args.height; 
+                         this.cfg.setProperty('height',panelHeight + "px"); 
+                     }, YAHOO.mbi.modal.my.panel, true ); 
+                 
+                 YAHOO.mbi.modal.my.resize.on( 
+                     'startResize',
+                     function( args ) {
+                         
+                         if( this.cfg.getProperty('constraintoviewport') ) {
+                             var D = YAHOO.util.Dom; 
+                             var clientRegion = D.getClientRegion();
+                             var elRegion = D.getRegion(this.element);
+                             YAHOO.mbi.modal.my.resize.set('maxWidth', 
+                                                          clientRegion.right - elRegion.left 
+                                                          - YAHOO.widget.Overlay.VIEWPORT_OFFSET );
+                             YAHOO.mbi.modal.my.resize.set('maxHeight', 
+                                                          clientRegion.bottom - elRegion.top 
+                                                          - YAHOO.widget.Overlay.VIEWPORT_OFFSET );
+                         } else {
+                             YAHOO.mbi.modal.my.resize.set('maxWidth',null);
+                             YAHOO.mbi.modal.my.resize.set('maxHeight',null);
+                         }
+                     }, YAHOO.mbi.modal.my.panel, true );   
+
+             }
+
+        if ( arg.url != undefined ) {
+                    
+            var helpCallback = { cache:false, timeout: 5000, 
+                                 success: YAHOO.mbi.modal.load,
+                                 argument: {title: title} };
+            YAHOO.util.Connect.asyncRequest( 'GET', arg.url, helpCallback ); 
+        }
+
+        if ( arg.body !== undefined ) {
+            var body =  arg.body;
+            if( arg.title !== undefined && arg.title.length > 0 ){
+                body = '<h2>' + arg.title + '</h2><hr/>' + arg.body;
+            }
+            YAHOO.mbi.modal.my.panel.setBody( body );
+            
+        } else {
+            YAHOO.mbi.modal.my.panel.setBody("");
+        }
+
+        YAHOO.mbi.modal.my.panel.setHeader( mtitle );       
+        YAHOO.mbi.modal.my.panel.show();
+        document.body.scrollTop = document.documentElement.scrollTop = 0;        
+        
+        
+    },
     
     show: function( arg ) {
         
@@ -326,6 +518,7 @@ YAHOO.mbi.modal = {
                                             });
 
                  YAHOO.mbi.modal.my.panel.render();
+                             
                  YAHOO.mbi.modal.my.resize =
                      new YAHOO.util.Resize( "modal-panel",
                                             { handles: ["br"],
@@ -360,7 +553,8 @@ YAHOO.mbi.modal = {
                              YAHOO.mbi.modal.my.resize.set('maxWidth',null);
                              YAHOO.mbi.modal.my.resize.set('maxHeight',null);
                          }
-                     }, YAHOO.mbi.modal.my.panel, true );   
+                     }, YAHOO.mbi.modal.my.panel, true );  
+                 
              }
         
         if ( arg.url != undefined ) {

@@ -5,16 +5,16 @@
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
-      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/beans/spring-beans.xsd
     
       http://www.springframework.org/schema/tx 
-      http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+      http://www.springframework.org/schema/tx/spring-tx.xsd
       
       http://www.springframework.org/schema/aop 
-      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+      http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 <!-- icentral context: configuration files -->
- 
+
  <bean id="portalContext" class="edu.ucla.mbi.util.context.PortalContext">
 
     <property name="portal">
@@ -87,13 +87,6 @@
     <property name="roleDao" ref="roleDao"/>
 
   </bean>
-
-  <!-- user data access -->
-
-  <bean id="userDao" class="edu.ucla.mbi.imex.central.dao.IcUserDao"/>
-  <bean id="groupDao" class="edu.ucla.mbi.imex.central.dao.IcGroupDao"/>
-  <bean id="roleDao" class="edu.ucla.mbi.imex.central.dao.IcRoleDao"/>
-
 
  <!-- access control list/interceptor -->
 

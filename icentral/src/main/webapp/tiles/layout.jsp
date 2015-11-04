@@ -8,6 +8,7 @@
  !========================================================================= --%>
 <html lang="en">
  <head>
+ <meta http-equiv="content-type"  content="text/html;charset=utf-8" />
  <title>
   <t:getAsString name="title"/>
  </title>
@@ -28,7 +29,7 @@
     </tr>
    </table>
    <t:insertAttribute name="footer" />
-  </page>
- <body>
+  </div>
+ </body>
 </html>
 

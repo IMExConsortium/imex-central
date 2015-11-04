@@ -81,6 +81,13 @@ public class AttachmentManager {
 
         // read Attachment/LogContext here ? 
     }
+
+    public void cleanup(){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "AttachmentManager: cleanup called" );
+    }
+
+
     
     //--------------------------------------------------------------------------
     // Operations

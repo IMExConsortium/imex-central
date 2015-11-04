@@ -28,7 +28,13 @@ import edu.ucla.mbi.imex.central.*;
        
 public class IcStatsDao extends AbstractDAO {
 
-    public static final Long PARTNERID = new Long( 15 ); // set as bean param
+    //public IcStatsDao(){ super();}
+
+    //public IcStatsDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
+    public static final Integer PARTNERID = new Integer( 15 ); // set as bean param
     
     public Map<DataState,Long> getCountAll() { 
         
@@ -37,8 +43,9 @@ public class IcStatsDao extends AbstractDAO {
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -83,8 +90,9 @@ public class IcStatsDao extends AbstractDAO {
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -97,7 +105,7 @@ public class IcStatsDao extends AbstractDAO {
                 for( Iterator i = res.iterator(); i.hasNext(); ) {
                     Object[] ir = (Object[])i.next();
                     
-                    Integer stateId = (Integer) ir[0];
+                    Long stateId = (Long) ir[0];
                     Long cnt = (Long) ir[1]; 
                     
                     DataState state = (DataState) 
@@ -149,8 +157,9 @@ public class IcStatsDao extends AbstractDAO {
         Map<Group,Map<DataState,Long>> 
             resmap = new HashMap<Group,Map<DataState,Long>>();
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -214,15 +223,18 @@ public class IcStatsDao extends AbstractDAO {
         Map<Group,Map<DataState,Long>> 
             resmap = new HashMap<Group,Map<DataState,Long>>();
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
             //startOperation();
-            
+      
             Query query = session.createQuery( qStr );
             query.setParameter( "pid", IcStatsDao.PARTNERID );
+
+            //XX 
             List  res = query.list();
             
             if(res.size()>0) {
@@ -275,8 +287,9 @@ public class IcStatsDao extends AbstractDAO {
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -323,8 +336,9 @@ public class IcStatsDao extends AbstractDAO {
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -365,8 +379,9 @@ public class IcStatsDao extends AbstractDAO {
     
     public void testQuery( String testQuery ) { 
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {

@@ -26,6 +26,13 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 
 public class IcGroupDao extends AbstractDAO implements GroupDao {
+
+
+    //public IcGroupDao(){ super();};
+
+    //public IcGroupDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
     
     public Group getGroup( int id ) { 
         
@@ -39,8 +46,9 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     public Group getGroup( String label ) {
         
         Group group = null;
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -101,8 +109,9 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     public long getUserCount( Group group ) {
 
         long cnt = 0;
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -134,8 +143,9 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
         
         List<User> ulst = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {

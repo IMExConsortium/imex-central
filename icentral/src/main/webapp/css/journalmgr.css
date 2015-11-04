@@ -1,15 +1,15 @@
-#joutab table {
+#journaltab table {
    width: 100%;
 }
 
-.joutab th {
+.journaltab th {
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
      
 }
 
-#joutab .yui-dt-label .yui-dt-sortable {
+#journaltab .yui-dt-label .yui-dt-sortable {
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
@@ -129,11 +129,64 @@
     border-color: #C8C8C8;   
 }
 
+
 .yui-skin-sam th.yui-dt-col-owner {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;
 }
+
+
+.yui-skin-sam th.yui-dt-col-pqueue {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-pqueueSub {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-queue {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-queueSub {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+
+.yui-skin-sam th.yui-dt-col-curation {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-curationSub {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-release {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-retract {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+
 
 .yui-skin-sam div.dt-pag-nav {
     border-top-style: solid;
@@ -255,3 +308,24 @@
 #joutab .nlmid {
   width:8em; 
 }
+
+
+#dqr-group {
+ position: absolute;
+ bottom: 0px;
+ left: 0px;
+
+}
+
+#dqr-group {
+ position: absolute;
+ bottom: 23px;
+ left: 5px;
+}
+
+#pub-header {
+ position: absolute;
+ top: 23px;
+ left: 0px;
+}
+

@@ -3,9 +3,55 @@ YAHOO.namespace("imex");
 YAHOO.imex.pubedit = {
 
     pubId: 0,
+    pubPmid: null,
     stateButton: null,
-    init: function( e, obj ) {
+    prefs: null,
 
+    subCnt: 14,
+
+    init: function( e, obj ){
+
+        //console.log( obj.prefs );
+
+        var myself = YAHOO.imex.pubedit;
+        
+        myself.pubPmid = obj.pmid;
+
+        if( obj.prefs != null && obj.prefs != "" ){
+            var p = obj.prefs.replace(/&quot;/g, '"'); 
+            //console.log( p );
+            myself.prefs = YAHOO.lang.JSON.parse( p  );
+            myself["curl"] 
+                = myself.prefs["option-def"]["curation-tool"]["option-def"]["curation-url"].value; 
+            
+            myself["cpat"] 
+                = myself.prefs["option-def"]["curation-tool"]["option-def"]["curation-pmid-pattern"].value; 
+        }
+
+        // curator link
+
+        if( myself.curl != undefined && myself.pubPmid != null ){ 
+            var href = myself.curl
+                .replace( myself.cpat, myself.pubPmid );
+            var a = ' [<a target="icentral_outlink" href="'+href+'">Curation Tool</a>]';
+            
+            YAHOO.util.Dom.get("pub_ttl").innerHTML += a;
+
+        }
+        
+        // activate submit buttons
+        
+        if( obj.login != undefined  && obj.login.length > 0 ){
+            
+            for(var i=0; i< myself.subCnt; i++ ){
+
+                var s = YAHOO.util.Dom.get("sub-" + i );
+                if( s != undefined ){
+                    s.disabled=false;
+                }                
+            }
+        } 
+        
         // main tab panel
         //---------------
 
@@ -294,8 +340,18 @@ YAHOO.imex.pubedit = {
                 }
 
                 YAHOO.util.Dom.get("pub-det-edit_pub_author").value = auth;
-                YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;                
-                YAHOO.util.Dom.get("pub_ttl").innerHTML = "<em>"+ttl+"</em>";
+                YAHOO.util.Dom.get("pub-det-edit_pub_title").value = title;
+
+                var icid = "<em>"+ttl+"</em>";
+
+                if( YAHOO.imex.pubedit.curl != undefined ){
+                    var href = YAHOO.imex.pubedit.curl
+                        .replace( YAHOO.imex.pubedit.cpat, messages.pub.pmid );
+                    icid = icid + '[<a target="icentral_outlink" href="'+href+'">Curation Tool</a>]';
+                }
+
+
+                YAHOO.util.Dom.get("pub_ttl").innerHTML = icid;
                
             }
         } catch(x) {
@@ -603,8 +659,8 @@ YAHOO.imex.pubedit = {
             if( YAHOO.imex.pubedit.aclErrorTest( o.responseText ) == false ) {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 var stl = YAHOO.util.Dom.get( "state-label" );
-                stl.innerHTML = messages.pub.state.name;
-                
+                stl.innerHTML = messages.pub.stage.name+ "/" + messages.pub.state.name;
+               
                 var tcm = YAHOO.util.Dom.get("td-contact-mail");
                 var nih = "";
                 

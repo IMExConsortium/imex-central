@@ -880,13 +880,17 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         
         DataState state =  
             wflowContext.getWorkflowDao().getDataState( "NEW" );
+
+        DataState stage =  
+            wflowContext.getWorkflowDao().getDataStage( "PREQUEUE" );
+        log.debug( " stage set to: " + stage );
         log.debug( " state set to: " + state );
         
         if ( state != null ) {
 
             try{
 
-                IcPub newPub = entryManager.addIcPub( pub, owner, state );
+                IcPub newPub = entryManager.addIcPub( pub, owner, stage, state );
                 if ( newPub != null ) {
                     icpub = newPub;
                     setId( newPub.getId() );
@@ -900,8 +904,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         
         return SUCCESS;
     }
-    
-    //---------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
 
     public String deleteIcPub( Publication pub, User luser ) {
 
@@ -911,7 +915,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
         return SUCCESS;
     }
 
-    //---------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     private String deleteIcPubList( List<Integer> pubs, User luser ) {
         

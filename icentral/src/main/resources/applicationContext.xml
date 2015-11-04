@@ -21,11 +21,11 @@
 
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/tx 
-        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+        http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/aop 
-        http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+        http://www.springframework.org/schema/aop/spring-aop.xsd
 
         http://jax-ws.dev.java.net/spring/core
         http://jax-ws.dev.java.net/spring/core.xsd
@@ -38,6 +38,7 @@
   <bean id="applicationContextProvider"
        class="edu.ucla.mbi.util.context.ApplicationContextProvider" />
 
+  <import resource="spring/dao.xml" />
   <import resource="spring/context.xml" />
   <import resource="spring/aop-logger.xml" />
 
@@ -97,8 +98,30 @@
 {
     "legend":"User Preferences", 
     "tableLayout":"null",
-    "options":["auto-watch","message-mail"], 
+    "options":["curation-tool","auto-watch","message-mail"], 
     "option-def":{
+      "curation-tool": {
+         "legend":"Curation Tool",
+         "options":["curation-url","curation-pmid-pattern"],
+         "option-def":{
+            "curation-url":{
+              "label": "URL",
+              "type": "text",
+              "size":"64", 
+              "value": "http://imex.mbi.ucla.edu/curator/curator/curatePaper.do?pubmedId=%%pmid%%",
+              "opp":"cturl",
+              "opcode": "cturl"
+            },
+            "curation-pmid-pattern":{
+              "label": "PMID Pattern",
+              "type": "text",
+              "size":"16", 
+              "value": "%%pmid%%",
+              "opp":"ctpmid",
+              "opcode": "ctpmid"
+            }
+         }
+      },
       "auto-watch": {
         "legend":"Watch List",
         "label": "Automatic watch list generation",
@@ -171,19 +194,19 @@
           "opcode": "watchMail",
           "options": ["mail-comment-watched","mail-attachment-watched"],
           "option-def":{
-            "mail-comment-watched": {          
-            "label": "Include comments",
-            "value": "false",
-            "opp": "mmcomw", 
-            "opcode": "attachMail"
-          },
-          "mail-attachment-watched": {          
-            "label": "Include attachments (curators/owners only)",
-            "value": "false",
-            "opp": "mmattw", 
-            "opcode": "attachMail"
+              "mail-comment-watched": {          
+              "label": "Include comments",
+              "value": "false",
+              "opp": "mmcomw", 
+              "opcode": "attachMail"
+             },
+            "mail-attachment-watched": {          
+              "label": "Include attachments (curators/owners only)",
+              "value": "false",
+              "opp": "mmattw", 
+              "opcode": "attachMail"
+             }
           }
-         }
        },
         "mail-comment-new": {          
           "label": "All comments",

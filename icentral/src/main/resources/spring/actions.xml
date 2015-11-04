@@ -5,13 +5,13 @@
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
-      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/beans/spring-beans.xsd
     
       http://www.springframework.org/schema/tx 
-      http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+      http://www.springframework.org/schema/tx/spring-tx.xsd
       
       http://www.springframework.org/schema/aop 
-      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+      http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 <!-- static content -->
  
@@ -63,13 +63,21 @@
     
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>
+    <property name="feedbackManager" ref="feedbackManager"/>
+
     <property name="mst" value="1:1"/>
-    
-    <property name="adminMail" value="dip@mbi.ucla.edu" />
-    <property name="mailServer" value="imex.mbi.ucla.edu" />
-    
     <property name="reCaptcha" ref="reCaptcha"/>
   </bean>
+
+  <bean id="feedbackManager" scope="prototype"
+       class="edu.ucla.mbi.imex.central.FeedbackManager">
+   
+    <property name="userContext" ref="userContext"/>
+
+    <property name="adminMail" value="dip@mbi.ucla.edu" />
+    <property name="mailServer" value="imex.mbi.ucla.edu" />
+  </bean>
+
 
   <bean id="reCaptcha" class="net.tanesha.recaptcha.ReCaptchaImpl">
     <property name="privateKey" value="${icentral.recaptcha.privateKey}"/>

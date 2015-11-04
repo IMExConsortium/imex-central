@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <!-- ========================================================================
  ! $HeadURL::                                                               $
@@ -72,6 +72,11 @@
   <property name="author" column="author"/>
   <property name="abstract" column="abstract"/>
 
+  <property name="volume" column="volume"/>
+  <property name="issue" column="issue"/>
+  <property name="pages" column="pages"/>
+  <property name="year" column="year"/>
+
   <property name="pubDate" column="pub_date"/>
   <property name="expectedPubDate" column="epub_date"/>
   <property name="releaseDate" column="rel_date"/>
@@ -90,6 +95,9 @@
 
   <many-to-one name="state" column="state_id"
                class="edu.ucla.mbi.imex.central.IcDataState" />
+
+  <many-to-one name="stage" column="stage_id"
+               class="edu.ucla.mbi.imex.central.IcDataStage" />
 
   <set name="adminUsers" table="entry_ausr" sort="natural" lazy="false">
     <key column="entry_id"/>

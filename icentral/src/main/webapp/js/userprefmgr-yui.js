@@ -80,15 +80,30 @@ YAHOO.imex.userprefmgr = {
                     
                     var keyClass = "cfg-key"; 
                     
-                    if( strong ){
-                        keyClass = "cfg-key-strong";
+                    if( value.type == "text" ){
+                        var keyClass = "cfg-text-key";
+                        if( strong ){
+                            keyClass = "cfg-text-key-strong";
+                        }
+
+                        return "<div class='cfg-key-val'>" 
+                            + "<div class='" + keyClass + "'>" + value.label + "</div>" 
+                            + "<div class='cfg-val' id='opp." + opp + "'>" 
+                            + userPrefManager.htmlStringText( options[key], opp, value.value, value.size )
+                            + "</div>"
+                            + "</div>";
+                    } else {
+                        var keyClass = "cfg-key";
+                        if( strong ){
+                            keyClass = "cfg-key-strong";
+                        }
+                        return "<div class='cfg-key-val'>" 
+                            + "<div class='" + keyClass + "'>" + value.label + "</div>" 
+                            + "<div class='cfg-val' id='opp." + opp + "'>" 
+                            + userPrefManager.htmlBoolRadio( options[key], opp, value.value )
+                            + "</div>"
+                            + "</div>";
                     }
-                    return "<div class='cfg-key-val'>" 
-                        + "<div class='" + keyClass + "'>" + value.label + "</div>" 
-                        + "<div class='cfg-val' id='opp." + opp + "'>" 
-                        + userPrefManager.htmlBoolRadio( options[key], opp, value.value )
-                        + "</div>"
-                        + "</div>";
                 }
                 return "";
             };
@@ -170,11 +185,11 @@ YAHOO.imex.userprefmgr = {
         return html;
     },
 
-    htmlStringText: function( optName, optOpp, optValue ){
+    htmlStringText: function( optName, optOpp, optValue, size ){
         
         var textBox = '<input type="text" id="' + optName 
-            + '" name="opp.' + optOpp + '"' 
-            +' value="true" checked="checked" />';
+            + '" name="opp.' + optOpp + '" size="' + size + '"' 
+            +' value="'+optValue+'" />';
 
         var html = "<div class='cfg-val'>" + textBox +"</div>";
         return html;

@@ -26,7 +26,13 @@ import java.net.*;
 import java.util.*;
 import java.sql.*;
 
-public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDao {
+public class IcKeyspaceDao extends AbstractDAO implements KeyspaceDao {
+
+    //public IcKeyspaceDao(){ super();}
+
+    //public IcKeyspaceDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
     
     //--------------------------------------------------------------------------
     // KeyspaceDAO implementation
@@ -36,8 +42,9 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDao {
 
         Keyspace ksp = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -147,8 +154,9 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDao {
 	IcKey key = null;
 	accession = accession.replaceAll( "[^0-9]", "" );
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
 	try {
@@ -181,8 +189,9 @@ public class IcKeyspaceDAO extends AbstractDAO implements KeyspaceDao {
        	
 	IcKey key = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 	
 	try {

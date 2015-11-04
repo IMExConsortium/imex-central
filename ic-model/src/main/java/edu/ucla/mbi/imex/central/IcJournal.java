@@ -48,6 +48,24 @@ public class IcJournal extends Journal {
 	return sb.toString();
     }
 
+
+    public Group getImexGroup(){
+        
+        Set<Group> agroups = this.getAdminGroups();
+        for( Iterator<Group> iag = agroups.iterator(); 
+             iag.hasNext(); ){ 
+            Group cag = iag.next();
+            for( Iterator<Role> ir = cag.getRoles().iterator(); 
+                 ir.hasNext(); ){
+                Role cr = ir.next();
+                if( cr.getName().equalsIgnoreCase("IMEX PARTNER") ){
+                    return cag;
+                }
+            }
+        }
+        return null;
+    }
+
 }
 
 

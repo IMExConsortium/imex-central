@@ -3,11 +3,11 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.ucla.mbi.imex</groupId>
-  <artifactId>imexcentral-project</artifactId>
+  <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>1.02</version>
+  <version>1.99</version>
   <name>IMEx Central</name>
-  <url>https://imex.mbi.ucla.edu/trac/imexcentral</url>
+  <url>https://github.com/IMExConsortium</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,7 +15,7 @@
   </properties>
 
   <organization>
-   <name>UCLA-DOE Institute for Genomics and Proteomics</name>
+   <name>UCLA-DOE Institute</name>
    <url>http://www.ucla-doe.mbi.ucla.edu</url>
   </organization>
 
@@ -24,7 +24,7 @@
       <id>lukasz</id>
       <name>Lukasz Salwinski</name>
       <url>http://dip.mbi.ucla.edu/dip/developers/lukasz</url>
-      <organization>UCLA-DOE Institute for Genomics and Proteomics</organization>
+      <organization>UCLA-DOE Institute</organization>
       <organizationUrl>http://www.ucla-doe.mbi.ucla.edu</organizationUrl>
       <roles>
         <role>developer</role>
@@ -34,8 +34,8 @@
     <developer>
       <id>zplat</id>
       <name>Zachary Plat</name>
-      <url>http://dip.mbi.ucla.edu/dip/developers/wyu</url>
-      <organization>UCLA-DOE Institute for Genomics and Proteomics</organization>
+      <url>http://dip.mbi.ucla.edu/dip/developers/zplat</url>
+      <organization>UCLA-DOE Institute</organization>
       <organizationUrl>http://www.ucla-doe.mbi.ucla.edu</organizationUrl>
       <roles>
         <role>developer</role>
@@ -81,17 +81,24 @@
   <dependencies>
 
    <dependency>
-    <groupId>postgresql</groupId>
-    <artifactId>postgresql</artifactId>
-     <version>9.0-801.jdbc4</version>
+     <groupId>org.postgresql</groupId>
+     <artifactId>postgresql</artifactId>
+     <version>9.4-1203-jdbc4</version>
    </dependency>
 
    <dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
-    <version>3.8.1</version>
+    <version>4.12</version>
     <scope>test</scope>
    </dependency>
+<!--
+   <dependency>
+     <groupId>org.apache.logging.log4j</groupId>
+     <artifactId>log4j-core</artifactId>
+     <version>2.4</version>
+   </dependency>
+-->
 
    <dependency>
     <groupId>log4j</groupId>

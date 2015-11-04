@@ -1,0 +1,1 @@
+select distinct gr from edu.ucla.mbi.imex.central.IcGroup as gr join gr.roles as rl where upper( rl.name ) like :q  and gr in (select distinct groups from edu.ucla.mbi.imex.central.IcJournal as j

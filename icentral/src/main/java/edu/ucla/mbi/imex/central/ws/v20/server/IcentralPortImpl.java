@@ -262,15 +262,20 @@ public class IcentralPortImpl implements IcentralPort {
                 User owner = entryManager.getUserContext()
                     .getUserDao().getUser( c.getLogin() );
                 log.debug( " owner set to: " + owner );
-                
+                 
                 DataState state =
                     entryManager.getWorkflowContext()
                     .getWorkflowDao().getDataState( "NEW" );
-                log.debug( " state set to: " + state );
+
+                DataState stage =
+                    entryManager.getWorkflowContext()
+                    .getWorkflowDao().getDataStage( "PREQUEUE" );
+
+               log.debug( " state set to: " + state );
                 
                 if ( state != null ) {
                     try{
-                        IcPub newPub = entryManager.addIcPub( icPub, owner, state );
+                        IcPub newPub = entryManager.addIcPub( icPub, owner, stage, state );
                         if ( newPub != null ) {
                             icPub = newPub;
                         }

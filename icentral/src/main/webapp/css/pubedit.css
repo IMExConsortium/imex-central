@@ -37,6 +37,21 @@
   border-width:0 0 5px;
 }
 
+
+#content .h3-label{
+    padding-top:0;
+    padding-bottom:0;
+}
+
+#content .box-fieldset{
+  
+    padding-top:0em;
+}
+
+
+
+
+
 #container .bd form {
         clear:left;
 }

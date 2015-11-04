@@ -163,7 +163,7 @@ public class JournalMgrAction extends ManagerSupport {
         
         if ( tracContext.getJournalDao() == null ) return SUCCESS;
         
-        if ( getId() > 0 && journal == null ) {
+        if ( getId() > 0 && getOp() == null && journal == null ) {
             log.debug( "setting journal=" + getId() );            
             journal = entryManager.getIcJournal( getId() );  
             return SUCCESS;
@@ -171,6 +171,11 @@ public class JournalMgrAction extends ManagerSupport {
         
         if( getOp() == null ) return SUCCESS;
         
+        
+        journal = entryManager.getIcJournal( getId() );
+
+
+
         for ( Iterator<String> i = getOp().keySet().iterator();
               i.hasNext(); ) {
             
@@ -231,103 +236,7 @@ public class JournalMgrAction extends ManagerSupport {
                     }
                     return SUCCESS;
                 }
-
-                //--------------------------------------------------------------
                 
-                if ( key.equalsIgnoreCase( "jpup" ) ) {
-                    return updateJournalProperties( getId(), journal );
-                }
-                
-                //--------------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "jauadd" ) ) {
-                    System.out.print("jauadd");
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String ulogin = getOpp().get( "jauadd" );
-                    try {
-                        return addJournalAdminUser( getId(), ulogin );
-                        
-                    } catch( NumberFormatException nfe ) {
-                        // abort on error
-                        nfe.printStackTrace();
-                    }
-                    return SUCCESS;
-                }
-                
-                //--------------------------------------------------------------
-                
-                if ( key.equalsIgnoreCase( "jagadd" ) ) {
-                    System.out.print("jagadd");
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String sgid = getOpp().get( "jagadd" );
-                    try {
-                        int gid = Integer.parseInt( sgid );
-                        return addJournalAdminGroup( getId(), gid );
-                        
-                    } catch( NumberFormatException nfe ) {
-                        // abort on error
-                    }
-                    return SUCCESS;
-                }
-
-                //--------------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "jaudel" ) ) {
-                    System.out.print("jaudel");
-                    if ( getOpp() == null ) return SUCCESS;
-                    
-                    String udel = getOpp().get( "jaudel" );
-                    
-                    if ( getId() > 0 && udel != null ) {
-                        try {
-                             List<Integer> uidl =
-                                 new ArrayList<Integer>();
-                             String[] us = udel.split(",");
-
-                             for( int ii = 0; ii <us.length; ii++ ) {
-                                 uidl.add( Integer.valueOf( us[ii] ) );
-                             }
-                             return delJournalAdminUsers( getId(), uidl );
-                        } catch ( Exception ex ) {
-                            // should not happen
-                        }   
-                    } else {
-                        journal = entryManager.getIcJournal( getId() );
-                        setId( journal.getId() );
-                    }
-                    return SUCCESS;
-                }
-                
-                //--------------------------------------------------------------
-
-                if ( key.equalsIgnoreCase( "jagdel" ) ) {
-                    System.out.print("jagdel");
-                    if ( getOpp() == null ) return SUCCESS;
-
-                    String gdel = getOpp().get( "jagdel" );
-
-                    if ( getId() > 0 && gdel != null ) {
-                        try {
-                             List<Integer> gidl =
-                                 new ArrayList<Integer>();
-                             String[] gs = gdel.split(",");
-
-                             for( int ii = 0; ii <gs.length; ii++ ) {
-                                 gidl.add( Integer.valueOf( gs[ii] ) );
-                             }
-                             return delJournalAdminGroups( getId(), gidl );
-                        } catch ( Exception ex ) {
-                            // should not happen
-                        }   
-                    } else {
-                        journal = entryManager.getIcJournal( getId() );
-                        setId( journal.getId() );
-                    }
-                    return SUCCESS;
-                }
-
                 if ( key.equalsIgnoreCase( "jpg" ) ) {
                     if ( getOpp() == null ) {
                         return this.getIcJournalRecords();
@@ -336,10 +245,30 @@ public class JournalMgrAction extends ManagerSupport {
                     String off= getOpp().get( "off" );
                     String skey= getOpp().get( "skey" );
                     String sdir= getOpp().get( "sdir" );
-                    String flt= getOpp().get( "flt" );
+                    
 
-                    return this.getIcJournalRecords( max, off, 
-                                                     skey, sdir, flt );
+                    
+                    Map<String,String> flt = new HashMap<String,String>();
+
+                    if( getOpp().get( "pfv" ).length() > 0){
+                        flt.put( "partner", getOpp().get( "pfv" ) );
+                    }
+
+                    if ( flt.size() == 0 ){
+
+                        log.debug( "getPubRecords: unfiltered" );
+
+                        return this.getIcJournalRecords( max, off, 
+                                                         skey, sdir, flt );
+                        
+                    } else {
+                        
+                        log.debug( "getPubRecords: filtered" );
+
+                        return this.getIcJournalRecords( max, off,
+                                                         skey, sdir, flt );
+                        
+                    }                   
                 }
             }
         }
@@ -509,7 +438,7 @@ public class JournalMgrAction extends ManagerSupport {
     public String updateJournalProperties( int id, Journal jrnl ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "update journal: id=" + id );
+        log.debug( "update properties: journal id=" + id );
         
         IcJournal oldJournal = entryManager.getIcJournal( id );
         if ( oldJournal == null || journal == null ) return SUCCESS;
@@ -518,8 +447,8 @@ public class JournalMgrAction extends ManagerSupport {
         
         journal = entryManager.getIcJournal( id );
         setId( journal.getId() );
-        
-        return JEDIT;
+        log.debug( "pdate properties: " + JSON );
+        return JSON;
     }
 
     //---------------------------------------------------------------------
@@ -651,12 +580,12 @@ public class JournalMgrAction extends ManagerSupport {
     //---------------------------------------------------------------------
 
     public String getIcJournalRecords() {
-        return this.getIcJournalRecords( "", "", "", "", "" );
+        return this.getIcJournalRecords( "", "", "", "", null );
     }
     
     public String getIcJournalRecords( String max, String off, 
                                        String skey, String sdir, 
-                                       String flt ) {
+                                       Map<String,String> flt ){
         
         if ( tracContext.getJournalDao() == null ) return null;
         
@@ -682,11 +611,20 @@ public class JournalMgrAction extends ManagerSupport {
             }
         }
 
-        List<Journal> jl = 
-            tracContext.getJournalDao().getJournalList( first, blockSize );
-        long total =  
-            tracContext.getJournalDao().getJournalCount();
+        boolean asc = true;
+        if( sdir != null && sdir.equalsIgnoreCase("desc")){
+            asc = false;
+        }
+        List<Journal> jl;
+        long total;
 
+        if( flt == null ){
+            jl = tracContext.getJournalDao().getJournalList( first, blockSize, skey, asc );
+            total = tracContext.getJournalDao().getJournalCount();
+        } else {
+            jl = tracContext.getJournalDao().getJournalList( first, blockSize, skey, asc, flt );
+            total = tracContext.getJournalDao().getJournalCount( flt );
+        }
         // buid record map
         //----------------
         
@@ -700,8 +638,14 @@ public class JournalMgrAction extends ManagerSupport {
 
         List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
         records.put("records", rl );
+        
+        Map<Journal,List> jstat = tracContext.getJournalDao()
+            .getJournalListStats( jl ); 
 
+        log.debug( "jstat count=" + jstat.size());
+        
         for( Iterator<Journal> ii = jl.iterator(); ii.hasNext(); ) {
+
             IcJournal ij = (IcJournal) ii.next();
             Map<String,Object> r = new HashMap<String,Object>();  
             r.put( "id", ij.getId() );
@@ -710,6 +654,84 @@ public class JournalMgrAction extends ManagerSupport {
             r.put( "owner", ij.getOwner().getLogin() );
             r.put( "date", ij.getCreateDateString() );
             r.put( "time", ij.getCreateTimeString() );
+            
+            Group imex = ij.getImexGroup();
+            if( imex != null ){
+                r.put( "imex", true );
+                r.put( "imexDB", imex.getName() );
+            } else {
+                r.put( "imex", false );               
+            }
+
+            long pqueue = 0;
+            long pqueueDisc = 0;
+            long queue = 0;
+            long queueDisc = 0;
+            long curate = 0;
+            long curateDisc = 0;
+            long release = 0;
+            long retract = 0;
+            
+
+            List sl = jstat.get( ij );
+            log.debug( "ij="+ ij.getTitle() + " sl size=" + sl.size() );
+
+            for( Iterator is = sl.iterator(); is.hasNext(); ){
+                Map ss = (Map) is.next();
+                
+                log.debug( " stage="+ ((DataState)ss.get( "stage" )).getName() +
+                           " stat=" + ((DataState)ss.get( "state" )).getName() + 
+                           " count=" +  ss.get( "count" ));
+                
+                long count = (Long) ss.get( "count" );
+
+                if( ((DataState)ss.get( "stage" )).getName().equals("PREQUEUE") ){
+                
+                    pqueue += count;
+                    if( ((DataState)ss.get( "state" )).getName().equals( "DISCARDED" )){
+                        pqueueDisc += count;                       
+                    }
+                    continue;
+                }
+                 
+                if( ((DataState)ss.get( "stage" )).getName().equals( "QUEUE" ) ){
+                    queue += count;
+                    if( ((DataState)ss.get( "state" )).getName().equals( "DISCARDED" )){
+                        queueDisc += count;
+                    }
+                    continue;
+                }
+
+                if( ((DataState)ss.get( "stage" )).getName().equals( "CURATION" ) ){
+                    
+                    if( ((DataState)ss.get( "state" )).getName().equals( "RELEASED" )){
+                        release += count;
+                        continue;
+
+                    }
+                    curate += count;
+
+                    if( ((DataState)ss.get( "state" )).getName().equals( "discard" )){
+                        curateDisc += count;
+                        continue;
+                    }
+                }
+            }
+
+            r.put( "pqueue", pqueue );
+            r.put( "pqueueSub", pqueueDisc );
+            r.put( "queue", queue );
+            r.put( "queueSub", queueDisc );
+            r.put( "curation", curate );
+            r.put( "curationSub", curateDisc);
+            r.put( "release", release );
+            r.put( "retract", retract );
+
+            log.debug("pq:" + pqueue + ":" + pqueueDisc +
+                      "q: " + queue + ":" + queueDisc +
+                      "c: " + curate +":" +curateDisc +
+                      "r: " +release); 
+            
             rl.add( r );
         }
         return JSON;

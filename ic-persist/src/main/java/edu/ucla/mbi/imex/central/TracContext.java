@@ -40,13 +40,13 @@ public class TracContext extends JsonContext {
 
     //--------------------------------------------------------------------------
 
-    private JournalDao journalDao;
+    private JournalVIPDao journalDao;
 
-    public JournalDao getJournalDao() {
+    public JournalVIPDao getJournalDao() {
         return journalDao;
     }
 
-    public void setJournalDao( JournalDao dao ) {
+    public void setJournalDao( JournalVIPDao dao ) {
         journalDao = dao;
     }
 

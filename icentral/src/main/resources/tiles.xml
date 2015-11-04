@@ -173,6 +173,9 @@
   <put-attribute name="footer" type="definition" value="footer"/>
  </definition>
 
+ <definition name="pub-status-popup" template="/tiles/pubstatus.jsp">
+ </definition>
+
  <definition name="pubnew" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral: Add Publication" />
   <put-attribute name="body" value="/tiles/pubnew-yui.jsp"/>
@@ -185,7 +188,23 @@
   <put-attribute name="body" value="/tiles/journalmgr-yui.jsp"/>
   <put-attribute name="footer" type="definition" value="footer"/>
  </definition>
- <definition name="journaledit" template="/tiles/journaledit.jsp"/>
+
+ <definition name="journaledit" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral: Journal Editor" />
+  <put-attribute name="body" value="/tiles/journaledit-yui.jsp"/>
+  <put-attribute name="footer" type="definition" value="footer"/>
+ </definition>
+
+
+
+<!-- <definition name="journaledit" template="/tiles/journaledit-yui.jsp"/> -->
+
+ <definition name="journalview" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral: Journal View" />
+  <put-attribute name="body" value="/tiles/journalview-yui.jsp"/>
+  <put-attribute name="footer" type="definition" value="footer"/>
+ </definition>
+
 
  <definition name="aclpageerror" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral: ACL Violation" />

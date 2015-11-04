@@ -301,6 +301,19 @@
      
    </action>
 
+  <!-- admin action -->
+
+   <action name="admin" class="adminAction">
+     <interceptor-ref name="defaultStack"/>
+     <interceptor-ref name="timer"/>
+     <result name="json" type="json">
+       <param name="includeProperties">
+         result.*
+       </param>
+       <param name="noCache">true</param>
+     </result>
+   </action>
+
  </package>
 
 </struts>

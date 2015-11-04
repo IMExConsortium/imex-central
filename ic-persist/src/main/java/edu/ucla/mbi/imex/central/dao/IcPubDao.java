@@ -28,6 +28,12 @@ import edu.ucla.mbi.imex.central.*;
        
 public class IcPubDao extends AbstractDAO implements PublicationDao {
 
+    //public IcPubDao(){ super(); }
+
+    //public IcPubDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
     public Publication getPublication( int id ) { 
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -45,8 +51,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         
         Publication pub = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -78,8 +85,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Publication pub = null;
         if ( pmid == null || pmid.equals("") ) return pub;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
 
@@ -112,8 +120,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Publication pub = null;
         if ( doi == null || doi.equals("") ) return pub;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
 
@@ -146,8 +155,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Publication pub = null;
         if ( jint == null || jint.equals("") ) return pub;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
 
@@ -177,8 +187,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Publication pub = null;
         if ( key == null || key.equals("") ) return pub;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -215,8 +226,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList"  );
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -249,8 +261,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList(block)"  );
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -286,8 +299,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -343,7 +357,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
     public List<Publication> getPublicationList( int firstRecord,
                                                  int blockSize,
                                                  String skey, boolean asc,
-                                                 Map<String,String> flt) {
+                                                 Map<String,String> flt ){
         
         List<Publication> plst = new ArrayList<Publication>();
         
@@ -352,8 +366,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         log.debug( "IcPubDao:getPublicationList(block) filt(partner)=:" + 
                   flt.get("partner") );
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -415,8 +430,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
 
         long count = 0;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -438,8 +454,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
 
     public List<User> getOwners( String qstr ) {
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         List<User> ulst = null;
@@ -473,8 +490,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
 
     public List<User>  getAdminUsers( String qstr ){
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         List<User> ulst = null;
@@ -509,8 +527,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
 
     public List<Group>  getAdminGroups( String qstr ){
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         List<Group> glst = null;
@@ -560,8 +579,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
 
     public List<DataState> getStates( String qstr ){
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         List<DataState> slst = null;
@@ -590,17 +610,15 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         return slst;
     }
 
-
     //--------------------------------------------------------------------------
-
-
     
     public long getPublicationCount(  Map<String,String> flt ) {
 
         long count = 0;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -636,12 +654,18 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Log log = LogFactory.getLog( this.getClass() );
         
         if ( publication  instanceof IcPub ) {
-            super.saveOrUpdate( publication );
+            log.info( "IcPub");
+            log.info( ((IcPub) publication).getStage() );
+            log.info( ((IcPub) publication).getState() );
+           
+            super.saveOrUpdate( (IcPub) publication );
 
             log.info( "IcPubDao->savePublication: id(pub)=" + publication.getId() );
 
             return publication;
         } else {
+            log.info( "Publication");
+
             IcPub icp = new IcPub( publication);
             super.saveOrUpdate( icp );
 
@@ -744,6 +768,37 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             
             log.info("Flag crt: " + flt.get( "cflag") );
         }
+
+        int jid = 1;
+        try{
+            jid = Integer.parseInt( flt.get( "jid" ) );
+        }catch( Exception ex ){
+            // shouldnt happen
+        }
+                 
+
+        if( flt.get( "jid" ) != null &&
+            !flt.get("jid").equals("") ){
+            crit.createAlias( "source", "sr" )
+                //.add( Restrictions.eq( "sr.id", flt.get( "jid" ) ) );
+                .add( Restrictions.eq( "sr.id", jid ) );
+        }
+
+        if( flt.get( "year" ) != null &&
+            !flt.get("year").equals("") ){
+            crit.add( Restrictions.eq( "year", flt.get( "year" ) ) );
+        }
+
+        if( flt.get( "volume" ) != null &&
+            !flt.get("volume").equals("") ){
+            crit.add( Restrictions.eq( "volume", flt.get( "volume" ) ) );
+        }
+
+        if( flt.get( "issue" ) != null &&
+            !flt.get("issue").equals("") ){
+            crit.add( Restrictions.eq( "issue", flt.get( "issue" ) ) );
+        }
+
         return crit;
     }
 
@@ -754,8 +809,9 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         
         IcPub pub = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {

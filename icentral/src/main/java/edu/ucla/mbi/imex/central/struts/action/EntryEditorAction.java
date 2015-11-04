@@ -39,6 +39,9 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
 
     public static final String EDITOR = "CURATOR";
     public static final String PARTNER = "IMEX PARTNER";
+
+    public static final String STATUS_POPUP = "pub-status-popup";
+
     
     ////------------------------------------------------------------------------
     /// Entry Manager
@@ -203,7 +206,14 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
     public List<String> getTargetStates() {
         return this.targetStates;
     }
+
+
+    private User luser = null;
+    public User  getLuser(){
+        return this.luser;
+    }
     
+
     //--------------------------------------------------------------------------
 
     public String execute() throws Exception{
@@ -216,9 +226,9 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
         Integer iusr = (Integer) getSession().get( "USER_ID" );
         log.debug( " login id=" + iusr );
         
-        User luser = null;
         if( iusr != null) {
             luser = getUserContext().getUserDao().getUser( iusr.intValue() );
+            
             log.debug( " user set to: " + luser );
         }
         
@@ -260,9 +270,13 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
             || getOp() == null ) return SUCCESS;
         
         if ( getId() > 0 && icpub == null ) {
+
+            log.debug("getting pub: id=" + getId());
             icpub = entryManager.getIcPub( getId() );
         }
         
+        log.debug( "scanning ops..." );
+
         for ( Iterator<String> i = getOp().keySet().iterator();
               i.hasNext(); ) {
             
@@ -278,6 +292,12 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
                 //-----------
                 if ( key.equalsIgnoreCase( "init" ) ) {
                     return SUCCESS;                    
+                }
+
+                if ( key.equalsIgnoreCase( "popup" ) ) {
+                    if( val != null && val.equalsIgnoreCase("status") ){
+                        return STATUS_POPUP;                    
+                    }
                 }
                 
                 //--------------------------------------------------------------
@@ -663,13 +683,18 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
         if ( owner == null )  return ACL_OPER;
         log.debug( " owner set to: " + owner );
         
+        DataState stage =  
+            wflowContext.getWorkflowDao().getDataStage( "PREQUEUE" );
+        log.debug( " stage set to: " + stage );
+
         DataState state =  
             wflowContext.getWorkflowDao().getDataState( "NEW" );
         log.debug( " state set to: " + state );
         
-        if ( state != null ) {
+        if ( stage != null &&  state != null) {
             try{
-                IcPub newPub = entryManager.addIcPub( pub, owner, state );
+                IcPub newPub = entryManager
+                    .addIcPub( pub, owner, stage, state );
                 if ( newPub != null ) {
                     icpub = newPub;
                     setId( newPub.getId() );

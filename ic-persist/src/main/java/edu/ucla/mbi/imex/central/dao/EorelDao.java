@@ -28,7 +28,13 @@ import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
 
 public class EorelDao extends AbstractDAO{ //  implements ObsMgrDao {
-    
+
+    //public EorelDao(){super();};
+
+    //public EorelDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
     public void addEORel( String event, User observer ){
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -74,8 +80,9 @@ public class EorelDao extends AbstractDAO{ //  implements ObsMgrDao {
         log.debug( "getEORel(HQL) event=" + event
                    + " sid=" + observer.getId() );
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         EORel watchStatus = null;
@@ -100,7 +107,6 @@ public class EorelDao extends AbstractDAO{ //  implements ObsMgrDao {
             ex.printStackTrace();
 
         } finally {
-            
             session.close();
         }
 
@@ -115,8 +121,9 @@ public class EorelDao extends AbstractDAO{ //  implements ObsMgrDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getEORel(HQL) event=" + event );
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         List<User> olst = null;

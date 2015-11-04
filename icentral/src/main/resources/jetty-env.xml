@@ -13,12 +13,15 @@
  <New class="org.mortbay.jetty.plus.naming.Resource">
   <Arg>java:/comp/env/jdbc/icentral</Arg>
   <Arg>
-   <New class="org.postgresql.ds.PGSimpleDataSource">
+   <!-- <New class="org.postgresql.ds.PGSimpleDataSource"> -->
+  <New class="org.postgresql.ds.PGPoolingDataSource">   
+    <Set name="dataSourceName">icentral-test</Set>
     <Set name="User">dip</Set>
     <Set name="Password">444dip444</Set>
     <Set name="DatabaseName">icentral_test</Set>
     <Set name="ServerName">10.1.2.212</Set>
     <Set name="PortNumber">5432</Set>
+    <Set name="maxConnections">10</Set>
    </New>
   </Arg>
  </New>

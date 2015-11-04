@@ -17,7 +17,7 @@ import java.util.*;
 
 import edu.ucla.mbi.util.data.*;
 
-public class IcPub extends Publication {
+public class IcPub extends PublicationVIP {
     
     IcPub() { }
     
@@ -30,6 +30,14 @@ public class IcPub extends Publication {
         this.setTitle( pub.getTitle() );
         this.setAuthor( pub.getAuthor() );
         this.setAbstract( pub.getAbstract() );
+
+        if( pub instanceof PublicationVIP ){
+            this.setVolume( ((PublicationVIP) pub).getVolume() );
+            this.setIssue( ((PublicationVIP) pub).getIssue() );
+            this.setPages( ((PublicationVIP) pub).getPages() );
+            this.setYear( ((PublicationVIP) pub).getYear() );
+        }
+
         
         this.setExpectedPubDate( pub.getExpectedPubDate() );
         this.setPubDate( pub.getPubDate() );
@@ -76,6 +84,15 @@ public class IcPub extends Publication {
 
     //--------------------------------------------------------------------------
 
+    private DataState stage;
+
+    public DataState getStage() {
+        return stage;
+    }
+
+    public void setStage( DataState stage ) {
+        this.stage = stage;
+    }
 
     //--------------------------------------------------------------------------
     
@@ -133,7 +150,6 @@ public class IcPub extends Publication {
 
         return actUser;
     }
-
 
     //--------------------------------------------------------------------------
     //  last modification

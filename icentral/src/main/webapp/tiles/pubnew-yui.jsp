@@ -46,7 +46,11 @@
      <label>PMID:</label>
      <div><s:property  value="pub.pmid" /> </div>
      <label>Journal:</label>
-     <div><s:property value="pub.source.title" /></div>
+     <div>
+        <s:property value="pub.source.title" />
+
+        <s:if test="pub.volume.length() != 0"><s:property value="pub.volume" /></s:if><s:if test="pub.issue.length() != 0">(<s:property value="pub.issue" />)</s:if><s:if test="pub.pages.length() != 0">:<s:property value="pub.pages" /></s:if><s:if test="pub.year.length() != 0">, <s:property value="pub.year" /></s:if>
+     </div>
           
      <label>Author(s):</label>
      <div><s:property value="pub.author"/></div>

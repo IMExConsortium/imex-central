@@ -172,7 +172,7 @@ public class NcbiProxyClient {
                     return null;
                 }
                 
-                Publication newPub = new Publication();
+                PublicationVIP newPub = new PublicationVIP();
 
                 newPub.setPmid( nodeT.getAc() );
                 
@@ -193,6 +193,21 @@ public class NcbiProxyClient {
                         if (ia.getName().equals("abstract") ){ 
                             newPub.setAbstract( ia.getValue().getValue() );
                         }
+
+                        if (ia.getName().equals("volume") ){ 
+                            newPub.setVolume( ia.getValue().getValue() );
+                        }
+                        if (ia.getName().equals("issue") ){ 
+                            newPub.setIssue( ia.getValue().getValue() );
+                        }
+                        if (ia.getName().equals("pages") ){ 
+                            newPub.setPages( ia.getValue().getValue() );
+                        }
+
+                        if (ia.getName().equals("year") ){ 
+                            newPub.setYear( ia.getValue().getValue() );
+                        }
+
                         if (ia.getName().equals("publication-date") ){
                             String sdate = ia.getValue().getValue(); // 1999-10-01
                             

@@ -107,6 +107,12 @@ public class EntryManager {
         log.info( "EntryManager: initializing" );
     }
 
+    public void cleanup(){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "EntryManager: cleanup called" );
+    }
+
+
 
     //---------------------------------------------------------------------
     // Operations
@@ -306,6 +312,12 @@ public class EntryManager {
         return ulist;
     }
 
+    public List<Group> acomJGroup( String query ) {
+        List<Group> ulist 
+            = tracContext.getJournalDao().getAdminGroups( query ); 
+        return ulist;
+    }
+
 
     //--------------------------------------------------------------------------
     // get through proxy
@@ -328,8 +340,8 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
     
-    public IcPub addIcPub( Publication pub, User owner, DataState state ) 
-        throws ImexCentralException {
+    public IcPub addIcPub( Publication pub, User owner, DataState stage, 
+                           DataState state ) throws ImexCentralException {
         
         Log log = LogFactory.getLog( this.getClass() );
         
@@ -342,7 +354,7 @@ public class EntryManager {
         
             log.info( " new pub -> pmid=" + pub.getPmid() );
             
-            return addPmidIcPub( pub, owner, state );
+            return addPmidIcPub( pub, owner, stage, state );
             
         } else {
             if( pub != null 
@@ -403,8 +415,8 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
-    public IcPub addPmidIcPub( Publication pub, User owner, DataState state ) 
-        throws ImexCentralException{
+    public IcPub addPmidIcPub( Publication pub, User owner, DataState stage, 
+                               DataState state ) throws ImexCentralException{
         
         Log log = LogFactory.getLog( this.getClass() );
         
@@ -475,13 +487,19 @@ public class EntryManager {
                 }
                 
                 icp.setOwner( owner );
+
+                icp.setStage( stage );
                 icp.setState( state );
 
                 icp.setActUser( owner );
                 icp.setActDate();
                 icp.setModUser( owner );
                 icp.setModDate();
-                
+                              
+                log.info( stage);
+                log.info( state);
+
+
                 // set admin user/group sets
                 //--------------------------
                 
@@ -630,15 +648,18 @@ public class EntryManager {
 
             // test if pmid already there !!!!
             
-            if ( getIcPubByNsAc( "pmid", npmid ) != null ){
+            if ( npmid != null && npmid.length() > 0 &&
+                 getIcPubByNsAc( "pmid", npmid ) != null &&
+                 getIcPubByNsAc( "pmid", npmid ).getId() == pub.getId() ){
 
                 // duplicated pmid                
                 throw EntryException.DUP_PMID;
-                
             }
 
-            if ( getIcPubByNsAc( "doi", ndoi ) != null ){
-
+            if ( ndoi != null && ndoi.length() > 0 &&
+                 getIcPubByNsAc( "doi", ndoi ) != null &&
+                 getIcPubByNsAc( "doi", ndoi ).getId() == pub.getId() ){
+                
                 // duplicated doi
                 throw EntryException.DUP_DOI;
             }
@@ -682,6 +703,13 @@ public class EntryManager {
             pub.setAbstract( pmPub.getAbstract() );
             pub.setDoi( pmPub.getDoi() );
       
+            if( pmPub instanceof PublicationVIP && pub instanceof PublicationVIP ){
+                pub.setVolume( ((PublicationVIP)pmPub).getVolume() );
+                pub.setIssue( ((PublicationVIP)pmPub).getIssue() );
+                pub.setPages( ((PublicationVIP)pmPub).getPages() );
+                pub.setYear( ((PublicationVIP)pmPub).getYear() );
+            }
+
             IcJournal journal = 
                 this.addIcJournal( ((Journal) pmPub.getSource()).getNlmid(),
                                    luser );
@@ -728,10 +756,46 @@ public class EntryManager {
               
              */
             
-            pub.setState( state );
-            //tracContext.getPubDao().savePublication( pub );
-            ((IcPubDao)tracContext.getPubDao()).updatePublication( pub, luser );
-        
+
+            // to be moved into workflow context
+
+            DataState oSt = pub.getState();
+            DataState oSg = pub.getStage();
+            
+            DataState stage = pub.getStage();
+            
+            log.debug( "stage/state (o): " + stage + " / " +  state );
+            
+
+           
+            if( state.getName().equals("QUEUE") ){
+                state = wflowContext.getWorkflowDao().getDataState( "NEW" );
+                stage = wflowContext.getWorkflowDao().getDataStage( "QUEUE" );
+            }
+
+            if( ! ( state.getName().equals("NEW") 
+                    || state.getName().equals("DISCARDED") ) ){
+                stage = wflowContext.getWorkflowDao().getDataStage( "CURATION" );
+            }
+
+            log.debug( "stage/state (n): " + stage + " / " +  state );
+
+            
+            //log.debug( oSt.getName() + " : " +  oSg.getName() + " : " 
+            //           +  state.getName() + " : " +  stage.getName()  );
+
+
+            // o be moved into workflow context: END
+
+            if( stage != oSg || state != oSt ){
+                pub.setState( state );
+                pub.setStage( stage );
+            
+                //tracContext.getPubDao().savePublication( pub );            
+
+                ((IcPubDao)tracContext.getPubDao()).updatePublication( pub, luser );
+            }
+            
             return pub;
         }
         return null;
@@ -1154,4 +1218,66 @@ public class EntryManager {
         tracContext.getJournalDao().updateJournal( oldJrnl );
         return oldJrnl;
     }
+
+    
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    
+    public String getIcJournalYear( Journal jrnl, boolean first ) {
+        
+        String year  = tracContext.getJournalDao()
+            .getJournalYear( jrnl, first );
+        
+        if( year != null){ 
+            return year;
+        }
+        return "";
+    }
+
+    public List<String> getIcJournalYearList( Journal jrnl, boolean first ) {
+        return tracContext.getJournalDao()
+            .getJournalYearList( jrnl, first );        
+    }
+
+    //--------------------------------------------------------------------------
+    
+    public String getIcJournalVolume( Journal jrnl, boolean first, 
+                                      String year ) {
+        
+        String volume  = tracContext.getJournalDao()
+            .getJournalVolume( jrnl, first, year );
+        
+        if( volume != null){ 
+            return volume;
+        }
+        return "";
+    }
+
+    public List<String> getIcJournalVolumeList( Journal jrnl, boolean first,
+                                                String year ) {
+        return tracContext.getJournalDao()
+            .getJournalVolumeList( jrnl, first, year );        
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public String getIcJournalIssue( Journal jrnl, boolean first,
+                                     String year, String volume ) {
+
+        String issue  = tracContext.getJournalDao()
+            .getJournalIssue( jrnl, first, year, volume );
+        
+        if( issue != null){ 
+            return issue;
+        }
+        return "";
+    }
+
+    public List<String> getIcJournalIssueList( Journal jrnl, boolean first,
+                                               String year, String volume ) {
+        return tracContext.getJournalDao()
+            .getJournalIssueList( jrnl, first, year, volume );        
+    }
+
+
 }

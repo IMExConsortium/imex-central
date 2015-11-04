@@ -159,6 +159,8 @@
 
      <result name="pubedit" type="tiles">pubedit</result>
 
+     <result name="pub-status-popup" type="tiles">pub-status-popup</result>
+
      <result name="pubnew" type="redirectAction">
        <param name="actionName">pubnew</param>
        <param name="pmid">%{pmid}</param>
@@ -166,12 +168,13 @@
      
      <result name="json" type="json">
        <param name="excludeProperties">
-         publicationList.*,.*roles.*,.*password.*,.*allRoles.*,.*prefs,
+         publicationList.*,.*roles.*,.*password.*,.*allRoles.*,pub.*.prefs,,
+
          .*activated,.*activationKey,.*affiliation,,.*allRoleNames,
          .*groups,.*groupNames
        </param>
        <param name="includeProperties">
-         pub.*, targetStates.*,statusCode,statusMessage
+         pub.*, targetStates.*,statusCode,statusMessage, luser.*,
        </param>
        <param name="noCache">true</param>
      </result>
@@ -261,17 +264,49 @@
      </result>
    </action>
 
-   <action name="journaledit" class="journalAction">
+
+   <action name="journaledit" class="journalEditAction">
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
-     <result name="success" type="tiles">journalmgr</result>  
+     <result name="success" type="tiles">journaledit</result>  
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="acl_tget" type="tiles">acltargeterror</result>
-     <result name="input" type="tiles">journalmgr</result> 
-     <result name="jedit" type="tiles">journalmgr</result>
-          
+     <result name="input" type="tiles">journaledit</result> 
+     <result name="jedit" type="tiles">journaledit</result>
+     <result name="json" type="json">
+       <param name="excludeProperties">
+         journalList.*,.*roles.*,.*password.*,.*allRoles.*,.*prefs,
+         .*activated,.*activationKey,.*affiliation,,.*allRoleNames,
+         .*groups,.*groupNames
+       </param>
+       <param name="includeProperties">
+         journal.*, targetStates.*,statusCode,statusMessage
+       </param>
+       <param name="noCache">true</param>
+     </result>
    </action>
+
+  <!-- journal viewer -->   
+
+   <action name="journalview" class="journalViewAction">
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">journalview</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
+     <result name="input" type="tiles">journalview</result>
+     <result name="jedit" type="tiles">journalview</result>
+     <result name="json" type="json">
+      <param name="includeProperties">
+        records.*,init.*
+      </param>
+      <param name="noCache">true</param>
+     </result>
+   </action>
+
  </package>
 </struts>

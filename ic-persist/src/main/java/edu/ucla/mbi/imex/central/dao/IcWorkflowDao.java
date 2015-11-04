@@ -26,7 +26,14 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
        
 public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
-    
+
+    //public IcWorkflowDao(){super();}
+
+    //public IcWorkflowDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
+   
     //---------------------------------------------------------------------
     // DataState
     //----------
@@ -43,8 +50,9 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
         
         DataState state = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {
@@ -73,8 +81,9 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
         
         List<DataState> slst = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -121,6 +130,50 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
     
         super.delete( state );
     }
+
+
+    //---------------------------------------------------------------------
+    // DataStage
+    //----------
+
+    public DataState getDataStage( int id ) { 
+        
+        DataState pub = (DataState) super.find( IcDataStage.class, id );
+        return pub; 
+    }
+    
+    //---------------------------------------------------------------------
+
+    public DataState getDataStage( String name ) { 
+        
+        DataState stage = null;
+
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        
+        try {
+            //startOperation();
+            Query query =
+                session.createQuery( "from IcDataStage s where " +
+                                     " s.name = :name ");
+            query.setParameter("name", name );
+            query.setFirstResult( 0 );
+            stage = (DataState) query.uniqueResult();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        
+        return stage; 
+    }
+
+
     
     //--------------------------------------------------------------------------
     // Transition
@@ -138,8 +191,9 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
         
         Transition trans = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -168,8 +222,9 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
         
         List<Transition> tlst = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();        
         Transaction tx = session.beginTransaction();
 
         try {
@@ -196,8 +251,9 @@ public class IcWorkflowDao extends AbstractDAO implements WorkflowDao {
         
         List<Transition> tlst = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {

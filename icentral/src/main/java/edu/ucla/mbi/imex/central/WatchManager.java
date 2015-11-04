@@ -68,6 +68,12 @@ public class WatchManager {
     }
 
 
+    public void cleanup(){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "WatchManager: cleanup" );
+    }
+
+
     //---------------------------------------------------------------------
     // Operations
     //---------------------------------------------------------------------

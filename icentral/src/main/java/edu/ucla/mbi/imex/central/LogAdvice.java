@@ -168,17 +168,19 @@ public class LogAdvice {
                    + " pub=" + pub 
                    + " luser=" + luser);
 
-        IcLogEntry ile 
-            = new IcLogEntry( (User) luser, (IcPub) pub,
-                              "Admin user information updated.", "" );
-        getAttachmentManager().getTracContext()
-            .getAdiDao().saveAdi( ile );
+        if( pub instanceof IcPub){
+            IcLogEntry ile 
+                = new IcLogEntry( (User) luser, (IcPub) pub,
+                                  "Admin user information updated.", "" );
+            getAttachmentManager().getTracContext()
+                .getAdiDao().saveAdi( ile );
+            
+            // get a list of observers and send out notifications
+            //---------------------------------------------------
 
-        // get a list of observers and send out notifications
-        //---------------------------------------------------
-
-        List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
-        notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+            List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
+            notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+        }
     }
 
     public void updatePubAdminGroupMonitor( Object pub, Object luser, 
@@ -189,17 +191,19 @@ public class LogAdvice {
                    + " pub=" + pub 
                    + " luser=" + luser);
         
-        IcLogEntry ile 
-            = new IcLogEntry( (User) luser, (IcPub) pub,
-                              "Admin group information updated.", "" );
-        getAttachmentManager().getTracContext()
-            .getAdiDao().saveAdi( ile );
+        if( pub instanceof IcPub ){
+            IcLogEntry ile 
+                = new IcLogEntry( (User) luser, (IcPub) pub,
+                                  "Admin group information updated.", "" );
+            getAttachmentManager().getTracContext()
+                .getAdiDao().saveAdi( ile );
+            
+            // get a list of observers and send out notifications
+            //---------------------------------------------------
 
-        // get a list of observers and send out notifications
-        //---------------------------------------------------
-        
-        List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
-        notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+            List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
+            notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+        }
     }
 
     public void genImexMonitor( Object pub, Object luser, 
@@ -233,20 +237,29 @@ public class LogAdvice {
                    + " state=" + state );
         
         String stateName = "";
-        if( state instanceof java.lang.String){
-            stateName = (String) state;
-        } else {
-            stateName = ((DataState)state).getName();
-        }
 
-        DataState ds = getAttachmentManager().getTracContext()
-            .getWorkflowDao().getDataState( stateName );
-            
-                    
+
+        if( state instanceof Integer ){
+            DataState ds = getAttachmentManager().getTracContext()
+                .getWorkflowDao().getDataState( (Integer) state );
+            stateName =  ds.getName();
+        } else {
+            if( state instanceof java.lang.String ){
+                DataState ds = getAttachmentManager().getTracContext()
+                    .getWorkflowDao().getDataState( (String) stateName );
+                stateName =  ds.getName();
+            } 
+            if( state instanceof DataState ){
+                DataState ds = getAttachmentManager().getTracContext()
+                    .getWorkflowDao().getDataState( ((DataState)state).getId() );
+                stateName =  ds.getName();
+            }
+        }
+        
         IcLogEntry ile 
             = new IcLogEntry( (User) luser, (IcPub) pub,
                               "Publication state updated: " 
-                              + ds.getName(), "" );
+                              + stateName, "" );
 
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );

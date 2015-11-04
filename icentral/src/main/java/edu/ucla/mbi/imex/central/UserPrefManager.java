@@ -72,6 +72,10 @@ public class UserPrefManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "UserPrefManager: initializing" );
     }
+    public void cleanup(){
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "UserPrefManager: cleanup" );
+    }
 
 
     //---------------------------------------------------------------------

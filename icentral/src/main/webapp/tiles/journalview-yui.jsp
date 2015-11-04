@@ -1,90 +1,121 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<h1>Journal Manager</h1>
-<s:if test="id > 0">
- <t:insertDefinition name="journaledit"/>
- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
- <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
- <br/><br/><br/><br/><br/><br/><br/><br/>
+
+<s:if test="id > 0 ">
+  <script src="js/journalview-yui.js" type="text/javascript"></script>
+
+  <h1 id="journal-name"></h1>
+  <div class="yui-skin-sam" width="100%">
+   <center>
+      <div>
+         <table width="100%" border="0">
+           <tr>
+            <td colspan="6" class="yvi-box">
+             <table width="100%" border="0">
+               <tr>
+                 <td></td>
+                 <td width="5%" class="yvi-name">Year</td>
+                 <td></td>
+                 <td></td>
+                 <td width="5%"  class="yvi-name">Volume</td>
+                 <td></td>
+                 <td></td>
+                 <td width="5%" class="yvi-name">Issue</td>
+                 <td></td>
+               </tr>
+               <tr>
+                 <td align="right">
+                   <a id="year-first-container" href="">&lt;&lt;</a>
+                   <a id="year-prev-container" href="">&lt;</a>
+                 </td>
+                 <td><label id="year-curr-container"/></td>
+                 <td align="left">
+                   <a id="year-next-container" href="">&gt;</a>
+                   <a id="year-last-container" href="">&gt;&gt;</a>
+                 </td>
+                 <td align="right">
+                   <a id="volume-first-container" href="">&lt;&lt;</a>
+                   <a id="volume-prev-container" href="">&lt;</a>
+                 </td>
+                 <td><label id="volume-curr-container"/></td>
+                 <td align="left">
+                   <a id="volume-next-container" href="">&gt;</a>
+                   <a id="volume-last-container" href="">&gt;&gt;</a>
+                 </td>
+                 <td align="right">
+                   <a id="issue-first-container" href="">&lt;&lt;</a>
+                   <a id="issue-prev-container" href="">&lt;</a>
+                 </td>
+                 <td><label id="issue-curr-container"/></td>
+                 <td align="left">
+                   <a id="issue-next-container" href="">&gt;</a>
+                   <a id="issue-last-container" href="">&gt;&gt;</a>
+                 </td>
+               </tr>
+             </table>
+            </td>
+           </tr>
+           <tr>
+             <td colspan="6">&nbsp;</td>
+           </tr>
+           <tr>
+            <td colspan="3">&nbsp;</td>
+            <td class="filter-name">By Stage</td>
+            <td>&nbsp;</td>
+            <td class="filter-name">By Status</td>
+           </tr>
+          <tr>
+            <td><div id="dt-pag-nav"></div></td>
+            <td width="95%">&nbsp;</td>
+            <th width="1%">Filter:</th>
+            <td class="filter-container"><label id="stage-button-container"/></td>
+            <th width="1%">and</th>
+            <td class="filter-container"><label id="state-button-container"/></td>
+          </tr> 
+         </table>
+      </div> 
+   </center>    
+  <div id="pubtab" width="100%" class="pubtab"></div>
+  <table width="100%" cellpadding="5">
+   <s:form theme="simple" action="pubmgr">
+    <tr>
+     <td align="center" width="5%">
+      <%-- <s:submit theme="simple" name="op.ldel" value="DROP" /> --%>
+     </td>
+     <td align="right">
+      <b>PMID:</b> 
+      <s:textfield theme="simple" name="pub.pmid" size="24" maxLength="64"/>
+     </td>
+     <td colspan="1" align="center" width="5%">
+      <s:submit theme="simple" name="op.esrc" value="Search" />
+     </td>
+    </tr>
+   </s:form>
+  </table>
+ </div>
+
+ <script type="text/javascript">
+  YAHOO.util.Event.addListener( window, "load", 
+                                YAHOO.imex.journalview.init(
+                                   { jid:"<s:property value="id"/>",
+                                     year:"<s:property value="cyear"/>",
+                                     volume:"<s:property value="cvolume"/>",
+                                     issue:"<s:property value="cissue"/>",
+                                     owner:"<s:property value="opp.ou"/>", 
+                                     admus:"<s:property value="opp.au"/>",
+                                     cflag:"<s:property value="opp.encf"/>",
+                                     watch:"<s:property value="opp.wfl"/>",
+                                     loginid:"<s:property value="#session['USER_ID']" />" }));
+
+ </script>
+
+
 </s:if>
 <s:else>
- <table width="100%">
-  <tr>
-   <td align="left">
-    <br/>
-    <table width="66%" cellspacing="1" cellpadding="3">
-     <s:if test="hasActionErrors()">
-      <tr><td>  
-       <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
-        <span class="error">
-         <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
-         </s:iterator>
-        </span>
-       </div>
-      </td></tr>
-     </s:if>
-    </table>  
-   </td>
-  </tr>
-  <tr>
-   <td>
-    <table width="100%" border="1">
-     <s:form theme="simple" action="journalmgr"> 
-      <tr>
-       <th colspan="2  width="5%"">JID</th>
-       <th width="5%" nowrap>NLMID</th>
-       <th width="85%" nowrap>Title</th>
-       <th idth="5%" nowrap>&nbsp</th>
-      </tr>
-      <s:if test="journalList!=null">
-       <s:iterator value="journalList" id="journal" status="jpos">
-        <tr>
-         <td align="center">
-          <s:checkbox name="opp.del" fieldValue="%{#journal.id}"/>
-         </td>
-         <td align="center">
-           <s:property value="#journal.id" />
-         </td>
-         <td>
-           <s:property value="#journal.nlmid" />
-         </td>
-         <td>
-           <s:property value="#journal.title" />
-         </td>
-         <td align="center">
-          <a href='journalmgr?id=<s:property value="#journal.id"/>'>detail</a>
-         </td>
-        </s:iterator>
-       </tr>
-      </s:if>
-      <tr>
-       <td colspan="2" align="center">
-        <s:submit theme="simple" name="op.ldel" value="DROP" />
-       </td>
-       <td colspan="2">
-        <s:if test="hasFieldErrors()">
-         <s:if test="fieldErrors['role.name']!=null">
-          <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
-           <span class="error">
-            <span class="errorMessage">
-             <s:property value="fieldErrors['role.name'][0]" />
-            </span>
-           </span>
-          </div>
-         </s:if>
-        </s:if>
-        <b>NLMID:</b> <s:textfield theme="simple" name="opp.jadd" size="48" maxLength="64"/>
-       </td>
-       <td align="center">
-        <s:submit theme="simple" name="op.jadd" value="ADD" />
-       </td>
-      </tr>
-     </s:form>
-    </table>
-   </td>
-  </tr>
- </table>
- <br/>
- <br/>
+ <!--<t:insertDefinition name="journaledit"/> -->
+   
+ <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+ redirect to journal manager...
+ <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+ <br/><br/><br/><br/><br/><br/><br/><br/>
 </s:else>

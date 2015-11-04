@@ -259,15 +259,21 @@ public class IcentralPortImpl implements IcentralPort {
                     .getUserDao().getUser( c.getLogin() );
                 log.debug( " owner set to: " + owner );
                 
+                DataState stage =
+                    entryManager.getWorkflowContext()
+                    .getWorkflowDao().getDataStage( "PREQUEUE" );
+                log.debug( " stage set to: " + stage );
+
                 DataState state =
                     entryManager.getWorkflowContext()
                     .getWorkflowDao().getDataState( "NEW" );
                 log.debug( " state set to: " + state );
                 
-                if ( state != null ) {
+                if ( stage != null && state != null ) {
 
                     try{
-                        IcPub newPub = entryManager.addIcPub( icPub, owner, state );
+                        IcPub newPub = entryManager
+                            .addIcPub( icPub, owner, stage, state );
                         if ( newPub != null ) {
                             icPub = newPub;
                         }
@@ -284,7 +290,7 @@ public class IcentralPortImpl implements IcentralPort {
         }
         throw Fault.NO_REC_CR;
     }
-    
+
     //--------------------------------------------------------------------------
     
     public PublicationList getPublicationById( List<Identifier> idl )

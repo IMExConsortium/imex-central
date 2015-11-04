@@ -36,9 +36,19 @@ public class FeedbackAction extends PortalSupport {
     public static final String ACCEPTED = "accepted";
 
     //---------------------------------------------------------------------
-    // mail config
-    //------------
+    // configuration
+    //--------------
     
+    FeedbackManager feedbackManager;
+
+    public FeedbackManager getFeedbackManager() {
+        return feedbackManager;
+    }
+
+    public void setFeedbackManager( FeedbackManager manager ) {
+        this.feedbackManager = manager;
+    }
+
     String adminMail;
     
     public String getAdminMail() {
@@ -69,17 +79,14 @@ public class FeedbackAction extends PortalSupport {
 	Log log = LogFactory.getLog( this.getClass() );
         log.info( "regFeed");	
 	
-	Integer id = (Integer) getSession().get( "DIP_USER_ID" );
-	UserDao dao = new IcUserDao();
-        IcUser icUser = (IcUser) dao.getUser( id );
-	
-	icUser.sendComment( adminMail, mailServer, 
-                            getAbout(), getComment() );
-	
+	Integer uid = (Integer) getSession().get( "DIP_USER_ID" );
+        
+        feedbackManager.regUserFeedback( uid, getAbout(), getComment());
+        
 	return ACCEPTED;
     }
-
-    //---------------------------------------------------------------------
+    
+    //--------------------------------------------------------------------------
     // email feedback
     //----------------
 
@@ -88,27 +95,13 @@ public class FeedbackAction extends PortalSupport {
 	Log log = LogFactory.getLog( this.getClass() );
         log.info( "mailFeed: email=" + email);
 	
-	String email = getEmail();
-	if ( email != null ) {
-	    try {
-		email = email.replaceAll("^\\s+","");
-		email = email.replaceAll("\\s+$","");
-	    } catch (Exception e ) {
-		// cannot be here
-	    }
-	}
+        feedbackManager.mailUserFeedback( email, getAbout(), getComment());
 	
-	String comment = getComment();
-	
-	if ( email != null ) {
-	    comment = "\n\nFrom: " + email + "\n\n" + comment;
-	}    
-	IcUser.sendComment( adminMail, adminMail, mailServer, 
-			     getAbout(), comment );
-	
-	return ACCEPTED;
+        return ACCEPTED;
     }
     
+    //--------------------------------------------------------------------------
+
     String submit;
 
     public String getSubmit() {

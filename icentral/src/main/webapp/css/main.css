@@ -1523,6 +1523,7 @@ a.disabled {
 
 .pub-edit-head h2 {
     padding: 0 0 0.2em 0.5em;
+    margin: 0.5em 0 0 0;
 }
 
 .pub-edit-head p{
@@ -1535,6 +1536,9 @@ a.disabled {
     padding: 0.3em;
 }
 
+.pub-edit-margin {
+    padding: 1.0em 0 0 0;
+}
 
 /*Additions by zack*/
 .yui-nav {
@@ -1646,6 +1650,7 @@ form.align-label input.radio~label
 
 #pubtab{
   border: 1px solid #888888;
+  margin: 5px 0 0 0;
 }
 
 .tbview{
@@ -1659,6 +1664,7 @@ form.align-label input.radio~label
 
 .joutab{
   border: 1px solid #888888;
+  margin: 5px 0 0 0;
 }
 
 .cfg-block-list{
@@ -1693,6 +1699,20 @@ form.align-label input.radio~label
   font-weight:bold;
 
 }
+
+.cfg-text-key{
+  display: inline-block;
+  width: 20em;
+
+}
+
+.cfg-text-key-strong{
+  display: inline-block;
+  width: 20em;
+  font-weight:bold;
+
+}
+
 .cfg-val{
   display: inline-block;
 }

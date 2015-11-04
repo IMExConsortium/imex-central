@@ -317,6 +317,7 @@ public class UserAction extends UserSupport {
 
                 getSession().put( "USER_ID", icUser.getId() );
                 getSession().put( "LOGIN", icUser.getLogin() );
+                getSession().put( "PREFS", icUser.getPrefs() );
                 log.debug( " login: session set" );
 
                 Map<String,Integer> roles = new HashMap();
@@ -395,6 +396,7 @@ public class UserAction extends UserSupport {
         getSession().put( "USER_ID", -1 );
         getSession().put( "USER_ROLE", null );
         getSession().put( "LOGIN", "" );
+        getSession().put( "PREFS", null );
 
         if( rurl != null ) return REDIRECT;
         

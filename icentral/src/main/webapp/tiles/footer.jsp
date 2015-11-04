@@ -11,10 +11,10 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2014<br/>IMEx Consortium
+       Copyright 2008-2015<br/>IMEx Consortium
       </td>
       <td class="cite">
-        <b>Cite IMEx:</b> Orchard S, Kerrien S, Abbani S, <it>et al</i>.
+        <b>Cite IMEx:</b> Orchard S, Kerrien S, Abbani S, <i>et al</i>.
         Protein interaction data curation: the International Molecular Exchange (IMEx) consortium.;
         <i>Nat Methods.</i> <b>9</b>:626 (2012).
         [<a href="http://www.ncbi.nlm.nih.gov/pubmed/22453911">Pubmed</a>]

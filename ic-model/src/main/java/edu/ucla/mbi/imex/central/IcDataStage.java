@@ -15,11 +15,11 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.ucla.mbi.util.data.DataState;
 
-public class IcDataState extends DataState { 
+public class IcDataStage extends DataState { 
 
-    public IcDataState() { }
+    public IcDataStage() { }
 
-    public IcDataState( DataState state ) {
+    public IcDataStage( DataState state ) {
         this.setName( state.getName() );
         this.setComments( state.getComments() );                
     }

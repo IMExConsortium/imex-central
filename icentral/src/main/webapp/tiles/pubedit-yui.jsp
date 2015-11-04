@@ -11,45 +11,89 @@
 <%-- END --%>
  <h1>Publication Editor</h1>
  <div class="pub-edit-head main-width">
-   <h2>IC-<s:property value="pub.id"/>-PUB</h2>
-   <p id="pub_ttl"><em><s:if test="pub.title.length()>78"><s:property value="pub.title.substring(0,75)"/>... </s:if><s:else><s:property value="pub.title"/></s:else></em></p>
+<%--
+   <h2>IC-<s:property value="pub.id"/>-PUB</h2>   
+   <p id="pub_ttl"><em><s:if test="pub.title.length()>78"><s:property value="pub.title.substring(0,75)"/>... </s:if>
+                       <s:else><s:property value="pub.title"/></s:else></em></p>
+--%>
+
+ <h2><s:if test="pub.title.length()>78"><s:property value="pub.title.substring(0,75)"/>... </s:if><s:else><s:property value="pub.title"/></s:else></h2>
+
+ <p id="pub_ttl"><em>IC-<s:property value="pub.id"/>-PUB</em></p>
+
+
  </div>
  <div class="yui-skin-sam">
     <div id="pubTab" class="yui-navset main-width">
        <ul class="yui-nav">
-          <li class="selected"><a href="#tab1"><em>Record Status</em></a></li>
-          <li><a href="#tab2"><em>Publication Details</em></a></li>
-          <li><a href="#tab3"><em>Curator Access</em></a></li>
-          <li><a href="#tab4"><em>Comments</em></a></li>
-          <li><a href="#tab5"><em>Attachments</em></a></li>          
-          <li><a href="#tab6"><em>Watch Status</em></a></li>
-          <li><a href="#tab7"><em>Record History</em></a></li>
+          <li class="selected"><a href="#tab1"><em>Summary</em></a></li>
+          <li><a href="#tab2"><em>Record Status</em></a></li>
+          <li><a href="#tab3"><em>Publication Details</em></a></li>
+          <li><a href="#tab4"><em>Curator Access</em></a></li>
+          <li><a href="#tab5"><em>Comments</em></a></li>
+          <li><a href="#tab6"><em>Attachments</em></a></li>          
+          <li><a href="#tab7"><em>Watch Status</em></a></li>
+          <li><a href="#tab8"><em>Record History</em></a></li>
        </ul>
        <div class="yui-content">
-          <!--Record Status Tab-->
-          <s:form id="pub-stat-edit" theme="simple" action="pubedit" cssClass="align-label">
-            <fieldset>
-              <legend><h3>Availability Status</h3></legend>
-              <ul>
-                <li><label for="pub-stat-edit_opp_epd">Publication Date (expected)</label> 
-                  <s:hidden name="pub.expectedPubDateStr"/>
-                  <s:textfield theme="simple" name="opp.epd" size="10" maxlength="10"/>
-                  <button id="epd-show" title="Show Calendar" type="button"><img src="img/calbtn.gif" alt="Calendar" height="18" width="18"/> </button>
-                </li>
-                <li><label for="pub-stat-edit_opp_pd">Publication Date</label> 
-                  <s:hidden name="pub.pubDateStr"/>
-                  <s:textfield theme="simple" name="opp.pd" size="10" maxlength="10"/>
-                  <button id="pd-show" title="Show Calendar" type="button"><img src="img/calbtn.gif" alt="Calendar" height="18" width="18"/> </button>
-                </li>
-                <li><label for="pub-stat-edit_opp_rd">Release Date</label>
-                  <s:hidden name="pub.releaseDateStr"/>
-                  <s:textfield theme="simple" name="opp.rd" size="10" maxlength="10"/>
-                  <button id="rd-show" title="Show Calendar" type="button"><img src="img/calbtn.gif" alt="Calendar" height="18" width="18"/> </button>
-                  </li>
-                <li><s:submit theme="simple" name="op.edup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubDate('update');"/></li>
-               </ul>
-            </fieldset>
-            <fieldset>
+         <div class="yui-hidden">
+           <s:if test="pub.source.title.length() != 0">
+             <fieldset>
+               <legend><h3>Journal Citation</h3></legend>  
+               <div style="float: left; width: 70%;">
+                   <s:property value="pub.source.title" />
+
+                   <s:if 
+                     test="pub.volume.length() > 0"><s:property value="pub.volume" /></s:if><s:if 
+                     test="pub.issue.length() > 0">(<s:property value="pub.issue" />)</s:if><s:if 
+                     test="pub.pages.length() > 0">:<s:property value="pub.pages" /></s:if><s:if 
+                     test="pub.year.length() > 0">, <s:property value="pub.year" />
+                   </s:if>
+
+               </div>
+               <s:if test="pub.pmid.length() != 0">
+                 <div style="float: left; width: 30%; text-align: right;">
+                   [PUBMED:<a target="icentral_outlink" href="http://www.ncbi.nlm.nih.gov/pubmed/<s:property value='pub.pmid'/>"><s:property value="pub.pmid"/></a>]
+                 </div>
+               </s:if> 
+             </fieldset>
+           </s:if>
+           <fieldset>
+                <legend><h3>Author(s)</h3></legend>
+                <s:property value="pub.author" />
+           </fieldset>
+           <fieldset class="box-fieldset">
+                <legend><h3 >Abstract</h3></legend>
+                <div style="background: #e0e0e0; border: 1px; border-style: solid; border-color: #888888; padding: 10px;">
+                   <s:property value="pub.abstract" />
+                </div>
+           </fieldset>         
+         </div>
+         <div class="yui-hidden"> 
+             <!--Record Status Tab-->
+             <s:form id="pub-stat-edit" theme="simple" action="pubedit" cssClass="align-label">
+                 <fieldset>
+                    <legend><h3>Availability Status</h3></legend>
+                    <ul>
+                       <li><label for="pub-stat-edit_opp_epd">Publication Date (expected)</label> 
+                        <s:hidden name="pub.expectedPubDateStr"/>
+                        <s:textfield theme="simple" name="opp.epd" size="10" maxlength="10"/>
+                        <button id="epd-show" title="Show Calendar" type="button"><img src="img/calbtn.gif" alt="Calendar" height="18" width="18"/> </button>
+                       </li>
+                       <li><label for="pub-stat-edit_opp_pd">Publication Date</label> 
+                        <s:hidden name="pub.pubDateStr"/>
+                        <s:textfield theme="simple" name="opp.pd" size="10" maxlength="10"/>
+                        <button id="pd-show" title="Show Calendar" type="button"><img src="img/calbtn.gif" alt="Calendar" height="18" width="18"/> </button>
+                       </li>
+                       <li><label for="pub-stat-edit_opp_rd">Release Date</label>
+                        <s:hidden name="pub.releaseDateStr"/>
+                        <s:textfield theme="simple" name="opp.rd" size="10" maxlength="10"/>
+                        <button id="rd-show" title="Show Calendar" type="button"><img src="img/calbtn.gif" alt="Calendar" height="18" width="18"/> </button>
+                       </li>
+                       <li><s:submit id="sub-1" disabled="true" theme="simple" name="op.edup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubDate('update');"/></li>
+                    </ul>
+                 </fieldset>
+                 <fieldset>
               <legend><h3>Contact Email</h3></legend>
               <ul>
                 <li id="td-contact-mail">
@@ -61,7 +105,7 @@
                   </s:if>
                  <s:textfield theme="simple" name="opp.necm" size="32" maxlength="32"/>
                 </li>
-                <li><s:submit theme="simple" name="op.emup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubContactMail('update');"/></li>
+                <li><s:submit id="sub-2" disabled="true" theme="simple" name="op.emup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubContactMail('update');"/></li>
               </ul>
             </fieldset>
              
@@ -72,7 +116,7 @@
                <ul>
                <li>
                 <span id="state-label" class="pub-state-label"></span> <em>change to</em>  <span id="state-button-container"></span> <s:hidden id="nsn" name="opp.nsn" value="%{pub.state.name}"/></p>
-                <s:submit theme="simple" name="op.esup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubState('update');"/>
+                <s:submit id="sub-3" disabled="true" theme="simple" name="op.esup" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubState('update');"/>
                 </li></ul>
             </fieldset>
             <fieldset>
@@ -89,6 +133,7 @@
               </ul>
             </fieldset>
           </s:form>
+          </div>
         <!--Publication Details Tab-->
           <div class="yui-hidden">
              <s:form id="pub-det-edit" theme="simple" action="pubedit" cssClass="align-label">
@@ -97,7 +142,7 @@
                 <ul>
                   <li>
                     <label for="pubedit_pub_pmid">PubMed</label>
-                    <s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/><s:submit theme="simple" name="op.epmr" value="Synchronize" disabled="false" onclick="return YAHOO.imex.pubedit.pubIdent('epmr');"/>
+                    <s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/><s:submit id="sub-4" disabled="true" theme="simple" name="op.epmr" value="Synchronize" onclick="return YAHOO.imex.pubedit.pubIdent('epmr');"/>
                   </li>
                   <li>
                     <label for="pubedit_pub_doi">DOI</label>
@@ -107,7 +152,7 @@
                     <label for="pubedit_pub_journalSpecific">Internal</label> 
                     <s:textfield theme="simple" name="pub.journalSpecific" size="32" maxLength="64"/>
                   </li>
-                  <li><s:submit theme="simple" name="op.eidu" value="UPDATE" disabled="false" onclick="return YAHOO.imex.pubedit.pubIdent('update');"/></li>
+                  <li><s:submit id="sub-5" disabled="true" theme="simple" name="op.eidu" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubIdent('update');"/></li>
                </fieldset>
                <fieldset>
                 <legend>
@@ -118,7 +163,7 @@
                     <s:select name="opp.jid" headerKey="-1" headerValue="---Select Journal---" value="pub.source.id" list="journalList" listKey="id" listValue="title"/>
                   </li>
                   <li>
-                    <s:submit theme="simple" name="op.jset" value="UPDATE" disabled="true"/>
+                    <s:submit id="sub-6" disabled="true" theme="simple" name="op.jset" value="UPDATE" />
                   </li>
                   </ul>
                </fieldset>
@@ -136,20 +181,20 @@
                         <s:textfield theme="simple" name="pub.title" size="90"  maxLength="512" cssClass="limit-width"/>
                       </li>
                       <li>
-                        <s:submit theme="simple" name="op.eatu" value="UPDATE" disabled="false" onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/>
+                        <s:submit id="sub-7" disabled="true" theme="simple" name="op.eatu" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/>
                         </li>
                    </fieldset>
                   <fieldset>
                     <legend><h3>Abstract</h3></legend>
                     <ul>
                       <li><s:textarea cssClass="limit-width" name="pub.abstract" value="%{pub.abstract}" cols="75" rows="12"/></li>
-                      <li><s:submit theme="simple" name="op.pup" value="UPDATE" disabled="true"/></li>
+                      <li><s:submit id="sub-8" disabled="true" theme="simple" name="op.pup" value="UPDATE"/></li>
                     </ul>
                   </fieldset>
              </s:form>
             </div>
           <!-- access pane -->
-          <div class="yui-hidden">
+          <div class="yui-hidden pub-edit-margin">
              <s:form id="pub-acc-edit" theme="simple" action="pubedit" cssClass="align-label">
                 <ul>
                   <li>
@@ -162,14 +207,14 @@
                 <fieldset>
                    <legend>Drop Curators</legend>
                    <li id="td-admin-user"><s:iterator value="pub.adminUsers" id="u" status="upos"><s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/></s:iterator></li>
-                   <li><s:submit theme="simple" name="op.eaudel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');"/></li>
+                   <li><s:submit id="sub-9" disabled="true" theme="simple" name="op.eaudel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');"/></li>
                 </fieldset>
                    </ul>
                      <ul>
                    <fieldset>
                      <legend>Add Curators</legend>
-                     <li>Curators username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/></li>
-                      <li><s:submit theme="simple" name="op.eauadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminUser('add');"/></li>
+                     <li>Curator username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/></li>
+                      <li><s:submit id="sub-10" disabled="true" theme="simple" name="op.eauadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminUser('add');"/></li>
                    </fieldset>
                       </ul>
                 <h3 class="pub-edit-sect">Curator Groups</h3>
@@ -177,14 +222,14 @@
                 <fieldset>
                    <legend>Drop Curator Group</legend>
                    <li id="td-admin-group"><s:iterator value="pub.adminGroups" id="g" status="gpos"><s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/></s:iterator></li>
-                   <li><s:submit theme="simple" name="op.eagdel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');"/></li>
+                   <li><s:submit id="sub-11" disabled="true" theme="simple" name="op.eagdel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');"/></li>
                      </ul>
                 </fieldset>
                 <ul>
                    <fieldset>
                       <legend>Add Curator Group</legend>
                       <li><s:select name="opp.eagadd" headerKey="-1" headerValue="---Select Group---" list="groupAll" listKey="id" listValue="label"/></p>
-                      <li><s:submit theme="simple" name="op.eagadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');"/></p>
+                      <li><s:submit id="sub-12" disabled="true" theme="simple" name="op.eagadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');"/></p>
                    </fieldset>
                 </ul>
              </s:form></div>
@@ -236,7 +281,7 @@
                       <li><label for="attmgr_opp_edat">Format</label> <s:radio label="Format" name="opp.edat" list="#{'0':'TEXT','1':'MIF25','2':'MITAB'}" value="2"/></li>
                       <li><label for="attmgr_opp_edaf">Flag</label> <%--            <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.edaf" headerKey="-1" headerValue="----------" list="#{'2':'MIMIX','3':'IMEX'}" value="-1"/></li>
                       <s:hidden name="op.eada" value="ADD"/>
-                      <li><s:submit theme="simple" name="op.xx" value="Add" disabled="false" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
+                      <li><s:submit id="sub-13" disabled="true" theme="simple" name="op.xx" value="Add" onclick="YAHOO.imex.attedit.nameSet( {'nf':'attmgr_opp_edan', 'ff':'attmgr_opp_edafile'}); YAHOO.imex.attedit.UploadFile(); return false;"/><%--                  onclick="return YAHOO.imex.attedit.pubAttach('adata','add');"/>  --%>
                     </ul>
                    </fieldset>
                 </s:form>
@@ -263,7 +308,7 @@
                    <p>Watch On <s:hidden name="flags.watch" value="%{flags.watch}"/>
                    <s:checkbox theme="simple" name="flags.watch" cssClass="watch-flag" 
                                fieldValue="true" value="%{flags.watch}"/>
-                   <s:submit theme="simple" name="op.wfls" value="UPDATE" 
+                   <s:submit id="sub-14" disabled="true" theme="simple" name="op.wfls" value="UPDATE" 
                         onclick="return YAHOO.imex.pubedit.watchFlag('update');"/>
                 </fieldset>
               </s:form></div>
@@ -283,13 +328,19 @@
        </div>
     </div>
  </div>
+ <br/>
+ <br/>
+ <br/>
 
 <script type="text/javascript">
     YAHOO.util.Event.addListener( 
          window, "load", YAHOO.imex.pubedit.init, 
          {id:"<s:property value="id"/>",
+          pmid:"<s:property value="pub.pmid"/>",
           imexACC:"<s:property value="pub.imexId"/>",
-          login:"<s:property value="#session['LOGIN']" />"} 
+          login:"<s:property value="#session['LOGIN']"/>",
+          prefs:"<s:property value="#session['PREFS']"/>"
+         } 
       );
 
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
@@ -301,7 +352,8 @@
           cname:{"author":"Author","subject":"Subject","date":"Date", "flagName":"Flag"},
           id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
-          login:"<s:property value="#session['LOGIN']" />"}  
+          login:"<s:property value="#session['LOGIN']"/>"
+         }  
       );
 
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 

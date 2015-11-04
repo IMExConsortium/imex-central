@@ -27,7 +27,13 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 
 public class IcAdiDao extends AbstractDAO implements AdiDao {
-    
+
+    //public IcAdiDao(){ super(); };
+
+    //public IcAdiDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
     // AdiDAO
     //--------------------------------------------------------------------------    
     
@@ -67,8 +73,9 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
 
         List<AttachedDataItem> alst = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -100,8 +107,9 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
 
     public long countIcCommByRoot( DataItem root ){
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         Long lCnt = null;
@@ -137,8 +145,9 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
 
     public long countIcLogEntryByRoot( DataItem root ){
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         Long lCnt = null;
@@ -176,8 +185,9 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
 
         List<AttachedDataItem> alst = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {

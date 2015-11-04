@@ -27,6 +27,12 @@ import edu.ucla.mbi.imex.central.*;
 
 public class IcUserDao extends AbstractDAO implements UserDao {
 
+    //public IcUserDao(){super();}
+
+    //public IcUserDao( SessionFactory sessionFactory ){
+    //    super( sessionFactory );
+    //}
+
     public User getUser( int id ) { 
         
         User user = null;
@@ -46,8 +52,9 @@ public class IcUserDao extends AbstractDAO implements UserDao {
         
         User user = null;
 
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -80,8 +87,9 @@ public class IcUserDao extends AbstractDAO implements UserDao {
        
         List<User> userl = null;
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
@@ -115,8 +123,9 @@ public class IcUserDao extends AbstractDAO implements UserDao {
 
         Log log = LogFactory.getLog( this.getClass() );
         
-        Session session =
-            HibernateUtil.getSessionFactory().openSession();
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
