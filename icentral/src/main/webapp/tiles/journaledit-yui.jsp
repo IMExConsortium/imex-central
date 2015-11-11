@@ -18,6 +18,10 @@
       <legend><h3>Details</h3></legend>
       <ul>
         <li>
+          <label for="pubedit_pub_owner_login">Record Created By</label>
+          <s:hidden name="journal.owner.login"/><s:textfield theme="simple" name="journal.owner.login" size="32" maxLength="64" disabled="true"/>
+        </li>
+        <li>
           <label for="pubedit_pub_pmid">Title</label>
           <s:textfield theme="simple" name="journal.title" size="32" maxLength="64"/>
           <s:submit theme="simple" name="op.epmr" value="Synchronize" disabled="true" onclick="return YAHOO.imex.jnledit.sync();"/>
@@ -35,7 +39,7 @@
           <s:textfield theme="simple" name="journal.websiteUrl" size="32" maxLength="64"/>
         </li>
         <li>
-          <s:submit theme="simple" name="op.eidu" value="UPDATE" disabled="false" onclick="return YAHOO.imex.jnledit.update('detail');"/>
+          <s:submit id="sub-1" disabled="true" theme="simple" name="op.jpup" value="UPDATE" onclick="return YAHOO.imex.jnledit.update('detail');"/>
         </li>
       </ul>
     </fieldset>
@@ -43,53 +47,57 @@
 
   <s:form id="jnl-acc-edit" theme="simple" action="journaledit" cssClass="align-label">
     <fieldset>
-      <legend><h3>Access</h3></legend>
+      <legend><h3>Curation</h3></legend>
+<!--
       <ul>
         <li>
           <label for="pubedit_pub_owner_login">Created By:</label>
           <s:hidden name="journal.owner.login"/><s:textfield theme="simple" name="journal.owner.login" size="32" maxLength="64" disabled="true"/>
         </li>
-        </ul> 
+      </ul>
+-->
+<!-- 
         <h3 class="pub-edit-sect">Curators</h3>
         <ul>
           <fieldset>
             <legend>Drop Curators</legend>
             <li id="td-admin-user">
               <s:iterator value="journal.adminUsers" id="u" status="upos">
-                <s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/>
+                <s:checkbox name="opp.jaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/>
               </s:iterator>
             </li>
-            <li><s:submit theme="simple" name="op.eaudel" value="DROP" onclick="return YAHOO.imex.jnledit.update('drop-admin');"/></li>
+            <li><s:submit theme="simple" name="op.jaudel" value="DROP" onclick="return YAHOO.imex.jnledit.update('drop-admin');"/></li>
           </fieldset>
         </ul>
         <ul>
           <fieldset>
             <legend>Add Curators</legend>
-            <li>Curator username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/></li>
-            <li><s:submit theme="simple" name="op.eauadd" value="ADD" onclick="return YAHOO.imex.jnledit.update('add-admin');"/></li>
+            <li>Curator username:<s:textfield theme="simple" name="opp.jauadd" size="32" maxLength="64"/></li>
+            <li><s:submit theme="simple" name="op.jauadd" value="ADD" onclick="return YAHOO.imex.jnledit.update('add-admin');"/></li>
           </fieldset>
         </ul>
-        <h3 class="pub-edit-sect">Curator Groups</h3>
+-->
+        <h3 class="pub-edit-sect">Tracking Databases</h3>
         <ul>
           <fieldset>
-            <legend>Drop Curator Group</legend>
+            <legend>Drop Database</legend>
             <li id="td-admin-group">
               <s:iterator value="journal.adminGroups" id="g" status="gpos">
-                <s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/>
+                <s:checkbox name="opp.jagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/>
               </s:iterator>
             </li>
             <li>
-              <s:submit theme="simple" name="op.eagdel" value="DROP" onclick="return YAHOO.imex.jnledit.update('drop-admin-group');"/>
+              <s:submit id="sub-2" disabled="true" theme="simple" name="op.jagdel" value="DROP" onclick="return YAHOO.imex.jnledit.update('drop-admin-group');"/>
             </li>
           </fieldset>
         </ul>
         <ul>
           <fieldset>
-            <legend>Add Curator Group</legend>
+            <legend>Add Database</legend>
             <li>
-              <s:select name="opp.eagadd" headerKey="-1" headerValue="---Select Group---" list="groupAll" listKey="id" listValue="label"/></p>
+              <s:select name="opp.jagadd" headerKey="-1" headerValue="---Select Group---" list="groupImex" listKey="id" listValue="label"/></p>
             <li>
-              <s:submit theme="simple" name="op.eagadd" value="ADD" onclick="return YAHOO.imex.jnledit.update('add-admin-group');"/></p>
+              <s:submit id="sub-3" disabled="true" theme="simple" name="op.jagadd" value="ADD" onclick="return YAHOO.imex.jnledit.update('add-admin-group');"/></p>
           </fieldset>
         </ul>
     </fieldset>

@@ -131,7 +131,8 @@
                                      admus:"<s:property value="opp.au"/>",
                                      cflag:"<s:property value="opp.encf"/>",
                                      watch:"<s:property value="opp.wfl"/>",
-                                     loginid:"<s:property value="#session['USER_ID']" />" }));
+                                     loginid:"<s:property value="#session['USER_ID']" />",
+                                     prefs:"<s:property value="#session['PREFS']"/>" }));
 
  </script>
 

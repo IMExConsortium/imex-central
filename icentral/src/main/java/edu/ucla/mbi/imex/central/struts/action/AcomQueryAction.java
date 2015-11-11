@@ -214,8 +214,8 @@ public class AcomQueryAction extends ManagerSupport {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( " q=" + q );
-        /* 
-        List<DataState> stateList = entryManager.acomStatus( q );
+        
+        List<DataState> stateList = entryManager.acomStage( q );
         
         if( stateList != null && stateList.size() > 0 ){
             
@@ -227,8 +227,8 @@ public class AcomQueryAction extends ManagerSupport {
                 getAcom().add( cr );
             }
         }
-        */
-
+        
+        /*
         Map <String,String> cr1 = new HashMap<String,String>();
         cr1.put("name","pQueue");
         getAcom().add( cr1 );
@@ -240,7 +240,7 @@ public class AcomQueryAction extends ManagerSupport {
         Map <String,String> cr3 = new HashMap<String,String>();
         cr3.put("name","Curate");
         getAcom().add( cr3 );
-
+        */
         return JSON;
     }
 

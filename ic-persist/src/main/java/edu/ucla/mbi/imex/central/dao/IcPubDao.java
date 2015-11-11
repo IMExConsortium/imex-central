@@ -577,10 +577,40 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
     
     //--------------------------------------------------------------------------
 
+    public List<DataState> getStages( String qstr ){
+        
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        List<DataState> slst = null;
+
+        if( qstr!= null ){
+            qstr = qstr.toUpperCase();
+        }
+
+        try {
+            Query query = session
+                .createQuery( "select distinct ds from IcDataStage as ds"
+                              + " order by ds.name" );
+            //query.setParameter( "q", qstr );
+            slst = (List<DataState>) query.list();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            e.printStackTrace();
+        } catch( Exception ex ) {
+            ex.printStackTrace();
+        } finally {
+
+            session.close();
+        }
+
+        return slst;
+    }
+    //--------------------------------------------------------------------------
+
     public List<DataState> getStates( String qstr ){
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
@@ -594,7 +624,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             Query query = session
                 .createQuery( "select distinct ds from IcDataState as ds"
                               + " order by ds.name" );
-            //query.setParameter( "q", qstr );
+             //query.setParameter( "q", qstr );
             slst = (List<DataState>) query.list();
             tx.commit();
         } catch ( HibernateException e ) {

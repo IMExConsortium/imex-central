@@ -29,6 +29,8 @@ public class JournalEditAction extends ManagerSupport {
 
     public static final String ACL_PAGE = "acl_page";
     public static final String ACL_OPER = "acl_oper";
+
+    public static final String IMEX_ROLE = "IMEx partner";
     
     ////------------------------------------------------------------------------
     /// Entry Manager
@@ -97,6 +99,35 @@ public class JournalEditAction extends ManagerSupport {
         
         if ( getUserContext().getGroupDao() != null ) {
             return getUserContext().getGroupDao().getGroupList();
+        }
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
+    // GroupImex list
+    //---------------
+
+    public List<Group> getGroupImex(){
+        
+        if ( getUserContext().getGroupDao() != null &&
+             getUserContext().getRoleDao() != null ){
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.info( "IMEX_ROLE="  + IMEX_ROLE );
+            
+            Role role = getUserContext().getRoleDao().getRole( IMEX_ROLE );
+
+            log.info( "role="  + role );
+            
+            List<Group> rlist 
+                = getUserContext().getGroupDao().getGroupList(role);
+            
+            
+
+            log.info( "rlist="  + rlist );
+
+            return rlist;
+
         }
         return null;
     }

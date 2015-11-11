@@ -305,6 +305,12 @@ public class EntryManager {
             = tracContext.getPubDao().getStates( query ); 
         return ulist;
     }
+
+    public List<DataState> acomStage( String query ) {
+        List<DataState> ulist 
+            = tracContext.getPubDao().getStages( query ); 
+        return ulist;
+    }
     
     public List<Group> acomGroup( String query ) {
         List<Group> ulist 

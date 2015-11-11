@@ -337,6 +337,7 @@
          window, "load", YAHOO.imex.pubedit.init, 
          {id:"<s:property value="id"/>",
           pmid:"<s:property value="pub.pmid"/>",
+          jSpec:"<s:property value="pub.journalSpecific"/>",
           imexACC:"<s:property value="pub.imexId"/>",
           login:"<s:property value="#session['LOGIN']"/>",
           prefs:"<s:property value="#session['PREFS']"/>"

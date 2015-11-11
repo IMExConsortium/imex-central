@@ -4,6 +4,7 @@ YAHOO.imex.pubedit = {
 
     pubId: 0,
     pubPmid: null,
+    pubJSpec: null,
     stateButton: null,
     prefs: null,
 
@@ -16,6 +17,7 @@ YAHOO.imex.pubedit = {
         var myself = YAHOO.imex.pubedit;
         
         myself.pubPmid = obj.pmid;
+        myself.pubJSpec = obj.jSpec;
 
         if( obj.prefs != null && obj.prefs != "" ){
             var p = obj.prefs.replace(/&quot;/g, '"'); 
@@ -30,10 +32,21 @@ YAHOO.imex.pubedit = {
 
         // curator link
 
-        if( myself.curl != undefined && myself.pubPmid != null ){ 
-            var href = myself.curl
-                .replace( myself.cpat, myself.pubPmid );
-            var a = ' [<a target="icentral_outlink" href="'+href+'">Curation Tool</a>]';
+        if( myself.curl != undefined ){
+
+            var a ="";
+
+            if(  myself.pubPmid != null ){ 
+                var href = myself.curl
+                    .replace( myself.cpat, myself.pubPmid );
+                a = ' [<a target="icentral_outlink" href="'+href+'">Curation Tool</a>]';
+            } else {
+                if(  myself.pubJSpec != null ){
+                    var href = myself.curl
+                        .replace( myself.cpat, myself.pubJSpec );
+                    a = ' [<a target="icentral_outlink" href="'+href+'">Curation Tool</a>]';
+                }
+            }
             
             YAHOO.util.Dom.get("pub_ttl").innerHTML += a;
 

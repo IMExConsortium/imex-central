@@ -5,7 +5,8 @@ YAHOO.imex.jnledit = {
     jid: 0,
     login: null,
     stateButton: null,
-    
+    subCnt: 5,
+
     init: function( e, obj ) {
         
         myself = YAHOO.imex.jnledit;
@@ -28,6 +29,19 @@ YAHOO.imex.jnledit = {
                                oMenuItem.cfg.getProperty("text") + "</em>"));
             
         };
+
+        // activate submit buttons                                                                                                                            
+
+        if( obj.login != undefined  && obj.login.length > 0 ){
+            
+            for(var i=0; i< myself.subCnt; i++ ){
+                var s = YAHOO.util.Dom.get("sub-" + i );
+                if( s != undefined ){
+                    s.disabled=false;
+                }
+            }
+        }
+        
     },
 
     sync:function( o ) {
@@ -100,30 +114,30 @@ YAHOO.imex.jnledit = {
             if( op === 'add-admin-group' ) {
                
                 url = url + "&op.jagadd=update"
-                    + '&opp.jagadd=' + YAHOO.util.Dom.get("jnl-acc-edit_opp_eagadd").value;
+                    + '&opp.jagadd=' + YAHOO.util.Dom.get("jnl-acc-edit_opp_jagadd").value;
                 setCallback = adminCallback;
             } 
             
             if( op === 'drop-admin-group' ) {
 
                 var drops = YAHOO.util.Dom.getElementsByClassName("admin-group-drop");
-                var eagdel = ",";
+                var jagdel = ",";
                 
                 for( var i = 0; i < drops.length; i++ ) {
                     if( drops[i].checked ) {
-                        eagdel = eagdel + drops[i].value + ",";
+                        jagdel = jagdel + drops[i].value + ",";
                     }
                 } 
 
-                if( eagdel === "," ) {               
+                if( jagdel === "," ) {               
                     if(drops.checked) {
-                        eagdel = eagdel + drops.value + ",";
+                        jagdel = jagdel + drops.value + ",";
                     }
                 }
-                if( eagdel !== "," ) {   
+                if( jagdel !== "," ) {   
                     
                     url =  url + "&op.jagdel=update"
-                        + '&opp.jagdel=' + eagdel;
+                        + '&opp.jagdel=' + jagdel;
                     setCallback = adminCallback;
                 }
             }
@@ -153,7 +167,7 @@ YAHOO.imex.jnledit = {
                 var title = messages.journal.title;
                 var nlmid = messages.journal.nlmid;
                 var issn= messages.journal.issn;
-                var wurl = messages.journal.wurl;
+                var wurl = messages.journal.websiteUrl;
 
                 var sCode = messages.statusCode;
                 var sMessage = messages.statusMessage;
@@ -163,7 +177,7 @@ YAHOO.imex.jnledit = {
                 
                 YAHOO.util.Dom.get("jnl-det-edit_journal_nlmid").value = nlmid;
                 YAHOO.util.Dom.get("jnl-det-edit_journal_issn").value = issn;
-                YAHOO.util.Dom.get("jnl-det-edit_journal_wurl").value = websiteUrl;
+                YAHOO.util.Dom.get("jnl-det-edit_journal_websiteUrl").value = wurl;
            
                 if( sCode > 0){                    
                     // pop up error modal                    
@@ -186,41 +200,45 @@ YAHOO.imex.jnledit = {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 
                 var tau = YAHOO.util.Dom.get( "td-admin-user" );
-                var nih = "";
-
-                for( var i = 0; i < messages.journal.adminUsers.length; i++ ) {
+                if( tau != null ){
                     
-                    nih = nih + '<input type="checkbox" id="jnl-acc-edit_opp_eaudel" value="' + 
-                        messages.journal.adminUsers[i].id +
-                        '" name="opp.eaudel" class="admin-user-drop">';
+                    var nih = "";
+                    
+                    for( var i = 0; i < messages.journal.adminUsers.length; i++ ) {
+                        
+                        nih = nih + '<input type="checkbox" id="jnl-acc-edit_opp_jaudel" value="' + 
+                            messages.journal.adminUsers[i].id +
+                            '" name="opp.jaudel" class="admin-user-drop">';
 
-                    nih = nih + '<input type="hidden" value="' + 
-                        messages.journal.adminUsers[i].id + 
-                        '" name="__checkbox_opp.eaudel" id="__checkbox_jnl-acc-edit_opp_eaudel">';
+                        nih = nih + '<input type="hidden" value="' + 
+                            messages.journal.adminUsers[i].id + 
+                            '" name="__checkbox_opp.jaudel" id="__checkbox_jnl-acc-edit_opp_jaudel">';
 
-                    nih = nih + messages.journal.adminUsers[i].login;
-                }              
-                tau.innerHTML = nih;
-                YAHOO.util.Dom.get("jnl-acc-edit_opp_eauadd").value ="";
-
+                        nih = nih + messages.journal.adminUsers[i].login;
+                    }              
+                    tau.innerHTML = nih;
+                    YAHOO.util.Dom.get("jnl-acc-edit_opp_jauadd").value ="";
+                }
                 var tag = YAHOO.util.Dom.get( "td-admin-group" );
-                var nig = "";
-
-                for( var i = 0; i < messages.journal.adminGroups.length; i++ ) {
+                if( tag != null){
                     
-                    nig = nig + '<input type="checkbox" id="jnl-acc-edit_opp_eagdel" value="' + 
-                        messages.journal.adminGroups[i].id +
-                        '" name="opp.eagdel" class="admin-group-drop">';
+                    var nig = "";
 
-                    nig = nig + '<input type="hidden" value="' + 
-                        messages.journal.adminGroups[i].id + 
-                        '" name="__checkbox_opp.eagdel" id="__checkbox_jnl-acc-edit_opp_eagdel">';
-                    
-                    nig = nig + messages.journal.adminGroups[i].label;
-                }              
-                tag.innerHTML = nig;
-                //YAHOO.util.Dom.get("jnledit_opp_eauadd").value ="";
-
+                    for( var i = 0; i < messages.journal.adminGroups.length; i++ ) {
+                        
+                        nig = nig + '<input type="checkbox" id="jnl-acc-edit_opp_eagdel" value="' + 
+                            messages.journal.adminGroups[i].id +
+                            '" name="opp.eagdel" class="admin-group-drop">';
+                        
+                        nig = nig + '<input type="hidden" value="' + 
+                            messages.journal.adminGroups[i].id + 
+                            '" name="__checkbox_opp.eagdel" id="__checkbox_jnl-acc-edit_opp_eagdel">';
+                        
+                        nig = nig + messages.journal.adminGroups[i].label;
+                    }              
+                    tag.innerHTML = nig;
+                    //YAHOO.util.Dom.get("jnledit_opp_jauadd").value ="";
+                }
             }
         } catch(x) {
             alert("AJAX Error: " + x );

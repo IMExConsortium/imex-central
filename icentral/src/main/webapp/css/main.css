@@ -42,6 +42,12 @@ p {
 caption {
   text-align: left;
 }
+
+.selected {
+    background-color: #66aaff !important;
+}
+
+
 /*
 h1 {
 
@@ -1612,7 +1618,7 @@ form.stylized button {
 form.align-label label {
     float: left;
     font-weight: bold;
-    width: 10em;
+    width: 12em;
     clear: none;
     display: block;
 }

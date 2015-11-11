@@ -36,6 +36,9 @@ public class JournalMgrAction extends ManagerSupport {
 
     public static final String EDITOR = "CURATOR";
     public static final String PARTNER = "IMEX PARTNER";
+
+    public static final String IMEX_ROLE = "IMEx partner";
+
     
     ////------------------------------------------------------------------------
     /// Entry Manager
@@ -104,6 +107,21 @@ public class JournalMgrAction extends ManagerSupport {
         
         if ( getUserContext().getGroupDao() != null ) {
             return getUserContext().getGroupDao().getGroupList();
+        }
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
+    // GroupImex list
+    //---------------
+
+    public List<Group> getGroupImex(){
+        
+        if ( getUserContext().getGroupDao() != null &&
+             getUserContext().getRoleDao() != null ){
+
+            Role role = getUserContext().getRoleDao().getRole( IMEX_ROLE );
+            return getUserContext().getGroupDao().getGroupList( role );
         }
         return null;
     }

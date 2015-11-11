@@ -6,13 +6,21 @@ YAHOO.imex.journalview = {
     owner: "",
     cflag: "",
     watch: "",
-    loginId: "",
-    
+    loginId: null,
+    prefs: null, 
+   
     id: "",
     year:"",
     volume:"",
     issue:"",
     nnav:"",
+    
+    curateUrl: "",
+    curatePat: "",
+    pubmedUrl: "http://www.ncbi.nlm.nih.gov/pubmed/%%pmid%%",
+    pubmedPat: "%%pmid%%",
+    imexUrl: "imex/rec/%%imex%%",
+    imexPat: "%%imex%%",
     
     stateBtn: { my:{value:"",foo:"state"} },    
     stateSel: [ { text: "---ANY---", value: "" } ],
@@ -27,7 +35,6 @@ YAHOO.imex.journalview = {
     yearPtn: { my:{value:"-",foo:"year"} },    
     yearNBtn: { my:{value:"+",foo:"year"} },    
     yearLBtn: { my:{value:"++",foo:"year"} },    
-
 
     volumeBtn: { my:{value:"",foo:"voulme"} },    
     volumeSel: [ { text: "---ANY---", value: "" } ],
@@ -70,17 +77,17 @@ YAHOO.imex.journalview = {
                    sortable:true, resizeable:true, hideable: true,
                    formatter:"imex",menuLabel:"Imex Accession" },
 
-/*
-        "submission":{ label:"Submission", menuLabel:"Submission", key:"submission", 
-                       hideable: true, hidden: true,
-                       children:[
-                           { key:"date",  label:"Date", 
-                             sortable:true, resizeable:false, formatter:"crt" },
-                           { key:"owner", label:"Submitted By",
-                             sortable:false, resizeable:false, formatter:"list" }
-                       ]
-                     },
-*/
+        
+        //"submission":{ label:"Submission", menuLabel:"Submission", key:"submission", 
+        //               hideable: true, hidden: true,
+        //               children:[
+        //                   { key:"date",  label:"Date", 
+        //                     sortable:true, resizeable:false, formatter:"crt" },
+        //                   { key:"owner", label:"Submitted By",
+        //                     sortable:false, resizeable:false, formatter:"list" }
+        //               ]
+        //             },
+
         "state":{ key:"state", label:"Status", 
                   sortable:false, resizeable:false, hideable: true, 
                   formatter:"center", menuLabel:"Status" },
@@ -101,7 +108,6 @@ YAHOO.imex.journalview = {
     myCL: [ "id", "pub", "pages", "pmid", "imexId", // "submission",
             "stage", "state",  "detail" ],
     myColumnDefs: [],
-
     
     tableReload: function( o, dt ) {
         try {
@@ -127,6 +133,7 @@ YAHOO.imex.journalview = {
             console.log(x);
         }
     },
+
     getDefaultCookie: function(){
         var cookie = "";
         var journalview = YAHOO.imex.journalview;
@@ -138,42 +145,62 @@ YAHOO.imex.journalview = {
             }
             cookie += journalview.myCD[journalview.myCL[i]].key + ":" + hidden +"|";
         }
-        //alert( cookie );
-
         return cookie;
     },
+
     init: function( init ){
-        
-        var journalview = YAHOO.imex.journalview;
-        journalview.loginId = init.loginid;
-        if( typeof journalview.myDataTable != "undefined" ){
-            journalview.myDataTable.my.configmenu.destroy();
-            journalview.myDataTable.destroy();
-            journalview.myColumnDefs = [];            
-        } else {
-            this.userTableLayoutInit( init );
-        }
         try{
+            console.log("INIT: START");
+    
+            var journalview = YAHOO.imex.journalview;
+            journalview.loginId = init.loginid;
+            journalview.prefStr = init.prefStr;
+        
+            if( journalview.prefs == null && journalview.prefStr != null && journalview.prefStr != "" ){
+            
+                var p = journalview.prefStr.replace(/&quot;/g, '"');           
+                journalview.prefs = YAHOO.lang.JSON.parse( p  );
+                journalview["curateUrl"]
+                    = journalview.prefs["option-def"]["curation-tool"]["option-def"]["curation-url"].value;
+                
+                journalview["curatePat"]
+                    = journalview.prefs["option-def"]["curation-tool"]["option-def"]["curation-pmid-pattern"].value;
+            }
+            
+            if( typeof journalview.myDataTable != "undefined" ){
+                journalview.myDataTable.my.contextmenu.destroy();
+                journalview.myDataTable.destroy();
+                journalview.myColumnDefs = [];            
+            } else {
+                this.userTableLayoutInit( init );
+            }
+            
             var cookie = YAHOO.util.Cookie.get("journalview");
             if( cookie == null ){
                 cookie = journalview.getDefaultCookie();
-        
+                
                 YAHOO.util.Cookie.set( "journalview", cookie );
             }
             
             if( cookie !== null ){
                 this.buildCDefs( cookie );                
             }
-        } catch (x) {
-            console.log("INIT: ex="+ x);
-        }
+            
+            this.initView( init );
+            this.historyInit( init );
 
-        this.initView( init );
-        this.historyInit( init );
+            console.log("INIT: DONE");
+            
+        } catch (x) {
+             console.log("INIT ERROR: "+ x);
+        }
+        
     },
+
     //----------------------------------------------------------------
     //if a user is logged in this sets the cookie to their preferences
     //----------------------------------------------------------------
+
     userTableLayoutInit: function( init ){
         var journalview = YAHOO.imex.journalview;
         if( typeof journalview.loginId  != "undefined" && journalview.loginId != "" ){
@@ -206,20 +233,21 @@ YAHOO.imex.journalview = {
                 init.loginid = journalview.loginId;
 
                 //journalview.init( init );
-               //                    {admus: journalview.admus,
-               //                     owner: journalview.owner,
-               //                     cflag: journalview.cflag,
-               //                     watch: journalview.watch,
-               //                     loginid:journalview.loginId });
+                //                    {admus: journalview.admus,
+                //                     owner: journalview.owner,
+                //                     cflag: journalview.cflag,
+                //                     watch: journalview.watch,
+                //                     loginid:journalview.loginId });
             };
+            
             var Fail = function ( o ) {
                 console.log( "AJAX Error update failed: id=" + o.argument.id ); 
             };
+            
             var callback = { cache:false, timeout: 5000, 
                              success: Success,
                              failure: Fail
                              }; 
-            
             try{
                 YAHOO.util.Connect
                 .asyncRequest( 'GET', 
@@ -232,11 +260,10 @@ YAHOO.imex.journalview = {
     },
     
     updateUserTablePref: function( cookie ){
-        var journalview = YAHOO.imex.journalview;
-        var loginId = journalview.loginId;
+        var my = YAHOO.imex.journalview;
+        var loginId = my.loginId;
         
-        if(typeof loginId  != "undefined" && loginId != "")
-        {
+        if( typeof loginId  != "undefined" && loginId != "" ){
             try{
                 YAHOO.util.Connect
                 .asyncRequest( 'POST', 
@@ -250,26 +277,23 @@ YAHOO.imex.journalview = {
     
     buildCDefs: function( cookie ){
 
-        var PMGR = YAHOO.imex.journalview;
-
-
-        //alert("buildCDefs:"+cookie );
+        var my = YAHOO.imex.journalview;
         var col = cookie.split("|");
         
         if(col.length > 0){
-            PMGR.myColumnDefs=[];
+            my.myColumnDefs=[];
             
             for( var i =0; i < col.length-1; i++ ){
                 try{
                 
                     var cs = col[i].split(":");
-                    if( PMGR.myCD[cs[0]] !== undefined ){
+                    if( my.myCD[cs[0]] !== undefined ){
                         
-                        PMGR.myColumnDefs.push(PMGR.myCD[cs[0]]);
+                        my.myColumnDefs.push(my.myCD[cs[0]]);
                         if(cs[1] === 'true'){
-                            PMGR.myColumnDefs[PMGR.myColumnDefs.length-1].hidden = true;
+                            my.myColumnDefs[my.myColumnDefs.length-1].hidden = true;
                         } else {
-                            PMGR.myColumnDefs[PMGR.myColumnDefs.length-1].hidden = false;
+                            my.myColumnDefs[my.myColumnDefs.length-1].hidden = false;
                         }
                     }
                     
@@ -282,23 +306,23 @@ YAHOO.imex.journalview = {
 
     buildCookie: function(){
 
-        var PMGR = YAHOO.imex.journalview;
+        var my = YAHOO.imex.journalview;
         var cookie = "";
-        var ac = PMGR.myDataTable.getColumnSet().keys;
+        var ac = my.myDataTable.getColumnSet().keys;
         for(var i=0; i< ac.length; i++ ){
 
             var key = ac[i].getKey();
             var hid = ac[i].hidden;
-            if( PMGR.myCD[key] !== undefined ){
+            if( my.myCD[key] !== undefined ){
                 cookie += key + ":" + hid + "|";
-            } else { // nested column
-                key = PMGR.myCP[key];
-                if( PMGR.myCD[key] !== undefined ){
+            } else {              // nested column
+                key = my.myCP[key];
+                if( my.myCD[key] !== undefined ){
                     cookie += key + ":" + hid + "|";
                 }
             }
         }
-        console.log("cookie:"+cookie);
+        console.log( "cookie:" + cookie );
         return cookie;
     },
 
@@ -320,16 +344,12 @@ YAHOO.imex.journalview = {
             watch: PMGR.watch,
             scol: "id",
             sdir: "asc" };
-             
-
-    
+        
         if(  init !== undefined && init.watch !== undefined ){
             defstate.watch = init.watch;
         }
 
-        var dst = YAHOO.lang.JSON.stringify( defstate );
-        //alert (dst );
-
+        var dst = YAHOO.lang.JSON.stringify( defstate );        
         var bState = YAHOO.util.History.getBookmarkedState( "journalview" );
         var iState = bState || dst;
         
@@ -372,17 +392,10 @@ YAHOO.imex.journalview = {
     handleNav: function( ev, o ){
 
         try{
-
-            //alert(PMGR);
-
             var navig = o.navig;
             var newVal = ev.newValue.value;
             
             var PMGR = YAHOO.imex.journalview;
-      
-            //alert(navig + ":" + newVal);
-
-  
             var newState = PMGR.myDataSource.my.myState;
       
             console.log("navig:" + navig + " newVal: " + newVal + "\noldstate: " 
@@ -425,17 +438,12 @@ YAHOO.imex.journalview = {
         try{
             var sdir = this.getColumnSortDir( column );
             newState.startIndex = 0;
-            //alert( "HS: col=" + column.key + " dir=" + sdir );
-
+            
             if( column.key !== undefined && sdir !==undefined ){
-                
                 newState.scol = column.key;
                 newState.sdir = sdir.substr( 7 );
-
-                //alert( "new sort=(" + newState.scol 
-                //       + "," + newState.sdir + ")" );
             }
-
+            
             YAHOO.util.History
                 .navigate( "journalview", 
                            PMGR.generateStateString( newState ) );
@@ -448,8 +456,6 @@ YAHOO.imex.journalview = {
     handleHistoryNavigation: function( state ){
         
         var PMGR = YAHOO.imex.journalview;
-
-        //alert( "HHN:" + state );
         
         var parsed = PMGR.parseStateString( state );      
         var request = PMGR.buildRequest( parsed );
@@ -462,25 +468,19 @@ YAHOO.imex.journalview = {
         var flt, 
         sflt = "";
         
-        //for( flt in parsed.filter){
-        //    sflt += "{" + flt + "=" + parsed.filter[flt] + "}";
-        //}
-        //alert( sflt );
-
         // reset filter buttons/menus
         //---------------------------
         
-        
         var statusLabel = "---ANY---";
         //PMGR.stateSel[0].text = statusLabel;
-
+        
         var stageLabel = "---ANY---";
         //PMGR.partnerSel[0].text = partnerLabel;
 
         if( parsed.filter.status !== ""){
             statusLabel = parsed.filter.status;
         }
-
+        
         if( parsed.filter.stage !== ""){
             stageLabel = parsed.filter.stage;
         }
@@ -525,6 +525,7 @@ YAHOO.imex.journalview = {
     parseStateString: function( statStr ){
         return YAHOO.lang.JSON.parse(statStr);
     },
+    
     generateLinkState: function( status, stage, year, volume, issue ){
 
         //LS: watch ?
@@ -532,13 +533,10 @@ YAHOO.imex.journalview = {
         var navig = {year:year, volume:volume, issue:issue  };
         var state = {startIndex:0, pageSize:25,filter:filter, navig:navig, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
-
     },
 
     buildRequest: function ( state ){
-      
-        //alert("buildRequest->state" +YAHOO.lang.JSON.stringify(state));
-
+        
         var req = "opp.off=" + state.startIndex + 
             "&opp.wfl=" + state.watch + 
             "&opp.max=" + state.pageSize +
@@ -564,8 +562,6 @@ YAHOO.imex.journalview = {
 
         var myself = YAHOO.imex.journalview;
         
-        //console.log("requestBuilder->oState=" + YAHOO.lang.JSON.stringify( oState) );
-
         // get state (or use defaults)
         //----------------------------
 
@@ -579,9 +575,9 @@ YAHOO.imex.journalview = {
             ? oState.pagination.recordOffset : 0;
         var results = (oState.pagination) 
             ? oState.pagination.rowsPerPage : 10;
-
+        
         // LS: also get watch flag here ?
-        // <        
+                
         // filters
         //--------
 
@@ -608,16 +604,11 @@ YAHOO.imex.journalview = {
         var yrVal = myself.yearCurrent.get( "value");
         var voVal = myself.volumeCurrent.get( "value");
         var isVal = myself.issueCurrent.get( "value"); 
-       
-
-        //alert("stateButton: name="+ YAHOO.imex.pubmgr.stateBtn.my.name 
-        //      + " value=" + YAHOO.imex.pubmgr.stateBtn.my.value);
         
         var efVal = oSelf.my.admusFlt;
         var ofVal = oSelf.my.ownerFlt;
         var ffVal = oSelf.my.cflagFlt;
-
-
+        
         // watch flag 
         
         var wtFlg = oSelf.my.watchFlg;
@@ -642,9 +633,6 @@ YAHOO.imex.journalview = {
         req = encodeURI(req);
         console.log("request: " + req);
         
-        // build custom request
-        //---------------------
-
         return req;
     },
 
@@ -659,456 +647,434 @@ YAHOO.imex.journalview = {
     },
 
     initView: function( init, cord, chid ) { 
-
-        var PMGR = YAHOO.imex.journalview;
-        
-        console.log( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
-        
-        this.formatterInit();
-        
-        if( init !== undefined ){
-            PMGR.admus = init.admus;
-            PMGR.owner = init.owner;
-            PMGR.cflag = init.cflag;
-            PMGR.watch = init.watch;
-        }
-        
-        
-        
-        var stageSuccess = function( o ){
-            var messages = YAHOO.lang.JSON.parse( o.responseText );
-            
-            
-            YAHOO.imex.journalview.selBtnInit( 
-                { pmgr: YAHOO.imex.journalview,
-                  filter: "stage",
-                  items: messages.acom,
-                  selmnu: YAHOO.imex.journalview.stageSel,
-                  selbtn: "stageBtn",
-                  selcnt: "stage-button-container",
-                  selnme: "stage-button",
-                  seltext: YAHOO.imex.journalview.stageSel[0].text});
-                  
-        };
-        
-        var stageCallback = { cache:false, timeout: 5000, 
-                                success: stageSuccess,
-                                failure: stageSuccess,
-                                argument:{}}; // id:obj.id, btn:imexButton } };                  
-
-        var stateSuccess = function( o ){
-            var messages = YAHOO.lang.JSON.parse(o.responseText);
-            YAHOO.imex.journalview.selBtnInit( 
-                { pmgr: YAHOO.imex.journalview,
-                  filter: "status",
-                  items: messages.acom,
-                  selmnu: YAHOO.imex.journalview.stateSel,
-                  selbtn: "stateBtn",
-                  selcnt: "state-button-container",
-                  selnme: "state-button", 
-                  seltext: YAHOO.imex.journalview.stateSel[0].text});
-        };
-        
-        var stateCallback = { cache:false, timeout: 5000, 
-                              success: stateSuccess,
-                              failure: stateSuccess,
-                              argument:{}}; // id:obj.id, btn:imexButton } };                  
-
-        
-        var yviSuccess = function( o ){
-            var messages = YAHOO.lang.JSON.parse(o.responseText);
-            
-            var YIJV = YAHOO.imex.journalview;
-            YIJV.year = messages.init.year;
-            YIJV.volume = messages.init.volume;
-            YIJV.issue = messages.init.issue;
-
-            console.log("YIJV.year="+YIJV.year + " YIJV.volume=" + YIJV.volume + " YIJV.issue=" + YIJV.issue );
-
-            // journal title
-            //--------------
-
-            //alert("RT:" + o.responseText);
-                          
-            var jname = YAHOO.util.Dom.get('journal-name');
-            jname.textContent=messages.init.title;
-                        
-            // year/volume/issue buttons
-            YAHOO.imex.journalview.navBtnInit(
-                { pmgr: YAHOO.imex.journalview,
-                  nbtn: "yearCurrent",
-                  navig: "year",
-                  ntxt: messages.init.year,
-                  items: messages.init['year-list'],
-                  navmnu: YAHOO.imex.journalview.yearSel,
-                  ncnt: "year-curr-container",
-                  nnme: "year-curr-button"
-                }
-            );
-            
-            YAHOO.imex.journalview.navBtnInit(
-                { pmgr: YAHOO.imex.journalview,
-                  nbtn: "volumeCurrent",
-                  navig: "volume",
-                  ntxt: messages.init.volume,
-                  items: messages.init['volume-list'],
-                  menu: YAHOO.imex.journalview.volumeSel,
-                  ncnt: "volume-curr-container",
-                  nnme: "volume-curr-button"
-                }
-            );
-            YAHOO.imex.journalview.navBtnInit(
-                { pmgr: YAHOO.imex.journalview,
-                  nbtn: "issueCurrent",
-                  navig: "issue",
-                  ntxt: messages.init.issue, 
-                  items: messages.init['issue-list'],
-                  menu: YAHOO.imex.journalview.issueSel,
-                  ncnt: "issue-curr-container",
-                  nnme: "issue-curr-button"
-                }
-            );
-        };
-        
-        var yviCallback = { cache:false, timeout: 5000, 
-                            success: yviSuccess,
-                            failure: yviSuccess,
-                            argument:{}}; // id:obj.id, btn:imexButton } };                  
-        
-        
         try{
-
-            var query =  "journalview?id="+init.jid
-                + "&op.init="+init.jid + "&opp.year=" + init.year
-                + "&opp.volume=" + init.volume + "&opp.issue=" + init.issue;
-
-            //alert("IQ:" + query);
-
-            YAHOO.util.Connect.asyncRequest( 'GET', query, yviCallback );        
-        } catch (x) {
-            console.log("AJAX Error:"+x);
-        }
+    
+            var PMGR = YAHOO.imex.journalview;
+            console.log( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
         
-        if( typeof PMGR.myDataTable == "undefined" ){
-            try{
-                YAHOO.util.Connect.asyncRequest( 'GET', 
-                                                 "acom?op.pstac=ac" , 
-                                                 stateCallback );        
-                YAHOO.util.Connect.asyncRequest( 'GET', 
-                                                 "acom?op.psgac=ac", 
-                                                 stageCallback );        
-            } catch (x) {
-                console.log("AJAX Error:"+x);
+            this.formatterInit();
+        
+            if( init !== undefined ){
+                PMGR.admus = init.admus;
+                PMGR.owner = init.owner;
+                PMGR.cflag = init.cflag;
+                PMGR.watch = init.watch;
             }
-        }
-
-        
-        
-        // create datasource
-        //------------------
-
-        PMGR.myDataSource = new YAHOO.util.DataSource("journalview?id=" + init.jid 
-                                                      + "&op.jppg=jppg&"); 
-        
-        PMGR.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
-        PMGR.myDataSource.responseSchema = { 
-            resultsList: "records.records", 
-            fields: ["id","author","title","pmid","imexId",
-                     "pages","issue","volume","year","stage",
-                     "owner","state","date","time","imexDb","editor",
-                     "actTStamp","actUser","modTStamp","modUser"], 
-            metaFields: { 
-                totalRecords: "records.totalRecords", 
-                paginationRecordOffset : "records.startIndex", 
-                paginationRowsPerPage : "records.pageSize", 
-                sortKey: "records.sort", 
-                sortDir: "records.dir",
-                fOwr: "records.filter.owner",
-                fEdr: "records.filter.editor",
-                fSte: "records.filter.status",
-                fPar: "records.filter.stage",
-                fFlg: "records.filter.cflag" 
-            }
-        }; 
-        
-        PMGR.myDataSource.my = { myState: null };
-        
-        PMGR.menuRebuild = function( button, value, vList ){
             
-            try{                
-                button.set( "label", value );
-                button.set( "value", value );
+            var stageSuccess = function( o ){
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
                 
-                var menu = button.getMenu();
-                var menuItems=[];
-                for( var i=0; i<vList.length; i++ ){
-                    menuItems[i]= { text: vList[i], value: vList[i] };
-                }
+                YAHOO.imex.journalview.selBtnInit( 
+                    { pmgr: YAHOO.imex.journalview,
+                      filter: "stage",
+                      items: messages.acom,
+                      selmnu: YAHOO.imex.journalview.stageSel,
+                      selbtn: "stageBtn",
+                      selcnt: "stage-button-container",
+                      selnme: "stage-button",
+                      seltext: YAHOO.imex.journalview.stageSel[0].text});     
+            };
+        
+            var stageCallback = { cache:false, timeout: 5000, 
+                                  success: stageSuccess,
+                                  failure: stageSuccess,
+                                  argument:{}}; // id:obj.id, btn:imexButton } };                  
+            
+            var stateSuccess = function( o ){
+                var messages = YAHOO.lang.JSON.parse(o.responseText);
+                YAHOO.imex.journalview.selBtnInit( 
+                    { pmgr: YAHOO.imex.journalview,
+                      filter: "status",
+                      items: messages.acom,
+                      selmnu: YAHOO.imex.journalview.stateSel,
+                      selbtn: "stateBtn",
+                      selcnt: "state-button-container",
+                      selnme: "state-button", 
+                      seltext: YAHOO.imex.journalview.stateSel[0].text});
+            };
+            
+            var stateCallback = { cache:false, timeout: 5000, 
+                                  success: stateSuccess,
+                                  failure: stateSuccess,
+                                  argument:{}}; // id:obj.id, btn:imexButton } };                  
+            
+        
+            var yviSuccess = function( o ){
+                var messages = YAHOO.lang.JSON.parse(o.responseText);
+            
+                var YIJV = YAHOO.imex.journalview;
+                YIJV.year = messages.init.year;
+                YIJV.volume = messages.init.volume;
+                YIJV.issue = messages.init.issue;
                 
-                if( YAHOO.util.Dom.inDocument( menu.element ) ){                    
-                    menu.clearContent();                 
-                    menu.addItems( menuItems );
-                    menu.render();
-                } else {
-                    menu.itemData = menuItems;
-                }
-            } catch(x){
-                console.log( "AJAX Error:" + x );
-            }
-        };
+                console.log("YIJV.year="+YIJV.year + " YIJV.volume=" + YIJV.volume + " YIJV.issue=" + YIJV.issue );
 
-        PMGR.myDataSource.doBeforeParseData = function( oRequest , oFullResponse , oCallback ){
+                // journal title
+                //--------------
+
+                //alert("RT:" + o.responseText);
+                          
+                var jname = YAHOO.util.Dom.get('journal-name');
+                jname.textContent=messages.init.title;
+                
+                // year/volume/issue buttons
+                YAHOO.imex.journalview.navBtnInit(
+                    { pmgr: YAHOO.imex.journalview,
+                      nbtn: "yearCurrent",
+                      navig: "year",
+                      ntxt: messages.init.year,
+                      items: messages.init['year-list'],
+                      navmnu: YAHOO.imex.journalview.yearSel,
+                      ncnt: "year-curr-container",
+                      nnme: "year-curr-button"
+                    }
+                );
+            
+                YAHOO.imex.journalview.navBtnInit(
+                    { pmgr: YAHOO.imex.journalview,
+                      nbtn: "volumeCurrent",
+                      navig: "volume",
+                      ntxt: messages.init.volume,
+                      items: messages.init['volume-list'],
+                      menu: YAHOO.imex.journalview.volumeSel,
+                      ncnt: "volume-curr-container",
+                      nnme: "volume-curr-button"
+                    }
+                );
+                YAHOO.imex.journalview.navBtnInit(
+                    { pmgr: YAHOO.imex.journalview,
+                      nbtn: "issueCurrent",
+                      navig: "issue",
+                      ntxt: messages.init.issue, 
+                      items: messages.init['issue-list'],
+                      menu: YAHOO.imex.journalview.issueSel,
+                      ncnt: "issue-curr-container",
+                      nnme: "issue-curr-button"
+                    }
+                );
+            };
+        
+            var yviCallback = { cache:false, timeout: 5000, 
+                                success: yviSuccess,
+                                failure: yviSuccess,
+                                argument:{}}; // id:obj.id, btn:imexButton } };                  
             
             try{
 
-                //alert("XXX");
-
+                var query =  "journalview?id="+init.jid
+                    + "&op.init="+init.jid + "&opp.year=" + init.year
+                    + "&opp.volume=" + init.volume + "&opp.issue=" + init.issue;
                 
-                var myself = YAHOO.imex.journalview;
-                var filter = oFullResponse.records.filter;
-                
-                // update buttons/menus
-
-                myself.menuRebuild( myself.yearCurrent, filter.year,  
-                                    oFullResponse.init["year-list"] );
-
-                if(oFullResponse.init["year-list"].length <=1){
-                    document.getElementById("year-first-container").style.display ="none"; 
-                    document.getElementById("year-prev-container").style.display="none";  
-                    document.getElementById("year-next-container").style.display="none"; 
-                    document.getElementById("year-last-container").style.display="none"; 
-                } else{
-                    document.getElementById("year-first-container").style.display="inline"; 
-                    document.getElementById("year-prev-container").style.display="inline";  
-                    document.getElementById("year-next-container").style.display="inline"; 
-                    document.getElementById("year-last-container").style.display="inline";                     
-                }
-                
-
-                myself.menuRebuild( myself.volumeCurrent, filter.volume,
-                                    oFullResponse.init["volume-list"] );
-
-                if(oFullResponse.init["volume-list"].length <=1){ 
-                    document.getElementById("volume-first-container").style.display="none"; 
-                    document.getElementById("volume-prev-container").style.display="none";
-                    document.getElementById("volume-next-container").style.display="none";
-                    document.getElementById("volume-last-container").style.display="none";
-               } else{
-                    document.getElementById("volume-first-container").style.display="inline"; 
-                    document.getElementById("volume-prev-container").style.display="inline";
-                    document.getElementById("volume-next-container").style.display="inline";
-                    document.getElementById("volume-last-container").style.display="inline";                    
-                }
-
-                myself.menuRebuild( myself.issueCurrent, filter.issue,
-                                    oFullResponse.init["issue-list"] );
-
-                if(oFullResponse.init["year-list"].length <=1){
-                    document.getElementById("issue-first-container").style.display="none"; 
-                    document.getElementById("issue-prev-container").style.display="none";
-                    document.getElementById("issue-next-container").style.display="none";
-                    document.getElementById("issue-last-container").style.display="none";
-                } else{
-                    document.getElementById("issue-first-container").style.display="inline"; 
-                    document.getElementById("issue-prev-container").style.display="inline";
-                    document.getElementById("issue-next-container").style.display="inline";
-                    document.getElementById("issue-last-container").style.display="inline";
-                }
-
-                
-                myself.myDataSource.my.myState.navig.year = filter.year;
-                myself.myDataSource.my.myState.navig.volume = filter.volume;
-                myself.myDataSource.my.myState.navig.issue = filter.issue;
-                
+                YAHOO.util.Connect.asyncRequest( 'GET', query, yviCallback );        
             } catch (x) {
                 console.log("AJAX Error:"+x);
             }
         
-            return oFullResponse;
-            
-        };
-        
-
-        // create paginator
-        //-----------------
-        
-        PMGR.myPaginator = new YAHOO.widget.Paginator(
-            { containers: ["dt-pag-nav"], 
-              rowsPerPage: 25, 
-              template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE, 
-              rowsPerPageOptions: [5,10,25,50,100], 
-              pageLinks: 5 
-            }
-        );
-        
-        // datatable configuration
-        //------------------------
-        
-        var initReq = "opp.off=0&opp.max=25"
-            + "&opp.yr=" + YAHOO.imex.year
-            + "&opp.vo=" + YAHOO.imex.volume
-            + "&opp.is=" + YAHOO.imex.issue
-
-            + "&opp.wfl=" + YAHOO.imex.journalview.watch 
-            + "&opp.ofv=" + YAHOO.imex.journalview.owner 
-            + "&opp.efv=" + YAHOO.imex.journalview.admus 
-            + "&opp.ffv=" + YAHOO.imex.journalview.cflag;
-
-        var myConfig = {
-            paginator : this.myPaginator,
-            initialLoad: false,
-            dynamicData : true,
-            draggableColumns: true
-        };
-        
-        // Instantiate DataTable
-        //----------------------
-
-        PMGR.myDataTable = new YAHOO.widget.DataTable(
-            "pubtab", PMGR.myColumnDefs, 
-            PMGR.myDataSource, myConfig
-        );
-        
-        PMGR.myPaginator
-            .unsubscribe( "changeRequest", 
-                          PMGR.myDataTable.onPaginatorChangeRequest );
-        PMGR.myPaginator
-            .subscribe( "changeRequest", 
-                        PMGR.handlePagination, PMGR.myDataTable, true );
-
-        PMGR.myDataTable.sortColumn = PMGR.handleSorting;
-
-        PMGR.myDataTable.my = { 
-            watchFlg: PMGR.watch,
-            stateFlt: PMGR.stateBtn, 
-            partnerFlt: PMGR.partnerBtn,
-            ownerFlt: PMGR.owner,
-            admusFlt: PMGR.admus,
-            cflagFlt: PMGR.cflag,
-            requestBuilder: PMGR.requestBuilder
-        };
-
-        PMGR.myDataTable.my.filter = {
-            owner: PMGR.owner, 
-            editor: PMGR.admus,
-            cflag: PMGR.cflag  
-        };
-
-        PMGR.myDataTable.my.navig = {
-            year: PMGR.year, 
-            volume: PMGR.volume,
-            issue: PMGR.issue  
-        };
-
-        PMGR.stateBtn.my.table = PMGR.myDataTable;
-        PMGR.stageBtn.my.table = PMGR.myDataTable;
-        
-        PMGR.yearBtn.my.table = PMGR.myDataTable;
-        PMGR.volumeBtn.my.table = PMGR.myDataTable;
-        PMGR.issueBtn.my.table = PMGR.myDataTable;
-        
-
-        // Show loading message while page is being rendered
-        
-        PMGR.myDataTable
-            .showTableMessage( PMGR.myDataTable.get("MSG_LOADING"), 
-                               YAHOO.widget.DataTable.CLASS_LOADING);
-        
-
-        PMGR.myDataTable.doBeforeLoadData = 
-            function( oRequest, oResponse, oPayload ){
-                
+            if( typeof PMGR.myDataTable == "undefined" ){
                 try{
-                    var meta = oResponse.meta;
-                    oPayload.totalRecords 
-                        = meta.totalRecords || oPayload.totalRecords;
+                    YAHOO.util.Connect.asyncRequest( 'GET', 
+                                                     "acom?op.pstac=ac" , 
+                                                     stateCallback );        
+                    YAHOO.util.Connect.asyncRequest( 'GET', 
+                                                     "acom?op.psgac=ac", 
+                                                     stageCallback );        
+                } catch (x) {
+                    console.log("AJAX Error:"+x);
+                }
+            }
+            
+            // create datasource
+            //------------------
+
+            PMGR.myDataSource = new YAHOO.util.DataSource("journalview?id=" + init.jid 
+                                                          + "&op.jppg=jppg&"); 
+            
+            PMGR.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
+            PMGR.myDataSource.responseSchema = { 
+                resultsList: "records.records", 
+                fields: ["id","author","title","pmid","imexId",
+                         "pages","issue","volume","year","stage",
+                         "owner","state","date","time","imexDb","editor",
+                         "actTStamp","actUser","modTStamp","modUser"], 
+                metaFields: { 
+                    totalRecords: "records.totalRecords", 
+                    paginationRecordOffset : "records.startIndex", 
+                    paginationRowsPerPage : "records.pageSize", 
+                    sortKey: "records.sort", 
+                    sortDir: "records.dir",
+                    fOwr: "records.filter.owner",
+                    fEdr: "records.filter.editor",
+                    fSte: "records.filter.status",
+                    fPar: "records.filter.stage",
+                    fFlg: "records.filter.cflag" 
+                }
+            }; 
+            
+            PMGR.myDataSource.my = { myState: null };
+            
+            PMGR.menuRebuild = function( button, value, vList ){
+                
+                try{                
+                    button.set( "label", value );
+                    button.set( "value", value );
                     
-                    var oPayloadOld = oPayload;
-                    
-                    //alert( "dbld: response=" + 
-                    //      YAHOO.lang.JSON.stringify(oResponse));
-                    oPayload.pagination = {
-                        rowsPerPage: meta.paginationRowsPerPage || 10,
-                        recordOffset: meta.paginationRecordOffset || 0
-                    };
-                    
-                    if( meta.sortKey !== undefined ){
-                        oPayload.sortedBy = { key: meta.sortKey,
-                                              dir: "yui-dt-" + meta.sortDir };
+                    var menu = button.getMenu();
+                    var menuItems=[];
+                    for( var i=0; i<vList.length; i++ ){
+                        menuItems[i]= { text: vList[i], value: vList[i] };
                     }
                     
-                    //alert( "dbld:\n payload(old)=" + YAHOO.lang.JSON.stringify( oPayloadOld ) +
-                    //       "\n meta=" + YAHOO.lang.JSON.stringify( meta ) +
-                    //       "\n payload(new)=" + YAHOO.lang.JSON.stringify( oPayload  ));
+                    if( YAHOO.util.Dom.inDocument( menu.element ) ){                    
+                        menu.clearContent();                 
+                        menu.addItems( menuItems );
+                        menu.render();
+                    } else {
+                        menu.itemData = menuItems;
+                    }
+                } catch(x){
+                    console.log( "AJAX Error:" + x );
+                }
+            };
+            
+            PMGR.myDataSource.doBeforeParseData = function( oRequest , oFullResponse , oCallback ){
+            
+                try{
+                    
+                    var myself = YAHOO.imex.journalview;
+                    var filter = oFullResponse.records.filter;
+                    
+                    // update buttons/menus
+                    
+                    myself.menuRebuild( myself.yearCurrent, filter.year,  
+                                        oFullResponse.init["year-list"] );
+                    
+                    if(oFullResponse.init["year-list"].length <=1){
+                        document.getElementById("year-first-container").style.display ="none"; 
+                        document.getElementById("year-prev-container").style.display="none";  
+                        document.getElementById("year-next-container").style.display="none"; 
+                        document.getElementById("year-last-container").style.display="none"; 
+                    } else{
+                        document.getElementById("year-first-container").style.display="inline"; 
+                        document.getElementById("year-prev-container").style.display="inline";  
+                        document.getElementById("year-next-container").style.display="inline"; 
+                        document.getElementById("year-last-container").style.display="inline";                     
+                    }
+                    
+                    myself.menuRebuild( myself.volumeCurrent, filter.volume,
+                                        oFullResponse.init["volume-list"] );
+                    
+                    if(oFullResponse.init["volume-list"].length <=1){ 
+                        document.getElementById("volume-first-container").style.display="none"; 
+                        document.getElementById("volume-prev-container").style.display="none";
+                        document.getElementById("volume-next-container").style.display="none";
+                        document.getElementById("volume-last-container").style.display="none";
+                    } else{
+                        document.getElementById("volume-first-container").style.display="inline"; 
+                        document.getElementById("volume-prev-container").style.display="inline";
+                        document.getElementById("volume-next-container").style.display="inline";
+                        document.getElementById("volume-last-container").style.display="inline";                    
+                    }
+                    
+                    myself.menuRebuild( myself.issueCurrent, filter.issue,
+                                        oFullResponse.init["issue-list"] );
+                    
+                    if(oFullResponse.init["year-list"].length <=1){
+                        document.getElementById("issue-first-container").style.display="none"; 
+                        document.getElementById("issue-prev-container").style.display="none";
+                        document.getElementById("issue-next-container").style.display="none";
+                        document.getElementById("issue-last-container").style.display="none";
+                    } else{
+                        document.getElementById("issue-first-container").style.display="inline"; 
+                        document.getElementById("issue-prev-container").style.display="inline";
+                        document.getElementById("issue-next-container").style.display="inline";
+                        document.getElementById("issue-last-container").style.display="inline";
+                    }
+                    
+                    myself.myDataSource.my.myState.navig.year = filter.year;
+                    myself.myDataSource.my.myState.navig.volume = filter.volume;
+                    myself.myDataSource.my.myState.navig.issue = filter.issue;
                     
                 } catch (x) {
+                    console.log("AJAX Error:"+x);
+                }
+                
+                return oFullResponse;            
+            };
+            
+            // create paginator
+            //-----------------
+        
+            PMGR.myPaginator = new YAHOO.widget.Paginator(
+                { containers: ["dt-pag-nav"], 
+                  rowsPerPage: 25, 
+                  template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE, 
+                  rowsPerPageOptions: [5,10,25,50,100], 
+                  pageLinks: 5 
+                }
+            );
+            
+            // datatable configuration
+            //------------------------
+            
+            var initReq = "opp.off=0&opp.max=25"
+                + "&opp.yr=" + YAHOO.imex.year
+                + "&opp.vo=" + YAHOO.imex.volume
+                + "&opp.is=" + YAHOO.imex.issue
+            
+                + "&opp.wfl=" + YAHOO.imex.journalview.watch 
+                + "&opp.ofv=" + YAHOO.imex.journalview.owner 
+                + "&opp.efv=" + YAHOO.imex.journalview.admus 
+                + "&opp.ffv=" + YAHOO.imex.journalview.cflag;
+            
+            var myConfig = {
+                paginator : this.myPaginator,
+                initialLoad: false,
+                dynamicData : true,
+                draggableColumns: true
+            };
+            
+            // Instantiate DataTable
+            //----------------------
+            
+            PMGR.myDataTable = new YAHOO.widget.DataTable(
+                "pubtab", PMGR.myColumnDefs, 
+                PMGR.myDataSource, myConfig
+            );
+            
+            PMGR.myPaginator
+                .unsubscribe( "changeRequest", 
+                              PMGR.myDataTable.onPaginatorChangeRequest );
+            PMGR.myPaginator
+                .subscribe( "changeRequest", 
+                            PMGR.handlePagination, PMGR.myDataTable, true );
+            
+            PMGR.myDataTable.sortColumn = PMGR.handleSorting;
+            
+            PMGR.myDataTable.my = { 
+                watchFlg: PMGR.watch,
+                stateFlt: PMGR.stateBtn, 
+                partnerFlt: PMGR.partnerBtn,
+                ownerFlt: PMGR.owner,
+                admusFlt: PMGR.admus,
+                cflagFlt: PMGR.cflag,
+                requestBuilder: PMGR.requestBuilder
+            };
+            
+            PMGR.myDataTable.my.filter = {
+                owner: PMGR.owner, 
+                editor: PMGR.admus,
+                cflag: PMGR.cflag  
+            };
+            
+            PMGR.myDataTable.my.navig = {
+                year: PMGR.year, 
+                volume: PMGR.volume,
+                issue: PMGR.issue  
+            };
+            
+            PMGR.stateBtn.my.table = PMGR.myDataTable;
+            PMGR.stageBtn.my.table = PMGR.myDataTable;
+            
+            PMGR.yearBtn.my.table = PMGR.myDataTable;
+            PMGR.volumeBtn.my.table = PMGR.myDataTable;
+            PMGR.issueBtn.my.table = PMGR.myDataTable;
+            
+            // Show loading message while page is being rendered
+            
+            PMGR.myDataTable
+                .showTableMessage( PMGR.myDataTable.get("MSG_LOADING"), 
+                                   YAHOO.widget.DataTable.CLASS_LOADING);
+            
+            PMGR.myDataTable.doBeforeLoadData = 
+                function( oRequest, oResponse, oPayload ){
+                    
+                    try{
+                        var meta = oResponse.meta;
+                        oPayload.totalRecords 
+                            = meta.totalRecords || oPayload.totalRecords;
+                        
+                        var oPayloadOld = oPayload;
+                        oPayload.pagination = {
+                            rowsPerPage: meta.paginationRowsPerPage || 10,
+                            recordOffset: meta.paginationRecordOffset || 0
+                        };
+                        
+                        if( meta.sortKey !== undefined ){
+                            oPayload.sortedBy = { key: meta.sortKey,
+                                                  dir: "yui-dt-" + meta.sortDir };
+                        }
+                        
+                    } catch (x) {
+                        console.log(x);
+                    }
+                    return true;
+                };
+            
+            PMGR.myDataTable.handleLayoutChange = function( ev, o ){
+                try{
+                    console.log("handleLayoutChange");
+                    var nCookie = YAHOO.imex.journalview.buildCookie();
+                    YAHOO.imex.journalview.updateUserTablePref( nCookie );
+                    YAHOO.util.Cookie.set( "journalview", nCookie );                                      
+                } catch (x) { 
                     console.log(x);
                 }
-                return true;
-        };
-       
-        PMGR.myDataTable.handleLayoutChange =
-            function( ev, o ){
-                //alert("reorder");                
-                try{
-                    PMGR.myDataTable.my.configmenu.destroy();
-                    PMGR.contextMenuInit( PMGR );
-                    
-                    var nCookie = YAHOO.imex.journalview.buildCookie();
-                    YAHOO.imex.journalview.updateUserTablePref(nCookie);
-                    YAHOO.util.Cookie.set("journalview", nCookie );                                      
-                } catch (x) { }
             };
-
-        
-        PMGR.contextMenuInit( PMGR );
-
-
-        PMGR.myDataTable.on( "columnReorderEvent",
-                             PMGR.myDataTable.handleLayoutChange );     
-                             
-
-        PMGR.myDataTable.on( "columnHideEvent",
-                             PMGR.myDataTable.handleLayoutChange );     
-                             
-
-        PMGR.myDataTable.on( "columnShowEvent",
-                             PMGR.myDataTable.handleLayoutChange );     
-                             
-
-
-        //tossing in some css to add a black separator between the rows
-        var sheet = document.createElement('style');
-        sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
-        document.body.appendChild(sheet); 
+            
+            
+            console.log("PRE: Contect Menu Init");
+            
+            PMGR.headMenuInit( PMGR );
+            PMGR.bodyMenuInit( PMGR );
+            
+            // table row popup
+            //----------------
+            
+            console.log("myself.loginId:"+ PMGR.loginId );
+            
+            if( PMGR.loginId != null && PMGR.loginId> 0 ){
+                PMGR.myDataTable.subscribe( "rowClickEvent", PMGR.rowPopup );            
+            }
+            
+            console.log("POST:rowPopup");
+            
+            PMGR.myDataTable.on( "columnReorderEvent",
+                                 PMGR.myDataTable.handleLayoutChange );     
+            
+            PMGR.myDataTable.on( "columnHideEvent",
+                                 PMGR.myDataTable.handleLayoutChange );     
+            
+            PMGR.myDataTable.on( "columnShowEvent",
+                                 PMGR.myDataTable.handleLayoutChange );     
+                        
+            //tossing in some css to add a black separator between the rows
+            var sheet = document.createElement('style');
+            sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
+            document.body.appendChild(sheet); 
+            
+        } catch (x) {
+            console.log("ERR:" + x);
+        }
         
         return { 
             ds: PMGR.myDataSource, 
             dt: PMGR.myDataTable 
-        };
-        
-        //YAHOO.imex.journalviewOld();    
-           
+        };        
+
+        // initView ends here
     },
 
     onSelectedMenuItemChange: function (event) {
         var oMenuItem = event.newValue;
         var text = oMenuItem.cfg.getProperty("text");
         
-        //alert("menu change: value=" + this.my.value + " text=" + text);        
-
         for( var i = 0; i < this.my.items.length; i++ ){
             if (this.my.items[i].text === text ) {
                 this.my.value = this.my.items[i].value;
             }
         }
         
-        //alert("menu change: new value=" + this.my.value);
-
-        //this.set("label", ("<em class=\"yui-button-label\">" + 
-        //                   oMenuItem.cfg.getProperty("text") + "</em>"));       
-
-        this.set("label",  oMenuItem.cfg.getProperty("text") );       
+        this.set( "label",  oMenuItem.cfg.getProperty("text") );       
     },
     
     selBtnInit: function( o ) {
@@ -1126,11 +1092,8 @@ YAHOO.imex.journalview = {
                     value = text;
                 }
                 
-                //alert("name=" + name + " text="+ text);
                 o.selmnu.push( {value: value, text: text} );        
             }
-            
-            //alert(YAHOO.imex.journalview[o.selbtn].my.foo);
             
             o.pmgr[o.selbtn] = new YAHOO.widget.Button(
                 { id: o.selnme,  
@@ -1160,7 +1123,7 @@ YAHOO.imex.journalview = {
             console.log(x);
         }
     },
-
+    
     navBtnInit: function( o ) {
 
         try{
@@ -1170,7 +1133,7 @@ YAHOO.imex.journalview = {
             
             o.navmenu = [{ text: o.ntxt, value: o.ntxt }];
             
-            if(o.items != null){
+            if( o.items != null ){
                 o.navmenu = [];
                 for( var i = 0; i < o.items.length; i++){
                     
@@ -1183,12 +1146,9 @@ YAHOO.imex.journalview = {
                     var text = o.items[i];
                     var value = o.items[i];
                     
-                    //alert("name=" + name + " text="+ text);
                     o.navmenu.push( {value: value, text: text} );
                 }
             }
-            
-            //alert(YAHOO.imex.journalview[o.selbtn].my.foo);
             
             o.pmgr[o.nbtn] = new YAHOO.widget.Button(
                 { id: o.nbtn,  
@@ -1206,39 +1166,31 @@ YAHOO.imex.journalview = {
                 "selectedMenuItemChange", 
                 o.pmgr.onSelectedMenuItemChange );
             
-            //alert("DT: " + o.pmgr.myDataTable );
-
             if( o.pmgr.myDataTable !== null ){  
                 o.pmgr[o.nbtn]
                     .on( "selectedMenuItemChange",
                          o.pmgr.handleNav, 
                          {navig: o.navig},
                          o.pmgr.myDataTable );
-                
-                //alert("o.nbtn:"+o.nbtn+ " dt:" + o.pmgr.myDataTable);
             }
         } catch (x) {
             console.log(x);
         }
     },
 
-    contextMenuInit: function( o ){
-        
+    headMenuInit:  function( o ){
         try{
-
-            var myself = YAHOO.imex.journalview;
-
-            // table header context
-            //---------------------
+            var my = YAHOO.imex.journalview;
+            var colmenu = new YAHOO.widget.Menu( "colmenu" );
             
-            o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
-            
-            var defaultTableLayout = function(o){
-                var journalview = YAHOO.imex.journalview;
+            var defaultTableLayout = function( o ){
+                var my = YAHOO.imex.journalview;    
                 
-                if( typeof myself.loginId  != "undefined" && myself.loginId != "" ){
-                    var Success = function( response ){ 
-
+                if( typeof my.loginId  != "undefined" && my.loginId != "" ){
+                    
+                    var Success = function( response ){
+                         
+                        
                     };
                     var Fail = function ( o ) {
                         console.log( "AJAX Error update failed: id=" + o.argument.id ); 
@@ -1246,172 +1198,226 @@ YAHOO.imex.journalview = {
                     var callback = { cache:false, timeout: 5000, 
                                      success: Success,
                                      failure: Fail
-                                     }; 
-                    
+                                   };                     
                     try{
+                        
                         YAHOO.util.Connect
-                        .asyncRequest( 'GET', 
-                                       'userprefmgr?id=' + myself.loginId +'&op.defaultTableLayout=true',
-                                       callback );        
+                            .asyncRequest( 'GET', 
+                                           'userprefmgr?id=' + my.loginId +'&op.defaultTableLayout=true',
+                                           callback );        
                     } catch (x) {
                         console.log("AJAX Error:"+x);
                     }
                 }
-                var cookie = myself.getDefaultCookie();
-                myself.buildCDefs(cookie);
+                var cookie = my.getDefaultCookie();
+                my.buildCDefs(cookie);
                 
-                YAHOO.util.Cookie.set( "journalview", cookie );
-                var myDataTable = myself.myDataTable;
+                YAHOO.util.Cookie.set( "pubmgr", cookie );
+                var myDataTable = my.myDataTable;
                 
-                myself.init(
-                    {admus: myself.admus,
-                     owner: myself.owner,
-                     cflag: myself.cflag,
-                     watch: myself.watch,
-                     loginid: myself.loginId });
+                my.init( {admus: my.admus,
+                          owner: my.owner,
+                          cflag: my.cflag,
+                          watch: my.watch,
+                          loginid: my.loginId });
             };
             
-            var oConfMenu = [  [{text:"Preferences", disabled: true }],
-                               [{text: "Show Columns", 
-                                 submenu: o.myDataTable.my.colmenu }],
-                               [{text:"Restore Default Layout",onclick: {fn: defaultTableLayout } } ],
-                               [{text:"Save...", disabled: true}]
-                            ];        
+            var clist = [];
             
-            var clist=[];
-            var trigger=[];
-            
-            for( var i = 0;  i < o.myColumnDefs.length; i++ ) {
-                if( o.myColumnDefs[i].menuLabel !== undefined ) {
+            for( var i = 0;  i < my.myColumnDefs.length; i++ ){
+                if( my.myColumnDefs[i].menuLabel !== undefined ){
 
-                    var trg = o.myDataTable.getColumn( 
-                        o.myColumnDefs[i].key ); 
-
-                    var item= {text: o.myColumnDefs[i].menuLabel,
-                               checked: !trg.hidden, disabled:  !o.myColumnDefs[i].hideable,
-                               onclick: { fn: o.hiddenColToggle,
-                                          obj: { tbl: o.myDataTable ,col: trg } } };
+                    var trg = my.myDataTable.getColumn( 
+                        my.myColumnDefs[i].key ); 
+                    
+                    var item = { text: my.myColumnDefs[i].menuLabel, 
+                                 id: "headmenu-col-" + my.myColumnDefs[i].key,
+                                 checked: !trg.hidden, disabled:  !my.myColumnDefs[i].hideable,
+                                 onclick: { fn: my.hiddenColToggle,
+                                            obj: { tbl: my.myDataTable ,col: trg } } };
                     clist.push( item );
-
-                        
-                    //alert( myColumnDefs[i].key+ "::" + trg);
-                    if( trg !== null ) {
-                        //trigger.push( trg.getThEl() );
-                        //alert(trg.getThEl());
-                    }
                 }
             }
             
-            o.myDataTable.my.colmenu.addItems( clist );
+            colmenu.addItems( clist );
+
+            var oConfMenu = [[{text:"Preferences", disabled: true }],
+                             [{text: "Show Columns", 
+                               submenu: colmenu }],
+                             [{text:"Restore Default Layout",onclick: {fn: defaultTableLayout } }
+                             ],
+                             [{text:"Save...", disabled: true}]
+                            ];        
             
-            o.myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
-                "configmenu", { trigger: o.myDataTable.getTbodyEl() } );
+            my.myDataTable.my.colmenu = colmenu;
+            my.myDataTable.my.headmenu = new YAHOO.widget.ContextMenu(
+                "headmenu", { trigger: my.myDataTable.getTheadEl() } );
             
-            o.myDataTable.my.configmenu.addItems( oConfMenu );
-            o.myDataTable.my.configmenu.render("pubtab");
+            my.myDataTable.my.headmenu.addItems( oConfMenu );
+            my.myDataTable.my.headmenu.render("pubtab");
+            my.myDataTable.my.headmenu.subscribe( "triggerContextMenu", my.onHeadMenuTrigger);
+            
+        }  catch( x ){
+            console.log( "HeadMenu: INIT ERROR: " + x );
+        } 
+    },
+    
+    onHeadMenuTrigger: function(p_sType, p_aArgs, p_myDataTable) {
+        try{
+            var my = YAHOO.imex.journalview;
+            var table = my.myDataTable;
+            var items = my.myDataTable.my.colmenu.getItems();
+            
+            for( var i =0; i< items.length; i++ ){
+                var item = items[ i ];
+                var id = item.id;
+                var col = table.getColumn(id.replace( "headmenu-col-", "" ) );
+                item.cfg.setProperty("checked", !col.hidden);
+            }
+        } catch (x) {
+            console.log( "HeadMenu: TRIGGER ERROR: " + x );
+        }
+    },
+    
+    bodyMenuInit: function( my ){
+        try{
+            
+            //var my = YAHOO.imex.journalview;            
 
             // table row context
             //------------------
-
-            var oSupMenu = [ [{text:"Discard", onclick: {fn: myself.statusUpdate, obj: { id: 5} }}],
-                             [{text:"Queue", onclick: {fn: myself.statusUpdate, obj: { id: 12} }}],
-                             [{text:"Reserve", onclick: {fn: myself.statusUpdate, obj: { id: 2} }}]
-                           ];
-            o.myDataTable.my.supmenu = new YAHOO.widget.Menu( "supmenu" );
-            o.myDataTable.my.supmenu.addItems( oSupMenu );
             
-            var oRowMenu = [ [ { text: "Status Update", submenu: o.myDataTable.my.supmenu 
+            var oSupMenu = [ [{text:"Discard", onclick: {fn: my.statusUpdate, obj: { id: 5} }}],
+                             [{text:"Queue", onclick: {fn: my.statusUpdate, obj: { id: 12} }}],
+                             [{text:"Reserve", onclick: {fn: my.statusUpdate, obj: { id: 2} }}]
+                           ];
+            var supmenu = new YAHOO.widget.Menu( "supmenu" );
+            supmenu.addItems( oSupMenu );
+            
+            console.log( "curateUrl:" + my.curateUrl);
+            console.log( "curatePat:" + my.curatePat);
+            
+            var oRowMenu = [ [ { text: "Status Update", submenu: supmenu 
                                }],
-                             [ { text:"Curate", disabled: true, 
-                                 onclick: { fn: myself.gotoExtUrl, 
-                                            obj: { url: "http://www.ebi.ac.uk/intact/editor/publication/%id%", 
-                                                   id: "%id%" } 
+                             [ { text:"Curate", disabled: my.loginId > 0 ? false : true, 
+                                 onclick: { fn: my.gotoExtUrl, 
+                                            obj: { url: my.curateUrl,
+                                                   idp: my.curatePat,
+                                                   id: "pmid" } 
                                           }
                                }],
-                             [ { text:"To PubMed", disabled: true, 
-                                 onclick: { fn: myself.gotoExtUrl, 
-                                            obj: { url: "http://www.ncbi.nlm.nih.gov/pubmed/%id%", 
-                                                   id: "%id%" } 
+                             [ { text:"To PubMed", disabled: false, 
+                                 onclick: { fn: my.gotoExtUrl, 
+                                            obj: { url: my.pubmedUrl, //"http://www.ncbi.nlm.nih.gov/pubmed/%id%", 
+                                                   idp: my.pubmedPat,
+                                                   id: "pmid" } 
                                           } 
                                }],
-                             [ { text:"To IMEx", disabled: true,
-                                 onclick: { fn: myself.gotoExtUrl, 
-                                            obj: { url: "http://www.ncbi.nlm.nih.gov/pubmed/%id%", 
-                                                   id: "%id%" } 
+                             [ { text:"To IMEx", disabled: false,
+                                 onclick: { fn: my.gotoExtUrl, 
+                                            obj: { url: my.imexUrl, //"http://www.ncbi.nlm.nih.gov/pubmed/%id%", 
+                                                   idp: my.imexPat,
+                                                   id: "imex" } 
                                           } 
                                }]
                            ];        
             
-
-            o.myDataTable.my.rowmenu = new YAHOO.widget
-                .ContextMenu("rowmenu", 
-                             {trigger:o.myDataTable.getTbodyEl()}); 
-            o.myDataTable.my.rowmenu.addItems(oRowMenu);
-
-            o.myDataTable.my.rowmenu.render("pubtab"); 
-
-            // table row popup
-            //----------------
+            my.myDataTable.my.bodymenu = new YAHOO.widget.ContextMenu( "bodymenu", {trigger: my.myDataTable.getTbodyEl()}); 
+            my.myDataTable.my.bodymenu.addItems( oRowMenu );
+            my.myDataTable.my.bodymenu.render( "pubtab" ); 
+            my.myDataTable.my.bodymenu.subscribe( "triggerContextMenu", my.onBodyMenuTrigger );
+            my.myDataTable.my.bodymenu.subscribe( "hide", my.onBodyMenuHide ); 
             
-            o.myDataTable.subscribe( "rowClickEvent", myself.rowPopup );            
-
-
         } catch (x) {
             console.log(x);
-        }
+        }        
     },
     
+    onBodyMenuTrigger: function(p_sType, p_aArgs, p_myDataTable) {
+        try{
+            var my = YAHOO.imex.journalview;
+            
+            console.log("BodyMenu: TRIGGER");  
+            var tgt = this.contextEventTarget;
+            console.log( tgt );
+
+
+            var [record, el] = my.getContextRecord( tgt );
+            
+            Dom.addClass(el, "selected"); 
+            
+            var menu = my.myDataTable.my.bodymenu;
+            var table = my.myDataTable;
+
+            console.log( "BodyMenu: record=" + record);
+            console.log( "BodyMenu: menu=" + menu );
+            
+            my.myDataTable.my.bodyrec = record;
+            my.myDataTable.my.bodysel = el;
+          
+         } catch (x) {
+             console.log( "BodyMenu: TRIGGER ERROR: " + x );
+         }
+    },
+
+    onBodyMenuHide: function(p_sType, p_aArgs) {
+     
+        try{
+            var my = YAHOO.imex.journalview;
+            var bodysel = my.myDataTable.my.bodysel;
+            //console.log( "BodyMenu: HIDE" );            
+            if ( bodysel != null ){
+                Dom.removeClass( bodysel, "selected"); 
+            } 
+        }catch( x ){
+            console.log( "BodyMenu: HIDE ERROR: " + x );
+        }
+    }, 
+    
+    getContextRecord: function( tgt ){
+ 
+        var myself = YAHOO.imex.journalview;
+        
+        console.log( "tgt: " + tgt );
+
+        var elem = tgt;  //this.parent;
+        var record = null;
+        var elRow = null;
+        if( tgt != undefined ){
+            for( var p=5; p>0; p--){
+                elRow = myself.myDataTable.getTrEl( tgt ); 
+                record =  myself.myDataTable.getRecord( elRow );
+                if( record == null){
+                    tgt = tgt.parentElement;
+                } else{
+                    p = 0;
+                }
+            }
+        }
+        
+        return [ record, elRow ];
+    },
 
     statusUpdate: function( e, o, a ){
         try{
-            var myself = YAHOO.imex.journalview;
-            var elem = this.parent;
-            var tgt = elem.contextEventTarget;
-            var record = null;  
-            for( var l=5; l>0; l--){
-                //console.log( "E: " + l + " : "+ tgt +":" + record );
-                if( tgt != undefined){
-                    l=0;
-                } else{                
-                    elem = elem.parent;
-                    tgt = elem.contextEventTarget; 
-                } 
-            }            
-            if( tgt != undefined ){
-
-                for( var p=5; p>0; p--){
-                    elRow = myself.myDataTable.getTrEl( tgt ); 
-                    record =  myself.myDataTable.getRecord( elRow );
-                    //console.log( "R:" + p + " : "+elRow +":"+record );
-                    if( record == null){
-                        tgt = tgt.parentElement;
-                    } else{
-                        p =0;
-                    }
-                }
-            }
-
-            var  rid = record.getData("id");
+            var my = YAHOO.imex.journalview;
+            var record = my.myDataTable.my.bodyrec;  
+            var rid = record.getData("id");
             var url = "pubedit?id="+rid+"&op.esup=esup&opp.nsn=" + a.id;
-            console.log( "URL: " + url );
-
-
-            // call url, wait til done
-
+            console.log( "StatusUpdate: URL=" + url );
+            
             var urlcallback = {
-                
-                success: function(o) {
+                success: function(o) {                    
+                    var my = YAHOO.imex.journalview;
+                    console.log( "urlcallback" );
                     
-                    var myself = YAHOO.imex.journalview;
-                    console.log("urlcallback");
-                    
-                    if( myself.myDataTable != null ){
+                    if( my.myDataTable != null ){
                         
                         // reload table
                         try{
                             console.log("reloading...");
-                            myself.tableReload( {}, myself.myDataTable);
-                        } catch (x) {
+                            my.tableReload( {}, my.myDataTable );
+                        } catch( x ){
                             console.log(x);
                         }
                     }
@@ -1420,26 +1426,35 @@ YAHOO.imex.journalview = {
                 }
             };
             
-            var cObj = YAHOO.util.Connect.asyncRequest( 'GET', url,
-                                                        urlcallback );
+            //var cObj = YAHOO.util.Connect.asyncRequest( 'GET', url, urlcallback );
             
         } catch (x) {
             console.log(x);
         }
     },
 
-    gotoExtUrl: function( e, o ){
+    gotoExtUrl: function( e, o, a ){
         
-
-    },
-
-    rowPopup: function( o ){
         try{
-            var t = o.target;
+            
+            console.log("gotoExtUrl: e=" + YAHOO.lang.JSON.stringify( e ) );
+            console.log(e);
+            
+            console.log("gotoExtUrl: o=" + YAHOO.lang.JSON.stringify( o ) );
+            console.log(o);
+            
+            console.log("gotoExtUrl: a=" + YAHOO.lang.JSON.stringify( a ) );
+            console.log(a);
+            
+            var elRow = this.contextEventTarget;
+            console.log("elRow=" +elRow);
+            
+            //var t = e.target;
             var myself = YAHOO.imex.journalview;
-            var trel = myself.myDataTable.getTrEl(t);
+            var trel = myself.myDataTable.getTrEl(elRow);
             var rec = myself.myDataTable.getRecord(trel);
             var l = 0;
+            
             while( rec == null && l++ <10 ){
                 trel = trel.parentElement;
                 rec = myself.myDataTable.getRecord(trel);
@@ -1449,49 +1464,70 @@ YAHOO.imex.journalview = {
             console.log("ID=" + myself.myDataTable.getRecord(trel).getId ( ));
             console.log("KEY=" + YAHOO.lang.JSON.stringify(rdat));
             
+        } catch (x) {
+            console.log("ERROR: " +x);
+        }        
+    },
+    
+    rowPopup: function( o ){
+        try{
+            var t = o.target;
+            var my = YAHOO.imex.journalview;
+            var trel = my.myDataTable.getTrEl( t );
+            var rec = my.myDataTable.getRecord( trel );
+            var l = 0;
+            while( rec == null && l++ <10 ){
+                trel = trel.parentElement;
+                rec = my.myDataTable.getRecord( trel );
+            }
+            var  rdat =  my.myDataTable.getRecord(trel).getData("id");
+            console.log(my.myDataTable.getRecord(trel));
+            console.log("ID=" + my.myDataTable.getRecord(trel).getId ( ));
+            console.log("KEY=" + YAHOO.lang.JSON.stringify(rdat));
+            
             var url = "pubedit?id="+rdat+"&op.popup=status";
             var dUrl = "pubedit?id="+rdat+"&op.esup=esup&opp.nsn=5";
             var qUrl = "pubedit?id="+rdat+"&op.esup=esup&opp.nsn=12";
             var rUrl = "pubedit?id="+rdat+"&op.esup=esup&opp.nsn=2";
-
+            
             YAHOO.mbi.modal.dialog( {mtitle:"Article", 
-                                     table: myself.myDataTable,
+                                     table: my.myDataTable,
                                      url: url,
                                      button:[{label:"Discard", id:"discard-btn", url:dUrl},
                                              {label:"ToQueue", id:"queue-btn", url:qUrl},
                                              {label:"Reserve", id:"reserve-btn", url:rUrl} ]
                                     });     
-        
         } catch (x) {
             console.log(x);
         }        
     },
-    
+        
     //-----------------------------------
     // Hides deselected column attributes 
     //-----------------------------------
-     
-
+    
     hiddenColToggle: function( tp, ev, o ){
+        
+        console.log( "hiddenColToggle: o=" + o );
+        console.log( "hiddenColToggle: hidden(m): " + o.col.hidden );
+        console.log( "hiddenColToggle: hidden(c): " + o.tbl.getColumn( o.col ).hidden );
 
-        //alert( "col-toggle:" + o);  
         try{
-            if( o.col.hidden){
+            if( o.col.hidden ){
                 o.tbl.showColumn( o.col );
-                
             } else {
                 o.tbl.hideColumn( o.col );                
             }
             o.tbl.render();
-            o.tbl.my.configmenu.destroy();
-            YAHOO.imex.journalview.contextMenuInit( YAHOO.imex.journalview );
         } catch (x) {
-            console.log("toggle:" + x);
+            console.log("ERROR: toggle:" + x);
         }
-
+        
         var nCookie = YAHOO.imex.journalview.buildCookie();
         YAHOO.util.Cookie.set("journalview", nCookie );                                      
+         
     },
+    
     //-----------------------------
     // Create the custom formatters 
     //-----------------------------
@@ -1566,8 +1602,6 @@ YAHOO.imex.journalview = {
 
     myModTStampFormatter: function(elLiner, oRecord, oColumn, oData) {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-        //alert(YAHOO.lang.JSON.stringify(oRecord));
-
         elLiner.innerHTML = oRecord.getData( "modTStamp" ).replace(" ", "<br>" ); 
     },
     

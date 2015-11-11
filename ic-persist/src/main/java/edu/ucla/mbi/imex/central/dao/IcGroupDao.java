@@ -80,6 +80,39 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
         return glst;
     }
 
+    //---------------------------------------------------------------------
+
+    public List<Group> getGroupList( Role role ){
+        
+        List<Group> glst = null;
+
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "role=" + role );
+
+        try {
+
+            Query query =
+                session.createQuery( "select g from IcGroup g join g.roles as r" +
+                                     " where r = :r ");
+            query.setParameter( "r", role );
+            query.setFirstResult( 0 );
+            glst = (List<Group>) query.list();
+            tx.commit();
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ? 
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+
+        log.debug( "list=" + glst );
+        return glst;
+    }
+
 
     //---------------------------------------------------------------------
 
