@@ -114,6 +114,35 @@
 
     </action>
 
+    <action name="projsrc" class="pubSrcAction">
+      <interceptor-ref name="mgrStack"/>
+      <interceptor-ref name="timer"/>
+      <result name="success" type="tiles">projmgr-tb</result>
+      <result name="notfound" type="tiles">projsrc</result>
+      <result name="input" type="tiles">projsrc</result>
+
+      <result name="pubview" type="redirectAction">
+        <param name="actionName">pubmgr</param>
+        <param name="opp.ou">%{opp.ou}</param>
+        <param name="opp.au">%{opp.au}</param>
+        <param name="opp.encf">%{opp.encf}</param>
+      </result>
+
+      <result name="pubedit" type="redirectAction">
+        <param name="actionName">pubedit</param>
+        <param name="id">%{id}</param>
+      </result>
+      
+      <result name="pubnew" type="redirectAction">
+        <param name="actionName">pubnew</param>
+        <param name="pmid">%{pmid}</param>
+      </result>
+
+      <result name="acl_page" type="tiles">aclpageerror</result>
+      <result name="acl_oper" type="tiles">acloperror</result>
+
+    </action>
+
     <action name="pubmgr" class="pubViewAction">
       
       <interceptor-ref name="mgrStack"/>

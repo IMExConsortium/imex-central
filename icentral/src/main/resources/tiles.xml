@@ -155,6 +155,19 @@
  </definition>
  <definition name="transedit" template="/tiles/transedit.jsp"/>
 
+ <definition name="projsrc" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral: Search" />
+  <put-attribute name="body" value="/tiles/projsrc-yui.jsp"/>  
+  <put-attribute name="footer" type="definition" value="footer"/>
+ </definition>
+
+ <definition name="projmgr-tb" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral: Publication Manager" />
+  <put-attribute name="body" value="/tiles/projmgr-tb-yui.jsp"/>  
+  <put-attribute name="footer" type="definition" value="footer"/>
+ </definition>
+
+
  <definition name="pubsrc" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral: Search" />
   <put-attribute name="body" value="/tiles/pubsrc-yui.jsp"/>  
