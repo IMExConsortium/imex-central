@@ -91,7 +91,11 @@
   </fieldset>
   </div>
     <div id="tab2">
-     <s:form theme="simple" action="usermgr" cssClass="align-label">    
+     <s:form theme="simple" action="usermgr" cssClass="align-label">
+       <s:hidden name="id" value="%{id}"/> 
+       <s:hidden name="user.id" value="%{id}"/> 
+       <s:hidden name="user.login" value="%{user.login}"/> 
+    
     <fieldset>
     <legend><h3>Change Password</h3></legend>
     <ul>
@@ -112,6 +116,10 @@
   </div>
   <div id="tab3">
    <s:form theme="simple" action="usermgr" cssClass="align-label">
+    <s:hidden name="id" value="%{id}"/> 
+    <s:hidden name="user.id" value="%{id}"/> 
+    <s:hidden name="user.login" value="%{user.login}"/> 
+
     <h3 class="header-grey-highlight">Roles</h3>
     <ul>
      <li>

@@ -252,7 +252,8 @@ YAHOO.imex.attedit = {
     },
     addTitleCount: function( count, id )
     {
-		tabs = YAHOO.imex.pubedit.tabs.get('tabs');
+		//tabs = YAHOO.imex.pubedit.tabs.get('tabs');
+        tabs = YAHOO.imex.pubedit.tabs;
 		for(var i = 0;i < tabs.length; i++)
 		{
 			var currentElement = tabs[i].get('contentEl');

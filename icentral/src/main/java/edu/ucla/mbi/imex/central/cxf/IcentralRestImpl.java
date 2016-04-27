@@ -9,7 +9,7 @@ package edu.ucla.mbi.imex.central.cxf;
  #
  #=========================================================================== */
 
-
+ 
 import java.util.*;
 import javax.ws.rs.*;
 import java.util.regex.*;
@@ -21,10 +21,22 @@ import org.json.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.handler.MessageContext;
+
+
+import javax.xml.ws.WebServiceContext;
+
 
 import java.io.IOException;
+
+
 import javax.annotation.Resource;
+//import javax.xml.ws.handler.MessageContext;
+
+
+
+import javax.ws.rs.core.Context;
+import org.apache.cxf.jaxrs.ext.MessageContext;
+
 
 import javax.jws.WebService;
 
@@ -36,11 +48,20 @@ import edu.ucla.mbi.util.data.*;
 
 public class IcentralRestImpl implements IcentralRest{
 
-    @Resource
-        HttpServletResponse httpResponse; 
+
+    // Struts 2.x
+    // @Resource HttpServletResponse httpResponse; 
+    // @Resource private WebServiceContext wsContext;
+
+    // Struts 3.x
+    
+    @Context private MessageContext messageContext;
 
     private EntryManager eman;
     private Map imexUrlMap;
+
+    private HttpServletResponse httpResponse;
+
      
     public IcentralRestImpl(){}
 
@@ -64,7 +85,7 @@ public class IcentralRestImpl implements IcentralRest{
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralRestImpl(getRecordByAcc):" +
-                  " ns=" + ns + " acc=" + acc + "mode=" + mode );
+                  " ns=" + ns + " acc=" + acc + " mode=" + mode );
         
         String imexAc = null;
         String imexDB = null;
@@ -80,6 +101,8 @@ public class IcentralRestImpl implements IcentralRest{
         }
 
         String imx = (String) getImexAcc( ns, acc);
+        log.info( "IcentralRestImpl(getRecordByAcc): ns=" + ns + " acc=" +acc+ " imx=" + imx );
+
         if( imx != null && !imx.equals( "{}" ) ){
             try{
                 JSONObject jo = new JSONObject( imx ); 
@@ -113,14 +136,61 @@ public class IcentralRestImpl implements IcentralRest{
         }
 
         if( mode.equals( "redirect" ) ){
+            
             try{
-                imexUrl = imexUrl.replace("%%ACC%%", imexAc );
+                log.info("MCX:" +  messageContext);
+
+                // Struts 2.x
+
+                //MessageContext ctx = wsContext.getMessageContext();
+                //HttpServletRequest request = (HttpServletRequest) 
+                //    ctx.get(AbstractHTTPDestination.HTTP_REQUEST);
+                
+                // Struts 3.x
+
+                MessageContext ctx = messageContext;
+
+                httpResponse = (HttpServletResponse) 
+                    ctx.get(AbstractHTTPDestination.HTTP_RESPONSE);
+            } catch( Exception ex ){
+                log.info( "IcentralRestImpl(getRecordByAcc): EX=" + ex );
+            }
+            
+
+            log.debug( "IcentralRestImpl(getRecordByAcc): redirect: httpResponse=" + httpResponse );
+
+            log.info( "IcentralRestImpl(getRecordByAcc): redirect: ac=" + imexAc );
+            log.info( "IcentralRestImpl(getRecordByAcc): redirect: url=" + imexUrl );
+
+            try{
+                imexUrl = imexUrl.replace("%%ACC%%", imexAc );   
                 httpResponse.sendRedirect( imexUrl ); 
-            } catch( Exception ex ){}
+            } catch( Exception ex ){
+                log.info( "IcentralRestImpl(getRecordByAcc): EX=" + ex );
+            }
             return null;
         }
 
         if( mode.equals( "icentral" ) ){
+            
+            try{
+
+                // Struts 2.x
+                
+                //MessageContext ctx = wsContext.getMessageContext();
+                //HttpServletRequest request = (HttpServletRequest) 
+                //    ctx.get(AbstractHTTPDestination.HTTP_REQUEST);
+
+                // Struts 3.x
+
+                MessageContext ctx = messageContext;
+                httpResponse = (HttpServletResponse) 
+                    ctx.get(AbstractHTTPDestination.HTTP_RESPONSE);
+                
+            } catch( Exception ex ){
+                log.info( "IcentralRestImpl(getRecordByAcc): EX=" + ex );
+            }
+
             
             IcPub icp = eman.getIcPubByNsAc( "imex", imexAc );
             
@@ -130,7 +200,9 @@ public class IcentralRestImpl implements IcentralRest{
                 icUrl = icUrl + icp.getId() + "#pubedit=tab1";
                 try{
                     httpResponse.sendRedirect( icUrl ); 
-                } catch(IOException ex){}
+                } catch(IOException ex){
+                    log.info( "IcentralRestImpl(getRecordByAcc): EX=" + ex );
+                }
                 return null;
             }
         }

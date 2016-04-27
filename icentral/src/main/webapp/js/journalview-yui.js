@@ -400,6 +400,7 @@ YAHOO.imex.journalview = {
       
             console.log("navig:" + navig + " newVal: " + newVal + "\noldstate: " 
                   + YAHOO.lang.JSON.stringify( newState ));
+            
   
             // LS: watch flag ?
         
@@ -408,6 +409,12 @@ YAHOO.imex.journalview = {
             PMGR.nnav = navig;
 
             //alert(PMGR.generateStateString( newState ));
+            console.log("newstate: "
+                        + YAHOO.lang.JSON.stringify( newState ));            
+            
+            console.log("year: "+ YAHOO.imex.journalview.year 
+                        + " volume: " + YAHOO.imex.journalview.volume
+                        + " issue: " + YAHOO.imex.journalview.issue + "\n" );
             
             YAHOO.util.History
                 .navigate( "journalview", 
@@ -461,6 +468,7 @@ YAHOO.imex.journalview = {
         var request = PMGR.buildRequest( parsed );
         
         PMGR.myDataSource.my.myState = parsed;
+        console.log("HandleHistoryNavigation:-> request:" + request );
         
         // update filters
         //---------------
@@ -484,6 +492,8 @@ YAHOO.imex.journalview = {
         if( parsed.filter.stage !== ""){
             stageLabel = parsed.filter.stage;
         }
+
+
         
         if( PMGR.stateBtn.set !== undefined ){           
             //PMGR.stateBtn.set( "label", 
@@ -889,11 +899,26 @@ YAHOO.imex.journalview = {
                         document.getElementById("issue-next-container").style.display="inline";
                         document.getElementById("issue-last-container").style.display="inline";
                     }
+
+                       
                     
-                    myself.myDataSource.my.myState.navig.year = filter.year;
+                    myself.myDataSource.my.myState.navig.year = filter.year;      // ##################
                     myself.myDataSource.my.myState.navig.volume = filter.volume;
                     myself.myDataSource.my.myState.navig.issue = filter.issue;
                     
+                    var PMGR = YAHOO.imex.journalview;
+                    if( filter.year != null){
+                        console.log("beforeparse:  year=" + filter.year);
+                        PMGR.year = filter.year;
+                    }
+                    if( filter.volume != null){
+                        console.log("beforeparse:  volume=" + filter.volume);
+                        PMGR.volume = filter.volume;
+                    }
+                    if( filter.issue != null){
+                        console.log("beforeparse:  issue=" + filter.issue);
+                        PMGR.issue = filter.issue;
+                    }
                 } catch (x) {
                     console.log("AJAX Error:"+x);
                 }
@@ -1033,7 +1058,7 @@ YAHOO.imex.journalview = {
             console.log("myself.loginId:"+ PMGR.loginId );
             
             if( PMGR.loginId != null && PMGR.loginId> 0 ){
-                PMGR.myDataTable.subscribe( "rowClickEvent", PMGR.rowPopup );            
+                PMGR.myDataTable.subscribe( "rowClickEvent", PMGR.rowPopup );
             }
             
             console.log("POST:rowPopup");
@@ -1470,12 +1495,22 @@ YAHOO.imex.journalview = {
     },
     
     rowPopup: function( o ){
+
+
         try{
             var t = o.target;
             var my = YAHOO.imex.journalview;
             var trel = my.myDataTable.getTrEl( t );
             var rec = my.myDataTable.getRecord( trel );
             var l = 0;
+
+            //alert( "rowPopup: " + rec );
+            
+            console.log( "trel" + trel );
+            console.log( "rec" + rec );
+
+            if( rec !== null ) return;
+
             while( rec == null && l++ <10 ){
                 trel = trel.parentElement;
                 rec = my.myDataTable.getRecord( trel );

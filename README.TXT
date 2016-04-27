@@ -94,3 +94,48 @@ Migration to v1.02 tables
  CREATE INDEX e_11 on entry (act_timestamp);
  CREATE INDEX e_12 on entry (mod_uid);
  CREATE INDEX e_13 on entry (mod_timestamp);
+
+
+Migration to v2.00 tables (icentral_v21 database)
+-------------------------
+
+- new states
+
+insert into datastate (name) value ('REQUEST');
+insert into datastate (name) values ('REQUEST');
+insert into datastate (name) values ('QUEUE');
+insert into datastate (name) values ('RETRACTED');
+
+- new stage table/stages
+
+CREATE TABLE datastage (
+    id serial primary key,
+    name character varying(32) UNIQUE not null default '',
+    comments character varying(256) not null default ''
+);
+
+CREATE INDEX datastage_1 on datastage (name);
+insert into datastage (name,comments) values ('PREQUEUE','');
+insert into datastage (name,comments) values ('QUEUE','');
+insert into datastage (name,comments) values ('CURATION','');
+
+- new entry columns
+
+alter table entry add column volume  character varying(32) default '';
+alter table entry add column issue  character varying(32) default '';
+alter table entry add column pages  character varying(32) default '';
+alter table entry add column year character varying(32) default '';
+alter table entry add column stage_id integer not null default 1;
+
+CREATE INDEX e_14 on entry (stage_id);
+CREATE INDEX e_15 on entry (volume);
+CREATE INDEX e_16 on entry (issue);
+CREATE INDEX e_17 on entry (pages);
+CREATE INDEX e_18 on entry (year);
+CREATE INDEX e_19 on entry (year,volume);
+
+
+deployead on:
+     icentral: 10.1.1.113
+     requires java 1.8.x
+              tomcat 8.x

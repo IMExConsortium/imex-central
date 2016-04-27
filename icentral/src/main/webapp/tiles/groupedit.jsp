@@ -33,12 +33,10 @@
 <!--  First Tab  -->
  <div id="tab1">
  <s:form theme="simple" action="groupedit" cssClass="align-label">
- <s:hidden name="id" value="%{id}"/>
- <s:hidden name="group.id" value="%{id}"/>
- <s:hidden name="group.label" value="%{group.label}"/>
-  
-
-  
+  <s:hidden name="id" value="%{id}"/>
+  <s:hidden name="group.id" value="%{id}"/>
+  <s:hidden name="group.label" value="%{group.label}"/>
+    
   <fieldset>
   <legend><h3>Group Details</h3></legend>
   <ul>
@@ -113,6 +111,10 @@
 <!--  Second Tab  -->
     <div id="tab2">
      <s:form theme="simple" action="groupedit"  cssClass="align-label">
+      <s:hidden name="id" value="%{id}"/>
+      <s:hidden name="group.id" value="%{id}"/>
+      <s:hidden name="group.label" value="%{group.label}"/>
+
      <h3 class="header-grey-highlight">Roles</h3>
     <ul>
      <li>

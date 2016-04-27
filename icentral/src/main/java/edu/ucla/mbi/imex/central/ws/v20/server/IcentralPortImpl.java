@@ -259,6 +259,8 @@ public class IcentralPortImpl implements IcentralPort {
             log.info( " icPub=" + icPub + " ID=" + icPub.getId());
             if ( icPub.getId() == null ) {
                 
+                // new entry
+
                 User owner = entryManager.getUserContext()
                     .getUserDao().getUser( c.getLogin() );
                 log.debug( " owner set to: " + owner );
@@ -284,6 +286,19 @@ public class IcentralPortImpl implements IcentralPort {
                         throw Fault.NO_REC_CR;
                     }
                 }
+            } else {
+                // existing entry - resynchronize
+                log.debug( " resynchronizing: " + icPub.getPmid() );
+                try{
+                    IcPub newPub = entryManager.resyncIcPubPubmed( icPub, usr, icPub );
+                    if( newPub != null ) {
+                        icPub = newPub;
+                    }
+                } catch( ImexCentralException icx ){
+                    // cannot connect to proxy ?                                                                                                                                                                                                            
+                    throw Fault.NO_REC_CR;
+                }
+                
             }
         } 
         

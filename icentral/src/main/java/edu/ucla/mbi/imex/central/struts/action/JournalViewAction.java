@@ -684,47 +684,65 @@ public class JournalViewAction extends ManagerSupport {
             
         IcJournal journal = entryManager.getIcJournal( jid );
 
-        if( usr == null ){
-            
-            if( (yr == null || yr.equals("") )
-                || (vo == null || vo.equals("") )
-                || (is == null || is.equals("") ) ){
-                
-                if( yr == null || yr.length() == 0 ){
-                    yr = entryManager
-                        .getIcJournalYear( journal, false );
-                }
-                if( vo == null || vo.length() == 0 ){
-                    vo = entryManager
-                        .getIcJournalVolume( journal, false, yr );
-                }
-                
-                if( is == null || is.length() == 0){
-                    is = entryManager
-                        .getIcJournalIssue( journal, false, yr, vo );
-                }
-            }
- 
-            flt.put( "year", yr );
-            flt.put( "volume", vo );
-            flt.put( "issue", is );
-            
-            pl = tracContext.getPubDao()
-                .getPublicationList( first, blockSize, 
-                                     sortKey, asc, flt );            
-                
-            total = tracContext.getPubDao().getPublicationCount( flt );
-        } else {
-                /*
-                pl = watchManager
-                    .getPublicationList( usr, first, blockSize, 
-                                         sortKey, asc, flt );
-                total = watchManager
-                    .getPublicationCount( usr, flt );
-                */
-        }   
-        //}
+        // get all years
 
+        List<String> yearList = entryManager
+            .getIcJournalYearList( journal, false );
+        
+        // no year set: get most recent
+        
+        if( yr == null || yr.length() == 0 ){
+            yr = entryManager
+                .getIcJournalYear( journal, false );
+        }
+
+        // get all volumes (for current year)
+        
+        List<String> volumeList = entryManager
+            .getIcJournalVolumeList( journal, false, yr );
+        
+        if( vo == null || vo.length() == 0 ){
+            
+            // no volume set: get most recent 
+
+            vo = entryManager
+                .getIcJournalVolume( journal, false, yr );
+        } else {
+            
+            // volume set: reset of not in current year
+            if( ! volumeList.contains( vo ) ){
+                 vo = entryManager
+                     .getIcJournalVolume( journal, false, yr );
+            }
+        }
+            
+        // get all issues (for current volume)
+        
+        List<String> issueList = entryManager
+            .getIcJournalIssueList( journal, false, yr,vo );
+ 
+        if( is == null || is.length() == 0){
+            // no issue  set: get most recent
+            is = entryManager
+                .getIcJournalIssue( journal, false, yr, vo );
+        } else {
+            // issue set: reset of not in current volume 
+            if( ! issueList.contains( is ) ){
+                is = entryManager
+                    .getIcJournalIssue( journal, false, yr, vo );
+            }
+        }
+        
+        flt.put( "year", yr );
+        flt.put( "volume", vo );
+        flt.put( "issue", is );
+        
+        pl = tracContext.getPubDao()
+            .getPublicationList( first, blockSize, 
+                                 sortKey, asc, flt );            
+        
+        total = tracContext.getPubDao().getPublicationCount( flt );
+        
         log.debug( "GetPubRecords: total=" + total);
 
 
@@ -736,18 +754,18 @@ public class JournalViewAction extends ManagerSupport {
         init.put("jid",  String.valueOf(jid) );
         
         init.put("year", yr );
-        List<String> yearList = entryManager
-            .getIcJournalYearList( journal, false );
+        //List<String> yearList = entryManager
+        //    .getIcJournalYearList( journal, false );
         init.put( "year-list", yearList );
 
         init.put("volume", vo );
-        List<String> volumeList = entryManager
-            .getIcJournalVolumeList( journal, false, yr );
+        //List<String> volumeList = entryManager
+        //    .getIcJournalVolumeList( journal, false, yr );
         init.put("volume-list", volumeList );
 
         init.put("issue", is );
-        List<String> issueList = entryManager
-            .getIcJournalIssueList( journal, false, yr,vo );
+        //List<String> issueList = entryManager
+        //    .getIcJournalIssueList( journal, false, yr,vo );
         init.put("issue-list", issueList );
 
 

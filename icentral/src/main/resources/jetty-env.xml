@@ -15,7 +15,7 @@
   <Arg>
    <!-- <New class="org.postgresql.ds.PGSimpleDataSource"> -->
   <New class="org.postgresql.ds.PGPoolingDataSource">   
-    <Set name="dataSourceName">icentral-test</Set>
+    <Set name="dataSourceName">icentral</Set>
     <Set name="User">dip</Set>
     <Set name="Password">444dip444</Set>
     <Set name="DatabaseName">icentral_test</Set>

@@ -389,7 +389,9 @@ public class EntryManager {
                     
                     icp.setOwner( owner ) ;
                     icp.setState( state );
-                    
+                    icp.setStage( stage );
+                   
+
                     icp.setActUser( owner );
                     icp.setActDate();
 

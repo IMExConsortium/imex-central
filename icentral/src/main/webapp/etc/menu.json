@@ -32,6 +32,11 @@
              link:"pubsrc.jsp",
              "disabled":"false",
              menu:[]
+            },
+            {label:"Projects",
+             link:"page?id=projectmgr",
+             "disabled":"false",
+             menu:[]
             }]
          },
          {label:"Add",
@@ -110,10 +115,14 @@
           link:"page?id=workflowmgr",
           "disabled":"false",
           menu:[
+           {label:"Stages",
+            link:"statemgr",
+            "disabled":"false",            
+            menu:[]
+           },
            {label:"States",
             link:"statemgr",
             "disabled":"false",
-            roles:["administrator"],
             menu:[]
            },
            {label:"Transitions",

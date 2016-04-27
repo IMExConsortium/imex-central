@@ -301,6 +301,14 @@
         menusel:"5:4",
         viewtype:"file-html",
         viewpath:"/RELEASE-NOTES.txt"
+      }, 
+      projectmgr:{
+        active:true,
+        title:"ImexCentral:Project Manager",
+        menudef:"0:2:0",
+        menusel:"1:2:2",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
       }
     }
   }

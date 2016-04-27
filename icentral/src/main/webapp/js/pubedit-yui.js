@@ -68,6 +68,8 @@ YAHOO.imex.pubedit = {
         // main tab panel
         //---------------
 
+        console.log( "pubedit-yui.js: pubTab" );
+
         YAHOO.imex.pubedit.tabs = new YAHOO.widget.TabView("pubTab");
         //this listener is for when a tab is clicked. 
         YAHOO.imex.pubedit.tabs.addListener("activeTabChange", 
