@@ -22,6 +22,14 @@ public interface IcentralRest {
                                       @PathParam("acc") String acc,  
                                       @DefaultValue("redirect")
                                       @QueryParam("mode") String mode );
+
+    @GET @Path("/dta/{format}/{acc}")
+        public Object getDataFileByAcc( @DefaultValue("imex")
+                                        @QueryParam("ns") String ns,
+                                        @PathParam("acc") String acc,
+                                        @PathParam("format") String format,
+                                        @DefaultValue("redirect")
+                                        @QueryParam("mode") String mode );
     
     @GET @Path("/map")
         public Object getImexAcc( @DefaultValue( "pmid" )

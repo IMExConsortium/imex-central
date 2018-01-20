@@ -5,7 +5,7 @@
   <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
    <span class="error">
     <s:iterator value="actionErrors">
-     <span class="errorMessage"><s:property escape="false" /></span>
+     <span class="errorMessage"><s:property escapeHtml="false" /></span>
     </s:iterator>
    </span>
   </div>
@@ -46,19 +46,19 @@
   <ul>
    <li>
     <label for="usermgr_user_firstName"><strong>First Name</strong></label>
-    <s:textfield theme="simple" name="user.firstName" size="32" maxLength="64"/>
+    <s:textfield theme="simple" name="user.firstName" size="32" maxlength="64"/>
    </li>
    <li>
     <label for="usermgr_user_lastName"><strong>Last Name</strong></label>
-    <s:textfield theme="simple" name="user.lastName" size="32" maxLength="64"/>
+    <s:textfield theme="simple" name="user.lastName" size="32" maxlength="64"/>
    </li>
    <li>
     <label for="usermgr_"><strong>Affilation</strong></label>
-    <s:textfield theme="simple" name="user.affiliation" size="32" maxLength="64"/>
+    <s:textfield theme="simple" name="user.affiliation" size="32" maxlength="64"/>
     </li>
    <li>
     <label for="usermgr_user_email"><strong>E-mail</strong></label>
-    <s:textfield theme="simple" name="user.email" size="32" maxLength="64"/>
+    <s:textfield theme="simple" name="user.email" size="32" maxlength="64"/>
    </li>
   </ul>
   <h3 class="header-grey-highlight">Status</h3>
@@ -101,11 +101,11 @@
     <ul>
      <li>
       <label for="usermgr_opp_pass1"><strong>New Password</strong></label>
-      <s:password theme="simple" name="opp.pass1" value="" size="16" maxLength="64"/>
+      <s:password theme="simple" name="opp.pass1" value="" size="16" maxlength="64"/>
      </li>
      <li>
       <label for="usermgr_opp_pass2"><strong>Confirm Password</strong></label>
-      <s:password theme="simple" name="opp.pass2" value="" size="16" maxLength="64"/>
+      <s:password theme="simple" name="opp.pass2" value="" size="16" maxlength="64"/>
      </li>
      <li>
       <s:submit theme="simple" name="op.prs" value="Update"/>
@@ -126,7 +126,7 @@
       <fieldset>
        <legend>Current Roles</legend>
        <li>
-        <s:iterator value="user.roles" id="r" status="rpos"> 
+        <s:iterator value="user.roles" var="r" status="rpos"> 
          <s:checkbox name="opp.rdel" fieldValue="%{#r.id}"/>
          <s:property value="#r.name"/>
         </s:iterator>
@@ -158,7 +158,7 @@
       <fieldset>
        <legend>Current Groups</legend>
        <li>
-        <s:iterator value="user.groups" id="g" status="gpos"> 
+        <s:iterator value="user.groups" var="g" status="gpos"> 
          <s:checkbox name="opp.gdel" fieldValue="%{#g.id}"/>
          <s:property value="#g.label"/>
         </s:iterator>

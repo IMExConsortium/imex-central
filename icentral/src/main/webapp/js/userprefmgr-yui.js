@@ -114,13 +114,13 @@ YAHOO.imex.userprefmgr = {
                 = YAHOO.lang.JSON.parse( response.responseText );
             userprefmgr.preferences 
                 = YAHOO.lang.JSON.parse( userprefmgr.preferences.preferences );
-            console.log( userprefmgr.preferences );     
+            //console.log( userprefmgr.preferences );     
             
             var form = document.getElementById(init["formid"]);
             var html = '';
 
             html += userprefmgr.traverse( userprefmgr.preferences, process, 0 );
-            console.log ( html );
+            //console.log ( html );
             form.innerHTML = html + form.innerHTML ;                             
         };
 
@@ -149,11 +149,21 @@ YAHOO.imex.userprefmgr = {
                 
         var html='';
         var process = function (key, value, options, opp, strong  ){   
+
+            //console.log( "key="+key+ " value.type=" + value.type + " opp=" + opp );
+
             if( typeof value.value != "undefined" ){                
                 var valDiv = YAHOO.util.Dom.get( "opp." + opp );
                 if( valDiv !== undefined ){
-                    valDiv.innerHTML 
-                        = userPrefManager.htmlBoolRadio( key, opp, value.value );
+
+                    if( value.type=="text" ){                                          
+                        valDiv.innerHTML 
+                            = userPrefManager.htmlStringText( key, opp, value.value,value.size );                    
+                    }
+                    if( value.type=="boolean"){                                          
+                        valDiv.innerHTML 
+                            = userPrefManager.htmlBoolRadio( key, opp, value.value );
+                    }
                 }
             }
         };
@@ -227,6 +237,7 @@ YAHOO.imex.userprefmgr = {
    
             userPrefManager.preferences 
                 = YAHOO.lang.JSON.parse( o.responseText );
+           
             userPrefManager.preferences 
                 = YAHOO.lang.JSON.parse( userPrefManager.preferences.preferences );
 

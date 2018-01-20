@@ -92,15 +92,15 @@
                 <ul>
                   <li>
                     <label for="pubedit_pub_pmid">PubMed</label>
-                    <s:textfield theme="simple" name="pub.pmid" size="32" maxLength="64"/><s:submit id="sub-4" disabled="true" theme="simple" name="op.epmr" value="Synchronize" onclick="return YAHOO.imex.pubedit.pubIdent('epmr');"/>
+                    <s:textfield theme="simple" name="pub.pmid" size="32" maxlength="64"/><s:submit id="sub-4" disabled="true" theme="simple" name="op.epmr" value="Synchronize" onclick="return YAHOO.imex.pubedit.pubIdent('epmr');"/>
                   </li>
                   <li>
                     <label for="pubedit_pub_doi">DOI</label>
-                    <s:textfield theme="simple" name="pub.doi" size="32" maxLength="64"/>
+                    <s:textfield theme="simple" name="pub.doi" size="32" maxlength="64"/>
                   </li>
                   <li>
                     <label for="pubedit_pub_journalSpecific">Internal</label> 
-                    <s:textfield theme="simple" name="pub.journalSpecific" size="32" maxLength="64"/>
+                    <s:textfield theme="simple" name="pub.journalSpecific" size="32" maxlength="64"/>
                   </li>
                   <li><s:submit id="sub-5" disabled="true" theme="simple" name="op.eidu" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubIdent('update');"/></li>
                </fieldset>
@@ -124,11 +124,11 @@
                     <ul>
                       <li>
                         <label for="pubedit_pub_author">Author(s)</label>
-                        <s:textfield theme="simple" name="pub.author" size="90" maxLength="512" cssClass="limit-width"/>
+                        <s:textfield theme="simple" name="pub.author" size="90" maxlength="512" cssClass="limit-width"/>
                       </li>
                       <li>
                         <label for="pubedit_pub_title">Title</label>
-                        <s:textfield theme="simple" name="pub.title" size="90"  maxLength="512" cssClass="limit-width"/>
+                        <s:textfield theme="simple" name="pub.title" size="90"  maxlength="512" cssClass="limit-width"/>
                       </li>
                       <li>
                         <s:submit id="sub-7" disabled="true" theme="simple" name="op.eatu" value="UPDATE" onclick="return YAHOO.imex.pubedit.pubAuthTitle('update');"/>
@@ -214,21 +214,21 @@
                 <ul>
                   <li>
                     <label for="pubedit_pub_owner_login">Submitted By:</label>
-                    <s:hidden name="pub.owner.login"/><s:textfield theme="simple" name="pub.owner.login" size="32" maxLength="64" disabled="true"/>
+                    <s:hidden name="pub.owner.login"/><s:textfield theme="simple" name="pub.owner.login" size="32" maxlength="64" disabled="true"/>
                   </li>
                 </ul> 
                 <h3 class="pub-edit-sect">Curators</h3>
                    <ul>
                 <fieldset>
                    <legend>Drop Curators</legend>
-                   <li id="td-admin-user"><s:iterator value="pub.adminUsers" id="u" status="upos"><s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/></s:iterator></li>
+                   <li id="td-admin-user"><s:iterator value="pub.adminUsers" var="u" status="upos"><s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/></s:iterator></li>
                    <li><s:submit id="sub-9" disabled="true" theme="simple" name="op.eaudel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');"/></li>
                 </fieldset>
                    </ul>
                      <ul>
                    <fieldset>
                      <legend>Add Curators</legend>
-                     <li>Curator username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxLength="64"/></li>
+                     <li>Curator username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxlength="64"/></li>
                       <li><s:submit id="sub-10" disabled="true" theme="simple" name="op.eauadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminUser('add');"/></li>
                    </fieldset>
                       </ul>
@@ -236,7 +236,7 @@
                      <ul>
                 <fieldset>
                    <legend>Drop Curator Group</legend>
-                   <li id="td-admin-group"><s:iterator value="pub.adminGroups" id="g" status="gpos"><s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/></s:iterator></li>
+                   <li id="td-admin-group"><s:iterator value="pub.adminGroups" var="g" status="gpos"><s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/></s:iterator></li>
                    <li><s:submit id="sub-11" disabled="true" theme="simple" name="op.eagdel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');"/></li>
                      </ul>
                 </fieldset>

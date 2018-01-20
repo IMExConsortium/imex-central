@@ -1,22 +1,50 @@
 {
- state:[
-  {name:"NEW",comments:""},
-  {name:"RESERVED",comments:""},
-  {name:"INPROGRESS",comments:""},
-  {name:"RELEASED",comments:""},
-  {name:"DISCARDED",comments:""},
-  {name:"INCOMPLETE",comments:""}
+ "state":[
+  {"name":"NEW","comments":""},
+  {"name":"RESERVED","comments":""},
+  {"name":"INPROGRESS","comments":""},
+  {"name":"RELEASED","comments":""},
+  {"name":"DISCARDED","comments":""},
+  {"name":"INCOMPLETE","comments":""},
+  {"name":"PROCESSED","comments":""},
+  {"name":"REQUEST","comments":""},
+  {"name":"RETRACTED","comments":""}
  ],
- transition:[
-   {name:"reserve",from:"NEW",to:"RESERVED",
-    comments:""
+ "transition":[
+   {"name":"reserve","from":"NEW","to":"RESERVED",
+    "comments":""
    },
-   {name:"process",from:"RESERVED",to:"INPROGRESS",
-    comments:""
+   {"name":"process","from":"RESERVED","to":"INPROGRESS",
+    "comments":""
    },
-   {name:"release",from:"INPROGRESS",to:"RELEASED",
-    comments:""
+   {"name":"release","from":"INPROGRESS","to":"RELEASED",
+    "comments":""
    }
  ],
- "admin-role-unique":["IMEx partner"]
+ "admin-role-unique":["IMEx partner"],
+
+ "stage":{
+    "PREQUEUE":{
+      "status-allowed":["NEW","REQUEST","DISCARDED"]
+    },
+    "QUEUE":{
+      "status-allowed":["NEW","REQUEST","DISCRDED"]
+    },
+    "CURATION":{
+      "status-allowed":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED"]
+    },
+    "RELEASE":{
+      "status-allowed":["RELEASED","RETRACTED"]
+    } 
+ },
+
+ "stage-list":["PREQUEUE","QUEUE","CURATION","RELEASE"],
+
+ "status-allowed":{
+    "PREQUEUE":["NEW","REQUEST","DISCARDED"],    
+    "QUEUE":["NEW","REQUEST","DISCRDED"],
+    "CURATION":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED"],
+    "RELEASE":["RELEASED","RETRACTED"]
+ }
 }
+     

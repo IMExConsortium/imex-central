@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
 <!DOCTYPE struts PUBLIC
-          "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-          "http://struts.apache.org/dtds/struts-2.0.dtd">
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <!-- =======================================================================
  # $Id::                                                                   $
@@ -56,7 +56,7 @@
       <interceptor-ref name="conversionError"/>
 
       <interceptor-ref name="menu"/>
-      <interceptor-ref name="acl"/>
+      <interceptor-ref name="acl"/> 
 
       <interceptor-ref name="validation">
        <param name="excludeMethods">input,back,cancel,browse</param>
@@ -147,7 +147,7 @@
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
       
-     <result name="success" type="tiles">usermgr</result>     
+     <result name="success" type="tiles">usermgr</result>
      <result name="acl_page" type="tiles">aclpageerror</result>  
      <result name="acl_oper" type="tiles">acloperror</result>
      <result name="input" type="tiles">usermgr</result>
@@ -161,9 +161,24 @@
          ^userList\[\d+\]\.firstName,
          ^userList\[\d+\]\.lastName,
          ^userList\[\d+\]\.affiliation,
-         ^userList\[\d+\]\.email
+         ^userList\[\d+\]\.email,
+         ^totalRecords,
+	 ^firstRecord,
+         ^blockSize
        </param>
      </result>
+
+<!--
+     <result name="success" type="json">
+        <param name="ignoreHierarchy">false</param>
+        <param name="noCache">true</param>
+
+        <param name="includeProperties">
+          ^user*,^id,^op*
+       </param>
+
+     </result>
+-->
 
    </action>
 

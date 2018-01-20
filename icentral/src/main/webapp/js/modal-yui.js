@@ -208,7 +208,7 @@ YAHOO.mbi.modal = {
                 } else {
                     
                     YAHOO.mbi.modal.showComment( { header:header, 
-                                                   body:bodyTp, body:body } );
+                                                   bodyTp:bodyTp, body:body } );
                 } 
             }
         };

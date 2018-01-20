@@ -42,7 +42,7 @@
      </td>
      <td align="right">
       <b>PMID:</b>
-      <s:textfield theme="simple" name="pub.pmid" size="24" maxLength="64"/>
+      <s:textfield theme="simple" name="pub.pmid" size="24" maxlength="64"/>
      </td>
      <td colspan="1" align="center" width="5%">
       <s:submit theme="simple" name="op.esrc" value="Search" />

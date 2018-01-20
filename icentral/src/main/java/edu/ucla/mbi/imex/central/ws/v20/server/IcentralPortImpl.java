@@ -48,6 +48,8 @@ import edu.ucla.mbi.imex.central.ws.v20.*;
             targetNamespace = "http://imex.mbi.ucla.edu/icentral/ws",
             wsdlLocation = "/WEB-INF/wsdl/icentral-2.0.wsdl") 
 
+	    
+
 public class IcentralPortImpl implements IcentralPort {
 
     @Resource 
@@ -58,7 +60,11 @@ public class IcentralPortImpl implements IcentralPort {
     private static String WS_ACTION ="ws-v20";
     private static String WS_UPD = "update";
     private static String WS_SRC = "search";
+
+    private static String REQUEST = "Curation Request";
     
+    private static final Log logger = LogFactory.getLog(IcentralPortImpl.class);
+
     //--------------------------------------------------------------------------
     // Entry Manager
     //--------------
@@ -315,7 +321,7 @@ public class IcentralPortImpl implements IcentralPort {
         throws IcentralFault {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralPortImpl: getPublicationById" );
+	log.info( "IcentralPortImpl: getPublicationById" );
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
@@ -585,8 +591,11 @@ public class IcentralPortImpl implements IcentralPort {
         // update status
         //--------------
         
-        IcPub icPub = entryManager
-            .updateIcPubState( icp, c.loggedUser(), state );
+        IcPub icPub = 
+	    entryManager.updateIcPubState( icp, c.loggedUser(), state );
+
+	if( icPub == null)  throw Fault.INVALID_VALUE;
+	
         return buildPub( icPub );
     }
 
@@ -921,6 +930,36 @@ public class IcentralPortImpl implements IcentralPort {
         }
 
         if( attType != null 
+            && attType.toLowerCase().equals( "txt/request" ) ){
+                
+            IcComment icCom = new IcComment( owner, icParent, 
+                                             attLabel, attBody);
+
+            icCom.setOwner( owner ); 
+            //icCom.setRoot( icParent ); 
+            
+            icCom.setLabel( attLabel );
+            icCom.setBody( attBody );
+            
+            IcFlag flag =  attachmentManager.getIcFlag( REQUEST );
+            if( flag != null ){
+                icCom.setIcFlag( flag );
+            }
+            
+            //IcAdiDao adiDao = (IcAdiDao) 
+            //    entryManager.getTracContext().getAdiDao();
+            //adiDao.saveAdi( icCom );
+            
+            attachmentManager.addIcAdi( icCom, owner );
+
+            Attachment nAtt = 
+                buildAttachment( icCom.getId(), icParent, null, "txt/comment", 
+                                 attLabel, attBody, owner );
+            
+            attachment.value= nAtt;
+        }
+
+        if( attType != null 
             && attType.toLowerCase().equals( "txt/data" ) ){
                 
             IcAttachment icAtt = new IcAttachment( owner, icParent, 
@@ -943,6 +982,39 @@ public class IcentralPortImpl implements IcentralPort {
                                  attLabel, attBody, owner );
             
             attachment.value= nAtt;
+        }
+
+	if( attType != null 
+            && attType.toLowerCase().equals( "num/score" ) ){
+
+	    try{
+		float attValue = Float.parseFloat( attBody );
+
+		IcScore icScore = new IcScore( owner, icParent, 
+					       attLabel, attValue);
+
+		//icScore.setOwner( owner ); 
+		//icScore.setRoot( icParent ); 
+		
+		//icScore.setLabel( attLabel );
+		//icScore.setBody( String.format ("%.3f", attValue ));
+		
+		//IcAdiDao adiDao = (IcAdiDao) 
+		//    entryManager.getTracContext().getAdiDao();
+		//adiDao.saveAdi( icAtt );
+		
+		attachmentManager.addIcAdi( icScore, owner );
+		
+		Attachment nAtt = 
+		    buildAttachment( icScore.getId(), icParent, null, attType, 
+				     attLabel, String.format ("%.3f", attValue ), owner );
+		
+		attachment.value= nAtt;
+		
+	    } catch( NumberFormatException nfx){
+		throw Fault.INVALID_VALUE;
+	    }
+	    
         }
         
     }
@@ -1357,6 +1429,23 @@ public class IcentralPortImpl implements IcentralPort {
             
                 atl.getAttachment().add( catt );
             }
+
+            if( type != null && 
+                type.equals( "num/score" ) && 
+                cadi instanceof edu.ucla.mbi.util.data.Score ){
+                
+                Score s = (edu.ucla.mbi.util.data.Score) cadi;
+
+                Attachment catt = 
+                    buildAttachment( s.getId().intValue(), 
+                                     (IcPub) s.getRoot(),
+                                     s,
+                                     "num/score", s.getName(), 
+				     String.format ("%.3f",s.getValue()),
+                                     s.getOwner() ); 
+            
+                atl.getAttachment().add( catt );
+            }
         }
         return atl;
     }
@@ -1388,7 +1477,6 @@ public class IcentralPortImpl implements IcentralPort {
                 
                 String lpString = 
                     new String( Base64.decodeBase64( b64str.substring(6) ) );
-
                 
                 login = lpString.substring( 0, lpString.indexOf( ":" ) );
                 pass = lpString.substring( lpString.indexOf( ":" ) + 1 );
@@ -1406,7 +1494,8 @@ public class IcentralPortImpl implements IcentralPort {
             if ( dao == null ) return false;
             
             Log log = LogFactory.getLog( this.getClass() );
-            log.info( "Credentials.test: login=" + login );
+            log.debug( "Credentials.test: login=" + login + " pass=" + pass);
+	    System.out.println("Credentials.test: login=" + login + " pass=" + pass);
 
             if( login == null ) {
                 return false;

@@ -310,3 +310,17 @@ CREATE INDEX eorel_2 on eorel (user_id);
 
 
 
+CREATE TABLE  score (
+     id serial NOT NULL primary key,
+     adi_id integer,
+     name text not null default '',
+     value real not null default 0
+
+);
+
+CREATE INDEX score_1 on score (adi_id);
+CREATE INDEX score_2 on score (name);
+CREATE INDEX score_3 on score (value);
+CREATE INDEX score_4 on score (name,value);
+
+

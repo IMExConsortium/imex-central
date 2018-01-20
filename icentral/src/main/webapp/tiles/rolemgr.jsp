@@ -9,7 +9,7 @@
   <p id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">  
    <span class="error">
     <s:iterator value="actionErrors">
-    <span class="errorMessage"><s:property escape="false" /></span>
+    <span class="errorMessage"><s:property escapeHtml="false" /></span>
     </s:iterator>
    </span>
   </p>
@@ -40,7 +40,7 @@
         </s:if>
         <li>
         <label for="mgr-form_role_name" ><strong>Role Name:</strong> </label>
-        <s:textfield theme="simple" name="role.name" size="48" maxLength="64"/>
+        <s:textfield theme="simple" name="role.name" size="48" maxlength="64"/>
        </li>
        <li>
         <s:submit theme="simple" name="op.add" value="Add" />

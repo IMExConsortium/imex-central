@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 5.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-5.0.dtd">
 
 <!-- ========================================================================
  ! $HeadURL::                                                               $
@@ -18,7 +18,7 @@
  <class name="edu.ucla.mbi.imex.central.IcRole" table="role" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">role_id_seq</param>
+    <param name="sequence_name">role_id_seq</param>
    </generator>
   </id>
 
@@ -30,7 +30,7 @@
  <class name="edu.ucla.mbi.imex.central.IcGroup" table="grp" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">grp_id_seq</param>
+    <param name="sequence_name">grp_id_seq</param>
    </generator>
   </id>
 
@@ -53,7 +53,7 @@
  <class name="edu.ucla.mbi.imex.central.IcUser" table="usr" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">usr_id_seq</param>
+    <param name="sequence_name">usr_id_seq</param>
    </generator>
   </id>
   

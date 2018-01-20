@@ -10,7 +10,7 @@
       <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
        <span class="error">
         <s:iterator value="actionErrors">
-         <span class="errorMessage"><s:property escape="false" /></span>
+         <span class="errorMessage"><s:property escapeHtml="false" /></span>
         </s:iterator>
        </span>
       </div>
@@ -38,7 +38,7 @@
         <tr>
          <td width="15%" align="right" nowrap>Title</td>
          <td align="left" width="95%"> 
-          <s:textfield theme="simple" name="journal.title" size="64" maxLength="128"/>
+          <s:textfield theme="simple" name="journal.title" size="64" maxlength="128"/>
          </td>
          <th rowspan="5">
           <s:submit theme="simple" name="op.jpup" value="UPDATE"/>
@@ -47,19 +47,19 @@
         <tr>
          <td width="15%" align="right" nowrap>NLMID</td>
          <td align="left" width="95%">
-          <s:textfield theme="simple" name="journal.nlmid" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.nlmid" size="32" maxlength="64"/>
          </td>
         </tr>
         <tr>
          <td width="15%" align="right" nowrap>ISSN</td>
          <td align="left" width="95%">
-          <s:textfield theme="simple" name="journal.issn" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.issn" size="32" maxlength="64"/>
          </td>
         </tr>
         <tr>
          <td width="15%" align="right" nowrap>Journal Site</td>
          <td align="left" width="95%">
-          <s:textfield theme="simple" name="journal.websiteUrl" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.websiteUrl" size="32" maxlength="64"/>
          </td>
         </tr>
         <tr>
@@ -75,7 +75,7 @@
         <tr>
          <th width="15%" align="right" nowrap>Owner</th>
          <td align="left" width="95%">
-          <s:textfield theme="simple" name="journal.owner.login" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.owner.login" size="32" maxlength="64"/>
          </td>
          <th rowspan="1">
           <s:submit theme="simple" name="op.oup" value="UPDATE"/>
@@ -84,7 +84,7 @@
         <tr>
          <th rowspan="2" align="right" nowrap>Admin Users</th>
          <td colspan="1">
-          <s:iterator value="journal.adminUsers" id="u" status="upos">
+          <s:iterator value="journal.adminUsers" var="u" status="upos">
            <s:checkbox name="opp.jaudel" fieldValue="%{#u.id}"/>
            <s:property value="#u.login"/>
           </s:iterator>
@@ -95,7 +95,7 @@
         </tr>
         <tr>
          <td colspan="1">
-          <s:textfield theme="simple" name="opp.jauadd" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="opp.jauadd" size="32" maxlength="64"/>
          </td>
          <th>
           <s:submit theme="simple" name="op.jauadd" value="ADD"/>
@@ -105,7 +105,7 @@
         <tr>
          <th rowspan="2" align="right" nowrap>Admin Groups</th>
          <td colspan="1">
-          <s:iterator value="journal.adminGroups" id="g" status="gpos">
+          <s:iterator value="journal.adminGroups" var="g" status="gpos">
            <s:checkbox name="opp.jagdel" fieldValue="%{#g.id}"/>
            <s:property value="#g.label"/>
           </s:iterator>

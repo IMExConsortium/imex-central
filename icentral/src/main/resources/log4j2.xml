@@ -2,19 +2,43 @@
 
 <Configuration>
       <Appenders>
-        <File name="A1" fileName="icentral.log" append="false">
-          <Log4j1XmlLayout />
-        </File>
+
+        <Console name="TRACE" target="SYSTEM_OUT">
+          <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+        </Console>
+
         <Console name="STDOUT" target="SYSTEM_OUT">
-          <PatternLayout pattern="%level - %m%n"/>
+          <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
         </Console>
       </Appenders>
+
       <Loggers>
-        <Logger name="org.apache.log4j.xml" level="debug">
-          <AppenderRef ref="A1"/>
+
+        <Logger name="edu.ucla.mbi.imex.central.ws" level="trace" additivity="false">  
+          <AppenderRef ref="TRACE"/> 
         </Logger>
-        <Root level="debug">
+
+        <Logger name="edu.ucla.mbi.util.struts" level="debug" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Logger name="edu.ucla.mbi.util.struts.action" level="debug" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Logger name="edu.ucla.mbi.imex.central.struts.action" level="debug" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Logger name="edu.ucla.mbi.imex.central.dao" level="debug" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Root level="error">
           <AppenderRef ref="STDOUT"/>
         </Root>
+
+
+
       </Loggers>
  </Configuration>

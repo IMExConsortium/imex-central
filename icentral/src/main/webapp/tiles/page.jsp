@@ -7,7 +7,7 @@
  ! Version: $Rev::                                                             $
  !========================================================================= --%>
 
-<s:set name="spath" value="%{skn}"/>
+<s:set var="spath" value="%{skn}"/>
 
 <html lang="en">
  <head>
@@ -30,7 +30,7 @@
       <div  class="upage" id="errorDiv">
        <span class="pgerror">
         <s:iterator value="actionErrors">
-         <span class="errorMessage"><s:property escape="false" /></span>
+         <span class="errorMessage"><s:property escapeHtml="false" /></span>
         </s:iterator>
        </span>
       </div>
@@ -70,10 +70,10 @@
        <div style="width: 95%; padding:0 0 0 4%;">
         <s:if test="id == 'relnotes'">
          <h1>ImexCentral Release Notes</h1> 
-         <t:insertTemplate template="/tiles/relnotes.jsp" ignore="true"/>
+         <t:insertTemplate template="/tiles/relnotes.jsp"/> <!-- ignore="true" -->
         </s:if>
         <s:else>
-         <s:property value="source" escape="false" />
+         <s:property value="source" escapeHtml="false" />
         </s:else>
        </div>         
        <br/><br/><br/><br/><br/>
@@ -92,7 +92,7 @@
   <s:if test="page.showindex">
    <script>
      YAHOO.util.Event.addListener( window, "load",
-       YAHOO.mbi.view.panel.index("<s:property value="page.urlindex" escape="false" />", 
+       YAHOO.mbi.view.panel.index("<s:property value="page.urlindex" escapeHtml="false" />", 
                                    document.getElementById("index-panel")));     
    </script>
   </s:if>

@@ -22,6 +22,7 @@ import edu.ucla.mbi.util.struts.action.*;
 import edu.ucla.mbi.util.struts.interceptor.*;
 
 import edu.ucla.mbi.imex.central.*;
+import edu.ucla.mbi.imex.central.dao.*;
 
 public class JournalEditAction extends ManagerSupport {
 
@@ -64,13 +65,13 @@ public class JournalEditAction extends ManagerSupport {
     //  WorkflowContext
     //-----------------
     
-    private WorkflowContext wflowContext;
+    private IcWorkflowContext wflowContext;
 
-    public void setWorkflowContext( WorkflowContext context ) {
+    public void setWorkflowContext( IcWorkflowContext context ) {
         this.wflowContext = context;
     }
 
-    public WorkflowContext getWorkflowContext() {
+    public IcWorkflowContext getWorkflowContext() {
         return this.wflowContext;
     }
 
@@ -120,7 +121,7 @@ public class JournalEditAction extends ManagerSupport {
             log.info( "role="  + role );
             
             List<Group> rlist 
-                = getUserContext().getGroupDao().getGroupList(role);
+                = ((IcGroupDao)getUserContext().getGroupDao()).getGroupList(role);
             
             
 

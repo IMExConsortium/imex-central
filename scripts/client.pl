@@ -5,6 +5,7 @@ use XML::XPath;
 use XML::XPath::XMLParser;
 
 my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
+my $URLPROD = "http://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
 my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
 my $URL = $URLTEST;
 my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/icentral/ws-v20";
@@ -35,13 +36,19 @@ my $newAC="";
 
 for( my $i=0; $i < @ARGV; $i++ ) {
 
-    if( $ARGV[$i]=~/PROD=YES/ ) {
-        $URL=$URLBETA;
-    }
+
     if( $ARGV[$i]=~/IP=(.+)/ ) {
         $ip=$1;
         $URL=$PURL;
         $URL=~s/%%%/$ip/;
+    }
+
+    if( $ARGV[$i]=~/BETA=YES/ ) {
+        $URL=$URLBETA;
+    }
+
+    if( $ARGV[$i]=~/PROD=YES/ ) {
+        $URL=$URLPROD;
     }
 
     if( $ARGV[$i]=~/PMID=(.+)/ ) {

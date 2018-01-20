@@ -18,7 +18,7 @@
        <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
         <span class="error">
          <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
+          <span class="errorMessage"><s:property escapeHtml="false" /></span>
          </s:iterator>
         </span>
        </div>
@@ -39,7 +39,7 @@
        <th width="5%">&nbsp</th>
       </tr>
       <s:if test="transList!=null">
-       <s:iterator value="transList" id="trans" status="tpos">
+       <s:iterator value="transList" var="trans" status="tpos">
         <tr>
          <td align="center">
           <s:checkbox name="opp.tdel" fieldValue="%{#trans.id}"/>
@@ -78,7 +78,7 @@
           </div>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="trans.name" size="48" maxLength="64"/>
+        <s:textfield theme="simple" name="trans.name" size="48" maxlength="64"/>
        </td>
        <td>
          <s:select name="opp.sfrom"  headerKey="-1" headerValue="---Select From State---"

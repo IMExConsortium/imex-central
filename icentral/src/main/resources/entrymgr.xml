@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
 <!DOCTYPE struts PUBLIC
-          "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-          "http://struts.apache.org/dtds/struts-2.0.dtd">
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
 
 <!-- ===========================================================================
  ! $Id::                                                                       $
@@ -175,6 +176,46 @@
         <param name="noCache">true</param>
       </result>
     </action>
+
+
+    <action name="stagemgr" class="pubViewAction">
+      
+      <interceptor-ref name="mgrStack"/>
+      <interceptor-ref name="timer"/>
+      
+      <result name="success" type="tiles">stagemgr-tb</result>     
+      <result name="acl_page" type="tiles">aclpageerror</result>
+      <result name="acl_oper" type="tiles">acloperror</result>
+      <result name="input" type="tiles">pubsrc</result>     
+
+      <result name="pubedit" type="redirectAction">
+        <param name="actionName">pubedit</param>
+        <param name="id">%{id}</param>
+      </result>
+      
+      <result name="pubnew" type="redirectAction">
+        <param name="actionName">pubnew</param>
+        <param name="pmid">%{pmid}</param>
+      </result>
+      
+      <result name="json" type="json">
+        <param name="excludeProperties">
+         publicationList.*,.*roles.*,.*password.*,.*allRoles.*,.*prefs,
+         .*activated,.*activationKey,.*affiliation,,.*allRoleNames,
+         .*groups,.*groupNames
+        </param>
+        <param name="includeProperties">
+          records.*,pub.*,flags.*
+        </param>
+        <param name="noCache">true</param>
+      </result>
+    </action>
+
+
+
+
+
+
     
     <action name="pubedit" class="pubEditAction">
      

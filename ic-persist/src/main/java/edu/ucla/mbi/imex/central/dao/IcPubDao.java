@@ -743,6 +743,15 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
     private  Criteria addFilter( Criteria crit, Map<String,String> flt ) {
         
         Log log = LogFactory.getLog( this.getClass() );
+        if( flt.get("stage") != null && 
+            !flt.get("stage").equals("") ){
+            
+            crit.createAlias( "stage", "sg" )
+                .add( Restrictions.eq( "sg.name",
+                                       flt.get( "stage" ) 
+                                       ) );
+        }
+
         if( flt.get("status") != null && 
             !flt.get("status").equals("") ){
             

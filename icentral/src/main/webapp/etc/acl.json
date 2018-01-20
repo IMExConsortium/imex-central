@@ -399,12 +399,6 @@
     }
   },
 
-  
-  
-
-
-
-
   journalmgr:{
     order:[ "operation"],
     operation:{
@@ -620,7 +614,7 @@
     },
 
     usermgr:{
-      order:["allow","operation"],
+      order:["operation"],
       allow:{
         user:["ADMIN"],
         role:["administrator"],

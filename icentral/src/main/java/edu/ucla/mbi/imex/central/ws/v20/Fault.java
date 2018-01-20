@@ -51,6 +51,9 @@ public class Fault {
 
     public static final IcentralFault
         INVALID_ID = createFault( 13, "identifier not valid" );
+
+    public static final IcentralFault
+        INVALID_VALUE = createFault( 14, "value not valid" );
     
     public static final IcentralFault
         UNSUP = createFault( 98, "operation not supported" );

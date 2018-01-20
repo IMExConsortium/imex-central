@@ -5,26 +5,26 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral-client</artifactId>
   <packaging>jar</packaging>
-  <version>1.99</version>
+ <!-- <version>3.0.0rc3</version> -->
   <name>icentral web services client</name>
 
   <properties>
     <icentral.version>${project.version}</icentral.version>
     <icentral.bld>$Rev: 139 $</icentral.bld>
-    <jaxws-rt.version>2.2.10</jaxws-rt.version>
+<!--    <jaxws-rt.version>2.3.0</jaxws-rt.version> -->
   </properties>   
 
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
-    <artifactId>imexcentral-project</artifactId>
-    <version>1.99</version>
+    <artifactId>imexcentral</artifactId>
+    <version>3.0.0rc5</version>
    </parent>
 
    <dependencies>
      <dependency>
        <groupId>edu.ucla.mbi.imex</groupId>
        <artifactId>ic-api</artifactId>
-       <version>1.99</version>
+       <version>${ic-api.version}</version>
       </dependency>
 
     <dependency>

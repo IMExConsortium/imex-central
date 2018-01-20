@@ -168,18 +168,27 @@ public class LogAdvice {
                    + " pub=" + pub 
                    + " luser=" + luser);
 
-        if( pub instanceof IcPub){
-            IcLogEntry ile 
-                = new IcLogEntry( (User) luser, (IcPub) pub,
-                                  "Admin user information updated.", "" );
-            getAttachmentManager().getTracContext()
-                .getAdiDao().saveAdi( ile );
-            
-            // get a list of observers and send out notifications
-            //---------------------------------------------------
+        if( pub instanceof IcPub  && rpub instanceof IcPub ){
 
-            List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
-            notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+            log.debug( "LogManager:   adm usr(old)=" + ((IcPub) pub).getAdminUserNames() );
+            log.debug( "LogManager:   adm usr(new)=" + ((IcPub) rpub).getAdminUserNames() );
+
+            boolean same = ((IcPub) pub).getAdminUserNames().equals( ((IcPub) pub).getAdminUserNames() );
+            if( ! same ){
+                log.debug( "LogManager:    adm users changed");
+                
+                IcLogEntry ile 
+                    = new IcLogEntry( (User) luser, (IcPub) pub,
+                                      "Admin user information updated.", "" );
+                getAttachmentManager().getTracContext()
+                    .getAdiDao().saveAdi( ile );
+            
+                // get a list of observers and send out notifications
+                //---------------------------------------------------
+
+                List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
+                notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+            }
         }
     }
 
@@ -187,22 +196,32 @@ public class LogAdvice {
                                             Object rpub ){
         
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( "LogManager: update publication monitor called:" 
-                   + " pub=" + pub 
-                   + " luser=" + luser);
+        log.debug( "LogManager: update publication monitor called:"); 
+        log.debug( "LogManager:   pub(old)=" + pub); 
+        log.debug( "LogManager:   pub(new)=" + rpub); 
+        log.debug( "LogManager:   luser=" + luser);
         
-        if( pub instanceof IcPub ){
-            IcLogEntry ile 
-                = new IcLogEntry( (User) luser, (IcPub) pub,
-                                  "Admin group information updated.", "" );
-            getAttachmentManager().getTracContext()
-                .getAdiDao().saveAdi( ile );
-            
-            // get a list of observers and send out notifications
-            //---------------------------------------------------
+        if( pub instanceof IcPub && rpub instanceof IcPub ){
 
-            List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
-            notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+            log.debug( "LogManager:   adm grp(old)=" + ((IcPub) pub).getAdminGroupNames() );
+            log.debug( "LogManager:   adm grp(new)=" + ((IcPub) rpub).getAdminGroupNames() );
+
+            boolean same = ((IcPub) pub).getAdminGroupNames().equals( ((IcPub) pub).getAdminGroupNames() );
+            if( ! same ){ 
+                log.debug( "LogManager:    adm groups changed");
+                            
+                IcLogEntry ile 
+                    = new IcLogEntry( (User) luser, (IcPub) pub,
+                                      "Admin group information updated.", "" );
+                getAttachmentManager().getTracContext()
+                    .getAdiDao().saveAdi( ile );
+            
+                // get a list of observers and send out notifications
+                //---------------------------------------------------
+
+                List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
+                notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
+            }
         }
     }
 
@@ -236,39 +255,57 @@ public class LogAdvice {
                    + " pub=" + pub + " luser=" + luser
                    + " state=" + state );
         
-        String stateName = "";
+        //if( !(state instanceof DataState)) return;
+
+        if( pub instanceof  IcPub && rpub instanceof  IcPub ){
+            log.debug( "statePubMonitor: pub(old).state=" 
+                       +  ((IcPub) pub).getState().getName());
+            log.debug( "statePubMonitor: pub(new).state=" 
+                       +  ((IcPub) rpub).getState().getName());
+        
+
+            String stateName = "";
+        
+            if( state instanceof Integer ){
+                DataState ds = getAttachmentManager().getTracContext()
+                    .getWorkflowDao().getDataState( (Integer) state );
+                stateName =  ds.getName();
+            } else {
+                if( state instanceof java.lang.String ){
+                    DataState ds = getAttachmentManager().getTracContext()
+                        .getWorkflowDao().getDataState( (String) state );
+                    
+                    stateName =  ds.getName();
+                } 
+                if( state instanceof DataState ){
+                    
+                    DataState ds = getAttachmentManager().getTracContext()
+                        .getWorkflowDao().getDataState( ((DataState)state).getId() );
+                    stateName =  ds.getName();
+                }
+            }
+        
+            log.debug( "statePubMonitor:  stateName =" +  stateName );
 
 
-        if( state instanceof Integer ){
-            DataState ds = getAttachmentManager().getTracContext()
-                .getWorkflowDao().getDataState( (Integer) state );
-            stateName =  ds.getName();
-        } else {
-            if( state instanceof java.lang.String ){
-                DataState ds = getAttachmentManager().getTracContext()
-                    .getWorkflowDao().getDataState( (String) stateName );
-                stateName =  ds.getName();
-            } 
-            if( state instanceof DataState ){
-                DataState ds = getAttachmentManager().getTracContext()
-                    .getWorkflowDao().getDataState( ((DataState)state).getId() );
-                stateName =  ds.getName();
+            if( ! ((IcPub) pub).getState().getName()
+                .equals( ((IcPub) rpub).getState().getName() )){
+
+                IcLogEntry ile 
+                    = new IcLogEntry( (User) luser, (IcPub) pub,
+                                      "Publication state updated: " 
+                                      + stateName, "" );
+
+                getAttachmentManager().getTracContext()
+                    .getAdiDao().saveAdi( ile );
+        
+                // get a list of observers and send out notifications
+                //---------------------------------------------------
+
+                List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
+                notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
             }
         }
-        
-        IcLogEntry ile 
-            = new IcLogEntry( (User) luser, (IcPub) pub,
-                              "Publication state updated: " 
-                              + stateName, "" );
-
-        getAttachmentManager().getTracContext()
-            .getAdiDao().saveAdi( ile );
-        
-        // get a list of observers and send out notifications
-        //---------------------------------------------------
-
-        List<User> obsLst = watchManager.getObserverList( (IcPub) pub );
-        notificationManager.updateNotify( (IcPub) pub, ile, obsLst );        
     }
 
 

@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+
+my $date = `git log --pretty=format:"%ai" -1`;
+while( $ln = <> ){
+    $ln=~s/\$Build\$/\$Build: $date\$/g;
+    print $ln;
+}       

@@ -8,6 +8,12 @@ YAHOO.imex.pubmgr = {
     watch: "",
     loginId: "",
     
+    stageBtn: { my:{value:"",foo:"stage"} },    
+    stageSel: [ { text: "---ANY---", value: "" },
+                { text: "preQueue", value: "preQueue" },
+                { text: "Queue", value: "Queue" } 
+              ],
+
     stateBtn: { my:{value:"",foo:"state"} },    
     stateSel: [ { text: "---ANY---", value: "" } ],
     
@@ -110,12 +116,18 @@ YAHOO.imex.pubmgr = {
         // filters
         //--------
 
-        //oSelf.my.stateFlt.my.value;
+        //oSelf.my.stageFlt.my.value;
+        var gfVal = YAHOO.imex.pubmgr.stageBtn.my.value;
+        
+	//oSelf.my.stateFlt.my.value;
         var sfVal = YAHOO.imex.pubmgr.stateBtn.my.value;
         
         // oSelf.my.partnerFlt.my.value;
         var pfVal = YAHOO.imex.pubmgr.partnerBtn.my.value;
         
+        if( gfVal === undefined ){
+            gfVal = "";
+        }
         if( sfVal === undefined ){
             sfVal = "";
         }
@@ -139,7 +151,8 @@ YAHOO.imex.pubmgr = {
         }
 
         var req = "opp.skey=" + sort +
-            "&opp.wfl=" + wtFlg + 
+            "&opp.wfl=" + wtFlg +
+	    "&opp.gfv=" + gfVal + 
             "&opp.sfv=" + sfVal +
             "&opp.pfv=" + pfVal +
             "&opp.efv=" + efVal +
@@ -358,7 +371,8 @@ YAHOO.imex.pubmgr = {
         var defstate = {
             startIndex: 0,
             pageSize: 25,
-            filter:{ status: "",
+            filter:{ stage: "",
+                     status: "",
                      partner:"",
                      editor:PMGR.admus,
                      owner: PMGR.owner,
@@ -476,11 +490,19 @@ YAHOO.imex.pubmgr = {
         //---------------------------
         
         
-        var statusLabel = "---ANY---";
+        var stageLabel = "---ANY---";
         //PMGR.stateSel[0].text = statusLabel;
+
+        var statusLabel = "---ANY---";
+        //PMGR.partnerSel[0].text = partnerLabel;
 
         var partnerLabel = "---ANY---";
         //PMGR.partnerSel[0].text = partnerLabel;
+
+
+        if( parsed.filter.stage !== ""){
+            stageLabel = parsed.filter.stage;
+        }
 
         if( parsed.filter.status !== ""){
             statusLabel = parsed.filter.status;
@@ -490,6 +512,15 @@ YAHOO.imex.pubmgr = {
             partnerLabel = parsed.filter.partner;
         }
         
+
+        if( PMGR.stageBtn.set !== undefined ){           
+            PMGR.stageBtn.set( "label", 
+                               ("<em class=\"yui-button-label\">" + 
+                                stageLabel + "</em>"));
+        }else{
+            PMGR.stageSel[0].text = stageLabel;
+        }
+
         if( PMGR.stateBtn.set !== undefined ){           
             PMGR.stateBtn.set( "label", 
                                ("<em class=\"yui-button-label\">" + 
@@ -497,6 +528,8 @@ YAHOO.imex.pubmgr = {
         }else{
             PMGR.stateSel[0].text = statusLabel;
         }
+
+
         
         if( PMGR.partnerBtn.set!== undefined ){
             PMGR.partnerBtn.set( "label", 
@@ -527,11 +560,11 @@ YAHOO.imex.pubmgr = {
     parseStateString: function( statStr ){
         return YAHOO.lang.JSON.parse(statStr);
     },
-    generateLinkState: function(status, partner)
+    generateLinkState: function(stage, status, partner)
     {
 
         //LS: watch ?
-        var filter = {status:status, partner:partner, editor:'', owner:'', cflag:''  };
+        var filter = {stage:stage, status:status, partner:partner, editor:'', owner:'', cflag:''  };
         var state = {startIndex:0, pageSize:25,filter:filter, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
 
@@ -543,6 +576,7 @@ YAHOO.imex.pubmgr = {
         var req = "opp.off=" + state.startIndex + 
             "&opp.wfl=" + state.watch + 
             "&opp.max=" + state.pageSize + 
+	    "&opp.gfv=" + state.filter.stage +
             "&opp.sfv=" + state.filter.status +
             "&opp.pfv=" + state.filter.partner +
             "&opp.efv=" + state.filter.editor +
@@ -600,6 +634,8 @@ YAHOO.imex.pubmgr = {
                                 failure: partnerSuccess,
                                 argument:{}}; // id:obj.id, btn:imexButton } };                  
 
+
+
         var stateSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse(o.responseText);
             YAHOO.imex.pubmgr.selBtnInit( 
@@ -619,8 +655,35 @@ YAHOO.imex.pubmgr = {
                               argument:{}}; // id:obj.id, btn:imexButton } };                  
 
         
+        var stageSuccess = function( o ){
+            var messages = YAHOO.lang.JSON.parse(o.responseText);
+            YAHOO.imex.pubmgr.selBtnInit( 
+                { pmgr: YAHOO.imex.pubmgr,
+                  filter: "stage",
+                  items: messages.acom,
+                  selmnu: YAHOO.imex.pubmgr.stageSel,
+                  selbtn: "stageBtn",
+                  selcnt: "stage-button-container",
+                  selnme: "stage-button", 
+                  seltext: YAHOO.imex.pubmgr.stageSel[0].text});
+        };
+        
+        var stageCallback = { cache:false, timeout: 5000, 
+                              success: stageSuccess,
+                              failure: stageSuccess,
+                              argument:{}}; // id:obj.id, btn:imexButton } };                  
+
+        
+
+
+
         if( typeof PMGR.myDataTable == "undefined" ){
             try{
+                YAHOO.util.Connect
+                    .asyncRequest( 'GET', 
+                                   "acom?op.psgac=ac" , 
+                                   stageCallback );
+        
                 YAHOO.util.Connect
                     .asyncRequest( 'GET', 
                                    "acom?op.pstac=ac" , 
@@ -722,6 +785,7 @@ YAHOO.imex.pubmgr = {
             cflag: PMGR.cflag  
         };
 
+        PMGR.stageBtn.my.table = PMGR.myDataTable;
         PMGR.stateBtn.my.table = PMGR.myDataTable;
         PMGR.partnerBtn.my.table = PMGR.myDataTable;
         

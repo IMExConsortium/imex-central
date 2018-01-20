@@ -18,7 +18,7 @@
        <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
         <span class="error">
          <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
+          <span class="errorMessage"><s:property escapeHtml="false" /></span>
          </s:iterator>
         </span>
        </div>
@@ -38,7 +38,7 @@
        <th idth="5%" nowrap>&nbsp</th>
       </tr>
       <s:if test="journalList!=null">
-       <s:iterator value="journalList" id="journal" status="jpos">
+       <s:iterator value="journalList" var="journal" status="jpos">
         <tr>
          <td align="center">
           <s:checkbox name="opp.del" fieldValue="%{#journal.id}"/>
@@ -74,7 +74,7 @@
           </div>
          </s:if>
         </s:if>
-        <b>NLMID:</b> <s:textfield theme="simple" name="opp.jadd" size="48" maxLength="64"/>
+        <b>NLMID:</b> <s:textfield theme="simple" name="opp.jadd" size="48" maxlength="64"/>
        </td>
        <td align="center">
         <s:submit theme="simple" name="op.jadd" value="ADD" />

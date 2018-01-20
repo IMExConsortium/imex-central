@@ -1,2 +1,2 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<s:property value="source" escape="false" />
+<s:property value="source" default="" />

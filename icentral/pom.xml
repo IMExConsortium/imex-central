@@ -5,28 +5,46 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral</artifactId>
   <packaging>war</packaging>
-  <version>1.99</version>
+  <version>3.0.0rc5</version>
   <name>Web Application module</name>
 
   <properties>
 
     <icentral.version>${project.version}</icentral.version> 
+    <icentral.copyright>2008-2017</icentral.copyright> 
     <icentral.bld>$Rev$</icentral.bld> 
     <icentral.wsver>1.0</icentral.wsver>
 
     <icentral.css>icentral-test.css</icentral.css>
 
-   <!-- foo.org: global key -->
     <icentral.recaptcha.publicKey>*****</icentral.recaptcha.publicKey>
     <icentral.recaptcha.privateKey>*****</icentral.recaptcha.privateKey>
     <icentral.recaptcha.recaptchaServer>*****</icentral.recaptcha.recaptchaServer>
-
-    <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
     
     <icentral.jdbc.dburl>*****</icentral.jdbc.dburl>
     <icentral.jdbc.user>*****</icentral.jdbc.user>
     <icentral.jdbc.pass>*****</icentral.jdbc.pass>
+
+    <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
+
+<!--
+       <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral_test</icentral.jdbc.dburl>
+       <icentral.jdbc.user>dip</icentral.jdbc.user>
+       <icentral.jdbc.pass>444dip444</icentral.jdbc.pass>
+
+      <icentral.recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</icentral.recaptcha.recaptchaServer>
+      <icentral.recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</icentral.recaptcha.publicKey>
+      <icentral.recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</icentral.recaptcha.privateKey>
+-->
+   
   </properties>
+
+  <parent>
+    <groupId>edu.ucla.mbi.imex</groupId>
+    <artifactId>imexcentral</artifactId>
+    <version>3.0.0rc5</version>
+  </parent>
+
    
   <profiles>
    <profile>
@@ -70,30 +88,25 @@
 
   </profiles>
  
-  <parent>
-    <groupId>edu.ucla.mbi.imex</groupId>
-    <artifactId>imexcentral</artifactId>
-    <version>1.99</version>
-  </parent>
   
   <dependencies>
 
     <dependency>
       <groupId>com.mchange</groupId>
       <artifactId>c3p0</artifactId>
-      <version>0.9.5.1</version>
+      <version>0.9.5.2</version>
     </dependency>
 
     <dependency>
       <groupId>edu.ucla.mbi.imex</groupId>
       <artifactId>ic-persist</artifactId>
-      <version>1.99</version>
+      <version>${icentral.version}</version>
     </dependency>
 
     <dependency>
       <groupId>edu.ucla.mbi.imex</groupId>
       <artifactId>ic-model</artifactId>
-      <version>1.99</version>
+      <version>${icentral.version}</version>
     </dependency>
 
     <dependency>
@@ -105,74 +118,68 @@
     <dependency>
       <groupId>edu.ucla.mbi.dip</groupId>
       <artifactId>dip-util-struts</artifactId>
-      <version>0.99</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.mchange</groupId>
-      <artifactId>c3p0</artifactId>
-      <version>0.9.5.1</version>
+      <version>${dip-util.version}</version>
     </dependency>
     
     <dependency>
-      <groupId>net.tanesha.recaptcha4j</groupId>
+      <groupId>com.google.code.maven-play-plugin.net.tanesha.recaptcha4j</groupId>
       <artifactId>recaptcha4j</artifactId>
-      <version>0.0.7</version>
+      <version>${recaptcha4j.version}</version>
     </dependency>
 
     <dependency>
       <groupId>info.bliki.wiki</groupId>
       <artifactId>bliki-core</artifactId>
-      <version>3.0.19</version>
+      <version>3.1.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.4</version>
+      <version>3.6</version>
     </dependency>
 
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>4.2.1.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>4.2.1.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
-      <version>4.2.1.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>4.2.1.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
 
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib</artifactId>
-      <version>3.1</version>
+      <version>3.2.5</version>
     </dependency>
 
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.8.7</version>
+      <version>${aspectj.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>1.8.7</version>
+      <version>${aspectj.version}</version>
     </dependency>
 
     <dependency>
@@ -184,7 +191,8 @@
     <dependency>
      <groupId>com.sun.xml.ws</groupId>
      <artifactId>jaxws-rt</artifactId>
-     <version>2.2.10</version>
+<!--     <version>2.2.10</version> -->
+      <version>${jaxws-rt.version}</version>
     </dependency>
 
     <dependency>
@@ -196,13 +204,13 @@
     <dependency>
       <groupId>org.apache.xbean</groupId>
       <artifactId>xbean-spring</artifactId>
-      <version>4.4</version>
+      <version>4.5</version>
     </dependency>
 
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>javax.mail-api</artifactId>
-      <version>1.5.4</version>
+      <version>1.6.0</version>  <!-- 1.5.4 -->
     </dependency>
 
     <dependency>
@@ -215,20 +223,49 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>9.4-1203-jdbc4</version>
+      <version>${postgresql.version}</version>
     </dependency>
-  
+
+<!--
+   <dependency>
+    <groupId>org.eclipse.jetty</groupId>
+    <artifactId>jetty-quickstart</artifactId>
+    <version>9.4.7.v20170914</version>
+   </dependency>
+  -->
   </dependencies>
 
   <build>
     <finalName>icentral</finalName>
-
     <plugins>
+
+<!--
+    <plugin>
+     <artifactId>maven-compiler-plugin</artifactId>
+     <version>3.7.0</version>
+     <configuration>
+      <verbose>true</verbose>
+      <fork>true</fork>
+      <source>1.8</source>
+      <target>1.8</target>
+     </configuration>
+    </plugin>
+
+    <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-javadoc-plugin</artifactId>
+     <version>3.0.0-M1</version>
+     <configuration>
+       <reportOutputDirectory>${reportDir}</reportOutputDirectory>
+       <destDir>imex-central</destDir>
+     </configuration>
+    </plugin>
+-->
    
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.0.2</version>
+        <version>3.1.0</version>
         <configuration>
           <webResources>
 
@@ -268,7 +305,8 @@
               <targetPath>WEB-INF/classes</targetPath>
               <filtering>true</filtering>
               <includes>
-                <include>hibernate.*</include>
+                <include>hibernate.cfg.xml</include>
+                <include>log4j2.xml</include>
               </includes>
             </resource>
 
@@ -278,6 +316,7 @@
               <filtering>true</filtering>
               <includes>
                 <include>jetty-web.xml</include>
+                <include>tiles.xml</include>
               </includes>
             </resource>
 
@@ -302,15 +341,19 @@
       </plugin>
 
       <plugin>
+         <groupId>org.eclipse.jetty</groupId>
+         <artifactId>jetty-maven-plugin</artifactId>
+         <version>9.4.7.v20170914</version>
+         <configuration>
+    <!--    <war>${project.basedir}/target/icentral.war</war> -->
+         </configuration>
+      </plugin>
 
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.3.8.v20160314</version>
-<!--
+   <!--
+      <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
-        <version>6.1.18</version>
--->
+	<version>6.1.18</version>
         <configuration>
           <webDefaultXml>src/main/resources/webdefault.xml</webDefaultXml>
 
@@ -327,46 +370,9 @@
 
           </systemProperties>
         </configuration>
-
-       <dependencies>
-           <dependency>
-    
-             <groupId>log4j</groupId>
-             <artifactId>log4j</artifactId>
-             <version>1.2.16</version>
-    <!--       
-              <groupId>org.apache.logging.log4j</groupId>
-              <artifactId>log4j-core</artifactId>
-              <version>2.4</version>
--->
-           </dependency>
-
-           <dependency>
-             <groupId>org.slf4j</groupId>
-             <artifactId>slf4j-api</artifactId>
-             <version>1.6.1</version>
-           </dependency>
-<!--
-           <dependency>
-             <groupId>org.slf4j</groupId>
-             <artifactId>slf4j-log4j12</artifactId>
-             <version>1.6.1</version>
-           </dependency>
-
--->
-        </dependencies>
-
-
-
-
-
-
-
-
       </plugin>
-  
+   -->
+
     </plugins>
-
   </build>
-
 </project>

@@ -222,11 +222,20 @@
         viewpath:"/pages/help.html"
       },
 
+       "help-overview":{
+        active:true,
+        title:"ICentral: Overview",
+        menudef:"0:2:0",
+        menusel:"5:1:1",
+        viewtype:"file-html",
+        viewpath:"/pages/help-overview.html"
+      },
+
       "help-signup":{
         active:true,
         title:"Icentral Help: Signing Up",
         menudef:"0:2:0",
-        menusel:"5:1:1",
+        menusel:"5:1:2",
         viewtype:"file-html",
         viewpath:"/pages/help-signup.html"
       },
@@ -234,7 +243,7 @@
         active:true,
         title:"Icentral Help: Curation Records",
         menudef:"0:2:0",
-        menusel:"5:1:2",
+        menusel:"5:1:3",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
       },
@@ -242,7 +251,7 @@
         active:true,
         title:"Icentral Help: Register",
         menudef:"0:2:0",
-        menusel:"5:1:3",
+        menusel:"5:1:4",
         viewtype:"file-html",
         viewpath:"/pages/help-register.html"
       },
@@ -250,7 +259,7 @@
         active:true,
         title:"Icentral Help: Attach",
         menudef:"0:2:0",
-        menusel:"5:1:4",
+        menusel:"5:1:5",
         viewtype:"file-html",
         viewpath:"/pages/help-attach.html"
       },
@@ -258,7 +267,7 @@
         active:true,
         title:"Icentral Help: Watch List",
         menudef:"0:2:0",
-        menusel:"5:1:5",
+        menusel:"5:1:6",
         viewtype:"file-html",
         viewpath:"/pages/help-watchlist.html"
       },      
@@ -309,7 +318,23 @@
         menusel:"1:2:2",
         viewtype:"file-html",
         viewpath:"/pages/udev.html"
-      }
+      },
+      "stats-history":{ 
+         active:true, 
+         title:"ImexCentral: Curation", 
+         menudef:"1:4:2", 
+         menusel:"1:4:2", 
+         viewtype:"file-html", 
+         viewpath:"/pages/stats-history.html" 
+      }, 
+      "stats-journals":{ 
+         active:true, 
+         title:"ImexCentral: IMEx Journals", 
+         menudef:"1:4:3", 
+         menusel:"1:4:3", 
+         viewtype:"file-html", 
+         viewpath:"/pages/stats-journals.html" 
+      } 
     }
   }
 }

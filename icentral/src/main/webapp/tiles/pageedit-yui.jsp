@@ -175,8 +175,8 @@
 <script type="text/javascript">
   var ip = function() {
     YAHOO.mbi.imgedit.init( 
-        "<s:property value='site' escape='false'/>",
-        "<s:property value='skn' escape='false'/>",
+        "<s:property value='site' escapeHtml='false'/>",
+        "<s:property value='skn' escapeHtml='false'/>",
         document.getElementById( "image-table" ) );
     YAHOO.mbi.accordion.init();
   }

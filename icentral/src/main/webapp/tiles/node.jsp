@@ -42,7 +42,7 @@
  </tr>
  <tr>
   <td colspan="2">
-    <s:property value="nodeStatus['routing table']" escape="false"/>
+    <s:property value="nodeStatus['routing table']" escapeHtml="false"/>
   </td>
  </tr>
 </table>

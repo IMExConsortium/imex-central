@@ -19,24 +19,24 @@
       <ul>
         <li>
           <label for="pubedit_pub_owner_login">Record Created By</label>
-          <s:hidden name="journal.owner.login"/><s:textfield theme="simple" name="journal.owner.login" size="32" maxLength="64" disabled="true"/>
+          <s:hidden name="journal.owner.login"/><s:textfield theme="simple" name="journal.owner.login" size="32" maxlength="64" disabled="true"/>
         </li>
         <li>
           <label for="pubedit_pub_pmid">Title</label>
-          <s:textfield theme="simple" name="journal.title" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.title" size="32" maxlength="64"/>
           <s:submit theme="simple" name="op.epmr" value="Synchronize" disabled="true" onclick="return YAHOO.imex.jnledit.sync();"/>
         </li>
         <li>
           <label for="pubedit_pub_doi">NLMID</label>
-          <s:textfield theme="simple" name="journal.nlmid" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.nlmid" size="32" maxlength="64"/>
         </li>
         <li>
           <label for="pubedit_pub_doi">ISSN</label>
-          <s:textfield theme="simple" name="journal.issn" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.issn" size="32" maxlength="64"/>
         </li>
         <li>
           <label for="pubedit_pub_journalSpecific">Journal Site</label> 
-          <s:textfield theme="simple" name="journal.websiteUrl" size="32" maxLength="64"/>
+          <s:textfield theme="simple" name="journal.websiteUrl" size="32" maxlength="64"/>
         </li>
         <li>
           <s:submit id="sub-1" disabled="true" theme="simple" name="op.jpup" value="UPDATE" onclick="return YAHOO.imex.jnledit.update('detail');"/>
@@ -52,7 +52,7 @@
       <ul>
         <li>
           <label for="pubedit_pub_owner_login">Created By:</label>
-          <s:hidden name="journal.owner.login"/><s:textfield theme="simple" name="journal.owner.login" size="32" maxLength="64" disabled="true"/>
+          <s:hidden name="journal.owner.login"/><s:textfield theme="simple" name="journal.owner.login" size="32" maxlength="64" disabled="true"/>
         </li>
       </ul>
 -->
@@ -62,7 +62,7 @@
           <fieldset>
             <legend>Drop Curators</legend>
             <li id="td-admin-user">
-              <s:iterator value="journal.adminUsers" id="u" status="upos">
+              <s:iterator value="journal.adminUsers" var="u" status="upos">
                 <s:checkbox name="opp.jaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/>
               </s:iterator>
             </li>
@@ -72,7 +72,7 @@
         <ul>
           <fieldset>
             <legend>Add Curators</legend>
-            <li>Curator username:<s:textfield theme="simple" name="opp.jauadd" size="32" maxLength="64"/></li>
+            <li>Curator username:<s:textfield theme="simple" name="opp.jauadd" size="32" maxlength="64"/></li>
             <li><s:submit theme="simple" name="op.jauadd" value="ADD" onclick="return YAHOO.imex.jnledit.update('add-admin');"/></li>
           </fieldset>
         </ul>
@@ -82,7 +82,7 @@
           <fieldset>
             <legend>Drop Database</legend>
             <li id="td-admin-group">
-              <s:iterator value="journal.adminGroups" id="g" status="gpos">
+              <s:iterator value="journal.adminGroups" var="g" status="gpos">
                 <s:checkbox name="opp.jagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/>
               </s:iterator>
             </li>

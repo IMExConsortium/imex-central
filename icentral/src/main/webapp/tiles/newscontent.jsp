@@ -14,7 +14,7 @@
            <s:property value="#item.date"/>
           </td>
           <td CLASS="newstitle">
-           <s:property value="#item.header" escape="false"/>
+           <s:property value="#item.header" default=""/>
           </td> 
           <td CLASS="newsauth">
            (Added by <i><A HREF="mailto:<s:property value='amail'/>"><s:property value='aini'/></A></i> )
@@ -34,7 +34,7 @@
       </tr>
       <tr>
        <td>
-        <s:property value="#item.body" escape="false"/>
+        <s:property escapeHtml="false" value="#item.body" default=""/>
        </td>
       </tr>
      </table>

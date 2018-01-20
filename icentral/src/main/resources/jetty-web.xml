@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
-<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
     <New id="psql" class="org.eclipse.jetty.plus.jndi.Resource">
-        <Arg>jdbc/icentral</Arg>
+        <Arg>java:comp/env/jdbc/icentral</Arg>
         <Arg>
             <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
                 <Set name="JdbcUrl">jdbc:postgresql://10.1.2.212/icentral_test</Set>
@@ -11,4 +11,10 @@
             </New>
         </Arg>
     </New>
+
+    <Call name="setAttribute">
+      <Arg>org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern</Arg>
+      <Arg>.*/spring-[^/]*\.jar$</Arg>
+   </Call>
+
 </Configure>

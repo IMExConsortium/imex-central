@@ -98,7 +98,7 @@
 {
     "legend":"User Preferences", 
     "tableLayout":"null",
-    "options":["curation-tool","auto-watch","message-mail"], 
+    "options":["curation-tool","curation-requests","auto-watch","message-mail"], 
     "option-def":{
       "curation-tool": {
          "legend":"Curation Tool",
@@ -119,6 +119,20 @@
               "value": "%%pmid%%",
               "opp":"ctpmid",
               "opcode": "ctpmid"
+            }
+         }
+      },
+      "curation-requests": {
+         "legend":"Curation Requests",
+         "options":["zotero-user"],
+         "option-def":{
+            "zotero-user":{
+              "label": "Zotero User",
+              "type": "text",
+              "size":"16", 
+              "value": "",
+              "opp":"crzu",
+              "opcode": "crzu"
             }
          }
       },
@@ -238,15 +252,20 @@
 
 <!-- ====================================================== DIP PROXY ACCESS -->
 
- <bean id="ncbiProxyClient" init-method="initialize"
+ <bean id="ncbiProxyClient"  
           class="edu.ucla.mbi.imex.central.NcbiProxyClient">
-<!--
+ <!--
   <property name="endpoint"
         value="http://dip.doe-mbi.ucla.edu:80/dip-proxy/ncbi-service"/>
--->
+
   <property name="endpoint"
         value="http://dip.mbi.ucla.edu/dip-proxy/ws/soap/ncbi-service"/>
   <property name="debug" value="false" />
+-->
+  <property name="endpoint"
+        value="http://10.1.3.111:8080/dip-proxy/ws/soap/ncbi-service"/>
+ 
+   <property name="debug" value="false" />
  </bean>
 
 <!-- ======================================================== STRUTS ACTIONS -->
@@ -274,6 +293,123 @@
       <entry key="UniprotKB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
      </map>
    </property>
+
+<!--
+http://www.ebi.ac.uk/intact/export?format=xml_html&query=IM-20288-1&negative=false&spoke=false&ontology=false&sort=intact-miscore&asc=false
+
+http://www.ebi.ac.uk/intact/query/IM-20288-1?conversationContext=4http://www.ebi.ac.uk/intact/query/IM-20288-1?conversationContext=4
+
+http://www.ebi.ac.uk/intact/export?format=mitab_25&query=IM-20288-1&negative=false&spoke=false&ontology=false&sort=intact-miscore&asc=false
+-->
+
+
+
+   <property name="imexDtaMap">
+     <map>
+      <entry key="DIP Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+
+      <entry key="IntAct Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://www.ebi.ac.uk/intact/export?format=mitab_25&amp;query=%%ACC%%&amp;lnegative=false&amp;spoke=false&amp;ontology=false&amp;sort=intact-miscore&amp;asc=false" />
+          <entry key="mitab26"
+                 value="http://www.ebi.ac.uk/intact/export?format=mitab_26&amp;query=%%ACC%%&amp;lnegative=false&amp;spoke=false&amp;ontology=false&amp;sort=intact-miscore&amp;asc=false" />
+          <entry key="mitab27"
+                 value="http://www.ebi.ac.uk/intact/export?format=mitab_27&amp;query=%%ACC%%&amp;lnegative=false&amp;spoke=false&amp;ontology=false&amp;sort=intact-miscore&amp;asc=false" />
+          <entry key="mif25"
+                 value="http://www.ebi.ac.uk/intact/export?format=xml_2_54&amp;query=%%ACC%%&amp;lnegative=false&amp;spoke=false&amp;ontology=false&amp;sort=intact-miscore&amp;asc=false" />
+        </map>
+      </entry>
+
+      <entry key="InnateDB Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+
+      <entry key="MINT Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+
+      <entry key="MPIDB Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+
+      <entry key="MatrixDB Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+      <entry key="Molecular Connections Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+      <entry key="UniprotKB Database">
+        <map>
+          <entry key="mitab25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab25" />
+          <entry key="mitab26"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab26" />
+          <entry key="mitab27"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=tab27" />
+          <entry key="mif25"
+                 value="http://imex.mbi.ucla.edu/xpsq-dip-imex/service/rest/current/search/interaction/%%ACC%%?format=xml25" />
+        </map>
+      </entry>
+     </map>
+   </property>
+   
  </bean>
 
  <import resource="spring/cxf.xml" />

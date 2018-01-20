@@ -50,13 +50,13 @@ public class EntryManager {
     //  WorkflowContext
     //-----------------
     
-    private WorkflowContext wflowContext;
+    private IcWorkflowContext wflowContext;
 
-    public void setWorkflowContext( WorkflowContext context ) {
+    public void setWorkflowContext( IcWorkflowContext context ) {
         this.wflowContext = context;
     }
 
-    public WorkflowContext getWorkflowContext() {
+    public IcWorkflowContext getWorkflowContext() {
         return this.wflowContext;
     }
 
@@ -309,6 +309,8 @@ public class EntryManager {
     public List<DataState> acomStage( String query ) {
         List<DataState> ulist 
             = tracContext.getPubDao().getStages( query ); 
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info( " acomStage count=" + ulist.size() );
         return ulist;
     }
     
@@ -339,7 +341,9 @@ public class EntryManager {
         Publication newPub = null;
         if ( cli != null ) {
             newPub = cli.getPublicationByPmid( pmid );
-            log.info( " doi" + newPub.getDoi() );
+            log.info( " newPub" + newPub );
+	    System.out.println( " newPub" + newPub );
+
         }
         return newPub;
     }
@@ -740,73 +744,114 @@ public class EntryManager {
         Log log = LogFactory.getLog( this.getClass() );
         
         if( pub != null && state !=null ) {
-
-            /*  test of allowed transition ???
-              if ( wflowContext.getWorkflowDao() == null ||
-              !( id > 0 && fid > 0 && tid > 0)) return SUCCESS;
-
-               Log log = LogFactory.getLog( this.getClass() );
-               log.info( "id=" + id + " from=" + fid + " to=" + tid );
-        
-               Transition oldTrans = wflowContext.getWorkflowDao().getTrans( id );
-               DataState fState = wflowContext.getWorkflowDao().getDataState( fid );
-               DataState tState = wflowContext.getWorkflowDao().getDataState( tid );
-              
-               if ( oldTrans == null ||
-               fState == null || tState == null ) return SUCCESS;
-
-               oldTrans.setFromState( fState );
-               oldTrans.setToState( tState );
-               wflowContext.getWorkflowDao().updateTrans( oldTrans );
-              
-               this.trans = wflowContext.getWorkflowDao().getTrans( id );
-               log.info( "updated trans(states)=" +this.trans );
-              
-             */
             
+            IcPub oldPub = (IcPub) tracContext.getPubDao()
+                .getPublication( pub.getId() );
 
-            // to be moved into workflow context
+            if( oldPub != null ){
+		
+                DataState oldState = oldPub.getState();
+                DataState oldStage = oldPub.getStage();
+		
+		// NOTE: getNewStageState imposes stage/state update policy
 
-            DataState oSt = pub.getState();
-            DataState oSg = pub.getStage();
+		Map<String,String> ssm = 
+		    wflowContext.getNewStageState( oldStage.getName(), 
+						   oldState.getName(), 
+						   state.getName());
+		if( ssm.size() == 0 ){
+		    // illegal op:  
+		    return null;
+		}
+		
+		String newState = ssm.get( "state" );
+		String newStage = ssm.get( "stage" );
+		
+		if( oldState.equals(newState) && oldStage.equals(newStage) ){
+		    // no chanage
+		    return oldPub;
+		} else {
+		    DataState nState = 
+			wflowContext.getWorkflowDao().getDataState( newState );
+		    DataState nStage = 
+			wflowContext.getWorkflowDao().getDataStage( newStage );
+		    
+		    oldPub.setState( nState );
+                    oldPub.setStage( nStage );
+
+                    //tracContext.getPubDao().savePublication( pub );                                                                                                                                           
+                    log.debug( "updating state/stage");
+                   
+		    ((IcPubDao) tracContext.getPubDao())
+                        .updatePublication( oldPub, luser );
+
+                    return oldPub;
+		}
+		
+		/*
+
+                // to be moved into workflow context
+
+                DataState oSt = oldPub.getState();
+                DataState oSg = oldPub.getStage();
             
-            DataState stage = pub.getStage();
+                DataState stage = oldPub.getStage();
             
-            log.debug( "stage/state (o): " + stage + " / " +  state );
+                log.debug( "stage/state (o): " + oSt + " / " +  oSg );
             
+		
+		// NOTE: setting state to 'queue' updates stage
+		//       setting state to non que/prequeue states sets stage to curation
 
-           
-            if( state.getName().equals("QUEUE") ){
-                state = wflowContext.getWorkflowDao().getDataState( "NEW" );
-                stage = wflowContext.getWorkflowDao().getDataStage( "QUEUE" );
-            }
+                if( state.getName().equals("QUEUE") ){
 
-            if( ! ( state.getName().equals("NEW") 
-                    || state.getName().equals("DISCARDED") ) ){
-                stage = wflowContext.getWorkflowDao().getDataStage( "CURATION" );
-            }
+		    if( oSt.getName().equals("NEW") || 
+			oSt.getName().equals("REQUEST")
+			){
+			state = wflowContext.getWorkflowDao().getDataState( oSt.getName() );
+		    } else {
+			state = wflowContext.getWorkflowDao().getDataState( "NEW" );
+		    }
+                    stage = wflowContext.getWorkflowDao().getDataStage( "QUEUE" );
+                }
 
-            log.debug( "stage/state (n): " + stage + " / " +  state );
+                if( ! ( state.getName().equals("NEW") ||
+			state.getName().equals("QUEUE") ||
+			state.getName().equals("REQUEST") ||
+                        state.getName().equals("DISCARDED") ) ){
+                    stage = wflowContext.getWorkflowDao().getDataStage( "CURATION" );
+                }
+
+                log.debug( "stage/state (n): " + state + " / " +  stage );
 
             
-            //log.debug( oSt.getName() + " : " +  oSg.getName() + " : " 
-            //           +  state.getName() + " : " +  stage.getName()  );
+                //log.debug( oSt.getName() + " : " +  oSg.getName() + " : " 
+                //           +  state.getName() + " : " +  stage.getName()  );
 
+                
+                // o be moved into workflow context: END
 
-            // o be moved into workflow context: END
-
-            if( stage != oSg || state != oSt ){
-                pub.setState( state );
-                pub.setStage( stage );
+                if( stage.getName().equals(oSg.getName()) 
+                    && state.getName().equals(oSt.getName()) ){
+                    
+                    return pub;
+                } else {
+                    oldPub.setState( state );
+                    oldPub.setStage( stage );
             
-                //tracContext.getPubDao().savePublication( pub );            
-
-                ((IcPubDao)tracContext.getPubDao()).updatePublication( pub, luser );
-            }
-            
-            return pub;
-        }
-        return null;
+                    //tracContext.getPubDao().savePublication( pub );            
+                    log.debug( "updating state/stage");
+                    ((IcPubDao) tracContext.getPubDao())
+                        .updatePublication( oldPub, luser );
+                    
+                    return oldPub;
+                    //return (IcPub) ((IcPubDao)tracContext.getPubDao())
+                    //    .getPublication( oldPub.getId() );
+                }
+		*/
+	    }
+	}
+	return null;
     }
 
     //--------------------------------------------------------------------------
@@ -817,8 +862,8 @@ public class EntryManager {
         DataState state = wflowContext.getWorkflowDao().getDataState( stateName );
 
         if( pub != null && state != null ) {
-            this.updateIcPubState( pub, user, state ); 
-            return pub;
+            return this.updateIcPubState( pub, user, state ); 
+            //return pub;
         }
         return null;
     }
@@ -830,8 +875,8 @@ public class EntryManager {
         DataState state = wflowContext.getWorkflowDao().getDataState( sid );
         
         if( pub != null && state != null ) {
-            this.updateIcPubState( pub, user, state );
-            return pub;
+            return this.updateIcPubState( pub, user, state );
+            //return pub;
         }
         return null;
 
@@ -1286,6 +1331,5 @@ public class EntryManager {
         return tracContext.getJournalDao()
             .getJournalIssueList( jrnl, first, year, volume );        
     }
-
 
 }

@@ -126,11 +126,24 @@ public class AttachmentManager {
     public IcFlag getIcFlag( int id ){
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( " get getIcFlag" );
+        log.info( " get getIcFlag(id)" );
 
         IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
 
         IcFlag flag = adiDao.getIcFlag( id );
+        return flag;
+    }
+
+    //--------------------------------------------------------------------------
+
+    public IcFlag getIcFlag( String name ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( " get getIcFlag(name)" );
+
+        IcAdiDao adiDao = (IcAdiDao) tracContext.getAdiDao();
+
+        IcFlag flag = adiDao.getIcFlag( name );
         return flag;
     }
     

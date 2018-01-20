@@ -86,6 +86,10 @@ public class IcUserDao extends AbstractDAO implements UserDao {
     public List<User> getUserList( int firstRecord, int blockSize ) { 
        
         List<User> userl = null;
+
+	Log log = LogFactory.getLog( this.getClass() );
+	log.debug("getUserList: firstRecord=" + firstRecord);
+	log.debug("getUserList: blockSize=" + blockSize);
         
         //Session session =
         //    HibernateUtil.getSessionFactory().openSession();

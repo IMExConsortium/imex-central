@@ -34,7 +34,7 @@
              menu:[]
             },
             {label:"Projects",
-             link:"page?id=projectmgr",
+             link:"projsrc.jsp",
              "disabled":"false",
              menu:[]
             }]
@@ -61,7 +61,41 @@
               "link":"stats",
               "disabled":"false",
               "menu":[]              
-             }]
+             },
+             {"label":"Curation History", 
+              "link":"page?id=stats-history", 
+              "disabled":"false", 
+              "menu":[] },
+             {"label":"IMEx Journals",
+              "link":"page?id=stats-journals",
+              "disabled":"false",
+              "menu":[] }
+            ]
+         },
+         {"label":"Pipeline",
+          "link":"stagemgr?stage=PREQUEUE&mst=1:5:1",
+          "disabled":"false",
+          "menu":[
+            {label:"preQueue",
+             link:"stagemgr?stage=PREQUEUE&mst=1:5:1",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Queue",
+             link:"stagemgr?stage=QUEUE&mst=1:5:2",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Curation",
+             link:"stagemgr?stage=CURATION&mst=1:5:3",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Release",
+             link:"stagemgr?stage=RELEASE&mst=1:5:4",
+             "disabled":"false",
+             menu:[]
+            }]         
          }]
       },       
       {label:"Tools",
@@ -179,6 +213,11 @@
           link:"page?id=help",
           "disabled":"false",
           menu:[
+            {label:"Overview",
+             link:"page?id=help-overview",
+             "disabled":"false",
+             menu:[]
+            },
             {label:"User Signup",
              link:"page?id=help-signup",
              "disabled":"false",

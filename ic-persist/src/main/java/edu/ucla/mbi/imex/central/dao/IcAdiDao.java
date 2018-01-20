@@ -68,6 +68,49 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
     }       
     
     //--------------------------------------------------------------------------
+    
+    public IcFlag getIcFlag( String name ){
+        
+        IcFlag flag = null;
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "IcAdiDao->getIcFlag: name=" + name  );
+
+        if( name == null ) return flag;
+        
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        
+        try {
+            Query query =
+                session.createQuery( "from IcFlag f where " +
+                                     " f.name = :name ");
+            query.setParameter("name", name );
+            List<IcFlag> icFL = (List<IcFlag>) query.list();
+
+            if( icFL != null && icFL.size() == 1 ){  
+                flag = icFL.get(0);
+                log.info( "getgetIcFlag by name: id=" + flag.getId() );
+            }
+            tx.commit();
+        } catch ( HibernateException e ) {
+            e.printStackTrace();
+            handleException( e );
+            // log error ?                                                                                                                                                                                                        
+        } finally {
+            //HibernateUtil.closeSession();                                                                                                                                                                                       
+            session.close();
+        }
+
+
+        //IcFlag flag = (IcFlag) super.find( IcFlag.class,
+        //                                   new Integer( id ) );
+        
+        log.info( "IcAdiDao->getIcFlag: name=" + name + " ::DONE"  );
+        return flag;
+    }       
+    
+    //--------------------------------------------------------------------------
 
     public List<AttachedDataItem> getAdiListByRoot( DataItem root ){
 

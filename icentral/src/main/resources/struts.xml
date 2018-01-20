@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
 <!DOCTYPE struts PUBLIC
-          "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-          "http://struts.apache.org/dtds/struts-2.0.dtd">
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
 
 <!-- ===========================================================================
  ! $Id::                                                                       $
@@ -15,7 +16,7 @@
 
 <struts>
   <constant name="struts.objectFactory" value="spring" />
-  <constant name="struts.devMode" value="false" />
+  <constant name="struts.devMode" value="true" />
   <constant name="struts.action.excludePattern" 
             value="/ws.*,/imex/.*,/map/.*"/>
 
@@ -38,8 +39,13 @@
     <result-types>
       <result-type name="tiles"
         class="org.apache.struts2.views.tiles.TilesResult"/>
+<!--
       <result-type name="redirect-action"
         class="org.apache.struts2.dispatcher.ServletActionRedirectResult" />
+-->
+      <result-type name="redirect-action"
+        class="org.apache.struts2.result.ServletActionRedirectResult" />
+
     </result-types>
 
    <!-- ======================================================= Interceptors -->
@@ -116,7 +122,7 @@
      <interceptor-ref name="timer"/>
      <interceptor-ref name="menu"/>
 
-     <result name="page" type="redirect-action">
+     <result name="page" type="redirectAction">
       <param name="actionName">page</param>
       <param name="namespace"></param>
       <param name="parse">true</param>
@@ -125,7 +131,7 @@
      
      <result name="menu">menuedit.jsp</result>
      
-     <result name="error" type="redirect-action">
+     <result name="error" type="redirectAction">
       <param name="actionName">page</param>
       <param name="namespace"></param>
       <param name="parse">true</param>
@@ -149,7 +155,7 @@
 
      <result name="preview" type="tiles">ipreview</result>
 
-     <result name="page" type="redirect-action">
+     <result name="page" type="redirectAction">
        <param name="actionName">page</param>
        <param name="namespace"></param>
        <param name="parse">true</param>
@@ -207,7 +213,7 @@
   <!-- user management -->
     
     <action name="user" class="userAction" >
-     <interceptor-ref name="defaultStack"/>
+     <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
      <interceptor-ref name="menu"/>
      

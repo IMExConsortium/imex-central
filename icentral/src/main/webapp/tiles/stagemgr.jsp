@@ -34,7 +34,7 @@
         <li>
          <label for="mgr-form_user_login"><strong>Login Name</strong> </label> 
         <s:hidden theme="simple" name="op" value="" />
-        <s:textfield theme="simple" name="user.login" size="18" maxLength="32"/> 
+        <s:textfield theme="simple" name="user.login" size="18" maxlength="32"/> 
        </li>
        
         <s:if test="hasFieldErrors()">
@@ -50,7 +50,7 @@
         </s:if>
         <li>
          <label for="mgr-form_user_firstName"><strong>First Name</strong> </label>  
-         <s:textfield theme="simple" name="user.firstName" size="19" maxLength="64"/>
+         <s:textfield theme="simple" name="user.firstName" size="19" maxlength="64"/>
         </li>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.lastName']!=null">
@@ -65,7 +65,7 @@
         </s:if>
         <li>
          <label for="mgr-form_user_lastName"><strong>Last Name</strong> </label> 
-         <s:textfield theme="simple" name="user.lastName" size="19" maxLength="64"/>
+         <s:textfield theme="simple" name="user.lastName" size="19" maxlength="64"/>
        </li>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.email']!=null">
@@ -80,7 +80,7 @@
         </s:if>
         <li>
          <label for="mgr-form_user_email"><strong>Email</strong> </label>
-         <s:textfield theme="simple" name="user.email" size="25" maxLength="64"/>
+         <s:textfield theme="simple" name="user.email" size="25" maxlength="64"/>
         </li>
        <li>
         <s:submit theme="simple" name="op.add" value="Add" />
@@ -132,7 +132,7 @@
        <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
         <span class="error">
          <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
+          <span class="errorMessage"><s:property escapeHtml="false" /></span>
          </s:iterator>
         </span>
        </div>
@@ -151,7 +151,7 @@
        <th width="5%">&nbsp</th>
       </tr>
       <s:if test="stateList!=null">
-       <s:iterator value="stateList" id="state" status="spos">
+       <s:iterator value="stateList" var="state" status="spos">
         <tr>
          <td align="center">
           <s:checkbox name="opp.sdel" fieldValue="%{#state.id}"/>
@@ -184,7 +184,7 @@
           </div>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="dataState.name" size="48" maxLength="64"/>
+        <s:textfield theme="simple" name="dataState.name" size="48" maxlength="64"/>
        </td>
        <td align="center">
         <s:submit theme="simple" name="op.sadd" value="ADD" />

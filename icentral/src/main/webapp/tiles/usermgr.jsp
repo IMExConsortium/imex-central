@@ -16,7 +16,8 @@
      
 <!--  First Tab  -->
   <div id="tab1">
-   <s:form theme="simple" action="usermgr" id="mgr-form" cssClass="align-label"> 
+
+   <s:form theme="simple" action="usermgr" cssClass="align-label"> 
    <fieldset>
    <legend><h2>Add User</h2></legend>
     <ul>
@@ -34,7 +35,7 @@
         <li>
          <label for="mgr-form_user_login"><strong>Login Name</strong> </label> 
         <s:hidden theme="simple" name="op" value="" />
-        <s:textfield theme="simple" name="user.login" size="18" maxLength="32"/> 
+        <s:textfield theme="simple" name="user.login" size="18" maxlength="32"/> 
        </li>
        
         <s:if test="hasFieldErrors()">
@@ -50,7 +51,7 @@
         </s:if>
         <li>
          <label for="mgr-form_user_firstName"><strong>First Name</strong> </label>  
-         <s:textfield theme="simple" name="user.firstName" size="19" maxLength="64"/>
+         <s:textfield theme="simple" name="user.firstName" size="19" maxlength="64"/>
         </li>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.lastName']!=null">
@@ -65,7 +66,7 @@
         </s:if>
         <li>
          <label for="mgr-form_user_lastName"><strong>Last Name</strong> </label> 
-         <s:textfield theme="simple" name="user.lastName" size="19" maxLength="64"/>
+         <s:textfield theme="simple" name="user.lastName" size="19" maxlength="64"/>
        </li>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['user.email']!=null">
@@ -80,7 +81,7 @@
         </s:if>
         <li>
          <label for="mgr-form_user_email"><strong>Email</strong> </label>
-         <s:textfield theme="simple" name="user.email" size="25" maxLength="64"/>
+         <s:textfield theme="simple" name="user.email" size="25" maxlength="64"/>
         </li>
        <li>
         <s:submit theme="simple" name="op.add" value="Add" />
@@ -93,6 +94,7 @@
 <!--  Second Tab  -->
 
     <div id="tab2">
+     <div id="dt-pag-nav"></div>
      <div id="usermgr-table"></div>
     </div>
     <script type="text/javascript">
@@ -106,16 +108,22 @@
             {key:"affiliation",label:"Affiliation", sortable:true, resizeable:true},
             {key:"Details", sortable:true, resizeable:true, formatter:"userDetails"}];
         
-        var dataSourceLink = "usermgr?op.view=json";
+        var dataSourceLink = "usermgr?op.view=json&";
   
         var datasourceSchema = { 
             resultsList: "userList", 
             fields: ["id", "login", "firstName", "lastName", "email", 
-                     "affiliation"]
+                     "affiliation"],
+            metaFields: {
+	       totalRecords: "totalRecords",
+               paginationRecordOffset : "firstRecord", 
+               paginationRowsPerPage : "blockSize" 
+            }
         }; 
         var container = "usermgr-table";
+
+        //YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
         YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
-        YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
   
     </script>
    </div>

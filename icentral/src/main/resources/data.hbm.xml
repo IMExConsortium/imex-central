@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 5.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-5.0.dtd">
 
 <!-- ========================================================================
  ! $HeadURL::                                                               $
@@ -21,7 +21,7 @@
         name="edu.ucla.mbi.imex.central.IcKeyspace" >
   <id name="id" column="id">
    <generator class="sequence">
-    <param name="sequence">keyspace_id_seq</param>
+    <param name="name">keyspace_id_seq</param>
    </generator>
   </id>
 
@@ -35,7 +35,7 @@
  <class name="edu.ucla.mbi.imex.central.IcKey" table="key" lazy="false">
   <id name="id" column="id">
    <generator class="sequence">
-    <param name="sequence">key_id_seq</param>
+    <param name="sequence_name">key_id_seq</param>
    </generator>
   </id>
   <many-to-one name="keyspace" column="keyspace_id"
@@ -51,7 +51,7 @@
  <class name="edu.ucla.mbi.imex.central.IcPub" table="entry" lazy="false">
   <id name="id" column="id">
    <generator class="sequence">
-    <param name="sequence">entry_id_seq</param>
+    <param name="sequence_name">entry_id_seq</param>
    </generator>
   </id>
 
@@ -124,7 +124,7 @@
  <class name="edu.ucla.mbi.imex.central.IcJournal" table="journal" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">journal_id_seq</param>
+    <param name="sequence_name">journal_id_seq</param>
    </generator>
   </id>
 
@@ -163,7 +163,7 @@
 
     <id name="id" column="id" >
      <generator class="sequence">
-      <param name="sequence">adi_id_seq</param>
+      <param name="sequence_name">adi_id_seq</param>
      </generator>
     </id>
 
@@ -200,6 +200,14 @@
      <property name="body" column="body" />
     </joined-subclass>   
 
+    <joined-subclass name="edu.ucla.mbi.imex.central.IcScore" 
+                     table="score" lazy="false">
+     
+     <key column="adi_id"/> 
+     <property name="name" column="name" />
+     <property name="value" column="value" />
+    </joined-subclass>   
+
 
     <joined-subclass name="edu.ucla.mbi.imex.central.IcAttachment" 
                      table="attachment" lazy="false">
@@ -219,7 +227,7 @@
   <class name="edu.ucla.mbi.imex.central.IcFlag" table="cflag" lazy="false">
     <id name="id" column="id" >
       <generator class="sequence">
-        <param name="sequence">cflag_id_seq</param>
+        <param name="sequence_name">cflag_id_seq</param>
       </generator>
     </id>
 
@@ -230,7 +238,7 @@
   <class name="edu.ucla.mbi.imex.central.dao.SORel" table="sorel" lazy="false">
     <id name="id" column="id" >
       <generator class="sequence">
-        <param name="sequence">sorel_id_seq</param>
+        <param name="sequence_name">sorel_id_seq</param>
       </generator>
     </id>
 
@@ -246,7 +254,7 @@
   <class name="edu.ucla.mbi.imex.central.dao.EORel" table="eorel" lazy="false">
     <id name="id" column="id" >
       <generator class="sequence">
-        <param name="sequence">eorel_id_seq</param>
+        <param name="sequence_name">eorel_id_seq</param>
       </generator>
     </id>
 

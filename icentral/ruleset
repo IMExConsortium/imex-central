@@ -1,0 +1,22 @@
+ruleset=
+{allow={role=[administrator], 
+        user=[ADMIN], 
+        group=[ADMIN]}, 
+ operation={
+   add={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, 
+       order=[allow]}, 
+   prs={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, order=[allow]}, 
+   view={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, order=[allow]}, 
+   gdel={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, order=[allow]}, 
+   del={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, order=[allow]}, 
+   radd={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, order=[allow]}, 
+   gadd={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, order=[allow]}, 
+   pup={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, 
+      order=[allow]}, 
+   rdel={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, 
+      order=[allow]}, 
+   ldel={allow={role=[administrator], user=[ADMIN], group=[ADMIN]}, 
+       order=[allow]}
+  }, 
+  order=[allow, operation]
+}

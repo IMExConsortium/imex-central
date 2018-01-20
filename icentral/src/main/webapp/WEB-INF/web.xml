@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
                          http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
-    version="2.5">
+    version="2.5" metadata-complete="true" >
 <!-- =======================================================================
  ! $HeadURL::                                                              $
  ! $Id::                                                                   $
@@ -26,7 +26,7 @@
     <param-name>
       org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG
     </param-name>
-    <param-value>/WEB-INF/classes/tiles.xml</param-value>
+    <param-value>/WEB-INF/classes/tiles.xmlxx</param-value>
    </context-param>
 
   <!-- ================================================= SPRING context  -->
@@ -40,12 +40,22 @@
 <!-- ===================================================== FILTERS setup -->
 <!-- ===================================================== ============= -->
 
+ <filter>
+   <filter-name>log4jServletFilter</filter-name>
+   <filter-class>
+     org.apache.logging.log4j.web.Log4jServletFilter
+   </filter-class>
+ </filter>
+
+
+
   <!-- ================================================== STRUTS2 filter -->
+
 
   <filter>
     <filter-name>action2</filter-name>
     <filter-class>
-      org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+      org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter
     </filter-class>
   </filter>
 <!--
@@ -56,6 +66,26 @@
     </filter-class>
   </filter>
 -->
+
+
+
+  <filter-mapping>
+    <filter-name>log4jServletFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>ASYNC</dispatcher><!-- Servlet 3.0 w/ disabled auto-initialization only; not supported in 2.5 -->
+  </filter-mapping>
+
+
+
+
+
+
+
+
 
  <!-- NOTE: check struts.xml for the pattern exclusion list !!! -->
 
@@ -267,6 +297,25 @@
     com.sun.xml.ws.transport.http.servlet.WSServletContextListener
    </listener-class>
   </listener>
+
+  <!-- ================================================== LOG4J listener -->
+
+  <listener>
+   <listener-class>
+    org.apache.logging.log4j.web.Log4jServletContextListener
+   </listener-class>
+  </listener>
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- ======================================= WSContextManager listener -->
 <!--

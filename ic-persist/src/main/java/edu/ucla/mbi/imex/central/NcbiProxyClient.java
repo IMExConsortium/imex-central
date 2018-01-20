@@ -15,6 +15,8 @@ import org.apache.commons.logging.LogFactory;
 import java.util.*;
 import java.util.regex.*;
 
+import java.util.regex.*;
+
 import java.io.*;
 import java.net.URL;
 
@@ -77,29 +79,41 @@ public class NcbiProxyClient {
         NcbiProxyService service = null;
         
         Log log = LogFactory.getLog( this.getClass() );
+	log.info( "NcbiSoapDbService: initialize");
         log.info( "NcbiSoapDbService: endpoint=" + endpoint);
 
+	System.out.println("pNcbiSoapDbService: initialize");
+	System.out.println("NcbiSoapDbService: endpoint=>" + endpoint + "<");
+	
         if ( endpoint == null ||  endpoint.length() == 0 ){
             log.info( "NcbiSoapDbService: default endpoint" );
             service = new NcbiProxyService();
             port = service.getProxyPort();
+	    System.out.println("NcbiSoapDbService: port=" + port);
         } else {
             
             try {
-
                 URL url = new URL( endpoint + "?wsdl" );
                 QName qn = new QName("http://mbi.ucla.edu/proxy/ncbi",
                                      "NcbiProxyService");
+		System.out.println("NcbiSoapDbService: url =" + url);
+
                 service = new NcbiProxyService( url, qn );           
+		System.out.println("NcbiSoapDbService: service=" + service);
                 port = service.getProxyPort();
                 ( (BindingProvider) port ).getRequestContext()
                     .put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                           endpoint );   
+
+		System.out.println("NcbiSoapDbService (D): port=" + port);
             } catch ( Exception ex ) {
                 log.info( "NcbiSoapDbService: cannot initialize");
             }
             
         }
+
+	System.out.println( "NcbiSoapDbService: initialize: DONE");
+	
     }
     
     //---------------------------------------------------------------------
@@ -120,25 +134,55 @@ public class NcbiProxyClient {
             new Holder<XMLGregorianCalendar>();
         
         try {        
+	   
+	    System.out.println("NcbiProxyClient: (A) port=" + port);
+
             port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
                                    0, timestamp, resDataset, resNative );
-        } catch ( ProxyFault f ){
-            log.info( "NcbiSoap: getDxfRefList: " + f );
-            if( debug ){
-                f.printStackTrace();
-            }
-            throw ClientException.NCBI_PROXY_FAULT;
-        } catch ( Exception ex ) {
-            log.info( "NcbiSoap: getDxfRefList: " + ex );
+        } catch ( Exception  ex ){
+            log.info( "NcbProxyClient: getPublicationByPmid(ex): " + ex );
             if( debug ){
                 ex.printStackTrace();
+            }
+
+	    // reinitialize on the first error
+
+	    try {
+		log.info( "NcbiSoap: reinitializing dip-proxy connection");
+		System.out.println("NcbiSoap: reinitializing dip-proxy connection");
+		initialize();
+
+		System.out.println("NcbiProxyClient: (B) port=" + port);
+		port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
+				       0, timestamp, resDataset, resNative );
+		System.out.println("NcbiProxyClient: (B) resDataset=" + resDataset);
+	    } catch ( Exception ex2 ){
+		log.info( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);
+		System.out.println( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);
+		if( debug ){
+		    ex2.printStackTrace();
+		}
+		throw ClientException.NCBI_PROXY_FAULT;
+	    }
+        } 
+
+	System.out.println("NcbiProxyClient: (C) port=" + port);
+	/*
+catch ( Exception ex3 ) {
+            log.info( "NcbiProxyClient: getPublicationByPmid(ex3): " + ex3 );
+            if( debug ){
+                ex3.printStackTrace();
             }
             
             throw ClientException.CLIENT_EXCEPTION;
         }
-        
+*/
         DatasetType dataset = resDataset.value;
         NodeType nodeT = null;
+
+
+	System.out.println("NcbiProxyClient: dataset=" + dataset);
+	
         if( dataset != null && dataset.getNode() != null &&
             dataset.getNode().size() == 1 ) {
             nodeT = dataset.getNode().get( 0 );
@@ -160,7 +204,7 @@ public class NcbiProxyClient {
                     
                     marshaller.marshal( dof.createDataset(dataset), sw );
                     log.info( "NcbiProxyClient(debug): " + sw.toString() );
-                    
+                    System.out.println("NcbiProxyClient(debug): " + sw.toString());
                 } catch ( JAXBException jex ){
                     jex.printStackTrace();
                 }

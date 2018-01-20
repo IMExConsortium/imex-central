@@ -1,0 +1,16 @@
+<Context>
+
+ <Valve className="org.apache.catalina.valves.AccessLogValve"
+                   fileDateFormat="yyyy-MM-dd"
+                   prefix="icentral." suffix=".log"/>
+
+ <Resources allowLinking="true" />
+
+ <Resource name="jdbc/icentral" type="javax.sql.DataSource"
+                     auth="Container"
+                     driverClassName="org.postgresql.Driver"
+                     username="dip" password="444dip444"
+                     url="jdbc:postgresql://10.1.2.212:5432/icentral_v21"
+                     maxIdle="2" maxWait="5000" maxActive="4"/>
+
+</Context>

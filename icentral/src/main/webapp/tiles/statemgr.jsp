@@ -18,7 +18,7 @@
        <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
         <span class="error">
          <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
+          <span class="errorMessage"><s:property default="" /></span>
          </s:iterator>
         </span>
        </div>
@@ -37,7 +37,7 @@
        <th width="5%">&nbsp</th>
       </tr>
       <s:if test="stateList!=null">
-       <s:iterator value="stateList" id="state" status="spos">
+       <s:iterator value="stateList" var="state" status="spos">
         <tr>
          <td align="center">
           <s:checkbox name="opp.sdel" fieldValue="%{#state.id}"/>
@@ -70,7 +70,7 @@
           </div>
          </s:if>
         </s:if>
-        <s:textfield theme="simple" name="dataState.name" size="48" maxLength="64"/>
+        <s:textfield theme="simple" name="dataState.name" size="48" maxlength="64"/>
        </td>
        <td align="center">
         <s:submit theme="simple" name="op.sadd" value="ADD" />

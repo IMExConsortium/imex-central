@@ -11,7 +11,7 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright 2008-2015<br/>IMEx Consortium
+       Copyright ${icentral.copyright}<br/>IMEx Consortium
       </td>
       <td class="cite">
         <b>Cite IMEx:</b> Orchard S, Kerrien S, Abbani S, <i>et al</i>.
@@ -32,7 +32,7 @@
     <table width="98%" cellspacing="0">
      <tr>
       <td align="left" nowrap>
-       <font size="-5">Ver: ${project.version} ($Build$)</font>
+       <font size="-5">Ver: ${project.version} ($Build${project.timestamp}$)</font>
       </td>
       <td align="right" nowrap>
        <font size="-5">

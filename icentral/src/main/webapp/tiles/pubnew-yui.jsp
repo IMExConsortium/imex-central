@@ -9,7 +9,7 @@
    <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
        <span class="error">
         <s:iterator value="actionErrors">
-         <span class="errorMessage"><s:property escape="false" /></span>
+         <span class="errorMessage"><s:property default="" /></span>
         </s:iterator>
        </span>
    </div>     
@@ -18,7 +18,7 @@
    <div style="display: block;">
     <s:form theme="simple" action="pubsrc" cssClass="stylized" style="display:inline-block">
      <label>PMID:</label>
-     <s:textfield theme="simple" name="pub.pmid" size="16" maxLength="16"/>                         
+     <s:textfield theme="simple" name="pub.pmid" size="16" maxlength="16"/>                         
      <button name="op.esrc" value="ADD">Add</button>
     </s:form>
    </div>
@@ -32,9 +32,9 @@
      <s:hidden name="id" value="%{id}"/>
      <s:hidden name="pub.id" value="%{id}"/>
      <label>Author(s):</label>
-     <s:textfield theme="simple" name="pub.author" size="90" maxLength="256"/>                         
+     <s:textfield theme="simple" name="pub.author" size="90" maxlength="256"/>                         
      <label>Title:</label>
-     <s:textfield theme="simple" name="pub.title" size="90" maxLength="128"/>                 
+     <s:textfield theme="simple" name="pub.title" size="90" maxlength="128"/>                 
      <button name="op.eadd" value="ADD">Add</button>
    </s:form>
   </div>

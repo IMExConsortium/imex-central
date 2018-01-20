@@ -28,25 +28,25 @@ import edu.ucla.mbi.imex.central.dao.*;
 
 public class TracContext extends JsonContext {
 
-    private PublicationDao pubDao;
+    private IcPubDao pubDao;
 
-    public PublicationDao getPubDao() {
+    public IcPubDao getPubDao() {
         return pubDao;
     }
 
-    public void setPubDao( PublicationDao dao ) {
+    public void setPubDao( IcPubDao dao ) {
         pubDao = dao;
     }
 
     //--------------------------------------------------------------------------
 
-    private JournalVIPDao journalDao;
+    private IcJournalDao journalDao;
 
-    public JournalVIPDao getJournalDao() {
+    public IcJournalDao getJournalDao() {
         return journalDao;
     }
 
-    public void setJournalDao( JournalVIPDao dao ) {
+    public void setJournalDao( IcJournalDao dao ) {
         journalDao = dao;
     }
 

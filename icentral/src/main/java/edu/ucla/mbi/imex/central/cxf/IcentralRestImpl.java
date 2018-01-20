@@ -59,6 +59,7 @@ public class IcentralRestImpl implements IcentralRest{
 
     private EntryManager eman;
     private Map imexUrlMap;
+    private Map imexDtaMap;
 
     private HttpServletResponse httpResponse;
 
@@ -71,6 +72,10 @@ public class IcentralRestImpl implements IcentralRest{
 
     public void setImexUrlMap( Map imexUrl ){
         this.imexUrlMap = imexUrl;
+    }
+    
+    public void setImexDtaMap( Map imexUrl ){
+        this.imexDtaMap = imexUrl;
     }
     
     public void initialize(){
@@ -212,7 +217,7 @@ public class IcentralRestImpl implements IcentralRest{
     public Object getImexAcc( String ns, String acc ){
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "IcentralRestImpl(getImexAcc):" +
+        log.info( "IcentralRestImpl(getRecordByAcc):" +
                   " ns=" + ns + " acc=" + acc );
         
         IcPub icp = eman.getIcPubByNsAc( ns, acc );
@@ -235,9 +240,6 @@ public class IcentralRestImpl implements IcentralRest{
                 }
                 if( !imexDB.equals("") ) break;
             }
-
-            log.info( "IcentralRestImpl(getImexAcc):" +
-                      " IMEX DB=" + imexDB );
             
             if( icp.getState().getName().equals("RELEASED") ){
                 String retStr = "{'entryset-list':["+
@@ -253,5 +255,145 @@ public class IcentralRestImpl implements IcentralRest{
             }
         } 
         return "{}";
+    }
+
+    public Object getDataFileByAcc( String ns, String acc, String format,
+                                    String mode ){
+
+        // /imex/dta/mif27/IM-1234-1?ns=imex?mode=redirect
+        // redirect to psicquic... 
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        log.info( "IcentralRestImpl(getDataFileByAcc):" +
+                  " ns=" + ns + 
+                  " acc=" + acc + 
+                  " format=" + format + 
+                  " mode=" + mode);
+        
+        String imexAc = null;
+        String imexDB = null;
+        String imexUrl = null;
+        
+        if( ns != null && ns.equalsIgnoreCase("imex") ){
+            imexAc = acc;                                               
+            Pattern p = Pattern.compile( "(IM-\\d+)(-\\d+)?" );
+            Matcher m = p.matcher( acc );
+            if( m.matches() ){
+                acc = m.group( 1 );
+            }
+        }
+
+        String imx = (String) getImexAcc( ns, acc);
+        log.info( "IcentralRestImpl(getDataFileByAcc): ns=" + ns + " acc=" +acc+ " imx=" + imx );
+
+        if( imx != null && !imx.equals( "{}" ) ){
+            try{
+                JSONObject jo = new JSONObject( imx ); 
+                JSONObject es = jo.getJSONArray( "entryset-list" )
+                    .getJSONObject(0); 
+            
+                if( imexAc == null ){
+                    imexAc = es.getString( "acc" );
+                }
+                imexDB = es.getJSONArray( "curated-by" )
+                    .getJSONObject(0).getString("name");
+            }catch(JSONException jx ){
+                log.info( "IcentralRestImpl(getDataFileByAcc): jx=" + jx );
+            }
+            log.info( "IcentralRestImpl(getDataFileByAcc):" +
+                      " imexAc=" + imexAc + " imexDB=" + imexDB);
+
+            Map formatMap = (Map) imexDtaMap.get( imexDB );
+
+            imexUrl = (String) formatMap.get( format );
+            log.info( "IcentralRestImpl(getDataFileByAcc): "+
+                      "URL="+imexUrl );
+        }
+
+        if( imexAc == null || imexDB == null || imexUrl == null){
+            return ns + ":" + acc + ":" + mode;
+        }
+        
+        if( mode.equals( "url" ) ){
+            try{
+                imexUrl = imexUrl.replace("%%ACC%%", imexAc );
+                return imexUrl;
+            } catch( Exception ex ){}
+        }
+
+        if( mode.equals( "redirect" ) ){
+            
+            try{
+                log.info("MCX:" +  messageContext);
+
+                // Struts 2.x
+
+                //MessageContext ctx = wsContext.getMessageContext();
+                //HttpServletRequest request = (HttpServletRequest) 
+                //    ctx.get(AbstractHTTPDestination.HTTP_REQUEST);
+                
+                // Struts 3.x
+
+                MessageContext ctx = messageContext;
+
+                httpResponse = (HttpServletResponse) 
+                    ctx.get(AbstractHTTPDestination.HTTP_RESPONSE);
+            } catch( Exception ex ){
+                log.info( "IcentralRestImpl(getDataFileByAcc): EX=" + ex );
+            }
+            
+
+            log.debug( "IcentralRestImpl(getDataFileByAcc): redirect: httpResponse=" + httpResponse );
+
+            log.info( "IcentralRestImpl(getDataFileByAcc): redirect: ac=" + imexAc );
+            log.info( "IcentralRestImpl(getDataFileByAcc): redirect: url=" + imexUrl );
+
+            try{
+                imexUrl = imexUrl.replace("%%ACC%%", imexAc );   
+                httpResponse.sendRedirect( imexUrl ); 
+            } catch( Exception ex ){
+                log.info( "IcentralRestImpl(getDataFileByAcc): EX=" + ex );
+            }
+            return null;
+        }
+
+        if( mode.equals( "icentral" ) ){
+            
+            try{
+
+                // Struts 2.x
+                
+                //MessageContext ctx = wsContext.getMessageContext();
+                //HttpServletRequest request = (HttpServletRequest) 
+                //    ctx.get(AbstractHTTPDestination.HTTP_REQUEST);
+
+                // Struts 3.x
+
+                MessageContext ctx = messageContext;
+                httpResponse = (HttpServletResponse) 
+                    ctx.get(AbstractHTTPDestination.HTTP_RESPONSE);
+                
+            } catch( Exception ex ){
+                log.info( "IcentralRestImpl(getDataFileByAcc): EX=" + ex );
+            }
+
+            
+            IcPub icp = eman.getIcPubByNsAc( "imex", imexAc );
+            
+            if( icp != null ){
+                String icUrl 
+                    = "https://imexcentral.org/icentral/pubedit?id=";
+                icUrl = icUrl + icp.getId() + "#pubedit=tab1";
+                try{
+                    httpResponse.sendRedirect( icUrl ); 
+                } catch(IOException ex){
+                    log.info( "IcentralRestImpl(getDataFileByAcc): EX=" + ex );
+                }
+                return null;
+            }
+        }
+        return ns + ":" + acc + ":" + mode;
+
     }
 }

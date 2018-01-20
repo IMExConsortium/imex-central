@@ -16,7 +16,7 @@
        <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
         <span class="error">
          <s:iterator value="actionErrors">
-          <span class="errorMessage"><s:property escape="false" /></span>
+          <span class="errorMessage"><s:property escapeHtml="false" /></span>
          </s:iterator>
         </span>
        </div>
@@ -43,7 +43,7 @@
        <th nowrap>Owner</th>
       </tr>
       <s:if test="publicationList!=null">
-       <s:iterator value="publicationList" id="pub" status="ppos">
+       <s:iterator value="publicationList" var="pub" status="ppos">
         <tr>
          <td align="center" rowspan="2">
           <s:checkbox name="opp.del" fieldValue="%{#pub.id}"/>
@@ -100,7 +100,7 @@
           </div>
          </s:if>
         </s:if>
-        <b>PMID:</b> <s:textfield theme="simple" name="pub.pmid" size="48" maxLength="64"/>
+        <b>PMID:</b> <s:textfield theme="simple" name="pub.pmid" size="48" maxlength="64"/>
        </td>
        <td colspan="1" align="center">
         <s:submit theme="simple" name="op.eadd" value="ADD" />

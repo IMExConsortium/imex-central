@@ -5,13 +5,33 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>1.99</version>
+  <version>3.0.0rc5</version>
   <name>IMEx Central</name>
   <url>https://github.com/IMExConsortium</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <reportDir>${env.PWD}</reportDir>    
+    <project.timestamp>${maven.build.timestamp}</project.timestamp>
+    <reportDir>${env.PWD}</reportDir>
+
+    <ic-api.version>2.00</ic-api.version>
+
+    <dip-util.version>2.0.0</dip-util.version>
+<!--    <dip-proxy.version>0.03</dip-proxy.version> -->
+    <dip-proxy.version>1.0.0</dip-proxy.version>
+
+    <spring.version>5.0.0.RELEASE</spring.version>
+<!--    <spring.version>4.3.11.RELEASE</spring.version>  -->
+    <aspectj.version>1.8.10</aspectj.version>
+    <postgresql.version>42.1.4</postgresql.version>
+    <recaptcha4j.version>0.0.8</recaptcha4j.version>
+
+    <cxf.version>3.2.0</cxf.version> 
+    <jaxws-rt.version>2.3.0</jaxws-rt.version>
+    <commons-logging.version>1.2</commons-logging.version> 
+    <log4j.version>2.9.1</log4j.version> 
+
+    <junit.version>4.12</junit.version> 
   </properties>
 
   <organization>
@@ -56,19 +76,19 @@
    <plugins>
     <plugin>
      <artifactId>maven-compiler-plugin</artifactId>
-     <version>2.4</version>
+     <version>3.7.0</version>
      <configuration>
       <verbose>true</verbose>
       <fork>true</fork>
-      <source>1.6</source>
-      <target>1.6</target>
+      <source>1.8</source>
+      <target>1.8</target>
      </configuration>
     </plugin>
 
     <plugin>
      <groupId>org.apache.maven.plugins</groupId>
      <artifactId>maven-javadoc-plugin</artifactId>
-     <version>2.9</version>      
+     <version>3.0.0-M1</version>     
      <configuration>
        <reportOutputDirectory>${reportDir}</reportOutputDirectory>
        <destDir>imex-central</destDir>
@@ -83,7 +103,7 @@
    <dependency>
      <groupId>org.postgresql</groupId>
      <artifactId>postgresql</artifactId>
-     <version>9.4-1203-jdbc4</version>
+     <version>${postgresql.version}</version> 
    </dependency>
 
    <dependency>
@@ -92,21 +112,33 @@
     <version>4.12</version>
     <scope>test</scope>
    </dependency>
-<!--
+
+   <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>${log4j.version}</version>
+   </dependency>
+
    <dependency>
      <groupId>org.apache.logging.log4j</groupId>
-     <artifactId>log4j-core</artifactId>
-     <version>2.4</version>
+     <artifactId>log4j-web</artifactId>
+     <version>${log4j.version}</version>
    </dependency>
--->
 
    <dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.16</version>
-    <type>jar</type>
+     <groupId>org.apache.logging.log4j</groupId>
+     <artifactId>log4j-jcl</artifactId>
+     <version>${log4j.version}</version>
    </dependency>
 
+
+<!--
+   <dependency>
+    <groupId>commons-logging</groupId>
+    <artifactId>commons-logging</artifactId>
+    <version>1.2</version>
+   </dependency>
+-->
   </dependencies>
 
   <profiles>

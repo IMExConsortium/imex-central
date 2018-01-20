@@ -101,7 +101,6 @@ Migration to v2.00 tables (icentral_v21 database)
 
 - new states
 
-insert into datastate (name) value ('REQUEST');
 insert into datastate (name) values ('REQUEST');
 insert into datastate (name) values ('QUEUE');
 insert into datastate (name) values ('RETRACTED');
@@ -135,7 +134,39 @@ CREATE INDEX e_18 on entry (year);
 CREATE INDEX e_19 on entry (year,volume);
 
 
-deployead on:
+deployed on:
      icentral: 10.1.1.113
      requires java 1.8.x
               tomcat 8.x
+
+
+Stage/Status update strategy
+----------------------------
+
+stage           state
+
+prequeue        new, request, discarded
+
+     setting state -> 'queue' changes stage -> 'queue', 
+                                      state->'new' (if different from 'new' or 'request') 
+
+queue           new, request, discarded
+curation        reserved, inprogress, incomplete, processed, discarded,retracted
+
+
+
+
+
+                if( state.getName().equals("QUEUE") ){
+                    state = wflowContext.getWorkflowDao().getDataState( "NEW" );
+                    stage = wflowContext.getWorkflowDao().getDataStage( "QUEUE" );
+                }
+
+                if( ! ( state.getName().equals("NEW") ||
+                        state.getName().equals("QUEUE") ||
+                        state.getName().equals("REQUEST") ||
+                        state.getName().equals("DISCARDED") ) ){
+                    stage = wflowContext.getWorkflowDao().getDataStage( "CURATION" );
+                }
+
+

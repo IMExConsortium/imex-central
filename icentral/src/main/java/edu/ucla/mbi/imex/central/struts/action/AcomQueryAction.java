@@ -22,15 +22,29 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.util.struts.action.*;
 import edu.ucla.mbi.util.struts.interceptor.*;
 
+import edu.ucla.mbi.util.context.WorkflowContext;
+
 import edu.ucla.mbi.imex.central.*;
 
 public class AcomQueryAction extends ManagerSupport {
 
     private final String JSON = "json";
+    
+    private IcWorkflowContext wfx;
+
+
+    ////------------------------------------------------------------------------
+    /// Workflow Context
+    //------------------
+
+    public void setWorkflowContext( IcWorkflowContext context ){
+	wfx = context;
+    }
+
 
     ////------------------------------------------------------------------------
     /// Entry Manager
-    //--------------
+    //---------------
 
     private EntryManager entryManager;
     
@@ -97,7 +111,7 @@ public class AcomQueryAction extends ManagerSupport {
                 if ( key.equalsIgnoreCase( "pstac" ) ) {
                     String query = null ;
                     if ( getOpp() != null ) {
-                        query = getOpp().get( "q" );
+                        query = getOpp().get( "stage" );
                     }
                     return acomStatus( query );
                 }
@@ -188,13 +202,15 @@ public class AcomQueryAction extends ManagerSupport {
 
     //---------------------------------------------------------------------
 
-    public String acomStatus( String q ) {
+    public String acomStatus( String stage ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( " q=" + q );
+        log.debug( " stage=" + stage );
         
-        List<DataState> stateList = entryManager.acomStatus( q );
-        
+
+	/*
+        List<DataState> stateList = entryManager.acomStatus( "" );
+        	
         if( stateList != null && stateList.size() > 0 ){
             
             for( Iterator<DataState> ii 
@@ -205,6 +221,26 @@ public class AcomQueryAction extends ManagerSupport {
                 getAcom().add( cr );
             }
         }
+	*/
+	
+	List<String> stateList = wfx.getStatusList( stage );
+	
+	if( stateList != null && stateList.size() > 0 ){
+	    for( Iterator<String> ii
+                     = stateList.iterator(); ii.hasNext(); ){
+                String state = ii.next();
+		Map <String,String> cr = new HashMap<String,String>();                                                                                                                                        
+
+                cr.put( "name",state );                                                                                                                                                                 
+                getAcom().add( cr );                                                                                                                                                                         
+            }                                                        
+
+	    //getAcom().addAll(wfx.getStatusList( stage ));
+	}
+	
+
+	log.debug( " acom=" + getAcom() );
+
         return JSON;
     }
 
@@ -216,7 +252,7 @@ public class AcomQueryAction extends ManagerSupport {
         log.debug( " q=" + q );
         
         List<DataState> stateList = entryManager.acomStage( q );
-        
+        log.debug( " count=" + stateList.size() );
         if( stateList != null && stateList.size() > 0 ){
             
             for( Iterator<DataState> ii 

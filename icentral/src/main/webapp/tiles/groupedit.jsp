@@ -5,7 +5,7 @@
   <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
    <span class="error">
     <s:iterator value="actionErrors">
-     <span class="errorMessage"><s:property escape="false" /></span>
+     <span class="errorMessage"><s:property escapeHtml="false" /></span>
     </s:iterator>
    </span>
   </div>
@@ -57,7 +57,7 @@
   
    <li>
     <label for="groupedit_group_name"><strong>Group Name: </strong></label>
-    <s:textfield theme="simple" name="group.name" size="30" maxLength="64"/>
+    <s:textfield theme="simple" name="group.name" size="30" maxlength="64"/>
    </li>
   
    <s:if test="hasFieldErrors()">
@@ -77,7 +77,7 @@
    <li>
     <label for="groupedit_opp_alogin"><strong>Admin User: </strong></label>
     <s:textfield theme="simple" name="opp.alogin" 
-                       value="%{group.adminUser.login}" size="30" maxLength="64"/>
+                       value="%{group.adminUser.login}" size="30" maxlength="64"/>
    </li>
       <s:if test="hasFieldErrors()">
        <s:if test="fieldErrors['opp.clogin']!=null">
@@ -96,7 +96,7 @@
    <li>
     <label for="groupedit_opp_clogin"><strong>Contact User: </strong></label>
     <s:textfield theme="simple" name="opp.clogin" 
-                       value="%{group.contactUser.login}" size="30" maxLength="64"/>
+                       value="%{group.contactUser.login}" size="30" maxlength="64"/>
    </li>
    <li>
     <label for="groupedit_group_comments"><strong>Comments: </strong></label><br />
@@ -121,7 +121,7 @@
      <fieldset>
       <legend>Current Roles</legend>
       <li>
-      <s:iterator value="group.roles" id="r" status="rpos">
+      <s:iterator value="group.roles" var="r" status="rpos">
        <s:checkbox name="opp.rdel" fieldValue="%{#r.id}"/>
        <s:property value="#r.name"/>
       </s:iterator>

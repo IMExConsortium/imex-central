@@ -69,13 +69,13 @@ public class JournalViewAction extends ManagerSupport {
     //  WorkflowContext
     //-----------------
     
-    private WorkflowContext wflowContext;
+    private IcWorkflowContext wflowContext;
 
-    public void setWorkflowContext( WorkflowContext context ) {
+    public void setWorkflowContext( IcWorkflowContext context ) {
         this.wflowContext = context;
     }
 
-    public WorkflowContext getWorkflowContext() {
+    public IcWorkflowContext getWorkflowContext() {
         return this.wflowContext;
     }
 

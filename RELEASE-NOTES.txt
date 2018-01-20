@@ -1,8 +1,32 @@
-Imex Central: RELEASE-NOTES
+>Imex Central: RELEASE-NOTES
 ---------------------------
 
 $HeadURL$
 $Id$ 
+
+2017/11/20       (ImexCentral v3.0.0rc5)
+
+  - user manager GUI fixes:
+      - user table paging
+      - history implemented
+
+
+2017/10/11        (ImexCentral v3.0.0rc1)
+  - library updates, including:
+     dip-util:    2.00   (including hibernate 5.2.11.Final)
+     spring:      5.0.0.RELEASE
+     aspectj:     1.8.10
+     postgresql: 42.1.4
+     recaptcha4j: 0.0.8
+     cxf:         3.2.0
+     jaxws-rt:    2.3.0
+
+ - java 8/tomcat 8/jetty 9 deployment-ready
+
+
+2017/04/28           (ImexCentral v1.99rc2)
+   - updates: too many to list ;o)
+
 
 2014/05/10 PROD-1.02 (ImexCentral v1.02)
   - activity tracker mods added (see ticket #119 from details)  

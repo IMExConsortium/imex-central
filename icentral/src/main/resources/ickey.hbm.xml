@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 5.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-5.0.dtd">
 
  <hibernate-mapping>
 
    <class name="edu.ucla.imex.central.IcKey" table="key" lazy="false">
      <id name="id" column="id">
        <generator class="native">
-         <param name="sequence">key_id_seq</param>   
+         <param name="sequence_name">key_id_seq</param>   
        </generator>
      </id>
 

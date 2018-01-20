@@ -52,8 +52,6 @@
                   and args( pub, luser, ..)"          
         method="updatePubMonitor" />
 
-
-
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubIdentifiers(..))
                   and args( pub, luser, ..)"
@@ -63,7 +61,6 @@
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubIdentifiers(..))
                   and args( pub, luser, ..)"
         method="updatePubExceptionMonitor" />    
-
 
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.updateIcPubAuthTitle(..))

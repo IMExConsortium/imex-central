@@ -18,7 +18,7 @@
 <!-- init-method="initialize"-->
 
   <bean id="workflowContext" 
-          class="edu.ucla.mbi.util.context.WorkflowContext"
+          class="edu.ucla.mbi.imex.central.IcWorkflowContext"
           init-method="initialize">
      <property name="config">
       <map>

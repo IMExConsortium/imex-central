@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 5.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-5.0.dtd">
 
 <!-- ========================================================================
  ! $HeadURL::                                                               $
@@ -18,7 +18,7 @@
  <class name="edu.ucla.mbi.imex.central.IcDataState" table="datastate" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">datastate_id_seq</param>
+    <param name="sequence_name">datastate_id_seq</param>
    </generator>
   </id>
 
@@ -30,7 +30,7 @@
  <class name="edu.ucla.mbi.imex.central.IcDataStage" table="datastage" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">datastage_id_seq</param>
+    <param name="sequence_name">datastage_id_seq</param>
    </generator>
   </id>
 
@@ -42,7 +42,7 @@
  <class name="edu.ucla.mbi.imex.central.IcTransition" table="trans" lazy="false">
   <id name="id" column="id" >
    <generator class="sequence">
-    <param name="sequence">trans_id_seq</param>
+    <param name="sequence_name">trans_id_seq</param>
    </generator>
   </id>
 
