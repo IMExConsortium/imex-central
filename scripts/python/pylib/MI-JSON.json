@@ -1,0 +1,486 @@
+{
+
+    "systematicName": "IML1:MTC5:NPR2:NPR3:RTC1:3xSEA4:SEC13:3xSEH1",
+    "synonyms": [
+        "Seh1-associated complex"
+    ],
+    "functions": [
+        "The SEA complex is a vacuole associated complex of eight proteins. One end of the SEA complex is made of the IML1/NPR2/NPR3 trimer (SEACIT), involved in inhibition of TORC1 (EBI-2435049, EBI-2435062) signaling, while the other end, composed of RTC1/MTC5/SEA4/SEH1/SecEC13 (SEACAT), is involved in the activation of TORC1 signaling.  The subcomplexes interact via MTC5. The complex regulates TORC1  signaling and is involved in maintaining vacuolar integrity, regulating autophagy in response to nitrogen starvation.  The complex is structurally related to coatamer complexes. GAP activity was demonstrated for the SEACIT component Iml1 and a putative GEF activity was suggested for NPR2 and NPR3."
+    ],
+    "properties": [
+        "The complex is about 1 MDa as determined by sedimentation. The abundance, based on abundance of its components - is 2-600 per cell."
+    ],
+    "ac": "EBI-9700176",
+    "name": "SEA complex",
+    "species": "Saccharomyces cerevisiae; 559292",
+    "ligands": [ ],
+    "complexAssemblies": [ ],
+    "diseases": [ ],
+    "participants": [
+        {
+            "interactorAC": "EBI-9700182",
+            "identifier": "P39923",
+            "identifierLink": "http://www.uniprot.org/uniprot/P39923",
+            "name": "NPR2",
+            "description": "Nitrogen permease regulator 2",
+            "stochiometry": "minValue: 1, maxValue: 1",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "P47170",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700183",
+            "identifier": "Q04491",
+            "identifierLink": "http://www.uniprot.org/uniprot/Q04491",
+            "name": "SEC13",
+            "description": "Protein transport protein SEC13",
+            "stochiometry": "minValue: 1, maxValue: 1",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "P38164",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q03897",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700184",
+            "identifier": "P53011",
+            "identifierLink": "http://www.uniprot.org/uniprot/P53011",
+            "name": "SEH1",
+            "description": "Nucleoporin SEH1",
+            "stochiometry": "minValue: 3, maxValue: 3",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "P38742",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P38164",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q08281",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q03897",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700178",
+            "identifier": "Q08281",
+            "identifierLink": "http://www.uniprot.org/uniprot/Q08281",
+            "name": "RTC1",
+            "description": "Restriction of telomere capping protein 1",
+            "stochiometry": "minValue: 1, maxValue: 1",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "P38164",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q03897",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P53011",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700180",
+            "identifier": "P38164",
+            "identifierLink": "http://www.uniprot.org/uniprot/P38164",
+            "name": "SEA4",
+            "description": "SEH-associated protein 4",
+            "stochiometry": "minValue: 3, maxValue: 3",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "Q08281",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q03897",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P53011",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q04491",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700177",
+            "identifier": "P38742",
+            "identifierLink": "http://www.uniprot.org/uniprot/P38742",
+            "name": "NPR3",
+            "description": "Nitrogen permease regulator 3",
+            "stochiometry": "minValue: 1, maxValue: 1",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "P47170",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P53011",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q03897",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700179",
+            "identifier": "P47170",
+            "identifierLink": "http://www.uniprot.org/uniprot/P47170",
+            "name": "IML1",
+            "description": "Vacuolar membrane-associated protein IML1",
+            "stochiometry": "minValue: 1, maxValue: 1",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "P38742",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q03897",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P39923",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        },
+        {
+            "interactorAC": "EBI-9700181",
+            "identifier": "Q03897",
+            "identifierLink": "http://www.uniprot.org/uniprot/Q03897",
+            "name": "MTC5",
+            "description": "Maintenance of telomere capping protein 5",
+            "stochiometry": "minValue: 1, maxValue: 1",
+            "bioRole": "unspecified role",
+            "bioRoleMI": "MI:0499",
+            "bioRoleDefinition": null,
+            "interactorType": "protein",
+            "interactorTypeMI": "MI:0326",
+            "interactorTypeDefinition": null,
+            "linkedFeatures": [
+                {
+                    "participantId": "Q08281",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P38742",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P47170",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P38164",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "P53011",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                },
+                {
+                    "participantId": "Q04491",
+                    "featureType": "binding region",
+                    "featureTypeMI": "MI:0117",
+                    "featureTypeDefinition": null,
+                    "ranges": [
+                        "?-?"
+                    ]
+                }
+            ],
+            "otherFeatures": [ ]
+        }
+    ],
+    "crossReferences": [
+        {
+            "database": "pubmed",
+            "qualifier": "additional information",
+            "identifier": "25073740",
+            "description": null,
+            "searchURL": "http://europepmc.org/abstract/MED/25073740",
+            "dbMI": "MI:0446",
+            "qualifierMI": "MI:0361",
+            "dbdefinition": "PubMed is designed to provide access to citations from biomedical literature. The data can be found at both NCBI PubMed and Europe PubMed Central.",
+            "qualifierDefinition": null
+        },
+        {
+            "database": "pubmed",
+            "qualifier": "additional information",
+            "identifier": "21454883",
+            "description": null,
+            "searchURL": "http://europepmc.org/abstract/MED/21454883",
+            "dbMI": "MI:0446",
+            "qualifierMI": "MI:0361",
+            "dbdefinition": "PubMed is designed to provide access to citations from biomedical literature. The data can be found at both NCBI PubMed and Europe PubMed Central.",
+            "qualifierDefinition": null
+        },
+        {
+            "database": "intact",
+            "qualifier": "Experimental evidence that interaction occurs",
+            "identifier": "EBI-9820948",
+            "description": null,
+            "searchURL": "http://www.ebi.ac.uk/intact/query/EBI-9820948",
+            "dbMI": "MI:0469",
+            "qualifierMI": null,
+            "dbdefinition": "INTerAction database (IntAct) provides an open source database and toolkit for the storage, presentation and analysis of molecular interactions.",
+            "qualifierDefinition": null
+        },
+        {
+            "database": "evidence ontology",
+            "qualifier": null,
+            "identifier": "ECO:0000353",
+            "description": null,
+            "searchURL": "http://www.ebi.ac.uk/ontology-lookup/?termId=ECO:0000353",
+            "dbMI": "MI:1331",
+            "qualifierMI": null,
+            "dbdefinition": "The Evidence Ontology (ECO) describes types of scientific evidence within the realm of biological research that can arise from laboratory experiments, computational methods, manual literature curation, and other means.",
+            "qualifierDefinition": null
+        },
+        {
+            "database": "pubmed",
+            "qualifier": "additional information",
+            "identifier": "23974112",
+            "description": null,
+            "searchURL": "http://europepmc.org/abstract/MED/23974112",
+            "dbMI": "MI:0446",
+            "qualifierMI": "MI:0361",
+            "dbdefinition": "PubMed is designed to provide access to citations from biomedical literature. The data can be found at both NCBI PubMed and Europe PubMed Central.",
+            "qualifierDefinition": null
+        },
+        {
+            "database": "gene ontology",
+            "qualifier": "cellular component",
+            "identifier": "GO:0035859",
+            "description": "Seh1-associated complex",
+            "searchURL": "https://www.ebi.ac.uk/QuickGO/term/GO:0035859",
+            "dbMI": "MI:0448",
+            "qualifierMI": "MI:0354",
+            "dbdefinition": "The objective of Gene Ontology (GO) is to provide controlled vocabularies for the description of the molecular function, biological process and cellular component of gene products.",
+            "qualifierDefinition": "Cross reference pointing to a Gene Ontology -'cellular component' term."
+        },
+        {
+            "database": "gene ontology",
+            "qualifier": "biological process",
+            "identifier": "GO:1903432",
+            "description": "regulation of TORC1 signaling",
+            "searchURL": "https://www.ebi.ac.uk/QuickGO/term/GO:1903432",
+            "dbMI": "MI:0448",
+            "qualifierMI": "MI:0359",
+            "dbdefinition": "The objective of Gene Ontology (GO) is to provide controlled vocabularies for the description of the molecular function, biological process and cellular component of gene products.",
+            "qualifierDefinition": "Cross reference pointing to a Gene Ontology -'cellular process' term."
+        },
+        {
+            "database": "gene ontology",
+            "qualifier": "cellular component",
+            "identifier": "GO:0000306",
+            "description": "extrinsic component of vacuolar membrane",
+            "searchURL": "https://www.ebi.ac.uk/QuickGO/term/GO:0000306",
+            "dbMI": "MI:0448",
+            "qualifierMI": "MI:0354",
+            "dbdefinition": "The objective of Gene Ontology (GO) is to provide controlled vocabularies for the description of the molecular function, biological process and cellular component of gene products.",
+            "qualifierDefinition": "Cross reference pointing to a Gene Ontology -'cellular component' term."
+        }
+    ],
+    "institution": "Saccharomyces Genome Database",
+    "agonists": [ ],
+    "antagonists": [ ],
+    "comments": [ ]
+
+}
