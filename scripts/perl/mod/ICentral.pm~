@@ -1,0 +1,59 @@
+package ICentral::SOAP;
+
+use SOAP::Lite;
+use XML::XPath;
+use XML::XPath::XMLParser;
+
+
+#use LWP::Simple;
+#use Carp;
+#use strict;
+#use DBI;
+#use Exporter;
+
+
+my @ISA    = qw(Exporter);
+
+my @EXPORT = qw(new
+                );
+
+my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
+my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
+my $URLPROD = "http://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
+
+sub new{
+ 
+    shift;
+    my $self={};
+    bless $self;
+
+    my $self->{UID}  = ""; # default user  
+    my $self->{PASS} = ""; # default password 
+    my $self->{URL}  = ""; # default URL
+
+    my %par=@_;
+    
+    if( $par{UID} ne ""){
+	$self->{UID}=$par{UID};	
+    }
+    
+    if($par{PASS} ne ""){
+	$self->{PASS}=$par{PASS};
+    }
+    
+    if($par{URL} ne ""){
+
+	$self->{URL}=$par{URL};
+
+	if($par{URL} eq "BETA"){
+	    $self->{URL}=$URLBETA;
+	}
+	if($par{URL} eq "PROD"){
+	    $self->{URL}=$URLPROD;
+	}
+    }
+ 
+}
+
+
+

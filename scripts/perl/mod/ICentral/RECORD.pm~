@@ -1,0 +1,33 @@
+package ICentral::RECORD;
+
+my @ISA    = qw(Exporter);
+
+my @EXPORT = qw(new
+                toString
+                );
+
+sub new{
+ 
+    shift;
+    my %par=@_;
+
+    my $self={};
+    bless $self;
+
+    $self{record}=$par{record};
+    
+    return $self; 
+}
+
+sub toString{
+    
+    my $self = shift;
+
+    print $self{record},"\n"; 
+
+
+    
+}
+
+
+

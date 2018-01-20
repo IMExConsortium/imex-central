@@ -1,0 +1,14 @@
+0410462   # Nature
+0404511   # Science
+101087697 # Structure
+0413066   # Cell
+101183755 # PLoS Biol
+101092707 # Proteomics
+8208664   # EMBO J
+100963049 # EMBO Rep
+101229646 # FEBS J
+100890575 # Nat Cell Biol
+8711562   # Oncogene
+9421566   # Nat Struct Biol
+101186374 # NSMB
+101231976 # Nat Chem Biol

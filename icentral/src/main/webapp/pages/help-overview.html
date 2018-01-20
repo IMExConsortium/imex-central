@@ -1,0 +1,65 @@
+<div  style="max-width: 1080px;">
+<p>The ImexCentral site tracks the status of research articles, which report molecular 
+interactions, as they progress through the IMEx Consortium curation pipeline.
+<p>The pipeline is composed of four stages:
+</br>
+
+<div style="display: flex; float: left;">
+ <div style="max-width: 540px;">
+  <ul>
+   <li><b>Pre-Queue.</b>  Potential curation targets, with exception of pre-publication data
+    that is submitted directly to one of the IMEx databases, enter the pipeline at this
+    stage. These might include: (a) publications that are automatically identified by either
+    scanning of the incoming PubMed records or some other computational methods, (b) publications 
+    targeted by IMEx curators, (c) publications requested by curators of the collaborating
+    databases, (d) publications requested by the IMEx database users at large. The targets 
+    identified by (a) and (b) are entered directly. Targets identified by (c) and (d) are 
+    typically submitted by adding them to the Zotero IMEx Curation Request library. 
+   </li>
+   <li><b>Queue.</b> ImexCentral curation queue lists publications that advanced past the semi automatic
+    triage and thus are likely to describe experiments documenting molecular interactions. 
+   </li>
+   <li><b>Curation.</b> Publications advance to the Curation stage once selected for curation by one of 
+    the IMEx curators. Their status reflects curation progress as reported by the curating database.
+   </li>
+   <li><b>Release.</b>  Fully curated publications that have been released by the curating database.
+   </li>
+  </ul>
+
+  <p>The status follows publications as they advance within each stage of the curation pipeline:
+
+  <ul>
+   <li><b>New.</b> (Pre-Queue, Queue). A record newly created by one of the data mining programs 
+    or IMEx curator.
+   </li>   
+   <li><b>Request.</b> (Pre-Queue, Queue). Curation request submitted by a third party - non-IMEx curator, 
+    curation focus group member or database user.
+   </li>   
+   <li><b>Discarded.</b> (Pre-Queue, Queue, Curation, Release). Publication discarded due
+    to lack of interaction. 
+   </li>   
+   <li><b>Reserved.</b> (Queue). Publication reserved for curation by one of the IMEx databases. 
+   </li>   
+   <li><b>InProgress.</b> (Queue). Partially curated publication.
+   </li>   
+   <li><b>Processed.</b> (Queue). Fully curatied publication.
+   </li>   
+   <li><b>OnHold.</b> (Queue). Publication waiting for additional, author-supplied information 
+    or creation of necessary molecule or CV term accessiond.
+   </li>   
+   <li><b>Incomplete.</b> (Queue). Publications describing molecular interactions but missing 
+     description sufficient enough to create a valid IMEx interaction record.  
+   </li>   
+   <li><b>Released.</b> (Release). Publications released by one of the IMEx databases. 
+   </li>   
+   <li><b>Retracted.</b> (Release). Publications retracted by the authors and/or journal.
+   </li>   
+  </ul>
+ </div>
+
+ <div style="width: 540px;">
+  <img src="img/icentral-workflow1000x1080.png" width="500"></img>
+ </div>
+</div>
+   
+</div>
