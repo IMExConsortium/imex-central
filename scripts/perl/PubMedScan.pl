@@ -26,7 +26,7 @@ my $url = "";
 my $jlf = "";
 my $uid = "";
 my $pass = "";
-my $days = 20;
+my $days = 10;
 
 GetOptions ('url=s' => \$url, 
 	    'user=s' => \$uid, 
@@ -83,9 +83,7 @@ while(my $ln=<JLF>){
 					AC=>$pmid,
 					TYPE =>'comment',
 					SUBJECT =>'Record created by PMDaemon');
-		}
-		die;
-		
+		}				
 	    }
 	}
     }

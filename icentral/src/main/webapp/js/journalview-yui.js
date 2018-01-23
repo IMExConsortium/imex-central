@@ -1445,13 +1445,16 @@ YAHOO.imex.journalview = {
                         } catch( x ){
                             console.log(x);
                         }
-                    }
+                    } else {
+			console.log( "my.myDataTable: null");
+		    }
                 },
                 failure: function(o) {
+		    console.log( "StatusUpdate: FAILED" );
                 }
             };
             
-            //var cObj = YAHOO.util.Connect.asyncRequest( 'GET', url, urlcallback );
+            var cObj = YAHOO.util.Connect.asyncRequest( 'GET', url, urlcallback );
             
         } catch (x) {
             console.log(x);

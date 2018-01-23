@@ -753,12 +753,17 @@ public class EntryManager {
                 DataState oldState = oldPub.getState();
                 DataState oldStage = oldPub.getStage();
 		
+		log.debug( "ostate: " + oldState.getName() + " ostage: " + oldStage.getName());
+		log.debug( "nstate: " + state.getName());
 		// NOTE: getNewStageState imposes stage/state update policy
 
 		Map<String,String> ssm = 
 		    wflowContext.getNewStageState( oldStage.getName(), 
 						   oldState.getName(), 
 						   state.getName());
+
+		log.debug( "ssm: " + ssm);
+
 		if( ssm.size() == 0 ){
 		    // illegal op:  
 		    return null;

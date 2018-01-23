@@ -888,7 +888,12 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
         log.debug( "id=" + id + " sid=" + sid );
 
         IcPub pub = entryManager.getIcPub( id );
+
+	log.debug( "pub: " + pub );
+
         if( pub != null ){
+
+	    log.debug( "aclTargetValidate: " + aclTargetValidate( pub ) );
 
             if( ! aclTargetValidate( pub ) ) return ACL_OPER;
 
@@ -896,6 +901,9 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
             if( uPub != null ) {
                 this.setPub( uPub );
             }        
+
+	    log.debug( "uPub: " + uPub);
+
         }
         return SUCCESS;
     }    

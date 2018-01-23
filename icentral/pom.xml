@@ -11,7 +11,7 @@
   <properties>
 
     <icentral.version>${project.version}</icentral.version> 
-    <icentral.copyright>2008-2017</icentral.copyright> 
+    <icentral.copyright>2008-2018</icentral.copyright> 
     <icentral.bld>$Rev$</icentral.bld> 
     <icentral.wsver>1.0</icentral.wsver>
 
