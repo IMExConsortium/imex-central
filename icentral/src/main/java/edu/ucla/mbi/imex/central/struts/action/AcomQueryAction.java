@@ -119,11 +119,11 @@ public class AcomQueryAction extends ManagerSupport {
                 //--------------------------------------------------------------
 
                 if ( key.equalsIgnoreCase( "psgac" ) ) {
-                    String query = null ;
+                    String status = null ;
                     if ( getOpp() != null ) {
-                        query = getOpp().get( "q" );
+                        status = getOpp().get( "status" );
                     }
-                    return acomStage( query );
+                    return acomStage( status );
                 }
 
                 //--------------------------------------------------------------
@@ -168,7 +168,8 @@ public class AcomQueryAction extends ManagerSupport {
         
         if( ownerList != null && ownerList.size() > 0 ){
             
-            for( Iterator<User> ii = ownerList.iterator(); ii.hasNext(); ){
+            for( Iterator<User> ii = ownerList.iterator(); 
+		 ii.hasNext(); ){
                 User cu = ii.next();
                 Map <String,String> cr = new HashMap<String,String>();
                 cr.put("name",cu.getLogin());
@@ -176,7 +177,6 @@ public class AcomQueryAction extends ManagerSupport {
             }
         }
         return JSON;
-
     }
     
     //---------------------------------------------------------------------
@@ -188,9 +188,9 @@ public class AcomQueryAction extends ManagerSupport {
         
         List<User> curatorList = entryManager.acomCurator( q );
         
-        if( curatorList != null && curatorList.size() > 0 ){
-            
-            for( Iterator<User> ii = curatorList.iterator(); ii.hasNext(); ){
+        if( curatorList != null && curatorList.size() > 0 ){            
+            for( Iterator<User> ii = curatorList.iterator(); 
+		 ii.hasNext(); ){
                 User cu = ii.next();
                 Map <String,String> cr = new HashMap<String,String>();
                 cr.put("name",cu.getLogin());
@@ -206,77 +206,40 @@ public class AcomQueryAction extends ManagerSupport {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( " stage=" + stage );
-        
-
-	/*
-        List<DataState> stateList = entryManager.acomStatus( "" );
         	
-        if( stateList != null && stateList.size() > 0 ){
-            
-            for( Iterator<DataState> ii 
-                     = stateList.iterator(); ii.hasNext(); ){
-                DataState cs = ii.next();
-                Map <String,String> cr = new HashMap<String,String>();
-                cr.put("name",cs.getName());
-                getAcom().add( cr );
-            }
-        }
-	*/
-	
 	List<String> stateList = wfx.getStatusList( stage );
 	
 	if( stateList != null && stateList.size() > 0 ){
 	    for( Iterator<String> ii
                      = stateList.iterator(); ii.hasNext(); ){
                 String state = ii.next();
-		Map <String,String> cr = new HashMap<String,String>();                                                                                                                                        
-
-                cr.put( "name",state );                                                                                                                                                                 
-                getAcom().add( cr );                                                                                                                                                                         
+		Map <String,String> cr = new HashMap<String,String>();
+                cr.put( "name",state );
+                getAcom().add( cr );                                                      
             }                                                        
-
-	    //getAcom().addAll(wfx.getStatusList( stage ));
 	}
 	
-
 	log.debug( " acom=" + getAcom() );
-
         return JSON;
     }
 
     //---------------------------------------------------------------------
 
-    public String acomStage( String q ) {
+    public String acomStage( String status ) {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.debug( " q=" + q );
-        
-        List<DataState> stateList = entryManager.acomStage( q );
-        log.debug( " count=" + stateList.size() );
-        if( stateList != null && stateList.size() > 0 ){
+	List<String> stageList = wfx.getStageList( status );	
+	log.info("acomStage: status="+status);
+        if( stageList != null && stageList.size() > 0 ){
             
-            for( Iterator<DataState> ii 
-                     = stateList.iterator(); ii.hasNext(); ){
-                DataState cs = ii.next();
+            for( Iterator<String> ii 
+		     = stageList.iterator(); ii.hasNext(); ){
+                String cs = ii.next();
                 Map <String,String> cr = new HashMap<String,String>();
-                cr.put("name",cs.getName());
+                cr.put("name",cs);
                 getAcom().add( cr );
             }
         }
-        
-        /*
-        Map <String,String> cr1 = new HashMap<String,String>();
-        cr1.put("name","pQueue");
-        getAcom().add( cr1 );
-
-        Map <String,String> cr2 = new HashMap<String,String>();
-        cr2.put("name","Queue");
-        getAcom().add( cr2 );
-
-        Map <String,String> cr3 = new HashMap<String,String>();
-        cr3.put("name","Curate");
-        getAcom().add( cr3 );
-        */
         return JSON;
     }
 
@@ -291,7 +254,8 @@ public class AcomQueryAction extends ManagerSupport {
         
         if( groupList != null && groupList.size() > 0 ){
             
-            for( Iterator<Group> ii = groupList.iterator(); ii.hasNext(); ){
+            for( Iterator<Group> ii = groupList.iterator(); 
+		 ii.hasNext(); ){
                 Group cg = ii.next();
                 Map <String,String> cr = new HashMap<String,String>();
                 cr.put("name",cg.getLabel());
@@ -309,8 +273,8 @@ public class AcomQueryAction extends ManagerSupport {
         List<Group> groupList = entryManager.acomJGroup( q );
         
         if( groupList != null && groupList.size() > 0 ){
-            
-            for( Iterator<Group> ii = groupList.iterator(); ii.hasNext(); ){
+	    for( Iterator<Group> ii = groupList.iterator(); 
+		 ii.hasNext(); ){
                 Group cg = ii.next();
                 Map <String,String> cr = new HashMap<String,String>();
                 cr.put("name",cg.getLabel());

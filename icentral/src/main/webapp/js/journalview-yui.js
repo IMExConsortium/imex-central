@@ -110,11 +110,11 @@ YAHOO.imex.journalview = {
     myColumnDefs: [],
     
     tableReload: function( o, dt ) {
-        try {
-            
+        try {            
             var state = dt.get('paginator').getState();
-            state.page=1;
-            state.recordOffset=0;
+            //state.page=1;
+            //state.recordOffset=0;
+	    console.log("state: page=" + state.page + " off="  + state.recordOffset );
             dt.get('paginator').setState( state );
             
             var reloadCallback = {
@@ -480,25 +480,23 @@ YAHOO.imex.journalview = {
         //---------------------------
         
         var statusLabel = "---ANY---";
-        //PMGR.stateSel[0].text = statusLabel;
-        
         var stageLabel = "---ANY---";
-        //PMGR.partnerSel[0].text = partnerLabel;
 
-        if( parsed.filter.status !== ""){
+        if( parsed.filter.status !== "" && 
+	    parsed.filter.status !== null){
             statusLabel = parsed.filter.status;
-        }
+        } else {
+	    parsed.filter.status = "";
+	}
         
-        if( parsed.filter.stage !== ""){
+        if( parsed.filter.stage !== "" && 
+	    parsed.filter.stage !== null){
             stageLabel = parsed.filter.stage;
-        }
-
-
+        } else {
+	    parsed.filter.stage = "";
+	}
         
         if( PMGR.stateBtn.set !== undefined ){           
-            //PMGR.stateBtn.set( "label", 
-            //                   ("<em class=\"yui-button-label\">" + 
-            //                    statusLabel + "</em>"));
             PMGR.stateBtn.set( "label", statusLabel );
 
         }else{
@@ -506,12 +504,78 @@ YAHOO.imex.journalview = {
         }
         
         if( PMGR.stageBtn.set!== undefined ){
-            //PMGR.stageBtn.set( "label", 
-            //                     ("<em class=\"yui-button-label\">" + 
-            //                      stageLabel + "</em>"));
             PMGR.stageBtn.set( "label", stageLabel);
         }else{
             PMGR.stageSel[0].text = stageLabel;
+        }
+
+	// reload stage/state filter button menus
+	//---------------------------------------
+
+	console.log("HHN: status="+parsed.filter.status +
+		    " stage="+ parsed.filter.stage );
+
+        var buttonUpdateSuccess = function( o ){	    
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+	    var button=o.argument.btn;
+	    var buttonMenu=button.getMenu();
+
+	    var items = [{ text: "---ANY---", value: "" }];
+	    for( var i=0; i< messages.acom.length; i++){
+		var ci = messages.acom[i];
+		items.push({value: ci["name"], text: ci["name"]});
+	    }
+
+	    try{
+		if (YAHOO.util.Dom.inDocument(buttonMenu.element)) {		    
+		    buttonMenu.clearContent(); 
+		    buttonMenu.addItems(items);
+		    buttonMenu.render();
+		} else {
+		    buttonMenu.itemData = items;
+		}
+	    } catch(x){
+		console.log(x);
+	    }
+        };
+        
+	var buttonUpdateFailure = function( o ){
+	    console.log("HHN: stageUpdateFailure");
+	}
+
+        var stageUpdateCallback = 
+	    { cache:false, timeout: 5000, 
+              success: buttonUpdateSuccess,
+              failure: buttonUpdateFailure,
+              argument: { btn: YAHOO.imex.journalview.stageBtn } }	
+
+        var statusUpdateCallback = 
+	    { cache:false, timeout: 5000, 
+              success: buttonUpdateSuccess,
+              failure: buttonUpdateFailure,
+              argument: { btn:YAHOO.imex.journalview.stateBtn } };	
+
+        try{
+	    var oppstg ="";
+	    if( parsed.filter.stage !== "" && parsed.filter.stage !== null){
+		oppstg = "&opp.stage=" + parsed.filter.stage;		
+	    }
+	    console.log("HHN: oppstg="+oppstg);
+
+            YAHOO.util.Connect.asyncRequest( 'GET', 
+                                             "acom?op.pstac=ac" + oppstg, 
+                                             statusUpdateCallback );	    
+	    var oppsts ="";
+	    if( parsed.filter.status !== "" && parsed.filter.status !== null){
+		oppsts = "&opp.status=" + parsed.filter.status;		
+	    }
+	    console.log("HHN: oppsts="+oppsts);
+
+            YAHOO.util.Connect.asyncRequest( 'GET', 
+                                             "acom?op.psgac=ac"+oppsts, 
+                                             stageUpdateCallback );        
+        } catch (x) {
+            console.log("AJAX Error:"+x);
         }
         
         // reload data
@@ -539,9 +603,10 @@ YAHOO.imex.journalview = {
     generateLinkState: function( status, stage, year, volume, issue ){
 
         //LS: watch ?
-        var filter = {status:status, stage:stage, editor:'', owner:'', cflag:''  };
-        var navig = {year:year, volume:volume, issue:issue  };
-        var state = {startIndex:0, pageSize:25,filter:filter, navig:navig, scol:'id', sdir:'asc' };
+        var filter = { status:status, stage:stage, editor:'', owner:'', cflag:''  };
+        var navig = { year:year, volume:volume, issue:issue  };
+        var state = { startIndex:0, pageSize:25, filter:filter, 
+		      navig:navig, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
     },
 
@@ -563,7 +628,6 @@ YAHOO.imex.journalview = {
             "&opp.nnav=" + YAHOO.imex.journalview.nnav;
         
         YAHOO.imex.journalview.nnav = "";
-        console.log("buildRequest:"  + req);
         return encodeURI( req );
         
     },
@@ -717,7 +781,9 @@ YAHOO.imex.journalview = {
                 YIJV.volume = messages.init.volume;
                 YIJV.issue = messages.init.issue;
                 
-                console.log("YIJV.year="+YIJV.year + " YIJV.volume=" + YIJV.volume + " YIJV.issue=" + YIJV.issue );
+                console.log( "YIJV.year="+YIJV.year + 
+			     " YIJV.volume=" + YIJV.volume + 
+			     " YIJV.issue=" + YIJV.issue );
 
                 // journal title
                 //--------------
@@ -898,25 +964,23 @@ YAHOO.imex.journalview = {
                         document.getElementById("issue-prev-container").style.display="inline";
                         document.getElementById("issue-next-container").style.display="inline";
                         document.getElementById("issue-last-container").style.display="inline";
-                    }
-
-                       
+                    }                       
                     
-                    myself.myDataSource.my.myState.navig.year = filter.year;      // ##################
+                    myself.myDataSource.my.myState.navig.year = filter.year;
                     myself.myDataSource.my.myState.navig.volume = filter.volume;
                     myself.myDataSource.my.myState.navig.issue = filter.issue;
                     
                     var PMGR = YAHOO.imex.journalview;
                     if( filter.year != null){
-                        console.log("beforeparse:  year=" + filter.year);
+                        //console.log("beforeparse:  year=" + filter.year);
                         PMGR.year = filter.year;
                     }
                     if( filter.volume != null){
-                        console.log("beforeparse:  volume=" + filter.volume);
+                        //console.log("beforeparse:  volume=" + filter.volume);
                         PMGR.volume = filter.volume;
                     }
                     if( filter.issue != null){
-                        console.log("beforeparse:  issue=" + filter.issue);
+                        //console.log("beforeparse:  issue=" + filter.issue);
                         PMGR.issue = filter.issue;
                     }
                 } catch (x) {

@@ -23,22 +23,27 @@
  ],
  "admin-role-unique":["IMEx partner"],
 
- "stage":{
-    "PREQUEUE":{
-      "status-allowed":["NEW","REQUEST","DISCARDED"]
+ "stage":[
+    {"name":"PREQUEUE",
+     "comments":"",
+     "status-allowed":["NEW","REQUEST","DISCARDED"]
     },
-    "QUEUE":{
-      "status-allowed":["NEW","REQUEST","DISCRDED"]
+    {"name":"QUEUE",
+     "comments":"",
+     "status-allowed":["NEW","REQUEST","DISCRDED"]
     },
-    "CURATION":{
-      "status-allowed":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED"]
+    {"name":"CURATION",
+     "comments":"",
+     "status-allowed":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED"]
     },
-    "RELEASE":{
-      "status-allowed":["RELEASED","RETRACTED"]
+    {"name":"RELEASE",
+     "comments":"",
+     "status-allowed":["RELEASED","RETRACTED"]
     } 
- },
+ ],
 
  "stage-list":["PREQUEUE","QUEUE","CURATION","RELEASE"],
+
 
  "status-allowed":{
     "PREQUEUE":["NEW","REQUEST","DISCARDED"],    

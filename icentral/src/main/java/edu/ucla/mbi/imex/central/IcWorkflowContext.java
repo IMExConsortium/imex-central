@@ -38,6 +38,7 @@ public class IcWorkflowContext extends WorkflowContext {
         wflowDao = dao;
     }
     */
+
     //---------------------------------------------------------------------        
     
     public void initialize() { 
@@ -56,7 +57,7 @@ public class IcWorkflowContext extends WorkflowContext {
         }
         
         log.info( "WorkflowContext: json-source OK " );
-        System.out.println( "config="+ getJsonConfigObject() );
+        log.debug( "config="+ getJsonConfigObject() );
         
         if ( getWorkflowDao() != null ) {
         
@@ -83,7 +84,7 @@ public class IcWorkflowContext extends WorkflowContext {
                         String name = state.getString( "name" );
                         String comments = state.getString( "comments" );
                         
-                        log.info( "state: name=" + name +
+                        log.debug( "state: name=" + name +
                                   " comments=" + comments );
                         
                         DataState oldState = getWorkflowDao().getDataState( name );
@@ -154,61 +155,121 @@ public class IcWorkflowContext extends WorkflowContext {
         }
     }
 
+    //--------------------------------------------------------------------------
+
     public List<String> getStageList(){
 
-	List<String> slist = new ArrayList<String>();                                                 
-	Log log = LogFactory.getLog( this.getClass() );
-	
-	try{
-	    
-	    JSONArray stageArray =
-		getJsonConfigObject().getJSONArray( "stage-list" );
-	    
-	    log.info( "stageArray: " + stageArray );
+	// returns the list of all stages 
 
+	return getStageList( null );
+    }
+
+    public List<String> getStageList( String status ){
+
+	// returns the list of stages compatible with the specified status
+
+	Log log = LogFactory.getLog( this.getClass() );
+	List<String> slist = new ArrayList<String>();
+
+	JSONArray stageArray = null;
+
+	try{
+	    stageArray =
+		getJsonConfigObject().getJSONArray( "stage" );
+	
+	} catch( Exception e ){
+	    e.printStackTrace();
+	    log.info( "WorkflowContext: json-source error (stage)" );	    
+	}
+
+	log.debug( "stageArray: " + stageArray );	    	    
+	try{
 	    if( stageArray != null){
 		for ( int i = 0; i < stageArray.length(); i++ ) {
-		    String stage = stageArray.getString( i );
-		    slist.add(stage);
+
+		    JSONObject joStage = stageArray.getJSONObject( i );
+		    String stage = joStage.getString( "name" );
+
+		    if( status == null) {
+			slist.add( stage );
+		    } else{
+			JSONArray stalArray = joStage.getJSONArray( "status-allowed" ); 
+
+			for ( int j = 0; j < stalArray.length(); j++ ) {		
+			    if( stalArray.getString(j).equals(status) ){
+				slist.add( stage );
+				break;
+			    }
+			}
+		    }
 		}
 	    }
-	    
 	} catch( Exception e ){
-	    log.info( "WorkflowContext: json-source error (getStageList)");
-	}
+	    e.printStackTrace();
+	    log.info( "WorkflowContext: json-source error (status-allowed)" );	    
+	}	
 	return slist;
     }
 
+    //--------------------------------------------------------------------------
+
+    public List<String> getStatusList(){
+
+	// return the list of all statuses
+
+	return getStatusList( null );
+    }
 
     public List<String> getStatusList( String stage ){
+
+	// return the list of statuses compatible with the specified 
+	// stage (or all)
 
 	List<String> slist = new ArrayList<String>();
 
 	Log log = LogFactory.getLog( this.getClass() );
 
 	try {
-	    JSONObject stages =
-		getJsonConfigObject().getJSONObject( "status-allowed" );
+	    if( stage == null ){
+
+		// get all states
+
+		JSONArray statusArray = 
+		    getJsonConfigObject().getJSONArray( "state" );
+		if( statusArray != null){
+		    for ( int i = 0; i < statusArray.length(); i++ ) {
+			JSONObject status = statusArray.getJSONObject( i );
+			slist.add( status.getString("name") );
+		    }
+		}
+	    } else {
+		// get stage compatible states
+		JSONArray stageArray =
+		    getJsonConfigObject().getJSONArray( "stage" );
 	
-	    log.info("stages: "+stages);
+		log.debug( "stage: " + stageArray );
 
-	    //JSONObject stageObj = stages.getJSONObject( stage );
-	    JSONArray statusArray = stages.getJSONArray( stage );
+		if( stageArray != null){
+		    for ( int i = 0; i < stageArray.length(); i++ ) {
+			JSONObject joStage = stageArray.getJSONObject( i );
+			if( joStage.getString("name").equals( stage ) ){
+			    JSONArray statusArray 
+				= joStage.getJSONArray( "status-allowed" );
 
-	    log.info( "statusArray: " + statusArray );
-
-	    if( statusArray != null){
-		for ( int i = 0; i < statusArray.length(); i++ ) {
-		    String status = statusArray.getString( i );
-		    slist.add( status );
+			    if( statusArray != null ){
+				for ( int j = 0; i<statusArray.length(); j++ ){
+				    slist.add( statusArray.getString( j ) );
+				}
+			    }
+			    break;
+			}
+		    }
 		}
 	    }
 	} catch ( Exception e ){	  
-
 	    log.info( "WorkflowContext: json-source error (getStatusList)" );
 	}
-
-
+	
 	return slist;
     }
 
@@ -218,8 +279,6 @@ public class IcWorkflowContext extends WorkflowContext {
 	getNewStageState( String oldStage, String oldState, String newState ){
 
 	Map<String,String> ssm = new HashMap<String,String>();
-
-
 	
 	if( this.getStatusList( oldStage ).contains( newState ) ){
 
@@ -303,7 +362,6 @@ public class IcWorkflowContext extends WorkflowContext {
 
 	    log.info( "WorkflowContext: json-source error (getStatusList)" );
 	}
-
 
 	return slist;
     }

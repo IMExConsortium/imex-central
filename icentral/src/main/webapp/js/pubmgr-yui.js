@@ -467,8 +467,6 @@ YAHOO.imex.pubmgr = {
     handleHistoryNavigation: function( state ){
         
         var PMGR = YAHOO.imex.pubmgr;
-
-        //alert( "HHN:" + state );
         
         var parsed = PMGR.parseStateString( state );      
         var request = PMGR.buildRequest( parsed );
@@ -481,24 +479,12 @@ YAHOO.imex.pubmgr = {
         var flt, 
         sflt = "";
         
-        //for( flt in parsed.filter){
-        //    sflt += "{" + flt + "=" + parsed.filter[flt] + "}";
-        //}
-        //alert( sflt );
-
         // reset filter buttons/menus
         //---------------------------
-        
-        
+                
         var stageLabel = "---ANY---";
-        //PMGR.stateSel[0].text = statusLabel;
-
         var statusLabel = "---ANY---";
-        //PMGR.partnerSel[0].text = partnerLabel;
-
         var partnerLabel = "---ANY---";
-        //PMGR.partnerSel[0].text = partnerLabel;
-
 
         if( parsed.filter.stage !== ""){
             stageLabel = parsed.filter.stage;
@@ -528,8 +514,6 @@ YAHOO.imex.pubmgr = {
         }else{
             PMGR.stateSel[0].text = statusLabel;
         }
-
-
         
         if( PMGR.partnerBtn.set!== undefined ){
             PMGR.partnerBtn.set( "label", 
@@ -537,6 +521,75 @@ YAHOO.imex.pubmgr = {
                                   partnerLabel + "</em>"));
         }else{
             PMGR.partnerSel[0].text = partnerLabel;
+        }
+
+	// reload stage/state filter button menus
+	//---------------------------------------
+
+	console.log("HHN: status="+parsed.filter.status +
+		    " stage="+ parsed.filter.stage );
+
+        var buttonUpdateSuccess = function( o ){	    
+            var messages = YAHOO.lang.JSON.parse( o.responseText );
+	    var button=o.argument.btn;
+	    var buttonMenu=button.getMenu();
+
+	    var items = [{ text: "---ANY---", value: "" }];
+	    for( var i=0; i< messages.acom.length; i++){
+		var ci = messages.acom[i];
+		items.push({value: ci["name"], text: ci["name"]});
+	    }
+
+	    try{
+		if (YAHOO.util.Dom.inDocument(buttonMenu.element)) {		    
+		    buttonMenu.clearContent(); 
+		    buttonMenu.addItems(items);
+		    buttonMenu.render();
+		} else {
+		    buttonMenu.itemData = items;
+		}
+	    } catch(x){
+		console.log(x);
+	    }
+        };
+        
+	var buttonUpdateFailure = function( o ){
+	    console.log("HHN: stageUpdateFailure");
+	}
+
+        var stageUpdateCallback = 
+	    { cache:false, timeout: 5000, 
+              success: buttonUpdateSuccess,
+              failure: buttonUpdateFailure,
+              argument: { btn: YAHOO.imex.pubmgr.stageBtn } }	
+
+        var statusUpdateCallback = 
+	    { cache:false, timeout: 5000, 
+              success: buttonUpdateSuccess,
+              failure: buttonUpdateFailure,
+              argument: { btn: YAHOO.imex.pubmgr.stateBtn } };	
+
+        try{
+	    var oppstg ="";
+	    if( parsed.filter.stage !== "" && parsed.filter.stage !== null){
+		oppstg = "&opp.stage=" + parsed.filter.stage;		
+	    }
+	    console.log("HHN: oppstg="+oppstg);
+
+            YAHOO.util.Connect.asyncRequest( 'GET', 
+                                             "acom?op.pstac=ac" + oppstg, 
+                                             statusUpdateCallback );	    
+	    var oppsts ="";
+	    if( parsed.filter.status !== "" && parsed.filter.status !== null){
+		oppsts = "&opp.status=" + parsed.filter.status;		
+	    }
+	    console.log("HHN: oppsts="+oppsts);
+
+            YAHOO.util.Connect.asyncRequest( 'GET', 
+                                             "acom?op.psgac=ac"+oppsts, 
+                                             stageUpdateCallback );        
+        } catch (x) {
+            console.log("AJAX Error:"+x);
         }
         
         // reload data
