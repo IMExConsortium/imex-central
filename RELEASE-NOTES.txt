@@ -4,6 +4,12 @@
 $HeadURL$
 $Id$ 
 
+2018/01/29       (ImexCentral v3.0.0rc6)
+
+  - GUI fixes:
+      - publication manager filter button fixes
+      - journal view filter button fixes
+
 2017/11/20       (ImexCentral v3.0.0rc5)
 
   - user manager GUI fixes:
