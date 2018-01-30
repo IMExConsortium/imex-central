@@ -518,24 +518,29 @@ YAHOO.imex.journalview = {
         var buttonUpdateSuccess = function( o ){	    
             var messages = YAHOO.lang.JSON.parse( o.responseText );
 	    var button=o.argument.btn;
-	    var buttonMenu=button.getMenu();
+	    //console.log("HHN: buttonUpdateSuccess: button=" + button.getMenu + " type=" + typeof button.getMenu);
 
-	    var items = [{ text: "---ANY---", value: "" }];
-	    for( var i=0; i< messages.acom.length; i++){
-		var ci = messages.acom[i];
-		items.push({value: ci["name"], text: ci["name"]});
-	    }
+	    if( button.getMenu !== undefined){
 
-	    try{
-		if (YAHOO.util.Dom.inDocument(buttonMenu.element)) {		    
-		    buttonMenu.clearContent(); 
-		    buttonMenu.addItems(items);
-		    buttonMenu.render();
-		} else {
-		    buttonMenu.itemData = items;
+		var buttonMenu=button.getMenu();
+
+		var items = [{ text: "---ANY---", value: "" }];
+		for( var i=0; i< messages.acom.length; i++){
+		    var ci = messages.acom[i];
+		    items.push({value: ci["name"], text: ci["name"]});
 		}
-	    } catch(x){
-		console.log(x);
+
+		try{
+		    if (YAHOO.util.Dom.inDocument(buttonMenu.element)) {		    
+			buttonMenu.clearContent(); 
+			buttonMenu.addItems(items);
+			buttonMenu.render();
+		    } else {
+			buttonMenu.itemData = items;
+		    }
+		} catch(x){
+		    console.log(x);
+		}
 	    }
         };
         
@@ -1371,7 +1376,7 @@ YAHOO.imex.journalview = {
     bodyMenuInit: function( my ){
         try{
             
-            //var my = YAHOO.imex.journalview;            
+            var my = YAHOO.imex.journalview;            
 
             // table row context
             //------------------
@@ -1386,7 +1391,8 @@ YAHOO.imex.journalview = {
             console.log( "curateUrl:" + my.curateUrl);
             console.log( "curatePat:" + my.curatePat);
             
-            var oRowMenu = [ [ { text: "Status Update", submenu: supmenu 
+            var oRowMenu = [ [ { text: "Status Update", disabled: my.loginId > 0 ? false : true,
+				 submenu: supmenu 
                                }],
                              [ { text:"Curate", disabled: my.loginId > 0 ? false : true, 
                                  onclick: { fn: my.gotoExtUrl, 
@@ -1396,11 +1402,13 @@ YAHOO.imex.journalview = {
                                           }
                                }],
                              [ { text:"To PubMed", disabled: false, 
+                                 // url:                                  
                                  onclick: { fn: my.gotoExtUrl, 
                                             obj: { url: my.pubmedUrl, //"http://www.ncbi.nlm.nih.gov/pubmed/%id%", 
                                                    idp: my.pubmedPat,
                                                    id: "pmid" } 
-                                          } 
+                                          }
+                               
                                }],
                              [ { text:"To IMEx", disabled: false,
                                  onclick: { fn: my.gotoExtUrl, 
@@ -1538,23 +1546,25 @@ YAHOO.imex.journalview = {
             console.log("gotoExtUrl: a=" + YAHOO.lang.JSON.stringify( a ) );
             console.log(a);
             
-            var elRow = this.contextEventTarget;
-            console.log("elRow=" +elRow);
-            
-            //var t = e.target;
-            var myself = YAHOO.imex.journalview;
-            var trel = myself.myDataTable.getTrEl(elRow);
-            var rec = myself.myDataTable.getRecord(trel);
-            var l = 0;
-            
-            while( rec == null && l++ <10 ){
-                trel = trel.parentElement;
-                rec = myself.myDataTable.getRecord(trel);
-            }
-            var  rdat =  myself.myDataTable.getRecord(trel).getData("id");
-            console.log(myself.myDataTable.getRecord(trel));
-            console.log("ID=" + myself.myDataTable.getRecord(trel).getId ( ));
-            console.log("KEY=" + YAHOO.lang.JSON.stringify(rdat));
+	    var my = YAHOO.imex.journalview;
+            var record = my.myDataTable.my.bodyrec;
+            var rid = record.getData("id");
+            var iid = record.getData("imexId");
+            var pmid = record.getData("pmid");
+	    
+            console.log("ID=" + rid + " PMID=" + pmid + " IMEXID=" + iid);
+	    var url = a.url;
+
+	    if( a.id=="pmid"){
+		url=url.replace(a.idp, pmid);
+	    }
+
+	    if( a.id=="imex"){
+		url=url.replace(a.idp, iid);
+	    }
+
+	    window.open(url,"icentral-tab");
+
             
         } catch (x) {
             console.log("ERROR: " +x);
@@ -1659,7 +1669,7 @@ YAHOO.imex.journalview = {
             if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
             elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
                 oRecord.getData( "pmid" ) + 
-                '">'+ oRecord.getData( "pmid" ) +'</a>';
+                '" target="icentral-tab">'+ oRecord.getData( "pmid" ) +'</a>';
             }
             else
             elLiner.innerHTML = pmid;
@@ -1675,7 +1685,7 @@ YAHOO.imex.journalview = {
         if( imex.length > 0 && imex !== "N/A" ){
                 if( state == "RELEASED" ){
                     elLiner.innerHTML = '<a href="imex/rec/' + 
-                        imex + '">'+ imex +'</a>';
+                        imex + '" target="icentral-tab">'+ imex +'</a>';
                 } else {
                     elLiner.innerHTML = imex;
                 }

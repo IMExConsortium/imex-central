@@ -1135,7 +1135,7 @@ YAHOO.imex.pubmgr = {
             if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
             elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
                 oRecord.getData( "pmid" ) + 
-                '">'+ oRecord.getData( "pmid" ) +'</a>';
+                '" target="icentral-tab">'+ oRecord.getData( "pmid" ) +'</a>';
             }
             else
             elLiner.innerHTML = pmid;
@@ -1151,7 +1151,7 @@ YAHOO.imex.pubmgr = {
         if( imex.length > 0 && imex !== "N/A" ){
                 if( state == "RELEASED" ){
                     elLiner.innerHTML = '<a href="imex/rec/' + 
-                        imex + '">'+ imex +'</a>';
+                        imex + '" target="icentral-tab">'+ imex +'</a>';
                 } else {
                     elLiner.innerHTML = imex;
                 }
