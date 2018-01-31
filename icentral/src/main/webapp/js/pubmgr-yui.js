@@ -44,6 +44,10 @@ YAHOO.imex.pubmgr = {
                    sortable:false, resizeable:true, hideable: true,
                    formatter:"partnerList",menuLabel:"Imex Partner" },
 
+        "stage":{ key:"stage", label:"Stage", 
+                  sortable:false, resizeable:false, hideable: true, 
+                  formatter:"center", menuLabel:"Stage" },
+
         "state":{ key:"state", label:"Status", 
                   sortable:false, resizeable:false, hideable: true, 
                   formatter:"center", menuLabel:"Status" },
@@ -89,7 +93,7 @@ YAHOO.imex.pubmgr = {
     
     myCP: { "date": "submission","modTStamp":"modified","actTStamp":"activity"},
 
-    myCL: [ "id", "pub", "pmid", "imexId", "imexDb",
+    myCL: [ "id", "pub", "pmid", "imexId", "imexDb", "stage",
             "state", "submission", "modified", "activity", "editor", "detail" ],
     myColumnDefs: [],
 
@@ -532,24 +536,28 @@ YAHOO.imex.pubmgr = {
         var buttonUpdateSuccess = function( o ){	    
             var messages = YAHOO.lang.JSON.parse( o.responseText );
 	    var button=o.argument.btn;
-	    var buttonMenu=button.getMenu();
 
-	    var items = [{ text: "---ANY---", value: "" }];
-	    for( var i=0; i< messages.acom.length; i++){
-		var ci = messages.acom[i];
-		items.push({value: ci["name"], text: ci["name"]});
-	    }
+	    if(button.getMenu !== undefined){
 
-	    try{
-		if (YAHOO.util.Dom.inDocument(buttonMenu.element)) {		    
-		    buttonMenu.clearContent(); 
-		    buttonMenu.addItems(items);
-		    buttonMenu.render();
-		} else {
-		    buttonMenu.itemData = items;
+		var buttonMenu=button.getMenu();
+
+		var items = [{ text: "---ANY---", value: "" }];
+		for( var i=0; i< messages.acom.length; i++){
+		    var ci = messages.acom[i];
+		    items.push({value: ci["name"], text: ci["name"]});
 		}
-	    } catch(x){
-		console.log(x);
+
+		try{
+		    if (YAHOO.util.Dom.inDocument(buttonMenu.element)) {		    
+			buttonMenu.clearContent(); 
+			buttonMenu.addItems(items);
+			buttonMenu.render();
+		    } else {
+			buttonMenu.itemData = items;
+		    }
+		} catch(x){
+		    console.log(x);
+		}
 	    }
         };
         
@@ -759,7 +767,7 @@ YAHOO.imex.pubmgr = {
         PMGR.myDataSource.responseSchema = { 
             resultsList: "records.records", 
             fields: ["id","author","title","pmid","imexId",
-                     "owner","state","date","time","imexDb","editor",
+                     "owner","stage","state","date","time","imexDb","editor",
                      "actTStamp","actUser","modTStamp","modUser"], 
             metaFields: { 
                 totalRecords: "records.totalRecords", 

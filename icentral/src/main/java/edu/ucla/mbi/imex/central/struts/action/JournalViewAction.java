@@ -816,7 +816,8 @@ public class JournalViewAction extends ManagerSupport {
             r.put( "volume", ip.getVolume() );
             r.put( "year", ip.getYear() );
 
-            r.put( "stage", "pQueue" );
+            //r.put( "stage", "pQueue" );
+	    r.put( "stage", ip.getStage().getName() );
 
             // set partner
             //------------

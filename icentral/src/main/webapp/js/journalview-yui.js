@@ -894,27 +894,31 @@ YAHOO.imex.journalview = {
             PMGR.myDataSource.my = { myState: null };
             
             PMGR.menuRebuild = function( button, value, vList ){
-                
-                try{                
-                    button.set( "label", value );
-                    button.set( "value", value );
+
+                if( button !== undefined){
+
+                    try{                
+			button.set( "label", value );
+			button.set( "value", value );
                     
-                    var menu = button.getMenu();
-                    var menuItems=[];
-                    for( var i=0; i<vList.length; i++ ){
-                        menuItems[i]= { text: vList[i], value: vList[i] };
+			var menu = button.getMenu();
+			var menuItems=[];
+			for( var i=0; i<vList.length; i++ ){
+                            menuItems[i]= { text: vList[i], value: vList[i] };
+			}
+			
+			if( YAHOO.util.Dom.inDocument( menu.element ) ){                    
+                            menu.clearContent();                 
+                            menu.addItems( menuItems );
+                            menu.render();
+			} else {
+                            menu.itemData = menuItems;
+			}
+		    
+                    } catch(x){
+			console.log( "AJAX Error:" + x );
                     }
-                    
-                    if( YAHOO.util.Dom.inDocument( menu.element ) ){                    
-                        menu.clearContent();                 
-                        menu.addItems( menuItems );
-                        menu.render();
-                    } else {
-                        menu.itemData = menuItems;
-                    }
-                } catch(x){
-                    console.log( "AJAX Error:" + x );
-                }
+		}
             };
             
             PMGR.myDataSource.doBeforeParseData = function( oRequest , oFullResponse , oCallback ){
@@ -1321,6 +1325,8 @@ YAHOO.imex.journalview = {
             for( var i = 0;  i < my.myColumnDefs.length; i++ ){
                 if( my.myColumnDefs[i].menuLabel !== undefined ){
 
+		    
+		    console.log("HMB: col=" + my.myColumnDefs[i].menuLabel);
                     var trg = my.myDataTable.getColumn( 
                         my.myColumnDefs[i].key ); 
                     
