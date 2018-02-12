@@ -114,7 +114,7 @@ YAHOO.imex.stagemgr = {
             ? oState.pagination.rowsPerPage : 10;
 
         // LS: also get watch flag here ?
-        // <        
+        
         // filters
         //--------
 
@@ -130,14 +130,10 @@ YAHOO.imex.stagemgr = {
         if( pfVal === undefined ){
             pfVal = "";
         }
-
-        //alert("stateButton: name="+ YAHOO.imex.pubmgr.stateBtn.my.name 
-        //      + " value=" + YAHOO.imex.stagemgr.stateBtn.my.value);
         
         var efVal = oSelf.my.admusFlt;
         var ofVal = oSelf.my.ownerFlt;
         var ffVal = oSelf.my.cflagFlt;
-
 
         // watch flag 
         
@@ -158,8 +154,7 @@ YAHOO.imex.stagemgr = {
             "&opp.max=" + results; 
         
         req = encodeURI(req);
-        console.log("request: " + req);
-        
+
         // build custom request
         //---------------------
 
@@ -167,8 +162,7 @@ YAHOO.imex.stagemgr = {
     },
 
     tableReload: function( o, dt ) {
-        try {
-            
+        try {           
             var state = dt.get('paginator').getState();
             state.page=1;
             state.recordOffset=0;
@@ -183,15 +177,14 @@ YAHOO.imex.stagemgr = {
                 
             var reloadRequest = 
                 dt.my.requestBuilder( dt.getState(), dt );
-                
-	    
-	    console.log("tableReload: request=", reloadRequest);
+            
             dt.getDataSource().sendRequest( reloadRequest, 
                                             reloadCallback );
         } catch (x) {   
-            console.log(x);
+            console.error( x );
         }
     },
+    
     getDefaultCookie: function(){
         var cookie = "";
         var stagemgr = YAHOO.imex.stagemgr;
@@ -203,8 +196,6 @@ YAHOO.imex.stagemgr = {
             }
             cookie += stagemgr.myCD[stagemgr.myCL[i]].key + ":" + hidden +"|";
         }
-        //alert( cookie );
-
         return cookie;
     },
 
@@ -247,7 +238,7 @@ YAHOO.imex.stagemgr = {
                 this.buildCDefs( cookie );                
             }
         } catch (x) {
-            console.log("INIT: ex="+ x);
+            console.error( x );
         }
         this.initView( init );
         this.historyInit( init );
@@ -255,14 +246,16 @@ YAHOO.imex.stagemgr = {
     //----------------------------------------------------------------
     //if a user is logged in this sets the cookie to their preferences
     //----------------------------------------------------------------
+
     userTableLayoutInit: function( init ){
         
 	var stagemgr = YAHOO.imex.stagemgr;
-        if(typeof stagemgr.loginId  != "undefined" 
-	   && stagemgr.loginId != "")
-        {
-            var Success = function( response ){                           
+	
+        if( typeof stagemgr.loginId  != "undefined" 
+	    && stagemgr.loginId != ""){
             
+	    var Success = function( response ){                           
+		
                 var cookie = YAHOO.util.Cookie.get("stagemgr");
            
                 if( cookie == null ){
@@ -272,32 +265,22 @@ YAHOO.imex.stagemgr = {
                 
                 var responseText = YAHOO.lang.JSON.parse(response.responseText);
                 var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
-                if(preferences.tableLayout == "null")
-                {
-                    stagemgr.updateUserTablePref(cookie);
-                }
-                else
-                {
+                if( preferences.tableLayout == "null" ){
+                    stagemgr.updateUserTablePref(cookie); 
+		}else{
                     cookie = preferences.tableLayout;
                     YAHOO.util.Cookie.set( "stagemgr", cookie );
                     stagemgr.buildCDefs( cookie );
                 }
-                
-                //stagemgr.init( {stage: stagemgr.stage, 
-                //                admus: stagemgr.admus,
-                //                owner: stagemgr.owner,
-                //                cflag: stagemgr.cflag,
-                //                watch: stagemgr.watch,
-                //                loginid:stagemgr.loginId });
             };
         
 	    var Fail = function ( o ) {
-                console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+                console.error( o.argument.id ); 
             };
             var callback = { cache:false, timeout: 5000, 
                              success: Success,
                              failure: Fail
-                             }; 
+                           }; 
             
             try{
                 YAHOO.util.Connect
@@ -305,7 +288,7 @@ YAHOO.imex.stagemgr = {
                                'userprefmgr?id=' + stagemgr.loginId +'&op.view=true',
                                callback );        
             } catch (x) {
-                console.log("AJAX Error:"+x);
+                console.error( x );
             }
         }
     },
@@ -314,15 +297,14 @@ YAHOO.imex.stagemgr = {
         var stagemgr = YAHOO.imex.stagemgr;
         var loginId = stagemgr.loginId;
         
-        if(typeof loginId  != "undefined" && loginId != "")
-        {
+        if( typeof loginId  != "undefined" && loginId != "" ){
             try{
                 YAHOO.util.Connect
                 .asyncRequest( 'POST', 
                                'userprefmgr?id=' + loginId + '&op.updateTable=true',
                                null, "opp.tableLayout=" + cookie );        
             } catch (x) {
-                console.log("AJAX Error:"+x);
+                console.error( x );
             }
         }
     },
@@ -331,8 +313,6 @@ YAHOO.imex.stagemgr = {
 
         var PMGR = YAHOO.imex.stagemgr;
 
-
-        //alert("buildCDefs:"+cookie );
         var col = cookie.split("|");
         
         if(col.length > 0){
@@ -340,7 +320,6 @@ YAHOO.imex.stagemgr = {
             
             for( var i =0; i < col.length-1; i++ ){
                 try{
-                
                     var cs = col[i].split(":");
                     if( PMGR.myCD[cs[0]] !== undefined ){
                         
@@ -352,8 +331,8 @@ YAHOO.imex.stagemgr = {
                         }
                     }
                     
-                } catch (x) {
-                    console.log( "I:"+ i + "-> " + cs[0] + " ex=" + x );
+                }catch( x ){
+                    console.error( "I:"+ i + "-> " + cs[0] + " ex=" + x );
                 }
             }        
         }
@@ -377,7 +356,6 @@ YAHOO.imex.stagemgr = {
                 }
             }
         }
-        console.log("cookie:"+cookie);
         return cookie;
     },
 
@@ -417,7 +395,7 @@ YAHOO.imex.stagemgr = {
             YAHOO.util.History.initialize( "yui-history-field", 
                                            "yui-history-iframe" );
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }                
     },
 
@@ -460,22 +438,18 @@ YAHOO.imex.stagemgr = {
         try{
             var sdir = this.getColumnSortDir( column );
             newState.startIndex = 0;
-            //alert( "HS: col=" + column.key + " dir=" + sdir );
 
             if( column.key !== undefined && sdir !==undefined ){
                 
                 newState.scol = column.key;
                 newState.sdir = sdir.substr( 7 );
-
-                //alert( "new sort=(" + newState.scol 
-                //       + "," + newState.sdir + ")" );
             }
 
             YAHOO.util.History
                 .navigate( "stagemgr", 
                            PMGR.generateStateString( newState ) );
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }
         
     },
@@ -483,8 +457,6 @@ YAHOO.imex.stagemgr = {
     handleHistoryNavigation: function( state ){
         
         var PMGR = YAHOO.imex.stagemgr;
-
-        //alert( "HHN:" + state );
         
         var parsed = PMGR.parseStateString( state );      
         var request = PMGR.buildRequest( parsed );
@@ -497,14 +469,8 @@ YAHOO.imex.stagemgr = {
         var flt, 
         sflt = "";
         
-        //for( flt in parsed.filter){
-        //    sflt += "{" + flt + "=" + parsed.filter[flt] + "}";
-        //}
-        //alert( sflt );
-
         // reset filter buttons/menus
         //---------------------------
-        
         
         var statusLabel = "---ANY---";
         //PMGR.stateSel[0].text = statusLabel;
@@ -557,15 +523,16 @@ YAHOO.imex.stagemgr = {
     parseStateString: function( statStr ){
         return YAHOO.lang.JSON.parse(statStr);
     },
-    generateLinkState: function(status, partner)
-    {
+    
+    generateLinkState: function(status, partner){
 
         //LS: watch ?
         var filter = {status:status, partner:partner, editor:'', owner:'', cflag:''  };
         var state = {startIndex:0, pageSize:25,filter:filter, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
-
+	
     },
+    
     buildRequest: function ( state ){
       
         //alert("buildRequest->state" +YAHOO.lang.JSON.stringify(state));
@@ -581,8 +548,7 @@ YAHOO.imex.stagemgr = {
             "&opp.skey=" + state.scol +
             "&opp.sdir=" + state.sdir;
         
-        return encodeURI( req );
-        
+        return encodeURI( req );        
     },
 
     historyReadyHandler: function(){
@@ -619,7 +585,6 @@ YAHOO.imex.stagemgr = {
                   selcnt: "partner-button-container",
                   selnme: "partner-button" ,
                   seltext: YAHOO.imex.stagemgr.partnerSel[0].text});
-                  
         };
         
         var partnerCallback = { cache:false, timeout: 5000, 
@@ -645,7 +610,6 @@ YAHOO.imex.stagemgr = {
                               failure: stateSuccess,
                               argument:{}}; // id:obj.id, btn:imexButton } };                  
 
-        
         if( typeof PMGR.myDataTable == "undefined" ){
             try{
                 YAHOO.util.Connect
@@ -657,7 +621,7 @@ YAHOO.imex.stagemgr = {
                                    "acom?op.pagac=ac", 
                                    partnerCallback );        
             } catch (x) {
-                console.log("AJAX Error:"+x);
+                console.error( x );
             }
         }
          
@@ -781,7 +745,7 @@ YAHOO.imex.stagemgr = {
                     }
                     
                 } catch (x) {
-                    console.log(x);
+                    console.error( x );
                 }
                 return true;
         };
@@ -802,10 +766,10 @@ YAHOO.imex.stagemgr = {
 	
         PMGR.contextMenuInit( PMGR );
 
-	// record editing popups #################
-	    
-	if(YAHOO.imex.recordedit !== undefined){
-	    YAHOO.imex.recordedit.init(PMGR);
+	// record-editing popups (if requested )
+	     
+	if( YAHOO.imex.recordedit !== undefined ){
+	    YAHOO.imex.recordedit.init( PMGR );
         }
 
 	// table layout changes
@@ -840,16 +804,12 @@ YAHOO.imex.stagemgr = {
         var oMenuItem = event.newValue;
         var text = oMenuItem.cfg.getProperty("text");
         
-        //alert("menu change: value=" + this.my.value);        
-
         for( var i = 0; i < this.my.items.length; i++ ){
             if (this.my.items[i].text === text ) {
                 this.my.value = this.my.items[i].value;
             }
         }
         
-        //alert("menu change: new value=" + this.my.value);
-
         this.set("label", ("<em class=\"yui-button-label\">" + 
                            oMenuItem.cfg.getProperty("text") + "</em>"));       
     },
@@ -868,12 +828,8 @@ YAHOO.imex.stagemgr = {
                 if( value === undefined ){
                     value = text;
                 }
-                
-                //alert("name=" + name + " text="+ text);
                 o.selmnu.push( {value: value, text: text} );        
             }
-            
-            //alert(YAHOO.imex.stagemgr[o.selbtn].my.foo);
             
             o.pmgr[o.selbtn] = new YAHOO.widget.Button(
                 { id: o.selnme,  
@@ -899,26 +855,24 @@ YAHOO.imex.stagemgr = {
             }
             
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }
     },
-
+    
     contextMenuInit: function( o ){
         
-        try{
-            
+        try{       
             o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
             
-            var defaultTableLayout = function(o)
-            {
+            var defaultTableLayout = function( o ){
                 var stagemgr = YAHOO.imex.stagemgr;
-                if(typeof stagemgr.loginId  != "undefined" && stagemgr.loginId != "")
-                {
+                if( typeof stagemgr.loginId  != "undefined" 
+		    && stagemgr.loginId != "" ){
                     var Success = function( response ){ 
-
+			// should do something here, shouldn't I ? 
                     };
                     var Fail = function ( o ) {
-                        console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+                        console.error( "failed: id=" + o.argument.id ); 
                     };
                     var callback = { cache:false, timeout: 5000, 
                                      success: Success,
@@ -927,9 +881,9 @@ YAHOO.imex.stagemgr = {
                     
                     try{
                         YAHOO.util.Connect
-                        .asyncRequest( 'GET', 
-                                       'userprefmgr?id=' + stagemgr.loginId +'&op.defaultTableLayout=true',
-                                       callback );        
+                            .asyncRequest( 'GET', 
+					   'userprefmgr?id=' + stagemgr.loginId +'&op.defaultTableLayout=true',
+					   callback );        
                     } catch (x) {
                         console.log("AJAX Error:"+x);
                     }
@@ -940,12 +894,11 @@ YAHOO.imex.stagemgr = {
                 YAHOO.util.Cookie.set( "stagemgr", cookie );
                 var myDataTable = stagemgr.myDataTable;
                 
-                  stagemgr.init(
-                                   {admus: stagemgr.admus,
-                                    owner: stagemgr.owner,
-                                    cflag: stagemgr.cflag,
-                                    watch: stagemgr.watch,
-                                    loginid:stagemgr.loginId });
+                stagemgr.init( {admus: stagemgr.admus,
+                                owner: stagemgr.owner,
+                                cflag: stagemgr.cflag,
+                                watch: stagemgr.watch,
+                                loginid:stagemgr.loginId });
             };
             
             var oConfMenu = [[{text:"Preferences", disabled: true }],
@@ -970,12 +923,9 @@ YAHOO.imex.stagemgr = {
                                onclick: { fn: o.hiddenColToggle,
                                           obj: { tbl: o.myDataTable ,col: trg } } };
                     clist.push( item );
-
-                        
-                    //alert( myColumnDefs[i].key+ "::" + trg);
-                    if( trg !== null ) {
+		    
+                    if( trg !== null ){
                         trigger.push( trg.getThEl() );
-                        //alert(trg.getThEl());
                     }
                 }
             }
@@ -986,10 +936,10 @@ YAHOO.imex.stagemgr = {
                 "configmenu", { trigger: trigger } );
             
             o.myDataTable.my.configmenu.addItems( oConfMenu );
-            o.myDataTable.my.configmenu.render("pubtab");
+            o.myDataTable.my.configmenu.render( "pubtab" );
             
-        } catch (x) {
-            console.log(x);
+        }catch(x){
+            console.error( x );
         }
     },
     //-----------------------------------
@@ -998,9 +948,7 @@ YAHOO.imex.stagemgr = {
      
 
     hiddenColToggle: function( tp, ev, o ){
-
-        //alert( "col-toggle:" + o);  
-        try{
+	try{
             if( o.col.hidden){
                 o.tbl.showColumn( o.col );
                 
@@ -1011,11 +959,11 @@ YAHOO.imex.stagemgr = {
             o.tbl.my.configmenu.destroy();
             YAHOO.imex.stagemgr.contextMenuInit( YAHOO.imex.stagemgr );
         } catch (x) {
-            console.log("toggle:" + x);
+            console.error( x );
         }
 
         var nCookie = YAHOO.imex.stagemgr.buildCookie();
-        YAHOO.util.Cookie.set("stagemgr", nCookie );                                      
+        YAHOO.util.Cookie.set( "stagemgr", nCookie );                                      
     },
     //-----------------------------
     // Create the custom formatters 

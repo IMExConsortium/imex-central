@@ -112,9 +112,6 @@ YAHOO.imex.journalview = {
     tableReload: function( o, dt ) {
         try {            
             var state = dt.get('paginator').getState();
-            //state.page=1;
-            //state.recordOffset=0;
-	    console.log("state: page=" + state.page + " off="  + state.recordOffset );
             dt.get('paginator').setState( state );
             
             var reloadCallback = {
@@ -130,7 +127,7 @@ YAHOO.imex.journalview = {
             dt.getDataSource().sendRequest( reloadRequest, 
                                             reloadCallback );
         } catch (x) {   
-            console.log(x);
+            console.error( "JV.tableReload: " + x);
         }
     },
 
@@ -188,11 +185,9 @@ YAHOO.imex.journalview = {
             
             this.initView( init );
             this.historyInit( init );
-
-            console.log("INIT: DONE");
             
         } catch (x) {
-             console.log("INIT ERROR: "+ x);
+             console.error("JV.init: "+ x);
         }
         
     },
@@ -231,17 +226,10 @@ YAHOO.imex.journalview = {
                 init.cflag = journalview.cflag;
                 init.watch = journalview.watch;
                 init.loginid = journalview.loginId;
-
-                //journalview.init( init );
-                //                    {admus: journalview.admus,
-                //                     owner: journalview.owner,
-                //                     cflag: journalview.cflag,
-                //                     watch: journalview.watch,
-                //                     loginid:journalview.loginId });
             };
             
             var Fail = function ( o ) {
-                console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+                console.error( "update failed: id=" + o.argument.id ); 
             };
             
             var callback = { cache:false, timeout: 5000, 
@@ -254,7 +242,7 @@ YAHOO.imex.journalview = {
                                'userprefmgr?id=' + journalview.loginId +'&op.view=true',
                                callback );        
             } catch (x) {
-                console.log("AJAX Error:"+x);
+                console.error( x );
             }
         }
     },
@@ -270,7 +258,7 @@ YAHOO.imex.journalview = {
                                'userprefmgr?id=' + loginId + '&op.updateTable=true',
                                null, "opp.tableLayout=" + cookie );        
             } catch (x) {
-                console.log("AJAX Error:"+x);
+                console.error( x );
             }
         }
     },
@@ -298,7 +286,7 @@ YAHOO.imex.journalview = {
                     }
                     
                 } catch (x) {
-                    console.log( "I:"+ i + "-> " + cs[0] + " ex=" + x );
+                    console.error( "I:"+ i + "-> " + cs[0] + " ex=" + x );
                 }
             }        
         }
@@ -322,7 +310,6 @@ YAHOO.imex.journalview = {
                 }
             }
         }
-        console.log( "cookie:" + cookie );
         return cookie;
     },
 
@@ -382,8 +369,6 @@ YAHOO.imex.journalview = {
         newState.startIndex = 0;
         newState.filter[filter] = newVal;
         
-        //alert(PMGR.generateStateString( newState ));
-
         YAHOO.util.History
             .navigate( "journalview", 
                        PMGR.generateStateString( newState ) );
@@ -397,51 +382,47 @@ YAHOO.imex.journalview = {
             
             var PMGR = YAHOO.imex.journalview;
             var newState = PMGR.myDataSource.my.myState;
-      
-            console.log("navig:" + navig + " newVal: " + newVal + "\noldstate: " 
-                  + YAHOO.lang.JSON.stringify( newState ));
             
-  
             // LS: watch flag ?
-        
+            
             newState.startIndex = 0;
             newState.navig[navig] = newVal;
             PMGR.nnav = navig;
-
-            //alert(PMGR.generateStateString( newState ));
+            
+	    /*
             console.log("newstate: "
                         + YAHOO.lang.JSON.stringify( newState ));            
             
             console.log("year: "+ YAHOO.imex.journalview.year 
                         + " volume: " + YAHOO.imex.journalview.volume
                         + " issue: " + YAHOO.imex.journalview.issue + "\n" );
-            
+            */
             YAHOO.util.History
                 .navigate( "journalview", 
                            PMGR.generateStateString( newState ) );
             
         } catch (x) {
-            console.log(x);
+            console.error(x);
         }
     },
 
     handlePagination: function( state, datatable ){
         
-        var PMGR = YAHOO.imex.journalview;
-        var newState = PMGR.myDataSource.my.myState;
+        var JV = YAHOO.imex.journalview;
+        var newState = JV.myDataSource.my.myState;
         
         newState.startIndex = state.recordOffset;
         newState.pageSize = state.rowsPerPage;
         
         YAHOO.util.History
             .navigate( "journalview", 
-                       PMGR.generateStateString( newState ) );
+                       JV.generateStateString( newState ) );
     },
     
     handleSorting: function( column ){
         
-        var PMGR = YAHOO.imex.journalview;
-        var newState = PMGR.myDataSource.my.myState;
+        var JV = YAHOO.imex.journalview;
+        var newState = JV.myDataSource.my.myState;
         try{
             var sdir = this.getColumnSortDir( column );
             newState.startIndex = 0;
@@ -453,9 +434,9 @@ YAHOO.imex.journalview = {
             
             YAHOO.util.History
                 .navigate( "journalview", 
-                           PMGR.generateStateString( newState ) );
+                           JV.generateStateString( newState ) );
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }
         
     },
@@ -468,7 +449,7 @@ YAHOO.imex.journalview = {
         var request = PMGR.buildRequest( parsed );
         
         PMGR.myDataSource.my.myState = parsed;
-        console.log("HandleHistoryNavigation:-> request:" + request );
+        //console.log("HandleHistoryNavigation:-> request:" + request );
         
         // update filters
         //---------------
@@ -511,15 +492,11 @@ YAHOO.imex.journalview = {
 
 	// reload stage/state filter button menus
 	//---------------------------------------
-
-	console.log("HHN: status="+parsed.filter.status +
-		    " stage="+ parsed.filter.stage );
-
+	
         var buttonUpdateSuccess = function( o ){	    
             var messages = YAHOO.lang.JSON.parse( o.responseText );
 	    var button=o.argument.btn;
-	    //console.log("HHN: buttonUpdateSuccess: button=" + button.getMenu + " type=" + typeof button.getMenu);
-
+	    
 	    if( button.getMenu !== undefined){
 
 		var buttonMenu=button.getMenu();
@@ -565,8 +542,7 @@ YAHOO.imex.journalview = {
 	    if( parsed.filter.stage !== "" && parsed.filter.stage !== null){
 		oppstg = "&opp.stage=" + parsed.filter.stage;		
 	    }
-	    console.log("HHN: oppstg="+oppstg);
-
+	    
             YAHOO.util.Connect.asyncRequest( 'GET', 
                                              "acom?op.pstac=ac" + oppstg, 
                                              statusUpdateCallback );	    
@@ -574,13 +550,12 @@ YAHOO.imex.journalview = {
 	    if( parsed.filter.status !== "" && parsed.filter.status !== null){
 		oppsts = "&opp.status=" + parsed.filter.status;		
 	    }
-	    console.log("HHN: oppsts="+oppsts);
-
+	    
             YAHOO.util.Connect.asyncRequest( 'GET', 
                                              "acom?op.psgac=ac"+oppsts, 
                                              stageUpdateCallback );        
         } catch (x) {
-            console.log("AJAX Error:"+x);
+            console.error( x );
         }
         
         // reload data
@@ -710,7 +685,7 @@ YAHOO.imex.journalview = {
             "&opp.max=" + results; 
         
         req = encodeURI(req);
-        console.log("request: " + req);
+        //console.log("request: " + req);
         
         return req;
     },
@@ -721,7 +696,7 @@ YAHOO.imex.journalview = {
             var cState = YAHOO.util.History.getCurrentState( "journalview" );
             YAHOO.imex.journalview.handleHistoryNavigation( cState );
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }
     },
 
@@ -730,8 +705,7 @@ YAHOO.imex.journalview = {
     
             var PMGR = YAHOO.imex.journalview;
             var JV = YAHOO.imex.journalview;
-            console.log( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
-        
+            
             this.formatterInit();
         
             if( init !== undefined ){
@@ -787,15 +761,9 @@ YAHOO.imex.journalview = {
                 YIJV.volume = messages.init.volume;
                 YIJV.issue = messages.init.issue;
                 
-                console.log( "YIJV.year="+YIJV.year + 
-			     " YIJV.volume=" + YIJV.volume + 
-			     " YIJV.issue=" + YIJV.issue );
-
                 // journal title
                 //--------------
-
-                //alert("RT:" + o.responseText);
-                          
+                
                 var jname = YAHOO.util.Dom.get('journal-name');
                 jname.textContent=messages.init.title;
                 
@@ -842,14 +810,13 @@ YAHOO.imex.journalview = {
                                 argument:{}}; // id:obj.id, btn:imexButton } };                  
             
             try{
-
                 var query =  "journalview?id="+init.jid
                     + "&op.init="+init.jid + "&opp.year=" + init.year
                     + "&opp.volume=" + init.volume + "&opp.issue=" + init.issue;
                 
                 YAHOO.util.Connect.asyncRequest( 'GET', query, yviCallback );        
             } catch (x) {
-                console.log("AJAX Error:"+x);
+                console.error( x );
             }
         
             if( typeof JV.myDataTable == "undefined" ){
@@ -861,7 +828,7 @@ YAHOO.imex.journalview = {
                                                      "acom?op.psgac=ac", 
                                                      stageCallback );        
                 } catch (x) {
-                    console.log("AJAX Error:"+x);
+                    console.error( x );
                 }
             }
             
@@ -917,12 +884,14 @@ YAHOO.imex.journalview = {
 			}
 		    
                     } catch(x){
-			console.log( "AJAX Error:" + x );
+			console.error( x );
                     }
 		}
             };
             
-            JV.myDataSource.doBeforeParseData = function( oRequest , oFullResponse , oCallback ){
+            JV.myDataSource.doBeforeParseData = function( oRequest , 
+							  oFullResponse , 
+							  oCallback ){
             
                 try{
                     
@@ -943,7 +912,7 @@ YAHOO.imex.journalview = {
                         document.getElementById("year-first-container").style.display="inline"; 
                         document.getElementById("year-prev-container").style.display="inline";  
                         document.getElementById("year-next-container").style.display="inline"; 
-                        document.getElementById("year-last-container").style.display="inline";                     
+                        document.getElementById("year-last-container").style.display="inline";
                     }
                     
                     myself.menuRebuild( myself.volumeCurrent, filter.volume,
@@ -958,7 +927,7 @@ YAHOO.imex.journalview = {
                         document.getElementById("volume-first-container").style.display="inline"; 
                         document.getElementById("volume-prev-container").style.display="inline";
                         document.getElementById("volume-next-container").style.display="inline";
-                        document.getElementById("volume-last-container").style.display="inline";                    
+                        document.getElementById("volume-last-container").style.display="inline";
                     }
                     
                     myself.menuRebuild( myself.issueCurrent, filter.issue,
@@ -994,7 +963,7 @@ YAHOO.imex.journalview = {
                         JV.issue = filter.issue;
                     }
                 } catch (x) {
-                    console.log("AJAX Error:"+x);
+                    console.error( x );
                 }
                 
                 return oFullResponse;            
@@ -1002,7 +971,7 @@ YAHOO.imex.journalview = {
             
             // create paginator
             //-----------------
-        
+            
             JV.myPaginator = new YAHOO.widget.Paginator(
                 { containers: ["dt-pag-nav"], 
                   rowsPerPage: 25, 
@@ -1104,7 +1073,7 @@ YAHOO.imex.journalview = {
                         }
                         
                     } catch (x) {
-                        console.log(x);
+                        console.error( x );
                     }
                     return true;
                 };
@@ -1115,7 +1084,7 @@ YAHOO.imex.journalview = {
                     YAHOO.imex.journalview.updateUserTablePref( nCookie );
                     YAHOO.util.Cookie.set( "journalview", nCookie );
                 } catch (x) { 
-                    console.log(x);
+                    console.error( x );
                 }
             };
             
@@ -1156,14 +1125,14 @@ YAHOO.imex.journalview = {
             document.body.appendChild(sheet); 
             
         } catch (x) {
-            console.log("ERR:" + x);
+            console.error( x );
         }
         
         return { 
             ds: PMGR.myDataSource, 
             dt: PMGR.myDataTable 
         };        
-
+	
         // initView ends here
     },
 
@@ -1194,7 +1163,6 @@ YAHOO.imex.journalview = {
                 if( value === undefined ){
                     value = text;
                 }
-                
                 o.selmnu.push( {value: value, text: text} );        
             }
             
@@ -1223,12 +1191,11 @@ YAHOO.imex.journalview = {
             }
             
         } catch (x) {
-            console.log(x);
+            console.error(x);
         }
     },
     
     navBtnInit: function( o ) {
-
         try{
             
             // navigate button 
@@ -1277,7 +1244,7 @@ YAHOO.imex.journalview = {
                          o.pmgr.myDataTable );
             }
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }
     },
 
@@ -1292,11 +1259,11 @@ YAHOO.imex.journalview = {
                 if( typeof my.loginId  != "undefined" && my.loginId != "" ){
                     
                     var Success = function( response ){
-                         
-                        
+                        // should do something here, shouldn't I ? 
                     };
+		    
                     var Fail = function ( o ) {
-                        console.log( "AJAX Error update failed: id=" + o.argument.id ); 
+                        console.error( "update failed: id=" + o.argument.id ); 
                     };
                     var callback = { cache:false, timeout: 5000, 
                                      success: Success,
@@ -1364,7 +1331,7 @@ YAHOO.imex.journalview = {
             my.myDataTable.my.headmenu.subscribe( "triggerContextMenu", my.onHeadMenuTrigger);
             
         }  catch( x ){
-            console.log( "HeadMenu: INIT ERROR: " + x );
+            console.error( x );
         } 
     },
     
@@ -1381,7 +1348,7 @@ YAHOO.imex.journalview = {
                 item.cfg.setProperty("checked", !col.hidden);
             }
         } catch (x) {
-            console.log( "HeadMenu: TRIGGER ERROR: " + x );
+            console.error( x );
         }
     },
 
@@ -1391,10 +1358,6 @@ YAHOO.imex.journalview = {
     
     hiddenColToggle: function( tp, ev, o ){
         
-        console.log( "hiddenColToggle: o=" + o );
-        console.log( "hiddenColToggle: hidden(m): " + o.col.hidden );
-        console.log( "hiddenColToggle: hidden(c): " + o.tbl.getColumn( o.col ).hidden );
-
         try{
             if( o.col.hidden ){
                 o.tbl.showColumn( o.col );
@@ -1403,12 +1366,11 @@ YAHOO.imex.journalview = {
             }
             o.tbl.render();
         } catch (x) {
-            console.log("ERROR: toggle:" + x);
+            console.error( x );
         }
         
         var nCookie = YAHOO.imex.journalview.buildCookie();
-        YAHOO.util.Cookie.set("journalview", nCookie );                                      
-         
+        YAHOO.util.Cookie.set( "journalview", nCookie );
     },
     
     //-----------------------------

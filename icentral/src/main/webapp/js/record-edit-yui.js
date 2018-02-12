@@ -11,36 +11,28 @@ YAHOO.imex.recordedit = {
     imexPat: "%%imex%%",
     
     init: function( parent ) { 
-        try{
-            // note: URLs should come from parent ??? 
-	    
+        try{	    
 	    var RE = YAHOO.imex.recordedit;
 	    RE.parent = parent;
-
-            console.log("Initalize RecordEdit");
             
             RE.bodyMenuInit( parent );
             
             // table row popup
             //----------------
             
-            console.log("parent.loginId:"+ parent.loginId );
-            
             if( parent.loginId != null && parent.loginId> 0 ){
                 parent.myDataTable.subscribe( "rowClickEvent", 
 					      RE.rowPopup, {parent: parent} );
             }
-                        
+            
         } catch (x) {
             console.log("recordedit error:" + x);
         }
     },
-        
+    
     bodyMenuInit: function( parent ){
         try{
             var RE = YAHOO.imex.recordedit;
-
-	    console.log("bodyMenuInit")
 
             // table row context
             //------------------
@@ -52,14 +44,11 @@ YAHOO.imex.recordedit = {
                              [{text:"Reserve", 
 			       onclick: {fn: RE.statusUpdate, obj: { id: 2, parent: parent} }}]
                            ];
-
-
+	    
             var supmenu = new YAHOO.widget.Menu( "supmenu" );
 
             supmenu.addItems( oSupMenu );
             
-	    console.log("bodyMenuInit: supmenu created")
-
             var oRowMenu = [ [ { text: "Status Update", 
 				 disabled: parent.loginId > 0 ? false : true,
 				 submenu: supmenu
@@ -97,23 +86,20 @@ YAHOO.imex.recordedit = {
 					      {trigger: parent.myDataTable.getTbodyEl()}); 
             parent.myDataTable.my.bodymenu.addItems( oRowMenu );
             parent.myDataTable.my.bodymenu.render( "pubtab" );
-
-	    console.log("bodyMenuInit: body menu rendered")
-
+	    
             parent.myDataTable.my.bodymenu.subscribe( "triggerContextMenu", 
 						      RE.onBodyMenuTrigger,
 						      {parent: parent});
             parent.myDataTable.my.bodymenu.subscribe( "hide", 
 						      RE.onBodyMenuHide,
 						      {parent: parent}); 
-        } catch (x) {
-            console.log("bodyMenuInit: error=" + x);
+        }catch( x ){
+            console.error ("bodyMenuInit: error=" + x );
         }        
     },
     
     onBodyMenuTrigger: function( e, o, a ){
         try{
-	    console.log( "onBodyMenuTrigger: start");
             var parent = a.parent;
 	    var RE = YAHOO.imex.recordedit;
 	    
@@ -129,14 +115,12 @@ YAHOO.imex.recordedit = {
             parent.myDataTable.my.bodyrec = record;
             parent.myDataTable.my.bodysel = el;
 
-            console.log( "BodyMenu: TRIGGER OK")
-         } catch (x) {
-             console.log( "BodyMenu: TRIGGER ERROR: " + x );
-         }
+        }catch( x ){
+            console.error( "BodyMenuTrigger: error= " + x );
+        }
     },
 
-    onBodyMenuHide: function( e, o, a ){
-     
+    onBodyMenuHide: function( e, o, a ){     
         try{
 	    var parent = a.parent;
             var bodysel = parent.myDataTable.my.bodysel;
@@ -144,7 +128,7 @@ YAHOO.imex.recordedit = {
                 Dom.removeClass( bodysel, "selected"); 
             } 
         }catch( x ){
-            console.log( "BodyMenu: HIDE ERROR: " + x );
+            console.error( "BodyMenuHide: error=" + x );
         }
     }, 
     
@@ -167,7 +151,7 @@ YAHOO.imex.recordedit = {
 	    
             return [ record, elRow ];
 	}catch( x ){
-	    consoloe.log("getContextRecord: error=" + x)
+	    consoloe.error( "getContextRecord: error=" + x)
 	}   
 	return [ null,null ];
     },
@@ -196,7 +180,7 @@ YAHOO.imex.recordedit = {
 		    }
                 },
                 failure: function(o) {
-		    console.log( "StatusUpdate: FAILED" );
+		    console.error( "StatusUpdate: error=" + o );
                 },
 		argument: {parent: parent }
             };
@@ -204,12 +188,11 @@ YAHOO.imex.recordedit = {
             var cObj = YAHOO.util.Connect.asyncRequest( 'GET', url, urlcallback );
             
         } catch (x) {
-            console.log(x);
+            console.error( x );
         }
     },
 
     gotoExtUrl: function( e, o, a ){
-
 	try{	    
 	    var parent = a.parent;
 	    
@@ -231,13 +214,12 @@ YAHOO.imex.recordedit = {
 	    window.open(url,"icentral-tab");
             
         } catch (x) {
-            console.log("ERROR: " +x);
+            console.error( x );
         }        
     },
     
     rowPopup: function( e, a ){
-	
-        try{
+	try{
 	    var t = e.target;
             var parent = a.parent;
 
@@ -252,9 +234,6 @@ YAHOO.imex.recordedit = {
                 rec = parent.myDataTable.getRecord( trel );
             }
             var  rdat =  parent.myDataTable.getRecord(trel).getData("id");
-            //console.log(parent.myDataTable.getRecord(trel));
-            //console.log("ID=" + parent.myDataTable.getRecord(trel).getId ( ));
-            //console.log("KEY=" + YAHOO.lang.JSON.stringify(rdat));
             
             var url = "pubedit?id="+rdat+"&op.popup=status";
             var dUrl = "pubedit?id="+rdat+"&op.esup=esup&opp.nsn=5";
@@ -269,8 +248,8 @@ YAHOO.imex.recordedit = {
                                              {label:"ToQueue", id:"queue-btn", url:qUrl},
                                              {label:"Reserve", id:"reserve-btn", url:rUrl} ]
                                     });     
-        } catch (x) {
-            console.log( "rowPopup? error=" + x );
+        }catch(x){
+            console.error( "rowPopup: error=" + x );
         }        
     }   
 };
