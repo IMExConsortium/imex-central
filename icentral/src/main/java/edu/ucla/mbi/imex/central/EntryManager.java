@@ -334,16 +334,19 @@ public class EntryManager {
     public Publication getPubByPmid( String pmid ) 
         throws ImexCentralException{
 
+	Log log = LogFactory.getLog( this.getClass() );
+	
         NcbiProxyClient cli = tracContext.getNcbiProxyClient();
+	Publication newPub = null;
         
-        Log log = LogFactory.getLog( this.getClass() );
-        log.info( " NcbiProxyClient=" + cli );
-        Publication newPub = null;
-        if ( cli != null ) {
-            newPub = cli.getPublicationByPmid( pmid );
-            log.info( " newPub" + newPub );
-	    System.out.println( " newPub" + newPub );
-
+	if ( cli != null ) {
+	    try{
+		newPub = cli.getPublicationByPmid( pmid );
+		log.info( " newPub" + newPub );
+	    } catch ( ClientException cEx){
+		log.info( "Not Found: PMID " + pmid );
+		return null;
+	    }
         }
         return newPub;
     }

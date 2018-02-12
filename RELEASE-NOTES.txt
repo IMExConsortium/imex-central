@@ -4,6 +4,12 @@
 $HeadURL$
 $Id$ 
 
+2018/02/11       (ImexCentral v3.0.0rc7)
+
+  - GUI upgrades/fixes:
+      - record editing pop-ups added to pipeline tabs
+      - graceful handling of NCBI proxy error (?)  
+
 2018/01/29       (ImexCentral v3.0.0rc6)
 
   - GUI fixes:

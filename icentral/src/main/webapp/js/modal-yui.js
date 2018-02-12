@@ -287,7 +287,7 @@ YAHOO.mbi.modal = {
         var title = arg.title;
         var mtitle = arg.mtitle === undefined ? title : arg.mtitle; 
         var id = arg.id;
-
+	
         var myself = YAHOO.mbi.modal;
 
         if ( YAHOO.mbi.modal.my  == null  
@@ -318,6 +318,9 @@ YAHOO.mbi.modal = {
                  if( arg.table != null ){
                      YAHOO.mbi.modal.my.table = arg.table;
                  }
+                 if( arg.parent != null ){
+                     YAHOO.mbi.modal.my.parent = arg.parent;
+                 }
                  if( arg.button != null ){
                      
                      YAHOO.mbi.modal.my.buttons = {};
@@ -337,17 +340,24 @@ YAHOO.mbi.modal = {
                              success: function(o) {
                                  var myself = YAHOO.mbi.modal.my;
                                  
-                                 console.log("urlcallback");
+                                 console.log("dialog: myself.table=" + myself.table);
+                                 console.log("dialog: myself.parent=" + myself.parent);
                                  
+				 
 
-                                 if( myself.table != null ){
+                                 if( myself.table != null && myself.parent != null){
                                      // reload table
                                      
                                      try{
                                          console.log("reloading...");
                                          
-                                         YAHOO.imex.journalview
-                                             .tableReload( {}, myself.table );                                        
+					 myself.parent 
+					     .tableReload( {}, myself.table );
+                                         //YAHOO.imex.journalview
+                                         //    .tableReload( {}, myself.table );
+
+
+                                         console.log("reloading... DONE");
                                      } catch (x) {
                                          console.log(x);
                                      }

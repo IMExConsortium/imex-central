@@ -8,6 +8,13 @@ YAHOO.imex.stagemgr = {
     watch: "",
     loginId: "",
     stage: "",
+
+    curateUrl: "",
+    curatePat: "",
+    pubmedUrl: "http://www.ncbi.nlm.nih.gov/pubmed/%%pmid%%",
+    pubmedPat: "%%pmid%%",
+    imexUrl: "imex/rec/%%imex%%",
+    imexPat: "%%imex%%",
     
     stateBtn: { my:{value:"",foo:"state"} },    
     stateSel: [ { text: "---ANY---", value: "" } ],
@@ -177,6 +184,8 @@ YAHOO.imex.stagemgr = {
             var reloadRequest = 
                 dt.my.requestBuilder( dt.getState(), dt );
                 
+	    
+	    console.log("tableReload: request=", reloadRequest);
             dt.getDataSource().sendRequest( reloadRequest, 
                                             reloadCallback );
         } catch (x) {   
@@ -198,25 +207,41 @@ YAHOO.imex.stagemgr = {
 
         return cookie;
     },
+
     init: function( init ){
+        var SM = YAHOO.imex.stagemgr;
+        SM.loginId = init.loginid;
+	SM.stage = init.stage;
+
+	if( SM.prefs == null && 
+	    SM.prefStr != null && 
+	    SM.prefStr != "" ){
+            
+            var p = SM.prefStr.replace(/&quot;/g, '"');           
+            SM.prefs = YAHOO.lang.JSON.parse( p  );
+            SM["curateUrl"]
+                = SM.prefs["option-def"]["curation-tool"]["option-def"]["curation-url"].value;
+                
+            SM["curatePat"]
+                = SM.prefs["option-def"]["curation-tool"]["option-def"]["curation-pmid-pattern"].value;
+        }
         
-        var stagemgr = YAHOO.imex.stagemgr;
-        stagemgr.loginId = init.loginid;
-	stagemgr.stage = init.stage;
-        if( typeof stagemgr.myDataTable != "undefined" ){
-            stagemgr.myDataTable.my.configmenu.destroy();
-            stagemgr.myDataTable.destroy();
-            stagemgr.myColumnDefs = [];            
+        if( typeof SM.myDataTable != "undefined" ){
+            SM.myDataTable.my.configmenu.destroy();
+            SM.myDataTable.destroy();
+            SM.myColumnDefs = [];            
         } else {
             this.userTableLayoutInit( init );
         }
         try{
             var cookie = YAHOO.util.Cookie.get("stagemgr");
-            if( cookie == null ){
-                cookie = stagemgr.getDefaultCookie();
-        
+	    if( cookie == null ){
+                cookie = SM.getDefaultCookie();
+		
                 YAHOO.util.Cookie.set( "stagemgr", cookie );
-            }
+            } else{
+		//alert( cookie );
+	    }
             
             if( cookie !== null ){
                 this.buildCDefs( cookie );                
@@ -231,8 +256,10 @@ YAHOO.imex.stagemgr = {
     //if a user is logged in this sets the cookie to their preferences
     //----------------------------------------------------------------
     userTableLayoutInit: function( init ){
-        var stagemgr = YAHOO.imex.stagemgr;
-        if(typeof stagemgr.loginId  != "undefined" && stagemgr.loginId != "")
+        
+	var stagemgr = YAHOO.imex.stagemgr;
+        if(typeof stagemgr.loginId  != "undefined" 
+	   && stagemgr.loginId != "")
         {
             var Success = function( response ){                           
             
@@ -256,14 +283,15 @@ YAHOO.imex.stagemgr = {
                     stagemgr.buildCDefs( cookie );
                 }
                 
-                  stagemgr.init(
-                                   {admus: stagemgr.admus,
-                                    owner: stagemgr.owner,
-                                    cflag: stagemgr.cflag,
-                                    watch: stagemgr.watch,
-                                    loginid:stagemgr.loginId });
+                //stagemgr.init( {stage: stagemgr.stage, 
+                //                admus: stagemgr.admus,
+                //                owner: stagemgr.owner,
+                //                cflag: stagemgr.cflag,
+                //                watch: stagemgr.watch,
+                //                loginid:stagemgr.loginId });
             };
-            var Fail = function ( o ) {
+        
+	    var Fail = function ( o ) {
                 console.log( "AJAX Error update failed: id=" + o.argument.id ); 
             };
             var callback = { cache:false, timeout: 5000, 
@@ -570,7 +598,6 @@ YAHOO.imex.stagemgr = {
     initView: function( init, cord, chid ) { 
 
         var PMGR = YAHOO.imex.stagemgr;
-        
         this.formatterInit();
         
         if( init !== undefined ){
@@ -579,8 +606,6 @@ YAHOO.imex.stagemgr = {
             PMGR.cflag = init.cflag;
             PMGR.watch = init.watch;
         }
-        
-        //alert( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
         
         var partnerSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse( o.responseText );
@@ -638,7 +663,7 @@ YAHOO.imex.stagemgr = {
          
         // create datasource
         //------------------
-
+	
         PMGR.myDataSource = new YAHOO.util.DataSource("stagemgr?stage="+PMGR.stage+"&op.ppg=ppg&"); 
         
         PMGR.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
@@ -662,6 +687,7 @@ YAHOO.imex.stagemgr = {
         }; 
         
         PMGR.myDataSource.my = { myState: null };
+
         
         // create paginator
         //-----------------
@@ -743,9 +769,7 @@ YAHOO.imex.stagemgr = {
                         = meta.totalRecords || oPayload.totalRecords;
                     
                     var oPayloadOld = oPayload;
-                    
-                    //alert( "dbld: response=" + 
-                    //      YAHOO.lang.JSON.stringify(oResponse));
+
                     oPayload.pagination = {
                         rowsPerPage: meta.paginationRowsPerPage || 10,
                         recordOffset: meta.paginationRecordOffset || 0
@@ -756,10 +780,6 @@ YAHOO.imex.stagemgr = {
                                               dir: "yui-dt-" + meta.sortDir };
                     }
                     
-                    //alert( "dbld:\n payload(old)=" + YAHOO.lang.JSON.stringify( oPayloadOld ) +
-                    //       "\n meta=" + YAHOO.lang.JSON.stringify( meta ) +
-                    //       "\n payload(new)=" + YAHOO.lang.JSON.stringify( oPayload  ));
-                    
                 } catch (x) {
                     console.log(x);
                 }
@@ -768,7 +788,6 @@ YAHOO.imex.stagemgr = {
        
         PMGR.myDataTable.handleLayoutChange =
             function( ev, o ){
-                //alert("reorder");                
                 try{
                     PMGR.myDataTable.my.configmenu.destroy();
                     PMGR.contextMenuInit( PMGR );
@@ -778,8 +797,18 @@ YAHOO.imex.stagemgr = {
                     YAHOO.util.Cookie.set("stagemgr", nCookie );                                      
                 } catch (x) { }
             };
-        
+
+        // header menu
+	
         PMGR.contextMenuInit( PMGR );
+
+	// record editing popups #################
+	    
+	if(YAHOO.imex.recordedit !== undefined){
+	    YAHOO.imex.recordedit.init(PMGR);
+        }
+
+	// table layout changes
 
         PMGR.myDataTable.on( "columnReorderEvent",
                              PMGR.myDataTable.handleLayoutChange );     
@@ -791,12 +820,9 @@ YAHOO.imex.stagemgr = {
 
         PMGR.myDataTable.on( "columnShowEvent",
                              PMGR.myDataTable.handleLayoutChange );     
-                             
 
+        // CSS to add a black separator between the rows
 
-
-
-        //tossing in some css to add a black separator between the rows
         var sheet = document.createElement('style');
         sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
         document.body.appendChild(sheet); 
@@ -806,7 +832,7 @@ YAHOO.imex.stagemgr = {
             dt: PMGR.myDataTable 
         };
         
-        //YAHOO.imex.stagemgrOld();    
+        // initView ends here 
            
     },
 

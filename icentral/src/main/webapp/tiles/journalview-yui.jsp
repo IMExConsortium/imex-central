@@ -2,6 +2,7 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
 <s:if test="id > 0 ">
+  <script src="js/record-edit-yui.js" type="text/javascript"></script>
   <script src="js/journalview-yui.js" type="text/javascript"></script>
 
   <h1 id="journal-name"></h1>
