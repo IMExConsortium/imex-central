@@ -107,6 +107,7 @@ public class JournalStatAction extends ManagerSupport {
         }
         return null;
     }
+
         
     //--------------------------------------------------------------------------
     //  IcJournal
@@ -121,7 +122,38 @@ public class JournalStatAction extends ManagerSupport {
     public IcJournal getJournal(){
 	return this.journal;
     }
+
+
+    //-------------------------------------------------------------------------
+    // initial year/volume
+    //--------------------
     
+    private String iyear = "";
+
+    public void setIYear( String year){
+	iyear = year;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("iyear: " + iyear);
+    }
+    
+    public String getIYear(){
+	return iyear;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private String ivolume = "";
+
+    public void setIVolume( String volume ){
+	ivolume = volume;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("ivolume: " + ivolume);
+    }
+    
+    public String getIVolume(){
+	return ivolume;
+    }
+        
     //--------------------------------------------------------------------------
     
     public List<IcJournal> getJournalList(){
@@ -138,7 +170,6 @@ public class JournalStatAction extends ManagerSupport {
         }
         return ijl;
     }
-
     
     //--------------------------------------------------------------------------
     // Records
@@ -154,6 +185,8 @@ public class JournalStatAction extends ManagerSupport {
         return this.records;
     }
 
+
+    //--------------------------------------------------------------------------
     // Init
     //-----
 
@@ -172,7 +205,7 @@ public class JournalStatAction extends ManagerSupport {
     public String execute() throws Exception{
 
         Log log = LogFactory.getLog( this.getClass() );
-        if (getId() <= 0 ){ setId( 1 ); }        // default journal
+        //if (getId() <= 0 ){ setId( 1 ); }        // default journal
         
         log.info( "id=" + getId() + " journal=" + journal + " op=" + getOp() ); 
    
@@ -193,95 +226,81 @@ public class JournalStatAction extends ManagerSupport {
             log.info(  "op=" + key + "  val=" + val );
 
             if ( val != null && val.length() > 0 ) {
-            
+          
                 //--------------------------------------------------------------
                 //--------------------------------------------------------------
                 // journal operations
                 //-------------------
-                
-                if ( key.equalsIgnoreCase( "init" ) ) {
-                    
-                    if ( getId() > 0 && journal == null ) {
-                        log.debug( "setting journal=" + getId() );
-                        journal = entryManager.getIcJournal( getId() );
-                    }
 
+		// op.init: initialize tables/journal info
+                
+                if( key.equalsIgnoreCase( "init" ) ){
+                    
                     if( init == null ){
                         init = new HashMap<String,Object>();
                     }
-                    
-                    init.put( "jid", journal.getId() );
-                    init.put("title", journal.getTitle() );
-                    
-                    if( getOpp() != null 
-                        && getOpp().get("year") != null 
-                        && getOpp().get("volume") != null 
-                        && getOpp().get("issue") != null ){
-                        
-                        init.put( "year", getOpp().get( "year" ));
-                        init.put( "volume", getOpp().get( "volume" ));
-                        init.put( "issue", getOpp().get( "issue" ));
-                        
-                    } else {
 
-                        if( getOpp() != null && getOpp().get("year") != null ){
-                            init.put( "year", getOpp().get( "year" ));
-                        }
-                    }
-                    
-                    //----------------------------------------------------------                    
-                    
-                    // get most recent YVI here: false == last
-                    
-                    if( init.get("year") == null 
-                        || ((String)init.get("year")).length() == 0 ){
-                        String year = entryManager
-                            .getIcJournalYear( journal, false );
-                        init.put( "year", year );
+		    // table layout info
 
-                        List<String> yearList = entryManager
-                            .getIcJournalYearList( journal, false );
-                        init.put( "year-list", yearList );
-                    }
-                    
-                    if( init.get("volume") == null 
-                        || ((String)init.get("volume")).length() == 0 ){
-                        String volume = entryManager
-                            .getIcJournalVolume( journal, false,
-                                                 (String) init.get( "year" ) );
-                        init.put( "volume", volume );
+		    if( val.equalsIgnoreCase( "tables") ){ 
+			this.getTablesInit( init );			
+		    }
 
-                        List<String> volumeList = entryManager
-                            .getIcJournalVolumeList( journal, false, 
-                                                     (String) init.get( "year" ) );
-                        init.put( "volume-list", volumeList );
-                    }
-                    
-                    if( init.get("issue") == null 
-                        || ((String)init.get("issue")).length() == 0){
-                        String issue = entryManager
-                            .getIcJournalIssue( journal, false,
-                                                (String) init.get( "year" ),
-                                                (String) init.get( "volume" ) );
-                        init.put( "issue", issue );
-                    
-                        List<String> issueList = entryManager
-                            .getIcJournalIssueList( journal, false,
-                                                    (String) init.get( "year" ),
-                                                    (String) init.get( "volume" ));
-                        init.put( "issue-list", issueList );
-                    }
-                    
+		    // journal year/volume info
+
+		    if( getId() > 0 ){
+			this.getJournalInit( init );
+		    }
                     return JSON;
                 }
 
+		// end of op.init operation
+		//-------------------------
+
+		//--------------------------------------------------------------
+		// op.ystat: journal yearly (volume, actually) stats
+		
+		if ( key.equalsIgnoreCase( "ystat" ) ) {
+                    
+		    log.info( "ystat:" + getOpp() );
+		    if( getId() > 0 ){
+			
+			if( init == null ){
+			    init = new HashMap<String,Object>();
+			}
+
+			this.getJournalInit( init );
+
+
+			String year = getOpp().get( "year" );
+			String volume = getOpp().get( "volume" );
+			
+			if( volume == null || volume.length() == 0 ){ 
+			 
+			    List<String> vlist = 
+				(List<String>) init.get("volume-list");
+			    volume = vlist.get(0);			    
+			}
+
+			List<Object> cntList = 
+			    this.getIcJPubStats( getId(), year, volume );
+			
+			if( records == null ){
+			    records = new HashMap<String,Object>();
+			}
+
+			records.put("counts", cntList);
+			
+		    }
+		    return JSON;
+                }
 
                 if ( key.equalsIgnoreCase( "jsrc" ) ) {
                     if ( getJournal() == null ) return SUCCESS;
                     String nlmid = getJournal().getNlmid();
                     return searchJournal( nlmid );
                 }
-                
+                // end of op.ystat
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "jpg" ) ) {
@@ -334,7 +353,7 @@ public class JournalStatAction extends ManagerSupport {
                     if( nnav != null && nnav.equals( "volume" ) ){
                         isn="";
                     }
-
+		    
                     return this.getIcJPubRecords( getId(), null, max, off, 
                                                   skey, sdir, 
                                                   sfv, gfv, "", "", "",
@@ -344,13 +363,117 @@ public class JournalStatAction extends ManagerSupport {
         }
         return SUCCESS;
     }
+
+    // get table layout info
     
+    private void getTablesInit( Map<String,Object> init ){
+	
+
+	Log log = LogFactory.getLog( this.getClass() );
+	
+	init.put( "tables",  new HashMap<String,Object>() );
+	List<String> stageLst = this.getWorkflowContext().getStageList();
+	List<Map<String,Object>> ssLst = new ArrayList<Map<String,Object>>();
+ 
+	((Map<String,Object>)init.get( "tables") ).put( "stage-list", ssLst );
+	
+	for( Iterator<String> i = stageLst.iterator(); 
+	     i.hasNext(); ) {
+	    String stage = i.next();
+	    
+	    List<String> statusLst = 
+		this.getWorkflowContext().getStatusList( stage );
+	    
+	    Map<String,Object> ss = new HashMap<String,Object>();
+	    ss.put("name", stage);
+	    ss.put("status-list", statusLst);
+	    ssLst.add(ss);
+	}	
+    }
+    
+
+    private void getJournalInit( Map<String,Object> init ){
+	
+	Log log = LogFactory.getLog( this.getClass() );
+	
+	if ( getId() > 0 && journal == null ) {
+	    log.debug( "setting journal=" + getId() );
+	    journal = entryManager.getIcJournal( getId() );
+	}
+
+	init.put( "jid", journal.getId() );
+	init.put("title", journal.getTitle() );
+                    
+	if( getOpp() != null ){
+	    if( getOpp().get("year") != null){
+		init.put( "year", getOpp().get( "year" ));
+	    }
+	    if( getOpp().get("year") != null 
+		&& getOpp().get("volume") != null ){
+		init.put( "volume", getOpp().get( "volume" ));
+	    }
+		
+	    if( getOpp().get("year") != null
+                && getOpp().get("volume") != null
+		&&getOpp().get("issue") != null ){
+		//init.put( "issue", getOpp().get( "issue" ));
+	    }
+	}
+                    
+	//----------------------------------------------------------                    
+                    
+	// get most recent Year/Volume here: false == last
+                    
+	if( init.get("year") == null 
+	    || ((String)init.get("year")).length() == 0 ){
+	    String year = entryManager
+		.getIcJournalYear( journal, false );
+	    init.put( "year", year );
+	}   
+
+	List<String> yearList = entryManager
+	    .getIcJournalYearList( journal, false );
+	init.put( "year-list", yearList );
+	
+        
+	if( init.get("volume") == null 
+	    || ((String)init.get("volume")).length() == 0 ){
+	    String volume = entryManager
+		.getIcJournalVolume( journal, false,
+				     (String) init.get( "year" ) );
+	    init.put( "volume", volume );
+	}
+
+	List<String> volumeList = entryManager
+	    .getIcJournalVolumeList( journal, false, 
+                                                     (String) init.get( "year" ) );
+	init.put( "volume-list", volumeList );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     // validation
     //-----------
     
-            public void validate() {
+    public void validate() {
 
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "validate" );
@@ -908,5 +1031,25 @@ public class JournalStatAction extends ManagerSupport {
             // ignore == parse to null
         }
         return null;        
+    }
+
+    //--------------------------------------------------------------------------
+
+    public List<Object> getIcJPubStats( int jid, String year, String volume ){
+
+        Log log = LogFactory.getLog( this.getClass() );	
+        if( entryManager == null ) return null;
+	
+	log.debug( "GetJPubStats:" + jid + " " + year + "  " + volume );
+            
+        IcJournal journal = entryManager.getIcJournal( jid );
+
+        // get counts
+	
+        List<Object> yearCounts = 
+	    entryManager.getIcJournalYVCounts( journal, year, volume );
+     	
+	return yearCounts;
+	
     }
 }

@@ -18,27 +18,27 @@
           <AppenderRef ref="TRACE"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.util.struts" level="debug" additivity="false">  
+        <Logger name="edu.ucla.mbi.util.struts" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.util.struts.action" level="debug" additivity="false">  
+        <Logger name="edu.ucla.mbi.util.struts.action" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.imex.central.struts.action" level="debug" additivity="false">  
+        <Logger name="edu.ucla.mbi.imex.central.struts.action" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.imex.central.dao" level="debug" additivity="false">  
+        <Logger name="edu.ucla.mbi.imex.central.dao" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.imex.central.EntryManager" level="debug" additivity="false">  
+        <Logger name="edu.ucla.mbi.imex.central.EntryManager" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.imex.central.IcWorkflowContext" level="debug" additivity="false">  
+        <Logger name="edu.ucla.mbi.imex.central.IcWorkflowContext" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 

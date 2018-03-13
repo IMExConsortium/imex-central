@@ -1340,4 +1340,12 @@ public class EntryManager {
             .getJournalIssueList( jrnl, first, year, volume );        
     }
 
+
+    public List<Object> getIcJournalYVCounts( Journal jrnl, 
+					      String year, String volume ) {
+
+	return tracContext.getIcStatsDao()
+            .getJournalYVCounts( jrnl, year, volume );
+	
+    }
 }

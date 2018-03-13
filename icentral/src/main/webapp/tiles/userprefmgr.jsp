@@ -29,6 +29,6 @@
  </div>
 </s:if>
 <s:else>
-  Must be logged in to access user preferences editor.
+  You must be logged in to access user preferences editor.
 </s:else>
 </br></br></br>

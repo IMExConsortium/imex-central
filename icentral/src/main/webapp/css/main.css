@@ -1724,3 +1724,16 @@ form.align-label input.radio~label
 }
 
 
+.jstat-table.yui-dt {
+  width: 100%;
+}
+
+#content .jstat-table.yui-dt table{
+  width: 100%;
+  border: 1px solid #aaaaaa;
+  
+}
+
+#content .jstat-column-fixed{
+    width: 100px;
+}

@@ -784,6 +784,19 @@ YAHOO.imex.pubmgr = {
         }; 
         
         PMGR.myDataSource.my = { myState: null };
+
+	/*
+	PMGR.myDataSource.doBeforeParseData = function( oRequest ,
+							oFullResponse ,
+							oCallback ){
+
+            console.log("dbpd1: "+ YAHOO.lang.JSON.stringify(oRequest));
+            console.log("dbpd2: "+ YAHOO.lang.JSON.stringify(oFullResponse));
+	 
+	    return oFullResponse;
+	}
+	*/
+
         
         // create paginator
         //-----------------
@@ -815,7 +828,10 @@ YAHOO.imex.pubmgr = {
         
         // Instantiate DataTable
         //----------------------
-    
+
+	console.log("PMGR.myColumnDefs " + YAHOO.lang.JSON.stringify(PMGR.myColumnDefs));
+
+  
         PMGR.myDataTable = new YAHOO.widget.DataTable(
             "pubtab", PMGR.myColumnDefs, 
             PMGR.myDataSource, myConfig

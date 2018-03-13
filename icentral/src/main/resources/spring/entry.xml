@@ -128,6 +128,19 @@
     <property name="mst" value="1:1:2"/>
   </bean>
 
+  <bean id="journalStatAction" scope="prototype"
+      class="edu.ucla.mbi.imex.central.struts.action.JournalStatAction">
+    
+    <property name="entryManager" ref="entryManager"/>
+
+    <property name="menuContext" ref="menuContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
+
+    <property name="mst" value="1:4:3"/>
+  </bean>
+
   <bean id="journalEditAction" scope="prototype"
       class="edu.ucla.mbi.imex.central.struts.action.JournalEditAction">
     

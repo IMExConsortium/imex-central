@@ -36,6 +36,80 @@ public class IcStatsDao extends AbstractDAO {
 
     public static final Integer PARTNERID = new Integer( 15 ); // set as bean param
     
+    
+    public List<Object> getJournalYVCounts( Journal jrnl, 
+					    String year, String volume ){
+
+        String qStr = "select p.issue, p.stage.id, p.state.id, " +
+	    " count( distinct p ) " + 
+            " from IcPub p where p.source.id = :jid" +
+	    " and  p.year = :yr and p.volume = :vo " +
+	    " group by p.issue, p.stage.id, p.state.id";
+                
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info( "getJournalYVCounts: :" + year + ": :" + volume + ":");
+	log.info(jrnl.getId());
+
+        List<Object> clist = new ArrayList<Object>();
+	
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        
+        try {            
+            Query query = session.createQuery( qStr );
+
+	    query.setParameter( "jid", jrnl.getId() );
+	    query.setParameter( "yr", year );
+	    query.setParameter( "vo", volume );
+	    
+            List  res = query.list();
+            log.info("res: " + res.size());
+            if( res.size()>0 ) {
+                for( Iterator i = res.iterator(); i.hasNext(); ) {
+                    Object[] ir = (Object[])i.next();
+                    
+		    
+		    String issue = (String) ir[0];
+                    Integer stageId = (Integer) ir[1];
+                    Integer stateId = (Integer) ir[2];
+                    Long count = (Long) ir[3]; 
+                    
+                    IcDataStage stage = (IcDataStage) 
+                        super.find( IcDataStage.class, stageId );
+                    
+                    IcDataState state = (IcDataState) 
+                        super.find( IcDataState.class, stateId );
+                    
+
+		    List<Object> cnt = new ArrayList<Object>();
+                    
+		    cnt.add(issue);
+		    cnt.add(stage.getName());
+                    cnt.add(state.getName());
+                    cnt.add(count);
+
+		    clist.add(cnt);
+
+		    log.info("iss: "+ issue +" stage: " + stageId + " state: " + stateId + " cnt: " + count);
+		    log.info("iss: "+ issue +" stage: " + stage.getName() + " state: " + state.getName() + " cnt: " + count);
+                }
+            } else {
+                
+                log.info( "IcStatsDao(getCountAll): no counts"  );
+            }
+            
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+
+	return clist;
+
+    }
+
     public Map<DataState,Long> getCountAll() { 
         
         String qStr = "select p.state.id, count( distinct p ) " + 

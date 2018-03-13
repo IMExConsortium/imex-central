@@ -228,12 +228,12 @@ public class IcWorkflowContext extends WorkflowContext {
 	List<String> slist = new ArrayList<String>();
 
 	Log log = LogFactory.getLog( this.getClass() );
-
+	//log.info(stage);
 	try {
 	    if( stage == null ){
-
+		
 		// get all states
-
+		
 		JSONArray statusArray = 
 		    getJsonConfigObject().getJSONArray( "state" );
 		if( statusArray != null){
@@ -247,18 +247,20 @@ public class IcWorkflowContext extends WorkflowContext {
 		JSONArray stageArray =
 		    getJsonConfigObject().getJSONArray( "stage" );
 	
-		log.debug( "stage: " + stageArray );
+		//log.info( "stage: " + stageArray );
 
 		if( stageArray != null){
 		    for ( int i = 0; i < stageArray.length(); i++ ) {
 			JSONObject joStage = stageArray.getJSONObject( i );
+			//log.info( "joStage: " + joStage );
 			if( joStage.getString("name").equals( stage ) ){
 			    JSONArray statusArray 
 				= joStage.getJSONArray( "status-allowed" );
-
+			    //log.info( ".");
 			    if( statusArray != null ){
-				for ( int j = 0; i<statusArray.length(); j++ ){
+				for ( int j = 0; j<statusArray.length(); j++ ){
 				    slist.add( statusArray.getString( j ) );
+				    //log.info( "slist" + slist);
 				}
 			    }
 			    break;
@@ -267,9 +269,9 @@ public class IcWorkflowContext extends WorkflowContext {
 		}
 	    }
 	} catch ( Exception e ){	  
-	    log.info( "WorkflowContext: json-source error (getStatusList)" );
+	    log.info( "WorkflowContext: json-source error (getStatusList)"+e );
 	}
-	
+	//log.info( "slist" + slist);
 	return slist;
     }
 

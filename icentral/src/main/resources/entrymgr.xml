@@ -378,5 +378,26 @@
      </result>
    </action>
 
+
+   <!-- journal stats view -->
+
+   <action name="journalstat" class="journalStatAction">
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">journalstat</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
+     <result name="input" type="tiles">journalstat</result>
+     <result name="jedit" type="tiles">journalstat</result>
+     <result name="json" type="json">
+      <param name="includeProperties">
+        records.*,init.*
+      </param>
+      <param name="noCache">true</param>
+     </result>
+   </action>
+
  </package>
 </struts>

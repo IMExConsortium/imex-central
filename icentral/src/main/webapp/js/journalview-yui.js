@@ -78,15 +78,15 @@ YAHOO.imex.journalview = {
                    formatter:"imex",menuLabel:"Imex Accession" },
 
         
-        //"submission":{ label:"Submission", menuLabel:"Submission", key:"submission", 
-        //               hideable: true, hidden: true,
-        //               children:[
-        //                   { key:"date",  label:"Date", 
-        //                     sortable:true, resizeable:false, formatter:"crt" },
-        //                   { key:"owner", label:"Submitted By",
-        //                     sortable:false, resizeable:false, formatter:"list" }
-        //               ]
-        //             },
+        "submission":{ label:"Submission", menuLabel:"Submission", key:"submission", 
+                       hideable: true, hidden: true,
+                       children:[
+                           { key:"date",  label:"Date", 
+                             sortable:true, resizeable:false, formatter:"crt" },
+                           { key:"owner", label:"Submitted By",
+                             sortable:false, resizeable:false, formatter:"list" }
+                       ]
+                     },
 
         "state":{ key:"state", label:"Status", 
                   sortable:false, resizeable:false, hideable: true, 
@@ -105,7 +105,7 @@ YAHOO.imex.journalview = {
     
     myCP: { "date": "submission"},
 
-    myCL: [ "id", "pub", "pages", "pmid", "imexId", // "submission",
+    myCL: [ "id", "pub", "pages", "pmid", "imexId", "submission",
             "stage", "state",  "detail" ],
     myColumnDefs: [],
     

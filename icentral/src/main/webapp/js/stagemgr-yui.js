@@ -994,7 +994,7 @@ YAHOO.imex.stagemgr = {
             if( typeof YAHOO.widget.DataTable.validateNumber(pmid) !== "undefined" ){
             elLiner.innerHTML = '<a href="http://www.ncbi.nlm.nih.gov/pubmed?term=' + 
                 oRecord.getData( "pmid" ) + 
-                '">'+ oRecord.getData( "pmid" ) +'</a>';
+                '" target="icentral-tab">'+ oRecord.getData( "pmid" ) +'</a>';
             }
             else
             elLiner.innerHTML = pmid;
