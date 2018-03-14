@@ -11,7 +11,7 @@
     <parent>
       <groupId>edu.ucla.mbi.imex</groupId>
       <artifactId>imexcentral</artifactId>
-      <version>3.0.0rc7</version>
+      <version>3.0.0rc8</version>
     </parent>
 
     <properties>
@@ -42,7 +42,7 @@
      <dependency>
       <groupId>edu.ucla.mbi.imex</groupId>
       <artifactId>ic-model</artifactId>
-      <version>3.0.0rc5</version>
+      <version>3.0.0rc8</version>
      </dependency>
 
      <dependency>
