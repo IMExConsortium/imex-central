@@ -5,7 +5,7 @@
   <script src="js/record-edit-yui.js" type="text/javascript"></script>
   <script src="js/journalview-yui.js" type="text/javascript"></script>
 
-  <h1 id="journal-name"></h1>
+  <h1 id="journal-header">Journal: <label id="journal-name"/></h1>
   <div class="yui-skin-sam" width="100%">
    <center>
       <div>
@@ -96,12 +96,15 @@
  </div>
 
  <script type="text/javascript">
+
   YAHOO.util.Event.addListener( window, "load", 
                                 YAHOO.imex.journalview.init(
                                    { jid:"<s:property value="id"/>",
-                                     year:"<s:property value="cyear"/>",
-                                     volume:"<s:property value="cvolume"/>",
-                                     issue:"<s:property value="cissue"/>",
+                                     year:"<s:property value="IYear"/>",
+                                     volume:"<s:property value="IVolume"/>",
+                                     issue:"<s:property value="IIssue"/>",
+				     stage:"<s:property value="IStage"/>",
+				     status:"<s:property value="IStatus"/>",
                                      owner:"<s:property value="opp.ou"/>", 
                                      admus:"<s:property value="opp.au"/>",
                                      cflag:"<s:property value="opp.encf"/>",

@@ -139,6 +139,79 @@ public class JournalViewAction extends ManagerSupport {
         return ijl;
     }
 
+    //-------------------------------------------------------------------------
+    // initial year/volume/issue/stage/status
+    //---------------------------------------
+    
+    private String iyear = "";
+
+    public void setIYear( String year){
+	iyear = year;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("iyear: " + iyear);
+    }
+    
+    public String getIYear(){
+	return iyear;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private String ivolume = "";
+
+    public void setIVolume( String volume ){
+	ivolume = volume;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("ivolume: " + ivolume);
+    }
+    
+    public String getIVolume(){
+	return ivolume;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private String iissue = "";
+
+    public void setIIssue( String issue ){
+	iissue = issue;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("iIssue: " + iissue);
+    }
+    
+    public String getIIssue(){
+	return iissue;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private String istage = "";
+
+    public void setIStage( String stage){
+	istage = stage;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("iStage: " + istage);
+    }
+    
+    public String getIStage(){
+	return istage;
+    }
+
+    //--------------------------------------------------------------------------
+
+    private String istatus = "";
+
+    public void setIStatus( String status){
+	istatus = status;
+	Log log = LogFactory.getLog( this.getClass() );
+	log.info("iStatus: " + istatus);
+    }
+    
+    public String getIStatus(){
+	return istatus;
+    }
+
+
     
     //--------------------------------------------------------------------------
     // Records

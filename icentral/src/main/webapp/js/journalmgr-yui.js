@@ -193,7 +193,8 @@ YAHOO.imex.journalmgr = {
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-liner");
         elLiner.innerHTML = '<a href="journalview?id=' + 
             oRecord.getData( "id" ) + 
-            '">'+ oRecord.getData( "title" )+'</a>';
+            '">'+ oRecord.getData( "title" )+'</a>' +
+	    ' [ <a href="journalstat?id=' + oRecord.getData( "id" )+'">pipeline</a> ]';
     },
     
     myStatFormatter: function(elLiner, oRecord, oColumn, oData){

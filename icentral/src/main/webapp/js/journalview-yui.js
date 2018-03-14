@@ -2,6 +2,7 @@ YAHOO.namespace("imex");
 
 YAHOO.imex.journalview = {
 
+    stringify: YAHOO.lang.JSON.stringify,
     admus: "",
     owner: "",
     cflag: "",
@@ -145,9 +146,13 @@ YAHOO.imex.journalview = {
         return cookie;
     },
 
+
     init: function( init ){
-        try{    
-            var JV = YAHOO.imex.journalview;
+
+	var JV = YAHOO.imex.journalview;
+	console.log("INIT: " + JV.stringify( init ) );
+
+        try{            
             JV.loginId = init.loginid;
             JV.prefStr = init.prefStr;
         
@@ -156,7 +161,7 @@ YAHOO.imex.journalview = {
 		JV.prefStr != "" ){
             
                 var p = JV.prefStr.replace(/&quot;/g, '"');           
-                JV.prefs = YAHOO.lang.JSON.parse( p  );
+                JV.prefs = YAHOO.lang.JSON.parse( p );
                 JV["curateUrl"]
                     = JV.prefs["option-def"]["curation-tool"]["option-def"]["curation-url"].value;
                 
@@ -169,7 +174,7 @@ YAHOO.imex.journalview = {
                 JV.myDataTable.destroy();
                 JV.myColumnDefs = [];            
             } else {
-                this.userTableLayoutInit( init );
+                JV.userTableLayoutInit( init );
             }
             
             var cookie = YAHOO.util.Cookie.get("journalview");
@@ -180,11 +185,11 @@ YAHOO.imex.journalview = {
             }
             
             if( cookie !== null ){
-                this.buildCDefs( cookie );                
+                JV.buildCDefs( cookie );                
             }
             
-            this.initView( init );
-            this.historyInit( init );
+            JV.initView( init );
+            JV.historyInit( init );
             
         } catch (x) {
              console.error("JV.init: "+ x);
@@ -315,37 +320,43 @@ YAHOO.imex.journalview = {
 
     historyInit: function( init ){
 
-        var PMGR = YAHOO.imex.journalview;
+        var JV = YAHOO.imex.journalview;
         
+	console.log("historyInit: init: " + JV.stringify(init));
+
         var defstate = {
             startIndex: 0,
             pageSize: 25,
-            filter:{ status: "",
-                     stage: "",
-                     editor: PMGR.admus,
-                     owner: PMGR.owner,
-                     cflag: PMGR.cflag},
-            navig:{ year: PMGR.year,
-                    volume: PMGR.volume,
-                    issue: PMGR.issue},
-            watch: PMGR.watch,
+            filter:{ status: init.status,
+                     stage: init.stage,
+                     editor: JV.admus,
+                     owner: JV.owner,
+                     cflag: JV.cflag},
+            navig:{ year: init.year,
+                    volume: init.volume,
+                    issue: init.issue},
+            watch: JV.watch,
             scol: "id",
             sdir: "asc" };
         
+	console.log("defstate: " + JV.stringify(defstate));
+
+	
         if(  init !== undefined && init.watch !== undefined ){
             defstate.watch = init.watch;
         }
 
-        var dst = YAHOO.lang.JSON.stringify( defstate );        
+        var dst = JV.stringify( defstate );        
         var bState = YAHOO.util.History.getBookmarkedState( "journalview" );
         var iState = bState || dst;
-        
-        var PMGR = YAHOO.imex.journalview;
-        
+
+
+        console.log("istate: " + JV.stringify(iState));
+
         YAHOO.util.History.register( "journalview", iState, 
-                                     PMGR.handleHistoryNavigation ); 
+                                     JV.handleHistoryNavigation ); 
         
-        YAHOO.util.History.onReady( PMGR.historyReadyHandler );    
+        YAHOO.util.History.onReady( JV.historyReadyHandler );    
         
         try{
             YAHOO.util.History.initialize( "yui-history-field", 
@@ -592,6 +603,10 @@ YAHOO.imex.journalview = {
 
     buildRequest: function ( state ){
         
+	var JV = YAHOO.imex.journalview;
+	console.log("buildRequest:"+ JV.stringify(state));
+
+
         var req = "opp.off=" + state.startIndex + 
             "&opp.wfl=" + state.watch + 
             "&opp.max=" + state.pageSize +
@@ -613,6 +628,9 @@ YAHOO.imex.journalview = {
     },
 
     requestBuilder: function( oState, oSelf ) {
+
+	console.log("requestBuilder");
+	try{
 
         var myself = YAHOO.imex.journalview;
         
@@ -685,9 +703,14 @@ YAHOO.imex.journalview = {
             "&opp.max=" + results; 
         
         req = encodeURI(req);
-        //console.log("request: " + req);
+        console.log("request: " + req);
         
         return req;
+
+	} catch (x) {
+	    
+	    console.error( x );
+        }
     },
 
     historyReadyHandler: function(){
@@ -701,12 +724,11 @@ YAHOO.imex.journalview = {
     },
 
     initView: function( init, cord, chid ) { 
+
+        var JV = YAHOO.imex.journalview;
+	
         try{
-    
-            var PMGR = YAHOO.imex.journalview;
-            var JV = YAHOO.imex.journalview;
-            
-            this.formatterInit();
+            JV.formatterInit();
         
             if( init !== undefined ){
                 JV.admus = init.admus;
@@ -719,14 +741,14 @@ YAHOO.imex.journalview = {
                 var messages = YAHOO.lang.JSON.parse( o.responseText );
                 
                 YAHOO.imex.journalview.selBtnInit( 
-                    { pmgr: YAHOO.imex.journalview,
+                    { pmgr: JV,
                       filter: "stage",
                       items: messages.acom,
-                      selmnu: YAHOO.imex.journalview.stageSel,
+                      selmnu: JV.stageSel,
                       selbtn: "stageBtn",
                       selcnt: "stage-button-container",
                       selnme: "stage-button",
-                      seltext: YAHOO.imex.journalview.stageSel[0].text});     
+                      seltext: JV.stageSel[0].text});     
             };
         
             var stageCallback = { cache:false, timeout: 5000, 
@@ -751,24 +773,24 @@ YAHOO.imex.journalview = {
                                   success: stateSuccess,
                                   failure: stateSuccess,
                                   argument:{}}; // id:obj.id, btn:imexButton } };                  
-            
-        
+                    
             var yviSuccess = function( o ){
-                var messages = YAHOO.lang.JSON.parse(o.responseText);
-            
-                var YIJV = YAHOO.imex.journalview;
-                YIJV.year = messages.init.year;
-                YIJV.volume = messages.init.volume;
-                YIJV.issue = messages.init.issue;
+
+		var JV = YAHOO.imex.journalview;
+                var messages = YAHOO.lang.JSON.parse( o.responseText );
+		
+                JV.year = messages.init.year;
+                JV.volume = messages.init.volume;
+                JV.issue = messages.init.issue;
                 
                 // journal title
                 //--------------
                 
                 var jname = YAHOO.util.Dom.get('journal-name');
-                jname.textContent=messages.init.title;
-                
+                jname.textContent = messages.init.title;
+		
                 // year/volume/issue buttons
-                YAHOO.imex.journalview.navBtnInit(
+                JV.navBtnInit(
                     { pmgr: YAHOO.imex.journalview,
                       nbtn: "yearCurrent",
                       navig: "year",
@@ -802,6 +824,7 @@ YAHOO.imex.journalview = {
                       nnme: "issue-curr-button"
                     }
                 );
+		
             };
         
             var yviCallback = { cache:false, timeout: 5000, 
@@ -810,15 +833,15 @@ YAHOO.imex.journalview = {
                                 argument:{}}; // id:obj.id, btn:imexButton } };                  
             
             try{
-                var query =  "journalview?id="+init.jid
-                    + "&op.init="+init.jid + "&opp.year=" + init.year
+                var query =  "journalview?id=" + init.jid
+                    + "&op.init=" + init.jid + "&opp.year=" + init.year
                     + "&opp.volume=" + init.volume + "&opp.issue=" + init.issue;
                 
                 YAHOO.util.Connect.asyncRequest( 'GET', query, yviCallback );        
             } catch (x) {
                 console.error( x );
             }
-        
+            
             if( typeof JV.myDataTable == "undefined" ){
                 try{
                     YAHOO.util.Connect.asyncRequest( 'GET', 
@@ -903,7 +926,7 @@ YAHOO.imex.journalview = {
                     myself.menuRebuild( myself.yearCurrent, filter.year,  
                                         oFullResponse.init["year-list"] );
                     
-                    if(oFullResponse.init["year-list"].length <=1){
+                    if(oFullResponse.init["year-list"].length <=-1){
                         document.getElementById("year-first-container").style.display ="none"; 
                         document.getElementById("year-prev-container").style.display="none";  
                         document.getElementById("year-next-container").style.display="none"; 
@@ -918,7 +941,7 @@ YAHOO.imex.journalview = {
                     myself.menuRebuild( myself.volumeCurrent, filter.volume,
                                         oFullResponse.init["volume-list"] );
                     
-                    if(oFullResponse.init["volume-list"].length <=1){ 
+                    if(oFullResponse.init["volume-list"].length <=-1){ 
                         document.getElementById("volume-first-container").style.display="none"; 
                         document.getElementById("volume-prev-container").style.display="none";
                         document.getElementById("volume-next-container").style.display="none";
@@ -933,7 +956,7 @@ YAHOO.imex.journalview = {
                     myself.menuRebuild( myself.issueCurrent, filter.issue,
                                         oFullResponse.init["issue-list"] );
                     
-                    if(oFullResponse.init["year-list"].length <=1){
+                    if(oFullResponse.init["year-list"].length <=-1){
                         document.getElementById("issue-first-container").style.display="none"; 
                         document.getElementById("issue-prev-container").style.display="none";
                         document.getElementById("issue-next-container").style.display="none";
@@ -1005,7 +1028,7 @@ YAHOO.imex.journalview = {
             //----------------------
             
             JV.myDataTable = new YAHOO.widget.DataTable(
-                "pubtab", PMGR.myColumnDefs, 
+                "pubtab", JV.myColumnDefs, 
                 JV.myDataSource, myConfig
             );
             
@@ -1090,7 +1113,7 @@ YAHOO.imex.journalview = {
             
 	    // header menu
             
-	    PMGR.headMenuInit( PMGR );
+	    JV.headMenuInit( JV );
             
 	    // record editing popups
 	    
@@ -1109,15 +1132,15 @@ YAHOO.imex.journalview = {
             */
             
 	    // table layout changes
-
-            PMGR.myDataTable.on( "columnReorderEvent",
-                                 PMGR.myDataTable.handleLayoutChange );     
+	    
+            JV.myDataTable.on( "columnReorderEvent",
+                                 JV.myDataTable.handleLayoutChange );     
             
-            PMGR.myDataTable.on( "columnHideEvent",
-                                 PMGR.myDataTable.handleLayoutChange );     
+            JV.myDataTable.on( "columnHideEvent",
+                                 JV.myDataTable.handleLayoutChange );     
             
-            PMGR.myDataTable.on( "columnShowEvent",
-                                 PMGR.myDataTable.handleLayoutChange );     
+            JV.myDataTable.on( "columnShowEvent",
+                                 JV.myDataTable.handleLayoutChange );     
                         
             // CSS to add a black separator between the rows
             var sheet = document.createElement('style');
@@ -1129,8 +1152,8 @@ YAHOO.imex.journalview = {
         }
         
         return { 
-            ds: PMGR.myDataSource, 
-            dt: PMGR.myDataTable 
+            ds: JV.myDataSource, 
+            dt: JV.myDataTable 
         };        
 	
         // initView ends here
@@ -1196,11 +1219,12 @@ YAHOO.imex.journalview = {
     },
     
     navBtnInit: function( o ) {
-        try{
-            
-            // navigate button 
-            //----------------
-            
+
+        // navigation button 
+        //-------------------
+	
+	var JV = YAHOO.imex.journalview;
+        try{  
             o.navmenu = [{ text: o.ntxt, value: o.ntxt }];
             
             if( o.items != null ){
@@ -1243,6 +1267,7 @@ YAHOO.imex.journalview = {
                          {navig: o.navig},
                          o.pmgr.myDataTable );
             }
+	    
         } catch (x) {
             console.error( x );
         }
@@ -1297,9 +1322,7 @@ YAHOO.imex.journalview = {
             
             for( var i = 0;  i < my.myColumnDefs.length; i++ ){
                 if( my.myColumnDefs[i].menuLabel !== undefined ){
-
 		    
-		    console.log("HMB: col=" + my.myColumnDefs[i].menuLabel);
                     var trg = my.myDataTable.getColumn( 
                         my.myColumnDefs[i].key ); 
                     

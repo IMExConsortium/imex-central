@@ -30,7 +30,7 @@
     },
     {"name":"QUEUE",
      "comments":"",
-     "status-allowed":["NEW","REQUEST","DISCRDED"]
+     "status-allowed":["NEW","REQUEST","DISCARDED"]
     },
     {"name":"CURATION",
      "comments":"",

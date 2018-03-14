@@ -66,7 +66,7 @@ YAHOO.imex.journalstat = {
 	  JS.jsyear=init.jsyear;
 	  JS.jsvolume=init.jsvolume;
 	  
- 	  console.log("JS.init: init=" + JS.stringify(init));
+ 	  //console.log("JS.init: init=" + JS.stringify(init));
 
           //JS.loginId = init.loginid;
           //JS.prefStr = init.prefStr;
@@ -473,7 +473,7 @@ YAHOO.imex.journalstat = {
         JS.menuRebuild( JS.yearCurrent, JS.jsyear, 
 			resp["year-list"] );
                     
-        if( resp["year-list"].length <=1){
+        if( resp["year-list"].length <=-1){
             document.getElementById("year-first-container").style.display ="none"; 
             document.getElementById("year-prev-container").style.display="none";  
             document.getElementById("year-next-container").style.display="none"; 
@@ -493,7 +493,7 @@ YAHOO.imex.journalstat = {
         JS.menuRebuild( JS.volumeCurrent, JS.jsvolume, 
 			resp["volume-list"] );
         
-	if(resp["volume-list"].length <=1){ 
+	if(resp["volume-list"].length <=-1){ 
             document.getElementById("volume-first-container").style.display="none"; 
             document.getElementById("volume-prev-container").style.display="none";
             document.getElementById("volume-next-container").style.display="none";
@@ -840,11 +840,8 @@ YAHOO.imex.journalstat = {
 
             JS.nnav = navig;
             
-            console.log("newstate: "
+            console.log("handle nav: newstate: "
                         + YAHOO.lang.JSON.stringify( newState ));            
-            
-            console.log("year: "+ JS.jsyear 
-                        + " volume: " + JS.jsvolume);
             
             YAHOO.util.History
                 .navigate( "journalstat", 
@@ -929,7 +926,8 @@ YAHOO.imex.journalstat = {
     },
     
     generateStateString: function( state ){            
-        return AHOO.lang.JSON.parse( state );
+	//console.log("state: " + YAHOO.lang.JSON.stringify(state));
+        return YAHOO.lang.JSON.stringify( state );
     },
     
     parseStateString: function( statStr ){
@@ -1841,12 +1839,13 @@ YAHOO.imex.journalstat = {
 	    + "&IStage=" + cstg
 	    + "&IStatus=" + csts;
 	
+	var url = "journalview?id="+ JS.jid + params;
+	
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
    
 	if( oData > 0 ){
-	    elLiner.innerHTML = '<a href="journalview?id=' + 
-		YAHOO.imex.journalstat.jid + params + 
-		'">'+oData+'</a>';
+	    elLiner.innerHTML = '<a href="' + encodeURI(url) 
+		+ '">'+oData+'</a>';
 	} else {
 	    elLiner.innerHTML = "0";
 	}
@@ -1881,13 +1880,14 @@ YAHOO.imex.journalstat = {
 	var params = "&IYear=" + cyr
             + "&IVolume=" + cvo
             + "&IIssue=" + cis
-        
+
+        var url = "journalview?id=" + JS.jid + params;
+	
         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
 	
         if( total > 0 ){
-            elLiner.innerHTML = '<a href="journalview?id=' +
-                YAHOO.imex.journalstat.jid + params +
-                '">' + total + '</a>';
+	    elLiner.innerHTML = '<a href="' + encodeURI(url)
+                + '">' + total + '</a>';
         } else {
             elLiner.innerHTML = "0";
         }	
@@ -1920,12 +1920,13 @@ YAHOO.imex.journalstat = {
 	    + "&IIssue=" + cis
 	    + "&IStage=" + cstg;
 	
-        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+	var url = "journalview?id=" + JS.jid + params;
+	
+        YAHOO.util.Dom.addClass( elLiner, "yui-dt-center" );
    
 	if( total > 0 ){
-	    elLiner.innerHTML = '<a href="journalview?id=' + 
-		YAHOO.imex.journalstat.jid + params + 
-		'">' + total + '</a>';
+	    elLiner.innerHTML = '<a href="' + encodeURI(url)
+                + '">' + total + '</a>';
 	} else {
 	    elLiner.innerHTML = "0";
 	}
