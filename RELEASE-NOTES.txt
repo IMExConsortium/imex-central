@@ -4,6 +4,11 @@
 $HeadURL$
 $Id$ 
 
+2018/03/14       (ImexCentral v3.0.0rc8)
+
+  - GUI upgrades/fixes:
+      - added journalstat page to display pipeline by-issue stats  
+     
 2018/02/11       (ImexCentral v3.0.0rc7)
 
   - GUI upgrades/fixes:
