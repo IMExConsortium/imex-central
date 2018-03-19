@@ -54,7 +54,7 @@
   <div class="yui-skin-sam">
     <div id="stageTab" class="yui-navset"></div>
   </div>
-
+  <br/><br/><br/><br/>
  <script type="text/javascript">
   YAHOO.util.Event.addListener( window, "load", 
                                 YAHOO.imex.journalstat.init(

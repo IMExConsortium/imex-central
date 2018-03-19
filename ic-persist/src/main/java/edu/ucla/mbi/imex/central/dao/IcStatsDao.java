@@ -40,11 +40,12 @@ public class IcStatsDao extends AbstractDAO {
     public List<Object> getJournalYVCounts( Journal jrnl, 
 					    String year, String volume ){
 
-        String qStr = "select p.issue, p.stage.id, p.state.id, " +
+        String qStr = "select distinct p.issue, p.stage.id, p.state.id, " +
 	    " count( distinct p ) " + 
             " from IcPub p where p.source.id = :jid" +
 	    " and  p.year = :yr and p.volume = :vo " +
-	    " group by p.issue, p.stage.id, p.state.id";
+	    " group by p.issue, p.stage.id, p.state.id"
+	    + " order by p.issue";
                 
 	Log log = LogFactory.getLog( this.getClass() );
 	log.info( "getJournalYVCounts: :" + year + ": :" + volume + ":");
@@ -66,9 +67,9 @@ public class IcStatsDao extends AbstractDAO {
             log.info("res: " + res.size());
             if( res.size()>0 ) {
                 for( Iterator i = res.iterator(); i.hasNext(); ) {
-                    Object[] ir = (Object[])i.next();
+
+                    Object[] ir = (Object[]) i.next();
                     
-		    
 		    String issue = (String) ir[0];
                     Integer stageId = (Integer) ir[1];
                     Integer stateId = (Integer) ir[2];
@@ -80,21 +81,71 @@ public class IcStatsDao extends AbstractDAO {
                     IcDataState state = (IcDataState) 
                         super.find( IcDataState.class, stateId );
                     
+		    //log.info( "I: "+ issue +" StgID: " + stageId + " SteID: " + stateId 
+		    //          + " cnt: " + count + " issue: " + issue);
 
 		    List<Object> cnt = new ArrayList<Object>();
                     
-		    cnt.add(issue);
-		    cnt.add(stage.getName());
-                    cnt.add(state.getName());
-                    cnt.add(count);
+		    String vissue = issue.replaceAll( "\\D", "" );
+		    int iissue = 0;
+		    if( vissue.length() >0 ){
+			iissue = Integer.parseInt( vissue );
+		    }
+		    
+		    cnt.add( issue);
+		    cnt.add( stage.getName());
+                    cnt.add( state.getName());
+                    cnt.add( count);
+                    cnt.add( iissue );
+		    
+		    if( clist.size() == 0 ){
+			clist.add( cnt );
+		    } else{
+			if( iissue >= (int) ((List<Object>)clist.get( clist.size()-1 )).get(4) ){
+			    clist.add( cnt ); // as last
+			} else{
+			    if( iissue <= (int) ((List<Object>) clist.get(0)).get(4) ){
+				clist.add( 0, cnt ); // as first
+			    } else {
+				int min = 0;
+				int max = clist.size()-1;
+				//log.info(" min:" + min + " max:" + max );
 
-		    clist.add(cnt);
+				int turns = 20; 
+				while( min < max  && turns >0){
+				    turns--;
+				    int mid = ( min+max ) / 2;
+				    int miss = (int) ((List<Object>) clist.get(mid)).get(4);
+				    //log.info("   mid:" + mid + " mis:" + miss);
+				    if( iissue <= miss ){
+					max = mid;
+				    } else {
+					min = mid;
+				    }
 
-		    log.info("iss: "+ issue +" stage: " + stageId + " state: " + stateId + " cnt: " + count);
-		    log.info("iss: "+ issue +" stage: " + stage.getName() + " state: " + state.getName() + " cnt: " + count);
+				    if( max-min == 1){
+					int imin =  (int) ((List<Object>) clist.get(min)).get(4);
+					int imax =  (int) ((List<Object>) clist.get(max)).get(4);
+					if( iissue >= imin && iissue<= imax){
+					    min=max;
+					}
+				        //log.info("    min:" + min + " imin:" + imin + " max:" + max + " imax:" + imax + " IIS: " + iissue);
+				    }
+				    
+				    //log.info("   min:" + min + " max:" + max + " mid:" + mid + " mis:" + miss);
+				}
+				//log.info("   adding at:" + min + " total(pre): "+ clist.size());
+				clist.add( min, cnt ); // at min
+				//log.info("   added at:" + min + " total(post): "+ clist.size());
+				for( Iterator c = clist.iterator(); c.hasNext(); ) {
+				    List<Object> cc = (List<Object>)c.next();
+				    //log.info("       issue="+ cc.get(4));
+				}
+			    }
+			}
+		    }		   
                 }
-            } else {
-                
+            } else {               
                 log.info( "IcStatsDao(getCountAll): no counts"  );
             }
             

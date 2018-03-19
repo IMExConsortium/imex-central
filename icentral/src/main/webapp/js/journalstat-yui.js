@@ -292,7 +292,7 @@ YAHOO.imex.journalstat = {
 	    var atab = 0;
 	    
 	    for( var i = 0; i < JS.jstab.length; i++ ){
-	    	
+	        	
 		var active = false;
 		if( i == atab ){
 		    active = true;
