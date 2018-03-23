@@ -35,7 +35,24 @@ public class IcStatsDao extends AbstractDAO {
     //}
 
     public static final Integer PARTNERID = new Integer( 15 ); // set as bean param
-    
+
+
+    public List<Object> getJournalYVCounts( Journal jrnl, 
+					    String year, String volume,
+					    int firstRecord,
+					    int blockSize ){
+
+	List<Object> cntall = getJournalYVCounts( jrnl, year, volume );
+
+	// note: paging based on unique issue id count
+	//--------------------------------------------
+	
+	// make list of issue IDs
+
+	// 
+	
+	return null;
+    }
     
     public List<Object> getJournalYVCounts( Journal jrnl, 
 					    String year, String volume ){
@@ -145,6 +162,7 @@ public class IcStatsDao extends AbstractDAO {
 			}
 		    }		   
                 }
+
             } else {               
                 log.info( "IcStatsDao(getCountAll): no counts"  );
             }

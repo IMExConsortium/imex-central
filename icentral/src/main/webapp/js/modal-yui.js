@@ -350,7 +350,9 @@ YAHOO.mbi.modal = {
                                      
                                      try{
                                          console.log("reloading...");
-                                         
+                                         console.log( myself.parent );
+					 
+
 					 myself.parent 
 					     .tableReload( {}, myself.table );
                                          //YAHOO.imex.journalview

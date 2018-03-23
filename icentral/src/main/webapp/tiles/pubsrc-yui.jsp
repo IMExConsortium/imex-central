@@ -57,7 +57,7 @@
          <div class="acom">
           <s:hidden name="mst" value="1:1:1"/> 
           <s:select name="opp.encf" headerKey="-1" headerValue="-- select --"
-                    list="#{'QControl':'QControl','Curation Request':'Curation Request'}" 
+                    list="#{'QControl':'QControl','Curation Request':'Curation Request','DSP':'DSP'}" 
                     value="-1" cssClass="pubsrc-flag"/>
           
           <s:submit theme="simple" name="op.eflt" value="SEARCH" onclick=""/>

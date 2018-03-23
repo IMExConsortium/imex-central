@@ -89,6 +89,16 @@ YAHOO.imex.journalview = {
                        ]
                      },
 
+        "modified":{ label:"Last Modified", menuLabel:"Last Modified", key:"modified", 
+                     hideable: true, hidden: true,
+                     children:[
+                         { key:"modTStamp",  label:"Date", 
+                           sortable:true, resizeable:false, formatter:"mts" },
+                         { key:"modUser", label:"Modified By",
+                           sortable:false, resizeable:false}
+                     ]
+                   },
+
         "state":{ key:"state", label:"Status", 
                   sortable:false, resizeable:false, hideable: true, 
                   formatter:"center", menuLabel:"Status" },
@@ -106,7 +116,7 @@ YAHOO.imex.journalview = {
     
     myCP: { "date": "submission"},
 
-    myCL: [ "id", "pub", "pages", "pmid", "imexId", "submission",
+    myCL: [ "id", "pub", "pages", "pmid", "imexId", "submission", "modified",
             "stage", "state",  "detail" ],
     myColumnDefs: [],
     

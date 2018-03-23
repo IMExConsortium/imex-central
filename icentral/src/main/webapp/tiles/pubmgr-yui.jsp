@@ -79,7 +79,7 @@
    <h2 class="pubmgr">Records curated by: <i><s:property value="opp.au"/></i></h2>
   </s:elseif>
   <s:elseif test="opp.encf.length() > 0 ">
-   <h2 class="pubmgr">Records Flagged as: <i><s:property value="opp.encf"/></i></h2>
+   <h2 class="pubmgr">Project: <i><s:property value="opp.encf"/></i></h2>
   </s:elseif>
   <s:elseif test="opp.wfl.length() > 0 && #session['USER_ID'] > 0" >
    <h2 class="pubmgr">Watched Records</h2>
