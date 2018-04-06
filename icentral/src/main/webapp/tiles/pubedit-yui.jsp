@@ -261,7 +261,7 @@
                    <li><label for="cmtmgr_opp_encs">Subject:</label> <s:textfield theme="simple" name="opp.encs" size="50" value=""/></li>
                     <%--  <p><label for="cmtmgr_format">Format:</label> --</li>%><%--  <li><s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> </li>--%>
                     <li><label for="cmtmgr_opp_encb">Body:</label> <s:textarea cssClass="limit-width" theme="simple" name="opp.encb" cols="50" rows="5" value=""/></li>
-                    <li><label for="cmtmgr_opp_encf">Flag:</label> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request'}" value="-1"/></li>
+                    <li><label for="cmtmgr_opp_encf">Flag:</label> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request','5':'DSP'}" value="-1"/></li>
                     <li><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></li>
                     <li><em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> <li>
                     

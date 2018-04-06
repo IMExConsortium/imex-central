@@ -106,7 +106,7 @@ public class IcentralRestImpl implements IcentralRest{
         }
 
         String imx = (String) getImexAcc( ns, acc);
-        log.info( "IcentralRestImpl(getRecordByAcc): ns=" + ns + " acc=" +acc+ " imx=" + imx );
+        log.debug( "IcentralRestImpl(getRecordByAcc): ns=" + ns + " acc=" +acc+ " imx=" + imx );
 
         if( imx != null && !imx.equals( "{}" ) ){
             try{

@@ -930,6 +930,41 @@ public class IcentralPortImpl implements IcentralPort {
         }
 
         if( attType != null 
+            && attType.toLowerCase().startsWith( "flag/" ) ){
+                
+            IcComment icCom = new IcComment( owner, icParent, 
+                                             attLabel, attBody);
+
+            icCom.setOwner( owner ); 
+            //icCom.setRoot( icParent ); 
+            
+            icCom.setLabel( attLabel );
+            icCom.setBody( attBody );
+
+    
+            String fname = attType.substring(5);
+        
+            IcFlag flag =  attachmentManager.getIcFlag( fname );
+            if( flag != null ){
+                icCom.setIcFlag( flag );
+            } else {
+                log.debug( " flag unknown: " + fname );
+            }
+
+            //IcAdiDao adiDao = (IcAdiDao) 
+            //    entryManager.getTracContext().getAdiDao();
+            //adiDao.saveAdi( icCom );
+            
+            attachmentManager.addIcAdi( icCom, owner );
+
+            Attachment nAtt = 
+                buildAttachment( icCom.getId(), icParent, null, "txt/comment", 
+                                 attLabel, attBody, owner );
+            
+            attachment.value= nAtt;
+        }
+
+        if( attType != null 
             && attType.toLowerCase().equals( "txt/request" ) ){
                 
             IcComment icCom = new IcComment( owner, icParent, 
