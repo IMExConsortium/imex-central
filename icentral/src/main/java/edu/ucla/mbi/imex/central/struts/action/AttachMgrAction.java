@@ -96,6 +96,7 @@ public class AttachMgrAction extends ManagerSupport {
     //--------
     
     private List attlist = null;
+    private List scrlist = null;
     
     public List getAttach() {
         if( attlist == null ){
@@ -103,14 +104,30 @@ public class AttachMgrAction extends ManagerSupport {
         }
         return attlist;
     }
+
+
+    public List getScore() {
+        if( scrlist == null ){
+            scrlist = new ArrayList();
+        }
+        return scrlist;
+    }
     
     private Map attmeta = null;
+    private Map scrmeta = null;
     
     public Map getAttachMeta(){   
         if( attmeta == null ){
             attmeta = new HashMap<String,Object>();
         }
         return attmeta;
+    }
+
+    public Map getScoreMeta(){   
+        if( scrmeta == null ){
+            scrmeta = new HashMap<String,Object>();
+        }
+        return scrmeta;
     }
 
     private InputStream dstream;
@@ -168,7 +185,23 @@ public class AttachMgrAction extends ManagerSupport {
 
                     // get all data attachments
                     //-------------------------
-                    attlist = getADataByRoot( icpub );
+                   
+                   List<Map> adl = getADataByRoot( icpub );
+
+                   for( Iterator<Map> ii = adl.iterator(); ii.hasNext(); ){
+                       
+                       Map ci = ii.next();
+
+                       if(ci.containsKey("value")){
+                           scrlist.add( ci );
+                       } else {
+                           attlist.add( ci );
+                       }
+                   }
+                   
+                   getAttachMeta().put( "total", attlist.size() );
+                   getScoreMeta().put( "total", scrlist.size() );
+
                 }
  
                 if ( key.equalsIgnoreCase( "cidg" ) ) {
@@ -523,7 +556,7 @@ public class AttachMgrAction extends ManagerSupport {
 
     //--------------------------------------------------------------------------
 
-    private List getADataByRoot( IcPub icpub ){
+    private List<Map> getADataByRoot( IcPub icpub ){
         
         //IcAdiDao adiDao = (IcAdiDao)
         //    entryManager.getTracContext().getAdiDao();
@@ -542,7 +575,11 @@ public class AttachMgrAction extends ManagerSupport {
             AttachedDataItem cadi = ii.next();
             if( cadi instanceof IcAttachment ){
                 IcAttachment ic = (IcAttachment) cadi;
-                clist.add( buildIcAttachmentMap(ic, false) );
+                clist.add( buildIcAttachmentMap( ic, false ) );
+            }
+            if( cadi instanceof IcScore ){
+                IcScore ic = (IcScore) cadi;
+                clist.add( buildIcScoreMap( ic ) );
             }
         }
 
@@ -648,5 +685,26 @@ public class AttachMgrAction extends ManagerSupport {
             cmap.put("body", bdy );
         }
         return cmap;
-    }    
+    }
+
+    //--------------------------------------------------------------------------
+
+    private Map buildIcScoreMap( IcScore ic ){
+
+        Map<String,Object> cmap = new HashMap<String,Object>();
+                
+        String crt = String.format( "%1$ta %1$tb %1$td %1$tT %1$tZ %1$tY", ic.getCrt() );
+        String aut = ic.getOwner().getLogin();        
+
+        cmap.put("id",ic.getId() );
+        cmap.put("aid",ic.getId() );
+        cmap.put("root",ic.getRoot().getId());
+        cmap.put("date",crt);
+        cmap.put("author",aut);
+        cmap.put("name",ic.getName());
+        cmap.put("value",ic.getValue());        
+        return cmap;        
+
+    }
+    
 }

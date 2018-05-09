@@ -304,6 +304,7 @@
              <s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
                    <h3 class="pub-edit-sect">Attachments</h3>
                    <div id="adata-tbview" class="tbview"></div>
+                   <div id="score-sect" class="score-sect"></div>
              </s:if>   
              <s:else>
              <h3 class="pub-edit-sect">Add a File</h3>               
@@ -369,11 +370,13 @@
           id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
           login:"<s:property value="#session['LOGIN']"/>"
+          
          }  
       );
 
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
          {aclass:"adata",apane:"adata-tbview",tabno:4,
+          spane: "score-sect",
           url:"attachmgr?op.dalg=dalg&id=",
           cname:{"author":"Author", "subject":"Name", "date":"Date", 
                  "bodyType":"Format", "flagName":"Flag", "aid":""},

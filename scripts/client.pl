@@ -8,7 +8,7 @@ my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
 my $URLPROD = "http://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
 my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
 my $URL = $URLTEST;
-my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/icentral/ws-v20";
+my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/ws-v20";
 
 my $ip="";
 my $pmid="";

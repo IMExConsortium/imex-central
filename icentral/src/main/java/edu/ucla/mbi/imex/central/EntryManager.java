@@ -742,6 +742,46 @@ public class EntryManager {
 
     //--------------------------------------------------------------------------
 
+    public IcPub updateIcPubState( IcPub pub, User luser, 
+                                   DataState stage , DataState state ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        if( pub != null && state !=null ) {
+            
+            IcPub oldPub = (IcPub) tracContext.getPubDao()
+                .getPublication( pub.getId() );
+
+            if( oldPub != null ){
+		
+                DataState oldState = oldPub.getState();
+                DataState oldStage = oldPub.getStage();
+		
+		log.debug( "ostate: " + oldState.getName() + " ostage: " + oldStage.getName());
+		log.debug( "nstate: " + state.getName() + " nstage: " + stage.getName());
+		
+                if( oldState.equals(state) && oldStage.equals(stage) ){
+		    // no chanage
+		    return oldPub;
+		} else {
+		    
+		    oldPub.setState( state );
+                    oldPub.setStage( stage );
+
+                    //tracContext.getPubDao().savePublication( pub );                                                                                                                                           
+                    log.debug( "updating state/stage");
+                   
+		    ((IcPubDao) tracContext.getPubDao())
+                        .updatePublication( oldPub, luser );
+
+                    return oldPub;
+		}		
+	    }
+	}
+	return null;
+    }
+    //--------------------------------------------------------------------------
+
     public IcPub updateIcPubState( IcPub pub, User luser, DataState state ) {
         
         Log log = LogFactory.getLog( this.getClass() );
@@ -865,6 +905,21 @@ public class EntryManager {
     //--------------------------------------------------------------------------
 
     
+    public IcPub updateIcPubState( IcPub pub, User user, 
+                                   String stageName, String stateName ) {
+
+        DataState stage = wflowContext.getWorkflowDao().getDataStage( stageName );
+        DataState state = wflowContext.getWorkflowDao().getDataState( stateName );
+
+        if( pub != null && stage != null && state != null) {
+            return this.updateIcPubState( pub, user, stage, state ); 
+            //return pub;
+        }
+        return null;
+    }
+    
+    //--------------------------------------------------------------------------
+
     public IcPub updateIcPubState( IcPub pub, User user, String stateName ) {
 
         DataState state = wflowContext.getWorkflowDao().getDataState( stateName );

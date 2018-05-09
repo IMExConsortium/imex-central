@@ -5,6 +5,13 @@ $HeadURL$
 $Id$ 
 
 
+
+
+2018/04/13
+   - web service (v2.00) upgrads:
+        - updatePublicationStatus method can set, both, stage and status
+          by passing <stage>/<status> (eg 'PREQUEUE/NEW') as status argument
+
 2018/03/24
    - GUI upgrades/fixes:
         - fixed some journalstat glitches

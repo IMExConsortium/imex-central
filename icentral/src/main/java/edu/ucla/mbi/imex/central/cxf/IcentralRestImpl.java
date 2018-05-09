@@ -93,6 +93,7 @@ public class IcentralRestImpl implements IcentralRest{
                   " ns=" + ns + " acc=" + acc + " mode=" + mode );
         
         String imexAc = null;
+        String pmidAc = null;
         String imexDB = null;
         String imexUrl = null;
         
@@ -117,6 +118,9 @@ public class IcentralRestImpl implements IcentralRest{
                 if( imexAc == null ){
                     imexAc = es.getString( "acc" );
                 }
+                if( pmidAc == null ){
+                    pmidAc = es.getString( "pmid" );
+                }
                 imexDB = es.getJSONArray( "curated-by" )
                     .getJSONObject(0).getString("name");
             }catch(JSONException jx ){
@@ -135,7 +139,12 @@ public class IcentralRestImpl implements IcentralRest{
         
         if( mode.equals( "url" ) ){
             try{
-                imexUrl = imexUrl.replace("%%ACC%%", imexAc );
+                if( imexAc != null ){
+                    imexUrl = imexUrl.replace("%%ACC%%", imexAc );
+                }
+                if( pmidAc != null ){
+                    imexUrl = imexUrl.replace("%%PMID%%", pmidAc );
+                }
                 return imexUrl;
             } catch( Exception ex ){}
         }
@@ -168,7 +177,12 @@ public class IcentralRestImpl implements IcentralRest{
             log.info( "IcentralRestImpl(getRecordByAcc): redirect: url=" + imexUrl );
 
             try{
-                imexUrl = imexUrl.replace("%%ACC%%", imexAc );   
+                if( imexAc != null ){
+                    imexUrl = imexUrl.replace("%%ACC%%", imexAc );   
+                }
+                if( pmidAc != null ){
+                    imexUrl = imexUrl.replace("%%PMID%%", pmidAc );
+                }
                 httpResponse.sendRedirect( imexUrl ); 
             } catch( Exception ex ){
                 log.info( "IcentralRestImpl(getRecordByAcc): EX=" + ex );
@@ -244,6 +258,7 @@ public class IcentralRestImpl implements IcentralRest{
             if( icp.getState().getName().equals("RELEASED") ){
                 String retStr = "{'entryset-list':["+
                     "{'acc':'"+icp.getImexId()+"',"+
+                    " 'pmid':'"+icp.getPmid()+"',"+
                     "'curated-by':[{'name':'"+imexDB+"'}]"+
                     "}]}";
 
@@ -272,6 +287,7 @@ public class IcentralRestImpl implements IcentralRest{
                   " mode=" + mode);
         
         String imexAc = null;
+        String pmidAc = null;
         String imexDB = null;
         String imexUrl = null;
         
@@ -296,6 +312,9 @@ public class IcentralRestImpl implements IcentralRest{
                 if( imexAc == null ){
                     imexAc = es.getString( "acc" );
                 }
+                if( pmidAc == null ){
+                    pmidAc = es.getString( "pmid" );
+                }
                 imexDB = es.getJSONArray( "curated-by" )
                     .getJSONObject(0).getString("name");
             }catch(JSONException jx ){
@@ -317,7 +336,12 @@ public class IcentralRestImpl implements IcentralRest{
         
         if( mode.equals( "url" ) ){
             try{
-                imexUrl = imexUrl.replace("%%ACC%%", imexAc );
+                if( imexAc != null ){
+                    imexUrl = imexUrl.replace("%%ACC%%", imexAc );
+                }
+                if( pmidAc != null ){
+                    imexUrl = imexUrl.replace("%%PMID%%", pmidAc );
+                }
                 return imexUrl;
             } catch( Exception ex ){}
         }
@@ -341,8 +365,7 @@ public class IcentralRestImpl implements IcentralRest{
                     ctx.get(AbstractHTTPDestination.HTTP_RESPONSE);
             } catch( Exception ex ){
                 log.info( "IcentralRestImpl(getDataFileByAcc): EX=" + ex );
-            }
-            
+            }            
 
             log.debug( "IcentralRestImpl(getDataFileByAcc): redirect: httpResponse=" + httpResponse );
 
@@ -350,7 +373,12 @@ public class IcentralRestImpl implements IcentralRest{
             log.info( "IcentralRestImpl(getDataFileByAcc): redirect: url=" + imexUrl );
 
             try{
-                imexUrl = imexUrl.replace("%%ACC%%", imexAc );   
+                if( imexAc != null ){
+                    imexUrl = imexUrl.replace("%%ACC%%", imexAc );   
+                }
+                if( pmidAc != null ){
+                    imexUrl = imexUrl.replace("%%PMID%%", pmidAc );   
+                }
                 httpResponse.sendRedirect( imexUrl ); 
             } catch( Exception ex ){
                 log.info( "IcentralRestImpl(getDataFileByAcc): EX=" + ex );

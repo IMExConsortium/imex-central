@@ -581,22 +581,61 @@ public class IcentralPortImpl implements IcentralPort {
             throw Fault.NO_RECORD;
         }
         aclVerify( WS_ACTION, WS_UPD, usr, icp );
+        
+        
 
-        DataState state = entryManager.getWorkflowContext()
-            .getWorkflowDao().getDataState( status );
-        
-        log.info( " state set to: " + state );
-        if( state == null ) throw Fault.STAT_UNKNOWN;
-        
-        // update status
-        //--------------
-        
-        IcPub icPub = 
-	    entryManager.updateIcPubState( icp, c.loggedUser(), state );
+        int div = status.indexOf("/");
+        if( div > 0){
 
-	if( icPub == null)  throw Fault.INVALID_VALUE;
+            // combined stage & state 
+            
+            String stage = status.substring(0,div);
+            String state = status.substring(div+1);
+
+            log.debug( " stage=" + stage + " state=" + state );
+
+            DataState stageDS = entryManager.getWorkflowContext()
+                .getWorkflowDao().getDataStage( stage );
+
+            DataState stateDS = entryManager.getWorkflowContext()
+                .getWorkflowDao().getDataState( state );
+
+            log.debug( " stageDS=" + stageDS + " stateDS=" + stateDS );
+
+            if( stageDS == null  || stateDS == null) throw Fault.STAT_UNKNOWN;
+
+            // update stage & state
+            //----------------------
+            
+            IcPub icPub = 
+                entryManager.updateIcPubState( icp, c.loggedUser(), stageDS, stateDS );
+
+            if( icPub == null)  throw Fault.INVALID_VALUE;
+
+            return buildPub( icPub );
+
+        } else {
+            
+            // state only (stage updated according to workflow
+
+            DataState state = entryManager.getWorkflowContext()
+                .getWorkflowDao().getDataState( status );
+         
+            log.info( " state set to: " + state.getName() );
+            if( state == null ) throw Fault.STAT_UNKNOWN;
+        
+            // update status
+            //--------------
+        
+            IcPub icPub = 
+                entryManager.updateIcPubState( icp, c.loggedUser(), state );
+
+            log.info( " new pub: " + icPub );
+
+            if( icPub == null)  throw Fault.INVALID_VALUE;
 	
-        return buildPub( icPub );
+            return buildPub( icPub );
+        }
     }
 
     //--------------------------------------------------------------------------
