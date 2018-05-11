@@ -44,9 +44,13 @@ YAHOO.imex.attedit = {
 
     attachInitList: function( o ){
         
+        try{
+
         var aclass= o.argument;
-        
+        //console.log( "attachInitList: o.responseText=" +  o.responseText); 
+
         var messages = YAHOO.lang.JSON.parse( o.responseText);
+        
         var tbvhandle = YAHOO.util.Dom.get( YAHOO.imex.attedit.conf[aclass].apane );
        
         if( tbvhandle === undefined ) return;
@@ -249,6 +253,11 @@ YAHOO.imex.attedit = {
                 true
             );
         }  
+
+      } catch(x){
+        console.log("xxx:" + x);
+      }
+
     },
     addTitleCount: function( count, id )
     {

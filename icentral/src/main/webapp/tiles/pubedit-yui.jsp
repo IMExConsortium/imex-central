@@ -7,7 +7,11 @@
 
  <script src="js/calendar-yui.js" type="text/javascript"></script>
  <script src="js/pubedit-yui.js" type="text/javascript"></script>
+
+ <script src="js/adi-yui.js" type="text/javascript"></script>
+
  <script src="js/attach-yui.js" type="text/javascript"></script>
+
 <%-- END --%>
  <h1>Publication Editor</h1>
  <div class="pub-edit-head main-width">
@@ -302,9 +306,14 @@
                 </s:form>
              </s:if> 
              <s:if test="#session['USER_ROLE'].curator != null || #session['USER_ID'] == pub.owner.id">
+               <div id="adi-attachments" class="yui-hidden">
                    <h3 class="pub-edit-sect">Attachments</h3>
                    <div id="adata-tbview" class="tbview"></div>
-                   <div id="score-sect" class="score-sect"></div>
+               </div>
+               <div id="adi-scores" class="yui-hidden">
+                   <h3 class="pub-edit-sect">Scores</h3>
+                   <div id="score-tbview" class="tbview"></div>
+               </div>
              </s:if>   
              <s:else>
              <h3 class="pub-edit-sect">Add a File</h3>               
@@ -349,6 +358,16 @@
  <br/>
 
 <script type="text/javascript">
+
+    console.log(window);
+
+    //var testFormatter = function( elLiner, oRecord, oColumn, oData ) { 
+    //   console.log("data: " + JSON.stringify(oRecord) );
+    //   elLiner.innerHTML = oData;
+    //};
+
+    //YAHOO.widget.DataTable.Formatter.test = testFormatter;
+
     YAHOO.util.Event.addListener( 
          window, "load", YAHOO.imex.pubedit.init, 
          {id:"<s:property value="id"/>",
@@ -362,6 +381,7 @@
 
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
 
+
     YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
          {aclass:"comment",
           apane:"com-tbview",tabno:3,
@@ -374,12 +394,36 @@
          }  
       );
 
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
-         {aclass:"adata",apane:"adata-tbview",tabno:4,
-          spane: "score-sect",
+
+    //YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
+    //     {aclass:"adata",apane:"adata-tbview",tabno:4,
+    //      spane: "score-sect",
+    //      url:"attachmgr?op.dalg=dalg&id=",
+    //      cname:{"author":"Author", "subject":"Name", "date":"Date", 
+    //             "bodyType":"Format", "flagName":"Flag", "aid":""},
+    //      id:"<s:property value="id"/>",
+    //      imexACC:"<s:property value="pub.imexId"/>",
+    //      login:"<s:property value="#session['LOGIN']" />",
+    //      loginid:"<s:property value="#session['USER_ID']" />",
+    //      curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
+    //      owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
+    //  );
+    
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
+         {adid: "eatt", tabno: 5, adipane:"adi-attachments",
+          aditable: "adata-tbview", "meta": "attachMeta",
           url:"attachmgr?op.dalg=dalg&id=",
-          cname:{"author":"Author", "subject":"Name", "date":"Date", 
-                 "bodyType":"Format", "flagName":"Flag", "aid":""},
+          rschema: { fields: ["id","aid","root","subject","body","date","author","bodyType","flagName"],
+                     resultsList: "attach"},
+          coldefs: [
+                //{key:"id", label:"ID"},
+                { key:"author",   label:"Author" /* , width:100,*/ },
+                { key:"date",     label:"Date"                            /* , width:240,*/ },
+                { key:"subject",  label:"Subject" , formatter: "adi_asubject" /* , width:240,*/ },
+                { key:"bodyType", label:"Format",   formatter: "adi_btype"    /* , width:240,*/ },
+                { key:"flagName", label:"Flag",     formatter: "adi_flag"     /* , width:240,*/ },
+                { key:"aid",      label:"",         formatter: "adi_dll"      /* , width:240,*/ }
+            ],
           id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
           login:"<s:property value="#session['LOGIN']" />",
@@ -387,6 +431,28 @@
           curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
           owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
       );
+
+    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
+         {adid:"escore", tabno:5, adipane:"adi-scores",
+          aditable: "score-tbview", "meta": "scoreMeta",
+          url:"attachmgr?op.dalg=dalg&id=",
+          rschema: { fields: ["id","aid","root","date","author","name","value"],
+                     resultsList: "score"},
+          coldefs: [
+                //{key:"id", label:"ID"},
+                { key:"author", label:"Author"                          /* , width:100,*/ },
+                { key:"date",   label:"Date"                            /* , width:240,*/ },
+                { key:"name",   label:"Name",    formatter: "adi_name"  /* , width:240,*/ },
+                { key:"value",  label:"Value",   formatter: "adi_value" /* , width:240,*/ }
+            ],
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />",
+          loginid:"<s:property value="#session['USER_ID']" />",
+          curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
+          owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
+     );
+
 
       YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
          {aclass:"history",apane:"history-tbview",tabno:6,
@@ -397,11 +463,11 @@
           login:"<s:property value="#session['LOGIN']" />"}  
       );
 
-    function attclear(){
-      try{   
-        YAHOO.util.Dom.get('attmgr_opp_edan').value='';
-        YAHOO.util.Dom.get('attmgr_opp_edafile').value='';
-      }catch(x){};
-    };
-    YAHOO.util.Event.addListener( window, "load", attclear );
+    //function attclear(){
+    //  try{   
+    //    YAHOO.util.Dom.get('attmgr_opp_edan').value='';
+    //    YAHOO.util.Dom.get('attmgr_opp_edafile').value='';
+    //  }catch(x){};
+    //};
+    //YAHOO.util.Event.addListener( window, "load", attclear );
  </script>

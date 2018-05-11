@@ -187,20 +187,40 @@ public class AttachMgrAction extends ManagerSupport {
                     //-------------------------
                    
                    List<Map> adl = getADataByRoot( icpub );
+                   
+                   Map<String,Map> smap = new <String,Map>HashMap();
 
                    for( Iterator<Map> ii = adl.iterator(); ii.hasNext(); ){
                        
                        Map ci = ii.next();
+                       
+                       if(ci.containsKey("value")){  // new score to add
+                                                     
+                           String name = (String) ci.get("name");
+                           int id = (int)  ci.get("id");
 
-                       if(ci.containsKey("value")){
-                           scrlist.add( ci );
+                           boolean skip = false;
+
+                           if( smap.containsKey(name) ){                           
+                               Map cscore = (Map) smap.get( name );
+                               
+                               if( ((int) cscore.get("id")) > id ){
+                                   skip = true;
+                               }
+                           }
+                           
+                           if( ! skip  ){
+                               smap.put( name, ci );
+                           }
                        } else {
-                           attlist.add( ci );
+                           getAttach().add( ci );
                        }
                    }
                    
-                   getAttachMeta().put( "total", attlist.size() );
-                   getScoreMeta().put( "total", scrlist.size() );
+                   scrlist = new ArrayList( smap.values() );
+
+                   getAttachMeta().put( "total", getAttach().size() );
+                   getScoreMeta().put( "total", getScore().size() );
 
                 }
  

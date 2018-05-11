@@ -125,10 +125,15 @@ public class EntryManager {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " get pub -> id=" + id );
         
-        IcPub oldPub =  (IcPub) tracContext.getPubDao()
-            .getPublication( id );
+        try{
 
-        return oldPub;
+            IcPub oldPub =  (IcPub) tracContext.getPubDao()
+                .getPublication( id );
+
+            return oldPub;
+        } catch( Exception ex ) {
+            return null;
+        }
     }
 
     //---------------------------------------------------------------------

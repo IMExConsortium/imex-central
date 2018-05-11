@@ -26,6 +26,10 @@
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
+        <Logger name="edu.ucla.mbi.imex.central.struts.action.AttachMgrAction" level="debug" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
         <Logger name="edu.ucla.mbi.imex.central.struts.action" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>

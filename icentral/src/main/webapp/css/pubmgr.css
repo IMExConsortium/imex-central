@@ -2,6 +2,10 @@
    width: 100%;
 }
 
+#pubtab table, #com-tbview table, #history-tbview table, #adata-tbview, #score-tbview table {
+   width: 100%;
+}
+
 .pubtab th {
     vertical-align: middle;
     text-align: center;

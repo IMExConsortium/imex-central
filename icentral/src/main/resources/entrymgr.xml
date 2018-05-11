@@ -266,7 +266,7 @@
          publicationList.*,attachmentManager.*
        </param>
        <param name="includeProperties">
-         attach.*, attachMeta.*
+         attach.*, attachMeta.*, score.*, scoreMeta.*
        </param>
        <param name="noCache">true</param>
      </result>

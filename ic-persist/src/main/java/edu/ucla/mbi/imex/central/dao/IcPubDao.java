@@ -39,10 +39,14 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao->getPublication: id(int)=" + id  );
         
-        Publication pub = (IcPub) super.find( IcPub.class, new Integer( id ) );
+        try{
 
-        log.info( "IcPubDao->getPublication: id=" + id + " ::DONE"  );
-        return pub; 
+            Publication pub = (IcPub) super.find( IcPub.class, new Integer( id ) );
+            log.info( "IcPubDao->getPublication: id=" + id + " ::DONE"  );
+            return pub;
+        } catch( Exception ex ){
+            return null;
+        } 
     }
     
     //--------------------------------------------------------------------------
