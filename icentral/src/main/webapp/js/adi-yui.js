@@ -12,7 +12,6 @@ YAHOO.imex.adi = {
 
         var adid = obj.adid; 
         
-
         mys.conf[obj.adid] = {};
         mys.conf[obj.adid].pane = obj.adipane;
         mys.conf[obj.adid].tbview = obj.aditable;
@@ -43,18 +42,13 @@ YAHOO.imex.adi = {
 
     initList: function( o ){
        try{
-
-          console.log("initList: o " + JSON.stringify(o) );
+          
           console.log("initList: o.argument " + JSON.stringify(o.argument) );
           console.log("initList: o.argument.adid: " + o.argument.adid);
 
           var adid = o.argument.adid;
           var myconf = YAHOO.imex.adi.conf[adid];
-          
-          //var meta = YAHOO.imex.adi.conf[adid].meta; 
-          //var pane = YAHOO.imex.adi.conf[adid].pane
-          //var opane = YAHOO.util.Dom.get( YAHOO.imex.adi.conf[adid].pane );
-
+        
           var meta = myconf.meta; 
           var pane = myconf.pane
           var opane = YAHOO.util.Dom.get( pane );
@@ -129,33 +123,32 @@ YAHOO.imex.adi = {
     setFormatters: function( o ){
 
        var myNameFormatter = function( elLiner, oRecord, oColumn, oData ) { 
-                
-                    elLiner.innerHTML = oRecord.getData("name");
-            };
+             elLiner.innerHTML = oRecord.getData("name");
+          };
 
        var myValueFormatter = function( elLiner, oRecord, oColumn, oData ) { 
-                
-                    elLiner.innerHTML = "<center>" + oRecord.getData("value") + "</center>";
-            };
+             //elLiner.innerHTML = "<center>" + oRecord.getData("value") + "</center>";
+             var val = parseFloat( Math.round(oRecord.getData("value") * 100) / 100).toFixed(2);
+               elLiner.innerHTML = "<center>" + val + "</center>";
+          };
 
        var mySubFormatter = function( elLiner, oRecord, oColumn, oData ) { 
-                
-                if( oRecord.getData("body") === "" ){ 
+             if( oRecord.getData("body") === "" ){ 
                     elLiner.innerHTML = oRecord.getData("subject");
-                } else {
+             } else {
                     elLiner.innerHTML = oRecord.getData("subject") 
                         + ' [<a onclick="YAHOO.mbi.modal.attachment({'
                         + 'rid:' + oRecord.getData("root")
                         + ',aid:' + oRecord.getData("id")
                         + '}); return false;" href="" >more</a>]';
-                }
-            };
+             }
+          };
  
        var myASubFormatter = function( elLiner, oRecord, oColumn, oData ) { 
                 
-                if( oRecord.getData("body") === "" ){ 
+             if( oRecord.getData("body") === "" ){ 
                     elLiner.innerHTML = oRecord.getData("subject");
-                } else {
+             } else {
                     elLiner.innerHTML = oRecord.getData("subject") 
                         + ' [<a onclick="YAHOO.mbi.modal.attachment({'
                         + 'atp:\'adata\', rid:' + oRecord.getData("root")
@@ -165,8 +158,8 @@ YAHOO.imex.adi = {
                         + '&id='+ oRecord.getData("root") 
                         + '&opp.aid='+ oRecord.getData("id")
                         + '&opp.rt=data">download</a>]';
-                }
-            }; 
+             }
+          }; 
             
        var myFlagFormatter = function( elLiner, oRecord, oColumn, oData ) { 
                 
@@ -204,7 +197,6 @@ YAHOO.imex.adi = {
                             + '});return false;\">delete</a></center>';
                     }
             }; 
-
 
        var myTestFormatter = function( elLiner, oRecord, oColumn, oData ) { 
           console.log("data: " + JSON.stringify(oRecord) );

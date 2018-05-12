@@ -274,15 +274,20 @@
                 </s:if>
               </s:form>
                 <s:if test="#session['USER_ID'] > 0">
-                   <h3 class="pub-edit-sect">Comments</h3>
-                   <div id="com-tbview" class="tbview"></div>
+                   <div id="adi-comments" class="yui-hidden">
+                     <h3 class="pub-edit-sect">Comments</h3>
+                     <div id="com-tbview" class="tbview"></div>
+                   </div>
                 </s:if>
                 <s:else>
                    <h3 class="pub-edit-sect">Add a Comment</h3>               
                    <p>Please <a href="javascript:YAHOO.mbi.login.sendUrlFragment();">Log in</a> to add a comment.</p>
-                   
-                    <h3 class="pub-edit-sect">Comments</h3>
-                   <div id="com-tbview" class="tbview"></div>
+
+                   <div id="adi-comments" class="yui-hidden">
+                     <h3 class="pub-edit-sect">Comments</h3>
+                     <div id="com-tbview" class="tbview"></div>
+                   </div>
+
                 </s:else>
              </div>
           <!-- attachment pane -->
@@ -346,9 +351,14 @@
           <!-- log pane -->
           <div id="log-pane" class="yui-hidden ">
              <s:form id="cmtmgr" theme="simple" action="attachmgr">
-                <h3 class="pub-edit-sect">Record History</h3>                  
-                   <s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
+             
+                <s:hidden name="id" value="%{id}"/><s:hidden name="pub.id" value="%{id}"/>
+
+               <div id="adi-history" class="yui-hidden">
+                   <h3 class="pub-edit-sect">Record History</h3>
                    <div id="history-tbview" class="tbview"></div>
+               </div>
+
              </s:form></div>
        </div>
     </div>
@@ -359,57 +369,51 @@
 
 <script type="text/javascript">
 
-    console.log(window);
+   // top-level tabs and content
+   //---------------------------
+   
+   YAHOO.util.Event.addListener( 
+      window, "load", YAHOO.imex.pubedit.init, 
+      {id:"<s:property value="id"/>",
+       pmid:"<s:property value="pub.pmid"/>",
+       jSpec:"<s:property value="pub.journalSpecific"/>",
+       imexACC:"<s:property value="pub.imexId"/>",
+       login:"<s:property value="#session['LOGIN']"/>",
+       prefs:"<s:property value="#session['PREFS']"/>"
+      } 
+   );
 
-    //var testFormatter = function( elLiner, oRecord, oColumn, oData ) { 
-    //   console.log("data: " + JSON.stringify(oRecord) );
-    //   elLiner.innerHTML = oData;
-    //};
+   YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
 
-    //YAHOO.widget.DataTable.Formatter.test = testFormatter;
+   // comment tab table
+   //------------------
 
-    YAHOO.util.Event.addListener( 
-         window, "load", YAHOO.imex.pubedit.init, 
-         {id:"<s:property value="id"/>",
-          pmid:"<s:property value="pub.pmid"/>",
-          jSpec:"<s:property value="pub.journalSpecific"/>",
-          imexACC:"<s:property value="pub.imexId"/>",
-          login:"<s:property value="#session['LOGIN']"/>",
-          prefs:"<s:property value="#session['PREFS']"/>"
-         } 
-      );
-
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.calendar.init );
-
-
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
-         {aclass:"comment",
-          apane:"com-tbview",tabno:3,
+   YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
+         {adid: "ecomm", tabno: 4, adipane:"adi-comments",
+          aditable: "com-tbview", "meta": "attachMeta",
           url:"attachmgr?op.calg=calg&id=",
-          cname:{"author":"Author","subject":"Subject","date":"Date", "flagName":"Flag"},
+          rschema: { fields: ["id", "root","subject","body","date","author","flagName"],
+                     resultsList: "attach"},
+          coldefs: [
+                //{key:"id", label:"ID"},
+                { key:"author",   label:"Author" /* , width:100,*/ },
+                { key:"date",     label:"Date"                            /* , width:240,*/ },
+                { key:"subject",  label:"Subject" , formatter: "adi_subject" /* , width:240,*/ },
+                { key:"flagName", label:"Flag",     formatter: "adi_flag"     /* , width:240,*/ }
+            ],
           id:"<s:property value="id"/>",
           imexACC:"<s:property value="pub.imexId"/>",
-          login:"<s:property value="#session['LOGIN']"/>"
-          
-         }  
+          login:"<s:property value="#session['LOGIN']" />",
+          loginid:"<s:property value="#session['USER_ID']" />",
+          curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
+          owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
       );
 
 
-    //YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
-    //     {aclass:"adata",apane:"adata-tbview",tabno:4,
-    //      spane: "score-sect",
-    //      url:"attachmgr?op.dalg=dalg&id=",
-    //      cname:{"author":"Author", "subject":"Name", "date":"Date", 
-    //             "bodyType":"Format", "flagName":"Flag", "aid":""},
-    //      id:"<s:property value="id"/>",
-    //      imexACC:"<s:property value="pub.imexId"/>",
-    //      login:"<s:property value="#session['LOGIN']" />",
-    //      loginid:"<s:property value="#session['USER_ID']" />",
-    //      curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
-    //      owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
-    //  );
+   // attachment tab table (attachments)
+   //-----------------------------------
     
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
+   YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
          {adid: "eatt", tabno: 5, adipane:"adi-attachments",
           aditable: "adata-tbview", "meta": "attachMeta",
           url:"attachmgr?op.dalg=dalg&id=",
@@ -432,7 +436,10 @@
           owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
       );
 
-    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
+   // attachment tab table (scores)
+   //------------------------------
+
+   YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
          {adid:"escore", tabno:5, adipane:"adi-scores",
           aditable: "score-tbview", "meta": "scoreMeta",
           url:"attachmgr?op.dalg=dalg&id=",
@@ -451,23 +458,38 @@
           loginid:"<s:property value="#session['USER_ID']" />",
           curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
           owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
+      );
+
+
+   // history tab table
+   //------------------
+
+   YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
+         {adid:"ehist", tabno:7, adipane:"adi-history",
+          aditable: "history-tbview", "meta": "attachMeta",
+          url:"attachmgr?op.halg=halg&id=",
+          rschema: { fields: ["id","root","date","author","subject"],
+                     resultsList: "attach"},
+          coldefs: [
+                //{key:"id", label:"ID"},
+                { key:"author",  label:"User"                                 /* , width:100,*/ },
+                { key:"date",    label:"Date"                                 /* , width:240,*/ },
+                { key:"subject", label:"Operation", formatter: "adi_subject"  /* , width:240,*/ }
+            ],
+          id:"<s:property value="id"/>",
+          imexACC:"<s:property value="pub.imexId"/>",
+          login:"<s:property value="#session['LOGIN']" />",
+          loginid:"<s:property value="#session['USER_ID']" />",
+          curator:"<s:property value="#session['USER_ROLE'].curator != null" />",   
+          owner:"<s:property value="#session['USER_ID'] == pub.owner.id" />"}   
      );
 
 
-      YAHOO.util.Event.addListener( window, "load", YAHOO.imex.attedit.init, 
-         {aclass:"history",apane:"history-tbview",tabno:6,
-          url:"attachmgr?op.halg=halg&id=",
-          cname:{"author":"User","subject":"Operation","date":"Date"},
-          id:"<s:property value="id"/>",
-          imexACC:"<s:property value="pub.imexId"/>",
-          login:"<s:property value="#session['LOGIN']" />"}  
-      );
-
-    //function attclear(){
-    //  try{   
-    //    YAHOO.util.Dom.get('attmgr_opp_edan').value='';
-    //    YAHOO.util.Dom.get('attmgr_opp_edafile').value='';
-    //  }catch(x){};
-    //};
-    //YAHOO.util.Event.addListener( window, "load", attclear );
+   //function attclear(){
+   //  try{   
+   //    YAHOO.util.Dom.get('attmgr_opp_edan').value='';
+   //    YAHOO.util.Dom.get('attmgr_opp_edafile').value='';
+   //  }catch(x){};
+   //};
+   //YAHOO.util.Event.addListener( window, "load", attclear );
  </script>
