@@ -160,6 +160,9 @@
       ppg:{
         order:["ANY"]
       },
+      scrl:{
+        order:["ANY"]
+      },
       wpg:{
         order:["ANY"]
       },

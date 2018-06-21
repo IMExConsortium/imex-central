@@ -208,3 +208,7 @@ a.disabled {
 #dt-pag-nav {
   margin: 0 0 6px 0;
 }      
+
+.ic-hidden {
+  display: none;
+}

@@ -156,7 +156,6 @@ public class IndexMgrAction extends ManagerSupport implements LogAware{
         return getIndexManager().getEsIndexActive();
     }
 
-   
     //--------------------------------------------------------------------------
 
     public String execute() throws Exception{
@@ -274,6 +273,28 @@ public class IndexMgrAction extends ManagerSupport implements LogAware{
                     return SUCCESS;
                 }
             }
+
+            if ( key.equalsIgnoreCase( "seturl" ) ){
+
+                try{                    
+
+                    String esurl = getOpp().get( "esurl" );
+
+                    if( esurl != null ){
+                        esurl = esurl.replaceAll( " ","");
+                    }
+                    
+                    if( esurl.length() > 0 ){
+                        getIndexManager().setEsIndexUrl( esurl );
+                        log.info(" New ES URL: " +  esurl );
+                    }
+                    
+                }catch( Exception ex ){
+                
+                    return SUCCESS;
+                }
+            }
+
         }
         return SUCCESS;
     }

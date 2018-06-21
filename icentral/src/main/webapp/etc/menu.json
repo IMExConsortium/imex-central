@@ -169,7 +169,23 @@
          {label:"Database",
           link:"page?id=databasemgr",
           "disabled":"false",
-          menu:[]
+          menu:[
+            {label:"Back-End Manager",
+             link:"page?id=backendmgr",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Proxy Manager",
+             link:"page?id=proxymgr",
+             "disabled":"false",
+             menu:[]
+            },
+            {label:"Index Manager",
+             link:"indexmgr",
+             "disabled":"false",
+             menu:[]
+            }
+          ]
          },
          {label:"Access Control",
           link:"page?id=accessmgr",

@@ -5,13 +5,13 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>ic-model</artifactId>
   <packaging>jar</packaging>
-<!--  <version>3.0.0rc3</version> -->
+  <version>3.1.0rc8</version>
   <name>Model module</name>
 
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
     <artifactId>imexcentral</artifactId>
-    <version>3.0.0rc8</version>
+    <version>3.1.0rc8</version>
   </parent>
 
   <dependencies>
@@ -19,28 +19,21 @@
    <dependency>
     <groupId>edu.ucla.mbi.dip</groupId>
     <artifactId>dip-util-data</artifactId>
-<!--    <version>2.00</version> -->
     <version>${dip-util.version}</version>
    </dependency>
 
    <dependency>
     <groupId>javax.mail</groupId>
     <artifactId>javax.mail-api</artifactId>
-    <version>1.6.0</version>
-   </dependency>
-<!--
-   <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.8.2</version>
+    <version>${email.version}</version>
    </dependency>
 
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.2</version>
-    </dependency>
--->
+   <dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>javax.mail</artifactId>
+    <version>${email.version}</version>
+   </dependency>
+
   </dependencies>
 
 </project>

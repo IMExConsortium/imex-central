@@ -82,6 +82,7 @@ public class AcomQueryAction extends ManagerSupport {
               i.hasNext(); ) {
             
             String key = i.next();
+            
             String val = getOp().get(key);
             
             log.debug(  "op=" + key + "  val=" + val );

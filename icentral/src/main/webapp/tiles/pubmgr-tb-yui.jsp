@@ -7,6 +7,10 @@
 
   <h1>Publication Manager</h1>
 
+  <s:if test="journalName.length() > 0 ">
+   <h2 class="pubmgr">Journal: <i><s:property value="journalName"/></i></h2>
+  </s:if>
+
   <s:if test="opp.ou.length() > 0 ">
    <h2 class="pubmgr">Records submitted by: <i><s:property value="opp.ou"/></i></h2>
   </s:if>
@@ -21,9 +25,12 @@
   </s:elseif>
   <s:else></s:else>
 
+
+
  <div class="yui-skin-sam" width="100%">
   <center>
-   <table width="99%">
+   <img id="spinner" src="img/waiting-1.gif" height="100" width="100" class="">
+   <table id="pubflt" width="99%" class="ic-hidden">
     <tr>
      <td colspan="3">&nbsp;</td>
      <td class="filter-name">By Stage</td>
@@ -44,8 +51,8 @@
     </tr> 
    </table>
   </center>    
-  <div id="pubtab" width="100%" class="pubtab"></div>
-  <table width="100%" cellpadding="5">
+  <div id="pubtab" width="100%" class="pubtab ic-hidden"></div>
+  <table id="pubsrch" width="100%" cellpadding="5" class="ic-hidden">
    <s:form theme="simple" action="pubsrc">
     <tr>
      <td align="center" width="5%">
@@ -71,6 +78,9 @@
                                      admus:"<s:property value="opp.au"/>",
                                      cflag:"<s:property value="opp.encf"/>",
                                      watch:"<s:property value="opp.wfl"/>",
+                                     jid:"<s:property value="jid"/>",
+                                     stage:"<s:property value="stage"/>",
+                                     status:"<s:property value="status"/>",
                                      loginid:"<s:property value="#session['USER_ID']" />" }));
 
  </script>

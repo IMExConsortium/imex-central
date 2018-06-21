@@ -2,6 +2,17 @@ YAHOO.namespace("imex");
 
 YAHOO.imex.pubmgr = {
 
+    objid: "pubmgr",
+
+    imexUrl: "http://www.ncbi.nlm.nih.gov/pubmed/%%pmid%%",
+    imexPat: "%%pmid%%",
+
+    curateUrl: "http://www.ncbi.nlm.nih.gov/pubmed/%%pmid%%",
+    curatePat: "%%pmid%%",
+ 
+    pubmedUrl: "http://www.ncbi.nlm.nih.gov/pubmed/%%pmid%%",
+    pubmedPat: "%%pmid%%",
+  
     admus: "",
     owner: "",
     cflag: "",
@@ -97,14 +108,69 @@ YAHOO.imex.pubmgr = {
             "state", "submission", "modified", "activity", "editor", "detail" ],
     myColumnDefs: [],
 
+    buildRequest: function ( state ){
+      
+        var PMGR = YAHOO.imex.pubmgr;
+
+        //console.log("stge: " + PMGR.stage + " flt: >" + state.filter.stage + "<");
+        //console.log("stat: " + PMGR.status + " flt: >" + state.filter.status + "<");
+        //alert("buildRequest->state" +YAHOO.lang.JSON.stringify(state));
+        
+        var gfVal, sfVal;
+
+        if( PMGR.stage !== undefined ){
+           gfVal = PMGR.stage;
+        }
+
+        if( PMGR.status !== undefined ){
+           sfVal = PMGR.status; 
+        }
+
+        //oSelf.my.stageFlt.my.value;
+
+        if( state.filter.stage !== undefined &&
+            state.filter.stage !== ""){
+           gfVal = state.filter.stage;
+        } 
+
+	//oSelf.my.stateFlt.my.value;
+
+        if( PMGR.stateBtn.my.value !== undefined &&
+            PMGR.stateBtn.my.value !== "" ){
+           sfVal = YAHOO.imex.pubmgr.stateBtn.my.value;
+        }
+
+        var req = "opp.off=" + state.startIndex + 
+            "&opp.wfl=" + state.watch + 
+            "&opp.max=" + state.pageSize + 
+	    "&opp.gfv=" + gfVal +
+            "&opp.sfv=" + sfVal +
+            "&opp.pfv=" + state.filter.partner +
+            "&opp.efv=" + state.filter.editor +
+            "&opp.ofv=" + state.filter.owner +
+            "&opp.ffv=" + state.filter.cflag +
+            "&opp.skey=" + state.scol +
+            "&opp.sdir=" + state.sdir;
+
+	req = req.replace(/=undefined/g, '=');
+        
+        console.log("REQ: " + req );
+
+        return encodeURI( req );
+        
+    },
+
     requestBuilder: function( oState, oSelf ) {
         
-        //alert("requestBuilder->oState=" + YAHOO.lang.JSON.stringify(oState) );
+        //console.log("requestBuilder->oState=" + YAHOO.lang.JSON.stringify(oState) );
+
+        var PMGR = YAHOO.imex.pubmgr;
 
         // get state (or use defaults)
         //----------------------------
 
         oState = oState || {pagination:null, sortedBy:null};
+
         var sort = (oState.sortedBy) ? oState.sortedBy.key : "id";
         var dir = 
             (oState.sortedBy 
@@ -119,13 +185,31 @@ YAHOO.imex.pubmgr = {
         // <        
         // filters
         //--------
+        
+        var gfVal, sfVal;
+
+        if( PMGR.stage !== undefined ){
+           gfVal = PMGR.stage;
+        }
+
+        if( PMGR.status !== undefined ){
+           sfVal = PMGR.status; 
+        }
 
         //oSelf.my.stageFlt.my.value;
-        var gfVal = YAHOO.imex.pubmgr.stageBtn.my.value;
-        
+
+        if( PMGR.stageBtn.my.value !== undefined &&
+            PMGR.stageBtn.my.value !== ""){
+           gfVal = PMGR.stageBtn.my.value;
+        } 
+
 	//oSelf.my.stateFlt.my.value;
-        var sfVal = YAHOO.imex.pubmgr.stateBtn.my.value;
-        
+
+        if( PMGR.stateBtn.my.value !== undefined &&
+            PMGR.stateBtn.my.value !== "" ){
+           sfVal = YAHOO.imex.pubmgr.stateBtn.my.value;
+        }
+
         // oSelf.my.partnerFlt.my.value;
         var pfVal = YAHOO.imex.pubmgr.partnerBtn.my.value;
         
@@ -165,7 +249,8 @@ YAHOO.imex.pubmgr = {
             "&opp.sdir=" + dir +
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
-        
+
+	req = req.replace(/=undefined/g, '=');        
         req = encodeURI(req);
         console.log("request: " + req);
         
@@ -179,10 +264,14 @@ YAHOO.imex.pubmgr = {
         try {
             
             var state = dt.get('paginator').getState();
-            state.page=1;
-            state.recordOffset=0;
-            dt.get('paginator').setState( state );
+            //state.page=1;
+            //state.recordOffset=0;
+            //dt.get('paginator').setState( state );
             
+            // note: should test if offset > total; if yes,
+            //       decrement offset by page size and reload 
+            //       once more, set pager to the last page  
+
             var reloadCallback = {
                 success: dt.onDataReturnInitializeTable,
                 failure: dt.onDataReturnInitializeTable,
@@ -214,43 +303,61 @@ YAHOO.imex.pubmgr = {
 
         return cookie;
     },
+
     init: function( init ){
-        
-        var pubmgr = YAHOO.imex.pubmgr;
-        pubmgr.loginId = init.loginid;
-        if( typeof pubmgr.myDataTable != "undefined" ){
-            pubmgr.myDataTable.my.configmenu.destroy();
-            pubmgr.myDataTable.destroy();
-            pubmgr.myColumnDefs = [];            
-        } else {
-            this.userTableLayoutInit( init );
-        }
+       console.log("PMGR:init CALLED"); 
+
+       var scrSuccess = function( response ){                                 
+
+          var oRes = YAHOO.lang.JSON.parse( response.responseText);
+          var scoreList = oRes.scoreNameList;
+          console.log( "scrSuccess: scoreList: " + YAHOO.lang.JSON.stringify( scoreList ));
+
+           var pubmgr = YAHOO.imex.pubmgr;
+
+           pubmgr.loginId = init.loginid;
+           pubmgr.scoreList = scoreList;
+
+           if( typeof pubmgr.myDataTable != "undefined" ){
+               pubmgr.myDataTable.my.configmenu.destroy();
+               pubmgr.myDataTable.destroy();
+               pubmgr.myColumnDefs = [];            
+           } else {
+               pubmgr.userTableLayoutInit( init );
+           }          
+        }       
+
+        var scrCallback = { cache:false, timeout: 5000, 
+                             success: scrSuccess,
+                             failure: scrSuccess
+                           };            
         try{
-            var cookie = YAHOO.util.Cookie.get("pubmgr");
-            if( cookie == null ){
-                cookie = pubmgr.getDefaultCookie();
-        
-                YAHOO.util.Cookie.set( "pubmgr", cookie );
-            }
-            
-            if( cookie !== null ){
-                this.buildCDefs( cookie );                
-            }
+             YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               'pubmgr?op.scrl=scrl',
+                               scrCallback );        
         } catch (x) {
-            console.log("INIT: ex="+ x);
-        }
-        this.initView( init );
-        this.historyInit( init );
+                console.log("AJAX Error:"+x);               
+       }
+       console.log("PMGR:init DONE"); 
     },
+
     //----------------------------------------------------------------
     //if a user is logged in this sets the cookie to their preferences
     //----------------------------------------------------------------
+
     userTableLayoutInit: function( init ){
         var pubmgr = YAHOO.imex.pubmgr;
-        if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
-        {
-            var Success = function( response ){                           
+        console.log("userTableLayoutInit: CALLED");
+
+        if( pubmgr.loginId  !== undefined && pubmgr.loginId !== ""
+	    && pubmgr.loginId >-1 ){
+
+            console.log("userTableLayoutInit: pubmgr.loginId" + pubmgr.loginId);
             
+            var Success = function( response ){ 
+                          
+                var pubmgr = YAHOO.imex.pubmgr;            
                 var cookie = YAHOO.util.Cookie.get("pubmgr");
            
                 if( cookie == null ){
@@ -260,23 +367,35 @@ YAHOO.imex.pubmgr = {
                 
                 var responseText = YAHOO.lang.JSON.parse(response.responseText);
                 var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
-                if(preferences.tableLayout == "null")
-                {
-                    pubmgr.updateUserTablePref(cookie);
-                }
-                else
-                {
+                if (preferences.tableLayout == "null" ){
+                     pubmgr.updateUserTablePref(cookie);
+                } else {
                     cookie = preferences.tableLayout;
                     YAHOO.util.Cookie.set( "pubmgr", cookie );
-                    pubmgr.buildCDefs( cookie );
+                    pubmgr.buildCDefs( cookie, [] );
                 }
-                
-                  pubmgr.init(
-                                   {admus: pubmgr.admus,
-                                    owner: pubmgr.owner,
-                                    cflag: pubmgr.cflag,
-                                    watch: pubmgr.watch,
-                                    loginid:pubmgr.loginId });
+            
+               try{
+                  var cookie = YAHOO.util.Cookie.get("pubmgr");
+                  if( cookie == null ){
+                      cookie = pubmgr.getDefaultCookie();
+        
+                      YAHOO.util.Cookie.set( "pubmgr", cookie );
+                  }
+            
+                  if( cookie !== null ){
+                     pubmgr.buildCDefs( cookie, scoreList );                
+                  }
+               } catch (x) {
+                  console.log("INIT: ex="+ x);
+               }
+
+	       console.log( "userTableLayoutInit: callback initView call: " 
+                            + YAHOO.lang.JSON.stringify(init) );
+               
+               pubmgr.initView( init );
+               pubmgr.historyInit( init );
+
             };
             var Fail = function ( o ) {
                 console.log( "AJAX Error update failed: id=" + o.argument.id ); 
@@ -287,6 +406,8 @@ YAHOO.imex.pubmgr = {
                              }; 
             
             try{
+                console.log("userTableLayoutInit: async pref call");
+
                 YAHOO.util.Connect
                 .asyncRequest( 'GET', 
                                'userprefmgr?id=' + pubmgr.loginId +'&op.view=true',
@@ -294,15 +415,41 @@ YAHOO.imex.pubmgr = {
             } catch (x) {
                 console.log("AJAX Error:"+x);
             }
-        }
+
+            console.log("userTableLayoutInit: DONE");
+        } else {
+
+           console.log("userTableLayoutInit: nologin");
+
+           try{
+               var cookie = YAHOO.util.Cookie.get("pubmgr");
+               if( cookie == null ){
+                   cookie = pubmgr.getDefaultCookie();
+        
+                   YAHOO.util.Cookie.set( "pubmgr", cookie );
+               }
+            
+               if( cookie !== null ){
+                   pubmgr.buildCDefs( cookie, pubmgr.scoreList );                
+               }
+           } catch (x) {
+               console.log("INIT: ex="+ x);
+           }
+
+	   console.log( "userTableLayoutInit: direct initView call: " 
+                         + YAHOO.lang.JSON.stringify(init) );
+
+           pubmgr.initView( init );
+           pubmgr.historyInit( init );
+       } 
     },
     
     updateUserTablePref: function( cookie ){
         var pubmgr = YAHOO.imex.pubmgr;
         var loginId = pubmgr.loginId;
         
-        if(typeof loginId  != "undefined" && loginId != "")
-        {
+        if( loginId !== undefined && loginId != ""
+            && loginId > -1 ){
             try{
                 YAHOO.util.Connect
                 .asyncRequest( 'POST', 
@@ -314,12 +461,10 @@ YAHOO.imex.pubmgr = {
         }
     },
     
-    buildCDefs: function( cookie ){
+    buildCDefs: function( cookie, scrList ){
 
         var PMGR = YAHOO.imex.pubmgr;
 
-
-        //alert("buildCDefs:"+cookie );
         var col = cookie.split("|");
         
         if(col.length > 0){
@@ -344,6 +489,26 @@ YAHOO.imex.pubmgr = {
                 }
             }        
         }
+
+        //"pmid":{ key:"pmid", label:"PMID", menuLabel:"PMID", 
+        //         sortable:true, resizeable:true,  hideable: true,
+        //         formatter:"pmid", className:"pmid"},
+
+
+        for( var j = 0; j < scrList.length; j++ ){
+
+           var scrName = scrList[j];
+
+           var cDef = { key:scrName, label:scrName, menuLabel:scrName, 
+                        sortable:true, resizeable:true,  hideable: true,
+                        formatter:"value", className:"value", hidden: true
+           }; 
+          
+          PMGR.myColumnDefs.push(cDef);
+
+
+        }
+        
     },
 
     buildCookie: function(){
@@ -375,8 +540,9 @@ YAHOO.imex.pubmgr = {
         var defstate = {
             startIndex: 0,
             pageSize: 25,
-            filter:{ stage: "",
-                     status: "",
+            filter:{ stage: PMGR.stage,
+                     status: PMGR.status,
+                     jid: PMGR.jid,
                      partner:"",
                      editor:PMGR.admus,
                      owner: PMGR.owner,
@@ -385,8 +551,23 @@ YAHOO.imex.pubmgr = {
             scol: "id",
             sdir: "asc" };
                  
-        if(  init !== undefined && init.watch !== undefined ){
-            defstate.watch = init.watch;
+        if(  init !== undefined){
+
+	   if( init.watch !== undefined ){
+              defstate.watch = init.watch;
+           }
+
+           if( init.stage !== undefined ){
+             defstate.filter.stage = init.stage;
+           }
+                    
+           if( init.status !== undefined ){
+              defstate.filter.status = init.status;
+           }
+
+           if( init.jid !== undefined ){
+            defstate.filter.jid = init.jid;
+           }
         }
 
         var dst = YAHOO.lang.JSON.stringify( defstate );
@@ -394,6 +575,10 @@ YAHOO.imex.pubmgr = {
         var bState = YAHOO.util.History.getBookmarkedState( "pubmgr" );
         var iState = bState || dst;
         
+	console.log("historyInit:     init: " + YAHOO.lang.JSON.stringify( init ));
+	console.log("historyInit: defstate: " + dst);
+	console.log("historyInit:   bState: " + YAHOO.lang.JSON.stringify( bState ));
+
         var PMGR = YAHOO.imex.pubmgr;
         
         YAHOO.util.History.register( "pubmgr", iState, 
@@ -490,6 +675,21 @@ YAHOO.imex.pubmgr = {
         var statusLabel = "---ANY---";
         var partnerLabel = "---ANY---";
 
+
+	// set filter buttons/menus to default
+	//------------------------------------
+	
+        if( PMGR.stage !== undefined && PMGR.stage !== "" ){ 
+           stageLabel = PMGR.stage;
+        }   
+
+        if( PMGR.status !== undefined && PMGR.status !== "" ){ 
+           statusLabel = PMGR.status;
+        }   
+        
+        // set filter buttons/menus to current state
+	//------------------------------------------
+
         if( parsed.filter.stage !== ""){
             stageLabel = parsed.filter.stage;
         }
@@ -500,8 +700,7 @@ YAHOO.imex.pubmgr = {
 
         if( parsed.filter.partner !== ""){
             partnerLabel = parsed.filter.partner;
-        }
-        
+        }        
 
         if( PMGR.stageBtn.set !== undefined ){           
             PMGR.stageBtn.set( "label", 
@@ -582,7 +781,7 @@ YAHOO.imex.pubmgr = {
 	    if( parsed.filter.stage !== "" && parsed.filter.stage !== null){
 		oppstg = "&opp.stage=" + parsed.filter.stage;		
 	    }
-	    console.log("HHN: oppstg="+oppstg);
+	    console.log("HHN: oppstg: "+oppstg);
 
             YAHOO.util.Connect.asyncRequest( 'GET', 
                                              "acom?op.pstac=ac" + oppstg, 
@@ -591,7 +790,7 @@ YAHOO.imex.pubmgr = {
 	    if( parsed.filter.status !== "" && parsed.filter.status !== null){
 		oppsts = "&opp.status=" + parsed.filter.status;		
 	    }
-	    console.log("HHN: oppsts="+oppsts);
+	    console.log("HHN: oppsts: "+oppsts);
 
             YAHOO.util.Connect.asyncRequest( 'GET', 
                                              "acom?op.psgac=ac"+oppsts, 
@@ -621,33 +820,14 @@ YAHOO.imex.pubmgr = {
     parseStateString: function( statStr ){
         return YAHOO.lang.JSON.parse(statStr);
     },
-    generateLinkState: function(stage, status, partner)
-    {
 
+    generateLinkState: function( stage, status, partner ){
+	
         //LS: watch ?
+	console.log( "****generateLinkState" );
         var filter = {stage:stage, status:status, partner:partner, editor:'', owner:'', cflag:''  };
         var state = {startIndex:0, pageSize:25,filter:filter, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
-
-    },
-    buildRequest: function ( state ){
-      
-        //alert("buildRequest->state" +YAHOO.lang.JSON.stringify(state));
-
-        var req = "opp.off=" + state.startIndex + 
-            "&opp.wfl=" + state.watch + 
-            "&opp.max=" + state.pageSize + 
-	    "&opp.gfv=" + state.filter.stage +
-            "&opp.sfv=" + state.filter.status +
-            "&opp.pfv=" + state.filter.partner +
-            "&opp.efv=" + state.filter.editor +
-            "&opp.ofv=" + state.filter.owner +
-            "&opp.ffv=" + state.filter.cflag +
-            "&opp.skey=" + state.scol +
-            "&opp.sdir=" + state.sdir;
-        
-        return encodeURI( req );
-        
     },
 
     historyReadyHandler: function(){
@@ -664,13 +844,23 @@ YAHOO.imex.pubmgr = {
 
         var PMGR = YAHOO.imex.pubmgr;
         
+        console.log("InitView: CALLED" );
+	console.log("InitView: init: " + YAHOO.lang.JSON.stringify( init ) );
+
         this.formatterInit();
         
+        // NOTE: turning on filter tabs
+        //-----------------------------        
+
         if( init !== undefined ){
             PMGR.admus = init.admus;
             PMGR.owner = init.owner;
             PMGR.cflag = init.cflag;
             PMGR.watch = init.watch;
+            PMGR.jid = init.jid;
+
+            PMGR.stage = init.stage;
+            PMGR.status = init.status;
         }
         
         //alert( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
@@ -681,13 +871,15 @@ YAHOO.imex.pubmgr = {
             YAHOO.imex.pubmgr.selBtnInit( 
                 { pmgr: YAHOO.imex.pubmgr,
                   filter: "partner",
+                  ival: "",
                   items: messages.acom,
                   selmnu: YAHOO.imex.pubmgr.partnerSel,
                   selbtn: "partnerBtn",
                   selcnt: "partner-button-container",
                   selnme: "partner-button" ,
                   seltext: YAHOO.imex.pubmgr.partnerSel[0].text});
-                  
+
+            YAHOO.util.Dom.removeClass("pubflt", "ic-hidden");      
         };
         
         var partnerCallback = { cache:false, timeout: 5000, 
@@ -696,18 +888,21 @@ YAHOO.imex.pubmgr = {
                                 argument:{}}; // id:obj.id, btn:imexButton } };                  
 
 
-
         var stateSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse(o.responseText);
             YAHOO.imex.pubmgr.selBtnInit( 
                 { pmgr: YAHOO.imex.pubmgr,
                   filter: "status",
+                  ival: PMGR.status,
                   items: messages.acom,
                   selmnu: YAHOO.imex.pubmgr.stateSel,
                   selbtn: "stateBtn",
                   selcnt: "state-button-container",
                   selnme: "state-button", 
                   seltext: YAHOO.imex.pubmgr.stateSel[0].text});
+
+            YAHOO.util.Dom.removeClass("pubflt", "ic-hidden");
+
         };
         
         var stateCallback = { cache:false, timeout: 5000, 
@@ -721,22 +916,21 @@ YAHOO.imex.pubmgr = {
             YAHOO.imex.pubmgr.selBtnInit( 
                 { pmgr: YAHOO.imex.pubmgr,
                   filter: "stage",
+                  ival: PMGR.stage,
                   items: messages.acom,
                   selmnu: YAHOO.imex.pubmgr.stageSel,
                   selbtn: "stageBtn",
                   selcnt: "stage-button-container",
                   selnme: "stage-button", 
                   seltext: YAHOO.imex.pubmgr.stageSel[0].text});
+
+            YAHOO.util.Dom.removeClass("pubflt", "ic-hidden");
         };
         
         var stageCallback = { cache:false, timeout: 5000, 
                               success: stageSuccess,
                               failure: stageSuccess,
                               argument:{}}; // id:obj.id, btn:imexButton } };                  
-
-        
-
-
 
         if( typeof PMGR.myDataTable == "undefined" ){
             try{
@@ -761,14 +955,14 @@ YAHOO.imex.pubmgr = {
         // create datasource
         //------------------
 
-        PMGR.myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=ppg&"); 
+        PMGR.myDataSource = new YAHOO.util.DataSource("pubmgr?op.ppg=ppg&opp.jfv="+PMGR.jid+"&"); 
         
         PMGR.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON; 
         PMGR.myDataSource.responseSchema = { 
             resultsList: "records.records", 
             fields: ["id","author","title","pmid","imexId",
                      "owner","stage","state","date","time","imexDb","editor",
-                     "actTStamp","actUser","modTStamp","modUser"], 
+                     "actTStamp","actUser","modTStamp","modUser","score"], 
             metaFields: { 
                 totalRecords: "records.totalRecords", 
                 paginationRecordOffset : "records.startIndex", 
@@ -829,7 +1023,7 @@ YAHOO.imex.pubmgr = {
         // Instantiate DataTable
         //----------------------
 
-	console.log("PMGR.myColumnDefs " + YAHOO.lang.JSON.stringify(PMGR.myColumnDefs));
+	//console.log("PMGR.myColumnDefs " + YAHOO.lang.JSON.stringify(PMGR.myColumnDefs));
 
   
         PMGR.myDataTable = new YAHOO.widget.DataTable(
@@ -917,8 +1111,19 @@ YAHOO.imex.pubmgr = {
                     YAHOO.util.Cookie.set("pubmgr", nCookie );                                      
                 } catch (x) { }
             };
+
         
         PMGR.contextMenuInit( PMGR );
+        //PMGR.bodyMenuInit( PMGR );
+
+	// record editing popups
+
+        if(YAHOO.imex.recordedit !== undefined){
+          console.log("recordedit: LOADING"); 
+           YAHOO.imex.recordedit.init( PMGR );
+        }
+
+        
 
         PMGR.myDataTable.on( "columnReorderEvent",
                              PMGR.myDataTable.handleLayoutChange );     
@@ -931,15 +1136,19 @@ YAHOO.imex.pubmgr = {
         PMGR.myDataTable.on( "columnShowEvent",
                              PMGR.myDataTable.handleLayoutChange );     
                              
-
-
-
-
         //tossing in some css to add a black separator between the rows
+
         var sheet = document.createElement('style');
         sheet.innerHTML = ".yui-dt-data > tr > td {border-bottom: 1px solid black !important;}";
         document.body.appendChild(sheet); 
+
+
+        // make everyting visibe
         
+        YAHOO.util.Dom.removeClass("pubtab", "ic-hidden");
+        YAHOO.util.Dom.removeClass("pubsrch", "ic-hidden");
+        YAHOO.util.Dom.addClass("spinner", "ic-hidden");
+                
         return { 
             ds: PMGR.myDataSource, 
             dt: PMGR.myDataTable 
@@ -988,16 +1197,25 @@ YAHOO.imex.pubmgr = {
             
             //alert(YAHOO.imex.pubmgr[o.selbtn].my.foo);
             
+
+            var seltext = o.seltext;
+            if(o.ival !== undefined && o.ival !== "" ){ 
+               seltext = o.ival;
+            }   
+
             o.pmgr[o.selbtn] = new YAHOO.widget.Button(
                 { id: o.selnme,  
                   name: o.selnme, 
-                  label: "<em class=\"yui-button-label\">" + o.seltext +"</em>", 
+                  label: "<em class=\"yui-button-label\">" + seltext +"</em>",                   
                   type: "menu",   
                   menu: o.selmnu,  
                   container: o.selcnt }); 
-            
+                  
+
+            console.log("IVAL: " + o.ival);
+
             o.pmgr[o.selbtn].my 
-                = { items: o.selmnu, value: "", name: o.selnme };
+                = { items: o.selmnu, value: o.ival, name: o.selnme };
             
             o.pmgr[o.selbtn].on( 
                 "selectedMenuItemChange", 
@@ -1017,29 +1235,30 @@ YAHOO.imex.pubmgr = {
     },
 
     contextMenuInit: function( o ){
-        
+
+	console.log("contextMenuInit:");        
+
         try{
-            
+           
             o.myDataTable.my.colmenu = new YAHOO.widget.Menu( "colmenu" );
             
-            var defaultTableLayout = function(o)
-            {
+            var defaultTableLayout = function(o){
                 var pubmgr = YAHOO.imex.pubmgr;
-                if(typeof pubmgr.loginId  != "undefined" && pubmgr.loginId != "")
-                {
-                    var Success = function( response ){ 
+                if( pubmgr.loginId !== undefined && pubmgr.loginId !== ""
+                    && pubmgr.loginId > -1 ){
+                   var Success = function( response ){ 
 
-                    };
-                    var Fail = function ( o ) {
+                   };
+                   var Fail = function ( o ) {
                         console.log( "AJAX Error update failed: id=" + o.argument.id ); 
-                    };
-                    var callback = { cache:false, timeout: 5000, 
-                                     success: Success,
-                                     failure: Fail
+                   };
+                   var callback = { cache:false, timeout: 5000, 
+                                    success: Success,
+                                    failure: Fail
                                      }; 
                     
-                    try{
-                        YAHOO.util.Connect
+                   try{
+                       YAHOO.util.Connect
                         .asyncRequest( 'GET', 
                                        'userprefmgr?id=' + pubmgr.loginId +'&op.defaultTableLayout=true',
                                        callback );        
@@ -1053,11 +1272,14 @@ YAHOO.imex.pubmgr = {
                 YAHOO.util.Cookie.set( "pubmgr", cookie );
                 var myDataTable = pubmgr.myDataTable;
                 
-                  pubmgr.init(
+                pubmgr.init(
                                    {admus: pubmgr.admus,
                                     owner: pubmgr.owner,
                                     cflag: pubmgr.cflag,
                                     watch: pubmgr.watch,
+                                    stage: pubmgr.stage,
+                                    status: pubmgr.status,
+                                    jid: pubmgr.jid, 
                                     loginid:pubmgr.loginId });
             };
             
@@ -1095,6 +1317,8 @@ YAHOO.imex.pubmgr = {
             
             o.myDataTable.my.colmenu.addItems( clist );
             
+	    console.log("colmenu: " + YAHOO.lang.JSON.stringify( "xxx" ));
+
             o.myDataTable.my.configmenu = new YAHOO.widget.ContextMenu(
                 "configmenu", { trigger: trigger } );
             
@@ -1227,7 +1451,32 @@ YAHOO.imex.pubmgr = {
             elLiner.innerHTML = oRecord.getData("editor");
         } else {
             elLiner.innerHTML = '<em>N/A</em>';
-        } 
+        }
+    },
+
+    myValueFormatter: function( elLiner, oRecord, oColumn, oData ) {
+
+        //if( oRecord !== undefined  &&  oRecord.getData("imexDb") !== undefined ) {                    
+        //    var val = parseFloat( Math.round( oRecord.getData("value") * 100) / 100).toFixed(2);
+        //    elLiner.innerHTML = "<center>" + val + "</center>";
+        //}
+
+        //console.log( "\nrecord: rec: " + YAHOO.lang.JSON.stringify( oRecord ) );
+        //console.log( "record: col: " + YAHOO.lang.JSON.stringify( oColumn.key) );
+        //console.log( "record: dta: " + YAHOO.lang.JSON.stringify( oData ) + "\n");
+
+
+         //console.log( "record: val: " + YAHOO.lang.JSON.stringify( oRecord.getData( "score" ) ));   
+        
+        if( oRecord.getData( "score" ) != undefined 
+            && oRecord.getData( "score" )[oColumn.key] ){
+             
+            elLiner.innerHTML = "<center>" + oRecord.getData( "score" )[oColumn.key] + "</center>";
+
+        }else{
+           elLiner.innerHTML = '<center><em>N/A</em></center>';
+       }
+
     },
     
     //--------------------------
@@ -1247,7 +1496,109 @@ YAHOO.imex.pubmgr = {
         YDTF.center = this.myCenterFormatter; 
         YDTF.partnerList = this.myPartnerListFormatter; 
         YDTF.editorList = this.myEditorListFormatter; 
-    }
+        YDTF.value = this.myValueFormatter; 
+    },
+
+ 
+   bodyMenuInit: function( parent ){
+
+      try{
+      
+         console.log("PMGR.bodyMenuInit: parent.loginId=== " + parent.loginId);
+         
+         var RE = YAHOO.imex.recordedit;
+
+         var uid = parent.loginId;
+         var dFlag = parent.loginId > 0 ? false : true;
+
+         // table row context
+         //------------------
+            
+         var oSupMenu = [ [{text:"Discard", 
+			       onclick: {fn: RE.statusUpdate, obj: { id: 5, parent:parent} }}],
+                             [{text:"Queue", 
+			       onclick: {fn: RE.statusUpdate, obj: { id: 12, parent: parent} }}],
+                             [{text:"Reserve", 
+			       onclick: {fn: RE.statusUpdate, obj: { id: 2, parent: parent} }}]
+                         ];
+
+	 console.log("bodyMenuInit: parent.loginId= = " + parent.loginId);
+
+	    
+            var supmenu = new YAHOO.widget.Menu( "supmenu" );
+
+            supmenu.addItems( oSupMenu );
+            
+	 console.log("  disabled:: " + uid + " :1:: " + YAHOO.lang.JSON.stringify(dFlag));
+           
+            var oRowMenu = [ [ { text: "Status Update", 
+				 disabled: dFlag,
+				 submenu: supmenu
+                               }],
+                             [ { text:"Curate", 
+				 disabled: dFlag, 
+                                 onclick: { fn: RE.gotoExtUrl, 
+                                            obj: { parent: parent,
+						   url: RE.parent.curateUrlx,
+                                                   idp: parent.curatePat,
+                                                   id: "pmid" } 
+                                          }
+                               }],
+                             [ { text:"To PubMed", disabled: false,
+                                 onclick: { fn: RE.gotoExtUrl, 
+                                            obj: { parent: parent,
+						   url: parent.pubmedUrl,
+                                                   idp: parent.pubmedPat,
+                                                   id: "pmid" } 
+                                          }
+                               
+                               }],
+                             [ { text:"To IMEx", disabled: false,
+                                 onclick: { fn: RE.gotoExtUrl, 
+                                            obj: { parent: parent, 
+						   url: parent.imexUrl,
+                                                   idp: parent.imexPat,
+                                                   id: "imex" } 
+                                          } 
+                               }]
+                           ];        
+           console.log("  disabled:: " + uid + " :2:: " + YAHOO.lang.JSON.stringify(dFlag));
+            
+      
+            parent.myDataTable.my.bodymenu = 
+		new YAHOO.widget.ContextMenu( "bodymenu", 
+					      {trigger: parent.myDataTable.getTbodyEl()}); 
+
+	    //console.log("menu: " + YAHOO.lang.JSON.stringify(oRowMenu[0].submenu));
+
+            parent.myDataTable.my.bodymenu.addItems( oRowMenu );
+            parent.myDataTable.my.bodymenu.render( "pubtab" );
+	    
+            console.log("menu: set trigger");   
+
+            parent.myDataTable.my.bodymenu.subscribe( "triggerContextMenu", 
+						      RE.onBodyMenuTrigger,
+						      {parent: parent});
+
+            console.log("menu: set hide");   
+            parent.myDataTable.my.bodymenu.subscribe( "hide", 
+						      RE.onBodyMenuHide,
+						      {parent: parent}); 
+
+        
+        }catch( x ){
+            console.error ("bodyMenuInit: error=" + x );
+        }        
+
+   }
+    
+
+
+
+
+
+
+
 };
 
 //YAHOO.util.Event.addListener(

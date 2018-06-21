@@ -350,16 +350,15 @@ YAHOO.mbi.modal = {
                                      
                                      try{
                                          console.log("reloading...");
-                                         console.log( myself.parent );
+                                         console.log( "mp: " + myself.parent );
+                                         console.log( "mp: " + myself.parent );
 					 
-
-					 myself.parent 
-					     .tableReload( {}, myself.table );
-                                         //YAHOO.imex.journalview
-                                         //    .tableReload( {}, myself.table );
-
-
-                                         console.log("reloading... DONE");
+                                         setTimeout( function() {
+                                                       console.log("delayed reload...");
+                                                       myself.parent.tableReload( {}, myself.table );
+         	                                       console.log("delayed reload... DONE");
+                                                     }, 750);
+                                                                       
                                      } catch (x) {
                                          console.log(x);
                                      }

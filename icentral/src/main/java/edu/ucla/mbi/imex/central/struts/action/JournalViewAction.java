@@ -51,6 +51,20 @@ public class JournalViewAction extends ManagerSupport {
         return this.entryManager;
     }
 
+    ////------------------------------------------------------------------------
+    /// Index Manager
+    //---------------
+
+    private IndexManager indexManager;
+    
+    public void setIndexManager( IndexManager manager ) {
+        this.indexManager = manager;
+    }
+    
+    public IndexManager getIndexManager() {
+        return this.indexManager;
+    }
+
     //--------------------------------------------------------------------------
     //  TracContext
     //--------------
@@ -64,7 +78,7 @@ public class JournalViewAction extends ManagerSupport {
     public TracContext getTracContext() {
         return this.tracContext;
     }
-
+    
     //--------------------------------------------------------------------------
     //  WorkflowContext
     //-----------------
@@ -810,11 +824,23 @@ public class JournalViewAction extends ManagerSupport {
         flt.put( "volume", vo );
         flt.put( "issue", is );
         
+        /*
         pl = tracContext.getPubDao()
             .getPublicationList( first, blockSize, 
                                  sortKey, asc, flt );            
+
         
+
         total = tracContext.getPubDao().getPublicationCount( flt );
+        */
+
+        
+        pl = getIndexManager()
+            .getPublicationList( first, blockSize,
+                                 sortKey, asc, flt );
+        
+        total = getIndexManager().getPublicationCount( flt );
+        
         
         log.debug( "GetPubRecords: total=" + total);
 

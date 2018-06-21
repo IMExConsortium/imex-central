@@ -1,7 +1,7 @@
 YAHOO.namespace("imex");
 
 YAHOO.imex.journalview = {
-
+ 
     stringify: YAHOO.lang.JSON.stringify,
     admus: "",
     owner: "",
@@ -16,6 +16,9 @@ YAHOO.imex.journalview = {
     issue:"",
     nnav:"",
     
+    stage: "",
+    status: "",
+
     curateUrl: "",
     curatePat: "",
     pubmedUrl: "http://www.ncbi.nlm.nih.gov/pubmed/%%pmid%%",
@@ -160,7 +163,7 @@ YAHOO.imex.journalview = {
     init: function( init ){
 
 	var JV = YAHOO.imex.journalview;
-	console.log("INIT: " + JV.stringify( init ) );
+	//console.log("INIT: " + JV.stringify( init ) );
 
         try{            
             JV.loginId = init.loginid;
@@ -213,8 +216,9 @@ YAHOO.imex.journalview = {
 
     userTableLayoutInit: function( init ){
         var journalview = YAHOO.imex.journalview;
-        if( typeof journalview.loginId  != "undefined" && journalview.loginId != "" ){
-            var Success = function( response ){                           
+        if( journalview.loginId !== undefined && journalview.loginId !== "" 
+	    && journalview.loginId > -1 ){
+           var Success = function( response ){                           
             
                 var cookie = YAHOO.util.Cookie.get("journalview");
            
@@ -380,7 +384,7 @@ YAHOO.imex.journalview = {
 
         var filter = o.filter;
         var newVal = ev.newValue.value;
-        
+        console.log("handleFilter: o="+o)
         var PMGR = YAHOO.imex.journalview;
         
         var newState = PMGR.myDataSource.my.myState;
@@ -466,7 +470,7 @@ YAHOO.imex.journalview = {
         
         var PMGR = YAHOO.imex.journalview;
         
-        var parsed = PMGR.parseStateString( state );      
+        var parsed = PMGR.parseStateString( state );
         var request = PMGR.buildRequest( parsed );
         
         PMGR.myDataSource.my.myState = parsed;
@@ -639,7 +643,11 @@ YAHOO.imex.journalview = {
 
     requestBuilder: function( oState, oSelf ) {
 
-	console.log("requestBuilder");
+	console.log( "requestBuilder");
+        var JV = YAHOO.imex.journalview;
+
+        //console.log( "oState: " + JV.stringify( oState ) );
+
 	try{
 
         var myself = YAHOO.imex.journalview;
@@ -663,12 +671,38 @@ YAHOO.imex.journalview = {
         // filters
         //--------
 
-        //oSelf.my.stateFlt.my.value;
-        var sfVal = myself.stateBtn.my.value;
-        
-        // oSelf.my.partnerFlt.my.value;
-        var gfVal = myself.stageBtn.my.value;
-        
+        // stage/status  (note: need to add history somewhere )
+        //-------------
+
+         // initial values
+         //---------------
+      
+	 var sfVal, gfVal;
+
+         if( JV.stage !== undefined && JV.stage !== "" ){
+	    gfVal = JV.stage;   
+         }	
+
+         if( JV.status !== undefined && JV.status !== "" ){
+	    sfVal = JV.status;   
+         }	
+
+        // button values
+        //--------------
+
+        if( JV.stateBtn.my.value !== undefined ){
+           //oSelf.my.stateFlt.my.value;
+            sfVal = JV.stateBtn.my.value;
+        }
+
+        if( JV.stageBtn.my.value !== undefined ){
+           // oSelf.my.partnerFlt.my.value;
+           gfVal = JV.stageBtn.my.value;
+        }
+
+        // sanity check
+        //-------------
+
         if( sfVal === undefined ){
             sfVal = "";
         }
@@ -745,6 +779,8 @@ YAHOO.imex.journalview = {
                 JV.owner = init.owner;
                 JV.cflag = init.cflag;
                 JV.watch = init.watch;
+                JV.stage = init.stage;
+                JV.status = init.status;            
             }
             
             var stageSuccess = function( o ){
@@ -753,6 +789,7 @@ YAHOO.imex.journalview = {
                 YAHOO.imex.journalview.selBtnInit( 
                     { pmgr: JV,
                       filter: "stage",
+                      ival: JV.stage,
                       items: messages.acom,
                       selmnu: JV.stageSel,
                       selbtn: "stageBtn",
@@ -771,6 +808,7 @@ YAHOO.imex.journalview = {
                 YAHOO.imex.journalview.selBtnInit( 
                     { pmgr: YAHOO.imex.journalview,
                       filter: "status",
+                      ival: JV.status,
                       items: messages.acom,
                       selmnu: YAHOO.imex.journalview.stateSel,
                       selbtn: "stateBtn",
@@ -924,8 +962,7 @@ YAHOO.imex.journalview = {
             
             JV.myDataSource.doBeforeParseData = function( oRequest , 
 							  oFullResponse , 
-							  oCallback ){
-            
+							  oCallback ){            
                 try{
                     
                     var myself = YAHOO.imex.journalview;
@@ -1199,17 +1236,22 @@ YAHOO.imex.journalview = {
                 o.selmnu.push( {value: value, text: text} );        
             }
             
+            var seltext = o.seltext;
+            if( o.ival !== undefined && o.ival !== "" ){ 
+               seltext = o.ival;
+            }   
+
             o.pmgr[o.selbtn] = new YAHOO.widget.Button(
                 { id: o.selnme,  
                   name: o.selnme, 
-                  //label: "<em class=\"yui-button-label\">" + o.seltext +"</em>", 
+                  //label: "<em class=\"yui-button-label\">" + seltext +"</em>", 
                   label: o.seltext, 
                   type: "menu",   
                   menu: o.selmnu,  
                   container: o.selcnt }); 
             
             o.pmgr[o.selbtn].my 
-                = { items: o.selmnu, value: "", name: o.selnme };
+                = { items: o.selmnu, value: o.ival, name: o.selnme };
             
             o.pmgr[o.selbtn].on( 
                 "selectedMenuItemChange", 

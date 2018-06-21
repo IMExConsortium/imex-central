@@ -36,6 +36,7 @@
       class="edu.ucla.mbi.imex.central.struts.action.EntryViewerAction">
 
     <property name="entryManager" ref="entryManager"/>
+    <property name="indexManager" ref="indexManager"/>
     <property name="watchManager" ref="watchManager"/>
 
     <property name="menuContext" ref="menuContext"/>
@@ -119,6 +120,7 @@
       class="edu.ucla.mbi.imex.central.struts.action.JournalViewAction">
     
     <property name="entryManager" ref="entryManager"/>
+    <property name="indexManager" ref="indexManager"/>
 
     <property name="menuContext" ref="menuContext"/>
     <property name="userContext" ref="userContext"/>

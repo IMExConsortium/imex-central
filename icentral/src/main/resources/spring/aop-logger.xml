@@ -17,6 +17,7 @@
      <property name="attachmentManager" ref="attachmentManager"/>
      <property name="watchManager" ref="watchManager"/>
      <property name="notificationManager" ref="notificationManager"/>
+     <property name="indexManager" ref="indexManager"/>
   </bean>     
 
   <aop:config>

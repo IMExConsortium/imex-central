@@ -32,6 +32,12 @@
 
   <include file="entrymgr.xml"/>  
 
+
+  <!-- index mamagement -->
+
+  <include file="indexmgr.xml"/>  
+
+
   <package name="icentral" extends="json-default" namespace="">
 
    <!-- ============================================================ Results -->

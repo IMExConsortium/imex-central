@@ -92,6 +92,30 @@
         viewtype:"file-html",
         viewpath:"/pages/databaseadmin.html"
       },
+      backendmgr:{
+        active:true,
+        title:"ImexCentral: Back-End Manager",
+        menudef:"0:2:2",
+        menusel:"3:3:1",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
+      proxymgr:{
+        active:true,
+        title:"ImexCentral: Proxy Manager",
+        menudef:"0:2:2",
+        menusel:"3:3:2",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
+      indexmgr:{
+        active:true,
+        title:"ImexCentral: Index Manager",
+        menudef:"0:2:2",
+        menusel:"3:3:3",
+        viewtype:"file-html",
+        viewpath:"/pages/udev.html"
+      },
       accessmgr:{
         active:true,
         title:"ImexCentral: Access Manager",

@@ -645,6 +645,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                         "" :  getOpp().get( "ofv" );
                     String efv = getOpp().get( "efv" ) == null ?
                         "" :  getOpp().get( "efv" );
+
                     String ffv = getOpp().get( "ffv" ) == null ?
                         "" :  getOpp().get( "ffv" );
                 
@@ -688,6 +689,10 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
 	    }
 	    if( fmap.get( "ffv" ) != null ){
 		filter.put( "cflag", fmap.get( "ffv" ) );
+	    }
+
+	    if( fmap.get( "jfv" ) != null ){
+		filter.put( "nlmid", fmap.get( "jfv" ) );
 	    }
 	}
 	
@@ -1386,8 +1391,10 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             sdir ="asc";
         }
 
-        String sortKey ="id";
+        String sortKey ="";
         
+        log.debug( "getPubRecords: skey " + skey);
+
         if( skey != null && !skey.equals("") ){
             if( skey.equals( "pub" ) ){
                 sortKey ="author";
@@ -1417,6 +1424,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             if( skey.equals( "modTStamp" ) ){
                 sortKey ="modDate";
             }
+
+            if(sortKey.equals( "" ) ){
+                sortKey = skey;
+            }
+            
         } else {
             skey = "id";
             sortKey = "id";
@@ -1514,6 +1526,11 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             r.put( "editor", "N/A" );
             r.put( "imexDb", "N/A" );
 
+
+
+            
+
+
             // set partner
             //------------
 
@@ -1533,7 +1550,7 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                     //log.debug( "r:" + role.getName() );
                 }
                 //log.debug( "g:" + g.getLabel() );
-                
+                 
             }
             if ( !partner.equals("") ) {
                 r.put( "imexDb", partner.substring(0,partner.length()-1 ) );

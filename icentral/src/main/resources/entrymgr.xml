@@ -171,7 +171,7 @@
          .*groups,.*groupNames
         </param>
         <param name="includeProperties">
-          records.*,pub.*,flags.*
+          records.*,pub.*,flags.*,scoreNameList.*, jid, journalName
         </param>
         <param name="noCache">true</param>
       </result>

@@ -63,6 +63,9 @@ public class UserAction extends UserSupport {
     public void setNotifyServer( String server ) {
         this.notifyServer = server;
     }
+
+    
+
     
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
@@ -265,7 +268,8 @@ public class UserAction extends UserSupport {
                 // store new settings
                 //-------------------
     
-                dao.updateUser( icUser );				    		    
+                dao.updateUser( icUser );
+                return HOME;
             }
                 
             if ( uedit != null && uedit.equalsIgnoreCase( "reset" ) ) {
@@ -444,6 +448,20 @@ public class UserAction extends UserSupport {
         this.rrf = field;
     }
 
+    private boolean reCaptchaActive = false;
+
+    public void setReCaptchaActive( boolean active ) {
+        this.reCaptchaActive = active;
+    }
+
+    public boolean getReCaptchaActive(){
+        return this.reCaptchaActive;
+    }
+
+    public boolean isReCaptchaActive(){
+        return this.reCaptchaActive;
+    }
+
 
     //---------------------------------------------------------------------
     // new password
@@ -499,11 +517,13 @@ public class UserAction extends UserSupport {
     }
     
     //---------------------------------------------------------------------
-
+    
     public void validate() {
 
         Log log = LogFactory.getLog( this.getClass() );
-                
+        log.debug( " validate: session=" + getSession() );
+        
+        
         // registration options
         //---------------------
 
@@ -513,80 +533,94 @@ public class UserAction extends UserSupport {
         //-----------
 
             if( getUser() != null ){
-            log.debug( " validate:" + getUser().getLogin() );
+                log.debug( " validate:" + getUser().getLogin() );
                 
-                UserDao dao = getUserContext().getUserDao();
-                IcUser oldUser = 
-                        (IcUser) dao.getUser( getUser().getLogin() );
-                if( oldUser != null ){
-                    addFieldError( "user.login","User name already taken. " +
-                           "Please, select another one.");
-                    log.debug( " old login... id=" + oldUser.toString() );
-                } 
-            }
-
-        // test recaptcha
-        //---------------
-
-            log.debug( "UserAction->validate: recaptcha=" + recaptcha );
-            log.debug( "UserAction->validate: rcf=" + rcf + " rrf=" + rrf );
-            
-        if( recaptcha != null ) {
-
-            ReCaptchaResponse reCaptchaResponse = 
-                recaptcha.checkAnswer( ServletActionContext.
-                           getRequest().getRemoteHost(),  
-                           rcf, rrf );  
-            
-            if ( !reCaptchaResponse.isValid() ) {  
-                addActionError("Not a good CAPTCHA");
-            } else {
-            
-                log.info( "  recaptcha response=" + 
-                      reCaptchaResponse.getErrorMessage() );
-            }
-        }
-
-        // test password typos
-        //--------------------
-        
-        log.debug( "UserAction->validate: pass0=" + pass0 + " pass1=" + pass1 );
-
-        if( pass0 != null && pass1 != null && !pass0.equals( pass1 ) ) {
-            addFieldError( "pass1", "Passwords do not match." );
-        }
-        return;
-    }
-
-
-        // edit options
-        //-------------
-
-    if( getOp() != null && getOp().equalsIgnoreCase( "edit" ) ) { 
-
-            // test passoword typos
-            //---------------------
-
-            if( pass0 != null && pass0.length() > 0 ){
-
                 UserDao dao = getUserContext().getUserDao();
                 IcUser oldUser = 
                     (IcUser) dao.getUser( getUser().getLogin() );
-                
-        if ( !oldUser.testPassword( pass0 ) ) {
-            addFieldError( "pass0", "Wrong password." );
-        } else {
-            if ( pass1 == null || !pass1.equals( pass0) ) {
-            addFieldError( "pass1", "Passwords do not match." );
+                if( oldUser != null ){
+                    addFieldError( "user.login","User name already taken. " +
+                                   "Please, select another one.");
+                    log.debug( " old login... id=" + oldUser.toString() );
+                } 
             }
-        }	
-        }	    
-        return;
-    }
+            
+            // test recaptcha
+            //---------------
+
+            log.debug( "UserAction->validate: recaptchaActive: "  + reCaptchaActive );
+            log.debug( "UserAction->validate: recaptcha=" + recaptcha );
+            log.debug( "UserAction->validate: rcf=" + rcf + " rrf=" + rrf );
+            
+            if( isReCaptchaActive() && recaptcha != null ) {
+                
+                ReCaptchaResponse reCaptchaResponse = 
+                    recaptcha.checkAnswer( ServletActionContext.
+                                           getRequest().getRemoteHost(),  
+                                           rcf, rrf );  
+                
+                if ( !reCaptchaResponse.isValid() ) {  
+                    addActionError("Not a good CAPTCHA");
+                } else {
+                    
+                    log.info( "  recaptcha response=" + 
+                              reCaptchaResponse.getErrorMessage() );
+                }
+            }
+            
+            // test password typos
+            //--------------------
+            
+            log.debug( "UserAction->validate: pass0=" + pass0 + " pass1=" + pass1 );
+            
+            if( pass0 != null && pass1 != null && !pass0.equals( pass1 ) ) {
+                addFieldError( "pass1", "Passwords do not match." );
+            }
+            return;
+        }
+        
+
+        // edit options
+        //-------------
+        
+        if( getOp() != null 
+            && getOp().equalsIgnoreCase( "edit" ) 
+            && getSession() != null ){ 
+            
+            log.debug( "UserAction->validate: session login=" + (String) getSession().get("LOGIN")  );
+            
+            if( getSession().get("LOGIN") != null ){
+        
+                // test passoword typos
+                //---------------------
+
+                if( pass0 != null && pass0.length() > 0 ){
+                    
+                    UserDao dao = getUserContext().getUserDao();
+                    IcUser oldUser = 
+                        (IcUser) dao.getUser( (String) getSession().get("LOGIN") );
+                    
+                    log.debug( "UserAction->validate: login=" + getUser().getLogin()  );
+                    log.debug( "UserAction->validate: pass0=" + pass0 + " pass1=" + pass1 );
+                    
+                    log.debug( "UserAction->validate: oldUser" + oldUser);
+                    
+                    if ( !oldUser.testPassword( pass0 ) ) {
+                        addFieldError( "pass0", "Wrong password." );
+                    } else {
+                        if ( pass1 == null || !pass1.equals( pass2) ) {
+                            addFieldError( "pass1", "Passwords do not match." );
+                        }
+                    }	
+                }	    
+            }
+            
+            return;
+        }
 
 	// activate options
 	//-----------------
-
+        
 	if( getOp() != null && getOp().equalsIgnoreCase( "activate" ) ) { 
             return;
 	}

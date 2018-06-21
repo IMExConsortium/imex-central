@@ -102,13 +102,66 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
             session.close();
         }
 
-
+ 
         //IcFlag flag = (IcFlag) super.find( IcFlag.class,
         //                                   new Integer( id ) );
         
         log.info( "IcAdiDao->getIcFlag: name=" + name + " ::DONE"  );
         return flag;
     }       
+
+
+    //--------------------------------------------------------------------------
+
+    public List<String> getScoreNameList( String grp ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        List<String> scrlst = new ArrayList<String>();; 
+        
+        try {
+            
+            Query query;
+
+            if( grp !=null){
+
+                query = session
+                    .createQuery( "select distinct a.name "
+                                  + "from AttachedDataItem a where "
+                                  + " a.class = IcScore and "
+                                  + "  substring( a.name, 0, :len ) = :grp "
+                                  + "order by a.name" );
+                
+                query.setParameter("grp", grp );
+                query.setParameter("len", grp.length() + 1);
+                
+            } else {
+                query = session
+                    .createQuery( "select distinct a.name  "
+                                  + "from AttachedDataItem a where "
+                                  + " a.class = IcScore "
+                                  + "order by a.name" );                
+            }
+            scrlst = (List<String>) query.list();
+
+            log.debug( "getScoreList: size=" + scrlst.size() );
+            
+            tx.commit();
+        } catch ( HibernateException e ) {
+            e.printStackTrace();
+            handleException( e );
+            // log error ?
+        } finally {
+            session.close();
+        }
+        
+        return scrlst;
+
+    }
+
     
     //--------------------------------------------------------------------------
 
@@ -116,8 +169,6 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
 
         List<AttachedDataItem> alst = null;
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
@@ -140,11 +191,58 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
             handleException( e );
             // log error ?
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
         return alst;
     }
+
+    //--------------------------------------------------------------------------
+
+    public List<Score> getScoreListByRoot( DataItem root ){
+
+        List<Score> alst = null;
+        
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            Query query =
+                session.createQuery( "from AttachedDataItem a where " +
+                                     " a.class = IcScore and " +
+                                     " a.root = :root ");
+            query.setParameter("root", root );
+            
+            alst = (List<Score>) query.list();
+
+            Log log = LogFactory.getLog( this.getClass() );
+            log.debug( "getScoreListByParent:" + alst.size() );
+            
+            tx.commit();
+        } catch ( HibernateException e ) {
+            e.printStackTrace();
+            handleException( e );
+            // log error ?
+        } finally {
+            session.close();
+        }
+        
+        Map<String,Score> sMap = new HashMap<String,Score>();
+
+        for( Iterator<Score> ii = alst.iterator(); ii.hasNext(); ){ 
+
+            Score cs = ii.next();
+            if( ! sMap.containsKey( cs.getName() ) ){
+                sMap.put( cs.getName(), cs );
+            } else{
+                if( cs.getCrt().after( sMap.get( cs.getName() ).getCrt() ) ){
+                    sMap.put( cs.getName(), cs );
+                }
+            } 
+        }
+        
+        return new ArrayList<Score>( sMap.values() );
+    }
+
 
     //--------------------------------------------------------------------------
 

@@ -725,13 +725,9 @@ public class IndexManager {
         
         try{
             List<Integer> idList = getPubIdList( query );
-            
-            for(Iterator<Integer> ii = idList.iterator(); ii.hasNext(); ){
-                IcPub iPub =  (IcPub) tracContext.getPubDao()
-                    .getPublication( ii.next() );
-                
-                plst.add( iPub );
-            }
+
+            plst = tracContext
+                .getPubDao().getPublicationList( idList );
             
         }catch( Exception ex){
             //ex.printStackTrace();
@@ -754,6 +750,20 @@ public class IndexManager {
         
         return getPubIdCount( query );
         
+    }
+
+    public List<String> getScoreNameList( String grp ){   
+        
+        String qagg = "{\"size\":0, \"aggregations\": {"
+            + "\"publication\": { \"nested\" : { \"path\": \"score\" },"
+            + "\"aggregations\": { \"scr\": {"
+            + "\"terms\": { \"field\" : \"score.name.keyword\", \"size\" : 500"
+            + " }}}}}}";
+
+
+        String  jres = esQueryResult( qagg );
+        return parseScoreNameList( jres, grp );
+
     }
     
     //--------------------------------------------------------------------------
@@ -782,7 +792,7 @@ public class IndexManager {
 
         String qsrt_simple = "{\"%%SNAME%%\":\"%%SDIR%%\"}";
 
-        String qsrt_script = "{\"_script\" : {\"type\" : \"string\"," +
+        String qsrt_script = "{\"_script\" : {\"type\" : \"number\"," +
             "\"script\" : {\"lang\": \"painless\", \"source\": " + 
             "\"double m = 0; for(obj in params._source.score){ " +
             " if( obj.name=='%%SNAME%%'){ m = obj.value;}} return m\" " +
@@ -947,6 +957,73 @@ public class IndexManager {
         }
         return idList;        
     }
+
+    //----------------------------------------------------------------------------
+
+    private List<String> parseScoreNameList( String jres, String grp ){
+        
+        // NOTE: nedd to fish out score group (if needed)
+
+        Log log = LogFactory.getLog( this.getClass() );
+        List<String> nameList = new ArrayList<String>();
+        
+        try{
+            JSONObject doc = new JSONObject( jres );                
+            JSONObject aggs = (JSONObject) doc.get("aggregations");
+            JSONObject pubs = (JSONObject) aggs.get("publication");
+            JSONObject scrs = (JSONObject) pubs.get("scr");
+
+            JSONArray bucketList = scrs.getJSONArray("buckets"); 
+            for( int ih = 0; ih < bucketList.length(); ih++ ){
+                JSONObject bckt = (JSONObject) bucketList.get(ih);                
+                nameList.add( (String) bckt.get("key") );
+            }
+            log.debug("scr:" + nameList);
+        } catch(Exception ex){
+        }
+        return nameList;        
+    }
+
+    /*
+    {
+            "took" : 3,
+            "timed_out" : false,
+            "_shards" : {
+            "total" : 5,
+                "successful" : 5,
+                "skipped" : 0,
+                "failed" : 0
+                },
+            "hits" : {
+                "total" : 36316,
+                "max_score" : 0.0,
+                "hits" : [ ]
+             },
+             "aggregations" : {
+                 "publication" : {
+                     "doc_count" : 29994,
+                      "scr" : {
+                         "doc_count_error_upper_bound" : 0,
+                         "sum_other_doc_count" : 0,
+                         "buckets" : [
+                                             {
+                                                 "key" : "DSP.interest",
+                                                     "doc_count" : 9998
+                                                     },
+                                             {
+                                                 "key" : "DSP.part_interest",
+                                                     "doc_count" : 9998
+                                                     },
+                                             {
+                                                 "key" : "DSP.relevance",
+                                                     "doc_count" : 9998
+                                                     }
+        ]
+                                }
+                    }
+                }
+    }
+    */
 
     //----------------------------------------------------------------------------
     

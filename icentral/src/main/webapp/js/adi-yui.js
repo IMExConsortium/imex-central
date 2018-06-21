@@ -54,63 +54,68 @@ YAHOO.imex.adi = {
           var opane = YAHOO.util.Dom.get( pane );
 
           //console.log( "o.responseText=" + o.responseText );
-    
-          var messages = YAHOO.lang.JSON.parse( o.responseText );
+          
+    	  try{
+             var messages = YAHOO.lang.JSON.parse( o.responseText );
 
-          console.log( "initList: meta=" + meta );
-          console.log( "initList: pane=" + pane );
-          console.log( "initList: opane=" + opane );
-          console.log( "initList: total=" + messages[meta].total );
+             console.log( "initList: meta=" + meta );
+             console.log( "initList: pane=" + pane );
+             console.log( "initList: opane=" + opane );
+             console.log( "initList: total=" + messages[meta].total );
                
-          if( messages[meta].total === 0 ){
-             YAHOO.util.Dom.addClass( pane, "yui-hidden" );
-             return;
-          } else {
-             YAHOO.util.Dom.removeClass( pane, "yui-hidden" );
-          }                             
+             if( messages[meta].total === 0 ){
+                YAHOO.util.Dom.addClass( pane, "yui-hidden" );
+                return;
+             } else {
+                YAHOO.util.Dom.removeClass( pane, "yui-hidden" );
+             }                             
 
-          myconf.dtaSrc 
-             = new YAHOO.util.DataSource( myconf.url + myconf.pubid );
+             myconf.dtaSrc 
+                = new YAHOO.util.DataSource( myconf.url + myconf.pubid );
  
-          myconf.dtaSrc.maxCacheEntries = 0;
+             myconf.dtaSrc.maxCacheEntries = 0;
  
-          myconf.dtaSrc.responseType 
-             = YAHOO.util.DataSource.TYPE_JSON;
+             myconf.dtaSrc.responseType 
+                = YAHOO.util.DataSource.TYPE_JSON;
 
-          myconf.dtaSrc.responseSchema = myconf.rschema; 
+             myconf.dtaSrc.responseSchema = myconf.rschema; 
 
-          myconf.dtaTable 
-             = new YAHOO.widget.DataTable( myconf.tbview,
-                    myconf.coldefs, 
-                    myconf.dtaSrc,
-                    { scrollable:false,
-                      dynamicData : true,
-                      draggableColumns: true
-                    });
+             myconf.dtaTable 
+                = new YAHOO.widget.DataTable( myconf.tbview,
+                       myconf.coldefs, 
+                       myconf.dtaSrc,
+                       { scrollable:false,
+                         dynamicData : true,
+                         draggableColumns: true
+                       });
 
-          myconf.pubtab = YAHOO.imex.pubedit.tabs.getTab(myconf.tabno);
-          console.log("myconf.pubtab: " + myconf.pubtab);
+             myconf.pubtab = YAHOO.imex.pubedit.tabs.getTab(myconf.tabno);
+             console.log("myconf.pubtab: " + myconf.pubtab);
 
-          if( myconf.pubtab !== undefined){
-             console.log("adi: setting up tab listener");
-             myconf.pubtab.addListener( "click", 
-                function(){
-                   console.log("adi: calling up tab listener");
-                   try{                        
-                      var dtb = myconf.dtaTable;
-                      dtb.getDataSource().sendRequest(
-                         '',
-                         {success: dtb.onDataReturnInitializeTable,
-                          failure: alert,
-                          scope: dtb});
-                    }catch(x){
-                       alert("AJAX error:"+x);
-                   }
-                },
-                myconf,
-                true
-             );
+             if( myconf.pubtab !== undefined){
+                console.log("adi: setting up tab listener");
+                myconf.pubtab.addListener( "click", 
+                   function(){
+                      console.log("adi: calling up tab listener");
+                      try{                        
+                         var dtb = myconf.dtaTable;
+                         dtb.getDataSource().sendRequest(
+                            '',
+                            {success: dtb.onDataReturnInitializeTable,
+                             failure: alert,
+                             scope: dtb});
+                       }catch(x){
+                          alert("AJAX error:"+x);
+                       }
+                   },
+                   myconf,
+                   true
+                );
+             }
+          }catch( x ){
+             console.log(x);
           }
+
        }catch( x ){
           console.log(x);
        }

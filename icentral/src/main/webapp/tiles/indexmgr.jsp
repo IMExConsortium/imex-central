@@ -46,7 +46,7 @@
      </td>
      <td align="right" colspan="2">
       ES Server URL:
-      <s:textfield theme="simple" name="esUrl" size="36" maxlength="64"/>
+      <s:textfield theme="simple" name="opp.esurl" size="36" maxlength="64"/>
      </td>
      <td colspan="1" align="left" width="65%">
       <s:submit theme="simple" name="op.seturl" value="Reset Url" />

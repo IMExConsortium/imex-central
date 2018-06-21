@@ -5,7 +5,7 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.0rc8</version>
+  <version>3.1.0rc8</version>
   <name>IMEx Central</name>
   <url>https://github.com/IMExConsortium</url>
 
@@ -20,14 +20,20 @@
 <!--    <dip-proxy.version>0.03</dip-proxy.version> -->
     <dip-proxy.version>1.0.0</dip-proxy.version>
 
-    <spring.version>5.0.0.RELEASE</spring.version>
+    <spring.version>5.0.6.RELEASE</spring.version>
 <!--    <spring.version>4.3.11.RELEASE</spring.version>  -->
     <aspectj.version>1.8.10</aspectj.version>
     <postgresql.version>42.1.4</postgresql.version>
     <recaptcha4j.version>0.0.8</recaptcha4j.version>
 
-    <cxf.version>3.2.0</cxf.version> 
+    <elasticsearch.version>6.0.1</elasticsearch.version>
+
+    <cxf.version>3.2.4</cxf.version> 
     <jaxws-rt.version>2.3.0</jaxws-rt.version>
+
+    <email.version>1.6.1</email.version>
+
+
     <commons-logging.version>1.2</commons-logging.version> 
     <log4j.version>2.9.1</log4j.version> 
 

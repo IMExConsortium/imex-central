@@ -1569,7 +1569,7 @@ public class IcentralPortImpl implements IcentralPort {
             
             Log log = LogFactory.getLog( this.getClass() );
             log.debug( "Credentials.test: login=" + login + " pass=" + pass);
-	    System.out.println("Credentials.test: login=" + login + " pass=" + pass);
+	    //System.out.println("Credentials.test: login=" + login + " pass=" + pass);
 
             if( login == null ) {
                 return false;

@@ -167,6 +167,22 @@ public class FeedbackAction extends PortalSupport {
 	this.rrf = field;
     }
 
+    private boolean reCaptchaActive = false;
+
+    public void setReCaptchaActive( boolean active ) {
+        this.reCaptchaActive = active;
+    }
+
+    public boolean getReCaptchaActive(){
+        return this.reCaptchaActive;
+    }
+
+    public boolean isReCaptchaActive(){
+        return this.reCaptchaActive;
+    }
+
+
+    //--------------------------------------------------------------------------
 
     public String execute() throws Exception {
 
@@ -217,7 +233,7 @@ public class FeedbackAction extends PortalSupport {
 		// test recaptcha
 		//---------------
 
-		if( recaptcha != null ) {
+		if( isReCaptchaActive() && recaptcha != null ) {
 		    
 		    ReCaptchaResponse reCaptchaResponse = 
 			recaptcha.checkAnswer( ServletActionContext.

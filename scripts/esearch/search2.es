@@ -1,5 +1,21 @@
-curl -X POST "10.1.200.200:9200/icentral_test/publication/_search" -H 'Content-Type: application/json' -d'
-{"query":{"bool":{"must":{"match_all":{}},"filter":[ {"term":{"stage":"queue"}}]}},"sort":[{"id":"asc"}],"_source":["id"],"from": 0,"size": 25}
+curl -X POST "10.1.216.103:9200/icentral/publication/_search?pretty" -H 'Content-Type: application/json' -d'
+
+{"size":0,
+  "aggregations": {
+    "publication": {
+       "nested" : {
+           "path": "score" 
+        },
+        "aggregations": {
+          "scr": {
+             "terms": { "field" : "score.name.keyword", "size" : 500 }   
+          }   
+        }
+    }
+  }
+}
+
 '
+
 
 

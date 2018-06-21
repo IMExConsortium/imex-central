@@ -167,7 +167,6 @@
   <put-attribute name="footer" type="definition" value="footer"/>
  </definition>
 
-
  <definition name="pubsrc" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral: Search" />
   <put-attribute name="body" value="/tiles/pubsrc-yui.jsp"/>  
@@ -222,6 +221,12 @@
  <definition name="journalview" template="/tiles/layout.jsp">
   <put-attribute name="title" value="ImexCentral: Journal View" />
   <put-attribute name="body" value="/tiles/journalview-yui.jsp"/>
+  <put-attribute name="footer" type="definition" value="footer"/>
+ </definition>
+
+ <definition name="indexmgr" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral: Index Manager" />
+  <put-attribute name="body" value="/tiles/indexmgr.jsp"/>
   <put-attribute name="footer" type="definition" value="footer"/>
  </definition>
 

@@ -5,7 +5,36 @@ $HeadURL$
 $Id$ 
 
 
+2018/06/16  (ImexCentral v3.1.0rc7)
+   - GUI upgrades:
+        - journal manager stat counts converted into corresponding 
+          links to pubmgr page  
+        - pubmgr initial journal/stage/status state added 
 
+2018/06/15  (ImexCentral v3.1.0rc6)
+
+   - GUI fixes:
+        - delay added to table refresh after status update (to
+          accomodate indexing delay)
+        - journal manager stats count short/detail column fixes
+        - stage/status filter correctly passed within pubmgr js code
+
+2018/05/28  (ImexCentral v3.1.0rc2)
+
+   - Minor GUI fixes:
+        - corrected publication manager filtered table size 
+        - added waiting spinner to publication manager table
+   - added on-fly score indexing 
+
+2018/05/27  (ImexCentral v3.1.0rc1)
+   - ElasticSearch based record indexing and search added.
+   - initial ReCaptcha mods to accomodate API changes
+    - GUI upgrades/fixes:
+        - fixed password update glitches
+        - added sortable record score columns to publication browser
+        - added score table to the attachment tab within record editor page 
+
+    - bumped up version to 3.1.0 (to denote ES-based indexing)
 
 2018/04/13
    - web service (v2.00) upgrads:

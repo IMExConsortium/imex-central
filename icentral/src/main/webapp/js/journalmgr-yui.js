@@ -27,47 +27,56 @@ YAHOO.imex.journalmgr = {
         imex:{ key:"imex", label:"IMEX<br/>Journal", menuLabel:"IMEX", sortable:false, resizeable:false, hidden:false, hideable: true, formatter: "cbox" },
         imexDB:{ key:"imexDB", label:"Tracked By", menuLabel:"Tracked By", sortable:false, resizeable:false, hidden:false, hideable: true, formatter:"imexDB" },        
 
-        pq:{ key:"pq", label:"pre-Queue", menuLabel:"pre-Queue", xor:"pqDet", dat: "pqueue", formatter:"dat-center",
-             sortable:true, resizeable:false, hideable: true },
+        pq:{ key:"pq", label:"pre-Queue", menuLabel:"pre-Queue", xor:"pqDet", dat: "pqueue", filter:"&status=&stage=PREQUEUE",
+             formatter:"dat-url-center", sortable:true, resizeable:false, hideable: true },
+
         pqDet:{ key:"pqDet", label:"pre-Queue", menuLabel:"pre-Queue (detailed)", xor:"pq",
                 sortable:true, resizeable:false, hidden:true, hideable: true,
                  children:[
-                     {key:"pqueue", label:"New", sortable:false, resizeable:false, formatter:"center" },
-                     {key:"pqueueSub", label:"Dropped", sortable:false, resizeable:false, formatter:"center" }
+                     {key:"pqueueNew", label:"New", sortable:false, resizeable:false, formatter:"url-center", filter:"&status=NEW&stage=PREQUEUE" },
+                     {key:"pqueueDiscarded", label:"Discarded", sortable:false, resizeable:false, formatter:"url-center",filter:"&status=DISCARDED&stage=PREQUEUE" }
                  ]},
 
-        qu:{ key:"qu", label:"Queue", menuLabel:"Queue (detailed)", xor:"quDet", dat: "queue", formatter:"dat-center",
-             sortable:false, resizeable:false, hideable: true },        
-        quDet:{ key:"quDet", label:"Queue", menuLabel:"Queue (detailed)", xor:"qu", formatter:"center",
+        qu:{ key:"qu", label:"Queue", menuLabel:"Queue", xor:"quDet", dat: "queue", filter:"&opp.sfv=&opp.gfv=QUEUE",
+             formatter:"dat-url-center", sortable:false, resizeable:false, hideable: true },
+        
+        quDet:{ key:"quDet", label:"Queue", menuLabel:"Queue (detailed)", xor:"qu",
                 sortable:false, resizeable:false, hidden:true, hideable: true,
                 children:[
-                    {key:"queue", label:"New", sortable:false, resizeable:false, formatter:"center" },
-                    {key:"queueSub", label:"Dropped", sortable:false, resizeable:false, formatter:"center" }
+                    {key:"queueNew", dat: "queueNew", label:"New", sortable:false, resizeable:false, formatter:"url-center", filter:"&status=NEW&stage==QUEUE" },
+                    {key:"queueDiscarded", dat: "queueDiscarded", label:"Discarded", sortable:false, resizeable:false, formatter:"url-center", filter:"&status=DISCARDED&stage=QUEUE" }
                 ]},        
         
-        cu:{ key:"cu", label:"Curation", menuLabel:"Curation (detailed)", xor:"cuDet", dat: "curation", formatter:"dat-center",
-             sortable:true, resizeable:false, hideable: true },
+        cu:{ key:"cu", label:"Curation", menuLabel:"Curation", xor:"cuDet", dat: "curation", filter:"&status=&stage=CURATION",
+             formatter:"dat-url-center", sortable:true, resizeable:false, hideable: true },
+
         cuDet:{ key:"cuDet", label:"Curation", menuLabel:"Curation (detailed)", 
-                sortable:true, resizeable:false, hidden:true, hideable: true, xor:"cu", formatter:"center",
+                sortable:true, resizeable:false, hidden:true, hideable: true, xor:"cu",
                 children:[
-                    {key:"curation", label:"Total", sortable:false, resizeable:false, formatter:"center" },
-                    {key:"curationSub", label:"Dropped", sortable:false, resizeable:false, formatter:"center" }
+                    {key:"curationReserved", dat: "curationReserved", label:"Reserved", 
+                     sortable:false, resizeable:false, formatter:"url-center", filter:"&status=RESERVED&stage=CURATION" },
+                    {key:"curationInprogress", dat: "curationInprogress", label:"In Progress", 
+                     sortable:false, resizeable:false, formatter:"url-center", filter:"&status=INPROGRESS&stage=CURATION" }
                 ]},
         
-        rel:{ key:"rel", label:"Released", menuLabel:"Released (detailed)", xor:"relDet",  dat:"release", formatter:"dat-center",
-                  sortable:true, resizeable:false, hideable: true },
-        relDet:{ key:"relDet", label:"Released", menuLabel:"Released (detailed)",  xor:"rel", formatter:"center",
+        rel:{ key:"rel", label:"Released", menuLabel:"Released", xor:"relDet",  dat:"release", filter:"&status=&stage=RELEASE",
+              formatter:"dat-url-center", sortable:true, resizeable:false, hideable: true },
+
+        relDet:{ key:"relDet", label:"Released", menuLabel:"Released (detailed)",  xor:"rel", 
                  sortable:true, resizeable:false, hidden:true, hideable: true,
                  children:[
-                     {key:"release", label:"Total", sortable:false, resizeable:false, formatter:"center" },
-                     {key:"retract", label:"Retracted", sortable:false, resizeable:false, formatter:"center" }
+                     {key:"releaseReleased", dat: "releaseReleased", label:"Released", 
+                      sortable:false, resizeable:false, formatter:"url-center", filter:"&status=RELEASED&stage=RELEASE" },
+                     {key:"releaseRetracted", dat: "releaseRetracted", label:"Retracted", 
+                      sortable:false, resizeable:false, formatter:"url-center", filter:"&status=RETRACTED&stage=RELEASE" }
                  ]},
+
         detail:{ key:"detail", label:"",sortable:false, resizeable:false, hide: false, hideable: false, 
                  formatter:"elink" , className:"detail" }
     },
     
     myCP: {
-        "date": "submission","modTStamp":"modified","actTStamp":"activity"},
+        "date": "submission","modTStamp":"modified","actTStamp":"activity", "pqueueNew":"pqDet","pqueue":"pqDet", "queueNew":"quDet", "curation":"cuDet","release":"relDet"},
     
     myCL: [ "id", "nlmid", "title", "imex","imexDB", "pq","pqDet","qu","quDet","cu","cuDet","rel","relDet", "detail" ],
 
@@ -127,10 +136,9 @@ YAHOO.imex.journalmgr = {
            var myself = YAHOO.imex.journalmgr;
            for(var i = 0; i < myself.myCL.length; i++ ){
                
-               var hidden= false;
+               var hidden = false;
                if(  myself.myCD[myself.myCL[i]].hidden === true ){
-                   
-                   hidden= true;
+                  hidden = true;
                }
                cookie += myself.myCD[myself.myCL[i]].key + ":" + hidden +"|";
            }
@@ -215,17 +223,81 @@ YAHOO.imex.journalmgr = {
         elLiner.innerHTML = oRecord.getData( "date" ) + 
             '<br/>' + oRecord.getData( "time" );
     },
-    
+
     myCenterFormatter: function(elLiner, oRecord, oColumn, oData) {
-        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+         YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
         elLiner.innerHTML = oData; 
     },
 
-    myDatCenterFormatter: function(elLiner, oRecord, oColumn, oData) {
-        YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
-        elLiner.innerHTML = oRecord.getData(oColumn.dat); 
+
+    myUrlCenterFormatter: function(elLiner, oRecord, oColumn, oData) {
+        //console.log("center:");
+        try{
+           //console.log("    column key=" + YAHOO.lang.JSON.stringify(oColumn.key));
+
+           var pcolkey = oColumn.getParent().key;
+           var pcolchld = YAHOO.imex.journalmgr.myCD[pcolkey].children;
+           var i, chld, url, dcol,dta;
+           for( i in pcolchld ){
+              chld = pcolchld[i]; 
+              //console.log("        "+ oColumn.key+" ->  " + YAHOO.lang.JSON.stringify(chld.key));
+              if( chld.key==oColumn.key){
+                 //console.log("    column=" + YAHOO.lang.JSON.stringify(chld));
+                 dcol= chld.dat;   // xxxxxxxxxxxxxxxxx
+                 dta = oRecord.getData(dcol);
+                 url = "pubmgr?jid=" + oRecord.getData("id") + chld.filter;
+                 //console.log("    filter=" + YAHOO.lang.JSON.stringify(chld.filter) );
+              
+                 break;
+              }
+           } 
+           
+           //console.log("   url=" + url ); 
+           //console.log("   data=" + YAHOO.lang.JSON.stringify(oData));
+           //console.log("  *data=" + YAHOO.lang.JSON.stringify(dta));
+           //console.log("   record=" + YAHOO.lang.JSON.stringify(oRecord));
+           YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+           
+           if( oData > 0){
+              elLiner.innerHTML = "<a href='"+url+"'>" + oData + "</a>";
+           } else {
+              elLiner.innerHTML = oData;
+           }            
+        } catch(x){
+            console.log(x);    
+        }
+        //console.log("center: DONE");
     },
 
+    myDatUrlCenterFormatter: function(elLiner, oRecord, oColumn, oData) {
+        //console.log("dcenter:");
+        
+        try{
+           //console.log("   column key=" + YAHOO.lang.JSON.stringify(oColumn.key) );
+
+           var col = YAHOO.imex.journalmgr.myCD[oColumn.key];
+           //console.log("   col=" + YAHOO.lang.JSON.stringify(col));
+
+           var flt = col.filter;  
+           //console.log("   flt=" +  col.filter ); 
+           
+           //console.log("   data=" + YAHOO.lang.JSON.stringify(oRecord.getData(oColumn.dat)));
+           //console.log("   record=" + YAHOO.lang.JSON.stringify(oRecord) );
+
+           var url = "pubmgr?jid=" + oRecord.getData("id") + flt;
+
+           YAHOO.util.Dom.addClass(elLiner, "yui-dt-center");
+          
+           if( oRecord.getData( oColumn.dat ) > 0 ){
+             elLiner.innerHTML = "<a href='"+url+"'>" + oRecord.getData( oColumn.dat ) + "</a>"; 
+           } else {
+             elLiner.innerHTML = oRecord.getData( oColumn.dat ); 
+           }
+        } catch(x){
+            console.log(x);
+        }
+        //console.log("dcenter: DONE");
+    },
 
     myCboxFormatter: function(elLiner, oRecord, oColumn, oData) {
        
@@ -263,12 +335,16 @@ YAHOO.imex.journalmgr = {
         YAHOO.widget.DataTable.Formatter.elink = this.myElinkFormatter; 
         YAHOO.widget.DataTable.Formatter.crt = this.myDateFormatter; 
         YAHOO.widget.DataTable.Formatter.center = this.myCenterFormatter; 
-        YAHOO.widget.DataTable.Formatter["dat-center"] = this.myDatCenterFormatter; 
+        //YAHOO.widget.DataTable.Formatter["dat-center"] = this.myDatCenterFormatter; 
         YAHOO.widget.DataTable.Formatter.jtitle = this.myJTitleFormatter; 
         YAHOO.widget.DataTable.Formatter.stat = this.myStatFormatter; 
         YAHOO.widget.DataTable.Formatter.imexDB = this.myImexDbFormatter; 
         YAHOO.widget.DataTable.Formatter.cbox = this.myCboxFormatter; 
         YAHOO.widget.DataTable.Formatter.icid = this.myIcIdFormatter; 
+
+        YAHOO.widget.DataTable.Formatter["dat-url-center"] = this.myDatUrlCenterFormatter; 
+        YAHOO.widget.DataTable.Formatter["url-center"] = this.myUrlCenterFormatter; 
+
     },
     
     init: function( init ){
@@ -291,12 +367,12 @@ YAHOO.imex.journalmgr = {
             if( cookie == null ){
                   
                 cookie = myself.getDefaultCookie();
-                console.log("init: got default cookie");
+                console.log(" init: COOKIE(d):" + cookie);
                 YAHOO.util.Cookie.set( "jnlmgr", cookie );
             }
 
             if( cookie !== null ){
-                console.log("init: buiding CDefs");
+                console.log("init: COOKIE(c):" + cookie);
                 this.buildCDefs( cookie );
             }
         } catch (x) {
@@ -314,28 +390,31 @@ YAHOO.imex.journalmgr = {
 
     userTableLayoutInit: function( init ){
         var myself = YAHOO.imex.journalmgr;
-        if( typeof myself.loginId  != "undefined" && myself.loginId != "" ){
+        if( myself.loginId  !== undefined && myself.loginId !== "" 
+            && myself.loginId > -1 && 1==0 ){  // prefs turned off
+
             var Success = function( response ){                           
                 
                 var cookie = YAHOO.util.Cookie.get("jnlmgr");
            
                 if( cookie == null ){
-                    cookie = myself.getDefaultCookie();
-                    YAHOO.util.Cookie.set( "jnlmgr", cookie );
+                   cookie = myself.getDefaultCookie();
+                   YAHOO.util.Cookie.set( "jnlmgr", cookie );
                 }
                 
                 var responseText = YAHOO.lang.JSON.parse(response.responseText);
                 var preferences = YAHOO.lang.JSON.parse(responseText.preferences);
                 if( preferences.tableLayout == "null" ){
-                    myself.updateUserTablePref(cookie);
+                   myself.updateUserTablePref(cookie);
                 }else{
-                    cookie = preferences.tableLayout;
-                    YAHOO.util.Cookie.set( "jnlmgr", cookie );
-                    myself.buildCDefs( cookie );
+                   cookie = preferences.tableLayout;
+                   YAHOO.util.Cookie.set( "jnlmgr", cookie );
+                   myself.buildCDefs( cookie );
                 }
                 
                 myself.init( {loginid: myself.loginId } );
             };
+
             var Fail = function ( o ) {
                 console.log( "AJAX Error update failed: id=" + o.argument.id ); 
             };
@@ -344,10 +423,12 @@ YAHOO.imex.journalmgr = {
                              failure: Fail
                              }; 
             
+	    console.log("***userpref: " + journalmgr.loginId + ":"+ myself.loginId); 
+
             try{
                 YAHOO.util.Connect
                     .asyncRequest( 'GET', 
-                                   'userprefmgr?id=' + journalmgr.loginId +'&op.view=true',
+                                   'userprefmgr?id=' + myself.loginId +'&op.view=true',
                                    callback );        
             } catch (x) {
                 console.log("AJAX Error:"+x);
@@ -359,7 +440,9 @@ YAHOO.imex.journalmgr = {
         var journalmgr = YAHOO.imex.journalmgr;
         var loginId = jounrnalmgr.loginId;
         
-        if( typeof loginId  != "undefined" && loginId != "" ){
+        if( typeof loginId  !== undefined && loginId !== "" ){
+
+            console.log("***userpref: " + loginId );
             try{
                 YAHOO.util.Connect
                     .asyncRequest( 'POST', 
@@ -413,16 +496,23 @@ YAHOO.imex.journalmgr = {
             
             var key = ac[i].getKey();
             var hid = ac[i].hidden;
+
+            //console.log("key: " + key);
+
             if( myself.myCD[key] !== undefined ){
+
                 cookie += key + ":" + hid + "|";
+
             } else { // nested column
+
                 key = myself.myCP[key];
                 if( myself.myCD[key] !== undefined ){
                     cookie += key + ":" + hid + "|";
                 }
+
             }
         }
-        console.log( "cookie:" + cookie );
+        //console.log( "cookie:" + cookie );
         return cookie;
     },
 
@@ -574,7 +664,9 @@ YAHOO.imex.journalmgr = {
             //------------
             
             var mdt = myself.myDataTable;
-            console.log(request);
+
+	    request = request.replace(/=undefined/g,"=");
+            console.log("request: " + request);
 
             myself.myDataSource
                 .sendRequest( request, {
@@ -704,7 +796,11 @@ YAHOO.imex.journalmgr = {
         
         myself.myDataSource.responseSchema = {
             resultsList: "records.records",
-            fields: ["id", "nlmid", "title", "imex","imexDB","pqueue", "pqueueSub","queue","queueSub","curation","curationSub","release","retract"],
+            fields: ["id", "nlmid", "title", "imex","imexDB",
+                      "pqueue", "pqueueNew","pqueueDiscarded",
+                      "queue",  "queueNew","queueDiscarded",
+                      "curation","curationReserved","curationInprogress","curationIncomplete","curationProcessed","curationDiscarded",
+                      "release","releaseReleased", "releaseRetracted"],
             metaFields: {                
                 totalRecords: "records.totalRecords",
                 paginationRecordOffset : "records.startIndex",
@@ -823,7 +919,7 @@ YAHOO.imex.journalmgr = {
                 myself.contextMenuInit(  myself );
                 
                 var nCookie = YAHOO.imex.journalmgr.buildCookie();
-                YAHOO.imex.jounrnalmgr.updateUserTablePref( nCookie );
+                YAHOO.imex.journalmgr.updateUserTablePref( nCookie );
                 YAHOO.util.Cookie.set("jnlmgr", nCookie );                                      
             } catch (x) { }
         };

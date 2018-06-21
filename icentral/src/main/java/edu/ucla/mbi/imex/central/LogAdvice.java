@@ -68,6 +68,24 @@ public class LogAdvice {
         return this.notificationManager;
     }
 
+
+
+    /////-----------------------------------------------------------------------
+    ////------------------------------------------------------------------------
+    /// Index Manager
+    //----------------
+
+    private IndexManager indexManager;
+
+    public void setIndexManager( IndexManager manager ) {
+        this.indexManager = manager;
+    }
+
+    public IndexManager getIndexManager() {
+        return this.indexManager;
+    }
+
+
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
 
@@ -111,6 +129,13 @@ public class LogAdvice {
             getAttachmentManager().getTracContext()
                 .getAdiDao().saveAdi( ile );
 
+            // index if needed
+            //----------------
+
+            if( getIndexManager() != null ){
+                getIndexManager().indexIcPub( ((IcPub)rpub).getId() );
+            } 
+
             // update watch list if needed
             //----------------------------
            
@@ -144,6 +169,15 @@ public class LogAdvice {
                               "Publication record updated.", "" );
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
+
+
+        // index if needed
+        //----------------
+
+        if( getIndexManager() != null ){
+            getIndexManager().indexIcPub( ((IcPub)pub).getId() );
+        } 
+
         
         // get a list of observers and send out notifications
         //---------------------------------------------------
@@ -183,6 +217,15 @@ public class LogAdvice {
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );
             
+
+                // index if needed
+                //----------------
+ 
+                if( getIndexManager() != null ){
+                    getIndexManager().indexIcPub( ((IcPub)rpub).getId() );
+                } 
+
+
                 // get a list of observers and send out notifications
                 //---------------------------------------------------
 
@@ -216,6 +259,13 @@ public class LogAdvice {
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );
             
+                // index if needed
+                //----------------
+
+                if( getIndexManager() != null ){
+                    getIndexManager().indexIcPub( ((IcPub)rpub).getId() );
+                } 
+
                 // get a list of observers and send out notifications
                 //---------------------------------------------------
 
@@ -241,6 +291,13 @@ public class LogAdvice {
         getAttachmentManager().getTracContext()
             .getAdiDao().saveAdi( ile );
 
+        // index if needed
+        //----------------
+
+        if( getIndexManager() != null ){
+            getIndexManager().indexIcPub( ((IcPub)rpub).getId() );
+        } 
+        
         // get a list of observers and send out notifications
         //---------------------------------------------------
         
@@ -299,6 +356,13 @@ public class LogAdvice {
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );
         
+                // index if needed
+                //----------------
+
+                if( getIndexManager() != null ){
+                    getIndexManager().indexIcPub( ((IcPub)rpub).getId() );
+                } 
+                
                 // get a list of observers and send out notifications
                 //---------------------------------------------------
 
@@ -332,11 +396,26 @@ public class LogAdvice {
                                   ": " + 
                                   ((IcAttachment)adi).getSubject() + ")", 
                                   "" );
+             
 
             // update watch list if needed
             //----------------------------
 
             watchManager.addWatchByAttachmentPref( (User) luser, pub, false );            
+        }
+
+        if( adi instanceof IcScore){
+            ile = new IcLogEntry( (User) luser, pub,
+                                  "Score added(ID#" + adi.getId() + 
+                                  ": " + 
+                                  ((IcScore) adi).getName() + ")", 
+                                  "" );
+             
+
+            // update watch list if needed
+            //----------------------------
+
+            // watchManager.addWatchByAttachmentPref( (User) luser, pub, false );            
         }
         
         if( adi instanceof IcComment ){
@@ -345,13 +424,16 @@ public class LogAdvice {
                                   ": " +
                                   ((IcComment)adi).getSubject() + ")",
                                   "" );   
-
+           
             // update watch list if needed 
             //----------------------------
             
             watchManager.addWatchByCommentPref( (User) luser, pub, false );
         }
+
         
+        //----------------------------------------------------------------------
+
         if( ile != null ){
             
             // log comments & attachments
@@ -359,6 +441,18 @@ public class LogAdvice {
             
             getAttachmentManager().getTracContext().getAdiDao().saveAdi( ile );
             
+
+            // index if needed
+            //----------------
+            
+            if( getIndexManager() != null ){
+                getIndexManager().indexIcPub( ((IcPub)pub).getId() );
+            } 
+
+
+            // NOTE: add score observers here ?
+
+
             // get a list of publication observers
             //------------------------------------
 
@@ -497,6 +591,15 @@ public class LogAdvice {
             //---------------------------
 
             getAttachmentManager().getTracContext().getAdiDao().saveAdi( ile );
+
+
+            // index if needed
+            //----------------
+            
+            if( getIndexManager() != null ){
+                getIndexManager().indexIcPub( ((IcPub)pub).getId() );
+            } 
+
 
             // get a list of observers and send out notifications
             //---------------------------------------------------

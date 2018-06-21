@@ -25,6 +25,8 @@ import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.imex.central.*;
+
+
        
 public class IcPubDao extends AbstractDAO implements PublicationDao {
 
@@ -34,6 +36,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
     //    super( sessionFactory );
     //}
 
+    
     public Publication getPublication( int id ) { 
 
         Log log = LogFactory.getLog( this.getClass() );
@@ -258,6 +261,55 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
 
     //--------------------------------------------------------------------------
 
+    public List<Publication> getPublicationList( List<Integer> idl ){
+        
+        List<Publication> plst = null;
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "IcPubDao:getPublicationList( idlist )" );
+        
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        
+        try {
+
+            Query query = session
+                .createQuery("select p.id, p from IcPub p where p.id in (:l)")
+                .setParameter( "l", idl );
+            
+            Map<Integer,IcPub> rmap=new HashMap<Integer,IcPub>();
+
+            for( Iterator i = query.iterate(); i.hasNext(); ){
+                Object[] ir = (Object[]) i.next();
+                rmap.put((Integer) ir[0], (IcPub) ir[1]);                
+            }
+
+            tx.commit();
+            plst = new ArrayList<Publication>();
+                
+            for( Iterator<Integer> i = idl.iterator(); i.hasNext(); ){
+                
+                Publication ip = rmap.get( i.next() );
+                if(  ip != null ){
+                    plst.add( ip );                    
+                }
+            }
+
+        } catch ( HibernateException e ) {
+            handleException( e );
+            // log exception ?
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        
+        log.debug( "plist: " + plst );
+
+        return plst;
+    }
+
+    //--------------------------------------------------------------------------
+
     public List<Publication> getPublicationList( int firstRecord, 
                                                  int blockSize ) {
         List<Publication> plst = null;
@@ -355,8 +407,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         }        
         return plst;
     }
-    
-    //--------------------------------------------------------------------------
+
+    //---------------------- ******    -----------------------------------------
 
     public List<Publication> getPublicationList( int firstRecord,
                                                  int blockSize,
@@ -714,6 +766,8 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
     public Publication updatePublication( Publication publication ) { 
         
         super.saveOrUpdate( publication );
+
+        
         return publication;
     }
 
@@ -729,6 +783,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             pub.setModDate();
 
             super.saveOrUpdate( pub );
+            
             return pub;
         }
         return null;
@@ -811,6 +866,27 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             
             log.info("Flag crt: " + flt.get( "cflag") );
         }
+
+
+        if( flt.get( "nlmid" ) != null && 
+            !flt.get("nlmid").equals("") ){
+                      
+            DetachedCriteria critt = DetachedCriteria.forClass( IcComment.class );
+                    
+            //xxxxxxxxxxxxxxxxx
+            critt.createAlias("icFlag","flg")
+                .add(  Restrictions.eq( "flg.name", flt.get( "cflag" ) ) )
+                .setProjection( Projections.property("root.id") );
+            
+            crit.add( Property.forName("id").in(critt) );
+            
+            log.info("Flag crt: " + flt.get( "cflag") );
+        }
+
+
+
+
+
 
         int jid = 1;
         try{

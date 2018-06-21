@@ -143,6 +143,12 @@
     border-color: #C8C8C8;   
 }
 
+.yui-skin-sam th.yui-dt-col-pqueueNew {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
 .yui-skin-sam th.yui-dt-col-pqueueSub {
     border-top-style: solid;
     border-top-width: thin;
@@ -150,6 +156,12 @@
 }
 
 .yui-skin-sam th.yui-dt-col-queue {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-queueNew {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;   

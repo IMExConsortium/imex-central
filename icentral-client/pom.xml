@@ -17,7 +17,7 @@
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
     <artifactId>imexcentral</artifactId>
-    <version>3.0.0rc8</version>
+    <version>3.1.0rc7</version>
    </parent>
 
    <dependencies>

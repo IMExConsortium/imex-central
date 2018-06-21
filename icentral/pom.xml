@@ -5,8 +5,14 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral</artifactId>
   <packaging>war</packaging>
-  <version>3.0.0rc8</version>
+  <version>3.1.0rc8</version>
   <name>Web Application module</name>
+
+  <parent>
+    <groupId>edu.ucla.mbi.imex</groupId>
+    <artifactId>imexcentral</artifactId>
+    <version>3.1.0rc8</version>
+  </parent>
 
   <properties>
 
@@ -25,6 +31,15 @@
     <icentral.jdbc.user>*****</icentral.jdbc.user>
     <icentral.jdbc.pass>*****</icentral.jdbc.pass>
 
+    <icentral.esindex.url>http://10.1.200.200:9200/icentral_test</icentral.esindex.url>
+    <icentral.esindex.active>true</icentral.esindex.active>
+
+<!--
+    <icentral.esindex.url>http://10.1.216.103:9200/icentral</icentral.esindex.url>
+    <icentral.esindex.active>true</icentral.esindex.active>
+-->
+
+
     <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
 
 <!--
@@ -35,16 +50,8 @@
       <icentral.recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</icentral.recaptcha.recaptchaServer>
       <icentral.recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</icentral.recaptcha.publicKey>
       <icentral.recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</icentral.recaptcha.privateKey>
--->
-   
+-->   
   </properties>
-
-  <parent>
-    <groupId>edu.ucla.mbi.imex</groupId>
-    <artifactId>imexcentral</artifactId>
-    <version>3.0.0rc8</version>
-  </parent>
-
    
   <profiles>
    <profile>
@@ -233,6 +240,40 @@
     <version>9.4.7.v20170914</version>
    </dependency>
   -->
+
+<!--
+    <dependency>
+      <groupId>org.elasticsearch</groupId>
+      <artifactId>elasticsearch</artifactId>
+      <version>${elasticsearch.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>elasticsearch-rest-high-level-client</artifactId>
+      <version>${elasticsearch.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>elasticsearch-rest-client</artifactId>
+      <version>${elasticsearch.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>elasticsearch-rest-client-sniffer</artifactId>
+      <version>${elasticsearch.version}</version>
+    </dependency>
+-->
+<!--
+<dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+    <version>4.5.5</version>
+</dependency>
+-->
+
   </dependencies>
 
   <build>
@@ -307,6 +348,7 @@
               <includes>
                 <include>hibernate.cfg.xml</include>
                 <include>log4j2.xml</include>
+                <include>applicationContext.xml</include>
               </includes>
             </resource>
 

@@ -1,5 +1,10 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+
+<s:if test="reCaptchaActive">
+ <script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+</s:if>
+
 <h1>Contact Us</h1>
 <table width="98%" cellspacing="10">
  <tr>
@@ -65,6 +70,7 @@
            </s:if>
           </th>
          </tr>
+   <s:if test="reCaptchaActive">
          <tr>
           <td align="left">
            <script type="text/javascript"
@@ -79,9 +85,12 @@
            </noscript>
           </td>
          </tr>
+   </s:if>
         </table>
        </td>
       </tr>
+
+
      </s:if>
      <tr>
       <td align="left" colspan="2">

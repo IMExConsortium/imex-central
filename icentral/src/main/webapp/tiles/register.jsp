@@ -1,5 +1,10 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+
+<s:if test="reCaptchaActive">
+ <script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+</s:if>
+
  <div class="main-width">
  <h1>Sign up for ImexCentral Account</h1>  
 
@@ -97,9 +102,19 @@
   
      I represent that I have read and accepted the  
      <a href="page?id=termsofuse&mdf=0:2:0&mst=3:0:0">Terms of Use</a>.</p>
+
+   <s:if test="reCaptchaActive">
+     <center>
+      <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"  data-callback="recall"></div>
+     </center>
+     <br/>
+   </s:if>
+
+  </form>
+
   </div>
 
-
+<!--
   <h3>Type Both Words Below</h3>
   <div class="center captcha-width">
    <s:if test="hasActionErrors()">
@@ -122,8 +137,12 @@
     <input type='hidden' name='recaptcha_response_field' value='manual_challenge' />
    </noscript>
   </div>
- 
+ -->
+
+
+
   <div  class="clogin">
+    
     <p><s:submit theme="simple" name="Submit" value="Submit" /></p>
     <p>You will be notified about account
     creation and the initial password by an <em>e-mail</em>
@@ -132,3 +151,13 @@
  </s:form>      
 
 </div>
+
+<script>
+
+recall( foo ){
+ 
+alert("foo");
+
+}
+
+</script>

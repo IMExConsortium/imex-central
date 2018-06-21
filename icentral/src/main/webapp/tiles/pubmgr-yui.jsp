@@ -104,7 +104,8 @@
      <td class="filter-container"><label id="partner-button-container"/></td>
     </tr> 
    </table>
-  </center>    
+  </center>
+    
   <div id="pubtab" width="100%" class="pubtab"></div>
   <table width="100%" cellpadding="5">
    <s:form theme="simple" action="pubmgr">

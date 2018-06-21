@@ -56,6 +56,20 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
     }
 
     ////------------------------------------------------------------------------
+    /// Index Manager
+    //--------------
+
+    private IndexManager indexManager;
+    
+    public void setIndexManager( IndexManager manager ) {
+        this.indexManager = manager;
+    }
+    
+    public IndexManager getIndexManager() {
+        return this.indexManager;
+    }
+
+    ////------------------------------------------------------------------------
     /// Watch Manager
     //--------------
 
@@ -142,6 +156,47 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         return this.stage;
     }
 
+    //--------------------------------------------------------------------------
+    // Status
+    //-------
+
+    private String status = null;
+    
+    public void setStatus( String status) {
+	this.status = status;
+	
+	Log log = LogFactory.getLog( this.getClass() );
+        log.info( "EntryMgrAction: set status=" + status  );
+
+    }
+
+    public String getStatus(){
+        return this.status;
+    }
+
+    //--------------------------------------------------------------------------
+    // Journal (set as journal ID)
+    //----------------------------
+
+    private String journalId = null;
+    
+    public void setJid( String id) {
+	this.journalId = id;
+	
+	Log log = LogFactory.getLog( this.getClass() );
+        log.info( "EntryMgrAction: set journalId=" + journalId  );
+
+    }
+
+    public String getJid(){
+        return this.journalId;
+    }
+
+    private String journalName = "";
+    
+    public String getJournalName(){
+        return this.journalName;
+    }
     
     //--------------------------------------------------------------------------
     
@@ -212,6 +267,14 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 
     //--------------------------------------------------------------------------
     
+    List<String> scoreNameList = null;
+
+    public List<String> getScoreNameList(){
+        return this.scoreNameList;
+    }
+
+    //--------------------------------------------------------------------------
+    
     Map<String,Object> flags = null;
 
     public Map<String,Object> getFlags(){
@@ -239,7 +302,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         Log log = LogFactory.getLog( this.getClass() );
         log.debug(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
 	
-	this.filter = buildFilter( (Map<String,String>) getOpp(), getStage() );
+	this.filter = buildFilter( (Map<String,String>) getOpp(), getStage(), getStatus());
         
         if ( tracContext.getPubDao() == null ) return SUCCESS;
 
@@ -269,6 +332,26 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             }
         }
         
+        if( getJid() != null ){
+            
+            try{
+                int jid = Integer.parseInt( getJid() );
+                IcJournal journal = entryManager.getIcJournal( jid );
+          
+                if(journal != null ){
+                    this.journalName=journal.getTitle();
+                    return SUCCESS;
+                }
+            } catch(Exception ex){
+                // journal not found
+            }
+
+            this.journalName="Unknown Journal";
+
+            return SUCCESS;
+            
+        }
+
         if( getId() <= 0 && getOp() == null ) return SUCCESS;
         
         for ( Iterator<String> i = getOp().keySet().iterator();
@@ -304,6 +387,19 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                     return searchIcPub( icpub, imex );
                 }
 
+                //--------------------------------------------------------------
+                
+                if ( key.equalsIgnoreCase( "scrl" ) ) {
+
+                    if ( getOpp() != null ) {
+
+                        String grp  = getOpp().get( "grp" );
+                        return getScoreNameList( grp );
+                    } else {
+                        return getScoreNameList( null );
+                    }                    
+                }
+                
                 //--------------------------------------------------------------
                 
                 /*
@@ -346,12 +442,12 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                         "" :  getOpp().get( "efv" );
                     String ffv = getOpp().get( "ffv" ) == null ?
                         "" :  getOpp().get( "ffv" );
+
+                    String jfv = getOpp().get( "jfv" ) == null ?
+                        "" :  getOpp().get( "jfv" );
                 
                     if( !wfl.equalsIgnoreCase("true") || luser == null ){
-    
                         return getIcPubRecords( max, off, skey, sdir, filter );
-			//                      gfv, sfv, pfv, ofv, efv, ffv );
-
                     } else {
                         return getWatchedRecords( luser, 
                                                   max, off, skey, sdir,
@@ -363,20 +459,33 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         }
         return SUCCESS;
     }
-    
 
-    private Map<String,String> buildFilter( Map<String,String> fmap, String stage ){
+    //--------------------------------------------------------------------------
+
+    private Map<String,String> buildFilter( Map<String,String> fmap, 
+                                            String stage, String status ){
+
+        Log log = LogFactory.getLog( this.getClass() );
 
 	Map<String,String> filter = new HashMap<String,String>();
+        
+
+	if( stage != null ){
+	    filter.put( "stage", stage );
+	}  
+
+	if( status != null ){
+	    filter.put( "status", status );
+	}  
 
 	if( fmap != null){
-	    if( fmap.get( "gfv" ) != null ){
+	    if( fmap.get( "gfv" ) != null && !fmap.get( "gfv" ).equals("") ){
 		filter.put( "stage", fmap.get( "gfv" ) );
 	    }
-
-	    if( fmap.get( "sfv" ) != null ){
+	    if( fmap.get( "sfv" ) != null && !fmap.get( "sfv" ).equals("") ){
 		filter.put( "status", fmap.get( "sfv" ) );
 	    }
+
 	    if( fmap.get( "pfv" ) != null ){
 		filter.put( "partner", fmap.get( "pfv" ) );
 	    }
@@ -389,11 +498,12 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 	    if( fmap.get( "ffv" ) != null ){
 		filter.put( "cflag", fmap.get( "ffv" ) );
 	    }
-	}
 
-	if( stage != null ){
-	    filter.put( "stage", stage );
-	}  
+	    if( fmap.get( "jfv" ) != null ){
+		filter.put( "jid", fmap.get( "jfv" ) );
+	    }
+            log.info( "FILTER: " + filter );
+	}
 	    
 	return filter; 
     }
@@ -504,6 +614,19 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             return NOPUB;
         }
     }
+
+
+
+    public String getScoreNameList( String grp ){
+        
+        //List<String> scores = entryManager.getScoreNameList( grp );
+        List<String> scores = indexManager.getScoreNameList( grp );
+
+        scoreNameList = scores;
+
+        return JSON;
+    }
+
     
     //--------------------------------------------------------------------------
     /*
@@ -532,15 +655,11 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                                      String max, String off,
 				     String skey, String sdir, 
 				     Map<String,String> filter ){
-        //                             String gfv, String sfv, String pfv,
-        //                             String ofv, String efv, String ffv ) {
         
-
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getWatchedRecords: uid=" + usr.getId() );
 
         return getIcPubRecords( usr , max, off, skey, sdir, filter );
-	//			gfv, sfv, pfv, ofv, efv, ffv);
         
     }
     
@@ -551,18 +670,13 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
     public String getIcPubRecords( String max, String off, 
                                    String skey, String sdir, 
 				   Map<String,String> filter ){
-        //                           String gfv, String sfv, String pfv, 
-        //                           String ofv, String efv, String ffv ) {
         return getIcPubRecords( null, max, off, skey, sdir, filter ); 
-	//                      gfv, sfv, pfv, ofv, efv, ffv);
     }
 
     public String getIcPubRecords( User usr, 
                                    String max, String off, 
                                    String skey, String sdir,
 				   Map<String,String> filter ){
-        //                           String gfv, String sfv, String pfv, 
-        //                           String ofv, String efv, String ffv ) {
         
         if ( tracContext.getPubDao() == null ) return null;
 
@@ -600,8 +714,8 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             sdir ="asc";
         }
 
-        String sortKey ="id";
-        
+        String sortKey ="";
+        log.debug( "skey= :" + skey + ":");
         if( skey != null && !skey.equals("") ){
             if( skey.equals( "pub" ) ){
                 sortKey ="author";
@@ -633,6 +747,13 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             if( skey.equals( "modTStamp" ) ){
                 sortKey ="modDate";
             }
+            if( skey.equals( "id" ) ){
+                sortKey ="id";
+            }
+
+            if( sortKey.equals( "" )){
+                sortKey = skey + ".value";
+            }
             
         } else {
             skey = "id";
@@ -655,13 +776,28 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         
         //if ( gfv.equals("") && sfv.equals("") && pfv.equals("") && 
 	//     ofv.equals("") && efv.equals("") && ffv.equals("") ){
+
+        //-------------------  ***************** -------------------------
+
 	if ( filter.isEmpty() ){  
             log.debug( "getPubRecords: unfiltered" );
             
             if( usr == null ){
-                pl = tracContext.getPubDao()
-                    .getPublicationList( first, blockSize, sortKey, asc );
-                total = tracContext.getPubDao().getPublicationCount();
+
+                if( getIndexManager() != null 
+                    && getIndexManager().isIndexActive() ){
+
+                    pl = getIndexManager()
+                        .getPublicationList( first, blockSize, sortKey, asc );
+
+                    total = getIndexManager().getPublicationCount();
+                    
+                } else {
+                    pl = tracContext.getPubDao()
+                        .getPublicationList( first, blockSize, sortKey, asc );
+                    total = tracContext.getPubDao().getPublicationCount();
+                }
+
             } else {
 
                 log.debug( "getting list" );
@@ -679,11 +815,25 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             log.debug( "getPubRecords: filtered" );
             
             if( usr == null ){
-                pl = tracContext.getPubDao()
-                    .getPublicationList( first, blockSize, 
-                                         sortKey, asc, filter );            
-                
-                total = tracContext.getPubDao().getPublicationCount( filter );
+
+                if( getIndexManager() != null 
+                    && getIndexManager().isIndexActive() ){
+
+                    pl = getIndexManager()
+                        .getPublicationList( first, blockSize, 
+                                             sortKey, asc, filter );
+
+                    total = getIndexManager().getPublicationCount( filter );
+                    
+                } else {
+                    pl = tracContext.getPubDao()
+                        .getPublicationList( first, blockSize, 
+                                             sortKey, asc, filter );            
+                    
+                    
+                    total = tracContext.getPubDao()
+                        .getPublicationCount( filter );
+                }
             } else {
                 pl = watchManager
                     .getPublicationList( usr, first, blockSize, 
@@ -692,6 +842,8 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                     .getPublicationCount( usr, filter );
             }   
         }
+
+        //------------------- **********************  ------------------
 
         log.debug( "getPubRecords: total=" + total);
 
@@ -738,6 +890,26 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             r.put( "modTStamp", ip.getModDateStr() );
 
 
+            // get/set scores
+            //---------------
+            
+            List<Score> scrList =  tracContext.getAdiDao()
+                .getScoreListByRoot( ip );
+
+            if( scrList != null && scrList.size() > 0 ){ 
+
+                Map scoreMap = new  HashMap();
+
+                for( Iterator<Score> si = scrList.iterator(); si.hasNext(); ){
+                    Score s = si.next();
+                    
+                    scoreMap.put( s.getName(), Float.toString( s.getValue() ) );
+                   
+                }
+                r.put("score", scoreMap );
+            }
+            
+           
             // set partner
             //------------
 

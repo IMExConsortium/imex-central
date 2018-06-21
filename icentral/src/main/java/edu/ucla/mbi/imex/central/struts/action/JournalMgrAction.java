@@ -683,13 +683,22 @@ public class JournalMgrAction extends ManagerSupport {
             }
 
             long pqueue = 0;
+            long pqueueNew = 0;
             long pqueueDisc = 0;
             long queue = 0;
+            long queueNew = 0;
             long queueDisc = 0;
+
             long curate = 0;
-            long curateDisc = 0;
+            long curReserved = 0;
+            long curInprog = 0;
+            long curIncomp = 0;
+            long curProcessed = 0;
+            long curDisc = 0;
+
             long release = 0;
-            long retract = 0;
+            long relReleased = 0;
+            long relRetracted = 0;
             
 
             List sl = jstat.get( ij );
@@ -710,6 +719,9 @@ public class JournalMgrAction extends ManagerSupport {
                     if( ((DataState)ss.get( "state" )).getName().equals( "DISCARDED" )){
                         pqueueDisc += count;                       
                     }
+                    if( ((DataState)ss.get( "state" )).getName().equals( "NEW" )){
+                        pqueueNew += count;                       
+                    }
                     continue;
                 }
                  
@@ -718,38 +730,84 @@ public class JournalMgrAction extends ManagerSupport {
                     if( ((DataState)ss.get( "state" )).getName().equals( "DISCARDED" )){
                         queueDisc += count;
                     }
+                    if( ((DataState)ss.get( "state" )).getName().equals( "NEW" )){
+                        queueNew += count;
+                    }
                     continue;
                 }
 
                 if( ((DataState)ss.get( "stage" )).getName().equals( "CURATION" ) ){
                     
+                    if( ((DataState)ss.get( "state" )).getName().equals( "RESERVED" )){
+                        curate += count;
+                        curReserved += count;
+                        continue;
+                    }
+
+                    if( ((DataState)ss.get( "state" )).getName().equals( "INPROGRESS" )){
+                        curate += count;
+                        curInprog += count;
+                        continue;
+                    }
+
+                    if( ((DataState)ss.get( "state" )).getName().equals( "INCOMPLETE" )){
+                        curate += count;
+                        curIncomp += count;
+                        continue;
+                    }
+
+                    if( ((DataState)ss.get( "state" )).getName().equals( "PROCESSED" )){
+                        curate += count;
+                        curProcessed += count;
+                        continue;
+                    }
+
+                    if( ((DataState)ss.get( "state" )).getName().equals( "DISCARDED" )){
+                        curate += count;
+                        curDisc += count;
+                        continue;
+                    }
+                }
+
+                if( ((DataState)ss.get( "stage" )).getName().equals( "RELEASE" ) ){
+                    
                     if( ((DataState)ss.get( "state" )).getName().equals( "RELEASED" )){
                         release += count;
+                        relReleased += count;
                         continue;
-
                     }
-                    curate += count;
 
-                    if( ((DataState)ss.get( "state" )).getName().equals( "discard" )){
-                        curateDisc += count;
+                    if( ((DataState)ss.get( "state" )).getName().equals( "RETRACTED" )){
+                        release += count;
+                        relRetracted += count;
                         continue;
                     }
                 }
             }
 
             r.put( "pqueue", pqueue );
-            r.put( "pqueueSub", pqueueDisc );
+            r.put( "pqueueNew", pqueueNew );
+            r.put( "pqueueDiscarded", pqueueDisc );
+
             r.put( "queue", queue );
-            r.put( "queueSub", queueDisc );
+            r.put( "queueNew", queueNew );
+            r.put( "queueDiscarded", queueDisc );
+
             r.put( "curation", curate );
-            r.put( "curationSub", curateDisc);
+            r.put( "curationReserved", curReserved);
+            r.put( "curationInprogress", curInprog);
+            r.put( "curationIncomplete", curIncomp);
+            r.put( "curationProcessed", curProcessed);
+            r.put( "curationDiscarded", curDisc);
+
             r.put( "release", release );
-            r.put( "retract", retract );
+            r.put( "releaseReleased", relReleased );
+            r.put( "releaseRetracted", relRetracted );
 
             log.debug("pq:" + pqueue + ":" + pqueueDisc +
-                      "q: " + queue + ":" + queueDisc +
-                      "c: " + curate +":" +curateDisc +
-                      "r: " +release); 
+                      "q: " + queue  + ":" + queueDisc +
+                      "c: " + curate + ":" + curDisc +
+                      "r: " + release+ ":" + relRetracted); 
             
             rl.add( r );
         }

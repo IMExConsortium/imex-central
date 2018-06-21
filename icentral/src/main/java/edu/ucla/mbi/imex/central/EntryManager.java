@@ -290,6 +290,19 @@ public class EntryManager {
     }
 
     //--------------------------------------------------------------------------
+
+    public List<String> getScoreNameList( String grp ){
+        
+        List<String> scores = tracContext.getAdiDao().getScoreNameList(  grp );
+        if( scores != null ){
+            return scores;
+        }
+
+        return new ArrayList<String>();
+    }
+
+
+    //--------------------------------------------------------------------------
     // autocompletion
     //---------------
 

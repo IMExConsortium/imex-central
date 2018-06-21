@@ -50,6 +50,7 @@
     <property name="notifyServer" value="imex.mbi.ucla.edu" />
     
     <property name="reCaptcha" ref="reCaptcha"/>
+    <property name="reCaptchaActive" value="false"/>
   </bean>
   
 
@@ -67,6 +68,7 @@
 
     <property name="mst" value="1:1"/>
     <property name="reCaptcha" ref="reCaptcha"/>
+    <property name="reCaptchaActive" value="false"/>
   </bean>
 
   <bean id="feedbackManager" scope="prototype"
@@ -172,6 +174,20 @@
 
    <property name="menuContext" ref="menuContext"/>
    <property name="mst" value="4:2:0"/>
+
+ </bean>
+
+ <bean id="indexMgrAction" scope="prototype"
+       class="edu.ucla.mbi.imex.central.struts.action.IndexMgrAction">
+
+   <property name="indexManager" ref="indexManager"/>
+   <property name="entryManager" ref="entryManager"/>
+
+   <property name="tracContext" ref="tracContext"/>
+   <property name="userContext" ref="userContext"/>
+   <property name="menuContext" ref="menuContext"/>
+   
+   <property name="mst" value="3:3:3"/>
 
  </bean>
 
