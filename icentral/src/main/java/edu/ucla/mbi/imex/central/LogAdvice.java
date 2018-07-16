@@ -346,12 +346,29 @@ public class LogAdvice {
 
 
             if( ! ((IcPub) pub).getState().getName()
-                .equals( ((IcPub) rpub).getState().getName() )){
+                .equals( ((IcPub) rpub).getState().getName() ) ||
+                ! ((IcPub) pub).getStage().getName()
+                .equals( ((IcPub) rpub).getStage().getName() )               
+                ){
+
+
+                String nStage = ((IcPub) rpub).getStage().getName();
+                String nState = ((IcPub) rpub).getState().getName();
+                
+                String msg = "";
+                if( ! nStage.equals( ((IcPub) pub).getStage().getName() )
+                    ){
+                    msg = " New Stage: " + nStage + ";";
+                }
+                if( ! nState.equals( ((IcPub) pub).getState().getName() )
+                    ){
+                    msg += " New State: " + nState + ";";
+                }
 
                 IcLogEntry ile 
                     = new IcLogEntry( (User) luser, (IcPub) pub,
-                                      "Publication state updated: " 
-                                      + stateName, "" );
+                                      "Publication status updated: " 
+                                      + msg, "" );
 
                 getAttachmentManager().getTracContext()
                     .getAdiDao().saveAdi( ile );

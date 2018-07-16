@@ -5,7 +5,7 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>3.1.0rc8</version>
+  <version>3.1.0rc9</version>
   <name>IMEx Central</name>
   <url>https://github.com/IMExConsortium</url>
 

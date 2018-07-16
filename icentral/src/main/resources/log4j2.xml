@@ -58,10 +58,6 @@
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 
-        <Logger name="edu.ucla.mbi.imex.central.EntryManager" level="info" additivity="false">  
-          <AppenderRef ref="STDOUT"/> 
-        </Logger>
-
         <Logger name="edu.ucla.mbi.imex.central.IcWorkflowContext" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
@@ -83,6 +79,18 @@
         </Logger>
 
         <Logger name="edu.ucla.mbi.imex.central.LogManager" level="info" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Logger name="edu.ucla.mbi.imex.central.EntryManager" level="info" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Logger name="edu.ucla.mbi.util.struts.AclValidator" level="info" additivity="false">  
+          <AppenderRef ref="STDOUT"/> 
+        </Logger>
+
+        <Logger name="edu.ucla.mbi.imex.central.IcWorkflowContext" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 

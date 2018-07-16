@@ -23,6 +23,7 @@ my @EXPORT = qw(new
                 addAttachment
                 );
 
+my $URLDEV  = "http://%USR%:%PASS%\@10.1.200.200:8080/ws-v20";
 my $URLTEST = "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
 my $URLBETA = "https://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
 my $URLPROD = "https://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
@@ -54,6 +55,9 @@ sub new{
 
 	$self->{URL}=$par{URL};
 
+	if($par{URL} eq "DEV"){
+	    $self->{URL}=$URLDEV;
+	}
 	if($par{URL} eq "BETA"){
 	    $self->{URL}=$URLBETA;
 	}
@@ -267,6 +271,69 @@ sub addAttachment{
 	}
     }
 }
+
+
+
+sub updatePublicationStatus{
+
+    my $self = shift;
+    my %par=@_;
+
+    my $ns="pmid";
+
+    if($par{NS} ne ""){
+        $ns = $par{NS};
+    }
+
+    my $ac = $par{AC};
+    my $stat = $par{status};
+
+    my $url = $self->{URL};
+    $url=~s/%USR%/$self->{UID}/;
+    $url=~s/%PASS%/$self->{PASS}/;
+
+    
+    if( $stat ne "") {
+        $som=SOAP::Lite->uri($url)
+            ->proxy($url)
+            ->default_ns($self->{RNS})
+            ->outputxml('true')
+            ->updatePublicationStatus( SOAP::Data->type( 'xml' =>
+                                                         "<identifier ns='$ns' ac='$ac' />" ),
+                                       SOAP::Data->name("status" => $stat) );
+ 
+        
+        print $som,"\n";
+        my $xp_som = XML::XPath->new(xml=>$som);
+        $xp_som->set_namespace("rns",$RNS);
+
+        # find publication
+        my $publist = $xp_som->find('//rns:publicationResponse/rns:publication');
+
+        if( $publist ){
+            return new ICentral::RECORD( record => parsePubList(PUBLIST => $publist) );
+        } else {
+            my $faultlist = $xp_som->find('//ImexCentralFault'); # fault
+            if( $faultlist ){
+                return new ICentral::FAULT( fault =>parseFaultList(FAULTLIST => $faultlist) );
+            } else {
+
+            # sholdn't get here
+            }
+        }    
+        print "**";
+
+
+    } else {
+        die "ERROR: New Status not provided.";
+    }
+}
+
+
+
+
+
+
 
 
 #------------------------------------------------------------------------------

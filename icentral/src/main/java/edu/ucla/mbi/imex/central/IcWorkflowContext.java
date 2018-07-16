@@ -182,13 +182,14 @@ public class IcWorkflowContext extends WorkflowContext {
 	    log.info( "WorkflowContext: json-source error (stage)" );	    
 	}
 
-	log.debug( "stageArray: " + stageArray );	    	    
+	
 	try{
 	    if( stageArray != null){
 		for ( int i = 0; i < stageArray.length(); i++ ) {
 
 		    JSONObject joStage = stageArray.getJSONObject( i );
 		    String stage = joStage.getString( "name" );
+                    log.debug( "stage: " + stage );
 
 		    if( status == null) {
 			slist.add( stage );
@@ -280,21 +281,33 @@ public class IcWorkflowContext extends WorkflowContext {
     public Map<String,String> 
 	getNewStageState( String oldStage, String oldState, String newState ){
 
+        Log log = LogFactory.getLog( this.getClass() );        
+        log.debug( "getNewStageState: requested state: " + newState );
+
 	Map<String,String> ssm = new HashMap<String,String>();
 	
+        if( newState != null && newState.equals(oldState) ){
+            log.debug( "getNewStageState: no change: " + oldStage );
+            return ssm;
+        }
+
 	if( this.getStatusList( oldStage ).contains( newState ) ){
 
 	    // new state requestested within current stage
+
+            log.debug( "getNewStageState: same stage: " + oldStage );
+
 
 	    ssm.put("stage",oldStage);
 	    ssm.put("state",newState);	 
 	    return ssm;
 	}
 
-
 	List<String> slist = this.getStageList();
 	
 	if( slist.contains( newState ) ){
+
+            log.debug( "getNewStageState: new stage request: " + newState );
 	    
 	    // new stage request
 	    ssm.put("stage", newState); 
@@ -315,13 +328,22 @@ public class IcWorkflowContext extends WorkflowContext {
 	// new state in up-stage ? 
 
 	try{
+
+            log.debug( "getNewStageState: looking for up-stage: " + oldStage );
+
 	    List<String> upstageList = 
-		slist.subList( slist.lastIndexOf( oldStage+1 ),
+		slist.subList( slist.lastIndexOf( oldStage ) + 1,
 			       slist.size() );
 	    
+            log.debug( "getNewStageState: starting from stage: " + upstageList.get(0) );
+            
+
 	    for( Iterator<String> i = upstageList.iterator(); i.hasNext(); ){
 		String nextStage = i.next();
+                log.debug( "getNewStageState: cstage: " + nextStage );
+
 		if( this.getStatusList( nextStage ).contains( newState ) ){
+                    log.debug( "getNewStageState: got state: " + newState );
 		    ssm.put( "stage", nextStage );
 		    ssm.put( "state", newState );	 
 		    return ssm;

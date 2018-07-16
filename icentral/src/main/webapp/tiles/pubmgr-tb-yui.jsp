@@ -1,5 +1,9 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+
+<!--pubmgr-tb-yui.jsp -->
+
+<script src="js/record-edit-yui.js" type="text/javascript"></script>
 <script src="js/util-yui.js" type="text/javascript"></script>
 <script src="js/pubmgr-yui.js" type="text/javascript"></script>
 

@@ -149,7 +149,7 @@
     border-color: #C8C8C8;   
 }
 
-.yui-skin-sam th.yui-dt-col-pqueueSub {
+.yui-skin-sam th.yui-dt-col-pqueueDiscarded {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;   
@@ -167,12 +167,11 @@
     border-color: #C8C8C8;   
 }
 
-.yui-skin-sam th.yui-dt-col-queueSub {
+.yui-skin-sam th.yui-dt-col-queueDiscarded {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;   
 }
-
 
 .yui-skin-sam th.yui-dt-col-curation {
     border-top-style: solid;
@@ -180,19 +179,25 @@
     border-color: #C8C8C8;   
 }
 
-.yui-skin-sam th.yui-dt-col-curationSub {
+.yui-skin-sam th.yui-dt-col-curationReserved {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;   
 }
 
-.yui-skin-sam th.yui-dt-col-release {
+.yui-skin-sam th.yui-dt-col-curationInprogress {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;   
 }
 
-.yui-skin-sam th.yui-dt-col-retract {
+.yui-skin-sam th.yui-dt-col-releaseReleased {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-color: #C8C8C8;   
+}
+
+.yui-skin-sam th.yui-dt-col-releaseRetracted {
     border-top-style: solid;
     border-top-width: thin;
     border-color: #C8C8C8;   

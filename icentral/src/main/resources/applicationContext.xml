@@ -108,11 +108,12 @@
        class="edu.ucla.mbi.imex.central.UserPrefManager">
 
    <property name="userContext" ref="userContext"/>
-   <property name="defUserPrefs">
-    <value>
+   <property name="defUserPrefs">     <!-- NOTE: need a map of table layouts -->
+    <value>                              
 {
     "legend":"User Preferences", 
     "tableLayout":"null",
+    "tableLayoutMap":{},
     "options":["curation-tool","curation-requests","auto-watch","message-mail"], 
     "option-def":{
       "curation-tool": {

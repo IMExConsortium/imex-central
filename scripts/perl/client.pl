@@ -48,6 +48,8 @@ my $ns = "pmid";
 my $ac = "";
 my $create = "false";
 my $op = "";
+my $stat = "";
+
 
 GetOptions ('url=s' => \$url, 
 	    'user=s' => \$uid, 
@@ -55,6 +57,7 @@ GetOptions ('url=s' => \$url,
 	    'ns=s' => $ns,
 	    'ac=s' => \$ac,
 	    'create=s' => \$create,
+            'status=s' => \$stat,
 	    'op=s' => \$op
     );
 
@@ -82,6 +85,17 @@ if( $url ne "" && $uid ne "" && $pass ne ""){
 						  AC=>$ac ); # "16980971"; 
 	print $record->toString();
     }
+
+    if( $op eq "updatePublicationStatus" && $stat ne "") {   
+
+        print "Updating Status to: $stat\n";
+        my $record = $IC->updatePublicationStatus( NS => $ns, 
+                                                   AC => $ac,
+                                                   status => $stat);
+        
+        #print $record->toString();
+    }
+
 
 } else {
 
@@ -189,7 +203,7 @@ if($op ne "" ) {
             ->createPublicationById(SOAP::Data->type( 'xml' =>
                                                       "<identifier ns='pmid' ac='$pmid' />" ) );
     }
-    
+
     if( $op eq "updatePublicationStatus" && $stat ne "") {   
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
@@ -199,6 +213,8 @@ if($op ne "" ) {
                                                          "<identifier ns='$ns' ac='$ac' />" ),
                                        SOAP::Data->name("status" => $stat) );
     }
+
+    
 
     if( $op eq "updatePubId") {   
 
