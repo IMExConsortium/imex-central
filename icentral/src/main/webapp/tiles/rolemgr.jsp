@@ -14,19 +14,23 @@
    </span>
   </p>
  </s:if>
-     
+
+<!--  Navigation  -->
+
  <div id="mgr-tabs" class="main-width">
- <ul class="yui-nav"> 
-       <li class="selected"><a href="#tab1"><em>Add Role</em></a></li> 
-       <li><a href="#tab2"><em>Roles</em></a></li> 
- </ul>   
- <div class="yui-content">
-  <div id="tab1">
-   <s:form theme="simple" action="rolemgr" id="mgr-form" cssClass="align-label"> 
+  <ul class="yui-nav"> 
+    <li class="selected"><a href="#tab1"><em>Add Role</em></a></li> 
+    <li><a href="#tab2"><em>Roles</em></a></li> 
+  </ul>
+ 
+  <div class="yui-content">
+
+   <div id="tab1">
+    <s:form theme="simple" action="rolemgr" id="mgr-form" cssClass="align-label"> 
      
-    <fieldset>
-    <legend><h2>Add Role</h2></legend>
-     <ul>
+     <fieldset>
+      <legend><h2>Add Role</h2></legend>
+      <ul>
         <s:if test="hasFieldErrors()">
          <s:if test="fieldErrors['role.name']!=null">
           <p id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
@@ -40,17 +44,23 @@
         </s:if>
         <li>
         <label for="mgr-form_role_name" ><strong>Role Name:</strong> </label>
-        <s:textfield theme="simple" name="role.name" size="48" maxlength="64"/>
+        <s:textfield theme="simple" name="role.name" size="24" maxlength="64"/>
        </li>
        <li>
         <s:submit theme="simple" name="op.add" value="Add" />
        </li>
-       </ul>
-      </fieldset>
-     </s:form>
-     </div>
-    <div id="tab2"><div id="rolemgr-table"></div></div>
-    <script type="text/javascript">
+      </ul>
+     </fieldset>
+    </s:form>
+   </div>
+     
+   <div id="tab2">
+      <div id="dt-pag-nav"></div>
+      <div id="rolemgr-table">
+   </div>
+ 
+   
+   <script type="text/javascript">
  
         var columnDefinitions = [
             {key:"id", label:"Id",  sortable:true, resizeable:true},
@@ -58,17 +68,21 @@
             {key:"Details", sortable:true, resizeable:true, formatter:"roleDetails"}
            ];
         
-        var dataSourceLink = "rolemgr?op.view=json";
+        var dataSourceLink = "rolemgr?op.view=json&";
   
         var datasourceSchema = { 
             resultsList: "roleList", 
-            fields: ["id", "name", "details"]
+            fields: ["id", "name", "details"],
+            metaFields: {
+	       totalRecords: "totalRecords",
+               paginationRecordOffset : "firstRecord", 
+               paginationRowsPerPage : "blockSize" 
+            }
         }; 
         var container = "rolemgr-table";
         
-        YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
-
-        YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
-    </script>
-    </div>
+        YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);        
+   </script>
+  </div>
+ </div>
 </s:else>

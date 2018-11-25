@@ -8,7 +8,7 @@ YAHOO.imex.usermgr = {
     myDataSource: null,
     myPaginator: null,
 
-    defPageSize: 20,
+    defPageSize: 50,
 
     myLogLevel: "none",
 
@@ -69,7 +69,7 @@ YAHOO.imex.usermgr = {
         //-----------------
         
         UMGR.myPaginator = new YAHOO.widget.Paginator(
-            {rowsPerPage: 20, 
+            {rowsPerPage: 10, 
 	     template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE, 
 	     rowsPerPageOptions: [5,10,20,50,100], 
 	     pageLinks: 5,
@@ -80,7 +80,7 @@ YAHOO.imex.usermgr = {
         // datatable configuration
         //------------------------
 
-	var initReq = "opp.off=0&opp.max=20";
+	var initReq = "opp.off=0&opp.max=50";
         // + "&opp.ffv=" + YAHOO.imex.pubmgr.cflag;   ???
 	
         var myConfig = {

@@ -726,7 +726,7 @@ public class JournalViewAction extends ManagerSupport {
             sortKey = "id";
         }
 
-        List<Publication> pl = new ArrayList<Publication>();
+        List<IcPub> pl = new ArrayList<IcPub>();
         long total = 0;
         log.debug( "getPubRecords: " + sfv + " :: " + gfv + " :: " + efv + " :: " + ffv);
 
@@ -883,8 +883,8 @@ public class JournalViewAction extends ManagerSupport {
         List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
         records.put("records", rl );
 
-        for( Iterator<Publication> ii = pl.iterator(); ii.hasNext(); ) {
-            IcPub ip = (IcPub) ii.next();
+        for( Iterator<IcPub> ii = pl.iterator(); ii.hasNext(); ) {
+            IcPub ip =  ii.next();
             Map<String,Object> r = new HashMap<String,Object>();  
             r.put( "id", ip.getId() );
             r.put( "pmid", ip.getPmid() );

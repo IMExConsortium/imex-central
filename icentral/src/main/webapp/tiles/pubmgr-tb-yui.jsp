@@ -29,8 +29,15 @@
   </s:elseif>
   <s:else></s:else>
 
-
-
+  <s:if test="opp.query.length() > 0 ">
+    <s:form theme="simple" action="pubsrc">
+       <b>Query:</b>
+       <s:textfield name="opp.query" size="64" maxlength="256" />
+       <s:hidden name="opp.ftype" value="elastic"/>
+       <s:submit name="op.eflt" theme="simple" value="SEARCH" cssClass="pubsrc-query" onclick=""/>
+    </s:form>
+  </s:if>
+  
  <div class="yui-skin-sam" width="100%">
   <center>
    <img id="spinner" src="img/waiting-1.gif" height="100" width="100" class="">
@@ -80,6 +87,7 @@
                                 YAHOO.imex.pubmgr.init(
                                    { owner:"<s:property value="opp.ou"/>", 
                                      admus:"<s:property value="opp.au"/>",
+                                     query:"<s:property value="opp.query"/>",
                                      cflag:"<s:property value="opp.encf"/>",
                                      watch:"<s:property value="opp.wfl"/>",
                                      jid:"<s:property value="jid"/>",

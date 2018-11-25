@@ -339,25 +339,24 @@ YAHOO.mbi.modal = {
                          var urlcallback = {
                              success: function(o) {
                                  var myself = YAHOO.mbi.modal.my;
-                                 
-                                 console.log("dialog: myself.table=" + myself.table);
-                                 console.log("dialog: myself.parent=" + myself.parent);
-                                 
-				 
-
+                                                                  
                                  if( myself.table != null && myself.parent != null){
                                      // reload table
                                      
-                                     try{
-                                         console.log("reloading...");
-                                         console.log( "mp: " + myself.parent );
-                                         console.log( "mp: " + myself.parent );
-					 
+                                     try{                                        
+                                         
                                          setTimeout( function() {
                                                        console.log("delayed reload...");
                                                        myself.parent.tableReload( {}, myself.table );
-         	                                       console.log("delayed reload... DONE");
-                                                     }, 750);
+         	                                       console.log("delayed reload... #1");
+
+                                                       setTimeout( function() {
+                                                         console.log("delayed reload...");
+                                                         myself.parent.tableReload( {}, myself.table );
+         	                                         console.log("delayed reload... #2");
+                                                       }, 1000);
+
+                                                     }, 500);
                                                                        
                                      } catch (x) {
                                          console.log(x);

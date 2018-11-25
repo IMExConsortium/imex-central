@@ -28,7 +28,7 @@
    <center>
     <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
-      <legend class="qlegend">By Record Identifier</legend>
+      <legend align="left" class="qlegend">By Record Identifier</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
@@ -49,7 +49,7 @@
    <center>
     <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
-      <legend class="qlegend">By Comment Flag</legend>
+      <legend align="left" class="qlegend">By Comment Flag</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
@@ -59,8 +59,8 @@
           <s:select name="opp.encf" headerKey="-1" headerValue="-- select --"
                     list="#{'QControl':'QControl','Curation Request':'Curation Request','DSP':'DSP'}" 
                     value="-1" cssClass="pubsrc-flag"/>
-          
-          <s:submit theme="simple" name="op.eflt" value="SEARCH" onclick=""/>
+          <s:hidden name="opp.ftype" value="dao"/>          
+          <s:submit name="op.eflt" theme="simple" value="SEARCH" onclick=""/>
          </div>
         </td>
        </tr>
@@ -76,13 +76,14 @@
    <center>
     <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
-      <legend class="qlegend">By Record Submitter</legend>
+      <legend align="left" class="qlegend">By Record Submitter</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Submitter:</b>
           <div class="acom">
-           <s:hidden name="mst" value="1:1:1"/> 
+           <s:hidden name="mst" value="1:1:1"/>
+           <s:hidden name="opp.ftype" value="dao"/>          
            <s:textfield name="opp.ou"/>
            <s:submit theme="simple" name="op.eflt" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
            <div id="poo_cnt"></div>
@@ -101,16 +102,44 @@
    <center>
     <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
-      <legend class="qlegend">By Record Curator</legend>
+      <legend align="left" class="qlegend">By Record Curator</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Curator:</b>
-         <div class="acom"> 
-          <s:hidden name="mst" value="1:1:1"/>          
-          <s:textfield name="opp.au" />          
-          <s:submit theme="simple" name="op.eflt" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
+         <div class="acom">
+          <s:textfield name="opp.au" />
+          <s:hidden name="mst" value="1:1:1"/>
+          <s:hidden name="opp.ftype" value="elastic"/>
+          <s:submit name="op.eflt" theme="simple" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
           <div id="poc_cnt">
+         </div>
+        </td>
+       </tr>
+      </table>
+     </fieldset>
+    </s:form>
+   </center>
+  </td>
+ </tr>
+
+
+<tr>
+ <td colspan="2">
+   <center>
+    <s:form theme="simple" action="pubsrc">
+     <fieldset class="qfield">
+      <legend align="left"  class="qlegend">Text Query</legend>
+      <table width="100%" class="qtable">
+       <tr>
+        <td class="pubsrc-td" align="left" valign="top" nowrap>
+         <b>Query:</b>
+         <div class="acom">
+          <s:textfield name="opp.query" size="64" maxlength="256" />
+          <s:hidden name="mst" value="1:1:1"/>
+          <s:hidden name="opp.ftype" value="elastic"/>
+          <s:submit name="op.eflt" theme="simple" value="SEARCH" cssClass="pubsrc-query" onclick=""/>
+          <div id="poq_cnt">
          </div>
         </td>
        </tr>

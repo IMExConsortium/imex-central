@@ -650,6 +650,10 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
                         "" :  getOpp().get( "ffv" );
                 
 
+                    String query = getOpp().get( "query" ) == null ?
+                        "" :  getOpp().get( "query" );
+                
+
                     if( !wfl.equalsIgnoreCase("true") || luser == null ){
 			
                         return getIcPubRecords( max, off, skey, sdir, filter );
@@ -1314,7 +1318,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     public String getWatchedRecords( User usr, 
                                      String max, String off,
                                      String skey, String sdir,
-				     Map<String,String> filter ){
+				     Map<String,String> filter
+                                     ){
 	//                           String gfv, String sfv, String pfv,
         //                           String ofv, String efv, String ffv){
         
@@ -1333,7 +1338,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     
     public String getIcPubRecords( String max, String off, 
                                    String skey, String sdir,
-				   Map<String,String> filter ){
+				   Map<String,String> filter
+                                  ){
 	//                         String gfv, String sfv, String pfv, 
         //                         String ofv, String efv, String ffv){
         return getIcPubRecords( null, max, off, skey, sdir, filter );
@@ -1343,7 +1349,8 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
     public String getIcPubRecords( User usr, 
                                    String max, String off, 
                                    String skey, String sdir, 
-				   Map<String,String> filter ){
+				   Map<String,String> filter
+                                    ){
 	//                         String gfv, String sfv, String pfv, 
         //                         String ofv, String efv, String ffv){
         
@@ -1525,10 +1532,6 @@ public class EntryMgrAction extends ManagerSupport implements LogAware{
             r.put( "time", ip.getCreateTimeString() );
             r.put( "editor", "N/A" );
             r.put( "imexDb", "N/A" );
-
-
-
-            
 
 
             // set partner

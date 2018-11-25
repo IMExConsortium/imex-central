@@ -4,6 +4,25 @@
 $HeadURL$
 $Id$ 
 
+2018/11/24  (ImexCentral v3.1.0rc12)
+    - GUI upgrades:
+            - pagination of rolemgr table added
+            - modify delayed refresh of publication browse table    
+    - role's group-unique flag added
+    - user sha1-based authentication added
+
+2018/11/10  (ImexCentral v3.1.0rc11)
+    - GUI upgrades:
+            - pagination of groupmgr table added            
+            - user access to json list of groups added
+
+2018/11/10  (ImexCentral v3.1.0rc10)
+   - web service update:
+        - publication info now includes admin users/groups
+        - queryPublication support added
+        
+    - GUI upgrades:
+        - text query added
 
 2018/06/21  (ImexCentral v3.1.0rc9)
    - workflow fixes:

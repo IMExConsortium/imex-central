@@ -5,7 +5,7 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>3.1.0rc9</version>
+  <version>3.1.0rc12</version>
   <name>IMEx Central</name>
   <url>https://github.com/IMExConsortium</url>
 
@@ -14,25 +14,26 @@
     <project.timestamp>${maven.build.timestamp}</project.timestamp>
     <reportDir>${env.PWD}</reportDir>
 
-    <ic-api.version>2.00</ic-api.version>
-
     <dip-util.version>2.0.0</dip-util.version>
-<!--    <dip-proxy.version>0.03</dip-proxy.version> -->
     <dip-proxy.version>1.0.0</dip-proxy.version>
 
-    <spring.version>5.0.6.RELEASE</spring.version>
-<!--    <spring.version>4.3.11.RELEASE</spring.version>  -->
-    <aspectj.version>1.8.10</aspectj.version>
-    <postgresql.version>42.1.4</postgresql.version>
+    <spring.version>5.1.0.RELEASE</spring.version>
+    <aspectj.version>1.9.1</aspectj.version>
+
+    <!--
+     <spring.version>4.3.11.RELEASE</spring.version> 
+     <aspectj.version>1.8.13</aspectj.version>
+     -->
+
+    <postgresql.version>42.2.5</postgresql.version>
     <recaptcha4j.version>0.0.8</recaptcha4j.version>
 
     <elasticsearch.version>6.0.1</elasticsearch.version>
 
-    <cxf.version>3.2.4</cxf.version> 
+    <cxf.version>3.2.0</cxf.version> 
     <jaxws-rt.version>2.3.0</jaxws-rt.version>
 
     <email.version>1.6.1</email.version>
-
 
     <commons-logging.version>1.2</commons-logging.version> 
     <log4j.version>2.9.1</log4j.version> 
@@ -158,13 +159,13 @@
         <repository>
           <id>public</id>
           <name>IMEx Public Maven Reopsitory</name>
-          <url>http://imex.mbi.ucla.edu/archiva/repository/imex-public/</url>
+          <url>https://dip.mbi.ucla.edu/archiva/repository/imex-public/</url>
         </repository>
 
         <repository>
           <id>snapshots</id>
           <name>Archiva Managed Snapshot Repository</name>
-          <url>http://imex.mbi.ucla.edu/archiva/repository/internal/</url>
+          <url>https://dip.mbi.ucla.edu/archiva/repository/internal/</url>
         </repository>
       </repositories>
 

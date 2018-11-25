@@ -65,6 +65,15 @@ public class IcentralPortImpl implements IcentralPort {
     
     private static final Log logger = LogFactory.getLog(IcentralPortImpl.class);
 
+    static DatatypeFactory dtf;
+    static {
+        try {
+            dtf = DatatypeFactory.newInstance();
+        } catch( DatatypeConfigurationException dce ) {
+            // should not happen
+        }
+    }
+    
     //--------------------------------------------------------------------------
     // Entry Manager
     //--------------
@@ -79,15 +88,20 @@ public class IcentralPortImpl implements IcentralPort {
         return this.entryManager;
     }
 
-    static DatatypeFactory dtf;
-    static {
-        try {
-            dtf = DatatypeFactory.newInstance();
-        } catch( DatatypeConfigurationException dce ) {
-            // should not happen
-        }
+    ////------------------------------------------------------------------------
+    /// Index Manager
+    //---------------
+
+    private IndexManager indexManager;
+
+    public void setIndexManager( IndexManager manager ) {
+        this.indexManager = manager;
     }
 
+    public IndexManager getIndexManager() {
+        return this.indexManager;
+    }
+    
     ////------------------------------------------------------------------------
     /// Attachment Manager
     //--------------------
@@ -380,16 +394,16 @@ public class IcentralPortImpl implements IcentralPort {
         lastRec.value = new Long( pubCnt );
 
         if( maxRec != null && maxRec.intValue() > 0 ){
-            List<IcPub> icPubList 
+            List<IcPub> pubList 
                 = entryManager.getPublicationByOwner( user, 
                                                       firstRec, maxRec );
             
-            if( icPubList == null || icPubList.size() == 0 ) 
+            if( pubList == null || pubList.size() == 0 ) 
                 throw Fault.NO_RECORD;
-            publicationList.value = buildPublicationList( icPubList );
+            publicationList.value = buildPublicationList( pubList );
       
             log.debug( " owner: " + owner
-                       + " count: " + icPubList.size()
+                       + " count: " + pubList.size()
                        + " last: " + pubCnt );
         }
     }
@@ -462,7 +476,31 @@ public class IcentralPortImpl implements IcentralPort {
         User usr = c.loggedUser();
         aclVerify( WS_ACTION, WS_SRC, usr );
 
-        throw Fault.UNSUP;
+
+        if( getIndexManager() != null
+           && getIndexManager().isIndexActive() ){
+
+            List<IcPub> pubList
+                =  getIndexManager().getPublicationList( firstRec, maxRec,
+                                                         null, true, null,
+                                                         query, "simple" );
+            
+            long pubCnt = getIndexManager()
+                .getPublicationCount( null, query, "simple" );
+            
+            lastRec.value = new Long( pubCnt );
+
+            
+
+            
+            if( pubList == null || pubList.size() == 0 )
+                throw Fault.NO_RECORD;
+            
+            publicationList.value = buildPublicationList( pubList );
+                        
+        } else {        
+            throw Fault.UNSUP;
+        }
     }
     
     //--------------------------------------------------------------------------
@@ -1348,25 +1386,56 @@ public class IcentralPortImpl implements IcentralPort {
                 pub.setReleaseDate( xmlDate );
             }
         }
+        
         //pub.setCreationDate(icp);
         
         pub.setStatus( icp.getState().getName() );
         pub.setImexAccession( icp.getImexId() );
         pub.setOwner( icp.getOwner().getLogin() );
 
+        // build/add admin list
+        //---------------------
+
+        edu.ucla.mbi.imex.central.ws.v20.Publication.AdminUserList aul
+            = of.createPublicationAdminUserList();
+
+        for( Iterator<User> aui = icp.getAdminUsers().iterator();
+             aui.hasNext(); ){
+            aul.getUser().add( aui.next().getLogin() );            
+        }
+        
+        if( aul.getUser().size() >0 ){
+            pub.setAdminUserList( aul );
+        }
+            
+        // build group list
+        //-----------------
+                
+        edu.ucla.mbi.imex.central.ws.v20.Publication.AdminGroupList agl
+            = of.createPublicationAdminGroupList();
+
+        for( Iterator<Group> agi = icp.getAdminGroups().iterator();
+             agi.hasNext(); ){
+            agl.getGroup().add( agi.next().getLabel() );
+        }
+        
+        if( agl.getGroup().size() >0 ){
+            pub.setAdminGroupList( agl );
+        }       
+        
         return pub;
     }
 
     //--------------------------------------------------------------------------
 
     private edu.ucla.mbi.imex.central.ws.v20.PublicationList
-        buildPublicationList( List<IcPub> pubList ){
+        buildPublicationList( List<IcPub> icPubList){
 
         edu.ucla.mbi.imex.central.ws.v20.PublicationList
             pl = of.createPublicationList();
         
         for( Iterator<IcPub> 
-                 ii = pubList.iterator(); ii.hasNext(); ){
+                 ii = icPubList.iterator(); ii.hasNext(); ){
             
             IcPub icpub = ii.next();
             

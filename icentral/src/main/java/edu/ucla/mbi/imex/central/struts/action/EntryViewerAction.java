@@ -445,9 +445,13 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 
                     String jfv = getOpp().get( "jfv" ) == null ?
                         "" :  getOpp().get( "jfv" );
+
+                    String query = getOpp().get( "query" ) == null ?
+                        "" :  getOpp().get( "query" );
                 
                     if( !wfl.equalsIgnoreCase("true") || luser == null ){
-                        return getIcPubRecords( max, off, skey, sdir, filter );
+                        return getIcPubRecords( max, off, skey, sdir, filter,
+                                                query );
                     } else {
                         return getWatchedRecords( luser, 
                                                   max, off, skey, sdir,
@@ -659,24 +663,28 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getWatchedRecords: uid=" + usr.getId() );
 
-        return getIcPubRecords( usr , max, off, skey, sdir, filter );
+        return getIcPubRecords( usr , max, off, skey, sdir, filter,
+                                null );
         
     }
     
     public String getIcPubRecords() {
-        return this.getIcPubRecords( null, "", "", "", "", null );
+        return this.getIcPubRecords( null, "", "", "", "", null, null );
     }
     
     public String getIcPubRecords( String max, String off, 
                                    String skey, String sdir, 
-				   Map<String,String> filter ){
-        return getIcPubRecords( null, max, off, skey, sdir, filter ); 
+				   Map<String,String> filter,
+                                   String query ){
+        return getIcPubRecords( null, max, off, skey, sdir, filter,
+                                query ); 
     }
 
     public String getIcPubRecords( User usr, 
                                    String max, String off, 
                                    String skey, String sdir,
-				   Map<String,String> filter ){
+				   Map<String,String> filter,
+                                   String query){
         
         if ( tracContext.getPubDao() == null ) return null;
 
@@ -760,7 +768,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             sortKey = "id";
         }
 
-        List<Publication> pl = new ArrayList<Publication>();
+        List<IcPub> pl = new ArrayList<IcPub>();
         long total = 0;
         log.debug( "getPubRecords: " + filter);
 		   //gfv + " :: " + sfv + " :: " + pfv + " :: " 
@@ -779,7 +787,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 
         //-------------------  ***************** -------------------------
 
-	if ( filter.isEmpty() ){  
+	if ( filter.isEmpty() && (query == null || query.equals("") ) ){  
             log.debug( "getPubRecords: unfiltered" );
             
             if( usr == null ){
@@ -793,17 +801,40 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                     total = getIndexManager().getPublicationCount();
                     
                 } else {
-                    pl = tracContext.getPubDao()
+
+
+                    List<Publication> ppl = tracContext.getPubDao()
                         .getPublicationList( first, blockSize, sortKey, asc );
+
+                    if( ppl != null ){
+                        for( Iterator<Publication> ii = ppl.iterator();
+                             ii.hasNext(); ){
+                            Publication pii = ii.next();
+                            if ( pii instanceof IcPub ){
+                                pl.add((IcPub) pii);
+                            }
+                        }                            
+                    }
                     total = tracContext.getPubDao().getPublicationCount();
                 }
 
             } else {
 
                 log.debug( "getting list" );
-                pl = watchManager
+                List<Publication> ppl = watchManager
                     .getPublicationList( usr, first, blockSize, sortKey, asc );
 
+
+                if( ppl != null ){
+                    for( Iterator<Publication> ii = ppl.iterator();
+                         ii.hasNext(); ){
+                        Publication pii = ii.next();
+                        if ( pii instanceof IcPub ){
+                            pl.add((IcPub) pii);
+                        }
+                    }
+                }
+                
                 log.debug( "getting count" );
                 total = watchManager
                     .getPublicationCount( usr );
@@ -812,7 +843,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             
         } else {
             
-            log.debug( "getPubRecords: filtered" );
+            log.debug( "getPubRecords: filtered/queried" );
             
             if( usr == null ){
 
@@ -821,23 +852,50 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 
                     pl = getIndexManager()
                         .getPublicationList( first, blockSize, 
-                                             sortKey, asc, filter );
+                                             sortKey, asc,
+                                             filter, query, "simple" );
 
-                    total = getIndexManager().getPublicationCount( filter );
+                    total = getIndexManager()
+                        .getPublicationCount( filter, query, "simple" );
                     
                 } else {
-                    pl = tracContext.getPubDao()
+
+                    List<Publication> ppl = tracContext.getPubDao()
                         .getPublicationList( first, blockSize, 
-                                             sortKey, asc, filter );            
+                                             sortKey, asc,
+                                             filter  );            
+
+                    if( ppl != null ){
+                        for( Iterator<Publication> ii = ppl.iterator();
+                             ii.hasNext(); ){
+                            Publication pii = ii.next();
+                            if ( pii instanceof IcPub ){
+                                pl.add((IcPub) pii);
+                            }
+                        }
+                    }
                     
-                    
+                                        
                     total = tracContext.getPubDao()
-                        .getPublicationCount( filter );
+                        .getPublicationCount( filter  );
                 }
             } else {
-                pl = watchManager
+
+                
+                List<Publication> ppl = watchManager
                     .getPublicationList( usr, first, blockSize, 
                                          sortKey, asc, filter );
+                
+                if( ppl != null ){
+                    for( Iterator<Publication> ii = ppl.iterator();
+                         ii.hasNext(); ){
+                        Publication pii = ii.next();
+                        if ( pii instanceof IcPub ){
+                            pl.add((IcPub) pii);
+                        }
+                    }
+                }
+                
                 total = watchManager
                     .getPublicationCount( usr, filter );
             }   
@@ -862,8 +920,8 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         List<Map<String,Object>> rl = new ArrayList<Map<String,Object>> ();
         records.put("records", rl );
 
-        for( Iterator<Publication> ii = pl.iterator(); ii.hasNext(); ) {
-            IcPub ip = (IcPub) ii.next();
+        for( Iterator<IcPub> ii = pl.iterator(); ii.hasNext(); ) {
+            IcPub ip =  ii.next();
             Map<String,Object> r = new HashMap<String,Object>();  
             r.put( "id", ip.getId() );
             r.put( "pmid", ip.getPmid() );

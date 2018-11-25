@@ -92,7 +92,10 @@
         <param name="includeProperties">
          ^groupList\[\d+\]\.id,
          ^groupList\[\d+\]\.label,
-         ^groupList\[\d+\]\.name
+         ^groupList\[\d+\]\.name,
+         ^totalRecords,
+	 ^firstRecord,
+         ^blockSize
         </param>
      </result>
           
@@ -124,7 +127,12 @@
         <param name="ignoreHierarchy">false</param>
         <param name="noCache">true</param>
        <param name="includeProperties">
-         ^roleList.*
+         ^roleList\[\d+\]\.id,
+         ^roleList\[\d+\]\.label,
+         ^roleList\[\d+\]\.name,
+         ^totalRecords,
+	 ^firstRecord,
+         ^blockSize
        </param>
      </result>
      

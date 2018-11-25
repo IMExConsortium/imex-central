@@ -24,6 +24,7 @@
 
   <property name="name" column="name" />
   <property name="comments" column="comments" />
+  <property name="grpEx" column="grp_unique" />
 
  </class>
 
@@ -63,6 +64,7 @@
   <property name="email" column="email" />
   <property name="login" column="login" />
   <property name="password" column="pass" />
+  <property name="sha1pass" column="sha1pass" />
   <property name="activationKey" column="act_key" />
   <property name="activated" column="act_flag" />
   <property name="enabled" column="enable_flag" />

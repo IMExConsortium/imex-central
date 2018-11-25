@@ -136,11 +136,13 @@ public class NcbiProxyClient {
         try {        
 	   
 	    System.out.println("NcbiProxyClient: (A) port=" + port);
-
+            System.out.println("NcbiProxyClient: (A) pmid=" + pmid);
+            
             port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
                                    0, timestamp, resDataset, resNative );
         } catch ( Exception  ex ){
             log.info( "NcbProxyClient: getPublicationByPmid(ex): " + ex );
+            System.out.println( "NcbProxyClient: getPublicationByPmid(ex): " + ex );
             if( debug ){
                 ex.printStackTrace();
             }
@@ -156,6 +158,8 @@ public class NcbiProxyClient {
 		port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
 				       0, timestamp, resDataset, resNative );
 		System.out.println("NcbiProxyClient: (B) resDataset=" + resDataset);
+                System.out.println("NcbiProxyClient: (B) resDataset.value=" + resDataset.value);
+                
 	    } catch ( Exception ex2 ){
 		log.info( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);
 		System.out.println( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);

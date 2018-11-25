@@ -15,7 +15,8 @@
  <div class="yui-content">
      
 <!--  First Tab  -->
-  <div id="tab1">
+
+<div id="tab1">
 
    <s:form theme="simple" action="usermgr" cssClass="align-label"> 
    <fieldset>
@@ -97,6 +98,7 @@
      <div id="dt-pag-nav"></div>
      <div id="usermgr-table"></div>
     </div>
+    
     <script type="text/javascript">
  
         var columnDefinitions = [
@@ -122,7 +124,6 @@
         }; 
         var container = "usermgr-table";
 
-        //YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
         YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
   
     </script>

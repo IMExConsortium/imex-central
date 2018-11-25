@@ -94,9 +94,11 @@
       <result name="input" type="tiles">pubsrc</result>
 
       <result name="pubview" type="redirectAction">
-        <param name="actionName">pubmgr</param>
+        <param name="actionName">pubmgr</param>        
+        <param name="opp.ftype">%{opp.ftype}</param>
         <param name="opp.ou">%{opp.ou}</param>
         <param name="opp.au">%{opp.au}</param>
+        <param name="opp.query">%{opp.query}</param>
         <param name="opp.encf">%{opp.encf}</param>
       </result>
 

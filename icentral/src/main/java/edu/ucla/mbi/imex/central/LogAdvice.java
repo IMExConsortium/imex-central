@@ -102,7 +102,28 @@ public class LogAdvice {
     }
     
     //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+
+    public void getIcPubMonitor( int id, 
+                                 Object rpub ){
+        Log log = LogFactory.getLog( this.getClass() );
+
+        log.debug( "LogManager: getIcPub monitor called:" 
+                   + " pub=" + rpub );
+                  
+        
+        // index if needed
+        //----------------
+
+        if( rpub != null && getIndexManager() != null ){
+            getIndexManager().indexIcPub( ((IcPub)rpub).getId() );
+        } 
+        
+    }
     
+    
+       
     public void addPubMonitor( Object pub,  Object owner, 
                                Object state, Object rpub ){
         Log log = LogFactory.getLog( this.getClass() );

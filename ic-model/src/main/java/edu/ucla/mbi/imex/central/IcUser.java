@@ -16,6 +16,12 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.vps.crypt.Crypt;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -24,6 +30,8 @@ import edu.ucla.mbi.util.data.User;
 
 public class IcUser extends User {
 
+    private String sha1pass = "";
+    
     public IcUser() {}
     
     public IcUser( User user ) {
@@ -51,7 +59,74 @@ public class IcUser extends User {
         }
         
     }
+    
+    public String getSha1pass(){
+        return sha1pass;
+    }
 
+    public void setSha1pass( String pass ){
+        this.sha1pass = pass;
+    }
+    
+    private String encrypSHA1(String input ){
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    } 
+
+    public void encryptPassword( String pass ) {
+        super.encryptPassword( pass );
+        this.sha1pass = Crypt.crypt( "ab", encrypSHA1( pass ) );
+    }
+    
+    public boolean testPassword( String pass ) {
+
+
+        if( ( sha1pass == null || sha1pass.equals( "" )) &&
+            ( getPassword() == null || getPassword().equals( "" )) ) {
+            return true;
+        } 
+                    
+        if( pass == null || pass.equals( "" )  ) {
+            return false;
+        }
+
+        if( pass.startsWith( "SHA1:") && (pass.length() > 5 ) ){
+            return testSHA1Password( pass.substring(5) );
+        } else {
+            return super.testPassword( pass );
+        }
+        
+    } 
+
+    public boolean testSHA1Password( String pass ) {
+
+        if( sha1pass == null || sha1pass.equals( "" )  ) {
+            return true;
+        }
+
+        if( pass == null || pass.length() == 0 ) {
+            return false;
+        }
+
+        if( getPassword().equals( Crypt.crypt( "ab", pass ) ) ) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    
     public String toString() {
 	
 	StringBuffer sb = new StringBuffer();

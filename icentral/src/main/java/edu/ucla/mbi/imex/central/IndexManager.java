@@ -352,10 +352,9 @@ public class IndexManager {
         }
 
         if( ipub.getAbstract() != null 
-            && ! ipub.getTitle().equals("") ){
-            mpub.put("abstract",ipub.getTitle());
+            && ! ipub.getAbstract().equals("") ){
+            mpub.put("abstract",ipub.getAbstract());
         }
-
 
         if( ipub.getSource() !=null 
             && ipub.getSource() instanceof Journal ){
@@ -701,34 +700,66 @@ public class IndexManager {
     //--------------------------------------------------------------------------
     //---------------------------- ******* -------------------------------------
     
-    public List<Publication> getPublicationList( int firstRecord, 
-                                                 int blockSize,
-                                                 String skey, 
-                                                 boolean asc ){
+    public List<IcPub> getPublicationList( int firstRecord, 
+                                           int blockSize,
+                                           String skey, 
+                                           boolean asc ){
     
         return getPublicationList( firstRecord, blockSize,
                                    skey, asc, null );
         
     }
+
     
-    public List<Publication> getPublicationList( int firstRecord, 
+    public List<IcPub> getPublicationList( int firstRecord, 
                                                  int blockSize,
                                                  String skey, boolean asc,
                                                  Map<String,String> flt ){
+        
+        return getPublicationList( firstRecord, blockSize,
+                                   skey, asc, flt, null, null );        
+    }
+
+    public List<IcPub> getPublicationList( int firstRecord, 
+                                                 int blockSize,
+                                                 String skey, boolean asc,
+                                                 Map<String,String> flt,
+                                                 String queryStr){
+        
+        return getPublicationList( firstRecord, blockSize,
+                                   skey, asc, flt, queryStr, "simple" );        
+    }
+    
+    public List<IcPub> getPublicationList( int firstRecord, 
+                                                 int blockSize,
+                                                 String skey, boolean asc,
+                                                 Map<String,String> flt,
+                                                 String queryStr,
+                                                 String queryType ){
 
         Log log = LogFactory.getLog( this.getClass() );
         
         String query = buildEsQuery( firstRecord, blockSize,
-                                     skey, asc, flt  );
+                                     skey, asc, flt, queryStr, queryType );
         
-        List<Publication> plst = new ArrayList<Publication>();
+        List<IcPub> plst = new ArrayList<IcPub>();
         
         try{
             List<Integer> idList = getPubIdList( query );
 
-            plst = tracContext
-                .getPubDao().getPublicationList( idList );
+            System.out.println(idList);
             
+            List<edu.ucla.mbi.util.data.Publication> pl = tracContext
+                .getPubDao().getPublicationList( idList );
+
+            if( pl != null ){
+                for( Iterator<Publication> ip = pl.iterator(); ip.hasNext(); ){
+                    Publication cp = ip.next();
+                    if( cp instanceof IcPub ){
+                        plst.add( (IcPub) cp );
+                    }
+                }
+            }
         }catch( Exception ex){
             //ex.printStackTrace();
         }
@@ -736,6 +767,8 @@ public class IndexManager {
         return plst;
     }
 
+
+    
     //--------------------------------------------------------------------------
 
     public long getPublicationCount(){
@@ -744,11 +777,27 @@ public class IndexManager {
     }
 
     
-    public long getPublicationCount( Map<String,String> flt ){
+    public long getPublicationCount( Map<String,String> flt  ){
         
-        String query = buildEsQuery( 0, 1, null, false, flt  );
+        String query = buildEsQuery( 0, 1, null, false, flt, null, "simple"  );
         
         return getPubIdCount( query );
+        
+    }
+
+    public long getPublicationCount( Map<String,String> flt, String query  ){
+        
+        String esquery = buildEsQuery( 0, 1, null, false, flt, query, "simple"  );
+        
+        return getPubIdCount( esquery );
+        
+    }
+
+    public long getPublicationCount( Map<String,String> flt, String query, String queryType  ){
+        
+        String esquery = buildEsQuery( 0, 1, null, false, flt, query, queryType  );
+        
+        return getPubIdCount( esquery );
         
     }
 
@@ -768,20 +817,253 @@ public class IndexManager {
     
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
+
+    private String buildESQ( int firstRecord, 
+                                 int blockSize,
+                                 String skey, 
+                                 boolean asc,
+                                 Map<String,String> flt  ){
+        
+        return  buildESQ( firstRecord, blockSize,
+                          skey, asc,
+                          flt,
+                          null, null );
+    }
+
+    //--------------------------------------------------------------------------
+    
+    private String buildESQ( int firstRecord, 
+                             int blockSize,
+                             String skey, 
+                             boolean asc,
+                             Map<String,String> flt,
+                             String queryStr,
+                             String queryType ){
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        System.out.println("buildESQ");
+        JSONObject esq = new JSONObject();
+        
+        JSONArray filter = new JSONArray();
+        JSONObject query = new JSONObject();
+        
+        JSONArray sort = new JSONArray();
+
+        JSONArray recret = new JSONArray();
+
+        recret.put("id");
+        
+        
+
+        
+        // filters
+        //--------
+        
+        if( flt != null && flt.size() > 0 ){
+            
+            for( Iterator ii = flt.keySet().iterator(); ii.hasNext(); ){
+                
+                String key = (String) ii.next();
+                String value = (String) flt.get(key);
+                
+                if( key != null && key.equals( "status" ) ){
+                    key = "state";
+                }
+
+                if( key != null && key.equals( "jid" ) ){
+                    key = "journal_id";
+                }
+
+                if( key != null && key.equals( "jid" ) ){
+                    key = "journal_id";
+                }
+
+                if( key != null && key.equals( "owner" ) ){
+                    key = "owner";
+                }
+
+                if( key != null && key.equals( "editor" ) ){
+                    key = "curator";
+                }
+
+                try{
+                
+                    if( value != null && !value.equals( "" ) ){
+                        JSONObject keyval = new JSONObject()
+                            .put( key, value.toLowerCase());
+                        filter.put(new JSONObject().put( "term", keyval ));
+                    }
+                } catch( JSONException jx ){
+                    jx.printStackTrace();
+                }
+
+            }
+                
+        }
+
+        // query
+        //------
+        
+        if( queryType == null ||  queryStr == null || queryStr.length() == 0 ){
+
+            // "bool":{
+            //    "must":{
+            //         "match_all":{}
+            //      }
+            //   }
+            
+            JSONObject bqs = new JSONObject();
+
+
+            try{
+                bqs.put( "must", new JSONObject().put( "match_all", new JSONObject() ) );
+                bqs.put( "filter", filter );
+            
+                query.put( "bool", bqs );
+
+            } catch( JSONException jx ){
+                jx.printStackTrace();
+            }
+            
+        } else {
+            
+            if( queryType.equals("simple") ){
+                
+                // "simple_query_string":{
+                //        "query" : "+interacts +regulate -factor",
+                //        "default_operator": "and"
+                //  default fields ???
+                //      }
+
+                JSONObject sqs = new JSONObject();
+
+                try{
+                
+                    sqs.put( "query", queryStr );
+                    sqs.put( "default_operator", "and" );
+                    
+                    
+                    //query.put( "simple_query_string", sqs );
+
+                    JSONObject bqs = new JSONObject();
+                    
+                    bqs.put( "must", new JSONObject().put( "simple_query_string", sqs ) );
+                    bqs.put( "filter", filter );
+
+                    query.put( "bool", bqs );
+                    
+                } catch( JSONException jx ){
+                    jx.printStackTrace();
+                }
+                
+            }                          
+        }
+        
+        // sort field/direction
+        //---------------------
+        
+        String sortFld = skey;
+
+        log.info( "skey :" + skey + ":");
+       
+        if( sortFld != null ){
+
+            try{
+                if( skey.equals("id") || skey.equals("imex") ){
+
+                    sort.put( new JSONObject().put( skey, asc ? "asc" : "desc"));
+                
+                } else if( skey.equals("modDate") || skey.equals("actDate") ){
+                
+                    sort.put( new JSONObject().put("modtime", asc ? "asc" : "desc"));
+                
+                } else if( skey.equals("crt") ){
+
+                    sort.put( new JSONObject().put( "cretime", asc ? "asc" : "desc"));
+                
+                } else if( skey.endsWith(".value") ){
+
+                    String source = "double m = 0; for(obj in params._source.score){ " +
+                        " if( obj.name=='%%SNAME%%'){ m = obj.value;}} return m";
+                
+                    source = source.replaceAll( "%%SNAME%%",
+                                                skey.replaceAll( ".value", "" ) );
+                
+                    JSONObject script = new JSONObject();
+
+                    script.put("lang","painless");
+                    script.put("source", source );
+                
+                    JSONObject sscr = new JSONObject();
+
+                    sscr.put("type", "number");
+                    sscr.put("script",script );
+                    sscr.put("order", asc ? "asc" : "desc");
+                
+                    sort.put( new JSONObject().put( "_script", sscr) );
+                
+                } else {
+                    sort.put( new JSONObject().put( skey + ".keyword", asc ? "asc" : "desc"));
+                }
+            } catch( JSONException jx ){
+                jx.printStackTrace();
+            }
+
+        }
+        
+        try{
+            esq.put( "query", query );
+            esq.put( "sort", sort );
+            esq.put( "from", firstRecord );
+            esq.put( "size", blockSize );
+            esq.put( "_source", recret );
+        } catch( JSONException jx ){
+            jx.printStackTrace();
+        }
+        
+        System.out.println("ESQ: " + esq.toString() );
+
+        return esq.toString();        
+    }
     
     private String buildEsQuery( int firstRecord, 
                                  int blockSize,
                                  String skey, 
                                  boolean asc,
-                                 Map<String,String> flt  ){
+                                 Map<String,String> flt,
+                                 String queryStr,
+                                 String queryType ){
 
+        if(1==1){
+        
+            return buildESQ( firstRecord, blockSize,
+                             skey, asc, flt, queryStr, queryType );
+        } 
         Log log = LogFactory.getLog( this.getClass() );
         
         // valid sort keys:
         
         // +pmid, +imex +author +crtime mdtime (mod time)  
+        
+        String queryDef = "\"bool\":{\"must\":{\"match_all\":{}},"; 
+        
+        if( queryType != null && queryStr != null ){
 
-        String qtmp = "{\"query\":{\"bool\":{\"must\":{\"match_all\":{}}," +
+            if( queryType.equals("simple") ){
+
+                String querySafe = querySanitize( queryStr );
+                
+                queryDef = "\"simple_query_string\":{\"query\":" +
+                    "\"" + querySafe  + "\"," +
+                    "\"default_operator\": \"and\" },";
+            }
+        }
+        
+        String qtmp = "{\"query\":{" + queryDef +
+        
+            //String qtmp = "{\"query\":{\"bool\":{\"must\":{\"match_all\":{}}," +
+
             "\"filter\":[%%FLT%%]}},\"sort\":[%%SRT%%],"+
             "\"_source\":[\"id\"]," +
             "\"from\": %%FR%%,\"size\": %%SZ%%}";
@@ -871,6 +1153,18 @@ public class IndexManager {
 
                 if( key != null && key.equals("jid")){
                     key = "journal_id";
+                }
+
+                if( key != null && key.equals("jid")){
+                    key = "journal_id";
+                }
+
+                if( key != null && key.equals("owner")){
+                    key = "owner";
+                }
+
+                if( key != null && key.equals("editor")){
+                    key = "curator";
                 }
                 
                 if( value != null && !value.equals("")){
@@ -1048,6 +1342,21 @@ public class IndexManager {
             try{
                 str = str.replaceAll("^\\s+","");
                 str = str.replaceAll("\\s+$","");
+            } catch( Exception ex ){
+                // should not happen   
+            }
+        } else {
+            str = "";
+        }
+        return str;
+    }
+    
+    private String querySanitize( String str ){
+
+        if( str != null ){
+            try{
+                str = str.replaceAll("\"","");
+                str = str.replaceAll("\'","");
             } catch( Exception ex ){
                 // should not happen   
             }

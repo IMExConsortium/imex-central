@@ -104,6 +104,75 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
         return rlst;
     }
 
+    public List<Role> getRoleList( int firstRecord, int blockSize ) { 
+        
+        List<Role> rolel = null;
+
+	Log log = LogFactory.getLog( this.getClass() );
+	log.debug("getRoleList: firstRecord=" + firstRecord);
+	log.debug("getRoleList: blockSize=" + blockSize);
+        
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            //startOperation();
+            
+            Query query = 
+                session.createQuery( "from IcRole r order by id ");
+            query.setFirstResult( firstRecord - 1 );
+            query.setMaxResults( blockSize );
+            
+            rolel = (List<Role>) query.list();
+            tx.commit();
+            System.out.println( firstRecord+ " :: " + 
+                                blockSize + " :: " + rolel.size() );
+        } catch( DAOException dex ) {
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        
+        return rolel;
+    }
+
+
+    //---------------------------------------------------------------------
+
+    public long getRoleCount(){
+
+        long count = 0;
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            //startOperation();
+
+            Query query =
+                session.createQuery( "select count(*) from IcRole");
+            
+            count = (Long) query.uniqueResult();
+            
+            log.info("Total roles=" + count);
+            
+        } catch( DAOException dex ) {
+            // log error ?
+            log.info(dex);
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+
+        return count;
+    }
 
     //---------------------------------------------------------------------
 

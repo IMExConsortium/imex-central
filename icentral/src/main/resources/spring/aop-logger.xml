@@ -22,6 +22,11 @@
 
   <aop:config>
     <aop:aspect id="logAspect" ref="logAdviceBean">
+
+      <aop:after-returning returning="rpub"
+        pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.getIcPub(..))
+                  and args( id )"
+        method="getIcPubMonitor" />    
       
       <aop:after-returning returning="rpub"
         pointcut="execution(* edu.ucla.mbi.imex.central.EntryManager.addPmidIcPub(..)) 

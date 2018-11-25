@@ -140,6 +140,22 @@ deployed on:
               tomcat 8.x
 
 
+2018-11-24
+
+ - columns added
+  -  unique flag added to roles
+  
+     alter table role add column grp_unique boolean not null default false;
+
+    NOTE: only one group with the same, grp_unique-flagged role can be assigned
+    to a given record
+
+  - sha1pass column added to usr
+    alter table usr add column sha1pass character varying(32) not null default ''::character varying;
+
+    sha1 pass is passed as a string preceded by SHA1: prefix
+
+
 Stage/Status update strategy
 ----------------------------
 
@@ -151,10 +167,7 @@ prequeue        new, request, discarded
                                       state->'new' (if different from 'new' or 'request') 
 
 queue           new, request, discarded
-curation        reserved, inprogress, incomplete, processed, discarded,retracted
-
-
-
+curation        reserved, inprogress, incomplete, processed, discarded,retracted, 
 
 
                 if( state.getName().equals("QUEUE") ){
@@ -170,3 +183,4 @@ curation        reserved, inprogress, incomplete, processed, discarded,retracted
                 }
 
 
+2018-11-24  curation/review state added

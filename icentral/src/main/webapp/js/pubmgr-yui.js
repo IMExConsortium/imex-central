@@ -15,6 +15,7 @@ YAHOO.imex.pubmgr = {
   
     admus: "",
     owner: "",
+    query: "",    
     cflag: "",
     watch: "",
     loginId: "",
@@ -149,21 +150,22 @@ YAHOO.imex.pubmgr = {
             "&opp.efv=" + state.filter.editor +
             "&opp.ofv=" + state.filter.owner +
             "&opp.ffv=" + state.filter.cflag +
+            "&opp.query=" + state.query +
             "&opp.skey=" + state.scol +
             "&opp.sdir=" + state.sdir;
 
 	req = req.replace(/=undefined/g, '=');
         
-        console.log("REQ: " + req );
+        //console.log("REQ: " + req );
 
         return encodeURI( req );
         
     },
 
     requestBuilder: function( oState, oSelf ) {
-        
-        //console.log("requestBuilder->oState=" + YAHOO.lang.JSON.stringify(oState) );
 
+        //console.log("requestBuilder called");   
+        
         var PMGR = YAHOO.imex.pubmgr;
 
         // get state (or use defaults)
@@ -182,7 +184,7 @@ YAHOO.imex.pubmgr = {
             ? oState.pagination.rowsPerPage : 10;
 
         // LS: also get watch flag here ?
-        // <        
+        //         
         // filters
         //--------
         
@@ -238,6 +240,12 @@ YAHOO.imex.pubmgr = {
             wtFlg = "";
         }
 
+        // query
+        //------
+
+        var queryVal = oSelf.my.query;
+
+
         var req = "opp.skey=" + sort +
             "&opp.wfl=" + wtFlg +
 	    "&opp.gfv=" + gfVal + 
@@ -246,13 +254,14 @@ YAHOO.imex.pubmgr = {
             "&opp.efv=" + efVal +
             "&opp.ofv=" + ofVal +
             "&opp.ffv=" + ffVal +
+            "&opp.query=" + queryVal +            
             "&opp.sdir=" + dir +
             "&opp.off=" + startIndex +
             "&opp.max=" + results; 
 
 	req = req.replace(/=undefined/g, '=');        
         req = encodeURI(req);
-        console.log("request: " + req);
+        //console.log("request: " + req);
         
         // build custom request
         //---------------------
@@ -262,12 +271,9 @@ YAHOO.imex.pubmgr = {
 
     tableReload: function( o, dt ) {
         try {
-            
-            var state = dt.get('paginator').getState();
-            //state.page=1;
-            //state.recordOffset=0;
-            //dt.get('paginator').setState( state );
-            
+            //console.log("reloading");
+            var state = dt.get('paginator').getState();            
+           
             // note: should test if offset > total; if yes,
             //       decrement offset by page size and reload 
             //       once more, set pager to the last page  
@@ -281,7 +287,7 @@ YAHOO.imex.pubmgr = {
                 
             var reloadRequest = 
                 dt.my.requestBuilder( dt.getState(), dt );
-                
+            //console.log("request: " + reloadRequest);    
             dt.getDataSource().sendRequest( reloadRequest, 
                                             reloadCallback );
         } catch (x) {   
@@ -306,6 +312,7 @@ YAHOO.imex.pubmgr = {
 
     init: function( init ){
        console.log("PMGR:init CALLED"); 
+       console.log(YAHOO.lang.JSON.stringify(init)); 
 
        var scrSuccess = function( response ){                                 
 
@@ -349,6 +356,7 @@ YAHOO.imex.pubmgr = {
     userTableLayoutInit: function( init ){
         var pubmgr = YAHOO.imex.pubmgr;
         console.log("userTableLayoutInit: CALLED");
+        
 
         if( pubmgr.loginId  !== undefined && pubmgr.loginId !== ""
 	    && pubmgr.loginId >-1 ){
@@ -529,7 +537,7 @@ YAHOO.imex.pubmgr = {
                 }
             }
         }
-        console.log("cookie:"+cookie);
+        //console.log("cookie:"+cookie);
         return cookie;
     },
 
@@ -547,6 +555,7 @@ YAHOO.imex.pubmgr = {
                      editor:PMGR.admus,
                      owner: PMGR.owner,
                      cflag: PMGR.cflag},
+            query: PMGR.query,
             watch: PMGR.watch,
             scol: "id",
             sdir: "asc" };
@@ -568,6 +577,7 @@ YAHOO.imex.pubmgr = {
            if( init.jid !== undefined ){
             defstate.filter.jid = init.jid;
            }
+                      
         }
 
         var dst = YAHOO.lang.JSON.stringify( defstate );
@@ -861,9 +871,12 @@ YAHOO.imex.pubmgr = {
 
             PMGR.stage = init.stage;
             PMGR.status = init.status;
+
+            PMGR.query = init.query;           
         }
         
-        //alert( "initView->init= " + YAHOO.lang.JSON.stringify(init) );
+       console.log("InitView: PMGR.query=" + PMGR.query  );
+
         
         var partnerSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse( o.responseText );
@@ -1011,9 +1024,12 @@ YAHOO.imex.pubmgr = {
             + "&opp.wfl=" + YAHOO.imex.pubmgr.watch 
             + "&opp.ofv=" + YAHOO.imex.pubmgr.owner 
             + "&opp.efv=" + YAHOO.imex.pubmgr.admus 
-            + "&opp.ffv=" + YAHOO.imex.pubmgr.cflag;
+            + "&opp.ffv=" + YAHOO.imex.pubmgr.cflag
+            + "&opp.query=" + YAHOO.imex.pubmgr.query;
 
-        var myConfig = {
+        console.log("initView: initReq=" + initReq);    
+
+        var myConfig = {                    
             paginator : this.myPaginator,
             initialLoad: false,
             dynamicData : true,
@@ -1047,6 +1063,7 @@ YAHOO.imex.pubmgr = {
             ownerFlt: PMGR.owner,
             admusFlt: PMGR.admus,
             cflagFlt: PMGR.cflag,
+            query: PMGR.query,
             requestBuilder: PMGR.requestBuilder
         };
 
@@ -1276,6 +1293,7 @@ YAHOO.imex.pubmgr = {
                                    {admus: pubmgr.admus,
                                     owner: pubmgr.owner,
                                     cflag: pubmgr.cflag,
+                                    query: pubmgr.query,
                                     watch: pubmgr.watch,
                                     stage: pubmgr.stage,
                                     status: pubmgr.status,

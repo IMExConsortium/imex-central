@@ -43,23 +43,27 @@
          <div class="yui-hidden">
            <fieldset>
                <legend><h3>Record Status</h3></legend>  
-               <div style="float: left; width: 33%;"><b>Requested/Submitted By:</b> <s:property value="pub.owner.login" /> </div>
-               <div style="float: left; width: 33%; text-align: center;"><b>Curation Status:</b> <s:property value="pub.stage.name" />/<s:property value="pub.state.name" /></div>
+               <div id="rec_owner" style="float: left; width: 33%;">
+                  <b>Requested/Submitted By:</b> <s:property value="pub.owner.login" />
+               </div>
+               <div id="rec_state" style="float: left; width: 33%; text-align: center;">
+                  <b>Curation Status:</b> <s:property value="pub.stage.name" />/<s:property value="pub.state.name" />
+               </div>
 
                <s:if test="pub.imexId.length() != 0">
-                 <div style="float: left; width: 33%;text-align: right;">
+                 <div id="rec_imexid" style="float: left; width: 33%;text-align: right;">
                   <b>Imex ID:</b> 
                      <s:property value="pub.imexId" />
                   </div>
                </s:if>
                <s:else>
-                 <div style="float: left; width: 33%;text-align: right;"><b>Imex ID:</b> N/A</div>
+                 <div id="rec_imexid" style="float: left; width: 33%;text-align: right;"><b>Imex ID:</b> N/A</div>
                </s:else>
            </fieldset> 
            <s:if test="pub.source.title.length() != 0">
              <fieldset>
                <legend><h3>Journal Citation</h3></legend>  
-               <div style="float: left; width: 70%;">
+               <div id="rec_src_cite" style="float: left; width: 70%;">
                    <s:property value="pub.source.title" />
 
                    <s:if 
@@ -71,7 +75,7 @@
 
                </div>
                <s:if test="pub.pmid.length() != 0">
-                 <div style="float: left; width: 30%; text-align: right;">
+                 <div id="rec_src_pmid" style="float: left; width: 30%; text-align: right;">
                    [PUBMED:<a target="icentral_outlink" href="http://www.ncbi.nlm.nih.gov/pubmed/<s:property value='pub.pmid'/>"><s:property value="pub.pmid"/></a>]
                  </div>
                </s:if> 
@@ -79,16 +83,16 @@
            </s:if>
            <fieldset>
                 <legend><h3>Author(s)</h3></legend>
-                <s:property value="pub.author" />
+                <div id="rec_src_author"><s:property value="pub.author" /></div>
            </fieldset>
            <fieldset class="box-fieldset">
                 <legend><h3 >Abstract</h3></legend>
-                <div style="background: #e0e0e0; border: 1px; border-style: solid; border-color: #888888; padding: 10px;">
+                <div id="rec_src_abstract" style="background: #e0e0e0; border: 1px; border-style: solid; border-color: #888888; padding: 10px;">
                    <s:property value="pub.abstract" />
                 </div>
            </fieldset>         
          </div>
-         <!--Publication Details Tab-->
+         <!--Publication Update Tab-->
           <div class="yui-hidden">
              <s:form id="pub-det-edit" theme="simple" action="pubedit" cssClass="align-label">
                <fieldset>

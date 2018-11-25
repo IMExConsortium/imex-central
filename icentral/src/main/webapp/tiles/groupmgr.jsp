@@ -23,7 +23,8 @@
  <div class="yui-content">
 
 <!--  First Tab  -->
-  <div id="tab1">
+
+<div id="tab1">
      
    <s:form theme="simple" action="groupmgr" id="mgr-form" cssClass="align-label">
    <fieldset>
@@ -69,9 +70,12 @@
  </div>
  
 <!--  Second Tab  -->
-  <div id="tab2">
+
+<div id="tab2">
+   <div id="dt-pag-nav"></div>
    <div id="groupmgr-table"></div>
   </div>
+  
  <script type="text/javascript">
 
     var columnDefinitions = [
@@ -81,16 +85,21 @@
         {key:"Details", sortable:true, resizeable:true, formatter:"groupDetails"}
        ];
     
-    var dataSourceLink = "groupmgr?op.view=json";
+    var dataSourceLink = "groupmgr?op.view=json&";
 
     var datasourceSchema = { 
         resultsList: "groupList", 
-        fields: ["id", "label", "name", "details"]
+        fields: ["id", "label", "name", "details"],
+        metaFields: {
+	       totalRecords: "totalRecords",
+               paginationRecordOffset : "firstRecord", 
+               paginationRowsPerPage : "blockSize" 
+            }
+
     }; 
     var container = "groupmgr-table";
     
     YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
-    YAHOO.imex.usermgr.tabView = new YAHOO.widget.TabView("mgr-tabs");
 
  </script>
 </s:else>

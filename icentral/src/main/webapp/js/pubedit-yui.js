@@ -7,7 +7,7 @@ YAHOO.imex.pubedit = {
     pubJSpec: null,
     stateButton: null,
     prefs: null,
-
+    aidx: -1,
     subCnt: 14,
 
     init: function( e, obj ){
@@ -74,6 +74,10 @@ YAHOO.imex.pubedit = {
         //this listener is for when a tab is clicked. 
         YAHOO.imex.pubedit.tabs.addListener("activeTabChange", 
                                     YAHOO.imex.pubedit.handleHistoryNavigation); 
+
+       
+        YAHOO.imex.pubedit.tabs.addListener("activeTabChange", 
+                                    YAHOO.imex.pubedit.refresh); 
 
         YAHOO.imex.pubedit.pubId = obj.id;
         
@@ -206,6 +210,98 @@ YAHOO.imex.pubedit = {
 
     },
 
+    refresh: function ( o ) {
+       console.log( "refresh: called" );
+       var idx = YAHOO.imex.pubedit.tabs.get('activeIndex');
+       console.log( "reloadTabPane: active index " + idx );
+
+       if( idx !== YAHOO.imex.pubedit.aidx ){
+           YAHOO.imex.pubedit.aidx = idx;            
+
+           var id = YAHOO.imex.pubedit.pubId;
+                     
+           var refreshCallback = { cache:false, timeout: 5000, 
+                                   success: YAHOO.imex.pubedit.recordUpdate,
+                                   failure: YAHOO.imex.pubedit.recordUpdate };        
+           try{
+              YAHOO.util.Connect
+                .asyncRequest( 'GET', 
+                               'pubedit?format=JSON&id=' + id, 
+                               refreshCallback );  
+           } catch (x) {
+              alert("AJAX Error: " + x );
+           }
+       }
+
+    },  
+
+    recordUpdate: function ( o ) {
+
+       try{
+          var messages = YAHOO.lang.JSON.parse( o.responseText );
+          
+          // summary tab
+          //------------
+
+          YAHOO.util.Dom.get('rec_owner').innerHTML = 
+                "<b>Requested/Submitted By:</b> " + messages.pub.owner.login;
+
+          YAHOO.util.Dom.get('rec_state').innerHTML = 
+                "<b>Curation Status:</b> " + messages.pub.stage.name + "/" +  messages.pub.state.name;
+          
+          YAHOO.util.Dom.get('rec_imexid').innerHTML = 
+                "<b>Imex ID:</b> " + messages.pub.imexId;
+
+          if( messages.pub.source.title.length > 0 ){
+
+             var newCite = messages.pub.source.title;
+
+             if(  messages.pub.volume.length > 0 ){
+                 newCite += ' <b>' + messages.pub.volume + '</b>';
+             }
+             if(  messages.pub.issue.length > 0 ){
+                 newCite += '(' + messages.pub.issue + ')';
+             }
+             if(  messages.pub.pages.length > 0 ){
+                 newCite += ':' + messages.pub.pages;
+             }
+             if(  messages.pub.year.length > 0 ){
+                 newCite += ', ' + messages.pub.year;
+             }
+          }
+     
+          YAHOO.util.Dom.get('rec_src_cite').innerHTML = newCite;          
+          
+          var newPMID = '[PUBMED:'+
+                        '<a target="icentral_outlink" href="http://www.ncbi.nlm.nih.gov/pubmed/'+
+                        messages.pub.pmid + '>' + messages.pub.pmid + '</a>]';
+
+          YAHOO.util.Dom.get('rec_src_pmid').innerHTML =  newPMID;
+
+          YAHOO.util.Dom.get('rec_src_author').innerHTML = 
+                messages.pub.author;
+          
+          YAHOO.util.Dom.get('rec_src_abstract').innerHTML = 
+                messages.pub.abstract;
+
+          // publication update tab
+          //----------------------- 
+
+          YAHOO.util.Dom.get('pub-det-edit_pub_pmid').value = messages.pub.pmid;
+          YAHOO.util.Dom.get('pub-det-edit_pub_doi').value = messages.pub.doi;
+          YAHOO.util.Dom.get('pub-det-edit_pub_journalSpecific').value = messages.pub.journalSpecific;
+
+          // NOTE: skipped journal title selection
+
+          YAHOO.util.Dom.get('pub-det-edit_pub_author').value = messages.pub.author;
+          YAHOO.util.Dom.get('pub-det-edit_pub_title').value = messages.pub.title;
+          YAHOO.util.Dom.get('pub-det-edit_pub_abstract').value = messages.pub.abstract;
+        
+        } catch (x) {
+            alert("AJAX Error: " + x );
+        }
+
+    },
 
     setTargetStates: function ( id, stateButton ) {
             
@@ -280,6 +376,20 @@ YAHOO.imex.pubedit = {
     identUpdateFail: function ( o ) {
         alert( "AJAX Error update failed: id=" + o.argument.id ); 
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

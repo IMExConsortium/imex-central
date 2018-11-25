@@ -212,7 +212,18 @@ public class EntrySearchAction extends ManagerSupport implements LogAware{
                 //--------------------------------------------------------------
                 
                 if ( key.equalsIgnoreCase( "eflt" ) ) {
+
                     if( getOpp() != null ){
+
+                        if( getOpp().get("ftype") != null ){
+
+                            if( getOpp().get("ftype").equals("elastic")) {
+                                
+
+                            }
+                        }
+
+                        
                         log.debug(  "opp=encf val=" + getOpp().get( "encf" ) );
                       
                         if( getOpp().get("encf") != null ){ 
@@ -226,6 +237,9 @@ public class EntrySearchAction extends ManagerSupport implements LogAware{
 
                     return PUBVIEW;
                 }
+
+                //--------------------------------------------------------------
+                                
             }
         }
         return SUCCESS;

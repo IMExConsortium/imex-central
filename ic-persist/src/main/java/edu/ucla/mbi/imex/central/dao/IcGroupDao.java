@@ -80,6 +80,77 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
         return glst;
     }
 
+
+    public List<Group> getGroupList( int firstRecord, int blockSize ) { 
+       
+        List<Group> groupl = null;
+
+	Log log = LogFactory.getLog( this.getClass() );
+	log.debug("getGroupList: firstRecord=" + firstRecord);
+	log.debug("getGroupList: blockSize=" + blockSize);
+        
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            //startOperation();
+            
+            Query query = 
+                session.createQuery( "from IcGroup g order by id ");
+            query.setFirstResult( firstRecord - 1 );
+            query.setMaxResults( blockSize );
+            
+            groupl = (List<Group>) query.list();
+            tx.commit();
+            System.out.println( firstRecord+ " :: " + 
+                                blockSize + " :: " + groupl.size() );
+        } catch( DAOException dex ) {
+            // log error ?
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+        
+        return groupl;
+    }
+
+
+    //---------------------------------------------------------------------
+
+    public long getGroupCount(){
+
+        long count = 0;
+
+        Log log = LogFactory.getLog( this.getClass() );
+
+        //Session session =
+        //    HibernateUtil.getSessionFactory().openSession();
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            //startOperation();
+
+            Query query =
+                session.createQuery( "select count(*) from IcGroup");
+            
+            count = (Long) query.uniqueResult();
+            
+            log.info("Total groups=" + count);
+            
+        } catch( DAOException dex ) {
+            // log error ?
+            log.info(dex);
+        } finally {
+            //HibernateUtil.closeSession();
+            session.close();
+        }
+
+        return count;
+    }
+    
     //---------------------------------------------------------------------
 
     public List<Group> getGroupList( Role role ){

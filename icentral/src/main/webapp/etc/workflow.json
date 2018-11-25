@@ -8,7 +8,8 @@
   {"name":"INCOMPLETE","comments":""},
   {"name":"PROCESSED","comments":""},
   {"name":"REQUEST","comments":""},
-  {"name":"RETRACTED","comments":""}
+  {"name":"RETRACTED","comments":""},
+  {"name":"REVIEW","comments":""}
  ],
  "transition":[
    {"name":"reserve","from":"NEW","to":"RESERVED",
@@ -48,7 +49,7 @@
  "status-allowed":{
     "PREQUEUE":["NEW","REQUEST","DISCARDED"],    
     "QUEUE":["NEW","REQUEST","DISCARDED"],
-    "CURATION":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED"],
+    "CURATION":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED","REVIEW"],
     "RELEASE":["RELEASED","RETRACTED"]
  }
 }

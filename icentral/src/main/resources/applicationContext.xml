@@ -448,7 +448,10 @@ http://www.ebi.ac.uk/intact/export?format=mitab_25&query=IM-20288-1&negative=fal
 
  <bean id="ws-v20" init-method="initialize"
        class="edu.ucla.mbi.imex.central.ws.v20.server.IcentralPortImpl" >
+   
    <property name="entryManager" ref="entryManager"/>
+   <property name="indexManager" ref="indexManager"/>
+   
    <property name="attachmentManager" ref="attachmentManager"/>  
    <property name="aclValidator" ref="aclVal"/>
    <property name="delay" value="5"/>       

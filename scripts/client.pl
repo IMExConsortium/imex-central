@@ -4,9 +4,9 @@ use SOAP::Lite;
 use XML::XPath;
 use XML::XPath::XMLParser;
 
-my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
-my $URLPROD = "http://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
-my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
+my $URLTEST = "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
+my $URLPROD = "https://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
+my $URLBETA = "https://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
 my $URL = $URLTEST;
 my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/ws-v20";
 
@@ -20,8 +20,11 @@ my $usr ="foo";
 my $pass ="bar";
 my $create="false";
 
+my $query = "";
+
+
 my $firstRec = 0;
-my $maxRec = 0;
+my $maxRec = 10;
 
 my $ausr = "";
 my $agrp = "";
@@ -77,6 +80,10 @@ for( my $i=0; $i < @ARGV; $i++ ) {
 
     if( $ARGV[$i]=~/IMEX=(.+)/ ) {
         $imex=$1;
+    }
+
+    if( $ARGV[$i]=~/QUERY=(.+)/ ) {
+        $query=$1;
     }
 
     if( $ARGV[$i]=~/OP=(.+)/ ) {
@@ -233,6 +240,19 @@ if($op ne "" ) {
                                                        "<firstRec>$firstRec</firstRec>" ),
                                      SOAP::Data->type( 'xml' =>
                                                        "<maxRec>$maxRec</maxRec>" ));
+    }
+
+    if( $op eq "queryPublication" ) {  
+        $som=SOAP::Lite->uri($URL.$ver)
+            ->proxy($URL.$ver)
+            ->default_ns($rns)
+            ->outputxml('true')
+            ->queryPublication( SOAP::Data->type( 'xml' =>
+                                                  "<query>$query</query>" ),
+                                SOAP::Data->type( 'xml' =>
+                                                  "<firstRec>$firstRec</firstRec>" ),
+                                SOAP::Data->type( 'xml' =>
+                                                  "<maxRec>$maxRec</maxRec>" ));
     }
 
 

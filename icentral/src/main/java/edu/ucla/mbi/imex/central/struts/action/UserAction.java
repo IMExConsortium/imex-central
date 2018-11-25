@@ -86,6 +86,7 @@ public class UserAction extends UserSupport {
         //-------------
 
         icUser.encryptPassword( pass0 );
+                
         
         // generate activation key
         //------------------------

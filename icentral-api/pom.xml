@@ -5,13 +5,13 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral-api</artifactId>
   <packaging>jar</packaging>
-  <version>2.0</version>
+  <version>2.00</version>
   <name>IMEx Central Web Service API module</name>
 
   <parent>
    <groupId>edu.ucla.mbi.imex</groupId>
    <artifactId>imexcentral</artifactId>
-   <version>3.1.0rc9</version>
+   <version>3.1.0rc12</version>
   </parent>
 
   <properties>
@@ -75,7 +75,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jaxws-maven-plugin</artifactId>
-        <version>2.4.1</version>
+        <version>2.5</version>
         <executions>
           <execution>
             <id>icentral</id>
@@ -83,7 +83,8 @@
               <goal>wsimport</goal>
             </goals>
             <configuration>
-              <verbose>false</verbose>
+              <verbose>true</verbose>
+               <useJdkToolchainExecutable>true</useJdkToolchainExecutable>
               <bindingFiles>
                 <bindingFile>icentral-1.0.jxb</bindingFile>
                 <bindingFile>icschema-1.0.jxb</bindingFile>
@@ -127,6 +128,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
         <configuration>
           <verbose>true</verbose>
           <fork>true</fork>
@@ -172,7 +174,7 @@
       <name>IMEx Public Maven Reopsitory</name>
       <url>http://imex.mbi.ucla.edu/archiva/repository/imex-public/</url>
     </repository>
-
+    
     <snapshotRepository>
       <id>snapshots</id>
       <name>Archiva Managed Snapshot Repository</name>

@@ -38,10 +38,22 @@
    <s:hidden name="role.name" value="%{role.name}"/>
   <fieldset>
    <legend><h3>Comments</h3></legend>
-   <ul>
+   <ul>                                          
     <li>
      <label for="roleedit_role_comments"><strong>Comments</strong></label><br />
      <s:textarea name="role.comments" value="%{role.comments}" cols="64" rows="4"/> 
+    </li>
+    <br/>
+    <li>
+     <label for="roleedit_role_grpEx"><strong>Group-Unique</strong></label>
+       <s:if test="%{role.grpEx}">
+       <strong><s:radio name="role.grpEx" label="True" value="%{role.grpEx}" list="#{'true':'True'}"/></strong>
+       <s:radio name="role.grpEx" label="False" value="%{role.grpEx}" list="#{'false':'False'}"/>
+     </s:if>
+     <s:else>
+       <s:radio name="role.grpEx" label="True" value="%{role.grpEx}" list="#{'true':'True'}"/>
+       <strong><s:radio name="role.grpEx" label="False" value="%{role.grpEx}" list="#{'false':'False'}"/> </strong>
+     </s:else>
     </li>
     <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
    </ul>

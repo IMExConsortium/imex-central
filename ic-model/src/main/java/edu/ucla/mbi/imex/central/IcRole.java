@@ -18,7 +18,7 @@ import java.util.*;
 import edu.ucla.mbi.util.data.Role;
 
 public class IcRole extends Role {
-
+    
     public IcRole() {}
         
     public IcRole( Role role ) {
@@ -26,13 +26,16 @@ public class IcRole extends Role {
         setName( role.getName() );
         setComments( role.getComments() == null ? "" : role.getComments() );
     }
-
+    
     public String toString() {
-	
+        
 	StringBuffer sb = new StringBuffer();
 	
 	sb.append( " IcRole(id=" + getId() );
 	sb.append( " name=" + getName() );
+        if( isGrpEx() ) {
+            sb.append( " (group-exclusive)");
+        }        
 	sb.append( " comments=" + getComments() );
 	sb.append( ")" );
 

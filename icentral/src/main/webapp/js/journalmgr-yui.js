@@ -43,7 +43,7 @@ YAHOO.imex.journalmgr = {
         quDet:{ key:"quDet", label:"Queue", menuLabel:"Queue (detailed)", xor:"qu",
                 sortable:false, resizeable:false, hidden:true, hideable: true,
                 children:[
-                    {key:"queueNew", dat: "queueNew", label:"New", sortable:false, resizeable:false, formatter:"url-center", filter:"&status=NEW&stage==QUEUE" },
+                    {key:"queueNew", dat: "queueNew", label:"New", sortable:false, resizeable:false, formatter:"url-center", filter:"&status=NEW&stage=QUEUE" },
                     {key:"queueDiscarded", dat: "queueDiscarded", label:"Discarded", sortable:false, resizeable:false, formatter:"url-center", filter:"&status=DISCARDED&stage=QUEUE" }
                 ]},        
         

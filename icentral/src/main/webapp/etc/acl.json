@@ -550,18 +550,75 @@
     },
 
     groupmgr:{
-      order:["allow","operation"],
-      allow:{
-        user:["ADMIN"],
-        role:["administrator"],
-        group:["ADMIN"]
-      },
+      order:["operation"],
       operation:{
         view:{
           order:["allow"],
           allow:{
             user:["ADMIN"],
+            role:["administrator","curator"],
+            group:["ADMIN"]
+          }
+        },
+        add:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
             role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        del:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        ldel:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        radd:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        rdel:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        },
+        pup:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator"],
+            group:["ADMIN"]
+          }
+        }
+      }
+    },
+
+    groupedit:{
+      order:["operation"],
+      operation:{
+        view:{
+          order:["allow"],
+          allow:{
+            user:["ADMIN"],
+            role:["administrator","curator"],
             group:["ADMIN"]
           }
         },
