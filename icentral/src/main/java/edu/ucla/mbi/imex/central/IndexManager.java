@@ -6,7 +6,7 @@ package edu.ucla.mbi.imex.central;
  #==============================================================================
  #
  # IndexManager - businness logic of indexer  
- #                 
+ #                NOTE: custom implementation of rest interface 
  #=========================================================================== */
 
 import org.apache.commons.logging.Log;
@@ -28,10 +28,6 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 import org.json.*;
-
-//import org.elasticsearch.client.*;
-//import org.elasticsearch.action.index.*;
-//import org.elasticsearch.common.xcontent.*;
 
 import edu.ucla.mbi.util.context.*;
 import edu.ucla.mbi.util.data.*;

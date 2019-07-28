@@ -1,5 +1,7 @@
+
 {acl:{
   "ws-v10":{      
+    control:["operation"],
     order:["operation"],
     operation:{
       "comment":"web service-based search",
@@ -41,6 +43,7 @@
   },
 
   "ws-v20":{      
+    control:["operation"],
     order:["operation"],
     operation:{
       "comment":"web service-based search",
@@ -82,6 +85,7 @@
   },
 
   watchmgr:{
+    control:["operation"],
     order:["operation"],
     operation:{
       "wflu": {
@@ -100,12 +104,13 @@
   },
 
   newsedit:{
+      control:["allow"],
       order:["allow"],
       allow:{
         user:["lukasz"],
         role:["administrator","editor"],
         group:["ADMIN"]
-      },
+      }, 
       operation:{
         order:["allow"],
         add:{
@@ -152,6 +157,7 @@
   },
 
   pubmgr:{
+    control:["operation"],
     order:["operation"],
     operation:{
       init: {
@@ -197,6 +203,7 @@
   },
 
   pubedit:{
+    control:["operation"],
     order:["operation"],
     operation:{
       ppg:{
@@ -288,7 +295,7 @@
         order:["allow","target"],
         allow:{
            user:["ADMIN"],
-           role:["administrator"],
+            role:["administrator"],
            group:["ADMIN"]
         },
         "target":{
@@ -304,7 +311,7 @@
         allow:{
           "comment":"administrative override",
           user:["ADMIN"],
-          role:["administrator"],
+            role:["administrator"],
           group:["ADMIN"]
         },
         "target":{
@@ -319,7 +326,7 @@
         order:["allow","target"],
         allow:{
           user:["ADMIN"],
-          role:["administrator"],
+            role:["administrator"],
           group:["ADMIN"]
         },
         "target":{
@@ -335,7 +342,7 @@
         allow:{
           "comment":"administrative override",
           user:["ADMIN"],
-          role:["administrator"],
+            role:["administrator"],
           group:["ADMIN"]
         },
         "target":{
@@ -349,6 +356,7 @@
   },
 
   attachmgr:{
+    control:[ "operation"],
     order:[ "operation"],
     operation:{
       calg:{
@@ -403,6 +411,7 @@
   },
 
   journalmgr:{
+    control:[ "operation"],
     order:[ "operation"],
     operation:{
         jpg:{
@@ -498,6 +507,7 @@
   },
 
   rolemgr:{
+      control:["allow","operation"],
       order:["allow","operation"],
       allow:{
         user:["ADMIN"],
@@ -550,10 +560,11 @@
     },
 
     groupmgr:{
+      control:["operation"],
       order:["operation"],
       operation:{
         view:{
-          order:["allow"],
+          order:["ANY"],
           allow:{
             user:["ADMIN"],
             role:["administrator","curator"],
@@ -612,6 +623,7 @@
     },
 
     groupedit:{
+      control:["operation"],
       order:["operation"],
       operation:{
         view:{
@@ -674,6 +686,7 @@
     },
 
     usermgr:{
+      control:["operation"],
       order:["operation"],
       allow:{
         user:["ADMIN"],

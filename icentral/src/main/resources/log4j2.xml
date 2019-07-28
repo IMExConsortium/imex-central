@@ -65,8 +65,8 @@
         <Logger name="edu.ucla.mbi.imex.central.cxf.IcentralRestImpl" level="info" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
-
-        <Logger name="edu.ucla.mbi.imex.central.ws.v20.server" level="info" additivity="false">  
+                      
+        <Logger name="edu.ucla.mbi.imex.central.ws.v20.server" level="debug" additivity="false">  
           <AppenderRef ref="STDOUT"/> 
         </Logger>
 

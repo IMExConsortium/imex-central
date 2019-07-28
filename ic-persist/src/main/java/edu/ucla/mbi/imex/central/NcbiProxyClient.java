@@ -171,8 +171,9 @@ public class NcbiProxyClient {
         } 
 
 	System.out.println("NcbiProxyClient: (C) port=" + port);
+        
 	/*
-catch ( Exception ex3 ) {
+         catch ( Exception ex3 ) {
             log.info( "NcbiProxyClient: getPublicationByPmid(ex3): " + ex3 );
             if( debug ){
                 ex3.printStackTrace();
@@ -180,11 +181,14 @@ catch ( Exception ex3 ) {
             
             throw ClientException.CLIENT_EXCEPTION;
         }
-*/
+        */
+        
         DatasetType dataset = resDataset.value;
         NodeType nodeT = null;
 
-
+        
+	System.out.println( resDataset );
+	System.out.println("NcbiProxyClient: resDataset=" + resDataset);
 	System.out.println("NcbiProxyClient: dataset=" + dataset);
 	
         if( dataset != null && dataset.getNode() != null &&

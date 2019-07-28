@@ -4,6 +4,21 @@
 $HeadURL$
 $Id$ 
 
+2019/07/28  (ImexCentral v3.1.0rc12)
+    - web service update:
+        - access to txt/data (ie text) attachments added
+
+2019/01/20  (ImexCentral v3.1.0rc12)
+    - GUI upgrades:
+            - fixed password field length
+            
+    - fixed SHA1-based password authentication issues
+
+2019/01/11  (ImexCentral v3.1.0rc12)
+    - GUI upgrades:
+            - fixed problems with pmid-less records 
+              (tiles/pubedit-yui.jsp & js/pubedit-yui.js)
+
 2018/11/24  (ImexCentral v3.1.0rc12)
     - GUI upgrades:
             - pagination of rolemgr table added

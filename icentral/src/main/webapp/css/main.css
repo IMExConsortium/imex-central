@@ -20,6 +20,7 @@
 
 /* GENERAL STYLES */
 
+    
 body {
   font-family: sans-serif;
   font-size: medium;
@@ -1609,7 +1610,7 @@ form.stylized button {
     background-color: white;
 }
 .main-width {
-    width:80em;
+    width:85em;
 }
 .captcha-width {
     width: 325px;

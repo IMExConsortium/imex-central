@@ -3,6 +3,6 @@
 
 curl -X PUT "10.1.216.103:9200/_all/_settings" -H 'Content-Type: application/json' -d'
 {
-  "index.max_result_window" : "100000"
+  "index.max_result_window" : "200000"
 }
 '

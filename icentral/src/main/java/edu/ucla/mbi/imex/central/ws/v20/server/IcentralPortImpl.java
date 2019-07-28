@@ -338,6 +338,9 @@ public class IcentralPortImpl implements IcentralPort {
 	log.info( "IcentralPortImpl: getPublicationById" );
         
         Credentials c = new Credentials( wsContext.getMessageContext() );
+
+        log.info( "IcentralPortImpl: credentials: " + c.test());
+        
         if ( ! c.test() ) throw Fault.AUTH;
         if ( id == null ) throw Fault.ID_MISSING;
 
@@ -346,7 +349,7 @@ public class IcentralPortImpl implements IcentralPort {
         String ns = id.getNs();
         String ac = id.getAc();
             
-        log.debug( " ns=" + ns + " ac=" + ac );
+        log.info( " ns=" + ns + " ac=" + ac );
         
         IcPub icp = getIcPub( ns, ac );
         
@@ -1168,7 +1171,7 @@ public class IcentralPortImpl implements IcentralPort {
         throws IcentralFault {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcentralPortImpl: getAttachmentByParent" );
-        
+                
         Credentials c = new Credentials( wsContext.getMessageContext() );
         if ( ! c.test() ) throw Fault.AUTH;
         User usr = c.loggedUser();
@@ -1183,14 +1186,14 @@ public class IcentralPortImpl implements IcentralPort {
         
         if( ns == null || ac== null ) throw Fault.ID_MISSING;
         IcPub icParent = getIcPub( ns, ac );
-
+        
         if ( icParent == null ){
             aclVerify( WS_ACTION, WS_SRC, usr );
             throw Fault.NO_RECORD;
         }
-
+        
         IcAdiDao adiDao = (IcAdiDao)
-            entryManager.getTracContext().getAdiDao();
+           entryManager.getTracContext().getAdiDao();
         
         List<AttachedDataItem> adiList = 
             adiDao.getAdiListByRoot( icParent ); 
@@ -1199,6 +1202,7 @@ public class IcentralPortImpl implements IcentralPort {
             AttachmentList al = buildAttachmentList( adiList, type );
             attachmentList.value = al;
             if( al== null || al.getAttachment().size() == 0 ){
+                
                 throw Fault.NO_RECORD;
             } 
         } else {
@@ -1556,6 +1560,8 @@ public class IcentralPortImpl implements IcentralPort {
         
             AttachedDataItem cadi = ii.next();
 
+            System.out.println("type: " + type + " cadi: " + cadi);
+            
             if( type != null && 
                 type.equals( "txt/comment" ) && 
                 cadi instanceof edu.ucla.mbi.util.data.Comment ){
@@ -1573,6 +1579,24 @@ public class IcentralPortImpl implements IcentralPort {
                 atl.getAttachment().add( catt );
             }
 
+            if( type != null && 
+                type.equals( "txt/data" ) && 
+                cadi instanceof edu.ucla.mbi.imex.central.IcAttachment ){
+                
+                IcAttachment a = (edu.ucla.mbi.imex.central.IcAttachment) cadi;
+                if( a.getDataType().equalsIgnoreCase("TEXT") ){
+                    Attachment catt = 
+                        buildAttachment( a.getId().intValue(), 
+                                         (IcPub) a.getRoot(),
+                                         a,
+                                         "txt/data", 
+                                         a.getLabel(), a.getBody(),
+                                         a.getOwner() ); 
+                    
+                    atl.getAttachment().add( catt );
+                }
+            }
+            
             if( type != null && 
                 type.equals( "num/score" ) && 
                 cadi instanceof edu.ucla.mbi.util.data.Score ){
@@ -1644,7 +1668,7 @@ public class IcentralPortImpl implements IcentralPort {
                 return false;
             }
 
-            User user = dao.getUser( login );
+            IcUser user = (IcUser) dao.getUser( login );
             
             if ( user != null && pass != null ) {
                 return user.testPassword( pass );

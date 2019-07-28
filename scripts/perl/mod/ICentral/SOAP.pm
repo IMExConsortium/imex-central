@@ -91,7 +91,7 @@ sub getPublicationById{
     $url=~s/%USR%/$self->{UID}/;
     $url=~s/%PASS%/$self->{PASS}/;
     
-    #print "getPublicationById> NS: $ns   AC: $ac   URL: $url\n\n";
+    print "getPublicationById> NS: $ns   AC: $ac   URL: $url\n\n";
     
     my $som=SOAP::Lite->uri($url)
 	->proxy($url)
@@ -100,7 +100,7 @@ sub getPublicationById{
 	->getPublicationById( SOAP::Data->type( 'xml' =>
 						"<identifier ns='$ns' ac='$ac' />" ));
     
-    #print $som,"\n";
+    print $som,"\n";
     my $xp_som = XML::XPath->new(xml=>$som);
     $xp_som->set_namespace("rns",$RNS);
     

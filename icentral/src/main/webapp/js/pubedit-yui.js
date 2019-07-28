@@ -21,7 +21,7 @@ YAHOO.imex.pubedit = {
 
         if( obj.prefs != null && obj.prefs != "" ){
             var p = obj.prefs.replace(/&quot;/g, '"'); 
-            //console.log( p );
+            console.log( p );
             myself.prefs = YAHOO.lang.JSON.parse( p  );
             myself["curl"] 
                 = myself.prefs["option-def"]["curation-tool"]["option-def"]["curation-url"].value; 
@@ -268,15 +268,18 @@ YAHOO.imex.pubedit = {
              if(  messages.pub.year.length > 0 ){
                  newCite += ', ' + messages.pub.year;
              }
-          }
-     
-          YAHOO.util.Dom.get('rec_src_cite').innerHTML = newCite;          
           
-          var newPMID = '[PUBMED:'+
+             YAHOO.util.Dom.get('rec_src_cite').innerHTML = newCite;          
+          }
+                 
+          if( messages.pub.pmid.length > 0 ){
+             
+             var newPMID = '[PUBMED:'+
                         '<a target="icentral_outlink" href="http://www.ncbi.nlm.nih.gov/pubmed/'+
-                        messages.pub.pmid + '>' + messages.pub.pmid + '</a>]';
-
-          YAHOO.util.Dom.get('rec_src_pmid').innerHTML =  newPMID;
+                        messages.pub.pmid + '">' + messages.pub.pmid + '</a>]';
+          
+             YAHOO.util.Dom.get('rec_src_pmid').innerHTML =  newPMID;
+          }
 
           YAHOO.util.Dom.get('rec_src_author').innerHTML = 
                 messages.pub.author;

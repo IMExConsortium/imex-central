@@ -1,5 +1,8 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+
+<script src="js/curation-yui.js" type="text/javascript"></script>
+
 <s:if test="hasActionErrors()">
  <p>  
   <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
@@ -30,6 +33,7 @@
        <li class="selected"><a href="#tab1"><em>User Information</em></a></li> 
        <li><a href="#tab2"><em>Change Password</em></a></li> 
        <li><a href="#tab3"><em>Groups/Roles</em></a></li> 
+       <li><a href="#tab4"><em>Curation Statistics</em></a></li> 
  </ul>   
  <div class="yui-content">
  
@@ -39,7 +43,7 @@
   <s:hidden name="id" value="%{id}"/> 
   <s:hidden name="user.id" value="%{id}"/> 
   <s:hidden name="user.login" value="%{user.login}"/> 
-  
+   
   <fieldset>
   <legend><h3>Account</h3></legend>
   <h3 class="header-grey-highlight">Details</h3>
@@ -90,28 +94,28 @@
   </s:form>
   </fieldset>
   </div>
-    <div id="tab2">
-     <s:form theme="simple" action="usermgr" cssClass="align-label">
+  <div id="tab2">
+   <s:form theme="simple" action="usermgr" cssClass="align-label">
        <s:hidden name="id" value="%{id}"/> 
        <s:hidden name="user.id" value="%{id}"/> 
        <s:hidden name="user.login" value="%{user.login}"/> 
     
     <fieldset>
-    <legend><h3>Change Password</h3></legend>
-    <ul>
-     <li>
-      <label for="usermgr_opp_pass1"><strong>New Password</strong></label>
-      <s:password theme="simple" name="opp.pass1" value="" size="16" maxlength="64"/>
-     </li>
-     <li>
-      <label for="usermgr_opp_pass2"><strong>Confirm Password</strong></label>
-      <s:password theme="simple" name="opp.pass2" value="" size="16" maxlength="64"/>
-     </li>
-     <li>
-      <s:submit theme="simple" name="op.prs" value="Update"/>
-     </li> 
-    </ul>
-   </fieldset>
+     <legend><h3>Change Password</h3></legend>
+     <ul>
+      <li>
+       <label for="usermgr_opp_pass1"><strong>New Password</strong></label>
+       <s:password theme="simple" name="opp.pass1" value="" size="16" maxlength="128"/>
+      </li>
+      <li>
+       <label for="usermgr_opp_pass2"><strong>Confirm Password</strong></label>
+       <s:password theme="simple" name="opp.pass2" value="" size="16" maxlength="128"/>
+      </li>
+      <li>
+       <s:submit theme="simple" name="op.prs" value="Update"/>
+      </li> 
+     </ul>
+    </fieldset>
    </s:form>
   </div>
   <div id="tab3">
@@ -150,7 +154,6 @@
        </li>
        </li> 
       </fieldset>
-      
      </ul>
      <h3 class="header-grey-highlight">Groups</h3>
      <ul>
@@ -185,10 +188,21 @@
      </ul> 
    </s:form>
   </div>
+
+  <div id="tab4">
+    <h3 class="header-grey-highlight">Curation Progress</h3>
+    <div id="curation-tbl" />
+  </div>
+
  </div>
 </div>
-<script>
-    var tabView = new YAHOO.widget.TabView("mgr-tabs");
+<script type="text/javascript">
+  var tabView = new YAHOO.widget.TabView("mgr-tabs");
+  YAHOO.util.Event.addListener( window, "load", 
+                                YAHOO.imex.curstat.init(
+                                   { uid:"<s:property value="user.id"/>",
+                                     container:"curation-tbl" }));
+
 </script>
 
 <style>

@@ -35,7 +35,7 @@
     },
     {"name":"CURATION",
      "comments":"",
-     "status-allowed":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED"]
+     "status-allowed":["RESERVED","INPROGRESS","INCOMPLETE","PROCESSED","DISCARDED","REVIEW"]
     },
     {"name":"RELEASE",
      "comments":"",

@@ -47,7 +47,7 @@
     <property name="mst" value="4:1"/>
     
     <property name="notifyFrom" value="dip@mbi.ucla.edu" />
-    <property name="notifyServer" value="imex.mbi.ucla.edu" />
+    <property name="notifyServer" value="banach.mbi.ucla.edu" />
     
     <property name="reCaptcha" ref="reCaptcha"/>
     <property name="reCaptchaActive" value="false"/>
@@ -77,7 +77,7 @@
     <property name="userContext" ref="userContext"/>
 
     <property name="adminMail" value="dip@mbi.ucla.edu" />
-    <property name="mailServer" value="imex.mbi.ucla.edu" />
+    <property name="mailServer" value="banach.mbi.ucla.edu" />
   </bean>
 
 
@@ -106,6 +106,7 @@
   <bean id="aclInterceptor"
         class="edu.ucla.mbi.util.struts.interceptor.AclInterceptor">
     <property name="aclContext" ref="aclContext"/>
+    <property name="aclValidator" ref="aclVal"/>
   </bean>
 
  <!-- access control list/interceptor -->

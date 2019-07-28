@@ -315,10 +315,17 @@ public class UserAction extends UserSupport {
             if ( icUser !=null && 
              icUser.testPassword( getPass0() ) ) {
 
+                // update & log current login time
+                //--------------------------------
+                
+                icUser.setLoginTime( new GregorianCalendar() );
+                dao.updateUser( icUser );
+                
+                
                 // valid user
                 //-----------
                 
-                        if ( !icUser.isActivated() ) return ACTIVATE;
+                if ( !icUser.isActivated() ) return ACTIVATE;
 
                 getSession().put( "USER_ID", icUser.getId() );
                 getSession().put( "LOGIN", icUser.getLogin() );

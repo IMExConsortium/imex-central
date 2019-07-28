@@ -123,16 +123,21 @@ public class IcentralRestImpl implements IcentralRest{
                 }
                 imexDB = es.getJSONArray( "curated-by" )
                     .getJSONObject(0).getString("name");
+                imexDB = imexDB.trim();
+                
             }catch(JSONException jx ){
                 log.info( "IcentralRestImpl(getRecordByAcc): jx=" + jx );
             }
             log.info( "IcentralRestImpl(getRecordByAcc):" +
-                      " imexAc=" + imexAc + " imexDB=" + imexDB);
+                      " imexAc=:" + imexAc + ": imexDB=:" + imexDB + ":");
 
             imexUrl = (String) imexUrlMap.get( imexDB );
             
         }
 
+        log.info( "IcentralRestImpl(getRecordByAcc):" +
+                  " imexAc=:" + imexAc + ": imexDB=:" + imexDB + ": imexUrl=:" + imexUrl +":");
+        
         if( imexAc == null || imexDB == null || imexUrl == null){
             return ns + ":" + acc + ":" + mode;
         }

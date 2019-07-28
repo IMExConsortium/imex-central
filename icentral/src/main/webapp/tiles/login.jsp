@@ -46,7 +46,7 @@
     <tr>
      <td align="right" class="tcell">Password</td>
      <td align="left" class="tcell">
-      <s:password theme="simple" name="pass0" size="16" maxlength="16" />
+      <s:password theme="simple" name="pass0" size="16" maxlength="128" />
      </td>
     </tr>
     <tr>

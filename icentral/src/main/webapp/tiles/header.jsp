@@ -180,7 +180,7 @@
            <td align="left" class="btmsearchtab" nowrap>
             <s:if test="searchOn"><s:form action="pubsrc" theme="simple">
              PMID:<s:textfield theme="simple" name="pub.pmid" size="16" value="" maxlength="128"/>
-             <s:submit type="input" tabindex="3" name="op.esrc" value="SEARCH" theme="simple"/>
+             <s:submit class="menu-button" type="input" tabindex="3" name="op.esrc" value="SEARCH" theme="simple"/>
             </s:form>
            </td>
            </s:if>

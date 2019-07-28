@@ -74,11 +74,14 @@
                    </s:if>
 
                </div>
-               <s:if test="pub.pmid.length() != 0">
-                 <div id="rec_src_pmid" style="float: left; width: 30%; text-align: right;">
+               <div id="rec_src_pmid" style="float: left; width: 30%; text-align: right;">
+                 <s:if test="pub.pmid.length() != 0">
                    [PUBMED:<a target="icentral_outlink" href="http://www.ncbi.nlm.nih.gov/pubmed/<s:property value='pub.pmid'/>"><s:property value="pub.pmid"/></a>]
-                 </div>
-               </s:if> 
+                 </s:if>
+                 <s:else>
+                 [PUBMED: N/A]
+                 </s:else>
+               </div>
              </fieldset>
            </s:if>
            <fieldset>

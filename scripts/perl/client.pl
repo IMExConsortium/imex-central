@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use lib "/raid1mnt/users/lukasz/git/imex-central/scripts/perl/mod";
+use lib "/home/lukasz/git/imex-central/scripts/perl/mod";
 
 use Getopt::Long;
 
@@ -12,10 +12,13 @@ use ICentral::SOAP;
 use ICentral::RECORD;
 
 
-my $URLTEST = "http://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
-my $URLBETA = "http://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
+my $URLTEST = "https://%USR%:%PASS%\@imexcentral.org/icentraltest/ws-v20";
+my $URLBETA = "https://%USR%:%PASS%\@imexcentral.org/icentralbeta/ws-v20";
+my $URLPROD = "https://%USR%:%PASS%\@imexcentral.org/icentral/ws-v20";
 my $URL = $URLTEST;
 my $PURL= "http://%USR%:%PASS%\@10.1.200.%%%:8080/icentral/ws-v20";
+
+my $PURL= "http://%USR%:%PASS%\@10.1.200.100:8080/ws-v20";
 
 my $ip="";
 my $pmid="";
@@ -41,7 +44,7 @@ my $ns="";
 my $newNS="";
 my $newAC="";
 
-my $url = $URLTEST;
+my $url = $PURL;
 my $uid = "";
 my $pass = "";
 my $ns = "pmid";

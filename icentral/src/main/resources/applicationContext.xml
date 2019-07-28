@@ -123,8 +123,8 @@
             "curation-url":{
               "label": "URL",
               "type": "text",
-              "size":"64", 
-              "value": "http://imex.mbi.ucla.edu/curator/curator/curatePaper.do?pubmedId=%%pmid%%",
+              "size":"64",
+              "value": "https://www.ebi.ac.uk/intact/editor/publication/%%pmid%%",
               "opp":"cturl",
               "opcode": "cturl"
             },
@@ -277,10 +277,15 @@
   <property name="endpoint"
         value="http://dip.mbi.ucla.edu/dip-proxy/ws/soap/ncbi-service"/>
   <property name="debug" value="false" />
--->
+  -->
+  
   <property name="endpoint"
-        value="http://10.1.3.111:8080/dip-proxy/ws/soap/ncbi-service"/>
- 
+        value="http://10.1.4.115:8080/dip-proxy/ws/soap/ncbi-service"/>
+
+  <!--
+<property name="endpoint"
+        value="http://128.97.39.203:8080/dip-proxy/ws/soap/ncbi-service"/>
+-->
    <property name="debug" value="false" />
  </bean>
 
@@ -299,14 +304,16 @@
    <property name="imexUrlMap">
      <map>
       <entry key="DIP Database" 
-             value="http://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
-      <entry key="IntAct Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="InnateDB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="MINT Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="MPIDB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="MatrixDB Database" value="http://matrixdb.univ-lyon1.fr/cgi-bin/current/newPort?type=publication&amp;value=%%PMID%%" />
-      <entry key="Molecular Connections Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="UniprotKB Database" value="http://www.ebi.ac.uk/intact/query/%%ACC%%" />
+             value="https://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
+      <entry key="DIP Database " 
+             value="https://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
+      <entry key="IntAct Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      <entry key="InnateDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      <entry key="MINT Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      <entry key="MPIDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      <entry key="MatrixDB Database" value="https://matrixdb.univ-lyon1.fr/cgi-bin/current/newPort?type=publication&amp;value=%%PMID%%" />
+      <entry key="Molecular Connections Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      <entry key="UniprotKB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
      </map>
    </property>
 

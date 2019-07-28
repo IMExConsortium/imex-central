@@ -105,7 +105,7 @@ for( my $i=0; $i < @ARGV; $i++ ) {
         $maxRec=$1;
     }
 
-    if( $ARGV[$i]=~/USR=(.+)/ ) {
+    if( $ARGV[$i]=~/^USR=(.+)/ ) {
         $usr=$1;
     }
 
@@ -115,7 +115,7 @@ for( my $i=0; $i < @ARGV; $i++ ) {
     if( $ARGV[$i]=~/CREATE=(.+)/ ) {
         $create=$1;
     }
-    if( $ARGV[$i]=~/AUSR=(.+)/ ) {
+    if( $ARGV[$i]=~/^AUSR=(.+)/ ) {
         $ausr=$1;
     }
     if( $ARGV[$i]=~/AGRP=(.+)/ ) {
@@ -148,7 +148,10 @@ if($op ne "" ) {
                                                       "<identifier ns='pmid' ac='$pmid' />" ) );
     }
     
-    if( $op eq "updatePublicationStatus" && $stat ne "") {   
+    if( $op eq "updatePublicationStatus" && $stat ne "") {
+
+
+             
         $som=SOAP::Lite->uri($URL.$ver)
             ->proxy($URL.$ver)
             ->default_ns($rns)

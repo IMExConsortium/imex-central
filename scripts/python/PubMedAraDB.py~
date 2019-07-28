@@ -1,6 +1,0 @@
-#!/usr/bin/python
-
-from pyArango.connection import *
-conn = Connection(arangoURL='http://crick.mbi.ucla.edu:8529',username="icentral", password="444ls444")
-
-print conn.hasDatabase('icentral')

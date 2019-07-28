@@ -121,10 +121,12 @@
       {label:"Admin",
        link:"usermgr",
        "disabled":"false",
+       roles:["administrator"],
        menu:[                   
          {label:"Accounts",
           link:"usermgr",
           "disabled":"false",
+          roles:["administrator"],
           menu:[
            {label:"Users",
             link:"usermgr",
@@ -148,15 +150,18 @@
          {label:"Workflow",
           link:"page?id=workflowmgr",
           "disabled":"false",
+          roles:["administrator"],
           menu:[
            {label:"Stages",
             link:"statemgr",
-            "disabled":"false",            
+            "disabled":"false",
+            roles:["administrator"],
             menu:[]
            },
            {label:"States",
             link:"statemgr",
             "disabled":"false",
+            roles:["administrator"],
             menu:[]
            },
            {label:"Transitions",
@@ -169,20 +174,24 @@
          {label:"Database",
           link:"page?id=databasemgr",
           "disabled":"false",
+          roles:["administrator"],
           menu:[
             {label:"Back-End Manager",
              link:"page?id=backendmgr",
              "disabled":"false",
+             roles:["administrator"],
              menu:[]
             },
             {label:"Proxy Manager",
              link:"page?id=proxymgr",
              "disabled":"false",
+             roles:["administrator"],
              menu:[]
             },
             {label:"Index Manager",
              link:"indexmgr",
              "disabled":"false",
+             roles:["administrator"],
              menu:[]
             }
           ]

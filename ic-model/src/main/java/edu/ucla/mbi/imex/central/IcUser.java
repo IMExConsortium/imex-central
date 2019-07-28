@@ -20,7 +20,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.vps.crypt.Crypt;
+import org.apache.commons.codec.digest.Crypt;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -31,6 +31,7 @@ import edu.ucla.mbi.util.data.User;
 public class IcUser extends User {
 
     private String sha1pass = "";
+    private String passcrypt = "";
     
     public IcUser() {}
     
@@ -67,7 +68,25 @@ public class IcUser extends User {
     public void setSha1pass( String pass ){
         this.sha1pass = pass;
     }
+
+    public String getPassCrypt(){
+        return passcrypt;
+    }
+
+    public void setPassCrypt( String pass ){
+        this.passcrypt = pass;
+    }
     
+    private GregorianCalendar loginTime;
+
+    public void setLoginTime( GregorianCalendar time) {
+        this.loginTime = time;
+    }
+
+    public GregorianCalendar getLoginTime() {
+        return this.loginTime;
+    }
+        
     private String encrypSHA1(String input ){
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -78,51 +97,72 @@ public class IcUser extends User {
                 hashtext = "0" + hashtext;
             }
             return hashtext;
-        }
-        catch (NoSuchAlgorithmException e) {
+        }catch( NoSuchAlgorithmException e ){
             throw new RuntimeException(e);
         }
     } 
 
     public void encryptPassword( String pass ) {
-        super.encryptPassword( pass );
-        this.sha1pass = Crypt.crypt( "ab", encrypSHA1( pass ) );
+        //super.encryptPassword( pass );
+        this.passcrypt = Crypt.crypt( pass );
+        this.sha1pass = Crypt.crypt( encrypSHA1( pass ) );
     }
     
     public boolean testPassword( String pass ) {
 
-
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug( "Test Password: " );
+        
         if( ( sha1pass == null || sha1pass.equals( "" )) &&
-            ( getPassword() == null || getPassword().equals( "" )) ) {
+            ( getPassword() == null || getPassword().equals( "" )) &&
+            ( passcrypt == null ||passcrypt.equals( "" ) ) ) {
             return true;
         } 
-                    
+        
         if( pass == null || pass.equals( "" )  ) {
             return false;
         }
-
+        
         if( pass.startsWith( "SHA1:") && (pass.length() > 5 ) ){
             return testSHA1Password( pass.substring(5) );
-        } else {
-            return super.testPassword( pass );
+        }
+
+        if( passcrypt == null || passcrypt.equals( "" ) ){
+
+            // update encrypted password
+            
+            if( super.testPassword( pass ) ){
+                this.passcrypt = Crypt.crypt( pass );
+                super.setPassword("");
+            }
+        }
+
+        if( sha1pass == null || sha1pass.equals( "" ) ){
+
+            // update SHA1-encrypted password
+            
+            if( super.testPassword( pass ) ){                
+                this.sha1pass = Crypt.crypt( encrypSHA1( pass ) );                
+            }
         }
         
+        return passcrypt.equals( Crypt.crypt( pass, passcrypt ) );
     } 
 
     public boolean testSHA1Password( String pass ) {
-
+        
         if( sha1pass == null || sha1pass.equals( "" )  ) {
-            return true;
+            //return true;
+            return false;
         }
 
         if( pass == null || pass.length() == 0 ) {
             return false;
         }
-
-        if( getPassword().equals( Crypt.crypt( "ab", pass ) ) ) {
-            return true;
+         
+        if( sha1pass.equals( Crypt.crypt( pass, sha1pass ) ) ) {
+            return true;           
         }
-
         return false;
     }
     
