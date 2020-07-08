@@ -4,21 +4,11 @@
         "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
-
-<!-- ===========================================================================
- ! $Id::                                                                       $
- ! Version: $Rev::                                                             $
- !==============================================================================
- !                                                                             $
- ! struts2: global configuration                                               $
- !                                                                             $
- !========================================================================== -->
-
 <struts>
   <constant name="struts.objectFactory" value="spring" />
   <constant name="struts.devMode" value="true" />
   <constant name="struts.action.excludePattern" 
-            value="/ws.*,/imex/.*,/map/.*"/>
+            value="/ws.*,/imex/.*,/map/.*,/service/.*"/>
 
   <!-- user/user preferences/watch mamagement -->
 
@@ -100,7 +90,7 @@
    <!-- ============================================================ Actions -->
 
    <!-- welcome page -->
-
+    
     <action name="">
       <result>/index.jsp</result>
     </action>
@@ -273,8 +263,11 @@
   <!-- contact -->
 
    <action name="feedback" class="feedbackAction" >
-    <interceptor-ref name="defaultStack"/>
-    <interceptor-ref name="timer"/>
+     <interceptor-ref name="defaultStack"/>
+     <interceptor-ref name="params">
+       <param name="excludeParams">dojo\..*</param>
+     </interceptor-ref>
+     <interceptor-ref name="timer"/>
     <interceptor-ref name="menu"/>
 
     <result name="success" type="tiles">feedback</result>

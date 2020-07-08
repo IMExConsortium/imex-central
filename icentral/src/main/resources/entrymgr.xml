@@ -6,9 +6,6 @@
 
 
 <!-- ===========================================================================
- ! $Id::                                                                       $
- ! Version: $Rev::                                                             $
- !==============================================================================
  !                                                                             $
  ! struts2: entrymgr package configuration                                     $
  !                                                                             $
@@ -117,6 +114,55 @@
 
     </action>
 
+    <action name="pubnew" class="pubNewAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">pubnew</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
+
+     <result name="input" type="tiles">pubedit</result>     
+     <result name="pubedit" type="tiles">pubedit</result>
+
+     <result name="pubnew" type="tiles">pubnew</result>
+     <result name="notfound" type="tiles">pubsrc</result>
+
+     <result name="json" type="json">
+       <param name="includeProperties">
+         records.*
+       </param>
+       <param name="noCache">true</param>
+     </result>
+   </action>
+
+    <action name="pubadd" class="pubAddAction">
+
+     <interceptor-ref name="mgrStack"/>
+     <interceptor-ref name="timer"/>
+
+     <result name="success" type="tiles">pubadd</result>
+     <result name="acl_page" type="tiles">aclpageerror</result>
+     <result name="acl_oper" type="tiles">acloperror</result>
+     <result name="acl_tget" type="tiles">acltargeterror</result>
+
+     <result name="input" type="tiles">pubadd</result>     
+     <result name="pubedit" type="tiles">pubedit</result>
+
+     <result name="pubnew" type="tiles">pubnew</result>
+     <result name="notfound" type="tiles">pubsrc</result>
+
+     <result name="json" type="json">
+       <param name="includeProperties">
+         records.*
+       </param>
+       <param name="noCache">true</param>
+     </result>
+   </action>
+
+
     <action name="projsrc" class="pubSrcAction">
       <interceptor-ref name="mgrStack"/>
       <interceptor-ref name="timer"/>
@@ -218,6 +264,7 @@
      <interceptor-ref name="mgrStack"/>
      <interceptor-ref name="timer"/>
 
+     <result name="input" type="tiles">pubnew</result>
      <result name="success" type="tiles">pubedit</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
@@ -284,30 +331,6 @@
      <interceptor-ref name="timer"/>
 
      <result name="json" type="json"/>
-   </action>
-
-   <action name="pubnew" class="pubNewAction">
-
-     <interceptor-ref name="mgrStack"/>
-     <interceptor-ref name="timer"/>
-
-     <result name="success" type="tiles">pubnew</result>
-     <result name="acl_page" type="tiles">aclpageerror</result>
-     <result name="acl_oper" type="tiles">acloperror</result>
-     <result name="acl_tget" type="tiles">acltargeterror</result>
-
-     <result name="input" type="tiles">pubedit</result>     
-     <result name="pubedit" type="tiles">pubedit</result>
-
-     <result name="pubnew" type="tiles">pubnew</result>
-     <result name="notfound" type="tiles">pubsrc</result>
-
-     <result name="json" type="json">
-       <param name="includeProperties">
-         records.*
-       </param>
-       <param name="noCache">true</param>
-     </result>
    </action>
 
   <!-- journal management -->   

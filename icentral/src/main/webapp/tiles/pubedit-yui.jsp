@@ -233,14 +233,16 @@
                 <fieldset>
                    <legend>Drop Curators</legend>
                    <li id="td-admin-user"><s:iterator value="pub.adminUsers" var="u" status="upos"><s:checkbox name="opp.eaudel" fieldValue="%{#u.id}" cssClass="admin-user-drop"/><s:property value="#u.login"/></s:iterator></li>
-                   <li><s:submit id="sub-9" disabled="true" theme="simple" name="op.eaudel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');"/></li>
+                   <li><s:submit id="sub-9" disabled="true" theme="simple" name="op.eaudel" value="DROP"
+                                 onclick="return YAHOO.imex.pubedit.pubAdminUser('drop');"/></li>
                 </fieldset>
                    </ul>
                      <ul>
                    <fieldset>
                      <legend>Add Curators</legend>
                      <li>Curator username:<s:textfield theme="simple" name="opp.eauadd" size="32" maxlength="64"/></li>
-                      <li><s:submit id="sub-10" disabled="true" theme="simple" name="op.eauadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminUser('add');"/></li>
+                      <li><s:submit id="sub-10" disabled="true" theme="simple" name="op.eauadd" value="ADD"
+                                    onclick="return YAHOO.imex.pubedit.pubAdminUser('add');"/></li>
                    </fieldset>
                       </ul>
                 <h3 class="pub-edit-sect">Curator Groups</h3>
@@ -248,14 +250,16 @@
                 <fieldset>
                    <legend>Drop Curator Group</legend>
                    <li id="td-admin-group"><s:iterator value="pub.adminGroups" var="g" status="gpos"><s:checkbox name="opp.eagdel" fieldValue="%{#g.id}" cssClass="admin-group-drop"/><s:property value="#g.label"/></s:iterator></li>
-                   <li><s:submit id="sub-11" disabled="true" theme="simple" name="op.eagdel" value="DROP" onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');"/></li>
+                   <li><s:submit id="sub-11" disabled="true" theme="simple" name="op.eagdel" value="DROP" 
+                                 onclick="return YAHOO.imex.pubedit.pubAdminGroup('drop');"/></li>
                      </ul>
                 </fieldset>
                 <ul>
                    <fieldset>
                       <legend>Add Curator Group</legend>
                       <li><s:select name="opp.eagadd" headerKey="-1" headerValue="---Select Group---" list="groupAll" listKey="id" listValue="label"/></p>
-                      <li><s:submit id="sub-12" disabled="true" theme="simple" name="op.eagadd" value="ADD" onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');"/></p>
+                      <li><s:submit id="sub-12" disabled="true" theme="simple" name="op.eagadd" value="ADD" 
+                                    onclick="return YAHOO.imex.pubedit.pubAdminGroup('add');"/></p>
                    </fieldset>
                 </ul>
              </s:form></div>
@@ -272,9 +276,9 @@
                    <li><label for="cmtmgr_opp_encs">Subject:</label> <s:textfield theme="simple" name="opp.encs" size="50" value=""/></li>
                     <%--  <p><label for="cmtmgr_format">Format:</label> --</li>%><%--  <li><s:radio label="Format" name="format" list="#{'0':'PLAIN','2':'WIKI'}" value="2"/> </li>--%>
                     <li><label for="cmtmgr_opp_encb">Body:</label> <s:textarea cssClass="limit-width" theme="simple" name="opp.encb" cols="50" rows="5" value=""/></li>
-                    <li><label for="cmtmgr_opp_encf">Flag:</label> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request','5':'DSP'}" value="-1"/></li>
-                    <li><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.attedit.pubAttach('comment','add');"/></li>
-                    <li><em><a onclick="return YAHOO.imex.attedit.pubPreview('comment','preview');" href="">preview</a></em> <li>
+                    <li><label for="cmtmgr_opp_encf">Flag:</label> <%--               <label id="flag-label" class="flag-label">Flag</label> --%><s:select name="opp.encf" headerKey="-1" headerValue="----------" list="#{'1':'QControl','4':'Curation Request','5':'DSP','8':'CV19'}" value="-1"/></li>
+                    <li><s:submit theme="simple" name="op.ecadd" value="ADD" disabled="false" onclick="return YAHOO.imex.adi.pubAttach('comment','add');"/></li>
+                    <li><em><a onclick="return YAHOO.imex.adi.pubPreview('comment','preview');" href="">preview</a></em> <li>
                     
                      </ul>
                   </fieldset>
@@ -396,7 +400,7 @@
    //------------------
 
    YAHOO.util.Event.addListener( window, "load", YAHOO.imex.adi.init, 
-         {adid: "ecomm", tabno: 4, adipane:"adi-comments",
+         {adid: "comment", tabno: 4, adipane:"adi-comments",
           aditable: "com-tbview", "meta": "attachMeta",
           url:"attachmgr?op.calg=calg&id=",
           rschema: { fields: ["id", "root","subject","body","date","author","flagName"],

@@ -1,14 +1,9 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =========================================================================
- * $HeadURL::                                                              $
- * $Id::                                                                   $
- * Version: $Rev::                                                         $
- *==========================================================================
  *
  * UserAction action
  *                
- *
  ======================================================================== */
 
 import org.apache.commons.logging.Log;
@@ -18,8 +13,8 @@ import org.apache.struts2.ServletActionContext;
 
 import java.util.*;
 
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaResponse;
+//import net.tanesha.recaptcha.ReCaptcha;
+//import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.vps.crypt.Crypt;
 
@@ -28,6 +23,8 @@ import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.util.struts.action.*;
 import edu.ucla.mbi.util.struts.interceptor.*;
+
+import edu.ucla.mbi.util.struts.captcha.*;
 
 import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
@@ -49,6 +46,30 @@ public class UserAction extends UserSupport {
     }
 
     //---------------------------------------------------------------------
+    // Captcha
+    //--------
+        
+    Captcha captcha = null;
+
+    public void setCaptcha( Captcha captcha ){
+        this.captcha = captcha; 
+    }
+
+    public Captcha getCaptcha(){
+        return this.captcha; 
+    }
+    
+    String capresponse ="";
+    
+    public void setCaptchaResponse( String response ){
+        this.capresponse = response;
+    }
+
+    public String getCaptchaResponse(){
+        return this.capresponse;
+    }
+    
+    //---------------------------------------------------------------------
     // new user registration
     //---------------------
 
@@ -63,15 +84,17 @@ public class UserAction extends UserSupport {
     public void setNotifyServer( String server ) {
         this.notifyServer = server;
     }
-
-    
-
     
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
 
     public String register( User user ) {
 
+        // sanitize 
+        user.setLogin( sanitize( user.getLogin(), 32 ) );
+        user.setFirstName( sanitize( user.getFirstName(), 32 ) );
+        user.setLastName( sanitize( user.getLastName(), 32 ) );        
+        
         Log log = LogFactory.getLog( this.getClass() );
         log.info( " register:" + user );
         log.debug( " register:login=" + user.getLogin() );
@@ -434,44 +457,6 @@ public class UserAction extends UserSupport {
     }
 
     //---------------------------------------------------------------------
-    // recaptcha
-    //----------
-    
-    private ReCaptcha recaptcha = null;
-
-    public void setReCaptcha( ReCaptcha recaptcha ) {
-
-        this.recaptcha = recaptcha;
-    }
-
-    private String rcf;
-
-    public void setRecaptcha_challenge_field( String field ) {
-        this.rcf = field;
-    }
-
-    private String rrf;
-
-    public void setRecaptcha_response_field( String field ) {
-        this.rrf = field;
-    }
-
-    private boolean reCaptchaActive = false;
-
-    public void setReCaptchaActive( boolean active ) {
-        this.reCaptchaActive = active;
-    }
-
-    public boolean getReCaptchaActive(){
-        return this.reCaptchaActive;
-    }
-
-    public boolean isReCaptchaActive(){
-        return this.reCaptchaActive;
-    }
-
-
-    //---------------------------------------------------------------------
     // new password
     //--------------
 
@@ -537,8 +522,8 @@ public class UserAction extends UserSupport {
 
         if( getOp() != null && getOp().equalsIgnoreCase( "reg" ) ) { 
 
-        // test login
-        //-----------
+            // test login
+            //-----------
 
             if( getUser() != null ){
                 log.debug( " validate:" + getUser().getLogin() );
@@ -552,30 +537,28 @@ public class UserAction extends UserSupport {
                     log.debug( " old login... id=" + oldUser.toString() );
                 } 
             }
+
+            System.out.println( captcha );
+            System.out.println( capresponse );
             
             // test recaptcha
             //---------------
 
-            log.debug( "UserAction->validate: recaptchaActive: "  + reCaptchaActive );
-            log.debug( "UserAction->validate: recaptcha=" + recaptcha );
-            log.debug( "UserAction->validate: rcf=" + rcf + " rrf=" + rrf );
+            boolean rvalid = true;
             
-            if( isReCaptchaActive() && recaptcha != null ) {
-                
-                ReCaptchaResponse reCaptchaResponse = 
-                    recaptcha.checkAnswer( ServletActionContext.
-                                           getRequest().getRemoteHost(),  
-                                           rcf, rrf );  
-                
-                if ( !reCaptchaResponse.isValid() ) {  
-                    addActionError("Not a good CAPTCHA");
-                } else {
-                    
-                    log.info( "  recaptcha response=" + 
-                              reCaptchaResponse.getErrorMessage() );
-                }
+            if( captcha == null ){
+                rvalid = true; 
+            } else {
+                rvalid = captcha.validate( capresponse );
             }
             
+            if ( ! rvalid ) {  
+                addActionError("Not a good CAPTCHA");
+                log.info( "recaptcha: error" );                    
+            } else {
+                log.info( "recaptcha: OK" );
+            }                            
+                        
             // test password typos
             //--------------------
             
@@ -587,7 +570,6 @@ public class UserAction extends UserSupport {
             return;
         }
         
-
         // edit options
         //-------------
         
@@ -629,8 +611,31 @@ public class UserAction extends UserSupport {
 	// activate options
 	//-----------------
         
-	if( getOp() != null && getOp().equalsIgnoreCase( "activate" ) ) { 
+        if( getOp() != null && getOp().equalsIgnoreCase( "activate" ) ) { 
             return;
-	}
+        }
     }
+    
+    //--------------------------------------------------------------------------    
+    //sanitize
+    //--------
+    
+    private String sanitize( String field, int maxlen ){
+
+        String sfield = field;
+
+        if( field == null ) return "";
+        sfield = field.trim();
+        
+        int spi = field.indexOf( " " );
+        if(spi > 0 ){
+            sfield = sfield.substring( 0, spi );
+            if( sfield.length() > maxlen ){
+                sfield = sfield.substring( maxlen );
+            }
+        }
+
+        return sfield;
+    }
+
 }

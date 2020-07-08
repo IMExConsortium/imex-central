@@ -585,9 +585,9 @@ YAHOO.imex.pubmgr = {
         var bState = YAHOO.util.History.getBookmarkedState( "pubmgr" );
         var iState = bState || dst;
         
-	console.log("historyInit:     init: " + YAHOO.lang.JSON.stringify( init ));
-	console.log("historyInit: defstate: " + dst);
-	console.log("historyInit:   bState: " + YAHOO.lang.JSON.stringify( bState ));
+	    console.log("historyInit:     init: " + YAHOO.lang.JSON.stringify( init ));
+	    console.log("historyInit: defstate: " + dst);
+	    console.log("historyInit:   bState: " + YAHOO.lang.JSON.stringify( bState ));
 
         var PMGR = YAHOO.imex.pubmgr;
         
@@ -834,7 +834,7 @@ YAHOO.imex.pubmgr = {
     generateLinkState: function( stage, status, partner ){
 	
         //LS: watch ?
-	console.log( "****generateLinkState" );
+	    console.log( "****generateLinkState" );
         var filter = {stage:stage, status:status, partner:partner, editor:'', owner:'', cflag:''  };
         var state = {startIndex:0, pageSize:25,filter:filter, scol:'id', sdir:'asc' };
         return YAHOO.lang.JSON.stringify( state );
@@ -855,7 +855,7 @@ YAHOO.imex.pubmgr = {
         var PMGR = YAHOO.imex.pubmgr;
         
         console.log("InitView: CALLED" );
-	console.log("InitView: init: " + YAHOO.lang.JSON.stringify( init ) );
+	    console.log("InitView: init: " + YAHOO.lang.JSON.stringify( init ) );
 
         this.formatterInit();
         
@@ -875,9 +875,8 @@ YAHOO.imex.pubmgr = {
             PMGR.query = init.query;           
         }
         
-       console.log("InitView: PMGR.query=" + PMGR.query  );
+        console.log("InitView: PMGR.query=" + PMGR.query  );
 
-        
         var partnerSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse( o.responseText );
             
@@ -898,8 +897,7 @@ YAHOO.imex.pubmgr = {
         var partnerCallback = { cache:false, timeout: 5000, 
                                 success: partnerSuccess,
                                 failure: partnerSuccess,
-                                argument:{}}; // id:obj.id, btn:imexButton } };                  
-
+                                argument:{}}; // id:obj.id, btn:imexButton } };
 
         var stateSuccess = function( o ){
             var messages = YAHOO.lang.JSON.parse(o.responseText);
@@ -1039,8 +1037,7 @@ YAHOO.imex.pubmgr = {
         // Instantiate DataTable
         //----------------------
 
-	//console.log("PMGR.myColumnDefs " + YAHOO.lang.JSON.stringify(PMGR.myColumnDefs));
-
+	    //console.log("PMGR.myColumnDefs " + YAHOO.lang.JSON.stringify(PMGR.myColumnDefs));
   
         PMGR.myDataTable = new YAHOO.widget.DataTable(
             "pubtab", PMGR.myColumnDefs, 

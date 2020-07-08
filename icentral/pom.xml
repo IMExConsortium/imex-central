@@ -5,19 +5,19 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral</artifactId>
   <packaging>war</packaging>
-  <version>3.1.0rc12</version>
+  <version>3.1.0rc17</version>
   <name>Web Application module</name>
 
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
     <artifactId>imexcentral</artifactId>
-    <version>3.1.0rc12</version>
+    <version>3.1.0rc17</version>
   </parent>
 
   <properties>
 
     <icentral.version>${project.version}</icentral.version> 
-    <icentral.copyright>2008-2019</icentral.copyright> 
+    <icentral.copyright>2008-2020</icentral.copyright> 
     <icentral.bld>$Rev$</icentral.bld> 
     <icentral.wsver>1.0</icentral.wsver>
 
@@ -25,32 +25,18 @@
 
     <icentral.recaptcha.publicKey>*****</icentral.recaptcha.publicKey>
     <icentral.recaptcha.privateKey>*****</icentral.recaptcha.privateKey>
-    <icentral.recaptcha.recaptchaServer>*****</icentral.recaptcha.recaptchaServer>
+    <icentral.recaptcha.apiURL>*****</icentral.recaptcha.apiURL>
+    <icentral.recaptcha.verifyURL>*****</icentral.recaptcha.verifyURL>
     
     <icentral.jdbc.dburl>*****</icentral.jdbc.dburl>
     <icentral.jdbc.user>*****</icentral.jdbc.user>
     <icentral.jdbc.pass>*****</icentral.jdbc.pass>
-<!--
-    <icentral.esindex.url>http://10.1.200.200:9200/icentral_test</icentral.esindex.url>
+
+    <icentral.esindex.url>http://10.1.5.8:9200/icentral</icentral.esindex.url>
     <icentral.esindex.active>true</icentral.esindex.active>
--->
-
-    <icentral.esindex.url>http://10.1.216.103:9200/icentral</icentral.esindex.url>
-    <icentral.esindex.active>true</icentral.esindex.active>
-
-
 
     <log4j.configuration>file:./target/icentral/WEB-INF/classes/log4j.properties</log4j.configuration>
 
-<!--
-       <icentral.jdbc.dburl>jdbc:postgresql://10.1.2.212:5432/icentral_test</icentral.jdbc.dburl>
-       <icentral.jdbc.user>dip</icentral.jdbc.user>
-       <icentral.jdbc.pass>444dip444</icentral.jdbc.pass>
-
-      <icentral.recaptcha.recaptchaServer>http://www.google.com/recaptcha/api</icentral.recaptcha.recaptchaServer>
-      <icentral.recaptcha.publicKey>6LcdTggAAAAAADLxCaxWmh0s-H_aaviTRxaTzFSH</icentral.recaptcha.publicKey>
-      <icentral.recaptcha.privateKey>6LcdTggAAAAAANFs1X1x8xM8uV-Ho75A3-Wx320P</icentral.recaptcha.privateKey>
--->   
   </properties>
    
   <profiles>
@@ -100,13 +86,6 @@
   <dependencies>
     
     <dependency>
-
-      <groupId>com.mchange</groupId>
-      <artifactId>c3p0</artifactId>
-      <version>0.9.5.3</version>
-    </dependency>
-
-    <dependency>
       <groupId>edu.ucla.mbi.imex</groupId>
       <artifactId>ic-persist</artifactId>
       <version>${icentral.version}</version>
@@ -129,13 +108,13 @@
       <artifactId>dip-util-struts</artifactId>
       <version>${dip-util.version}</version>
     </dependency>
-    
-    <dependency>
-      <groupId>com.google.code.maven-play-plugin.net.tanesha.recaptcha4j</groupId>
-      <artifactId>recaptcha4j</artifactId>
-      <version>${recaptcha4j.version}</version>
-    </dependency>
 
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.5.3</version>
+    </dependency>
+    
     <dependency>
       <groupId>info.bliki.wiki</groupId>
       <artifactId>bliki-core</artifactId>
@@ -147,7 +126,19 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.6</version>
     </dependency>
-
+    
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20190722</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.12</version>
+    </dependency>
+    
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -195,21 +186,6 @@
      <artifactId>commons-codec</artifactId>
      <version>1.10</version>
     </dependency>
-    
-    <dependency>
-     <groupId>com.sun.xml.ws</groupId>
-     <artifactId>jaxws-rt</artifactId>
-<!--     <version>2.2.10</version> -->
-      <version>${jaxws-rt.version}</version>
-    </dependency>
-
-
-    
-    <dependency>
-     <groupId>org.jvnet.jax-ws-commons.spring</groupId>
-     <artifactId>jaxws-spring</artifactId>
-     <version>1.9</version>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.xbean</groupId>
@@ -235,22 +211,6 @@
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
     </dependency>
-    
-<!--
-   <dependency>
-    <groupId>org.eclipse.jetty</groupId>
-    <artifactId>jetty-quickstart</artifactId>
-    <version>9.4.7.v20170914</version>
-   </dependency>
-  -->
-
-<!--
-<dependency>
-    <groupId>org.apache.httpcomponents</groupId>
-    <artifactId>httpclient</artifactId>
-    <version>4.5.5</version>
-</dependency>
--->
 
   </dependencies>
 
@@ -272,15 +232,27 @@
             <includes>
               <include>icentral-1.0.wsdl</include>
               <include>icentral-2.0.wsdl</include>
+              <include>*.xsd</include>
             </includes>
            </resource>
 
            <resource>
             <directory>${basedir}/../ic-persist/src/wsdl</directory>
-            <targetPath>WEB-INF/classes/edu/ucla/mbi/proxy</targetPath>
+            <targetPath>WEB-INF/wsdl</targetPath>
             <filtering>true</filtering>
             <includes>
               <include>*.wsdl</include>
+              <include>*.xsd</include>
+            </includes>
+           </resource>
+
+           <resource>
+            <directory>${basedir}/../ic-persist/src/wsdl</directory>
+            <targetPath>WEB-INF/classes/wsdl</targetPath>
+            <filtering>true</filtering>
+            <includes>
+              <include>*.wsdl</include>
+              <include>*.xsd</include>
             </includes>
            </resource>
             
@@ -303,7 +275,6 @@
               <includes>
                 <include>hibernate.cfg.xml</include>
                 <include>log4j2.xml</include>
-                <include>log4j.properties</include>
                 <include>applicationContext.xml</include>
               </includes>
             </resource>
@@ -341,18 +312,21 @@
       <plugin>
          <groupId>org.eclipse.jetty</groupId>
          <artifactId>jetty-maven-plugin</artifactId>
-         <version>9.4.7.v20170914</version> 
+         <version>9.4.26.v20200117</version> 
+
          <configuration>
-                  
+           <webApp>
+             <contextPath>/icentraldev</contextPath>
+           </webApp>
            <systemProperty>
               <name>log4j2.configuration</name>
-              <value>file:../etc/icentral/jetty-log4j.properties</value>
+              <value>file:../etc/icentral/jetty-log4j2.xml</value>
            </systemProperty>           
 
            <properties>
              <property>
               <name>log4j2.configuration</name>
-              <value>file:../etc/icentral/jetty-log4j.properties</value>
+              <value>file:../etc/icentral/jetty-log4j2.xml</value>
              </property>             
            </properties>           
          </configuration>

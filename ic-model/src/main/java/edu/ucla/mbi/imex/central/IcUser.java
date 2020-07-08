@@ -184,54 +184,62 @@ public class IcUser extends User {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug("from: " + from + " server: " + server);
 
-	Properties props = new Properties();
-	props.put("mail.from", from);
-	props.put("mail.smtp.host", server);
-	
-	Session session = Session.getInstance(props, null);
-
-	//-----------------------------------------------------------------
-
-	String message = 
-	    "Dear " + getFirstName() + " " + getLastName() + ",\n" +
-	    " thank you for registering as an ImexCentral user.\n" +
-	    "In order to activate your ImexCentral account (user name: " + 
-	    getLogin() + "), please, use the key:\n\n" +
-	    "    " + getActivationKey() +"\n\n" +
-	    "when loging in for the first time.  Without activation\n" +
-	    "the account might be terminated shortly.\n\n\n"+
-	    "Regards,\nThe ImexCentral Deamon\n\n";
-	
-        log.debug("message:  "+ message);
-
-	//-----------------------------------------------------------------
-
-	try {
-	    MimeMessage msg = new MimeMessage( session );
-	    msg.setFrom();
-	    msg.setRecipients( Message.RecipientType.TO,
-			       getEmail() );
-	    msg.setSubject( "ImexCentral Account Activation" );
-	    msg.setSentDate( new Date() );
-	    msg.setText( message );
-	    Transport.send( msg );
-	} catch ( MessagingException mex ) {
-	    System.out.println("send failed, exception: " + mex);
-	}
-    }
-
-    public void sendComment( String to, String server,
-			     String about, String comment ) {
-	
-	Log log = LogFactory.getLog( this.getClass() );
-
-	Properties props = new Properties();
-        props.put("mail.from", getEmail() );
+        Properties props = new Properties();
+        props.put("mail.from", from);
         props.put("mail.smtp.host", server);
-	
+        
         Session session = Session.getInstance(props, null);
 
-	try {
+        //----------------------------------------------------------------------
+        //sanitize
+        //--------
+    
+        String sFirstName = sanitize( getFirstName(), 16 );    
+        String sLastName = sanitize( getLastName(), 32 );
+        String sLogin = sanitize( getLogin(), 32 );
+        
+        //----------------------------------------------------------------------
+        
+    
+        String message = 
+            "Thank you for registering as an ImexCentral user.\n" +
+            "In order to activate your ImexCentral account (user name: " + 
+            sLogin + "), please, use the key:\n\n" +
+            "    " + getActivationKey() +"\n\n" +
+            "when loging in for the first time.  Without activation\n" +
+            "the account might be terminated shortly.\n\n\n"+
+            "Regards,\nThe ImexCentral Deamon\n\n";
+        
+        log.debug("message:  "+ message);
+        
+        //----------------------------------------------------------------------
+
+        try {
+            MimeMessage msg = new MimeMessage( session );
+            msg.setFrom();
+            msg.setRecipients( Message.RecipientType.TO,
+                               getEmail() );
+            msg.setSubject( "ImexCentral Account Activation" );
+            msg.setSentDate( new Date() );
+            msg.setText( message );
+            Transport.send( msg );
+        } catch ( MessagingException mex ) {
+            System.out.println("send failed, exception: " + mex);
+        }
+    }
+    
+    public void sendComment( String to, String server,
+                             String about, String comment ) {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        
+        Properties props = new Properties();
+        props.put("mail.from", getEmail() );
+        props.put("mail.smtp.host", server);
+        
+        Session session = Session.getInstance(props, null);
+        
+        try {
             MimeMessage msg = new MimeMessage( session );
             msg.setFrom();
             msg.setRecipients( Message.RecipientType.TO,
@@ -240,28 +248,28 @@ public class IcUser extends User {
             msg.setSentDate( new Date() );
             msg.setText( comment );
             Transport.send( msg );
-
-	    log.info( "send ok: " + to );
-
+            
+            log.info( "send ok: " + to );
+            
         } catch ( MessagingException mex ) {
-	    
-	    log.info( "send to: " + to );
-	    log.info( "send failed, exception: " + mex );
+            
+            log.info( "send to: " + to );
+            log.info( "send failed, exception: " + mex );
         }
     }
-
+    
     public static void sendComment( String from, String to, String server, 
-				    String about, String comment ) {
+                                    String about, String comment ) {
 	
-	Log log = LogFactory.getLog( IcUser.class );
-
-	Properties props = new Properties();
+        Log log = LogFactory.getLog( IcUser.class );
+        
+        Properties props = new Properties();
         props.put("mail.from", from );
         props.put("mail.smtp.host", server);
-	
+        
         Session session = Session.getInstance(props, null);
-
-	try {
+        
+        try {
             MimeMessage msg = new MimeMessage( session );
             msg.setFrom();
             msg.setRecipients( Message.RecipientType.TO,
@@ -270,11 +278,29 @@ public class IcUser extends User {
             msg.setSentDate( new Date() );
             msg.setText( comment );
             Transport.send( msg );
-	    log.info( "send ok: " + to );
-
+            log.info( "send ok: " + to );
+            
         } catch ( MessagingException mex ) {
-	    log.info( "send to: " + to );
-	    log.info( "send failed, exception: " + mex );
+            log.info( "send to: " + to );
+            log.info( "send failed, exception: " + mex );
         }
     }
+    
+    private String sanitize( String field, int maxlen ){
+
+        String sfield = field;
+        
+        if( field == null ) return "";
+        sfield = sfield.trim();
+        
+        int spi = field.indexOf( " " ); 
+        if(spi > 0 ){
+            sfield = sfield.substring( 0, spi );
+            if( sfield.length() > maxlen ){
+                sfield = sfield.substring( maxlen );
+            }            
+        }
+        
+        return sfield;    
+    }    
 }

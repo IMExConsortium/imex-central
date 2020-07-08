@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ===========================================================================
- ! $HeadURL::                                                                  $
- ! $Id::                                                                       $
- ! Version: $Rev::                                                             $
- !==============================================================================
- !
- ! IMEx Central: application context
- !
- !========================================================================== -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:aop="http://www.springframework.org/schema/aop"
-    xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       
+       xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+       xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
 
-    xmlns:ws="http://jax-ws.dev.java.net/spring/core"
-    xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
 
-
-    xsi:schemaLocation="
+       xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/tx 
@@ -33,83 +23,84 @@
         http://jax-ws.dev.java.net/spring/servlet.xsd">
 
 
-<!-- ========================================================== CONFIGUATION -->
+  <!-- ======================================================== CONFIGUATION -->
 
   <bean id="applicationContextProvider"
-       class="edu.ucla.mbi.util.context.ApplicationContextProvider" />
+        class="edu.ucla.mbi.util.context.ApplicationContextProvider" />
 
   <import resource="spring/dao.xml" />
   <import resource="spring/context.xml" />
   <import resource="spring/aop-logger.xml" />
 
-<!-- ========================================================= ENTRY MANAGER -->
+  <!-- ======================================================= ENTRY MANAGER -->
 
- <bean id="entryManager" init-method="initialize" destroy-method="cleanup"
-       class="edu.ucla.mbi.imex.central.EntryManager">
+  <bean id="entryManager" init-method="initialize" destroy-method="cleanup"
+        class="edu.ucla.mbi.imex.central.EntryManager">
 
-   <property name="tracContext" ref="tracContext"/>
-   <property name="workflowContext" ref="workflowContext"/>
-   <property name="userContext" ref="userContext"/>
-   <property name="keyspaceContext" ref="keyspaceContext"/>
+    <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="keyspaceContext" ref="keyspaceContext"/>
+    
+  </bean>
+
+  <!-- ======================================================= INDEX MANAGER -->
+
+  <bean id="indexManager" init-method="initialize" destroy-method="cleanup"
+        class="edu.ucla.mbi.imex.central.IndexManager">
+
+    <property name="tracContext" ref="tracContext"/>
+    <property name="workflowContext" ref="workflowContext"/>
+    <property name="userContext" ref="userContext"/>
+    <property name="keyspaceContext" ref="keyspaceContext"/>
+    
+    <property name="esIndexUrl"  value="${icentral.esindex.url}"/>
+    <property name="esIndexActive"  value="${icentral.esindex.active}"/>
+    
+  </bean>
+
+  <!-- ================================================== ATTACHMENT MANAGER -->
+
+  <bean id="attachmentManager" init-method="initialize" destroy-method="cleanup"
+        class="edu.ucla.mbi.imex.central.AttachmentManager">
+
+    <property name="tracContext" ref="tracContext"/>
+    <property name="userContext" ref="userContext"/>
    
- </bean>
+  </bean>
+  
+  <!-- ======================================================== NEWS MANAGER -->
 
-<!-- ========================================================= INDEX MANAGER -->
-
- <bean id="indexManager" init-method="initialize" destroy-method="cleanup"
-       class="edu.ucla.mbi.imex.central.IndexManager">
-
-   <property name="tracContext" ref="tracContext"/>
-   <property name="workflowContext" ref="workflowContext"/>
-   <property name="userContext" ref="userContext"/>
-   <property name="keyspaceContext" ref="keyspaceContext"/>
-
-   <property name="esIndexUrl"  value="${icentral.esindex.url}"/>
-   <property name="esIndexActive"  value="${icentral.esindex.active}"/>
-   
- </bean>
-
-<!-- ==================================================== ATTACHMENT MANAGER -->
-
- <bean id="attachmentManager" init-method="initialize" destroy-method="cleanup"
-       class="edu.ucla.mbi.imex.central.AttachmentManager">
-
-   <property name="tracContext" ref="tracContext"/>
-   <property name="userContext" ref="userContext"/>
-   
- </bean>
-<!-- ========================================================== NEWS MANAGER -->
-
- <bean id="newsManager" class="edu.ucla.mbi.imex.central.NewsManager">
+  <bean id="newsManager" class="edu.ucla.mbi.imex.central.NewsManager">
          
- </bean>
+  </bean>
 
-<!-- ========================================================= WATCH MANAGER -->
+  <!-- ======================================================= WATCH MANAGER -->
 
- <bean id="watchManager" init-method="initialize" destroy-method="cleanup"
-       class="edu.ucla.mbi.imex.central.WatchManager">
+  <bean id="watchManager" init-method="initialize" destroy-method="cleanup"
+        class="edu.ucla.mbi.imex.central.WatchManager">
 
-   <property name="tracContext" ref="tracContext"/>
+    <property name="tracContext" ref="tracContext"/>
    
- </bean>
+  </bean>
 
-<!-- ================================================= NOTIFIACATION MANAGER -->
+  <!-- =============================================== NOTIFIACATION MANAGER -->
 
- <bean id="notificationManager" init-method="initialize" 
-       class="edu.ucla.mbi.imex.central.NotificationManager">
+  <bean id="notificationManager" init-method="initialize" 
+        class="edu.ucla.mbi.imex.central.NotificationManager">
 
-   <property name="queueDir" value="/var/icentral/queue" />
+    <property name="queueDir" value="/var/icentral/queue" />
    
- </bean>
+  </bean>
+  
+  <!-- ===================================================== USERPREF MANAGER -->
 
-<!-- ====================================================== USERPREF MANAGER -->
+  <bean id="uprefManager" init-method="initialize" destroy-method="cleanup"
+        class="edu.ucla.mbi.imex.central.UserPrefManager">
 
- <bean id="uprefManager" init-method="initialize" destroy-method="cleanup"
-       class="edu.ucla.mbi.imex.central.UserPrefManager">
-
-   <property name="userContext" ref="userContext"/>
-   <property name="defUserPrefs">     <!-- NOTE: need a map of table layouts -->
-    <value>                              
+    <property name="userContext" ref="userContext"/>
+    <property name="defUserPrefs">     <!-- NOTE: need a map of table layouts -->
+      <value>                       
 {
     "legend":"User Preferences", 
     "tableLayout":"null",
@@ -255,68 +246,74 @@
   },
   "opcode": "update"
 }
-    </value>
-   </property>
+       </value>
+    </property>
    
- </bean>
-
-<!-- ======================================================================= -->
-
-  <bean id="aclVal" class="edu.ucla.mbi.util.struts.AclValidator">
-     <property name="aclContext" ref="aclContext"/>
   </bean>
 
-<!-- ====================================================== DIP PROXY ACCESS -->
+  <!-- ======================================================================= -->
 
- <bean id="ncbiProxyClient"  
-          class="edu.ucla.mbi.imex.central.NcbiProxyClient">
- <!--
-  <property name="endpoint"
+  <bean id="aclVal" init-method="initialize"
+        class="edu.ucla.mbi.util.struts.AclValidator">
+    <property name="aclContext" ref="aclContext"/>
+  </bean>
+
+  <!-- ====================================================== DIP PROXY ACCESS -->
+
+  <bean id="ncbiProxyClient"  
+        class="edu.ucla.mbi.imex.central.NcbiProxyClient">
+  
+ <!-- <property name="endpoint"
         value="http://dip.doe-mbi.ucla.edu:80/dip-proxy/ncbi-service"/>
-
-  <property name="endpoint"
+ -->
+ <!-- <property name="endpoint"
         value="http://dip.mbi.ucla.edu/dip-proxy/ws/soap/ncbi-service"/>
-  <property name="debug" value="false" />
+  -->
+
+  <!-- direct cluster connection -->
+  <!-- <property name="endpoint"
+        value="http://10.1.4.115:8080/dip-proxy/ws/soap/ncbi-service"/>
   -->
   
+  <!-- direct cluster connection: v2.0.0 beta -->
   <property name="endpoint"
-        value="http://10.1.4.115:8080/dip-proxy/ws/soap/ncbi-service"/>
+        value="http://10.1.5.8:8080/dip-proxy-beta/service/soap/ncbi-service"/>
 
-  <!--
-<property name="endpoint"
+  <!-- use  with tcpmon -->
+  <!-- <property name="endpoint"
         value="http://128.97.39.203:8080/dip-proxy/ws/soap/ncbi-service"/>
--->
-   <property name="debug" value="false" />
- </bean>
+  -->
+  <property name="debug" value="false" />
+  </bean>
 
-<!-- ======================================================== STRUTS ACTIONS -->
+  <!-- ====================================================== STRUTS ACTIONS -->
 
- <import resource="spring/actions.xml" />
- <import resource="spring/workflow.xml" />
- <import resource="spring/keyspace.xml" />
- <import resource="spring/entry.xml" />
+  <import resource="spring/actions.xml" />
+  <import resource="spring/workflow.xml" />
+  <import resource="spring/keyspace.xml" />
+  <import resource="spring/entry.xml" />
 
 
- <bean id="imex-rs-imp" class="edu.ucla.mbi.imex.central.cxf.IcentralRestImpl"
-       scope="prototype" init-method="initialize" >
+  <bean id="imex-rs-imp" class="edu.ucla.mbi.imex.central.cxf.IcentralRestImpl"
+        scope="prototype" init-method="initialize" >
 
-   <property name="entryManager" ref="entryManager"/>
-   <property name="imexUrlMap">
-     <map>
-      <entry key="DIP Database" 
-             value="https://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
-      <entry key="DIP Database " 
-             value="https://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
-      <entry key="IntAct Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="InnateDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="MINT Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="MPIDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="MatrixDB Database" value="https://matrixdb.univ-lyon1.fr/cgi-bin/current/newPort?type=publication&amp;value=%%PMID%%" />
-      <entry key="Molecular Connections Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-      <entry key="UniprotKB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-     </map>
-   </property>
-
+    <property name="entryManager" ref="entryManager"/>
+    <property name="imexUrlMap">
+      <map>
+        <entry key="DIP Database" 
+               value="https://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
+        <entry key="DIP Database " 
+               value="https://dip.doe-mbi.ucla.edu/dip/Search.cgi?SM=7&amp;AU=&amp;JO=&amp;YR=&amp;Search=Query+DIP&amp;IMX=%%ACC%%" />
+        <entry key="IntAct Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+        <entry key="InnateDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+        <entry key="MINT Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+        <entry key="MPIDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+        <entry key="MatrixDB Database" value="https://matrixdb.univ-lyon1.fr/cgi-bin/current/newPort?type=publication&amp;value=%%PMID%%" />
+        <entry key="Molecular Connections Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+        <entry key="UniprotKB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
+      </map>
+    </property>
+    
 <!--
 http://www.ebi.ac.uk/intact/export?format=xml_html&query=IM-20288-1&negative=false&spoke=false&ontology=false&sort=intact-miscore&asc=false
 
@@ -435,25 +432,54 @@ http://www.ebi.ac.uk/intact/export?format=mitab_25&query=IM-20288-1&negative=fal
    
  </bean>
 
- <import resource="spring/cxf.xml" />
+ <!-- ======================================================== WEB SERVICES -->
+<!--
+ <bean id="psq-server" class="org.hupo.psi.mi.psicquic.server.PsicquicServer"
+       scope="prototype" init-method="initialize">
+   <property name="psqContext" ref="psqContext"/>
+ </bean>
+
+ <bean id="psq-ws-imp" class="org.hupo.psi.mi.psicquic.server.PsicquicSoapImpl"
+       scope="prototype" init-method="initialize">
+   <property name="psqContext" ref="psqContext"/>
+   <property name="psqServer" ref="psq-server"/>
+ </bean>
+
+ <bean id="psq-rs-imp" class="org.hupo.psi.mi.psicquic.server.PsicquicRestImpl"
+       scope="prototype" init-method="initialize">
+   <property name="psqContext" ref="psqContext"/>
+   <property name="psqServer" ref="psq-server"/>
+ </bean>
+
+ <import resource="cxf.xml" />
+ 
+-->
+
+
 
 <!-- ========================================================== WEB SERVICES -->
+
 <!-- ver 1.x -->
 
- <bean id="ws-v10" init-method="initialize"
+
+ <bean id="ws-v10-imp" init-method="initialize"
        class="edu.ucla.mbi.imex.central.ws.v10.server.IcentralPortImpl" >
    <property name="entryManager" ref="entryManager"/>
    <property name="aclValidator" ref="aclVal"/>
    <property name="delay" value="5"/>       
  </bean>
 
- <ws:service  id="ics-v10" bean="#ws-v10"/>
+<!--
+  <ws:service  id="ics-v10" bean="#ws-v10"/>
  <wss:binding url="/ws" service="#ics-v10" />
  <wss:binding url="/ws-v10" service="#ics-v10" />
+-->
 
 <!-- ver 2.x -->
 
- <bean id="ws-v20" init-method="initialize"
+
+
+ <bean id="ws-v20-imp" init-method="initialize"
        class="edu.ucla.mbi.imex.central.ws.v20.server.IcentralPortImpl" >
    
    <property name="entryManager" ref="entryManager"/>
@@ -464,7 +490,12 @@ http://www.ebi.ac.uk/intact/export?format=mitab_25&query=IM-20288-1&negative=fal
    <property name="delay" value="5"/>       
  </bean>
 
+<!-- 
  <ws:service  id="ics-v20" bean="#ws-v20"/>
  <wss:binding url="/ws-v20" service="#ics-v20" />
+-->
+
+ <import resource="spring/cxf.xml" />
+
 
 </beans>

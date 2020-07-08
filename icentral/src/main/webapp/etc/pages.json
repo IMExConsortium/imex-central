@@ -218,6 +218,15 @@
         viewpath:"/pages/template.html"
       },
 
+      "success":{
+        active:true,
+        title:"Update Successful",
+        menudef:"0:0:0",
+        menusel:"0:0:0",
+        viewtype:"file-html",
+        viewpath:"/pages/success.html"
+      },
+
        "exception202":{
         active:true,
         title:"Exception: 202",

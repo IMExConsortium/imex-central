@@ -1,13 +1,9 @@
 package edu.ucla.mbi.imex.central.dao;
 
 /*==============================================================================
- * $HeadURL::                                                                  $
- * $Id::                                                                       $
- * Version: $Rev::                                                             $
- *==============================================================================
- *
- * IcAdiDao:
- *
+ *                                                                             $
+ * IcAdiDao:                                                                   $
+ *                                                                             $
  *=========================================================================== */
 
 import org.apache.commons.logging.Log;
@@ -175,7 +171,7 @@ public class IcAdiDao extends AbstractDAO implements AdiDao {
         try {
             Query query =
                 session.createQuery( "from AttachedDataItem a where " +
-                                     " a.root = :root ");
+                                     " a.root = :root order by a.crt desc");
             query.setParameter("root", root );
             
             alst = (List<AttachedDataItem>) query.list();

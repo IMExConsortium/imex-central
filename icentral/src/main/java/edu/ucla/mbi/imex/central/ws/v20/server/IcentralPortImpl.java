@@ -1,9 +1,6 @@
 package edu.ucla.mbi.imex.central.ws.v20.server;
 
 /* =============================================================================
- # $Id::                                                                       $
- # Version: $Rev::                                                             $
- #==============================================================================
  #
  # IcentralPortImpl - ImexCentral SOAP port implementation
  #
@@ -1392,8 +1389,14 @@ public class IcentralPortImpl implements IcentralPort {
         }
         
         //pub.setCreationDate(icp);
-        
-        pub.setStatus( icp.getState().getName() );
+
+        //NOTE: revert to full info
+        if( icp.getStage().getName() != null && ! icp.getStage().getName().equals("") ){
+            //pub.setStatus( icp.getStage().getName() + "/" + icp.getState().getName() );
+            pub.setStatus( icp.getState().getName() );
+        } else {
+            pub.setStatus( icp.getState().getName() );
+        }
         pub.setImexAccession( icp.getImexId() );
         pub.setOwner( icp.getOwner().getLogin() );
 

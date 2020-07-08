@@ -1,10 +1,6 @@
 package edu.ucla.mbi.imex.central.struts.action;
-
+ 
 /* =========================================================================
- * $HeadURL::                                                              $
- * $Id::                                                                   $
- * Version: $Rev::                                                         $
- *==========================================================================
  *
  * FeedbackAction action
  *                
@@ -15,18 +11,21 @@ import org.apache.commons.logging.LogFactory;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
-
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaResponse;
+       
 import org.vps.crypt.Crypt;
 
 import java.util.*;
+import java.security.*;
+
+import java.io.IOException;
 
 import edu.ucla.mbi.util.data.*;
 import edu.ucla.mbi.util.data.dao.*;
 
 import edu.ucla.mbi.util.struts.action.*;
 import edu.ucla.mbi.util.struts.interceptor.*;
+       
+import edu.ucla.mbi.util.struts.captcha.*;
 
 import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
@@ -40,7 +39,7 @@ public class FeedbackAction extends PortalSupport {
     //--------------
     
     FeedbackManager feedbackManager;
-
+    
     public FeedbackManager getFeedbackManager() {
         return feedbackManager;
     }
@@ -143,112 +142,91 @@ public class FeedbackAction extends PortalSupport {
         return about;
     }
 
-
     //---------------------------------------------------------------------
-    // recaptcha
-    //----------
+    // Captcha
+    //--------
+        
+    Captcha captcha = null;
+
+    public void setCaptcha( Captcha captcha ){
+        this.captcha = captcha; 
+    }
+
+    public Captcha getCaptcha(){
+        return this.captcha; 
+    }
     
-    private ReCaptcha recaptcha = null;
-
-    public void setReCaptcha( ReCaptcha recaptcha ) {
-
-	this.recaptcha = recaptcha;
+    String capresponse ="";
+    
+    public void setCaptchaResponse( String response ){
+        this.capresponse = response;
     }
 
-    private String rcf;
-
-    public void setRecaptcha_challenge_field( String field ) {
-	this.rcf = field;
+    public String getCaptchaResponse(){
+        return this.capresponse;
     }
-
-    private String rrf;
-
-    public void setRecaptcha_response_field( String field ) {
-	this.rrf = field;
-    }
-
-    private boolean reCaptchaActive = false;
-
-    public void setReCaptchaActive( boolean active ) {
-        this.reCaptchaActive = active;
-    }
-
-    public boolean getReCaptchaActive(){
-        return this.reCaptchaActive;
-    }
-
-    public boolean isReCaptchaActive(){
-        return this.reCaptchaActive;
-    }
-
-
+    
     //--------------------------------------------------------------------------
-
+    
     public String execute() throws Exception {
-
-	if( getSubmit() != null && getSubmit().length() > 0 ) {
-
-	    if ( getSession().get( "DIP_USER_ID" ) != null &&
-		 (Integer) getSession().get( "DIP_USER_ID" )  > 0 ) {
-		return regFeed();
-	    } else {
-		return mailFeed();
-	    }
-	} 
-	return SUCCESS;
+        
+        if( getSubmit() != null && getSubmit().length() > 0 ) {
+            
+            if ( getSession().get( "DIP_USER_ID" ) != null &&
+                 (Integer) getSession().get( "DIP_USER_ID" )  > 0 ) {
+                return regFeed();
+            } else {
+                return mailFeed();
+            }
+        } 
+        return SUCCESS;
     }
     
     //---------------------------------------------------------------------
 
     public void validate() {
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        if( getSubmit() != null && getSubmit().length() > 0 ) {
+            
+            String comment = getComment();
+            if ( comment != null ) {
+                try {
+                    comment = comment.replaceAll("^\\s+","");
+                    comment = comment.replaceAll("\\s+$","");
+                } catch ( Exception ex ) {
+                    // cannot be here 
+                }
+                setComment( comment );
+            }
+            
+            if ( comment == null || comment.length() == 0 ) {
+                addFieldError( "comment",
+                               "Comment field cannot be left empty" );
+            }
+            
+            if ( getSession().get( "DIP_USER_ID" ) != null &&
+                 (Integer) getSession().get( "DIP_USER_ID" )  > 0 ) {                		                
+            } else {                
+                // test recaptcha
+                //---------------
 
-	Log log = LogFactory.getLog( this.getClass() );
-		    
-	if( getSubmit() != null && getSubmit().length() > 0 ) {
-
-
-	    String comment = getComment();
-	    if ( comment != null ) {
-		try {
-		    comment = comment.replaceAll("^\\s+","");
-		    comment = comment.replaceAll("\\s+$","");
-		} catch ( Exception ex ) {
-		    // cannot be here 
-		}
-		setComment( comment );
-	    }
-
-	    if ( comment == null || comment.length() == 0 ) {
-		addFieldError( "comment",
-			       "Comment field cannot be left empty" );
-	    }
-	    
-	    if ( getSession().get( "DIP_USER_ID" ) != null &&
-		 (Integer) getSession().get( "DIP_USER_ID" )  > 0 ) {
-		
-		
-		
-	    } else {
-		
-		// test recaptcha
-		//---------------
-
-		if( isReCaptchaActive() && recaptcha != null ) {
-		    
-		    ReCaptchaResponse reCaptchaResponse = 
-			recaptcha.checkAnswer( ServletActionContext.
-					   getRequest().getRemoteHost(),  
-					       rcf, rrf );  
-		    
-		    if ( !reCaptchaResponse.isValid() ) {  
-			addActionError("Not a good CAPTCHA");
-		    } else {
-			
-			log.info( "  recaptcha response=" + 
-				  reCaptchaResponse.getErrorMessage() );
-		    }
-		}
-	    }
-	}
-    }
+                boolean rvalid = true;
+                
+                if( captcha == null ){
+                    rvalid = true; 
+                } else {
+                    rvalid = captcha.validate( capresponse );
+                }
+                
+                if ( ! rvalid ) {  
+                    addActionError("Not a good CAPTCHA");
+                    log.info( "recaptcha: error" );                    
+                } else {
+                    log.info( "recaptcha: OK" );
+                }                            
+            }
+        }
+    }    
 }
+

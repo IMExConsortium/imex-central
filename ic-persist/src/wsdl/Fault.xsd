@@ -11,8 +11,8 @@
      #================================================================== -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:dsv="http://dip.doe-mbi.ucla.edu/services"
-           targetNamespace="http://dip.doe-mbi.ucla.edu/services"
+           xmlns:dsv="http://dip.doe-mbi.ucla.edu/fault"
+           targetNamespace="http://dip.doe-mbi.ucla.edu/fault"
            elementFormDefault="qualified" attributeFormDefault="unqualified"> 
 
   <xs:element name="serviceFault"> 

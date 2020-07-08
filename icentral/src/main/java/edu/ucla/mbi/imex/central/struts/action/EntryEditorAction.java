@@ -1,9 +1,6 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =============================================================================
- * $Id::                                                                       $
- * Version: $Rev::                                                             $
- *==============================================================================
  *
  * EntryEditorAction - Action supporting viewing and editing of individual
  *                     publication entry records
@@ -220,6 +217,8 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
 
         Log log = LogFactory.getLog( this.getClass() );
         log.debug(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
+        System.out.println( "id=" + getId() + " icpub=" + icpub + " op=" + getOp() );
+        
         
         if ( tracContext.getPubDao() == null ) return SUCCESS;
 
@@ -541,12 +540,13 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
     // validation
     //-----------
     
-    public void validateXXX() {
+    public void validate() {
 
         Log log = LogFactory.getLog( this.getClass() );
-        log.info( "EntryMgrAction: validate" );
-       
-        //boolean loadUserFlag = false;
+        log.info( "EntryEditorAction: validate" );
+        System.out.println("EntryEditorAction: validate");
+
+            //boolean loadUserFlag = false;
         
         if( getOp() != null ) {
             for ( Iterator<String> i = getOp().keySet().iterator();
@@ -558,6 +558,7 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
                 if ( val != null && val.length() > 0 ) {
                     
                     log.debug( " op=" + val);
+                    
                     if ( key.equalsIgnoreCase( "esrc" ) ) {
 
                         if ( getOpp() != null 
@@ -590,7 +591,7 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
                     
                     //----------------------------------------------------------
                     
-                    if ( key.equalsIgnoreCase( "eatu" ) ) {
+                    if( key.equalsIgnoreCase("eatu") ){
                         
                         String auth = null;
                         String title = null;
@@ -616,6 +617,56 @@ public class EntryEditorAction extends ManagerSupport implements LogAware{
                             }
                             getPub().setTitle( title );
 
+                        }
+                        
+                        if( auth == null || auth.length() == 0 ) {
+                            addFieldError( "pub.author",
+                                           "Author field cannot be empty." );
+                        }
+                        
+                        if( title == null || title.length() == 0 ) {
+                            addFieldError( "pub.title",
+                                           "Title field cannot be empty." );
+                        }
+                        
+                        break;
+                    }
+
+                    //----------------------------------------------------------
+                    
+                    if( key.equalsIgnoreCase("eadd") ){
+                        
+                        String auth = null;
+                        String title = null;
+                        System.out.println("pub: " + getPub());
+                        
+                        if( getPub() != null ) {
+
+                            auth = getPub().getAuthor();
+                            title = getPub().getTitle();
+                            
+                            if (auth != null ) {
+                                auth = auth.replaceAll( "^\\s+", "" );
+                                auth = auth.replaceAll( "\\s+$", "" );
+                            } else {
+                                auth = "";
+                            }
+                            getPub().setAuthor( auth );
+
+                            if ( title != null ) {
+                                title = title.replaceAll( "^\\s+", "" );
+                                title = title.replaceAll( "\\s+$", "" );
+                            } else {
+                                title= "";
+                            }
+                            getPub().setTitle( title );
+
+                        }
+
+
+                        if( getPub().getPmid() != null
+                            && getPub().getPmid().length() >  0 ){
+                            break;
                         }
                         
                         if( auth == null || auth.length() == 0 ) {

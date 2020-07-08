@@ -5,13 +5,13 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>ic-model</artifactId>
   <packaging>jar</packaging>
-  <version>3.1.0rc12</version>
+  <version>3.1.0rc17</version>
   <name>Model module</name>
 
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
     <artifactId>imexcentral</artifactId>
-    <version>3.1.0rc12</version>
+    <version>3.1.0rc17</version>
   </parent>
 
   <dependencies>

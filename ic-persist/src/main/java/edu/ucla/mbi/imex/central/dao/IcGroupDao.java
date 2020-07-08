@@ -1,14 +1,10 @@
 package edu.ucla.mbi.imex.central.dao;
 
-/*===========================================================================
- * $HeadURL::                                                               $
- * $Id::                                                                    $
- * Version: $Rev::                                                          $
- *===========================================================================
- *
- * GroupDAO:
- *
- *========================================================================= */
+/*==============================================================================
+ *                                                                             $
+ * GroupDAO:                                                                   $
+ *                                                                             $
+ *=========================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,20 +22,12 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 
 public class IcGroupDao extends AbstractDAO implements GroupDao {
-
-
-    //public IcGroupDao(){ super();};
-
-    //public IcGroupDao( SessionFactory sessionFactory ){
-    //    super( sessionFactory );
-    //}
     
     public Group getGroup( int id ) { 
         
         Group group = (IcGroup) super.find( IcGroup.class, id ); 
         return group; 
     }
-
     
     //---------------------------------------------------------------------
 
@@ -75,41 +63,57 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
     //---------------------------------------------------------------------
 
     public List<Group> getGroupList() {
-     
+        
         List<Group> glst = (List<Group>) super.findAll( IcGroup.class );
-        return glst;
+
+        List<Group> groupl = null;
+
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("getGroupList: all" );
+        
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        
+        try {
+            
+            Query query = 
+                session.createQuery( "from IcGroup g order by name ");
+            
+            groupl = (List<Group>) query.list();
+            tx.commit();
+        } catch( DAOException dex ) {
+            // log error ?
+        } finally {
+            session.close();
+        }
+        
+        return groupl;
     }
-
-
+    
     public List<Group> getGroupList( int firstRecord, int blockSize ) { 
        
         List<Group> groupl = null;
 
-	Log log = LogFactory.getLog( this.getClass() );
-	log.debug("getGroupList: firstRecord=" + firstRecord);
-	log.debug("getGroupList: blockSize=" + blockSize);
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("getGroupList: firstRecord=" + firstRecord);
+        log.debug("getGroupList: blockSize=" + blockSize);
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
-
+        
         try {
-            //startOperation();
             
             Query query = 
-                session.createQuery( "from IcGroup g order by id ");
+                session.createQuery( "from IcGroup g order by name ");
             query.setFirstResult( firstRecord - 1 );
             query.setMaxResults( blockSize );
             
             groupl = (List<Group>) query.list();
             tx.commit();
-            System.out.println( firstRecord+ " :: " + 
-                                blockSize + " :: " + groupl.size() );
+            
         } catch( DAOException dex ) {
             // log error ?
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
         
@@ -125,14 +129,10 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
 
         Log log = LogFactory.getLog( this.getClass() );
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
-
-        try {
-            //startOperation();
-
+        
+        try {            
             Query query =
                 session.createQuery( "select count(*) from IcGroup");
             
@@ -144,7 +144,6 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             // log error ?
             log.info(dex);
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
 
@@ -176,10 +175,9 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             handleException( e );
             // log error ? 
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
-
+        
         log.debug( "list=" + glst );
         return glst;
     }
@@ -219,7 +217,6 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
         Transaction tx = session.beginTransaction();
 
         try {
-            //startOperation();
             Query query =
                 session.createQuery( "select count(u) from IcUser u" +
                                      " join u.groups as grp" +
@@ -232,7 +229,6 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             handleException( e );
             // log error ?
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
 
@@ -247,8 +243,6 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
         
         List<User> ulst = null;
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
@@ -266,7 +260,6 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             handleException( e );
             // log error ?
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
 

@@ -5,7 +5,7 @@
   <tr>
    <td class="aclerror" nowrap>
     Access Control List Violation (operation).<br/>
-    <font size="-1.5"><i>If you think you have got here in error please
+    <font size="-1.2"><i>If you think you have got here in error please
     <a href="feedback">contact us</a>.</i></font>
    </td>
   </tr>

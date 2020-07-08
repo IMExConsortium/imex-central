@@ -1,56 +1,46 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
-                         http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
-    version="2.5" metadata-complete="true" >
-<!-- =======================================================================
- ! $HeadURL::                                                              $
- ! $Id::                                                                   $
- ! Version: $Rev::                                                         $
- !==========================================================================
- !                                                                        
- ! IMEx Central: Web Application configuration file
- !                                                                        
- !====================================================================== -->
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+                             http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
+         version="2.5" metadata-complete="true" >
 
   <display-name>IMEx Central</display-name>
 
-<!-- ===================================================== ============= -->
-<!-- ===================================================== CONTEXT setup -->
-<!-- ===================================================== ============= -->
+  <!-- ======================================================= ============= -->
+  <!-- ======================================================= CONTEXT setup -->
+  <!-- ======================================================= ============= -->
 
-  <!-- ================================================== TILES context  -->
-   <context-param>
+  <!-- ====================================================== TILES context  -->
+  <!-- default location: WEB-INF/tiles.xml -->
+  <!--
+  <context-param>
     <param-name>
       org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG
     </param-name>
     <param-value>/WEB-INF/classes/tiles.xmlxx</param-value>
    </context-param>
-
-  <!-- ================================================= SPRING context  -->
+  -->
+  <!-- ===================================================== SPRING context  -->
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/classes/applicationContext.xml</param-value>
   </context-param>
 
-<!-- ===================================================== ============= -->
-<!-- ===================================================== FILTERS setup -->
-<!-- ===================================================== ============= -->
+  <!-- ======================================================= ============= -->
+  <!-- ======================================================= FILTERS setup -->
+  <!-- ======================================================= ============= -->
 
- <filter>
-   <filter-name>log4jServletFilter</filter-name>
-   <filter-class>
-     org.apache.logging.log4j.web.Log4jServletFilter
-   </filter-class>
- </filter>
+  <filter>
+    <filter-name>log4jServletFilter</filter-name>
+    <filter-class>
+      org.apache.logging.log4j.web.Log4jServletFilter
+    </filter-class>
+  </filter>
 
-
-
-  <!-- ================================================== STRUTS2 filter -->
-
+  <!-- ====================================================== STRUTS2 filter -->
 
   <filter>
     <filter-name>action2</filter-name>
@@ -58,16 +48,6 @@
       org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter
     </filter-class>
   </filter>
-<!--
-  <filter>
-    <filter-name>action2</filter-name>
-    <filter-class>
-      org.apache.struts2.dispatcher.FilterDispatcher
-    </filter-class>
-  </filter>
--->
-
-
 
   <filter-mapping>
     <filter-name>log4jServletFilter</filter-name>
@@ -76,199 +56,16 @@
     <dispatcher>FORWARD</dispatcher>
     <dispatcher>INCLUDE</dispatcher>
     <dispatcher>ERROR</dispatcher>
-    <dispatcher>ASYNC</dispatcher><!-- Servlet 3.0 w/ disabled auto-initialization only; not supported in 2.5 -->
+    <!-- Servlet 3.0 w/ disabled auto-initialization only; not supported in 2.5 -->
+    <dispatcher>ASYNC</dispatcher>
   </filter-mapping>
-
-
-
-
-
-
-
-
 
  <!-- NOTE: check struts.xml for the pattern exclusion list !!! -->
 
-<filter-mapping>
+  <filter-mapping>
     <filter-name>action2</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
-
-<!--
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>*.do</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>*.action</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>*.jsp</url-pattern>
-  </filter-mapping>
-
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/page</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/edit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/user</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/register</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/uedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/feedback</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/pubmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/acom</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/pubsrc</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/pubedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/pubnew</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/journalmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/jousrc</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/journaledit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/entrymgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/attachmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/wikiparse</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/entryedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/usermgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/useredit</url-pattern>
-  </filter-mapping>
-
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/groupmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/groupedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/rolemgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/roleedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/aclmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/statemgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/stateedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/transmgr</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/transedit</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/stats</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>action2</filter-name>
-    <url-pattern>/image</url-pattern>
-  </filter-mapping>
-
--->
 
 <!-- =================================================== =============== -->
 <!-- =================================================== LISTENERS setup -->
@@ -291,13 +88,13 @@
   </listener>
 
   <!-- ================================================= JAX-WS listener -->
-
+<!--
   <listener>
    <listener-class>
     com.sun.xml.ws.transport.http.servlet.WSServletContextListener
    </listener-class>
   </listener>
-
+-->
   <!-- ================================================== LOG4J listener -->
 
   <listener>
@@ -305,17 +102,6 @@
     org.apache.logging.log4j.web.Log4jServletContextListener
    </listener-class>
   </listener>
-
-
-
-
-
-
-
-
-
-
-
 
   <!-- ======================================= WSContextManager listener -->
 <!--
@@ -339,14 +125,14 @@
    <load-on-startup>1</load-on-startup>
   </servlet>
   -->
-
+<!--
   <servlet>
    <servlet-name>imex-central</servlet-name>
    <servlet-class>
     com.sun.xml.ws.transport.http.servlet.WSSpringServlet
    </servlet-class>
   </servlet>
-
+-->
 
   <servlet>
     <servlet-name>cxf-service</servlet-name>
@@ -357,19 +143,26 @@
     <load-on-startup>2</load-on-startup>
   </servlet>
 
-<!-- =================================================== =============== -->
-<!-- =================================================== Servlet mapping -->
-<!-- =================================================== =============== -->
+  <!-- ===================================================== =============== -->
+  <!-- ===================================================== Servlet mapping -->
+  <!-- ===================================================== =============== -->
 
+<!--
   <servlet-mapping>
-   <servlet-name>imex-central</servlet-name>
+   <servlet-name>cxf-service</servlet-name>
    <url-pattern>/ws-v20</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
-   <servlet-name>imex-central</servlet-name>
+   <servlet-name>cxf-service</servlet-name>
    <url-pattern>/ws</url-pattern>
    <url-pattern>/ws-v10</url-pattern>
+  </servlet-mapping>
+-->
+
+  <servlet-mapping>
+   <servlet-name>cxf-service</servlet-name>
+   <url-pattern>/service/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -377,11 +170,19 @@
     <url-pattern>/imex/*</url-pattern>
   </servlet-mapping>
 
+  <!-- ==================================================== ================ -->
+  <!-- ==================================================== = MIME mapping = -->
+  <!-- ==================================================== ================ -->
+  
   <mime-mapping>
         <extension>inc</extension>
         <mime-type>text/plain</mime-type>
   </mime-mapping>
-  
+
+  <!-- ===================================================================== -->
+  <!-- ===================================================================== -->
+  <!-- ===================================================================== -->
+
   <welcome-file-list>
       <welcome-file>index.jsp</welcome-file>
       <welcome-file>index.html</welcome-file>

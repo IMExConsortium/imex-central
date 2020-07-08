@@ -79,10 +79,15 @@
  <script type="text/javascript">
 
     var columnDefinitions = [
-        {key:"id", label:"Id",  sortable:true, resizeable:true},
-        {key:"label",label:"Label", sortable:true, resizeable:true},
-        {key:"name",label:"Name", sortable:true, resizeable:true},
-        {key:"Details", sortable:true, resizeable:true, formatter:"groupDetails"}
+        {key:"id", label:"Id",  menuLabel:"Group Id",
+                   sortable:true, resizeable:true, hidden: true, hideable: true },
+        {key:"label",label:"Label", trigger: true,
+                   sortable:true, resizeable:true, hidden: false, hideable: false },
+        {key:"name",label:"Name", trigger: true,
+                   sortable:true, resizeable:true, hidden: false, hideable: false },
+        {key:"details", label:"", trigger: true,
+                   sortable:true, resizeable:true, hidden: false, hideable: false,
+                   formatter:"groupDetails" }
        ];
     
     var dataSourceLink = "groupmgr?op.view=json&";
@@ -99,7 +104,7 @@
     }; 
     var container = "groupmgr-table";
     
-    YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
+    YAHOO.imex.groupmgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);
 
  </script>
 </s:else>

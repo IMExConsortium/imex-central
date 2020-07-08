@@ -1,9 +1,6 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =============================================================================
- * $Id::                                                                       $
- * Version: $Rev::                                                             $
- *==============================================================================
  *
  * EntryViewerAction - Action supporting a table view of entry list
  *
@@ -683,8 +680,8 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
     public String getIcPubRecords( User usr, 
                                    String max, String off, 
                                    String skey, String sdir,
-				   Map<String,String> filter,
-                                   String query){
+                                   Map<String,String> filter,
+                                   String query ){
         
         if ( tracContext.getPubDao() == null ) return null;
 
@@ -738,7 +735,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                 sortKey ="pmid";
             }
             if( skey.equals( "imexId" ) ){
-                sortKey ="imex";
+                sortKey ="imex.value";
             }
 
             if( skey.equals( "actUser" ) ){
@@ -783,15 +780,15 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
         //flt.put( "cflag", ffv );
         
         //if ( gfv.equals("") && sfv.equals("") && pfv.equals("") && 
-	//     ofv.equals("") && efv.equals("") && ffv.equals("") ){
+        //     ofv.equals("") && efv.equals("") && ffv.equals("") ){
 
         //-------------------  ***************** -------------------------
 
-	if ( filter.isEmpty() && (query == null || query.equals("") ) ){  
+        if ( filter.isEmpty() && (query == null || query.equals("") ) ){  
             log.debug( "getPubRecords: unfiltered" );
             
             if( usr == null ){
-
+                
                 if( getIndexManager() != null 
                     && getIndexManager().isIndexActive() ){
 
@@ -801,7 +798,6 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                     total = getIndexManager().getPublicationCount();
                     
                 } else {
-
 
                     List<Publication> ppl = tracContext.getPubDao()
                         .getPublicationList( first, blockSize, sortKey, asc );
@@ -880,7 +876,6 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                         .getPublicationCount( filter  );
                 }
             } else {
-
                 
                 List<Publication> ppl = watchManager
                     .getPublicationList( usr, first, blockSize, 

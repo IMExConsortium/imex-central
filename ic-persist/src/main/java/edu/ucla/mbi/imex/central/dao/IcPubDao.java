@@ -1,15 +1,5 @@
 package edu.ucla.mbi.imex.central.dao;
 
-/*=============================================================================
- * $HeadURL::                                                                 $
- * $Id::                                                                      $
- * Version: $Rev::                                                            $
- *=============================================================================
- *
- * IcJournalDAO:
- *
- *=========================================================================== */
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -254,7 +244,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             session.close();
         }
         
-        System.out.println("plist"+plst);
+        //System.out.println("plist"+plst);
 
         return plst;
     }
@@ -340,7 +330,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
             session.close();
         } 
         
-        System.out.println("plist" + plst);
+        //System.out.println("plist" + plst);
         return plst;
     }
 
@@ -354,7 +344,7 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcPubDao:getPublicationList(block) sort=:" + skey );
-        
+               
         //Session session =
         //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
@@ -363,11 +353,6 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         try {
             //startOperation();
             Criteria crit = session.createCriteria( IcPub.class );
-
-            if( firstRecord >= 0 && blockSize > 0 ){
-                crit.setFirstResult( firstRecord );
-                crit.setMaxResults( blockSize );
-            }
             
             if( skey != null && skey.length() > 0 ){
                 if( asc ){
@@ -387,6 +372,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
                 }
             }
 
+            if( firstRecord >= 0 && blockSize > 0 ){
+                crit.setFirstResult( firstRecord );
+                crit.setMaxResults( blockSize );
+            }
+            
             //Query query =
             //    session.createQuery( "from IcPub p order by id ");
             //query.setFirstResult( firstRecord );
@@ -430,6 +420,11 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
         try {
             
             Criteria crit = session.createCriteria( IcPub.class );
+
+            if ( flt != null ) {
+                crit = this.addFilter( crit, flt );
+            }
+
             
             if (skey != null && skey.length() > 0 ) {
                 if ( asc ) {
@@ -449,9 +444,6 @@ public class IcPubDao extends AbstractDAO implements PublicationDao {
                 }
             }
 
-            if ( flt != null ) {
-                crit = this.addFilter( crit, flt );
-            }
             
             crit.setFirstResult( firstRecord );
             crit.setMaxResults( blockSize );

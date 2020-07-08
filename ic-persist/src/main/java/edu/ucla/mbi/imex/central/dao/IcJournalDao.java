@@ -1,14 +1,10 @@
 package edu.ucla.mbi.imex.central.dao;
 
-/*===========================================================================
- * $HeadURL::                                                               $
- * $Id::                                                                    $
- * Version: $Rev::                                                          $
- *===========================================================================
- *
- * IcJournalDAO:
- *
- *========================================================================= */
+/*==============================================================================
+ *                                                                             $
+ * IcJournalDAO:                                                               $
+ *                                                                             $
+ *=========================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -307,13 +303,10 @@ public class IcJournalDao extends AbstractDAO implements JournalVIPDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcJournalDao:getJournalList(block)"  );
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
-            //startOperation();
             Query query = session
                 .createQuery( "from IcJournal p where id > 0 order by id ");
             query.setFirstResult( firstRecord );
@@ -326,11 +319,9 @@ public class IcJournalDao extends AbstractDAO implements JournalVIPDao {
             // log exception ?
             e.printStackTrace();
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
-        
-        System.out.println("jlist" + jlst);
+                
         return jlst;
     }
 
@@ -346,8 +337,6 @@ public class IcJournalDao extends AbstractDAO implements JournalVIPDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.info( "IcJournaaDao:getJournalList(block) sort=:" + skey );
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
@@ -376,7 +365,6 @@ public class IcJournalDao extends AbstractDAO implements JournalVIPDao {
             // log exception ?
             e.printStackTrace();
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
         return jlst;
@@ -441,8 +429,6 @@ public class IcJournalDao extends AbstractDAO implements JournalVIPDao {
         return jlst;
         
     }
-
-
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------

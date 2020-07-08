@@ -1,13 +1,9 @@
 package edu.ucla.mbi.imex.central.dao;
 
 /*==============================================================================
- * $HeadURL::                                                                  $
- * $Id::                                                                       $
- * Version: $Rev::                                                             $
- *==============================================================================
- *
- * IcStatsDao: entry statistics 
- *
+ *                                                                             $
+ * IcStatsDao: entry statistics                                                $
+ *                                                                             $
  *=========================================================================== */
 
 import org.apache.commons.logging.Log;
@@ -28,66 +24,57 @@ import edu.ucla.mbi.imex.central.*;
        
 public class IcStatsDao extends AbstractDAO {
 
-    //public IcStatsDao(){ super();}
-
-    //public IcStatsDao( SessionFactory sessionFactory ){
-    //    super( sessionFactory );
-    //}
-
     public static final Integer PARTNERID = new Integer( 15 ); // set as bean param
 
-
     public List<Object> getJournalYVCounts( Journal jrnl, 
-					    String year, String volume,
-					    int firstRecord,
-					    int blockSize ){
+                                            String year, String volume,
+                                            int firstRecord,
+                                            int blockSize ){
+        
+        List<Object> cntall = getJournalYVCounts( jrnl, year, volume );
 
-	List<Object> cntall = getJournalYVCounts( jrnl, year, volume );
-
-	// note: paging based on unique issue id count
-	//--------------------------------------------
-	
-	// make list of issue IDs
-
-	// 
-	
-	return null;
+        // note: paging based on unique issue id count
+        //--------------------------------------------
+        
+        // make list of issue IDs
+        
+        return null;
     }
     
     public List<Object> getJournalYVCounts( Journal jrnl, 
-					    String year, String volume ){
-
+                                            String year, String volume ){
+        
         String qStr = "select distinct p.issue, p.stage.id, p.state.id, " +
-	    " count( distinct p ) " + 
+            " count( distinct p ) " + 
             " from IcPub p where p.source.id = :jid" +
-	    " and  p.year = :yr and p.volume = :vo " +
-	    " group by p.issue, p.stage.id, p.state.id"
-	    + " order by p.issue";
-                
-	Log log = LogFactory.getLog( this.getClass() );
-	log.info( "getJournalYVCounts: :" + year + ": :" + volume + ":");
-	log.info(jrnl.getId());
-
+            " and  p.year = :yr and p.volume = :vo " +
+            " group by p.issue, p.stage.id, p.state.id"
+            + " order by p.issue";
+        
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "getJournalYVCounts: :" + year + ": :" + volume + ":");
+        log.info(jrnl.getId());
+        
         List<Object> clist = new ArrayList<Object>();
-	
+        
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
         try {            
             Query query = session.createQuery( qStr );
-
-	    query.setParameter( "jid", jrnl.getId() );
-	    query.setParameter( "yr", year );
-	    query.setParameter( "vo", volume );
-	    
+            
+            query.setParameter( "jid", jrnl.getId() );
+            query.setParameter( "yr", year );
+            query.setParameter( "vo", volume );
+            
             List  res = query.list();
             log.info("res: " + res.size());
             if( res.size()>0 ) {
                 for( Iterator i = res.iterator(); i.hasNext(); ) {
-
+                    
                     Object[] ir = (Object[]) i.next();
                     
-		    String issue = (String) ir[0];
+                    String issue = (String) ir[0];
                     Integer stageId = (Integer) ir[1];
                     Integer stateId = (Integer) ir[2];
                     Long count = (Long) ir[3]; 
@@ -98,71 +85,71 @@ public class IcStatsDao extends AbstractDAO {
                     IcDataState state = (IcDataState) 
                         super.find( IcDataState.class, stateId );
                     
-		    //log.info( "I: "+ issue +" StgID: " + stageId + " SteID: " + stateId 
-		    //          + " cnt: " + count + " issue: " + issue);
-
-		    List<Object> cnt = new ArrayList<Object>();
+                    //log.info( "I: "+ issue +" StgID: " + stageId + " SteID: " + stateId 
+                    //          + " cnt: " + count + " issue: " + issue);
                     
-		    String vissue = issue.replaceAll( "\\D", "" );
-		    int iissue = 0;
-		    if( vissue.length() >0 ){
-			iissue = Integer.parseInt( vissue );
-		    }
-		    
-		    cnt.add( issue);
-		    cnt.add( stage.getName());
+                    List<Object> cnt = new ArrayList<Object>();
+                    
+                    String vissue = issue.replaceAll( "\\D", "" );
+                    int iissue = 0;
+                    if( vissue.length() >0 ){
+                        iissue = Integer.parseInt( vissue );
+                    }
+                    
+                    cnt.add( issue);
+                    cnt.add( stage.getName());
                     cnt.add( state.getName());
                     cnt.add( count);
                     cnt.add( iissue );
-		    
-		    if( clist.size() == 0 ){
-			clist.add( cnt );
-		    } else{
-			if( iissue >= (int) ((List<Object>)clist.get( clist.size()-1 )).get(4) ){
-			    clist.add( cnt ); // as last
-			} else{
-			    if( iissue <= (int) ((List<Object>) clist.get(0)).get(4) ){
-				clist.add( 0, cnt ); // as first
-			    } else {
-				int min = 0;
-				int max = clist.size()-1;
-				//log.info(" min:" + min + " max:" + max );
-
-				int turns = 20; 
-				while( min < max  && turns >0){
-				    turns--;
-				    int mid = ( min+max ) / 2;
-				    int miss = (int) ((List<Object>) clist.get(mid)).get(4);
-				    //log.info("   mid:" + mid + " mis:" + miss);
-				    if( iissue <= miss ){
-					max = mid;
-				    } else {
-					min = mid;
-				    }
-
-				    if( max-min == 1){
-					int imin =  (int) ((List<Object>) clist.get(min)).get(4);
-					int imax =  (int) ((List<Object>) clist.get(max)).get(4);
-					if( iissue >= imin && iissue<= imax){
-					    min=max;
-					}
-				        //log.info("    min:" + min + " imin:" + imin + " max:" + max + " imax:" + imax + " IIS: " + iissue);
-				    }
-				    
-				    //log.info("   min:" + min + " max:" + max + " mid:" + mid + " mis:" + miss);
-				}
-				//log.info("   adding at:" + min + " total(pre): "+ clist.size());
-				clist.add( min, cnt ); // at min
-				//log.info("   added at:" + min + " total(post): "+ clist.size());
-				for( Iterator c = clist.iterator(); c.hasNext(); ) {
-				    List<Object> cc = (List<Object>)c.next();
-				    //log.info("       issue="+ cc.get(4));
-				}
-			    }
-			}
-		    }		   
+                    
+                    if( clist.size() == 0 ){
+                        clist.add( cnt );
+                    } else{
+                        if( iissue >= (int) ((List<Object>)clist.get( clist.size()-1 )).get(4) ){
+                            clist.add( cnt ); // as last
+                        } else{
+                            if( iissue <= (int) ((List<Object>) clist.get(0)).get(4) ){
+                                clist.add( 0, cnt ); // as first
+                            } else {
+                                int min = 0;
+                                int max = clist.size()-1;
+                                //log.info(" min:" + min + " max:" + max );
+                                
+                                int turns = 20; 
+                                while( min < max  && turns >0){
+                                    turns--;
+                                    int mid = ( min+max ) / 2;
+                                    int miss = (int) ((List<Object>) clist.get(mid)).get(4);
+                                    //log.info("   mid:" + mid + " mis:" + miss);
+                                    if( iissue <= miss ){
+                                        max = mid;
+                                    } else {
+                                        min = mid;
+                                    }
+                                    
+                                    if( max-min == 1){
+                                        int imin =  (int) ((List<Object>) clist.get(min)).get(4);
+                                        int imax =  (int) ((List<Object>) clist.get(max)).get(4);
+                                        if( iissue >= imin && iissue<= imax){
+                                            min=max;
+                                        }
+                                        //log.info("    min:" + min + " imin:" + imin + " max:" + max + " imax:" + imax + " IIS: " + iissue);
+                                    }
+                                    
+                                    //log.info("   min:" + min + " max:" + max + " mid:" + mid + " mis:" + miss);
+                                }
+                                //log.info("   adding at:" + min + " total(pre): "+ clist.size());
+                                clist.add( min, cnt ); // at min
+                                //log.info("   added at:" + min + " total(post): "+ clist.size());
+                                for( Iterator c = clist.iterator(); c.hasNext(); ) {
+                                    List<Object> cc = (List<Object>)c.next();
+                                    //log.info("       issue="+ cc.get(4));
+                                }
+                            }
+                        }
+                    }		   
                 }
-
+                
             } else {               
                 log.info( "IcStatsDao(getCountAll): no counts"  );
             }
@@ -174,18 +161,18 @@ public class IcStatsDao extends AbstractDAO {
             //HibernateUtil.closeSession();
             session.close();
         }
-
-	return clist;
-
+        
+        return clist;
+        
     }
-
+    
     public Map<DataState,Long> getCountAll() { 
         
         String qStr = "select p.state.id, count( distinct p ) " + 
             " from IcPub p group by p.state.id";
         
         Map<DataState,Long> resmap = new HashMap<DataState,Long>();
-
+        
         //Session session =
         //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
@@ -304,7 +291,7 @@ public class IcStatsDao extends AbstractDAO {
         //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
-
+        
         try {
             //startOperation();
             
@@ -376,8 +363,7 @@ public class IcStatsDao extends AbstractDAO {
       
             Query query = session.createQuery( qStr );
             query.setParameter( "pid", IcStatsDao.PARTNERID );
-
-            //XX 
+            
             List  res = query.list();
             
             if(res.size()>0) {
@@ -538,16 +524,16 @@ public class IcStatsDao extends AbstractDAO {
                 for( Iterator i = res.iterator(); i.hasNext(); ) {
                     Object[] ir = (Object[])i.next();
                     for(int j = 0; j < ir.length; j++ ) {
-                        System.out.print(" " + ir[j] );
+                        //System.out.print(" " + ir[j] );
                     }
-                    System.out.println("");
+                    //System.out.println("");
                 }
-                System.out.println("Size: " + res.size() + "res(0)=" + res.get(0) );
+                //System.out.println("Size: " + res.size() + "res(0)=" + res.get(0) );
             } else {
-                System.out.println("M/T");
+                //System.out.println("M/T");
             }
             tx.commit();
-            System.out.println("Session closed normally");
+            //System.out.println("Session closed normally");
             
         } catch ( HibernateException e ) {
             handleException( e );

@@ -32,10 +32,10 @@
  
 <!--  First Tab  -->
  <div id="tab1">
- <s:form theme="simple" action="groupedit" cssClass="align-label">
-  <s:hidden name="id" value="%{id}"/>
-  <s:hidden name="group.id" value="%{id}"/>
-  <s:hidden name="group.label" value="%{group.label}"/>
+  <s:form theme="simple" action="groupedit" cssClass="align-label">
+   <s:hidden name="id" value="%{id}"/>
+   <s:hidden name="group.id" value="%{id}"/>
+   <s:hidden name="group.label" value="%{group.label}"/>
     
   <fieldset>
   <legend><h3>Group Details</h3></legend>
@@ -103,11 +103,15 @@
     <s:textarea name="group.comments" value="%{group.comments}" cols="64" rows="4"/>
    </li>
        
-   <li><s:submit theme="simple" name="op.pup" value="Update"/></li>
+   <li>
+     <s:submit theme="simple" name="op.pup" value="Update"
+               onclick="return YAHOO.imex.groupedit.groupInfo('update');"/>
+   </li>
   </ul>
   </fieldset>
     </s:form>
     </div>
+    
 <!--  Second Tab  -->
     <div id="tab2">
      <s:form theme="simple" action="groupedit"  cssClass="align-label">
@@ -120,14 +124,16 @@
      <li>
      <fieldset>
       <legend>Current Roles</legend>
-      <li>
+      <li id="li-group-role">
       <s:iterator value="group.roles" var="r" status="rpos">
-       <s:checkbox name="opp.rdel" fieldValue="%{#r.id}"/>
-       <s:property value="#r.name"/>
+        <s:checkbox name="opp.rdel" fieldValue="%{#r.id}"
+                    cssClass="group-role-drop"/>
+        <s:property value="#r.name"/>
       </s:iterator>
       </li>
      <li>
-      <s:submit theme="simple" name="op.rdel" value="Drop"/>
+      <s:submit theme="simple" name="op.rdel" value="Drop"
+                onclick="return YAHOO.imex.groupedit.groupRole('drop');"/>     
      </li> 
      </fieldset>
      </li>
@@ -141,7 +147,8 @@
                 list="roleAll" listKey="id" listValue="name" />
       </li>
       <li>
-       <s:submit theme="simple" name="op.radd" value="Add"/>
+       <s:submit theme="simple" name="op.radd" value="Add"
+                 onclick="return YAHOO.imex.groupedit.groupRole('add');"/>     
       </li>
       </li> 
      </fieldset>
@@ -151,11 +158,23 @@
  </div>
 </div>
 <script>
-    var tabView = new YAHOO.widget.TabView("mgr-tabs");
+  // top-level tabs and content
+  //---------------------------
+   
+  YAHOO.util.Event.addListener( 
+    window, "load",
+    YAHOO.imex.groupedit.init, 
+    { gid:"<s:property value="id"/>",
+      tabName: "mgr-tabs",
+      login: "<s:property value="#session['LOGIN']"/>",
+      prefs: "<s:property value="#session['PREFS']"/>"
+    } 
+  );
+
 </script>
 
 <style>
-form#groupedit ul li {
-  list-style: none;
-}
+  form#groupedit ul li {
+    list-style: none;
+  }
 </style>

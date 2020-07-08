@@ -3,15 +3,11 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
-<!-- ========================================================================
- ! $HeadURL::                                                               $
- ! $Id::                                                                    $
- ! Version: $Rev::                                                          $
- !===========================================================================
- !
- ! IMEx Central: tiles configuration
- !
- !======================================================================= -->
+<!-- ===========================================================================
+ !                                                                             $
+ ! IMEx Central: tiles configuration                                           $
+ !                                                                             $
+ !========================================================================== -->
 
 <tiles-definitions>
 
@@ -193,6 +189,13 @@
  </definition>
 
  <definition name="pub-status-popup" template="/tiles/pubstatus.jsp">
+ </definition>
+
+ <definition name="pubadd" template="/tiles/layout.jsp">
+  <put-attribute name="title" value="ImexCentral: Add Publication" />
+  <put-attribute name="body" value="/tiles/pubadd-yui.jsp"/>
+  <put-attribute name="mdf" value="/tiles/pubadd-yui.jsp"/>
+  <put-attribute name="footer" type="definition" value="footer"/>
  </definition>
 
  <definition name="pubnew" template="/tiles/layout.jsp">

@@ -755,7 +755,16 @@ th.int, td.int {
   font-family: sans-serif;
   background-color: #ffffff;
 }
- 
+
+.reg-submit {
+  border: 1px solid #444444;
+  margin:  15px 0 100px 0;
+  padding: 15px;
+  font-family: sans-serif;
+  background-color: #eeeeee;
+}
+
+
 img.main {
   border: 1px solid #444444;
 }
@@ -1475,7 +1484,7 @@ td.footer {
   background-color: #ffdddd;
   color: #dd0000;
   text-align: center;
-  font-size: 1.8em;
+  font-size: 1.5em;
   margin: 2em 5em 0 5em;
   padding: 2em;
 }

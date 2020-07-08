@@ -358,8 +358,9 @@ YAHOO.imex.attedit = {
     },
 
     attachUpdate: function( o ) {
+        return;                                    
         try{
-            var edit = YAHOO.imex.attedit;
+            var edit = YAHOO.imex.attedit;            
             var aclass = o.argument.aclass;
             var dtb = edit.conf[o.argument.aclass].comTable;
             

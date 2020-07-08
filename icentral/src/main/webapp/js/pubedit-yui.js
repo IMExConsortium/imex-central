@@ -367,9 +367,11 @@ YAHOO.imex.pubedit = {
            
                 if( sCode > 0){                    
                     // pop up error modal                    
-                    YAHOO.mbi.modal.exception( sCode, sMessage );                         
+                    YAHOO.mbi.modal.exception( sCode, sMessage );
+                } else {
+                  // pop up update successful
+                    YAHOO.mbi.modal.success( sCode, sMessage );
                 }
-                
             }
         } catch(x) {
             alert("AJAX Error: " + x );
@@ -379,22 +381,6 @@ YAHOO.imex.pubedit = {
     identUpdateFail: function ( o ) {
         alert( "AJAX Error update failed: id=" + o.argument.id ); 
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     pubmedUpdate: function ( o ) {
         try {

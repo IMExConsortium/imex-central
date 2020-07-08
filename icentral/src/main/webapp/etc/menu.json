@@ -40,10 +40,10 @@
             }]
          },
          {label:"Add",
-          link:"pubnew",
+          link:"pubadd",
           "disabled":"false",
           menu:[{label:"Publication",
-             link:"pubnew",
+             link:"pubadd",
              "disabled":"false",
              menu:[]
             },

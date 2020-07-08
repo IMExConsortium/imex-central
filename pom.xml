@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+  
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>3.1.0rc12</version>
+  <version>3.1.0rc17</version>
   <name>IMEx Central</name>
   <url>https://github.com/IMExConsortium</url>
 
@@ -14,31 +16,24 @@
     <project.timestamp>${maven.build.timestamp}</project.timestamp>
     <reportDir>${env.PWD}</reportDir>
 
-    <dip-util.version>2.0.0</dip-util.version>
+    <dip-util.version>3.0.0</dip-util.version>
     <dip-proxy.version>1.0.0</dip-proxy.version>
 
-    <spring.version>5.1.0.RELEASE</spring.version>
-    <aspectj.version>1.9.1</aspectj.version>
-
-    <!--
-     <spring.version>4.3.11.RELEASE</spring.version> 
-     <aspectj.version>1.8.13</aspectj.version>
-     -->
+    <spring.version>5.2.3.RELEASE</spring.version>
+    <aspectj.version>1.9.5</aspectj.version>
 
     <postgresql.version>42.2.5</postgresql.version>
     <recaptcha4j.version>0.0.8</recaptcha4j.version>
 
     <elasticsearch.version>6.0.1</elasticsearch.version>
 
-    <cxf.version>3.2.0</cxf.version> 
-    <jaxws-rt.version>2.3.0</jaxws-rt.version>
-
+    <cxf.version>3.3.5</cxf.version>
+    <jaxws-rt.version>2.3.3-b01</jaxws-rt.version>
     <email.version>1.6.1</email.version>
-
     <commons-logging.version>1.2</commons-logging.version> 
-    <log4j.version>2.9.1</log4j.version> 
-
-    <junit.version>4.12</junit.version> 
+    <log4j.version>2.13.1</log4j.version> 
+    <junit.version>4.12</junit.version>
+    
   </properties>
 
   <organization>
@@ -116,7 +111,7 @@
    <dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
-    <version>4.12</version>
+    <version>${junit.version}</version>
     <scope>test</scope>
    </dependency>
 
@@ -126,6 +121,18 @@
     <version>${log4j.version}</version>
    </dependency>
 
+   <dependency>
+     <groupId>org.apache.logging.log4j</groupId>
+     <artifactId>log4j-jcl</artifactId>
+     <version>${log4j.version}</version>
+   </dependency>
+
+   <dependency>
+     <groupId>org.apache.logging.log4j</groupId>
+     <artifactId>log4j-web</artifactId>
+     <version>${log4j.version}</version>
+   </dependency>
+   
    <dependency>
     <groupId>commons-logging</groupId>
     <artifactId>commons-logging</artifactId>

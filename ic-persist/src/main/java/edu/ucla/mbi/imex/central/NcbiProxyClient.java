@@ -38,14 +38,14 @@ public class NcbiProxyClient {
     private NcbiProxyPort port;
     
     private edu.ucla.mbi.dxf14.ObjectFactory
-	dxo = new edu.ucla.mbi.dxf14.ObjectFactory();
+        dxo = new edu.ucla.mbi.dxf14.ObjectFactory();
+    
+    private edu.ucla.mbi.proxy.ncbi.ObjectFactory
+        pxo = new edu.ucla.mbi.proxy.ncbi.ObjectFactory();
     
     public NcbiProxyClient() {
-	Log log = LogFactory.getLog( this.getClass() );
-	log.info( "NcbiProxyClient: creating client" );
-        
-        //NcbiProxyService service = new NcbiProxyService();
-        //port = service.getProxyPort();
+        Log log = LogFactory.getLog( this.getClass() );
+        log.info( "NcbiProxyClient: creating client" );
     }
 
     //---------------------------------------------------------------------
@@ -79,33 +79,33 @@ public class NcbiProxyClient {
         NcbiProxyService service = null;
         
         Log log = LogFactory.getLog( this.getClass() );
-	log.info( "NcbiSoapDbService: initialize");
+        log.info( "NcbiSoapDbService: initialize");
         log.info( "NcbiSoapDbService: endpoint=" + endpoint);
-
-	System.out.println("pNcbiSoapDbService: initialize");
-	System.out.println("NcbiSoapDbService: endpoint=>" + endpoint + "<");
-	
+        
+        System.out.println("pNcbiSoapDbService: initialize");
+        System.out.println("NcbiSoapDbService: endpoint=>" + endpoint + "<");
+        
         if ( endpoint == null ||  endpoint.length() == 0 ){
             log.info( "NcbiSoapDbService: default endpoint" );
             service = new NcbiProxyService();
             port = service.getProxyPort();
-	    System.out.println("NcbiSoapDbService: port=" + port);
+            System.out.println("NcbiSoapDbService: port=" + port);
         } else {
             
             try {
                 URL url = new URL( endpoint + "?wsdl" );
                 QName qn = new QName("http://mbi.ucla.edu/proxy/ncbi",
                                      "NcbiProxyService");
-		System.out.println("NcbiSoapDbService: url =" + url);
-
+                System.out.println("NcbiSoapDbService: url =" + url);
+                
                 service = new NcbiProxyService( url, qn );           
-		System.out.println("NcbiSoapDbService: service=" + service);
+                System.out.println("NcbiSoapDbService: service=" + service);
                 port = service.getProxyPort();
                 ( (BindingProvider) port ).getRequestContext()
                     .put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                           endpoint );   
-
-		System.out.println("NcbiSoapDbService (D): port=" + port);
+                
+                System.out.println("NcbiSoapDbService (D): port=" + port);
             } catch ( Exception ex ) {
                 log.info( "NcbiSoapDbService: cannot initialize");
             }
@@ -124,55 +124,58 @@ public class NcbiProxyClient {
     public Publication getPublicationByPmid( String pmid ) 
         throws ClientException{
         
-	Log log = LogFactory.getLog( this.getClass() );
+        Log log = LogFactory.getLog( this.getClass() );
         log.info( "NcbiProxyClient: getPublicationByPmid: " + 
                   " pmid= " + pmid );
 
-        Holder<DatasetType> resDataset = new  Holder<DatasetType>();
-        Holder<String> resNative = new  Holder<String>();
-        Holder<XMLGregorianCalendar> timestamp =
-            new Holder<XMLGregorianCalendar>();
+        //Holder<DatasetType> resDataset = new  Holder<DatasetType>();
+        //Holder<String> resNative = new  Holder<String>();
+        //Holder<XMLGregorianCalendar> timestamp =
+        //    new Holder<XMLGregorianCalendar>();
+
+        GetPubmedArticle gpaReq = pxo.createGetPubmedArticle();
+        gpaReq.setNs( "pmid" );
+        gpaReq.setAc( pmid );
+        gpaReq.setMatch( "exact" );
+        gpaReq.setDetail( "full" );
+        gpaReq.setFormat( "dxf" );
+                     
+        edu.ucla.mbi.proxy.ncbi.Result result = null;
         
         try {        
 	   
-	    System.out.println("NcbiProxyClient: (A) port=" + port);
-            System.out.println("NcbiProxyClient: (A) pmid=" + pmid);
-            
-            port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
-                                   0, timestamp, resDataset, resNative );
+            log.info( "NcbiProxyClient: (A) port=" + port );
+            log.info( "NcbiProxyClient: (A) pmid=" + pmid );
+
+            result = port.getPubmedArticle( gpaReq );
+            log.info( "NcbiProxyClient: (A) result=" + result );
         } catch ( Exception  ex ){
-            log.info( "NcbProxyClient: getPublicationByPmid(ex): " + ex );
-            System.out.println( "NcbProxyClient: getPublicationByPmid(ex): " + ex );
+            log.info( "NcbProxyClient: getPublicationByPmid(ex): " + ex );            
             if( debug ){
                 ex.printStackTrace();
             }
 
-	    // reinitialize on the first error
-
-	    try {
-		log.info( "NcbiSoap: reinitializing dip-proxy connection");
-		System.out.println("NcbiSoap: reinitializing dip-proxy connection");
-		initialize();
-
-		System.out.println("NcbiProxyClient: (B) port=" + port);
-		port.getPubmedArticle( "pmid", pmid, "", "full", "dxf", "",
-				       0, timestamp, resDataset, resNative );
-		System.out.println("NcbiProxyClient: (B) resDataset=" + resDataset);
-                System.out.println("NcbiProxyClient: (B) resDataset.value=" + resDataset.value);
+            // reinitialize on the first error
+            
+            try {
+                log.info( "NcbiSoap: reinitializing dip-proxy connection");                
+                initialize();
                 
-	    } catch ( Exception ex2 ){
-		log.info( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);
-		System.out.println( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);
-		if( debug ){
-		    ex2.printStackTrace();
-		}
-		throw ClientException.NCBI_PROXY_FAULT;
-	    }
-        } 
-
-	System.out.println("NcbiProxyClient: (C) port=" + port);
+                log.info("NcbiProxyClient: (B) port=" + port);
+                result = port.getPubmedArticle( gpaReq );
+                
+            } catch ( Exception ex2 ){
+                log.info( "NcbProxyClient: getPublicationByPmid(ex2): " + ex2);                
+                if( debug ){
+                    ex2.printStackTrace();
+                }
+                throw ClientException.NCBI_PROXY_FAULT;
+            }
+        }         
         
-	/*
+        System.out.println("NcbiProxyClient: (C) port=" + port);
+        
+        /*
          catch ( Exception ex3 ) {
             log.info( "NcbiProxyClient: getPublicationByPmid(ex3): " + ex3 );
             if( debug ){
@@ -183,18 +186,21 @@ public class NcbiProxyClient {
         }
         */
         
-        DatasetType dataset = resDataset.value;
-        NodeType nodeT = null;
+        //DatasetType dataset = resDataset.value;
 
+        DatasetType dataset = null;
+        if( result != null){
+            dataset = result.getDataset();
+        }
+        NodeType nodeT = null;
         
-	System.out.println( resDataset );
-	System.out.println("NcbiProxyClient: resDataset=" + resDataset);
-	System.out.println("NcbiProxyClient: dataset=" + dataset);
-	
+        log.info("NcbiProxyClient: result=" + result);
+        log.info("NcbiProxyClient: dataset=" + dataset);
+        
         if( dataset != null && dataset.getNode() != null &&
             dataset.getNode().size() == 1 ) {
             nodeT = dataset.getNode().get( 0 );
-
+            
             if ( debug ) {
                 try{
                     edu.ucla.mbi.dxf14.ObjectFactory
@@ -371,35 +377,56 @@ public class NcbiProxyClient {
     public Journal getJournalByNlmid( String nlmid ) 
         throws ClientException{
         
-	Log log = LogFactory.getLog( this.getClass() );
+        Log log = LogFactory.getLog( this.getClass() );
         log.info( "NcbiProxyClient: getJournalByNlmid: nlmid= " + nlmid );
         
-        Holder<DatasetType> jDT = new  Holder<DatasetType>();
-        Holder<String> jNative = new  Holder<String>();
-        Holder<XMLGregorianCalendar> jTime =
-            new Holder<XMLGregorianCalendar>();
+        //Holder<DatasetType> jDT = new  Holder<DatasetType>();
+        //Holder<String> jNative = new  Holder<String>();
+        //Holder<XMLGregorianCalendar> jTime =
+        //    new Holder<XMLGregorianCalendar>();
         
-        try {
-            port.getJournal( "nlm", nlmid, "", "full", "dxf", "",
-                             0, jTime, jDT, jNative );
+        edu.ucla.mbi.proxy.ncbi.GetJournal gjReq = pxo.createGetJournal();
+        gjReq.setNs( "nlmid" );
+        gjReq.setAc( nlmid );
+        gjReq.setMatch( "exact" );
+        gjReq.setDetail( "full" );
+        gjReq.setFormat( "dxf" );
+
+        //<xs:element name="ns" type="xs:string" default="nlmid" />
+        //<xs:element name="ac" type="xs:string"/>
+        //<xs:element name="match" type="xs:string" default="exact"/>
+        //<xs:element name="detail" type="xs:string" default="stub" />
+        //<xs:element name="format" type="xs:string" default="dxf"  />
+        //<xs:element name="client" type="xs:string" default="" minOccurs="0" />
+        //<xs:element name="depth" type="xs:int" default="0" minOccurs="0" />
+        
+        edu.ucla.mbi.proxy.ncbi.Result result = null; 
+        
+        try {   
+            result = port.getJournal( gjReq );
         } catch ( ProxyFault f ){
             log.info( "NcbiSoap: getDxfRefList: " + f );
-           if( debug ){
+            if( debug ){
                 f.printStackTrace();
             }
-           throw ClientException.NCBI_PROXY_FAULT;
+            throw ClientException.NCBI_PROXY_FAULT;
         } catch ( Exception ex ) {
             log.info( "NcbiSoap: getDxfRefList: " + ex );
-           if( debug ){
+            if( debug ){
                 ex.printStackTrace();
             }
-           
+            
             throw ClientException.CLIENT_EXCEPTION;
         }
-
-        Journal newJrnl = null;
         
-        DatasetType jDataset = jDT.value;
+        Journal newJrnl = null;
+
+        DatasetType jDataset = null;
+
+        if( result != null ){
+            jDataset = result.getDataset();
+        }
+        
         NodeType jT = null;
         if( jDataset != null && jDataset.getNode() != null &&
             jDataset.getNode().size() == 1 ) {

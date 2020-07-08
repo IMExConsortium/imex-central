@@ -652,7 +652,9 @@ public class EntryManager {
     public IcPub updateIcPubIdentifiers( IcPub pub, User luser, 
                                          Publication npub ) 
         throws EntryException{
-        
+
+        Log log = LogFactory.getLog( this.getClass() );
+                
         if( pub != null && npub != null && luser != null) {
             pub.setDoi( npub.getDoi() );
 
@@ -679,24 +681,40 @@ public class EntryManager {
                 }
             }
 
-            // test if pmid already there !!!!
-            
-            if ( npmid != null && npmid.length() > 0 &&
-                 getIcPubByNsAc( "pmid", npmid ) != null &&
-                 getIcPubByNsAc( "pmid", npmid ).getId() == pub.getId() ){
+            // test if pmid already there 
 
-                // duplicated pmid                
+            try{
+                
+                IcPub ictest = getIcPubByNsAc( "pmid", npmid );
+                                                       
+                if ( npmid != null && npmid.length() > 0 &&
+                     ictest != null &&
+                     ! ictest.getId().equals( pub.getId()) ){  
+                    
+                    // duplicated pmid                
+                    throw EntryException.DUP_PMID;
+                }
+            } catch (Exception ex){
                 throw EntryException.DUP_PMID;
             }
 
-            if ( ndoi != null && ndoi.length() > 0 &&
-                 getIcPubByNsAc( "doi", ndoi ) != null &&
-                 getIcPubByNsAc( "doi", ndoi ).getId() == pub.getId() ){
+            // test if doi already there
+            
+            try{
                 
-                // duplicated doi
-                throw EntryException.DUP_DOI;
+                IcPub ictest = getIcPubByNsAc( "doi", ndoi );
+                
+                if ( ndoi != null && ndoi.length() > 0 &&
+                     ictest != null &&
+                     ! ictest.getId().equals( pub.getId()) ){
+                
+                    // duplicated doi
+                    throw EntryException.DUP_DOI;
+                }
+            } catch (Exception ex){
+                    throw EntryException.DUP_DOI;                    
             }
-
+            
             pub.setPmid( npub.getPmid() );
             pub.setJournalSpecific( npub.getJournalSpecific() );
             this.updateIcPubProps( pub, luser );

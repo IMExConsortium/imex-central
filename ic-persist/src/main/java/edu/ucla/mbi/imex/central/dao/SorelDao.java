@@ -1,13 +1,9 @@
 package edu.ucla.mbi.imex.central.dao;
 
 /*==============================================================================
- * $HeadURL::                                                                  $
- * $Id::                                                                       $
- * Version: $Rev::                                                             $
- *==============================================================================
- *
- * SorelDao: Access to subject-object relationship data
- *
+ *                                                                             $
+ * SorelDao: Access to subject-object relationship data                        $
+ *                                                                             $
  *=========================================================================== */
 
 import org.apache.commons.logging.Log;
@@ -28,12 +24,6 @@ import edu.ucla.mbi.imex.central.*;
 import edu.ucla.mbi.imex.central.dao.*;
 
 public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
-
-    //public SorelDao(){super();}
-
-    //public SorelDao( SessionFactory sessionFactory ){
-    //    super( sessionFactory );
-    //}
     
     public void addSORel( DataItem subject, User observer ){
 
@@ -75,8 +65,6 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
         log.debug( "getWatchStatus(HQL) uid=" + subject.getId()
                    + " sid=" + observer.getId() );
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
@@ -116,11 +104,9 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getObserverList(HQL) id=" + subject.getId() );
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
-
+        
         List<User> olst = null;
 
         try {
@@ -142,8 +128,6 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
             session.close();
         }
         
-        System.out.println("olist"+olst);
-
         return olst;
     }
 
@@ -154,19 +138,17 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getSubjectList(HQL) id=" + observer.getId()  );
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         List<DataItem> slst = null;
-
+        
         try {
             Query query =
                 session.createQuery( "select sor.subject "
                                      + " from SORel as sor where "
                                      + " sor.observer = :observer " );
-
+            
             query.setParameter( "observer", observer );
             
             slst = (List<DataItem>) query.list();
@@ -192,8 +174,6 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getSubjectList(crit) id=" + observer.getId() );
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
@@ -273,8 +253,6 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
         Log log = LogFactory.getLog( this.getClass() );
         log.debug( "getSubjectList(crit) id=" + observer.getId() );
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
@@ -358,8 +336,6 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
 
         long count = 0;
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         
@@ -395,8 +371,6 @@ public class SorelDao extends AbstractDAO { //implements ObsMgrDao {
 
         long count = 0;
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         

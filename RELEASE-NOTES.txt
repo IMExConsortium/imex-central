@@ -1,9 +1,34 @@
->Imex Central: RELEASE-NOTES
----------------------------
+Imex Central: RELEASE-NOTES
+----------------------------
 
-$HeadURL$
-$Id$ 
+2020/04/11 (ImexCentral v3.1.0rc17)
+    - GUI fixes/ugrades:
+        - roles/groups lists sorted on Name field
+        - admin GUI fixes (useredit, groupedit)
+        
+2020/04/04 (ImexCentral v3.1.0rc16)
+    - ACL enforcement fixes
+    - GUI fixes/ugrades:
+        - publication editor comment submission fix
+        - tab counts fix
+        - sort on imex accession fix 
+        
+2020/03/19 (ImexCentral v3.1.0rc15)
+    - GUI fixes/ugrades:
+        - account creation and feedback form protected
+          with google recaptcha v2  
+        
+2020/03/15 (ImexCentral v3.1.0rc14)
+    - completed web services migration to Apache CXF
 
+2020/02/13
+   - GUI fixes:
+    - fixed duplicated pmid/doi guard/GUI notification
+    - comment/log lists are ordered now by creation time
+
+2020/01/22  (ImexCentral v3.1.0rc13)
+    - openJDK11/tomcat9 port
+        
 2019/07/28  (ImexCentral v3.1.0rc12)
     - web service update:
         - access to txt/data (ie text) attachments added
@@ -79,7 +104,7 @@ $Id$
     - bumped up version to 3.1.0 (to denote ES-based indexing)
 
 2018/04/13
-   - web service (v2.00) upgrads:
+   - web service (v2.00) upgrades:
         - updatePublicationStatus method can set, both, stage and status
           by passing <stage>/<status> (eg 'PREQUEUE/NEW') as status argument
 

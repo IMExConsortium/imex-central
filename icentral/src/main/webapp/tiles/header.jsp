@@ -24,7 +24,7 @@
          <s:if test='#mpos.count==menuSel[0]'>
           <td class="menu1select" nowrap>
            <a <s:if test="disabled == 'false'">onMouseOver="this.className='mmMON'" onMouseOut="this.className='mmMOFF'"
-              class="topmenulinkon" HREF="<s:property value='[0].link' />"</s:if>
+              class="topmenulinkon" HREF="<s:property value='link' />"</s:if>
               <s:else>class="topmenulinkon disabled"</s:else>>
             <s:property value="label"/>
            </a>
@@ -33,9 +33,9 @@
          <s:else>
           <td class="menu1" nowrap>      
            <a <s:if test="disabled == 'false'">onMouseOver="this.className='MON'" onMouseOut="this.className='MOFF'"
-              class="topmenulink" HREF="<s:property value='[0].link' />"</s:if>
+              class="topmenulink" HREF="<s:property value='link' />"</s:if>
               <s:else>class="topmenulink disabled"</s:else>>
-            <s:property value="[0].label" />
+            <s:property value="label" />
            </a>
           </td>
          </s:else>  

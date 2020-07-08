@@ -1,8 +1,8 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="t" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-<s:if test="reCaptchaActive">
- <script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+<s:if test="captcha != null and captcha.active">
+ <script src="${icentral.recaptcha.apiURL}" async defer></script>
 </s:if>
 
 <h1>Contact Us</h1>
@@ -17,7 +17,8 @@
  </tr>
  <tr>
   <td colspan="1" align="center">
-   <s:form action="feedback" theme ="simple">
+   <s:form id="feedback" action="feedback" theme ="simple">
+    <s:hidden name="captchaResponse" value=""/>
     <table width="96%">
      <tr>
       <th width="10%"  align="right">Subject</th>
@@ -52,14 +53,19 @@
        </td>
       </tr>
       <tr>
-       <td>&nbsp;</td>
+        <td colspan="2"><br/></td>
+      </tr>
+
+      <s:if test="captcha != null and captcha.active">
+      <tr>
+       <th align="right" valign="middle">
+         Robot<br/>Test
+       </th>
        <td align="left">
         <table cellpadding="0" cellspacing="0" >
          <tr>
-          <th align="left" class="tcell">
-           <br/>
-           Type Both Words Below<br/>
-           <s:if test="hasActionErrors()">
+          <s:if test="hasActionErrors()">
+          <th align="left" class="tcell">                     
             <div id="errorDiv" style="padding-left: 10px; margin-bottom: 5px">
              <span class="error">
               <s:iterator value="actionErrors">
@@ -67,34 +73,24 @@
              </s:iterator>
              </span>
             </div>
-           </s:if>
           </th>
+          </s:if>
          </tr>
-   <s:if test="reCaptchaActive">
          <tr>
-          <td align="left">
-           <script type="text/javascript"
-             src="${icentral.recaptcha.recaptchaServer}/challenge?k=${icentral.recaptcha.publicKey}">             
-           </script>
-           <noscript>
-            <iframe src="${icentral.recaptcha.recaptchaServer}/noscript?k=${icentral.recaptcha.publicKey}"
-                height="300" width="500" frameborder="0">
-            </iframe><br/>
-            <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-            <input type='hidden' name='recaptcha_response_field' value='manual_challenge' />
-           </noscript>
+          <td align="left" valign="middle">
+            <div class="g-recaptcha" data-sitekey="${icentral.recaptcha.publicKey}"></div>
           </td>
          </tr>
-   </s:if>
         </table>
        </td>
       </tr>
-
-
+      </s:if>       
      </s:if>
      <tr>
       <td align="left" colspan="2">
-       <s:submit name="submit" value="Submit" />
+       <s:submit name="submit"
+                 value="Submit"
+                 onclick="YAHOO.util.Dom.get('feedback_captchaResponse').value = grecaptcha.getResponse()"/>
       </td>
      </tr>
     </table>

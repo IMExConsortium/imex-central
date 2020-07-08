@@ -108,11 +108,11 @@
     <Logger name="edu.ucla.mbi.imex.central.EntryManager" level="info" additivity="false">  
       <AppenderRef ref="RollingFile"/> 
     </Logger>
-    
+                  
     <Logger name="edu.ucla.mbi.util.struts.AclValidator" level="debug" additivity="false">  
       <AppenderRef ref="STDOUT"/> 
     </Logger>
-    
+
     <Logger name="edu.ucla.mbi.util.interceptor.AclInterceptor" level="debug" additivity="false">  
       <AppenderRef ref="STDOUT"/> 
     </Logger>

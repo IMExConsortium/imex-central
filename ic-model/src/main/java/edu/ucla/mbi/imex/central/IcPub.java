@@ -191,7 +191,18 @@ public class IcPub extends PublicationVIP {
         return modUser;
     }
 
-
+    public String toString(){
+        StringBuffer sbuff = new StringBuffer( "IcPub:" );
+        sbuff.append( " id=" );
+        sbuff.append( this.getId() );
+        sbuff.append( " pmid=" );
+        sbuff.append( this.getPmid() );
+        sbuff.append( " doi=" );
+        sbuff.append( this.getDoi() );
+        
+        return sbuff.toString();            
+    }
+    
     //--------------------------------------------------------------------------
 
     private String getDateStr( GregorianCalendar date) {

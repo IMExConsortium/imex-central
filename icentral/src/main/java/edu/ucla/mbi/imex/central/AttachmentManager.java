@@ -1,12 +1,9 @@
 package edu.ucla.mbi.imex.central;
 
 /* =============================================================================
- # $Id::                                                                       $
- # Version: $Rev::                                                             $
- #==============================================================================
- #
- # AttachmentManager - business logic of attachments (log, comments) management 
- #                 
+ #                                                                             $
+ # AttachmentManager - business logic of attachment (log, comments) management $
+ #                                                                             $
  #=========================================================================== */
 
 import org.apache.commons.logging.Log;

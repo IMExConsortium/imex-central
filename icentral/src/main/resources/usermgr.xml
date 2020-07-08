@@ -5,11 +5,8 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <!-- =======================================================================
- # $Id::                                                                   $
- # Version: $Rev::                                                         $
- #==========================================================================
  #                                                                         $
- # struts2: jqdip package configuration                                    $
+ # struts2: usermgr configuration                                          $
  #                                                                         $
  #====================================================================== -->
                                                                            
@@ -94,7 +91,7 @@
          ^groupList\[\d+\]\.label,
          ^groupList\[\d+\]\.name,
          ^totalRecords,
-	 ^firstRecord,
+	     ^firstRecord,
          ^blockSize
         </param>
      </result>
@@ -109,7 +106,24 @@
      <result name="success" type="tiles">groupmgr</result>
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
-     <result name="input" type="tiles">groupmgr</result>  
+     <result name="input" type="tiles">groupmgr</result>
+
+     <result name="json" type="json">
+        <param name="ignoreHierarchy">false</param>
+        <param name="noCache">true</param>
+        <param name="includeProperties">
+         ^group\.id,
+         ^group\.label,
+         ^group\.name,
+         ^group\.comments,
+         ^group\.roles\[\d+\]\.id,
+         ^group\.roles\[\d+\]\.name         
+        </param>
+     </result>
+
+
+
+     
    </action>
 
   <!-- role management -->   
@@ -171,7 +185,7 @@
          ^userList\[\d+\]\.affiliation,
          ^userList\[\d+\]\.email,
          ^totalRecords,
-	 ^firstRecord,
+	     ^firstRecord,
          ^blockSize
        </param>
      </result>
@@ -182,7 +196,10 @@
         <param name="noCache">true</param>
 
         <param name="includeProperties">
-          ^user*,^id,^op*
+          ^user.*,
+          ^id,
+          ^op.*,
+          
        </param>
 
      </result>
@@ -198,7 +215,26 @@
      <result name="success" type="tiles">usermgr</result>     
      <result name="acl_page" type="tiles">aclpageerror</result>
      <result name="acl_oper" type="tiles">acloperror</result>
-     <result name="input" type="tiles">usermgr</result>     
+     <result name="input" type="tiles">usermgr</result>
+     <result name="json" type="json">
+       <param name="ignoreHierarchy">false</param>       
+       <param name="includeProperties">
+         ^id,
+         ^user\.login,
+         ^user\.firstName,
+         ^user\.lastName,
+         ^user\.affiliation,
+         ^user\.email,
+         ^user\.roles\[\d+\]\.id,
+         ^user\.roles\[\d+\]\.name,
+         ^user\.groups\[\d+\]\.id,
+         ^user\.groups\[\d+\]\.name,
+         ^user\.activated,
+         ^user\.enabled         
+        </param>
+        <param name="noCache">true</param>     
+     </result>
+     
    </action>
 
 

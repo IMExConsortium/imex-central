@@ -1,9 +1,6 @@
 package edu.ucla.mbi.imex.central.struts.action;
 
 /* =============================================================================
- * $Id::                                                                       $
- * Version: $Rev::                                                             $
- *==============================================================================
  *
  * EntrySearchAction - Action supporting entry searches
  *

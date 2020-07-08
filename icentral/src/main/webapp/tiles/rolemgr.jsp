@@ -63,9 +63,13 @@
    <script type="text/javascript">
  
         var columnDefinitions = [
-            {key:"id", label:"Id",  sortable:true, resizeable:true},
-            {key:"name",label:"Name", sortable:true, resizeable:true},
-            {key:"Details", sortable:true, resizeable:true, formatter:"roleDetails"}
+            {key:"id", label:"Id", menuLabel:"Group Id",
+                 sortable:true, resizeable:true, hidden: true, hideable: true},
+            {key:"name",label:"Name", trigger: true,
+                 sortable:true, resizeable:true, hidden: false, hideable: false},
+            {key:"Details", trigger: true, 
+                 sortable:true, resizeable:true, hidden: false, hideable: false,
+                 formatter:"roleDetails"}
            ];
         
         var dataSourceLink = "rolemgr?op.view=json&";
@@ -81,7 +85,7 @@
         }; 
         var container = "rolemgr-table";
         
-        YAHOO.imex.usermgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);        
+        YAHOO.imex.rolemgr.init(columnDefinitions, dataSourceLink, datasourceSchema, container);        
    </script>
   </div>
  </div>

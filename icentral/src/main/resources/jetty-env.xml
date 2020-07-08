@@ -19,7 +19,7 @@
     <Set name="User">dip</Set>
     <Set name="Password">444dip444</Set>
     <Set name="DatabaseName">icentral_v21</Set>
-    <Set name="ServerName">10.1.2.212</Set>
+    <Set name="ServerName">10.1.5.7</Set>
     <Set name="PortNumber">5432</Set>
     <Set name="maxConnections">10</Set>
    </New>

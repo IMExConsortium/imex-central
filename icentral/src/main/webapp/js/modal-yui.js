@@ -51,6 +51,13 @@ YAHOO.mbi.modal = {
         YAHOO.mbi.modal.show({ mtitle: 'Exception', title: title, url: url } );
     },
 
+    success: function( code, message ) {
+        
+        var title = "Success";
+        var url = "page?ret=body&id=success";
+        YAHOO.mbi.modal.show({ mtitle: 'Success', title: title, url: url, destroy: true } );
+    },
+
 
     adataView:function( arg ){
         var rid = arg.rid;
@@ -491,12 +498,13 @@ YAHOO.mbi.modal = {
         var title = arg.title;
         var mtitle = arg.mtitle === undefined ? title : arg.mtitle; 
         var id = arg.id;
-
+                
         if ( YAHOO.mbi.modal.my  == null  
              || YAHOO.mbi.modal.my.panel == null ) {
                  
                  YAHOO.mbi.modal.my = {};
-        
+                 YAHOO.mbi.modal.my.dbutt = arg.destroy;
+                 
                  var hp = document.createElement('div');
                  document.body.appendChild(hp);
                  hp.id="modal-panel";
@@ -580,6 +588,13 @@ YAHOO.mbi.modal = {
             if( arg.title !== undefined && arg.title.length > 0 ){
                 body = '<h2>' + arg.title + '</h2><hr/>' + arg.body;
             }
+
+            if( YAHOO.mbi.modal.my.dbutt ){
+            body = body + '<br\><br\><hr\><br\>\n';
+            body = body + '<center>\n';
+            body = body + '<input type="submit" value="OK" id="destroy" name="destroy" onclick="return YAHOO.mbi.modal.my.panel.destroy();"/>\n';
+            body = body + '</center>\n';
+            }
             YAHOO.mbi.modal.my.panel.setBody( body );
             
         } else {
@@ -597,7 +612,15 @@ YAHOO.mbi.modal = {
         if ( o.argument.title !== undefined && o.argument.title.length > 0 ){
             body = '<h2>' + o.argument.title + 
                 '</h2><hr/>' + body;               
-        } 
+        }
+
+        if( YAHOO.mbi.modal.my.dbutt ){
+            body = body + '<br\><br\><hr\><br\>\n';
+            body = body + '<center>\n';
+            body = body + '<input type="submit" value="OK" id="destroy" name="destroy" onclick="return YAHOO.mbi.modal.my.panel.destroy();"/>\n';
+            body = body + '</center>\n';
+        }
+
         YAHOO.mbi.modal.my.panel.setBody( body );               
     }
 };

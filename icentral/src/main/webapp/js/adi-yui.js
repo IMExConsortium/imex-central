@@ -11,7 +11,9 @@ YAHOO.imex.adi = {
         mys.setFormatters();
 
         var adid = obj.adid; 
+
         
+        mys.conf.tabs = YAHOO.imex.pubedit.tabs;
         mys.conf[obj.adid] = {};
         mys.conf[obj.adid].pane = obj.adipane;
         mys.conf[obj.adid].tbview = obj.aditable;
@@ -23,9 +25,9 @@ YAHOO.imex.adi = {
         mys.conf[obj.adid].rschema = obj.rschema;
         mys.conf[obj.adid].coldefs = obj.coldefs;
 
-        console.log("obj.adid: " + JSON.stringify(obj.adid));
-        console.log("mys.conf: " + mys.conf[obj.adid]);
-        console.log("mys.conf[].meta: " + mys.conf[obj.adid].meta);
+        console.log( "obj.adid: " + JSON.stringify(obj.adid));
+        console.log( "mys.conf: " + mys.conf[obj.adid]);
+        console.log( "mys.conf[].meta: " + mys.conf[obj.adid].meta);
                 
         var countCallback = { cache:false, timeout: 5000, 
                               success: YAHOO.imex.adi.initList,
@@ -52,8 +54,6 @@ YAHOO.imex.adi = {
           var meta = myconf.meta; 
           var pane = myconf.pane
           var opane = YAHOO.util.Dom.get( pane );
-
-          //console.log( "o.responseText=" + o.responseText );
           
     	  try{
              var messages = YAHOO.lang.JSON.parse( o.responseText );
@@ -112,6 +112,9 @@ YAHOO.imex.adi = {
                    true
                 );
              }
+
+             YAHOO.imex.adi.initTitleCount( adid );
+
           }catch( x ){
              console.log(x);
           }
@@ -218,6 +221,125 @@ YAHOO.imex.adi = {
        YAHOO.widget.DataTable.Formatter.adi_btype = myBTypeFormatter; 
        YAHOO.widget.DataTable.Formatter.adi_dll = myDllFormatter; 
 
+    },
+
+    pubAttach: function( aclass, op ){ // NOTE: hardwired submit form
+        
+        if( aclass !== "adata" ){
+            var sub = YAHOO.util.Dom.get("cmtmgr_opp_encs").value;
+            var bdy = YAHOO.util.Dom.get("cmtmgr_opp_encb").value;
+            var flg = YAHOO.util.Dom.get("cmtmgr_opp_encf").value;
+            
+            var attachCallback = { cache:false, timeout: 5000, 
+                                   success: YAHOO.imex.adi.attachUpdate,
+                                   failure: YAHOO.imex.adi.attachUpdateFail,
+                                   argument: {aclass: aclass }
+                                 };   
+            try{
+                var eSub=  encodeURIComponent( sub );
+                var eBdy=  encodeURIComponent( bdy );
+                
+                var postMsg = 'op.eca=add&id=' 
+                    + YAHOO.imex.pubedit.pubId 
+                    + "&opp.encs=" + eSub 
+                    + "&opp.encb=" + eBdy 
+                    + "&opp.encbt=WIKI"  
+                    + "&opp.encf=" + flg;
+                
+                YAHOO.util.Connect
+                    .asyncRequest( 'POST', 
+                                   'attachmgr', attachCallback, postMsg );
+                
+            } catch( ex ) {
+                alert( "AJAX Error:" + ex );
+            }
+            
+            YAHOO.util.Dom.get("cmtmgr_opp_encs").value="";
+            YAHOO.util.Dom.get("cmtmgr_opp_encb").value="";
+            return false;
+        }
+
+        var sub = YAHOO.util.Dom.get("cmtmgr_opp_edan").value;
+        var fmt = YAHOO.util.Dom.get("cmtmgr_opp_edat").value;
+        var flg = YAHOO.util.Dom.get("cmtmgr_opp_edaf").value;
+        var file = YAHOO.util.Dom.get("cmtmgr_opp_edafile").value;
+
+        return false;
+    },
+
+    attachUpdate: function( o ) {
+                                   
+        try{
+            var edit = YAHOO.imex.adi;            
+            var aclass = o.argument.aclass;
+            
+            var dtb = edit.conf[aclass].dtaTable;
+            
+            dtb.getDataSource().sendRequest( 
+                '',
+                { success: dtb.onDataReturnInitializeTable,
+                  scope: dtb });
+            edit.attachReload({'argument':aclass});
+            edit.addTitleCount( dtb.getRecordSet().getLength() + 1,
+                                YAHOO.util.Dom.get( edit.conf[aclass].pane).id );
+        }catch(ex){
+            alert( "AJAX Error: " + ex );
+        }
+    },
+    
+    attachUpdateFail: function(o) {
+        YAHOO.imex.adi.conf[o.argument.aclass].tbview.onShow();
+    },
+
+    attachReload: function( o ) {
+        var aclass = o.argument;
+        YAHOO.imex.adi.conf[aclass].dtaTable.load(); 
+    },
+
+    addTitleCount: function( count, id ){
+		tabs = YAHOO.imex.pubedit.tabs.get('tabs');
+		for( var i = 0;i < tabs.length; i++ ){
+			var currentElement = tabs[i].get('contentEl');
+			if( currentElement.querySelector('#' + id)  !== null ){
+                var label = tabs[i].get('label');
+				if( label.indexOf('(') > 0)
+					label = label.slice(0, label.indexOf('(') - 1);
+				tabs[i].set('label', label +' (' + count + ')' );
+				return
+			}
+		}		
+	},
+
+    initTitleCount: function( aclass ){
+        
+        var url = YAHOO.imex.adi.conf[aclass].url +
+                  YAHOO.imex.adi.conf[aclass].pubid;
+
+        var cback = { success: YAHOO.imex.adi.itcSuccess,
+                      failure: YAHOO.imex.adi.itcFailure,
+                      argument: {'aclass':aclass} };
+                      
+        var tr = YAHOO.util.Connect.asyncRequest('GET', url, cback, null);
+
+    },
+
+    itcSuccess: function( o ){
+       try{
+          //alert(JSON.stringify(o.argument['aclass']))
+          var aclass = o.argument['aclass'];
+          var dta =  JSON.parse( o.responseText );
+          var dom = YAHOO.util.Dom.get( YAHOO.imex.adi.conf[aclass].pane).id;
+          //alert( dta.attach.length  );
+          if( dta.attach.length > 0 ){
+             YAHOO.imex.adi.addTitleCount( dta.attach.length, dom );
+          }
+       }catch( ex ){
+          //alert( "AJAX Error: " + ex );
+       }                             
+    },
+    
+    itcFailure: function( o ){
+      //alert( "itcFailure: " + JSON.stringify(o) );   
     }
 
 };

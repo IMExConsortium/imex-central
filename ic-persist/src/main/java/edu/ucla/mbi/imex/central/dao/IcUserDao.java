@@ -1,14 +1,10 @@
 package edu.ucla.mbi.imex.central.dao;
 
-/*===========================================================================
- * $HeadURL::                                                               $
- * $Id::                                                                    $
- * Version: $Rev::                                                          $
- *===========================================================================
- *
- * UserDAO:
- *
- *========================================================================= */
+/*==============================================================================
+ *                                                                             $
+ * UserDAO:                                                                    $
+ *                                                                             $
+ *=========================================================================== */
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,12 +22,6 @@ import edu.ucla.mbi.util.data.dao.*;
 import edu.ucla.mbi.imex.central.*;
 
 public class IcUserDao extends AbstractDAO implements UserDao {
-
-    //public IcUserDao(){super();}
-
-    //public IcUserDao( SessionFactory sessionFactory ){
-    //    super( sessionFactory );
-    //}
 
     public User getUser( int id ) { 
         
@@ -52,13 +42,10 @@ public class IcUserDao extends AbstractDAO implements UserDao {
         
         User user = null;
 
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
-
+        
         try {
-            //startOperation();
             Query query =
                 session.createQuery( "from IcUser u where " +
                                      " u.login = :login ");
@@ -69,7 +56,6 @@ public class IcUserDao extends AbstractDAO implements UserDao {
         } catch( DAOException dex ) {
             // log error ?
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
 
@@ -86,18 +72,15 @@ public class IcUserDao extends AbstractDAO implements UserDao {
     public List<User> getUserList( int firstRecord, int blockSize ) { 
        
         List<User> userl = null;
-
-	Log log = LogFactory.getLog( this.getClass() );
-	log.debug("getUserList: firstRecord=" + firstRecord);
-	log.debug("getUserList: blockSize=" + blockSize);
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
+        Log log = LogFactory.getLog( this.getClass() );
+        log.debug("getUserList: firstRecord=" + firstRecord);
+        log.debug("getUserList: blockSize=" + blockSize);
+        
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         try {
-            //startOperation();
             
             Query query = 
                 session.createQuery( "from IcUser u order by id ");
@@ -105,13 +88,10 @@ public class IcUserDao extends AbstractDAO implements UserDao {
             query.setMaxResults( blockSize );
             
             userl = (List<User>) query.list();
-            tx.commit();
-            System.out.println( firstRecord+ " :: " + 
-                                blockSize + " :: " + userl.size() );
+            tx.commit();            
         } catch( DAOException dex ) {
             // log error ?
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
         
@@ -127,14 +107,10 @@ public class IcUserDao extends AbstractDAO implements UserDao {
 
         Log log = LogFactory.getLog( this.getClass() );
         
-        //Session session =
-        //    HibernateUtil.getSessionFactory().openSession();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
 
-        try {
-            //startOperation();
-            
+        try {            
             Query query =
                 session.createQuery( "select count(*) from IcUser");
             
@@ -146,13 +122,12 @@ public class IcUserDao extends AbstractDAO implements UserDao {
             // log error ?
             log.info(dex);
         } finally {
-            //HibernateUtil.closeSession();
             session.close();
         }
         
         return count;
     }
-
+    
     public void saveUser( User user ) { 
         super.saveOrUpdate( new IcUser ( user ) );
     }
@@ -165,5 +140,4 @@ public class IcUserDao extends AbstractDAO implements UserDao {
     public void deleteUser( User user ) { 
         super.delete( user );
     }
-
 }

@@ -3,17 +3,29 @@
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xsi:schemaLocation="
-         http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd
-         http://cxf.apache.org/jaxws
-           http://cxf.apache.org/schemas/jaxws.xsd
-         http://cxf.apache.org/jaxrs
-           http://cxf.apache.org/schemas/jaxrs.xsd">
+              http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans.xsd
+              
+              http://cxf.apache.org/jaxws
+              http://cxf.apache.org/schemas/jaxws.xsd
+              
+              http://cxf.apache.org/jaxrs
+              http://cxf.apache.org/schemas/jaxrs.xsd">
 
+  <jaxws:endpoint id="ws-v20" address="/ws-v20"
+                  implementor="#ws-v20-imp" />
+
+  <jaxws:endpoint id="ws-v10" address="/ws-v10"
+                  implementor="#ws-v10-imp" />
+
+  <jaxws:endpoint id="ws" address="/ws"
+                  implementor="#ws-v10-imp" />
+    
   <jaxrs:server id="imex-rs-current" address="/">
     <jaxrs:serviceBeans>
       <ref bean="imex-rs-imp" />
     </jaxrs:serviceBeans>
   </jaxrs:server>
-
+  
+  
 </beans>

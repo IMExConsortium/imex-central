@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+  
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral-api</artifactId>
@@ -11,22 +11,21 @@
   <parent>
    <groupId>edu.ucla.mbi.imex</groupId>
    <artifactId>imexcentral</artifactId>
-   <version>3.1.0rc12</version>
+   <version>3.1.0rc17</version>
   </parent>
 
-  <properties>
-    <cxf.version>3.2.0</cxf.version>
-    <jaxws-rt.version>2.3.0</jaxws-rt.version>
-    <commons-logging.version>1.2</commons-logging.version>
-    <junit.version>4.12</junit.version>
-  </properties>
-
   <dependencies>
-   
+    
     <dependency>
-      <groupId>com.sun.xml.ws</groupId>
-      <artifactId>jaxws-rt</artifactId>
-      <version>${jaxws-rt.version}</version>
+      <groupId>org.jvnet.mimepull</groupId>
+      <artifactId>mimepull</artifactId>
+      <version>1.9.12</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-core</artifactId>
+      <version>${cxf.version}</version>
     </dependency>
     
     <dependency>
@@ -52,83 +51,68 @@
       <artifactId>cxf-rt-transports-http-jetty</artifactId>
       <version>${cxf.version}</version>
     </dependency>
-<!--    
-   <dependency>
-     <groupId>commons-logging</groupId>
-     <artifactId>commons-logging</artifactId>
-     <version>${commons-logging.version}</version>
-   </dependency>
-   
-   <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-   </dependency>
--->
+
   </dependencies>
 
   <build>
     <finalName>icentral-api</finalName>
 
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxws-maven-plugin</artifactId>
-        <version>2.5</version>
-        <executions>
-          <execution>
-            <id>icentral</id>
-            <goals>
-              <goal>wsimport</goal>
-            </goals>
-            <configuration>
-              <verbose>true</verbose>
-               <useJdkToolchainExecutable>true</useJdkToolchainExecutable>
-              <bindingFiles>
-                <bindingFile>icentral-1.0.jxb</bindingFile>
-                <bindingFile>icschema-1.0.jxb</bindingFile>
-              </bindingFiles>
-              <wsdlFiles>
-                <wsdlFile>icentral-1.0.wsdl</wsdlFile> 
-              </wsdlFiles>
-              <wsdlLocation>
-               /WEB-INF/wsdl/icentral-1.0.wsdl 
-              </wsdlLocation>
-              <staleFile>${basedir}/target/.icentral-1.0.staleFlag</staleFile>
-              <keep>true</keep>
-            </configuration>
-          </execution>
 
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        
+        <version>3.3.0</version> 
+        <executions>
+          
+          <execution>
+            <id>icentral-1.0</id>
+            <phase>generate-sources</phase>
+            <configuration> 
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${project.basedir}/src/wsdl/icentral-1.0.wsdl</wsdl>
+                  <wsdlLocation>classpath:wsdl/icentral-1.0.wsdl</wsdlLocation> 
+                  <bindingFiles>
+                    <bindingFile>src/jaxws/icentral-1.0.jxb</bindingFile>  
+                    <bindingFile>src/jaxws/icschema-1.0.jxb</bindingFile>
+                  </bindingFiles>  
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+          
           <execution>
             <id>icentral-2.0</id>
-            <goals>
-              <goal>wsimport</goal>
-            </goals>
-            <configuration>
-              <verbose>false</verbose>
-              <bindingFiles>
-                <bindingFile>icentral-2.0.jxb</bindingFile>
-                <bindingFile>icschema-2.0.jxb</bindingFile>
-              </bindingFiles>
-              <wsdlFiles>
-                <wsdlFile>icentral-2.0.wsdl</wsdlFile> 
-              </wsdlFiles>
-              <wsdlLocation>
-               /WEB-INF/wsdl/icentral-2.0.wsdl 
-              </wsdlLocation>
-              <staleFile>${basedir}/target/.icentral-2.0.staleFlag</staleFile>
-              <keep>true</keep>
+            <phase>generate-sources</phase>
+            <configuration> 
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${project.basedir}/src/wsdl/icentral-2.0.wsdl</wsdl>
+                  <wsdlLocation>classpath:wsdl/icentral-2.0.wsdl</wsdlLocation> 
+                  <bindingFiles>
+                    <bindingFile>src/jaxws/icentral-2.0.jxb</bindingFile>  
+                    <bindingFile>src/jaxws/icschema-2.0.jxb</bindingFile>
+                  </bindingFiles>  
+                </wsdlOption>
+              </wsdlOptions>
             </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
           </execution>
-
         </executions>
+        
       </plugin>
-
+      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.8.1</version>
         <configuration>
           <verbose>true</verbose>
           <fork>true</fork>

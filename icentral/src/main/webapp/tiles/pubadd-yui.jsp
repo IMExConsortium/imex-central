@@ -14,7 +14,6 @@
        </span>
    </div>     
  </s:if>
- <s:if test="pub == null or pub.pmid == null or pub.pmid.length() == 0" >  
    <div style="display: block;">
     <s:form theme="simple" action="pubsrc" cssClass="stylized" style="display:inline-block">
      <label>PMID:</label>
@@ -36,30 +35,4 @@
      <button name="op.eadd" value="ADD">Add</button>
    </s:form>
   </div>
-</s:if>
-<s:else>
-  <div>
-    <s:form theme="simple" cssClass="stylized" action="pubedit"> 
-     <s:hidden name="pub.pmid" value="%{pub.pmid}"/>
-     <label>PMID:</label>
-     <div><s:property  value="pub.pmid" /> </div>
-     <label>Journal:</label>
-     <div>
-        <s:property value="pub.source.title" />
-
-        <s:if test="pub.volume.length() != 0"><s:property value="pub.volume" /></s:if><s:if test="pub.issue.length() != 0">(<s:property value="pub.issue" />)</s:if><s:if test="pub.pages.length() != 0">:<s:property value="pub.pages" /></s:if><s:if test="pub.year.length() != 0">, <s:property value="pub.year" /></s:if>
-     </div>
-          
-     <label>Author(s):</label>
-     <div><s:property value="pub.author"/></div>
-     
-     <label>Title:</label>
-     <div><s:property value="pub.title"/></div>
-     
-     <label>Abstract:</label>
-     <div><s:property value="%{pub.abstract}"/></div>
-     <button name="op.eadd" value="ADD">Add</button>
-    </s:form>
-  </div>
-</s:else>
 </div>

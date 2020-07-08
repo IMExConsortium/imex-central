@@ -57,7 +57,7 @@
          <div class="acom">
           <s:hidden name="mst" value="1:1:1"/> 
           <s:select name="opp.encf" headerKey="-1" headerValue="-- select --"
-                    list="#{'QControl':'QControl','Curation Request':'Curation Request','DSP':'DSP'}" 
+                    list="#{'QControl':'QControl','Curation Request':'Curation Request','DSP':'DSP','CV19':'CV19'}" 
                     value="-1" cssClass="pubsrc-flag"/>
           <s:hidden name="opp.ftype" value="dao"/>          
           <s:submit name="op.eflt" theme="simple" value="SEARCH" onclick=""/>
@@ -84,7 +84,7 @@
           <div class="acom">
            <s:hidden name="mst" value="1:1:1"/>
            <s:hidden name="opp.ftype" value="dao"/>          
-           <s:textfield name="opp.ou"/>
+           <s:textfield name="opp.ou"  size="32" maxlength="64"/>
            <s:submit theme="simple" name="op.eflt" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
            <div id="poo_cnt"></div>
          </div>
@@ -108,12 +108,12 @@
         <td class="pubsrc-td" align="left" valign="top" nowrap>
          <b>Curator:</b>
          <div class="acom">
-          <s:textfield name="opp.au" />
+          <s:textfield name="opp.au" size="32" maxlength="64"/>
           <s:hidden name="mst" value="1:1:1"/>
           <s:hidden name="opp.ftype" value="elastic"/>
           <s:submit name="op.eflt" theme="simple" value="SEARCH" cssClass="pubsrc-sub" onclick=""/>
           <div id="poc_cnt">
-         </div>
+          </div>
         </td>
        </tr>
       </table>
@@ -129,7 +129,7 @@
    <center>
     <s:form theme="simple" action="pubsrc">
      <fieldset class="qfield">
-      <legend align="left"  class="qlegend">Text Query</legend>
+      <legend align="left"  class="qlegend">By Text Query</legend>
       <table width="100%" class="qtable">
        <tr>
         <td class="pubsrc-td" align="left" valign="top" nowrap>
@@ -140,7 +140,7 @@
           <s:hidden name="opp.ftype" value="elastic"/>
           <s:submit name="op.eflt" theme="simple" value="SEARCH" cssClass="pubsrc-query" onclick=""/>
           <div id="poq_cnt">
-         </div>
+          </div>
         </td>
        </tr>
       </table>

@@ -1,12 +1,10 @@
 package edu.ucla.mbi.imex.central;
 
 /* =============================================================================
- # $Id::                                                                       $
- # Version: $Rev::                                                             $
- #==============================================================================
  #
  # IndexManager - businness logic of indexer  
  #                NOTE: custom implementation of rest interface 
+ #
  #=========================================================================== */
 
 import org.apache.commons.logging.Log;
@@ -43,7 +41,7 @@ public class IndexManager {
         log = LogFactory.getLog( this.getClass() );
         log.info( "IndexManager: creating manager" );
     }
-
+ 
     //---------------------------------------------------------------------
     //  TracContext
     //--------------
@@ -195,9 +193,8 @@ public class IndexManager {
 
 
     public List<Integer> getIcPubList( int count ){
-        
-        
-        
+       
+               
         return null;
     }
 
@@ -708,42 +705,43 @@ public class IndexManager {
 
     
     public List<IcPub> getPublicationList( int firstRecord, 
-                                                 int blockSize,
-                                                 String skey, boolean asc,
-                                                 Map<String,String> flt ){
+                                           int blockSize,
+                                           String skey, boolean asc,
+                                           Map<String,String> flt ){
         
         return getPublicationList( firstRecord, blockSize,
                                    skey, asc, flt, null, null );        
     }
-
+    
     public List<IcPub> getPublicationList( int firstRecord, 
-                                                 int blockSize,
-                                                 String skey, boolean asc,
-                                                 Map<String,String> flt,
-                                                 String queryStr){
+                                           int blockSize,
+                                           String skey, boolean asc,
+                                           Map<String,String> flt,
+                                           String queryStr){
         
         return getPublicationList( firstRecord, blockSize,
                                    skey, asc, flt, queryStr, "simple" );        
     }
     
     public List<IcPub> getPublicationList( int firstRecord, 
-                                                 int blockSize,
-                                                 String skey, boolean asc,
-                                                 Map<String,String> flt,
-                                                 String queryStr,
-                                                 String queryType ){
-
+                                           int blockSize,
+                                           String skey, boolean asc,
+                                           Map<String,String> flt,
+                                           String queryStr,
+                                           String queryType ){
+        
         Log log = LogFactory.getLog( this.getClass() );
         
         String query = buildEsQuery( firstRecord, blockSize,
                                      skey, asc, flt, queryStr, queryType );
+       
         
         List<IcPub> plst = new ArrayList<IcPub>();
         
         try{
             List<Integer> idList = getPubIdList( query );
-
-            System.out.println(idList);
+            
+            log.info( idList );
             
             List<edu.ucla.mbi.util.data.Publication> pl = tracContext
                 .getPubDao().getPublicationList( idList );
@@ -763,40 +761,35 @@ public class IndexManager {
         return plst;
     }
 
-
     
     //--------------------------------------------------------------------------
 
     public long getPublicationCount(){
-    
+        
         return getPublicationCount( null ) ;
     }
 
     
     public long getPublicationCount( Map<String,String> flt  ){
         
-        String query = buildEsQuery( 0, 1, null, false, flt, null, "simple"  );
-        
-        return getPubIdCount( query );
-        
+        String query = buildEsQuery( 0, 1, null, false, flt, null, "simple"  );        
+        return getPubIdCount( query );        
     }
 
     public long getPublicationCount( Map<String,String> flt, String query  ){
         
-        String esquery = buildEsQuery( 0, 1, null, false, flt, query, "simple"  );
-        
+        String esquery = buildEsQuery( 0, 1, null, false, flt, query, "simple"  );        
         return getPubIdCount( esquery );
         
     }
-
+    
     public long getPublicationCount( Map<String,String> flt, String query, String queryType  ){
         
-        String esquery = buildEsQuery( 0, 1, null, false, flt, query, queryType  );
-        
+        String esquery = buildEsQuery( 0, 1, null, false, flt, query, queryType  );  
         return getPubIdCount( esquery );
         
     }
-
+    
     public List<String> getScoreNameList( String grp ){   
         
         String qagg = "{\"size\":0, \"aggregations\": {"
@@ -804,8 +797,7 @@ public class IndexManager {
             + "\"aggregations\": { \"scr\": {"
             + "\"terms\": { \"field\" : \"score.name.keyword\", \"size\" : 500"
             + " }}}}}}";
-
-
+        
         String  jres = esQueryResult( qagg );
         return parseScoreNameList( jres, grp );
 
@@ -815,17 +807,17 @@ public class IndexManager {
     //--------------------------------------------------------------------------
 
     private String buildESQ( int firstRecord, 
-                                 int blockSize,
+                             int blockSize,
                                  String skey, 
-                                 boolean asc,
-                                 Map<String,String> flt  ){
+                             boolean asc,
+                             Map<String,String> flt  ){
         
         return  buildESQ( firstRecord, blockSize,
                           skey, asc,
                           flt,
                           null, null );
     }
-
+    
     //--------------------------------------------------------------------------
     
     private String buildESQ( int firstRecord, 
@@ -838,7 +830,7 @@ public class IndexManager {
 
         Log log = LogFactory.getLog( this.getClass() );
 
-        System.out.println("buildESQ");
+        log.info( "buildESQ" );
         JSONObject esq = new JSONObject();
         
         JSONArray filter = new JSONArray();
@@ -851,8 +843,6 @@ public class IndexManager {
         recret.put("id");
         
         
-
-        
         // filters
         //--------
         
@@ -862,36 +852,66 @@ public class IndexManager {
                 
                 String key = (String) ii.next();
                 String value = (String) flt.get(key);
-                
-                if( key != null && key.equals( "status" ) ){
-                    key = "state";
-                }
 
-                if( key != null && key.equals( "jid" ) ){
-                    key = "journal_id";
-                }
+                if( key != null && key.equals( "cflag" ) ){
+                    //flag filter
+                    
+                    try{
+                        if( value != null && !value.equals( "" ) ){
+                            JSONObject nested = new JSONObject()
+                                .put( "path", "comment" );
+                            
+                            JSONObject keyval = new JSONObject()
+                                .put( "comment.flag", value.toLowerCase());
 
-                if( key != null && key.equals( "jid" ) ){
-                    key = "journal_id";
-                }
+                            JSONObject innerFlt = new JSONObject()
+                                .put( "term", keyval );
 
-                if( key != null && key.equals( "owner" ) ){
-                    key = "owner";
-                }
+                            JSONObject innerBool = new JSONObject()
+                                .put( "filter", innerFlt );
+                            
+                            JSONObject innerQuery = new JSONObject()
+                                .put( "bool", innerBool );
 
-                if( key != null && key.equals( "editor" ) ){
-                    key = "curator";
-                }
-
-                try{
-                
-                    if( value != null && !value.equals( "" ) ){
-                        JSONObject keyval = new JSONObject()
-                            .put( key, value.toLowerCase());
-                        filter.put(new JSONObject().put( "term", keyval ));
+                            nested.put( "query", innerQuery );
+                            
+                            filter.put( new JSONObject().
+                                        put( "nested", nested ) );
+                        }                        
+                    } catch( JSONException jx ){
+                        jx.printStackTrace();
+                    }                    
+                } else {
+                        
+                    if( key != null && key.equals( "status" ) ){
+                        key = "state";
                     }
-                } catch( JSONException jx ){
-                    jx.printStackTrace();
+
+                    if( key != null && key.equals( "jid" ) ){
+                        key = "journal_id";
+                    }
+
+                    if( key != null && key.equals( "jid" ) ){
+                        key = "journal_id";
+                    }
+
+                    if( key != null && key.equals( "owner" ) ){
+                        key = "owner";
+                    }
+
+                    if( key != null && key.equals( "editor" ) ){
+                        key = "curator";
+                    }
+
+                    try{        
+                        if( value != null && !value.equals( "" ) ){
+                            JSONObject keyval = new JSONObject()
+                                .put( key, value.toLowerCase());
+                            filter.put(new JSONObject().put( "term", keyval ));
+                        }
+                    } catch( JSONException jx ){
+                        jx.printStackTrace();
+                    }
                 }
 
             }
@@ -915,7 +935,7 @@ public class IndexManager {
             try{
                 bqs.put( "must", new JSONObject().put( "match_all", new JSONObject() ) );
                 bqs.put( "filter", filter );
-            
+                
                 query.put( "bool", bqs );
 
             } catch( JSONException jx ){
@@ -933,26 +953,24 @@ public class IndexManager {
                 //      }
 
                 JSONObject sqs = new JSONObject();
-
+                
                 try{
                 
                     sqs.put( "query", queryStr );
-                    sqs.put( "default_operator", "and" );
-                    
+                    sqs.put( "default_operator", "and" );                    
                     
                     //query.put( "simple_query_string", sqs );
-
+                    
                     JSONObject bqs = new JSONObject();
                     
                     bqs.put( "must", new JSONObject().put( "simple_query_string", sqs ) );
                     bqs.put( "filter", filter );
-
+                    
                     query.put( "bool", bqs );
                     
                 } catch( JSONException jx ){
                     jx.printStackTrace();
-                }
-                
+                }                
             }                          
         }
         
@@ -962,22 +980,26 @@ public class IndexManager {
         String sortFld = skey;
 
         log.info( "skey :" + skey + ":");
-       
+        
         if( sortFld != null ){
 
             try{
-                if( skey.equals("id") || skey.equals("imex") ){
+                if( skey.equals("id") ){
 
                     sort.put( new JSONObject().put( skey, asc ? "asc" : "desc"));
                 
+                } else if( skey.equals("imex.value") ){
+                    
+                    sort.put( new JSONObject().put( "imexid"+".keyword", asc ? "asc" : "desc"));
+                    
                 } else if( skey.equals("modDate") || skey.equals("actDate") ){
                 
                     sort.put( new JSONObject().put("modtime", asc ? "asc" : "desc"));
-                
+                    
                 } else if( skey.equals("crt") ){
 
                     sort.put( new JSONObject().put( "cretime", asc ? "asc" : "desc"));
-                
+                    
                 } else if( skey.endsWith(".value") ){
 
                     String source = "double m = 0; for(obj in params._source.score){ " +
@@ -996,7 +1018,7 @@ public class IndexManager {
                     sscr.put("type", "number");
                     sscr.put("script",script );
                     sscr.put("order", asc ? "asc" : "desc");
-                
+                    
                     sort.put( new JSONObject().put( "_script", sscr) );
                 
                 } else {
@@ -1018,8 +1040,8 @@ public class IndexManager {
             jx.printStackTrace();
         }
         
-        System.out.println("ESQ: " + esq.toString() );
-
+        log.info( "ESQ: " + esq.toString() );        
+        
         return esq.toString();        
     }
     
@@ -1032,7 +1054,7 @@ public class IndexManager {
                                  String queryType ){
 
         if(1==1){
-        
+            
             return buildESQ( firstRecord, blockSize,
                              skey, asc, flt, queryStr, queryType );
         } 
@@ -1045,9 +1067,9 @@ public class IndexManager {
         String queryDef = "\"bool\":{\"must\":{\"match_all\":{}},"; 
         
         if( queryType != null && queryStr != null ){
-
+            
             if( queryType.equals("simple") ){
-
+                
                 String querySafe = querySanitize( queryStr );
                 
                 queryDef = "\"simple_query_string\":{\"query\":" +
@@ -1103,6 +1125,8 @@ public class IndexManager {
                 sortStr = "{\"" + skey + "\":\"%%SDIR%%\"}";
             } else if( skey.equals("imex") ){                    
                 sortStr = "{\"" + skey + "id.keyword\":\"%%SDIR%%\"}";
+            } else if( skey.equals("imexId") ){                    
+                sortStr = "{\"" + "imex" + "id.keyword\":\"%%SDIR%%\"}";
             } else if( skey.equals("modDate") ){                    
                 sortStr = "{\"modtime\":\"%%SDIR%%\"}"; 
             } else if( skey.equals("actDate") ){                    
@@ -1175,7 +1199,6 @@ public class IndexManager {
             .replace("%%SRT%%",sortStr).replace("%%FLT%%",fltrStr);
 
         log.debug("query:" + query);
-
         
         return query;
     }    
@@ -1185,11 +1208,11 @@ public class IndexManager {
     private String esQueryResult( String query ){
 
         Log log = LogFactory.getLog( this.getClass() );
+
+        String url = getEsIndexUrl() + "/publication/_search";  
         
         try{
             CloseableHttpClient httpclient = HttpClients.createDefault();
-            String url = getEsIndexUrl() 
-                + "/publication/_search";  
             
             log.debug("EsIndex URL=" + url);
             log.debug("EsIndex query=" + query);
@@ -1220,6 +1243,8 @@ public class IndexManager {
             return jdoc.toString();
 
         } catch(Exception ex){
+            log.info("EsIndex query error(url): " + url);
+            log.info("EsIndex query error(query): " + query);            
         }
             
         return null;
