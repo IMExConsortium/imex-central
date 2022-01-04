@@ -11,7 +11,7 @@
      </s:if>
      <tr>
       <td class="copyright2" nowrap>
-       Copyright ${icentral.copyright}<br/>IMEx Consortium
+       ${icentral.copyright1}<br/>${icentral.copyright2}
       </td>
       <td class="cite">
         <b>Cite IMEx:</b> Orchard S, Kerrien S, Abbani S, <i>et al</i>.

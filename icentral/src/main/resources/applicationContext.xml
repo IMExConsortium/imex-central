@@ -308,7 +308,7 @@
         <entry key="InnateDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
         <entry key="MINT Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
         <entry key="MPIDB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
-        <entry key="MatrixDB Database" value="https://matrixdb.univ-lyon1.fr/cgi-bin/current/newPort?type=publication&amp;value=%%PMID%%" />
+        <entry key="MatrixDB Database" value="http://matrixdb.univ-lyon1.fr/cgi-bin/current/newPort?type=publication&amp;value=%%PMID%%" />
         <entry key="Molecular Connections Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
         <entry key="UniprotKB Database" value="https://www.ebi.ac.uk/intact/query/%%ACC%%" />
       </map>

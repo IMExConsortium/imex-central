@@ -7,7 +7,7 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>imexcentral</artifactId>
   <packaging>pom</packaging>
-  <version>3.1.0rc17</version>
+  <version>3.1.0rc18</version>
   <name>IMEx Central</name>
   <url>https://github.com/IMExConsortium</url>
 
@@ -31,7 +31,7 @@
     <jaxws-rt.version>2.3.3-b01</jaxws-rt.version>
     <email.version>1.6.1</email.version>
     <commons-logging.version>1.2</commons-logging.version> 
-    <log4j.version>2.13.3</log4j.version> 
+    <log4j.version>2.17.0</log4j.version> 
     <junit.version>4.12</junit.version>
     
   </properties>
@@ -152,13 +152,13 @@
         <repository>
           <id>public</id>
           <name>IMEx Public Maven Reopsitory</name>
-          <url>https://dip.mbi.ucla.edu/archiva/repository/imex-public/</url>
+          <url>http://lukasz:foobar99@imex.mbi.ucla.edu/archiva/repository/imex-public/</url>
         </repository>
 
         <repository>
           <id>snapshots</id>
           <name>Archiva Managed Snapshot Repository</name>
-          <url>https://dip.mbi.ucla.edu/archiva/repository/internal/</url>
+          <url>http://lukasz:foobar99@imex.mbi.ucla.edu/archiva/repository/internal/</url>
         </repository>
       </repositories>
 
@@ -167,4 +167,20 @@
      </profile>
   </profiles>
 
+  <distributionManagement>
+    <repository>
+      <id>public</id>
+      <name>IMEx Public Maven Reopsitory</name>
+      <url>http://${repo.login}:${repo.pass}@imex.mbi.ucla.edu/archiva/repository/imex-public/</url>
+    </repository>
+
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Archiva Managed Snapshot Repository</name>
+      <url>http://${repo.login}:${repo.pass}@imex.mbi.ucla.edu/archiva/repository/snapshots/</url>
+    </snapshotRepository>
+
+  </distributionManagement>
+
+  
 </project>

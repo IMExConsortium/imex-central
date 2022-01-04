@@ -66,7 +66,7 @@
     <property name="mst" value="4:1"/>
     
     <property name="notifyFrom" value="dip@mbi.ucla.edu" />
-    <property name="notifyServer" value="banach.mbi.ucla.edu" />
+    <property name="notifyServer" value="mail.mbi.ucla.edu" />
 
     <property name="Captcha" ref="captcha"/>  
 

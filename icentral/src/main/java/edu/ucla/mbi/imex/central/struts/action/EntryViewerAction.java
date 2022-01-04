@@ -298,8 +298,8 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 
         Log log = LogFactory.getLog( this.getClass() );
         log.debug(  "id=" + getId() + " icpub=" + icpub + " op=" + getOp() ); 
-	
-	this.filter = buildFilter( (Map<String,String>) getOpp(), getStage(), getStatus());
+        //System.out.println( "id=" + getId() + " icpub=" + icpub + " op=" + getOp() );
+        this.filter = buildFilter( (Map<String,String>) getOpp(), getStage(), getStatus());
         
         if ( tracContext.getPubDao() == null ) return SUCCESS;
 
@@ -356,7 +356,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             
             String key = i.next();
             String val = getOp().get(key);
-            
+            //System.out.println("op=" + key + "  val=" + val);
             log.debug(  "op=" + key + "  val=" + val );
 
             if ( val != null && val.length() > 0 ) {
@@ -414,7 +414,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                     log.debug(  "\n\nop=" + getOp() );
                     log.debug(  "opp=" + getOpp() );
                     log.debug(  "luser=" + luser +"\n\n" );
-
+                    //System.out.println("\n\nop=" + getOp() + "opp=" + getOpp() + "luser=" + luser +"\n\n");
                     if ( getOpp() == null ) {
                         return getIcPubRecords();
                     }
@@ -447,9 +447,12 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                         "" :  getOpp().get( "query" );
                 
                     if( !wfl.equalsIgnoreCase("true") || luser == null ){
+                        //System.out.println("all");
                         return getIcPubRecords( max, off, skey, sdir, filter,
                                                 query );
                     } else {
+                        //System.out.println("watched");
+
                         return getWatchedRecords( luser, 
                                                   max, off, skey, sdir,
 						  filter );
@@ -786,7 +789,8 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
 
         if ( filter.isEmpty() && (query == null || query.equals("") ) ){  
             log.debug( "getPubRecords: unfiltered" );
-            
+            //System.out.println("getPubRecords: unfiltered" );
+
             if( usr == null ){
                 
                 if( getIndexManager() != null 
@@ -815,7 +819,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
                 }
 
             } else {
-
+        
                 log.debug( "getting list" );
                 List<Publication> ppl = watchManager
                     .getPublicationList( usr, first, blockSize, sortKey, asc );
@@ -838,7 +842,7 @@ public class EntryViewerAction extends ManagerSupport implements LogAware{
             }
             
         } else {
-            
+            //System.out.println("getPubRecords: filtered" );    
             log.debug( "getPubRecords: filtered/queried" );
             
             if( usr == null ){

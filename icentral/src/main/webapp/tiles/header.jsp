@@ -7,7 +7,8 @@
    <table width="100%" cellspacing="0" border="0">
     <tr>
      <td class="logo" valign="middle">
-      <a href="."><img height="55" border="0" src="img/imex_central_logo_small.png" alt="iCentral"/></a>
+<!--      <a href="."><img height="55" border="0" src="img/imex_central_logo_small.png" alt="iCentral"/></a> -->
+      <a href="."><img height="55" border="0" src="img/${icentral.logo}" alt="iCentral"/></a>
      </td>
     </tr>
    </table>

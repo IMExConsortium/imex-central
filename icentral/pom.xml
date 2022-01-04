@@ -5,23 +5,26 @@
   <groupId>edu.ucla.mbi.imex</groupId>
   <artifactId>icentral</artifactId>
   <packaging>war</packaging>
-  <version>3.1.0rc17</version>
+  <version>3.1.0rc18</version>
   <name>Web Application module</name>
 
   <parent>
     <groupId>edu.ucla.mbi.imex</groupId>
     <artifactId>imexcentral</artifactId>
-    <version>3.1.0rc17</version>
+    <version>3.1.0rc18</version>
   </parent>
 
   <properties>
 
     <icentral.version>${project.version}</icentral.version> 
-    <icentral.copyright>2008-2020</icentral.copyright> 
+    <icentral.copyright1>Copyright 2008-2022</icentral.copyright1> 
+    <icentral.copyright2>IMEx Consortium</icentral.copyright2> 
     <icentral.bld>$Rev$</icentral.bld> 
     <icentral.wsver>1.0</icentral.wsver>
 
     <icentral.css>icentral-test.css</icentral.css>
+    <icentral.log>/var/tmp/jetty</icentral.log>
+    <icentral.logo>imex_central_logo_small.png</icentral.logo>
 
     <icentral.recaptcha.publicKey>*****</icentral.recaptcha.publicKey>
     <icentral.recaptcha.privateKey>*****</icentral.recaptcha.privateKey>
@@ -46,7 +49,8 @@
       <activeByDefault>false</activeByDefault>
      </activation>
      <properties>
-       <icentral.css>icentral-test.css</icentral.css>       
+       <icentral.css>icentral-test.css</icentral.css>      
+       <icentral.log>/var/log/tomcat9</icentral.log>
      </properties>
      <build>
       <finalName>icentraltest</finalName>
@@ -60,7 +64,8 @@
        <activeByDefault>false</activeByDefault>
      </activation>
      <properties>
-       <icentral.css>icentral-beta.css</icentral.css>
+       <icentral.css>icentral-beta.css</icentral.css>     
+       <icentral.log>/var/log/tomcat9</icentral.log>
      </properties>
      <build>
        <finalName>icentralbeta</finalName>
@@ -73,16 +78,32 @@
        <activeByDefault>false</activeByDefault>
      </activation>
      <properties>
-       <icentral.css>icentral.css</icentral.css>
+       <icentral.css>icentral.css</icentral.css>       
+       <icentral.log>/var/log/tomcat9</icentral.log>
      </properties>
      <build>
        <finalName>icentral</finalName>
      </build>
    </profile>
 
+   <profile>
+     <id>ccentral</id>
+     <activation>
+       <activeByDefault>false</activeByDefault>
+     </activation>
+     <properties>
+       <icentral.css>ccentral.css</icentral.css>
+       <icentral.logo>sitelogo.svg</icentral.logo>
+       <icentral.copyright2>Curation Central</icentral.copyright2>
+       <icentral.log>/var/tmp/ccentral</icentral.log>
+     </properties>
+     <build>
+       <finalName>ccentral</finalName>
+     </build>
+   </profile>
+
   </profiles>
- 
-  
+   
   <dependencies>
     
     <dependency>
@@ -263,6 +284,7 @@
               <includes>
                 <include>register.jsp</include>
                 <include>feedback.jsp</include>
+                <include>header.jsp</include>
                 <include>footer.jsp</include>
                 <include>icentral-css.jsp</include>
               </includes>
@@ -318,6 +340,10 @@
            <webApp>
              <contextPath>/icentraldev</contextPath>
            </webApp>
+           <httpConnector>
+             <port>9999</port>
+           </httpConnector>
+
            <systemProperty>
               <name>log4j2.configuration</name>
               <value>file:../etc/icentral/jetty-log4j2.xml</value>

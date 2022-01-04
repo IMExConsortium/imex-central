@@ -84,7 +84,7 @@ public class IcUserDao extends AbstractDAO implements UserDao {
             
             Query query = 
                 session.createQuery( "from IcUser u order by id ");
-            query.setFirstResult( firstRecord - 1 );
+            query.setFirstResult( firstRecord );  // -1 ???
             query.setMaxResults( blockSize );
             
             userl = (List<User>) query.list();

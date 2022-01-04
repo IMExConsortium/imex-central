@@ -105,7 +105,7 @@ public class IcGroupDao extends AbstractDAO implements GroupDao {
             
             Query query = 
                 session.createQuery( "from IcGroup g order by name ");
-            query.setFirstResult( firstRecord - 1 );
+            query.setFirstResult( firstRecord ); // -1 ???
             query.setMaxResults( blockSize );
             
             groupl = (List<Group>) query.list();

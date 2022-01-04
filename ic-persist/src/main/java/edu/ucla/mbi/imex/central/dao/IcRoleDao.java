@@ -98,7 +98,7 @@ public class IcRoleDao extends AbstractDAO implements RoleDao {
             
             Query query = 
                 session.createQuery( "from IcRole r order by name ");
-            query.setFirstResult( firstRecord - 1 );
+            query.setFirstResult( firstRecord ); // -1 ???
             query.setMaxResults( blockSize );
             
             rolel = (List<Role>) query.list();
